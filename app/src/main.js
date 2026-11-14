@@ -4,6 +4,7 @@ import { loadWorld, layerRGB, sourceLabel } from './world.js'
 import { startWalk, stepTo, ringMask, ringLimit, appState, oxygenL } from './walk.js'
 import { planTour, MAX_STOPS } from './plan.js'
 import { routeFlights, scanAt, pointAlong } from './scout.js'
+import { surveyPlan, scanSegment, bestAreas, FLIGHTS_PER_SOL } from './survey.js'
 
 const $ = (id) => document.getElementById(id)
 const params = new URLSearchParams(location.search)
@@ -24,6 +25,7 @@ const targets = await optionalJSON('targets.json', [])
 const photos = await optionalJSON('stops.json', []) // rover photos per stop (contract: stops.json)
 const scoutPlan = await optionalJSON('scout_plan.json', []) // pipeline's extra helicopter flights (D4), when it exists
 let flight = null // helicopter in the air: { flights, k, along, speed, found, before }
+let survey = null // whole-area survey playing: { plan, sol, t, found, bySol }
 const { meta, layers } = world
 const { width: W, height: H, cell_size_m: cs } = meta
 // The way home the ring and walk read. Live: cells the helicopter scouts switch to cost_to_go_scouted (E4).
@@ -89,6 +91,7 @@ renderer.setAnimationLoop((now) => {
   const dt = Math.min((now - lastFrame) / 1000, 0.1)
   lastFrame = now
   if (flight) tickFlight(dt)
+  if (survey) tickSurvey(dt)
   controls.update()
   renderer.render(scene, camera)
 })
@@ -99,16 +102,25 @@ const EXTRA = ['thermal_inertia', 'science', 'dose_rate'] // THEMIS, CRISM, Curi
 const shownLayers = meta.layers.filter((n) => layers[n] && n !== 'rocks_fine' && (!EXTRA.includes(n) || flags.has('layers_extra')))
 let layerName = 'terrain_class'
 let layerColors = layerRGB(layerName, layers[layerName])
+// Colours for a layer; "best areas" is computed from what is known now (survey.js), not read from a file.
+const colorsFor = (name) => layerRGB(name, name === 'best_areas' ? bestAreas(world, ctg, scanned, blocked) : layers[name])
+function refreshLayer() {
+  if (layerName === 'best_areas') layerColors = colorsFor(layerName)
+}
 $('sources').textContent = meta.sources?.all ?? '' // applies to every layer without its own source
-$('layers').append(...shownLayers.map((name) => {
+const BEST = 'best_areas'
+const layerSource = (name) => name === BEST
+  ? 'Computed: round trip from base fits the usable energy, slope within the limit, no rocks seen; unscouted ground counts half'
+  : sourceLabel(meta, name)
+$('layers').append(...[...shownLayers, BEST].map((name) => {
   const label = document.createElement('label')
   label.innerHTML = `<input type="radio" name="layer"><span><b></b><small></small></span>`
   label.querySelector('input').checked = name === layerName
   label.querySelector('b').textContent = name.replaceAll('_', ' ')
-  label.querySelector('small').textContent = sourceLabel(meta, name)
+  label.querySelector('small').textContent = layerSource(name)
   label.querySelector('input').onchange = () => {
     layerName = name
-    layerColors = layerRGB(name, layers[name])
+    layerColors = colorsFor(name)
     render()
   }
   return label
@@ -129,6 +141,7 @@ function replan(keepBefore = false) {
   beforeLine.visible = keepBefore
   if (!keepBefore) $('scoutStatus').textContent = ''
   route = planTour(world, allStops().filter((s) => included.has(s.id)), blocked)
+  refreshLayer()
   routeLine.geometry.dispose()
   routeLine.geometry = new THREE.BufferGeometry().setFromPoints(route.cells.map((c) => cellPos(c, 1)))
   reset() // a new plan starts a new walk; reset also draws the stops
@@ -266,31 +279,61 @@ function paintMinimap(inside) {
 }
 
 // --- Helicopter scout (block E4, flag drone_scout): flies the planned route, reveals rocks, re-plans. ---
-const heli = new THREE.Group()
 const heliSize = span / 150
-heli.add(new THREE.Mesh(new THREE.SphereGeometry(heliSize, 16, 12), new THREE.MeshStandardMaterial({ color: 0xeeeeee })))
-const rotor = new THREE.Mesh(new THREE.BoxGeometry(heliSize * 6, heliSize / 6, heliSize / 2), new THREE.MeshBasicMaterial({ color: 0x222222 }))
-rotor.position.y = heliSize * 1.3
-heli.add(rotor)
 const ALT = span / 25 // flying height above the ground, for the view only
-const beam = new THREE.Mesh(new THREE.ConeGeometry(15, ALT, 24, 1, true), // 15 m = SWATH_M
-  new THREE.MeshBasicMaterial({ color: 0x35e0ff, transparent: true, opacity: 0.18, side: THREE.DoubleSide, depthWrite: false }))
-beam.position.y = -ALT / 2
-heli.add(beam)
-heli.visible = false
-scene.add(heli)
+function makeHeli() {
+  const g = new THREE.Group()
+  g.add(new THREE.Mesh(new THREE.SphereGeometry(heliSize, 16, 12), new THREE.MeshStandardMaterial({ color: 0xeeeeee })))
+  const rotor = new THREE.Mesh(new THREE.BoxGeometry(heliSize * 6, heliSize / 6, heliSize / 2), new THREE.MeshBasicMaterial({ color: 0x222222 }))
+  rotor.position.y = heliSize * 1.3
+  g.add(rotor)
+  const beam = new THREE.Mesh(new THREE.ConeGeometry(15, ALT, 24, 1, true), // 15 m = SWATH_M
+    new THREE.MeshBasicMaterial({ color: 0x35e0ff, transparent: true, opacity: 0.18, side: THREE.DoubleSide, depthWrite: false }))
+  beam.position.y = -ALT / 2
+  g.add(beam)
+  g.visible = false
+  g.userData.rotor = rotor
+  scene.add(g)
+  return g
+}
+const helis = [makeHeli()] // more are made when a survey flies a bigger fleet
+const heli = helis[0]
+const rotor = heli.userData.rotor
+function placeHeli(h, [x, y]) {
+  h.position.set(x * cs, layers.height[Math.round(y) * W + Math.round(x)] + ALT, y * cs)
+}
 const dotPos = new Float32Array(W * H * 3)
 const dotCol = new Float32Array(W * H * 3)
 const dotsGeo = new THREE.BufferGeometry()
 dotsGeo.setAttribute('position', new THREE.BufferAttribute(dotPos, 3))
 dotsGeo.setAttribute('color', new THREE.BufferAttribute(dotCol, 3))
 dotsGeo.setDrawRange(0, 0)
-scene.add(new THREE.Points(dotsGeo, new THREE.PointsMaterial({ size: span / 300, vertexColors: true })))
+const scanDots = new THREE.Points(dotsGeo, new THREE.PointsMaterial({ size: span / 300, vertexColors: true }))
+scanDots.visible = false // shown while helicopters fly; after landing the terrain itself shows the rocks
+scene.add(scanDots)
 let dots = 0
+
+// Cells seen for the first time: switch their way home to the scouted one, add scan dots. Returns rocks found.
+function reveal(fresh) {
+  let rocks = 0
+  for (const i of fresh) {
+    const rock = layers.rocks_fine[i]
+    rocks += rock
+    if (layers.cost_to_go_scouted) ctg[i] = layers.cost_to_go_scouted[i]
+    dotPos.set([(i % W) * cs, layers.height[i] + 0.5, Math.floor(i / W) * cs], dots * 3)
+    dotCol.set(rock ? [1, 0.2, 0.15] : [0.55, 0.95, 1], dots * 3)
+    dots++
+  }
+  if (fresh.length) {
+    dotsGeo.attributes.position.needsUpdate = dotsGeo.attributes.color.needsUpdate = true
+    dotsGeo.setDrawRange(0, dots)
+  }
+  return rocks
+}
 
 if (flags.has('drone_scout') && layers.rocks_fine) $('scoutBox').hidden = false
 $('scout').onclick = () => {
-  if (flight) return
+  if (flight || survey) return
   const flights = [...routeFlights(meta, route.cells).map((f) => ({ ...f, kind: 'route corridor' })),
     ...scoutPlan.map((f) => ({ waypoints: f.waypoints, metres: f.metres, kind: f.kind === 'uncertain' ? 'least certain' : f.kind ?? 'extra' }))]
   if (!flights.length) return
@@ -298,7 +341,7 @@ $('scout').onclick = () => {
   flight = { flights, k: 0, along: 0, speed: metres / 9, found: 0, before: route } // the whole scout plays in ~9 s
   pause()
   $('scout').disabled = true
-  heli.visible = true
+  heli.visible = scanDots.visible = true
 }
 
 function tickFlight(dt) {
@@ -312,23 +355,10 @@ function tickFlight(dt) {
     if (flight.k >= flight.flights.length) land()
     return
   }
-  const [x, y] = p
-  const ground = layers.height[Math.round(y) * W + Math.round(x)]
-  heli.position.set(x * cs, ground + ALT, y * cs)
-  const fresh = scanAt(meta, scanned, x, y)
-  for (const i of fresh) {
-    const rock = layers.rocks_fine[i]
-    if (rock) flight.found++
-    if (layers.cost_to_go_scouted) ctg[i] = layers.cost_to_go_scouted[i]
-    dotPos.set([(i % W) * cs, layers.height[i] + 0.5, Math.floor(i / W) * cs], dots * 3)
-    dotCol.set(rock ? [1, 0.2, 0.15] : [0.55, 0.95, 1], dots * 3)
-    dots++
-  }
-  if (fresh.length) {
-    dotsGeo.attributes.position.needsUpdate = dotsGeo.attributes.color.needsUpdate = true
-    dotsGeo.setDrawRange(0, dots)
-    render()
-  }
+  placeHeli(heli, p)
+  const fresh = scanAt(meta, scanned, p[0], p[1])
+  flight.found += reveal(fresh)
+  if (fresh.length) render()
   $('scoutStatus').textContent = `Flight ${flight.k + 1} of ${flight.flights.length} (${f.kind}) · ${flight.found} rock cells found · ` +
     `simulated helicopter flight, rocks from ${sourceLabel(meta, 'rocks_fine') || meta.sources?.all || 'rocks_fine'}`
 }
@@ -336,7 +366,7 @@ function tickFlight(dt) {
 function land() {
   const { before, found } = flight
   flight = null
-  heli.visible = false
+  heli.visible = scanDots.visible = false
   $('scout').disabled = false
   $('scout').textContent = 'Fly the new route'
   blocked = Uint8Array.from(scanned, (v, i) => v && layers.rocks_fine[i])
@@ -352,6 +382,79 @@ function land() {
       (route.dropped.length > before.dropped.length
         ? `; now doesn't fit: ${route.dropped.filter((d) => !before.dropped.includes(d)).map((d) => allStops().find((s) => s.id === d)?.name ?? d).join(', ')}`
         : '')
+}
+
+// --- Whole-area survey (flag drone_scout): a fleet maps the slice strip by strip, reachable ground first.
+// Answers "how many helicopters, how many sols" and feeds the best-areas layer. Flight simulated. ---
+const SOL_S = 0.15 // playback seconds per sol
+const fleetSize = () => Math.min(6, Math.max(1, Math.round(+$('fleet').value || 3)))
+
+function fleetTable() {
+  const rows = [1, 2, 3, 4, 6].map((n) => {
+    const p = surveyPlan(meta, layers.cost_to_go, { helicopters: n })
+    return `<tr><td>${n}</td><td>${p.solsReachable}</td><td>${p.sols}</td></tr>`
+  })
+  const p = surveyPlan(meta, layers.cost_to_go)
+  $('fleetTable').innerHTML = `<caption>${p.flights.length} flights, ${Math.round(p.km)} km to map the whole slice</caption>
+    <tr><th>Helicopters</th><th>Sols: reachable area</th><th>Sols: whole slice</th></tr>${rows.join('')}`
+}
+fleetTable()
+
+$('survey').onclick = () => {
+  if (survey) return endSurvey()
+  if (flight) return
+  const plan = surveyPlan(meta, layers.cost_to_go, { helicopters: fleetSize() })
+  const bySol = new Map()
+  for (const f of plan.flights) bySol.set(f.sol, [...(bySol.get(f.sol) ?? []), f])
+  while (helis.length < fleetSize()) helis.push(makeHeli())
+  survey = { plan, bySol, sol: 1, t: 0, found: 0, before: route }
+  pause()
+  $('survey').textContent = 'Stop the survey'
+  scanDots.visible = true
+  $('scout').disabled = true
+}
+
+function tickSurvey(dt) {
+  const { plan, bySol } = survey
+  const t0 = survey.t
+  const t1 = Math.min(1, t0 + dt / SOL_S)
+  let fresh = []
+  for (const f of bySol.get(survey.sol) ?? []) {
+    const at = (t) => (f.metres ? pointAlong(meta, f.waypoints, t * f.metres) : f.waypoints[0])
+    const to = at(t1)
+    fresh = fresh.concat(scanSegment(meta, scanned, at(t0), to))
+    const h = helis[f.heli]
+    h.visible = true
+    h.userData.rotor.rotation.y += dt * 40
+    placeHeli(h, to)
+  }
+  survey.found += reveal(fresh)
+  survey.t = t1
+  if (t1 >= 1) {
+    survey.sol++
+    survey.t = 0
+    if (survey.sol % 10 === 0) refreshLayer()
+    if (survey.sol > plan.sols) return endSurvey()
+  }
+  if (fresh.length) render()
+  const mapped = scanned.reduce((a, v) => a + v, 0) / (W * H)
+  $('scoutStatus').textContent = `Survey: sol ${Math.min(survey.sol, plan.sols)} of ${plan.sols} with ${fleetSize()} helicopters · ` +
+    `${Math.round(mapped * 100)}% mapped · ${survey.found} rock cells found · reachable area done by sol ${plan.solsReachable} · simulated flight`
+}
+
+function endSurvey() {
+  const { found, sol, plan, before } = survey
+  survey = null
+  scanDots.visible = false
+  for (const h of helis) h.visible = false
+  $('survey').textContent = 'Survey the whole area'
+  $('scout').disabled = false
+  blocked = Uint8Array.from(scanned, (v, i) => v && layers.rocks_fine[i])
+  replan()
+  const mapped = Math.round((scanned.reduce((a, v) => a + v, 0) / (W * H)) * 100)
+  $('scoutStatus').textContent = `Survey ${sol > plan.sols ? 'done' : 'stopped'}: ${mapped}% mapped in ${Math.min(sol, plan.sols)} sols ` +
+    `with ${fleetSize()} helicopters (at ${FLIGHTS_PER_SOL} flight per helicopter per sol, an estimate); ${found} rock cells found. ` +
+    `Route ${kj(before.energy_j)} → ${kj(route.energy_j)}. Pick the "best areas" layer and tap bright spots to add stops.`
 }
 
 // --- Walk (block E2): along the planned route, energy and oxygen drain, ring, point of no return. ---
