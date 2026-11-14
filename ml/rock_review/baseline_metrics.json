@@ -1,0 +1,150 @@
+{
+  "method": "image-only bright/dark component pairing v1; unvalidated possible shadows",
+  "source": {
+    "source_file": "Gale_HiRISE_starter_25cm.png",
+    "source_sha256": "21c86b0f0408d06ca21cc0e9b2f7b6fa11eaa431bd6c437d8314883c01fd3196",
+    "source_metadata": {
+      "title": "Gale / Mount Sharp - HiRISE starter crop",
+      "source_product": "MSL Gale Merged Orthophoto Mosaic 25cm v3",
+      "source_url": "https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/MSL_Gale_Orthophoto_Mosaic_25cm_v3.tif",
+      "source_page": "https://astrogeology.usgs.gov/search/map/mars_msl_gale_merged_orthophoto_mosaic_25cm",
+      "credit": "Calef III and Parker / NASA / JPL-Caltech / USGS / University of Arizona",
+      "width": 1024,
+      "height": 1024,
+      "ground_sampling_m": 0.25,
+      "extent_m": [
+        256,
+        256
+      ],
+      "crop_pixel_window": [
+        65942,
+        153938,
+        1024,
+        1024
+      ],
+      "pixel_indexing": "zero-based, column then row",
+      "north_up": true,
+      "crs": "Mars_2000_Sphere, equirectangular, central longitude 0, standard parallel 0, sphere radius 3396190 m",
+      "upper_left_corner_projected_m": [
+        8142733.5,
+        -279648.5
+      ],
+      "geotransform": [
+        8142733.5,
+        0.25,
+        0,
+        -279648.5,
+        0,
+        -0.25
+      ],
+      "centre_latitude_deg": -4.72,
+      "centre_longitude_east_deg": 137.375,
+      "processing": "Exact unresampled 8-bit grayscale source pixel window, lossless PNG encoding; no contrast change or sharpening added",
+      "status": "Starter test area; not yet confirmed as the final team demo area; no rock annotations or model predictions",
+      "solar_geometry": "Not inferred: the source mosaic combines multiple acquisitions. Match the contributing observation before shadow-derived height estimation."
+    },
+    "source_pixel_sha256": "9d17b1864c40ab721011e82ab15362d1a9769fb0072838576681abb8842f2144"
+  },
+  "parameters": {
+    "kernel_px": 17,
+    "contrast_threshold": 18,
+    "min_area_px": 8,
+    "max_area_px": 220,
+    "max_component_extent_px": 24,
+    "max_pair_distance_px": 14,
+    "reference_match_distance_px": 8
+  },
+  "detections": 812,
+  "accepted_reference_locations": 50,
+  "matched_reference_locations": 2,
+  "reference_correspondence_fraction": 0.04,
+  "matching": "maximum-cardinality one-to-one bright-centroid distance <= 8 pixels (2 m); review circles not used",
+  "matches": [
+    {
+      "reference_id": 7,
+      "detection_id": "S0158",
+      "distance_px": 0.004714045207906029
+    },
+    {
+      "reference_id": 13,
+      "detection_id": "S0254",
+      "distance_px": 0.005160156871129113
+    }
+  ],
+  "unmatched_reference_ids": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    8,
+    9,
+    10,
+    11,
+    12,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50
+  ],
+  "new_review_ids": [
+    "S0255",
+    "S0623",
+    "S0487",
+    "S0489",
+    "S0366",
+    "S0030",
+    "S0528",
+    "S0456",
+    "S0270",
+    "S0192",
+    "S0052",
+    "S0457"
+  ],
+  "precision": null,
+  "recall": null,
+  "minimum_reliable_size_m": null,
+  "solar_geometry_verified": false,
+  "final_world_grid": null,
+  "limitations": [
+    "Same crop as the selected positive reference; not an independent benchmark.",
+    "Unmatched detections are not automatically false alarms; missed rocks were not exhaustively annotated.",
+    "Dark and bright components can be terrain, albedo or imaging artifacts.",
+    "No heights, physical rock footprints, safe route or final rocks_fine layer are inferred.",
+    "Illumination metadata and contributing acquisition at this crop remain unverified."
+  ]
+}
