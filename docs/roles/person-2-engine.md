@@ -17,9 +17,11 @@
 5. `buddy_scripted`: a rover that follows on low-cost cells. Then `buddy_rl`: load `buddy_policy.onnx`, build the 27-value observation, take the argmax action. Same rover, switchable.
 6. Load the real Mars world from Person 3 (just a different folder).
 7. `classifier` / `camera_mode`: run `terrain_cls.onnx` on a Perseverance image or the phone camera; show the class and its walking cost.
-8. HUD in the style of a suit display: energy, margin, distance home, terrain class, buddy status. Big, high-contrast, readable while walking.
-9. `capcom`: show messages from the agent with their delay.
-10. Log each walk (contract §3) for the debrief replay.
+8. HUD in the style of a suit display: energy and oxygen left (`kj_per_l_o2`), margin, distance and minutes home, terrain class, buddy status, delay to Earth. Big, high-contrast, readable while walking. The suggested screens are on the team plan page.
+9. `override`: E-STOP, hold, come to me, return to base along the breadcrumb path; on lost link the rover stops, then retreats.
+10. `storm` and `dust`: walking minutes to the nearest shelter during a solar storm; dust lowers rover power and visibility.
+11. `capcom`: show messages from the agent with their delay.
+12. Log each walk (contract §3) for the debrief replay.
 
 ## Done when
 - The foundation works on a phone with the synthetic world and with the real Mars world, every feature flag off.

@@ -13,6 +13,7 @@
   "gravity_mps2": 3.71,
   "energy_budget_j": 250000.0,
   "reserve_fraction": 0.2,
+  "kj_per_l_o2": 20.1,
   "classes": {
     "0": "unknown",
     "1": "soil",

@@ -2,7 +2,9 @@
 
 **Challenge:** Interplanetary Survival Guide: Martian Map (NASA Space Apps 2026).
 **One sentence:** Your phone tells you, step by step, how far you can still walk on Mars and make it home.
-**The demo:** a judge walks the venue hallway holding the phone. Their real steps move an astronaut across real Mars terrain, energy drains with every step, the walk-back ring shrinks, a trained buddy rover follows and scouts, and the phone buzzes at the point of no return. Mission control answers 20 seconds late.
+**The demo:** a judge walks the venue hallway holding the phone. Their real steps move an astronaut across real Mars terrain, energy (and the oxygen it costs) drains with every step, the walk-back ring shrinks, a trained buddy rover leads and scouts, and the phone buzzes at the point of no return. Mission control answers 20 seconds late.
+
+**The research behind every design choice is in `docs/RESEARCH.md`:** how NASA plans surface EVAs (walkback and rideback limits, the 2 km / 1-hour Artemis rule), why plans break on unseen terrain, how slow EVAs are, what runs out first, what robots are for, and who funds them.
 
 ## 1. What NASA problem this solves
 
@@ -10,13 +12,13 @@
 |---|---|---|
 | "Provide in-situ decision support tools to address identified EVA hazards and risks on the Martian surface" | Civil Space Shortfall need 8.06 (FY26 ranking: SF08 Mars EVA) | The walk-back ring and point-of-no-return alert, computed on the device |
 | Surface mobility for crew and assets | SF16, ranked #2 of 32 in FY26 | Energy-aware routes over real terrain |
-| Robots and crew working together on the surface | SF15, ranked #10 | The buddy rover that scouts ahead and stays near the astronaut |
+| Robots and crew working together on the surface | SF15, ranked #10 | The buddy rover that leads, scouts, carries and relays |
 | Operating without Earth's instructions in safety-critical moments | SF21 need 21.09 | Decisions made on the device; CAPCOM informed after, 20 min late |
 | EVA operations and Earth-independent operations | Human Research Roadmap risks 84 and 175; Moon to Mars objectives OP-5LM, OP-2LM, TH-8LM, OP-10LM | Crew-side display, logs for debrief |
 
-**Why now.** Mars crews face up to 20 minutes of one-way radio delay, so nobody on Earth can make the turn-back call. NASA's orbital support at Mars is shrinking: MAVEN likely failed in 2025, and the FY2027 request proposes ending Mars Odyssey and halving Perseverance operations. Future crews will rely on onboard, offline tools.
+**Why now.** Mars crews face 4 to 22 minutes of one-way radio delay, so nobody on Earth can make the turn-back call. NASA's orbital support at Mars is shrinking: MAVEN likely failed in 2025, and the FY2027 request proposes ending Mars Odyssey and halving Perseverance operations. Future crews will rely on onboard, offline tools.
 
-**Where the money goes.** Axiom's AxEMU suits: first task order about $228M, orders capped at $3.1B; NASA's inspector general warns suit readiness could slip to 2031. Lunar Terrain Vehicle awards: Astrolab $219M and Lunar Outpost $220M. Moon Base plans a landing every six months. Crew time is priced at $130,000 per hour on the ISS. Suits and rovers get the money; the decision layer between the human and the terrain is the gap we fill.
+**Where the money goes.** Axiom's AxEMU suits: first task order about $228M, orders capped at $3.1B; NASA's inspector general warns suit readiness could slip to 2031. Lunar Terrain Vehicle: a contract worth up to $4.6B, with awards to Astrolab ($219M) and Lunar Outpost ($220M) for rovers that drive with or without crew. The one NASA-funded follow-me astronaut assistant (BioBot, NIAC) is on hold. Moon Base plans a landing every six months. Crew time is priced at $130,000 per hour on the ISS. Suits and rovers get the money; the decision layer between the human and the terrain is the gap we fill.
 
 **The research gap.** Rover tools (ENav, AI4Mars) ignore human energy. EVA planners (SEXTANT) use a simple energy model. Suit-display teams (NASA SUITS) mostly use scenario data, not real terrain. No open tool combines terrain, a walking energy model, consumables and a walk-back limit. NASA JSC's field-modified walking model improved predicted-versus-measured fit from a slope of 0.50 to 0.95 (Kim et al. 2024).
 
@@ -25,7 +27,7 @@
 - **The phone stands in for the suit display.** Real suits will use a helmet display or a wrist or chest display. NASA's SUITS program builds head-mounted AR displays for spacewalks.
 - **Phones are already flying.** Since February 2026, NASA lets astronauts carry their own smartphones; the Crew-12 and Artemis II crews flew with them, after a certification process.
 - **The phone's sensors are the same kind a suit needs:** motion sensors, compass, camera, vibration. On Mars there is no GPS, so position comes from counting steps and heading (dead reckoning) plus map matching. That is exactly what our step mode does, so the demo is not a shortcut.
-- **The buddy rover is simulated.** We train it on the real terrain grid and show it in the game. We do not build hardware. Real buddy rovers are what SF15 asks for.
+- **The buddy rover is simulated.** We train it on the real terrain grid and show it in the game. We do not build hardware. It is specified like a Lunar Terrain Vehicle (km/h, can drive without crew), because today's Mars rovers average about 110 m/h, 20–30 times slower than a walking astronaut. Its jobs come from field tests: lead and scout, carry, relay, rescue, and return along the breadcrumb path. NASA's 2022 desert test rated "rover leads, crew follows" acceptable and "crew leads" not.
 
 ## 3. Across the mission: plan, train, explore, debrief
 
@@ -66,7 +68,7 @@ Both options run on a phone and both load the same world files and the same ONNX
 | Piece | Type | Where it shows up | If it fails |
 |---|---|---|---|
 | Terrain classifier | Small CNN fine-tuned on AI4Mars labels (soil, bedrock, sand, big rock) | Builds the terrain layer that sets walking cost; live camera mode on Perseverance images | Use the USGS geologic units for the terrain layer |
-| Buddy rover | Reinforcement learning (PPO) on the world grid | Follows and scouts in the game | Scripted follower using the same grid |
+| Buddy rover | Reinforcement learning (PPO) on the world grid | Leads, scouts and returns along the breadcrumb path in the game | Scripted follower using the same grid |
 | Energy model | Published physics (Pandolf, then Kim et al. 2024) | Every step's cost | Not optional: this is the foundation |
 | CAPCOM | LLM agent (Azure / Microsoft Foundry) with tools and a 20 s delay | Talks to the astronaut; explains the ring | Pre-recorded delayed messages |
 
@@ -74,9 +76,9 @@ Both options run on a phone and both load the same world files and the same ONNX
 
 Rule: **the base never depends on a feature.** Every feature sits behind a flag and can be switched off without breaking the demo.
 
-**Foundation (must work):** world files → terrain on screen → astronaut moves → energy drains → walk-back ring → buzz at the point of no return → runs on one phone.
+**Foundation (must work):** world files → terrain on screen → astronaut moves → energy and oxygen drain → walk-back ring → buzz at the point of no return → runs on one phone.
 
-**Features (each behind a flag):** `step_mode` (real steps), `buddy_scripted`, `buddy_rl`, `classifier`, `camera_mode`, `capcom`, `before_after`, `radiation` (stretch).
+**Features (each behind a flag):** `step_mode` (real steps), `buddy_scripted`, `buddy_rl`, `override` (E-STOP, hold, come to me, return to base), `rideback_ring`, `classifier`, `camera_mode`, `capcom`, `storm` (solar-storm shelter time), `dust`, `plan_mode`, `debrief`, `before_after`.
 
 | Milestone | Time | Done when |
 |---|---|---|
@@ -93,9 +95,11 @@ Rule: **the base never depends on a feature.** Every feature sits behind a flag 
 |---|---|---|
 | Route | Planned on Earth days ahead | Planned and re-planned on the device |
 | Knowing how far you can go | Estimated; Apollo 14 turned back 20–40 m from Cone Crater's rim | Walk-back ring updated with every step |
-| Who decides to turn back | Mission control, by voice | The crew, with the device; Earth is informed 20 min later |
+| Who decides to turn back | Mission control, by voice | The crew, with the device; Earth is informed 4–22 min later |
 | Position | "Our positions are all in doubt now" (Apollo 14) | Step counting and heading on a real terrain map |
-| Robots | Rovers work alone | A buddy rover scouts and stays close |
+| Planning | Map books, cuff checklists and return limits worked out on Earth before the EVA | The same limits, recomputed on the device every step, including after a replan |
+| Comms | One crew member stands still as a relay when the signal drops (JETT3) | The buddy rover relays |
+| Robots | Rovers work alone | A buddy rover leads, scouts, carries and relays |
 | After the walk | Notes and memory | Replay, predicted versus measured energy, better models |
 
 ## 9. Sources
