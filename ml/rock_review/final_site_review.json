@@ -76,6 +76,27 @@
         {"id": "G29", "status": "accepted", "note": "User explicitly says certain."},
         {"id": "G30", "status": "accepted", "note": "User explicitly says certain."}
       ]
+    },
+    {
+      "reviewer": "Jules Rumeau",
+      "date": "2026-11-14",
+      "timezone": "America/Chicago",
+      "sheet": "final_site_details_4.png",
+      "sheet_sha256": "174f2a362c2406899c54a158d0e34af82751e935590bc457da838634cf0660bc",
+      "question": "Sur la planche G31–G40 affichée ci-dessus, lesquels correspondent à un rocher isolé ? Donne « oui », « non » ou « incertain » pour chaque numéro de 31 à 40. Les détails trop flous peuvent rester incertains.",
+      "user_statement": "G 31. Non. G 32, oui. G 34. Oui. G 33, oui. G 35, incertain. G 36, oui. G 37, oui. G 38, oui. G 39, oui. G 40, oui.",
+      "decisions": [
+        {"id": "G31", "status": "rejected"},
+        {"id": "G32", "status": "accepted"},
+        {"id": "G33", "status": "accepted"},
+        {"id": "G34", "status": "accepted"},
+        {"id": "G35", "status": "uncertain"},
+        {"id": "G36", "status": "accepted"},
+        {"id": "G37", "status": "accepted"},
+        {"id": "G38", "status": "accepted"},
+        {"id": "G39", "status": "accepted"},
+        {"id": "G40", "status": "accepted"}
+      ]
     }
   ]
 }
