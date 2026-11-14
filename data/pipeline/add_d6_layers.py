@@ -8,7 +8,7 @@ Grid layers (contract section 1; the app shows them with flag layers_extra):
   thermal_inertia.f32  Mars Odyssey THEMIS night-time IR brightness (Mars Trek 100 m mosaic), 0-255, relative:
                        warm at night = high thermal inertia (rock), cool = loose sand/dust. Not calibrated SI units.
   science.u8           MRO CRISM hydration browse (MTRDR "HYD": polyhydrated sulfate, monohydrated sulfate, bound
-                       water), mean of the observations over the box, in tertiles 1..3 (0 = no CRISM coverage).
+                       water), each observation ranked (each is stretched on its own), mean of ranks over the box, in tertiles 1..3 (0 = no CRISM coverage).
   dose_rate.f32        Curiosity RAD mean GCR dose at Gale, 0.210 mGy/day (Hassler et al. 2014, Science), as
                        micrograys per hour, times the sky-view factor from the HiRISE terrain (estimate of shielding).
 Points and series (new optional files, see CONTRACTS.md section 1):
@@ -131,6 +131,8 @@ def crism(grid, bbox):
             a = s.read().astype('f4')
             hyd = a.max(axis=0)  # R: polyhydrated sulfate, G: monohydrated sulfate, B: bound water
             hyd[(a == 0).all(axis=0)] = np.nan
+            ok = np.isfinite(hyd)  # each browse image is stretched on its own: compare ranks, not raw values
+            hyd[ok] = (np.argsort(np.argsort(hyd[ok])) + 1) / ok.sum() * 255
             stack.append(onto_grid(np.nan_to_num(hyd, nan=-1), s.transform, s.crs, grid, Resampling.average, -1))
             used.append(img.split('_')[0].upper())
     m = np.nanmean(np.stack(stack), axis=0) if stack else np.full((grid['n'], grid['n']), np.nan)
