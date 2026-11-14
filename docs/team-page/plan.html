@@ -2364,11 +2364,35 @@ flowchart LR
 </tr>
 <tr>
 <td>How do you detect rocks?</td>
-<td>From their shadows in HiRISE images, the method NASA used to check landing sites. We report agreement with hand-checked rocks <em>(to measure)</em>.</td>
+<td>From their shadows in HiRISE images, the method NASA used to check landing sites.</td>
+</tr>
+<tr>
+<td>Does the detector find real rocks or image artefacts?</td>
+<td>We measured it: precision and recall against about 50 rocks we marked by hand on a tile the detector never saw <em>(to measure, R3)</em>, and we can show a miss and a false alarm on screen. Small rocks are where it is weakest, and that is the helicopter's job.</td>
+</tr>
+<tr>
+<td>Can humans check or correct the ML?</td>
+<td>Yes. At each stop the crew confirms or rejects the hazards flagged nearby, and the corrections go back into the site files, so the next walk starts from a better map (block D7). It is the citizen-science idea, people checking machine labels, applied to one crew.</td>
 </tr>
 <tr>
 <td>How accurate is the energy model?</td>
 <td>A published walking model with a simple Mars-gravity correction; we show how the ring moves if it is off by ±30% <em>(to measure)</em>. The upgrade path is NASA's field-calibrated model.</td>
+</tr>
+<tr>
+<td>Which numbers are measured and which are assumed?</td>
+<td>One backup slide lists every input to the energy and oxygen model, where it comes from, and whether it was measured (on Earth, in field tests) or assumed (Mars gravity scaling, suit values). Nobody has walked on Mars, so the first walks calibrate it.</td>
+</tr>
+<tr>
+<td>What failure rate does the oxygen margin tolerate?</td>
+<td>We don't claim a probability we can't measure. We follow NASA's rule instead: an untouched reserve, with walks sized to a 1-hour return on contingency oxygen, and we show the ring still holds if the energy model is 30% off.</td>
+</tr>
+<tr>
+<td>What are the uncertainties on your data layers?</td>
+<td>Each layer lists its source and resolution in <code>world.json</code> (HiRISE terrain points about 1 m apart, height precise to tens of centimetres; CRISM minerals about 18 m per pixel). Where layers disagree is exactly where the helicopter flies first.</td>
+</tr>
+<tr>
+<td>What runs on Azure, and why an agent rather than a script?</td>
+<td>The browser runs the 3D view and the ML models, so the walk works with no connection. Azure Static Web Apps hosts the app. The mission-control agent on Microsoft Foundry answers the crew's own questions in plain language from the exported map package, with the light delay built in. A script can only answer questions written in advance.</td>
 </tr>
 <tr>
 <td>Astronauts don't use phones.</td>
