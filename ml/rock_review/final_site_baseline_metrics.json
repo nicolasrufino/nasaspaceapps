@@ -1,0 +1,126 @@
+{
+  "method": "Fixed image-only bright/dark pairing v1 on the full final Gale site",
+  "purpose": "Selected-reference development correspondence, not independent detector accuracy",
+  "source_url": "https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/Mars/MSL/MSL_Gale_HiRISE-LRGB_78quads_sharp_cog.tif",
+  "source_window": [
+    9244,
+    53980,
+    8192,
+    8192
+  ],
+  "source_rgb_pixel_sha256": "7594cf078e70af1684b0b9bfafb47f27adb381abdba1aeb50c4af8363d1f6949",
+  "candidate_file_sha256": "59b2517d9677d436bff3fa7b171b0c9d859c056bdc0e13d853f0f75ce5d574f1",
+  "review_file_sha256": "34d221ff4451149207f713ffb234c9180c62a8ef91931e52d69e090dccacc66a",
+  "parameters": {
+    "kernel_px": 17,
+    "contrast_threshold": 18,
+    "min_area_px": 8,
+    "max_area_px": 220,
+    "max_component_extent_px": 24,
+    "max_pair_distance_px": 14,
+    "reference_match_distance_px": 8
+  },
+  "parameters_tuned_on_this_review": false,
+  "detections": 8973,
+  "review_counts": {
+    "uncertain": 16,
+    "accepted": 31,
+    "rejected": 3
+  },
+  "matched_accepted_references": 7,
+  "matched_rejected_references": 1,
+  "matching": "Maximum-cardinality one-to-one bright-centroid distance <= 8 pixels (2 m); marker radii unused",
+  "matches": [
+    {
+      "reference_id": "G02",
+      "detection_id": "S0212",
+      "distance_px": 0.00532625887132787,
+      "review_decision": "accepted"
+    },
+    {
+      "reference_id": "G09",
+      "detection_id": "S0815",
+      "distance_px": 0.004559373949051479,
+      "review_decision": "rejected"
+    },
+    {
+      "reference_id": "G10",
+      "detection_id": "S0891",
+      "distance_px": 7.874801584801788,
+      "review_decision": "accepted"
+    },
+    {
+      "reference_id": "G11",
+      "detection_id": "S1200",
+      "distance_px": 0.002749806661141654,
+      "review_decision": "accepted"
+    },
+    {
+      "reference_id": "G12",
+      "detection_id": "S1353",
+      "distance_px": 0.0037460731715231784,
+      "review_decision": "accepted"
+    },
+    {
+      "reference_id": "G14",
+      "detection_id": "S2180",
+      "distance_px": 0.00414237779400006,
+      "review_decision": "accepted"
+    },
+    {
+      "reference_id": "G21",
+      "detection_id": "S3378",
+      "distance_px": 0.0014629795474918556,
+      "review_decision": "accepted"
+    },
+    {
+      "reference_id": "G48",
+      "detection_id": "S8669",
+      "distance_px": 0.0032859664209225654,
+      "review_decision": "accepted"
+    }
+  ],
+  "unmatched_resolved_reference_ids": [
+    "G04",
+    "G05",
+    "G06",
+    "G13",
+    "G15",
+    "G16",
+    "G17",
+    "G19",
+    "G23",
+    "G28",
+    "G29",
+    "G30",
+    "G31",
+    "G32",
+    "G33",
+    "G34",
+    "G36",
+    "G37",
+    "G38",
+    "G39",
+    "G40",
+    "G44",
+    "G46",
+    "G47",
+    "G49",
+    "G50"
+  ],
+  "precision": null,
+  "recall": null,
+  "solar_geometry_verified": false,
+  "world_hazard_layer_written": false,
+  "runtime": {
+    "opencv": "5.0.0",
+    "numpy": "2.5.4"
+  },
+  "limitations": [
+    "Reference points were selected by bright-object morphology and visually judged by one reviewer.",
+    "Uncertain points are excluded; unmarked detections are not automatically false positives.",
+    "A centroid correspondence does not verify a shadow, rock outline, height or hazardous world cell.",
+    "No exhaustive independent annotation exists to count missed rocks or measure recall.",
+    "Illumination geometry is unverified; this experiment does not replace Luca's world hazards."
+  ]
+}
