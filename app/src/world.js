@@ -9,7 +9,8 @@ export const CLASS_RGB = [[128, 128, 128], [194, 140, 92], [120, 92, 78], [230, 
 export async function loadWorld(base) {
   const meta = await fetchOk(`${base}/world.json`).then((r) => r.json())
   const n = meta.width * meta.height
-  const layers = Object.fromEntries(await Promise.all(Object.entries(meta.files).map(async ([name, file]) =>
+  const grids = Object.entries(meta.files).filter(([, f]) => /\.(f32|u8)$/.test(f)) // optical.png etc. load elsewhere
+  const layers = Object.fromEntries(await Promise.all(grids.map(async ([name, file]) =>
     [name, parseLayer(file, await fetchOk(`${base}/${file}`).then((r) => r.arrayBuffer()), n)])))
   return { meta, layers } // keys in world.json order
 }
@@ -43,4 +44,10 @@ export function layerRGB(name, arr) {
     out.set([30 + 225 * t, 20 + 200 * t, 40 + 110 * t], i * 3)
   })
   return out
+}
+
+// "Mission · instrument · date" for a layer; world.json sources may hold a string or an object per layer.
+export function sourceLabel(meta, name) {
+  const s = meta.sources?.[name] ?? ''
+  return typeof s === 'string' ? s : [s.mission, s.instrument, s.date].filter(Boolean).join(' · ')
 }

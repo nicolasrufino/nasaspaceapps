@@ -1,20 +1,26 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
-import { loadWorld, layerRGB } from './world.js'
+import { loadWorld, layerRGB, sourceLabel } from './world.js'
 import { startWalk, stepTo, ringMask, ringLimit, appState, oxygenL } from './walk.js'
 
 const $ = (id) => document.getElementById(id)
-const worldName = new URLSearchParams(location.search).get('world') ?? 'synthetic'
+const params = new URLSearchParams(location.search)
+const worldName = params.get('world') ?? 'synthetic'
+// Feature flags (docs/PLAN.md §10), all off by default: ?flags=layers_extra,pov_images
+const flags = new Set((params.get('flags') ?? '').split(',').filter(Boolean))
 const base = `${import.meta.env.BASE_URL}${worldName}`
+const optionalJSON = (file, fallback) => fetch(`${base}/${file}`).then((r) => (r.ok ? r.json() : fallback)).catch(() => fallback)
 
 let world, route
 try {
   world = await loadWorld(base)
-  route = (await fetch(`${base}/route.json`).then((r) => r.json())).cells
+  route = await fetch(`${base}/route.json`).then((r) => r.json())
 } catch (e) {
   $('title').textContent = `Could not load world "${worldName}": ${e.message}`
   throw e
 }
+const targets = await optionalJSON('targets.json', [])
+const stops = await optionalJSON('stops.json', [])
 const { meta, layers } = world
 const { width: W, height: H, cell_size_m: cs } = meta
 const ctg = layers.cost_to_go
@@ -29,8 +35,7 @@ geo.translate(((W - 1) * cs) / 2, 0, ((H - 1) * cs) / 2)
 const pos = geo.attributes.position
 for (let i = 0; i < W * H; i++) pos.setY(i, layers.height[i])
 geo.computeVertexNormals()
-const classRGB = layerRGB('terrain_class', layers.terrain_class)
-const colors = new THREE.BufferAttribute(classRGB.slice(), 3, true)
+const colors = new THREE.BufferAttribute(new Uint8Array(W * H * 3), 3, true)
 geo.setAttribute('color', colors)
 const terrain = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 1 }))
 
@@ -45,12 +50,20 @@ sun.position.set(-1, 0.6, -0.4) // low sun so slopes read
 scene.add(sun)
 
 const span = Math.max(W, H) * cs
-const baseMarker = new THREE.Mesh(new THREE.ConeGeometry(span / 120, span / 40, 12), new THREE.MeshBasicMaterial({ color: 0xffffff }))
+const pin = (color) => new THREE.Mesh(new THREE.ConeGeometry(span / 120, span / 40, 12), new THREE.MeshBasicMaterial({ color }))
+const baseMarker = pin(0xffffff)
 baseMarker.position.copy(cellPos(meta.base_cell, span / 80))
 scene.add(baseMarker)
+const targetPins = targets.map((t) => {
+  const p = pin(0xffd23f)
+  p.rotation.x = Math.PI // pointing down at the spot
+  p.position.copy(cellPos(t.cell, span / 80))
+  scene.add(p)
+  return p
+})
 const walker = new THREE.Mesh(new THREE.CapsuleGeometry(span / 200, span / 60, 4, 12), new THREE.MeshBasicMaterial({ color: 0x35e0ff }))
 scene.add(walker)
-scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(route.map((c) => cellPos(c, 1))),
+scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(route.cells.map((c) => cellPos(c, 1))),
   new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.7 })))
 
 const camera = new THREE.PerspectiveCamera(50, 1, span / 1000, span * 10)
@@ -72,19 +85,82 @@ renderer.setAnimationLoop(() => {
   renderer.render(scene, camera)
 })
 
+// --- Plan mode (block E3): layer toggles with their source, targets, route, stop previews. ---
+// rocks_fine and cost_to_go_scouted stay hidden until the drone has flown (E4).
+const EXTRA = ['thermal_inertia', 'science', 'dose_rate'] // THEMIS, CRISM, Curiosity RAD: flag layers_extra
+const shownLayers = meta.layers.filter((n) => layers[n] && n !== 'rocks_fine' && (!EXTRA.includes(n) || flags.has('layers_extra')))
+let layerName = 'terrain_class'
+let layerColors = layerRGB(layerName, layers[layerName])
+$('sources').textContent = meta.sources?.all ?? '' // applies to every layer without its own source
+$('layers').append(...shownLayers.map((name) => {
+  const label = document.createElement('label')
+  label.innerHTML = `<input type="radio" name="layer"><span><b></b><small></small></span>`
+  label.querySelector('input').checked = name === layerName
+  label.querySelector('b').textContent = name.replaceAll('_', ' ')
+  label.querySelector('small').textContent = sourceLabel(meta, name)
+  label.querySelector('input').onchange = () => {
+    layerName = name
+    layerColors = layerRGB(name, layers[name])
+    render()
+  }
+  return label
+}))
+
+const kj = (j) => `${Math.round(Math.max(j, 0) / 1000)} kJ`
+const num = (v, unit) => v != null && `${Math.round(v)} ${unit}`
+$('route').textContent = ['Route:', [`${route.stops?.length ?? 0} stops`, num(route.energy_j / 1000, 'kJ'), num(route.minutes, 'min'),
+  num(route.dose_ugy, 'µGy')].filter(Boolean).join(' · ')].join(' ')
+
+let selected = null
+$('targets').append(...targets.map((t, k) => {
+  const b = document.createElement('button')
+  b.textContent = t.name
+  b.onclick = () => select(k)
+  return b
+}))
+
+function select(k) {
+  selected = k
+  const t = targets[k]
+  ;[...$('targets').children].forEach((b, j) => b.setAttribute('aria-pressed', j === k))
+  targetPins.forEach((p, j) => p.scale.setScalar(j === k ? 1.8 : 1))
+  // Swing the view to the target, keeping the camera's offset.
+  const to = cellPos(t.cell)
+  camera.position.add(to.clone().sub(controls.target))
+  controls.target.copy(to)
+
+  const d = $('detail')
+  d.innerHTML = `<strong></strong><p class="why"></p><p class="src"></p>`
+  d.querySelector('strong').textContent = `${t.name}${t.goal ? ` · ${t.goal}` : ''}`
+  d.querySelector('.why').textContent = t.why ?? ''
+  d.querySelector('.src').textContent = (t.sources ?? []).join(' · ')
+  if (flags.has('pov_images')) {
+    const photos = stops.filter((s) => s.target_id === t.id || (s.cell && s.cell[0] === t.cell[0] && s.cell[1] === t.cell[1]))
+    if (!photos.length) d.append(Object.assign(document.createElement('p'), { textContent: 'No rover photo of this stop yet.' }))
+    for (const s of photos) {
+      const fig = document.createElement('figure')
+      fig.innerHTML = `<img loading="lazy"><figcaption></figcaption>`
+      Object.assign(fig.querySelector('img'), { src: s.image_url, alt: s.caption ?? t.name })
+      fig.querySelector('figcaption').textContent = [s.caption, s.credit, s.sol != null && `Sol ${s.sol}`].filter(Boolean).join(' · ')
+      d.append(fig)
+    }
+  }
+  render()
+}
+
+for (const b of document.querySelectorAll('[data-tab]')) {
+  b.onclick = () => {
+    for (const o of document.querySelectorAll('[data-tab]')) o.setAttribute('aria-selected', o === b)
+    $('plan').hidden = b.dataset.tab !== 'plan'
+    $('walk').hidden = b.dataset.tab !== 'walk'
+  }
+}
+
 // --- Minimap: flat, north up, one pixel per cell; outside the walk-back ring is shaded dark. ---
 const map = $('map')
 map.width = W
 map.height = H
 const ctx = map.getContext('2d')
-const select = $('layer')
-select.append(...Object.keys(layers).map((name) => new Option(name.replaceAll('_', ' '), name)))
-select.value = 'terrain_class'
-let layerColors = classRGB
-select.addEventListener('change', () => {
-  layerColors = layerRGB(select.value, layers[select.value])
-  render()
-})
 
 function paintMinimap(inside) {
   const img = ctx.createImageData(W, H)
@@ -94,7 +170,12 @@ function paintMinimap(inside) {
   }
   ctx.putImageData(img, 0, 0)
   ctx.fillStyle = '#ffffff80'
-  for (const [x, y] of route) ctx.fillRect(x, y, 1, 1)
+  for (const [x, y] of route.cells) ctx.fillRect(x, y, 1, 1)
+  targets.forEach((t, k) => {
+    const r = k === selected ? 2 : 1
+    ctx.fillStyle = '#ffd23f'
+    ctx.fillRect(t.cell[0] - r, t.cell[1] - r, 2 * r + 1, 2 * r + 1)
+  })
   ctx.fillStyle = '#fff'
   ctx.fillRect(meta.base_cell[0] - 1, meta.base_cell[1] - 1, 3, 3)
   ctx.fillStyle = '#35e0ff'
@@ -112,8 +193,8 @@ function reset() {
 }
 
 function step() {
-  if (k >= route.length - 1 || walk.energy_left_j <= 0) return pause()
-  if (stepTo(world, walk, route[++k])) buzz()
+  if (k >= route.cells.length - 1 || walk.energy_left_j <= 0) return pause()
+  if (stepTo(world, walk, route.cells[++k])) buzz()
   render()
 }
 
@@ -132,7 +213,7 @@ function render() {
   const inside = ringMask(ctg, ringLimit(meta, walk))
   for (let i = 0; i < W * H; i++) {
     const f = inside[i] ? 1 : 0.45
-    for (let c = 0; c < 3; c++) colors.array[i * 3 + c] = classRGB[i * 3 + c] * f
+    for (let c = 0; c < 3; c++) colors.array[i * 3 + c] = layerColors[i * 3 + c] * f
   }
   colors.needsUpdate = true
   walker.position.copy(cellPos(walk.cell, span / 100))
@@ -140,7 +221,6 @@ function render() {
 
   const s = appState(world, walk)
   window.appState = s // contract §3: what CAPCOM and the walk log read
-  const kj = (j) => `${Math.round(Math.max(j, 0) / 1000)} kJ`
   const margin = ringLimit(meta, walk) - s.cost_to_go_j
   $('energy').value = Math.max(walk.energy_left_j, 0) / meta.energy_budget_j
   $('stats').textContent = [
