@@ -143,3 +143,65 @@ Robots are not there because astronauts cannot walk. They are there because **cr
 6. **Hazards first:** slope and sand traps, solar-storm shelter time, dust (power and visibility), line of sight to the rover and habitat. Not wind force.
 7. **Expect replans:** routes are guides; the ring recomputes the instant the crew deviates; optional "get-ahead" stops when margin allows.
 8. **Learn the real pace:** update speed and energy from measured steps; first-EVA predictions will be wrong, so the debrief closes the loop.
+
+## 13. How a scout drone sees in 3D
+
+### Echolocation: how bats do it
+
+A bat makes a short, very high-pitched call (roughly 20 to 120 kHz, above human hearing) and listens for the echo.
+
+- **Distance:** the time until the echo comes back. Distance = speed of sound × time ÷ 2 (the sound goes there and back).
+- **Direction:** two ears. The echo reaches one ear slightly earlier and louder than the other.
+- **Shape and motion:** many calls per second, and changes in the echo's pitch, build a moving 3D picture.
+
+Dolphins, submarine sonar, car parking sensors and some indoor drones use the same idea.
+
+### Why sound does not work on Mars
+
+- **The air is too thin.** Mars' air is about 1% as dense as Earth's, so sounds are about 20 dB quieter. ([Nature 2022](https://doi.org/10.1038/s41586-022-04679-0))
+- **High pitches die within metres.** Carbon dioxide absorbs high frequencies. A sound that carries about 65 m on Earth is lost after about 8 m on Mars, and high pitches are gone at that distance. ([DLR](https://www.dlr.de/en/latest/news/2022/02/20220401_the-sound-of-mars)) Bat-style ultrasound is the worst case.
+- **There are two speeds of sound.** Sound travels about 240 m/s, and about 10 m/s faster above roughly 400 Hz, which blurs the timing that echolocation depends on. ([Nature 2022](https://doi.org/10.1038/s41586-022-04679-0))
+- **The drone drowns its own echo.** Ingenuity's rotors spin about 2,400 rpm, right next to any microphone.
+
+**Verdict:** echolocation by sound cannot map terrain from a Mars drone. The *idea* is exactly right, though. We only change what the drone sends out.
+
+### The same idea with light: lidar
+
+Send laser pulses instead of sound and time the echo. Light needs no air, so this works on Mars, and it works in shadow because the drone brings its own light.
+
+- **Caves on Earth are mapped this way.** In DARPA's Subterranean Challenge (2018–2021), robots mapped caves, tunnels and buildings with no GPS, and almost every team built its maps around lidar. NASA JPL's team CoSTAR won the Urban round in 2020. ([arXiv survey](https://arxiv.org/pdf/2103.11470v3), [NASA](https://www.nasa.gov/?p=71706)) The method is called SLAM: build the map and track your own position in it at the same time.
+- **Ingenuity already flew one beam of it.** A Garmin LIDAR-Lite v3 laser rangefinder pointed down and measured height 50 times a second. It was chosen because it was very light. ([Garmin](https://www.garmin.com/en-US/blog/general/garmin-on-mars/))
+- **Its limit:** a full scanning lidar is heavier and uses more power, and weight is the hardest limit on a Mars helicopter.
+
+### The same idea with radio: radar
+
+Radio echoes pass through the ground. Ground-penetrating radar shows what is underneath: buried ice, hollows, and how deep loose sand goes. JPL and AeroVironment's Skyfall concept proposes helicopters that send back high-resolution images and ground-penetrating radar data to scout landing sites for people. ([Space.com](https://www.space.com/astronomy/mars/nasas-skyfall-helicopters-will-show-us-parts-of-mars-weve-never-seen-before-scientists-say)) It answers "is it solid underneath?", not "where are the rocks?"
+
+### No echo at all: cameras (photogrammetry)
+
+Take overlapping photos from different positions. Software matches the same points across photos and works out their 3D positions. This is called structure from motion, and it is how most drone maps on Earth are made.
+
+- **It has already been done on Mars.** A JPL study turned about 200 navigation-camera images from Ingenuity's Flight 12 into a terrain model with 5 cm spacing. ([JPL poster](https://www.jpl.nasa.gov/site/research/media/posters/2023/SP23018p.pdf))
+- **At scale:** a 2025 study processed 14,553 Ingenuity images into one map, with about 3 to 6 cm of height error from 10 m up, tied to HiRISE for position. ([LPSC 2025](https://epizodyspace.ru/bibl/inostr-yazyki/Lunar_and_Planetary_Science/2025/Zubarev_et_al_The_Complete_Orthophotomosaic_of_Ingenuity_Navcam_Images_56th_LPSC_no_1302_(2025).pdf))
+- **Its limits:** it needs daylight and texture, and it needs an orbital map (HiRISE) to place itself, because Mars has no GPS.
+
+### Side by side
+
+| Method | Sends out | Works on Mars? | What it sees | Proven on Mars? |
+|---|---|---|---|---|
+| Sound (sonar, like bats) | Sound | **No:** thin air, high pitches lost within metres | Nearby surfaces, on Earth | No |
+| Cameras (photogrammetry) | Nothing; uses sunlight | **Yes** | Surface shape and colour, centimetre detail | **Yes:** Ingenuity's images, 5 cm terrain |
+| Lidar | Laser light | **Yes** | Exact distances, also in shadow | Yes, as a single-beam altimeter |
+| Radar | Radio | **Yes** | Under the surface: ice, hollows, sand depth | On rovers (Perseverance's RIMFAX); proposed for helicopters (Skyfall) |
+
+**What a real scout would carry:** cameras as the main 3D sensor (lightest, already proven), a laser for exact height and shadowed spots, and radar later for what lies underneath.
+
+### How our demo shows it
+
+We do not build a sensor. We show what the sensor does, honestly:
+
+1. As the drone flies, it casts a fan of rays down onto the terrain, like a lidar sweep: "a bat, but with light".
+2. Where a ray hits the real 1 m terrain of our slice, a dot appears. The dots build up into a point cloud.
+3. Once a stretch is covered, the full-detail terrain and image fade in, the rocks appear, and the route re-plans.
+
+**Labelled:** "simulated scan, real NASA terrain". The flight and the sweep are simulated; the terrain they reveal is the real USGS/HiRISE data. In three.js this is a raycaster against a hidden full-detail mesh, about 50 lines behind the `drone_scout` flag.
