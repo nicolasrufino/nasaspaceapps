@@ -11,11 +11,13 @@ Five minutes, seven parts, the organizers' format. Test this draft on mentors an
 > NASA has decades of Mars data from orbiters and rovers, but it lives in separate maps built for regions and whole planets, not for one walk. The first Mars crews will need it layered for the exact ground they cross, with science targets, hazards and the way home. And on Mars, a message takes 4 to 22 minutes each way, so the turn-back call has to be made on the spot.
 
 **3. Solution in one sentence (1:00–1:15)**
-> **Martian Map turns NASA's Mars data into a science walk you can plan, preview and come home from.**
+> **Martian Map turns NASA's Mars data into a science walk you can plan, preview and come home from, and makes the map better with every walk.**
+>
+> How: orbit gives the base layers; a scout drone flies the route first, the way Ingenuity scouted for Perseverance; we plan the path and the packing list; the crew walks for the science and adds to the map; the next crew starts from a better one.
 
 **4. Demo (1:15–3:00)**
 - On the habitat screen: pick "boxwork" on Mount Sharp. Toggle the layers (image, slope, thermal, minerals, radiation); the targets light up.
-- The route appears: it goes around a sand patch and a steep slope, longer but safer. Tap a stop: Curiosity's own photo of it.
+- The route appears. The scout drone flies it and reveals a rock field orbit missed; the route re-plans around it, longer but safer. The packing list appears; the heavy drill goes on the rover. Tap a stop: Curiosity's own photo of it.
 - A judge takes the phone (the suit display) and walks the hallway. Real steps move the astronaut along the route; the walk-back ring shrinks.
 - At the first stop, the science checklist: look, get close, decide, sample. The context card saves where and why.
 - The buddy rover scouts ahead and flags rocks the orbital image missed. At the point of no return the phone buzzes red. Mission control answers 20 seconds later: too late, which is the point.
@@ -35,6 +37,7 @@ Five minutes, seven parts, the organizers' format. Test this draft on mentors an
 2. Mars data exists, but not for one walk: separate regional maps versus one layered view.
 3. Mars: 4–22 minutes each way; plans break on unseen ground; the crew decides.
 4. The one sentence.
+4b. How we make the map: orbit → scout → plan and pack → walk and add → next walk.
 5. Live demo: plan (layers, targets, route, rover photos), then walk (phone as suit display).
 6. Six NASA data sources, one view: each layer and its job.
 7. Why a robot: lead, carry, relay, rescue (field-test evidence).
