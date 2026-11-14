@@ -7,6 +7,10 @@ source-verified, grid-aligned proposals on the real demo area.
 All 50 new-site proposals have been reviewed: 31 accepted, 3 rejected and 16
 uncertain. Decisions and the exact user responses are in
 `final_site_review.json`; the frozen proposal coordinates are unchanged.
+The fixed shadow-pair baseline has now been measured on that real site:
+8,973 possible pairs, matching 7/31 accepted and 1/3 rejected reference points
+within 2 m; uncertain points are excluded. These are correspondence counts,
+not detector accuracy. See `final_site_baseline_metrics.json` and `FINAL_SITE.md`.
 
 This handoff makes the same starter review available to Jules, Luca and Nicolas. **Jules has visually accepted all 50 numbered circles in the first delivered image as corresponding to rocks.** Their positions lie on a real 256 × 256 m Gale crop. The proposals use bright-object morphology; this is **preparation for R1**, not the completed shadow-based detector, a trained model, a final hazard map or a measured accuracy result. Issue #31 remains open.
 

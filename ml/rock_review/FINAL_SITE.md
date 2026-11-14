@@ -87,6 +87,36 @@ is labeled as a DTM roughness estimate. Reliable final-site rock identification,
 independent annotations and observation/illumination metadata still gate a
 scientific rock-hazard replacement. This PR leaves #31 open.
 
+## Fixed shadow-pair baseline on the reviewed site
+
+After the 50-proposal review, `evaluate_final_site.py` ran the existing v1
+bright/dark pairing method on the complete 8192 x 8192 source image. It verifies
+the candidate artifact hash, review coverage and source RGB pixels before
+running. No detection parameters were tuned to these judgments.
+
+The measured result in `final_site_baseline_metrics.json` is **8,973 possible
+bright/dark pairs**, with centroid correspondences within 8 pixels (2 m) for
+**7 of 31 accepted** and **1 of 3 rejected** references. All 16 uncertain points
+are excluded from matching. Matching is one-to-one across the resolved points.
+This remains inadequate evidence for a rock-hazard replacement. These are
+selected-reference correspondences, not precision or recall: neither shadow
+identity nor the unmarked detections and missed rocks have been verified.
+
+```sh
+python -m ml.rock_review.evaluate_final_site ml/data/gale-final-v1/gale_final_rgb.png ml/runs/final-shadow-eval-v1
+```
+
+Use a fresh output directory. The complete detection list stays in ignored
+`ml/runs/`; only the small measured report is committed. The report links the
+exact source, candidate and review hashes. Its review-file hash records the
+bytes evaluated (line-ending conversion can change that hash).
+
+To make the full-site run practical, pairing uses spatial buckets to find
+exactly the same radius-limited edges as exhaustive search, then retains the
+same sorting and greedy assignment. An exhaustive-search regression test covers
+bucket/radius boundaries. Rerunning the original crop reproduced its 812 pairs,
+2/50 matches and fixed 12-example selection exactly.
+
 The AI4Mars terrain classifier is for rover ground photos, not orbital HiRISE
 pixels. Its export must not replace the orbital terrain grid without a separate
 domain evaluation and agreement with Luca.

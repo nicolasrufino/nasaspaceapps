@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import math
+from collections import defaultdict
 from pathlib import Path
 
 import cv2
@@ -33,6 +34,24 @@ def components(response):
     return result
 
 
+def pairing_edges(bright, dark):
+    """Exact radius lookup without comparing every bright/dark component pair."""
+    radius = PARAMETERS["max_pair_distance_px"]
+    buckets = defaultdict(list)
+    for di, component in enumerate(dark):
+        x, y = component["center"]
+        buckets[math.floor(x/radius), math.floor(y/radius)].append(di)
+    for bi, component in enumerate(bright):
+        x, y = component["center"]
+        bx, by = math.floor(x/radius), math.floor(y/radius)
+        for dy in (-1, 0, 1):
+            for dx in (-1, 0, 1):
+                for di in buckets.get((bx+dx, by+dy), ()):
+                    distance = math.dist(component["center"], dark[di]["center"])
+                    if 1 <= distance <= radius:
+                        yield distance, bi, di
+
+
 def detect(pixels):
     size = PARAMETERS["kernel_px"]
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (size, size))
@@ -40,9 +59,7 @@ def detect(pixels):
     dark = components(cv2.morphologyEx(pixels, cv2.MORPH_BLACKHAT, kernel))
     pairs = []
     # One dark component per bright component. A dark component cannot serve two detections.
-    edges = sorted((math.dist(b["center"], d["center"]), bi, di)
-                   for bi, b in enumerate(bright) for di, d in enumerate(dark)
-                   if 1 <= math.dist(b["center"], d["center"]) <= PARAMETERS["max_pair_distance_px"])
+    edges = sorted(pairing_edges(bright, dark))
     used_bright, used_dark = set(), set()
     for distance, bi, di in edges:
         if bi in used_bright or di in used_dark:
