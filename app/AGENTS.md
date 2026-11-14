@@ -15,5 +15,5 @@ Applies to everything under `app/`. The root `AGENTS.md` still applies.
 - Your blocks and their order: `docs/BUILD.md`, lane P2.
 - Every feature sits behind a flag named in `docs/PLAN.md` §10 and defaults to off until stable.
 - Read sizes from `world.json`; never hard-code them. The ring is a lookup in `cost_to_go`; no pathfinding on the phone.
-- Test on a real phone over HTTPS before marking a PR ready.
+- Before merging: `npm test`, `npm run build`, and run it in a browser (feature works, no console errors), then merge (root rule 13). Check on a real phone over HTTPS when you can.
 - Stack: three.js + Vite (decided). Worlds are served straight from `data/worlds/` (Vite `publicDir`).
