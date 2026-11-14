@@ -19,6 +19,17 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      # Hygiene (~5 s), before anything writes node_modules/: no secrets, no big files or data in the wrong place.
+      # gitleaks binary pinned by version + sha256 (no action, no license needed). False positive: add its fingerprint to .gitleaksignore.
+      - name: Secret scan (gitleaks)
+        run: |
+          curl -sSfL -o "$RUNNER_TEMP/gl.tgz" https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz
+          echo "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb  $RUNNER_TEMP/gl.tgz" | sha256sum -c --quiet
+          tar -xzf "$RUNNER_TEMP/gl.tgz" -C "$RUNNER_TEMP" gitleaks
+          "$RUNNER_TEMP/gitleaks" dir . --redact --no-banner
+      - name: Big files, weights, datasets, .env
+        run: bash scripts/check-hygiene.sh
+
       # Node: runs whatever scripts exist in package.json (lint, typecheck, test, build).
       # ponytail: root-level only; if you split into frontend/ backend/, add working-directory.
       - if: hashFiles('package-lock.json') != ''
