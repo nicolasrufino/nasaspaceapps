@@ -1,0 +1,36 @@
+{
+  "contract_version": 1,
+  "name": "synthetic",
+  "source": "synthetic",
+  "width": 128,
+  "height": 128,
+  "cell_size_m": 5.0,
+  "row_order": "north_to_south",
+  "base_cell": [
+    32,
+    64
+  ],
+  "gravity_mps2": 3.71,
+  "energy_budget_j": 250000.0,
+  "reserve_fraction": 0.2,
+  "classes": {
+    "0": "unknown",
+    "1": "soil",
+    "2": "bedrock",
+    "3": "sand",
+    "4": "big_rock"
+  },
+  "knobs": {
+    "body_kg": 75.0,
+    "load_kg": 60.0,
+    "speed_mps": 1.0,
+    "max_slope_deg": 25.0
+  },
+  "files": {
+    "height": "height.f32",
+    "slope": "slope.f32",
+    "terrain_class": "terrain_class.u8",
+    "cost_per_m": "cost_per_m.f32",
+    "cost_to_go": "cost_to_go.f32"
+  }
+}
