@@ -1,13 +1,13 @@
-# Gale starter rock review — R1 / issue #31
+# Gale starter rock review â€” R1 / issue #31
 
-This handoff makes the same starter review available to Jules, Luca and Nicolas. **Jules has visually accepted all 50 numbered circles in the first delivered image as corresponding to rocks.** Their positions lie on a real 256 × 256 m Gale crop. The proposals use bright-object morphology; this is **preparation for R1**, not the completed shadow-based detector, a trained model, a final hazard map or a measured accuracy result. Issue #31 remains open.
+This handoff makes the same starter review available to Jules, Luca and Nicolas. **Jules has visually accepted all 50 numbered circles in the first delivered image as corresponding to rocks.** Their positions lie on a real 256 Ã— 256 m Gale crop. The proposals use bright-object morphology; this is **preparation for R1**, not the completed shadow-based detector, a trained model, a final hazard map or a measured accuracy result. Issue #31 remains open.
 
 ## Start here
 
 The review ZIP (source PNG, numbered overview, two enlarged sheets and coordinates) was sent directly to Galsan on 2026-11-14. Keep source imagery in ignored `ml/data/` and generated previews in ignored `ml/runs/`; raw imagery, datasets and rendered review images are not committed here.
 
-- `candidates_unreviewed.json`: frozen initial review artifact, IDs 1–50 with pixel/map coordinates and provenance. All statuses are `unreviewed`; it is not a training dataset or `ml/exports/rocks.json`.
-- `candidates_reviewed.json`: current review result. All original IDs 1–50 are `accepted` by Jules. Positions and marker sizes are unchanged; acceptance covers visible correspondence to rocks, not precise contours or missed rocks.
+- `candidates_unreviewed.json`: frozen initial review artifact, IDs 1â€“50 with pixel/map coordinates and provenance. All statuses are `unreviewed`; it is not a training dataset or `ml/exports/rocks.json`.
+- `candidates_reviewed.json`: current review result. All original IDs 1â€“50 are `accepted` by Jules. Positions and marker sizes are unchanged; acceptance covers visible correspondence to rocks, not precise contours or missed rocks.
 - `source.json`: public source URL, exact crop window, projection, footprint, original PNG SHA-256 and grayscale-pixel SHA-256.
 - `prepare_review.py`: reproducible candidate proposal and image renderer for this specific crop. It refuses to overwrite an existing review JSON.
 - [HANDOFF.md](HANDOFF.md): complete technical instructions for Luca.
@@ -18,7 +18,7 @@ The review ZIP (source PNG, numbered overview, two enlarged sheets and coordinat
 | Owner | Next action | Where to report |
 |---|---|---|
 | Jules (`julesrumeautennis-cmd`) | Visual review of the first 50 circles is complete; continue shadow-based detection and validation, then produce the agreed rock-density/mask output | #31 and this handoff PR |
-| Luca (GitHub handle pending) | Confirm the final 2 × 2 km region, whether this small test patch belongs to it, and supply aligned imagery/DEM plus world-grid metadata | #13; link the resulting world folder |
+| Luca (GitHub handle pending) | Confirm the final 2 Ã— 2 km region, whether this small test patch belongs to it, and supply aligned imagery/DEM plus world-grid metadata | #13; link the resulting world folder |
 | Nicolas (`nicolasrufino`) | Continue the app/3D/minimap against the world contract; consume validated world files when available | App issues and the handoff PR |
 
 **Nothing needs to be manually copied to another map.** Candidate coordinates are already recorded. Integration must use the same footprint and a compatible Mars coordinate system. The 3D terrain comes from a DEM, not from this PNG. Display circles are approximate markers and must not be rasterized as measured rock footprints.
@@ -30,12 +30,12 @@ Nicolas can keep building against `data/worlds/synthetic/`. This review artifact
 | Item | Value |
 |---|---|
 | Source | USGS MSL Gale Merged Orthophoto Mosaic, 25 cm, v3 |
-| Approximate center | latitude −4.720°, longitude 137.375° East |
-| Crop | 1024 × 1024 pixels; 256 × 256 m; north up, east right |
+| Approximate center | latitude âˆ’4.720Â°, longitude 137.375Â° East |
+| Crop | 1024 Ã— 1024 pixels; 256 Ã— 256 m; north up, east right |
 | Raster sampling | 0.25 m/pixel; not a guarantee of 25 cm object recognition |
 | Source window | x=65942, y=153938, width=1024, height=1024, zero-based |
 | Geotransform | `[8142733.5, 0.25, 0, -279648.5, 0, -0.25]` |
-| Projection | Mars sphere radius 3396190 m, equirectangular, central longitude 0°, standard parallel 0° |
+| Projection | Mars sphere radius 3396190 m, equirectangular, central longitude 0Â°, standard parallel 0Â° |
 | Site choice | Test patch; final team region is not confirmed by this handoff |
 
 [Official source and credits](https://astrogeology.usgs.gov/search/map/mars_msl_gale_merged_orthophoto_mosaic_25cm): Calef III and Parker / NASA / JPL-Caltech / USGS / University of Arizona.
@@ -58,7 +58,7 @@ python ml/rock_review/prepare_review.py ml/data/Gale_HiRISE_starter_25cm.png ml/
 
 Create `ml/data/` first. The GDAL retrieval is an alternative recipe; the handoff was generated from a range-read extraction of the stated source window. PNG encoders may produce different file hashes for identical pixels. With `--metadata`, the script checks the grayscale-pixel hash before assigning the crop's coordinates.
 
-Outputs: `Gale_50_rock_candidates.png`, `review_details_1.png`, `review_details_2.png`, `rock_candidates_review.json`. The overview has a 60-pixel footer below the 1024 image rows; all coordinates refer to the source image without the footer. Each review tile is a 64 × 64 source-pixel window (16 × 16 m), displayed at 2× without smoothing.
+Outputs: `Gale_50_rock_candidates.png`, `review_details_1.png`, `review_details_2.png`, `rock_candidates_review.json`. The overview has a 60-pixel footer below the 1024 image rows; all coordinates refer to the source image without the footer. Each review tile is a 64 Ã— 64 source-pixel window (16 Ã— 16 m), displayed at 2Ã— without smoothing.
 
 Use a fresh output directory for each run. Preserve reviewed decisions separately from the frozen initial candidate file. The renderer produces fresh unreviewed proposals; it does not overwrite or transfer the accepted decisions in `candidates_reviewed.json`. Jules does not need to repeat the first 50-circle review.
 
@@ -94,9 +94,17 @@ Matching maximizes the number of one-to-one centroid correspondences within the
 fixed distance limit; review-circle radii are not used. This is selected-reference
 correspondence, not precision or recall. Unmatched proposals cannot be labeled
 false alarms without review, and missed-rock completeness is unknown. The new
-12-tile visual review is pending and is separate from Jules's accepted 50 points.
+12-tile visual review is provisionally accepted with low confidence: Jules said
+he could not see the image well and thought the proposals looked correct. The
+exact statement is in `shadow_review.json`; it does not validate shadow geometry
+or measure precision. It is separate from the original 50 accepted locations.
 
 Next: obtain the contributing observation/illumination metadata, improve the
 method based on reviewed errors, then evaluate on a separately annotated area.
-R3 remains blocked on Luca's confirmed image/DEM footprint and world-grid
-metadata. No `rocks_fine.u8`, fabricated heights or final-site metrics are emitted.
+Luca has since delivered the real site via #63 on `dev`: 2048 m square centred
+at -4.800, 137.383 E, 256 x 256 cells at 8 m. This starter crop is outside it,
+about 5 km north. The real site's current `rocks_fine` is explicitly a DTM
+roughness estimate. R3 needs a suitable detector and independent final-site
+annotations; no `rocks_fine.u8`, fabricated heights or final-site metrics are
+emitted by this experiment. Luca's source/grid recipe is in `cut_slice.py` and
+`docs/DATA.md` on `dev`.
