@@ -1,0 +1,60 @@
+// Walking core (block E2). All maths on the 2D grid; the 3D view only shows it.
+// Energy model mirrors data/pipeline/make_world.py so the drain matches cost_to_go exactly:
+// Pandolf (1977) metabolic rate, terrain factor per AI4Mars class, scaled to Mars gravity.
+
+// ponytail: copied from make_world.py CLASSES; move into world.json if Galsan ever tunes it.
+const ETA = [1.2, 1.1, 1.0, 2.1, 1.5] // unknown, soil, bedrock, sand, big rock
+
+const idx = (meta, [x, y]) => y * meta.width + x
+
+// Joules to walk from cell a to neighbour b.
+export function stepCost(meta, height, cls, a, b) {
+  const dist = meta.cell_size_m * Math.hypot(a[0] - b[0], a[1] - b[1])
+  const grade = (100 * (height[idx(meta, b)] - height[idx(meta, a)])) / dist
+  const { body_kg: W, load_kg: L, speed_mps: V } = meta.knobs
+  const eta = ETA[cls[idx(meta, b)]] ?? ETA[0]
+  const watts = 1.5 * W + 2 * (W + L) * (L / W) ** 2 + eta * (W + L) * (1.5 * V * V + 0.35 * V * Math.max(grade, 0))
+  return (watts * (meta.gravity_mps2 / 9.81) * dist) / V
+}
+
+export function startWalk(meta) {
+  return { t: 0, cell: [...meta.base_cell], energy_left_j: meta.energy_budget_j, inside_ring: true }
+}
+
+// Move one cell; returns true when this step crossed the point of no return.
+export function stepTo({ meta, layers }, walk, next) {
+  walk.energy_left_j -= stepCost(meta, layers.height, layers.terrain_class, walk.cell, next)
+  walk.t += (meta.cell_size_m * Math.hypot(next[0] - walk.cell[0], next[1] - walk.cell[1])) / meta.knobs.speed_mps
+  walk.cell = next
+  const was = walk.inside_ring
+  walk.inside_ring = layers.cost_to_go[idx(meta, next)] <= ringLimit(meta, walk)
+  return was && !walk.inside_ring
+}
+
+// The walk-back ring: every cell with cost_to_go <= energy_left - reserve (contract §1).
+export const reserveJ = (meta) => meta.reserve_fraction * meta.energy_budget_j
+export const ringLimit = (meta, walk) => walk.energy_left_j - reserveJ(meta)
+
+export function ringMask(costToGo, limit) {
+  const inside = new Uint8Array(costToGo.length)
+  for (let i = 0; i < costToGo.length; i++) inside[i] = costToGo[i] <= limit
+  return inside
+}
+
+// App state, contract §3. The CAPCOM agent and the walk log read this shape.
+export function appState({ meta, layers }, walk) {
+  const i = idx(meta, walk.cell)
+  return {
+    t: walk.t,
+    astronaut: { x: walk.cell[0], y: walk.cell[1] },
+    energy_left_j: walk.energy_left_j,
+    reserve_j: reserveJ(meta),
+    cost_to_go_j: layers.cost_to_go[i],
+    inside_ring: walk.inside_ring,
+    terrain_class: layers.terrain_class[i],
+    mode: 'route',
+  }
+}
+
+// Litres of oxygen the energy left stands for (kj_per_l_o2 in world.json).
+export const oxygenL = (meta, energyJ) => Math.max(energyJ, 0) / 1000 / meta.kj_per_l_o2
