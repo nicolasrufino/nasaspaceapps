@@ -68,7 +68,8 @@
     "cost_to_go": "cost_to_go.f32",
     "rocks_fine": "rocks_fine.u8",
     "cost_to_go_scouted": "cost_to_go_scouted.f32",
-    "optical": "optical.png"
+    "optical": "optical.png",
+    "scout_plan": "scout_plan.json"
   },
   "site": {
     "name": "Gale crater, lower Mount Sharp boxwork",
@@ -85,5 +86,13 @@
     "projection": "+proj=eqc +lat_ts=0 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +R=3396190 +units=m +no_defs=True"
   },
   "height_offset_m": -3919.4,
-  "energy_budget_note": "knob: sized so the five-stop Curiosity tour uses ~80% of usable energy"
+  "energy_budget_note": "knob: sized so the five-stop Curiosity tour uses ~80% of usable energy",
+  "scout": {
+    "flights": 5,
+    "metres": 3441,
+    "cells_revealed": 1271,
+    "rock_cells_seen_corridor_only": 39,
+    "rock_cells_seen_with_plan": 88,
+    "note": "extra flights after the route corridor; made by data/pipeline/scout_plan.py"
+  }
 }
