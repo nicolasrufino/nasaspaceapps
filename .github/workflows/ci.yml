@@ -19,14 +19,15 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      # Node: runs whatever scripts exist in package.json (lint, typecheck, test, build).
-      # ponytail: root-level only; if you split into frontend/ backend/, add working-directory.
-      - if: hashFiles('package-lock.json') != ''
+      # Node: the three.js app in app/ (lint, typecheck, test, build, whichever scripts exist).
+      - if: hashFiles('app/package-lock.json') != ''
         uses: actions/setup-node@v5
         with:
           node-version: 24
           cache: npm
-      - if: hashFiles('package-lock.json') != ''
+          cache-dependency-path: app/package-lock.json
+      - if: hashFiles('app/package-lock.json') != ''
+        working-directory: app
         run: |
           npm ci
           npm run lint --if-present
