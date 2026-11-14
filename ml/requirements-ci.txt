@@ -1,0 +1,5 @@
+# CI only: what ml/check_exports.py needs to load and run the ONNX exports.
+# CPU wheels, about 40 MB; no torch. Training deps stay in ml/requirements.txt.
+numpy
+onnx>=1.17
+onnxruntime>=1.20
