@@ -27,6 +27,34 @@
         {"id": "G09", "status": "rejected", "note": "Tentative no: je dirais non."},
         {"id": "G10", "status": "accepted"}
       ]
+    },
+    {
+      "reviewer": "Jules Rumeau",
+      "date": "2026-11-14",
+      "timezone": "America/Chicago",
+      "sheet": "final_site_details_2.png",
+      "sheet_sha256": "1424a4c7c7fe75f74a6807a985f962c663ef10e6d83a1fc6cb0053842ecb4670",
+      "question": "Sur la nouvelle planche G11–G20 affichée ci-dessus, lesquels correspondent à un rocher isolé ? Réponds « oui », « non » ou « incertain » par identifiant ; laisse incertains les détails trop flous. Image brute à gauche, repère à droite.",
+      "user_statement": "Yeah, localhost. I don't know if that just says...   Image 11, oui. C'est certain. Image 12, c'est certain. Image 13, c'est certain. Image 14, c'est certain. Image 15, c'est certain. Image C, c'est certain. Image 17, oui. Image 18, incertain. Image 19, oui. Image 20, not sure. I don't think I could.",
+      "clarifications": [
+        {
+          "question": "Quand tu dis « Image C, c’est certain », parles-tu de G16, entre G15 et G17 ?",
+          "user_statement": "Oui, G16 est accepté",
+          "resolves_id": "G16"
+        }
+      ],
+      "decisions": [
+        {"id": "G11", "status": "accepted", "note": "User explicitly says certain."},
+        {"id": "G12", "status": "accepted", "note": "User explicitly says certain."},
+        {"id": "G13", "status": "accepted", "note": "User explicitly says certain."},
+        {"id": "G14", "status": "accepted", "note": "User explicitly says certain."},
+        {"id": "G15", "status": "accepted", "note": "User explicitly says certain."},
+        {"id": "G16", "status": "accepted", "note": "Ambiguous Image C reference explicitly clarified by the user as G16 accepted."},
+        {"id": "G17", "status": "accepted"},
+        {"id": "G18", "status": "uncertain"},
+        {"id": "G19", "status": "accepted"},
+        {"id": "G20", "status": "uncertain"}
+      ]
     }
   ]
 }
