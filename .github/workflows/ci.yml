@@ -1,0 +1,47 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+  merge_group:
+
+# New push to the same PR cancels the old run, so fast pushers don't queue up.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Job name "ci" is the required status check. Rename it = update the ruleset too.
+  # ponytail: no path filters on purpose, a skipped required check blocks merging forever.
+  ci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+
+      # Node: runs whatever scripts exist in package.json (lint, typecheck, test, build).
+      # ponytail: root-level only; if you split into frontend/ backend/, add working-directory.
+      - if: hashFiles('package-lock.json') != ''
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+      - if: hashFiles('package-lock.json') != ''
+        run: |
+          npm ci
+          npm run lint --if-present
+          npm run typecheck --if-present
+          npm test --if-present
+          npm run build --if-present
+
+      # Python: ruff + pytest. Exit code 5 = "no tests collected", which is fine early on.
+      - if: hashFiles('requirements.txt') != ''
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+      - if: hashFiles('requirements.txt') != ''
+        run: |
+          pip install -r requirements.txt ruff pytest
+          ruff check .
+          pytest || [ $? -eq 5 ]
