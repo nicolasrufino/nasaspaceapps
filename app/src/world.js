@@ -41,6 +41,7 @@ export function layerRGB(name, arr) {
   arr.forEach((v, i) => {
     if (v >= UNREACHABLE) return out.set([200, 30, 30], i * 3) // no way home from here
     const t = (v - lo) / span // dark low, pale high
+    if (name === 'best_areas') return out.set(v > 0 ? [40 + 180 * t, 90 + 165 * t, 40 + 40 * t] : [25, 20, 25], i * 3) // green = go
     out.set([30 + 225 * t, 20 + 200 * t, 40 + 110 * t], i * 3)
   })
   return out
