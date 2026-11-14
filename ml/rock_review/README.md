@@ -70,3 +70,33 @@ Use a fresh output directory for each run. Preserve reviewed decisions separatel
 4. An actual rock-density/footprint-to-grid export and documented validation. Checking the 50 selected proposals alone does not measure recall; missed rocks need an independently annotated area.
 
 No quality or navigation-safety claim is made from this preliminary review.
+
+## Image-only shadow-pair baseline (R1 continuation)
+
+`shadow_baseline.py` pairs nearby bright top-hat and dark black-hat components.
+The dark component is only a possible shadow. No contributing acquisition or
+illumination angle has been verified for this mosaic crop (the official USGS
+metadata page returned HTTP 403 during this run). No heights or physical rock
+boundaries are calculated. A component box is an image-processing diagnostic.
+
+```sh
+python -m ml.rock_review.shadow_baseline ml/data/Gale_HiRISE_starter_25cm.png ml/runs/shadow-v1
+```
+
+Use a fresh run directory. It writes all detections, metrics and a fixed hash
+sample of 12 new proposals for review. The accepted 50-location record is never
+modified. `baseline_metrics.json` is the measured result from this run:
+812 pairs, only 2 of 50 reference locations matched within 8 pixels (2 m).
+This baseline is **not suitable for world hazard integration**. The negative
+result is retained; thresholds were not retuned to inflate agreement.
+
+Matching maximizes the number of one-to-one centroid correspondences within the
+fixed distance limit; review-circle radii are not used. This is selected-reference
+correspondence, not precision or recall. Unmatched proposals cannot be labeled
+false alarms without review, and missed-rock completeness is unknown. The new
+12-tile visual review is pending and is separate from Jules's accepted 50 points.
+
+Next: obtain the contributing observation/illumination metadata, improve the
+method based on reviewed errors, then evaluate on a separately annotated area.
+R3 remains blocked on Luca's confirmed image/DEM footprint and world-grid
+metadata. No `rocks_fine.u8`, fabricated heights or final-site metrics are emitted.
