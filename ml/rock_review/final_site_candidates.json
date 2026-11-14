@@ -1,0 +1,1151 @@
+{
+  "schema": "martian-map-final-site-review-v1",
+  "source": {
+    "source_url": "https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/Mars/MSL/MSL_Gale_HiRISE-LRGB_78quads_sharp_cog.tif",
+    "product": "USGS MSL Gale HiRISE LRGB 78 quads sharpened COG",
+    "credit": "NASA/JPL-Caltech/USGS/University of Arizona",
+    "processing": "Exact native RGB pixel window; no added resizing, sharpening or contrast change. Source mosaic itself is sharpened.",
+    "source_window": [
+      9244,
+      53980,
+      8192,
+      8192
+    ],
+    "width": 8192,
+    "height": 8192,
+    "geotransform": [
+      8142311.0,
+      0.25,
+      0.0,
+      -283495.0,
+      0.0,
+      -0.25
+    ],
+    "crs_wkt": "PROJCS[\"GCS_INTERPLANETARY,_MARS_2000_SPHERE\",GEOGCS[\"unknown\",DATUM[\"unnamed\",SPHEROID[\"unnamed\",3396190,0]],PRIMEM[\"Reference meridian\",0],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]]],PROJECTION[\"Equirectangular\"],PARAMETER[\"standard_parallel_1\",0],PARAMETER[\"central_meridian\",0],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]",
+    "world_projection": "+proj=eqc +lat_ts=0 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +R=3396190 +units=m +no_defs=True",
+    "world_projected_bounds": [
+      8142310.999999999,
+      -285543.0,
+      8144359.0,
+      -283495.0
+    ],
+    "world_name": "gale",
+    "world_width": 256,
+    "world_height": 256,
+    "world_cell_size_m": 8.0,
+    "row_order": "north_to_south",
+    "world_sha256": "ab310b594d5428b5874d77d5e054fbf1245710cc1135e3aaab4257def882780b",
+    "source_png_sha256": "70c09c349dae78f41caa60e701fc88d75999924038d55ad1b2155f5587a61758",
+    "source_rgb_pixel_sha256": "7594cf078e70af1684b0b9bfafb47f27adb381abdba1aeb50c4af8363d1f6949",
+    "solar_geometry_verified": false
+  },
+  "review_status": "unreviewed",
+  "method": "Bright-object top-hat proposals; top contrast per 8x8 stratum, hash-select 50 strata. RGB converted to grayscale for proposal generation only.",
+  "limitations": [
+    "New site: old accepted locations and their approval do not transfer.",
+    "Display circles are not measured rock boundaries; selected positives cannot establish recall.",
+    "Not a shadow detector, complete hazard inventory or rocks_fine grid."
+  ],
+  "annotations": [
+    {
+      "x": 882.75,
+      "y": 33.85,
+      "bbox_px": [
+        874,
+        23,
+        21,
+        22
+      ],
+      "id": "G01",
+      "status": "unreviewed",
+      "world_cell": [
+        27,
+        1
+      ],
+      "longitude_east_deg": 137.36943675332023,
+      "latitude_deg": -4.7828770005705925,
+      "projected_m": [
+        8142531.8125,
+        -283503.5875
+      ]
+    },
+    {
+      "x": 3367.23,
+      "y": 264.23,
+      "bbox_px": [
+        3359,
+        258,
+        15,
+        13
+      ],
+      "id": "G02",
+      "status": "unreviewed",
+      "world_cell": [
+        105,
+        8
+      ],
+      "longitude_east_deg": 137.3799154234097,
+      "latitude_deg": -4.7838486630573955,
+      "projected_m": [
+        8143152.9325,
+        -283561.1825
+      ]
+    },
+    {
+      "x": 2940.84,
+      "y": 306.11,
+      "bbox_px": [
+        2929,
+        300,
+        22,
+        16
+      ],
+      "id": "G03",
+      "status": "unreviewed",
+      "world_cell": [
+        91,
+        9
+      ],
+      "longitude_east_deg": 137.37811705910832,
+      "latitude_deg": -4.784025298290261,
+      "projected_m": [
+        8143046.335,
+        -283571.6525
+      ]
+    },
+    {
+      "x": 6015.17,
+      "y": 350.21,
+      "bbox_px": [
+        6012,
+        346,
+        8,
+        8
+      ],
+      "id": "G04",
+      "status": "unreviewed",
+      "world_cell": [
+        187,
+        10
+      ],
+      "longitude_east_deg": 137.3910835107667,
+      "latitude_deg": -4.784211296708821,
+      "projected_m": [
+        8143814.9175,
+        -283582.6775
+      ]
+    },
+    {
+      "x": 6332.57,
+      "y": 469.83,
+      "bbox_px": [
+        6328,
+        467,
+        11,
+        8
+      ],
+      "id": "G05",
+      "status": "unreviewed",
+      "world_cell": [
+        197,
+        14
+      ],
+      "longitude_east_deg": 137.39242219326218,
+      "latitude_deg": -4.784715812147104,
+      "projected_m": [
+        8143894.2675,
+        -283612.5825
+      ]
+    },
+    {
+      "x": 1092.12,
+      "y": 844.83,
+      "bbox_px": [
+        1089,
+        842,
+        9,
+        9
+      ],
+      "id": "G06",
+      "status": "unreviewed",
+      "world_cell": [
+        34,
+        26
+      ],
+      "longitude_east_deg": 137.37031980295498,
+      "latitude_deg": -4.786297431352551,
+      "projected_m": [
+        8142584.155,
+        -283706.3325
+      ]
+    },
+    {
+      "x": 7600.29,
+      "y": 915.83,
+      "bbox_px": [
+        7597,
+        911,
+        7,
+        11
+      ],
+      "id": "G07",
+      "status": "unreviewed",
+      "world_cell": [
+        237,
+        28
+      ],
+      "longitude_east_deg": 137.39776899405985,
+      "latitude_deg": -4.786596884588783,
+      "projected_m": [
+        8144211.1975,
+        -283724.0825
+      ]
+    },
+    {
+      "x": 5300.27,
+      "y": 1304.57,
+      "bbox_px": [
+        5294,
+        1295,
+        15,
+        22
+      ],
+      "id": "G08",
+      "status": "unreviewed",
+      "world_cell": [
+        165,
+        40
+      ],
+      "longitude_east_deg": 137.3880683119134,
+      "latitude_deg": -4.788236454321919,
+      "projected_m": [
+        8143636.1925,
+        -283821.2675
+      ]
+    },
+    {
+      "x": 7102.59,
+      "y": 1535.68,
+      "bbox_px": [
+        7095,
+        1524,
+        16,
+        22
+      ],
+      "id": "G09",
+      "status": "unreviewed",
+      "world_cell": [
+        221,
+        48
+      ],
+      "longitude_east_deg": 137.39566986905038,
+      "latitude_deg": -4.789211195694108,
+      "projected_m": [
+        8144086.7725,
+        -283879.045
+      ]
+    },
+    {
+      "x": 4066.9,
+      "y": 1643.15,
+      "bbox_px": [
+        4061,
+        1634,
+        15,
+        19
+      ],
+      "id": "G10",
+      "status": "unreviewed",
+      "world_cell": [
+        127,
+        51
+      ],
+      "longitude_east_deg": 137.38286638743494,
+      "latitude_deg": -4.789664466670133,
+      "projected_m": [
+        8143327.85,
+        -283905.9125
+      ]
+    },
+    {
+      "x": 4445.22,
+      "y": 1906.76,
+      "bbox_px": [
+        4438,
+        1901,
+        15,
+        14
+      ],
+      "id": "G11",
+      "status": "unreviewed",
+      "world_cell": [
+        138,
+        59
+      ],
+      "longitude_east_deg": 137.3844620092424,
+      "latitude_deg": -4.790776281706796,
+      "projected_m": [
+        8143422.43,
+        -283971.815
+      ]
+    },
+    {
+      "x": 7323.02,
+      "y": 2017.81,
+      "bbox_px": [
+        7315,
+        2010,
+        16,
+        18
+      ],
+      "id": "G12",
+      "status": "unreviewed",
+      "world_cell": [
+        228,
+        63
+      ],
+      "longitude_east_deg": 137.3965995659076,
+      "latitude_deg": -4.79124465187417,
+      "projected_m": [
+        8144141.88,
+        -283999.5775
+      ]
+    },
+    {
+      "x": 6099.48,
+      "y": 2437.48,
+      "bbox_px": [
+        6097,
+        2435,
+        6,
+        6
+      ],
+      "id": "G13",
+      "status": "unreviewed",
+      "world_cell": [
+        190,
+        76
+      ],
+      "longitude_east_deg": 137.39143910094057,
+      "latitude_deg": -4.79301467355937,
+      "projected_m": [
+        8143835.995,
+        -284104.495
+      ]
+    },
+    {
+      "x": 7464.44,
+      "y": 2476.23,
+      "bbox_px": [
+        7453,
+        2467,
+        18,
+        19
+      ],
+      "id": "G14",
+      "status": "unreviewed",
+      "world_cell": [
+        233,
+        77
+      ],
+      "longitude_east_deg": 137.39719602614235,
+      "latitude_deg": -4.793178107543934,
+      "projected_m": [
+        8144177.235,
+        -284114.1825
+      ]
+    },
+    {
+      "x": 4878.8,
+      "y": 2506.43,
+      "bbox_px": [
+        4872,
+        2499,
+        16,
+        16
+      ],
+      "id": "G15",
+      "status": "unreviewed",
+      "world_cell": [
+        152,
+        78
+      ],
+      "longitude_east_deg": 137.38629069845604,
+      "latitude_deg": -4.793305480610612,
+      "projected_m": [
+        8143530.825,
+        -284121.7325
+      ]
+    },
+    {
+      "x": 2754.76,
+      "y": 2660.76,
+      "bbox_px": [
+        2747,
+        2651,
+        15,
+        22
+      ],
+      "id": "G16",
+      "status": "unreviewed",
+      "world_cell": [
+        86,
+        83
+      ],
+      "longitude_east_deg": 137.37733223857032,
+      "latitude_deg": -4.793956390722551,
+      "projected_m": [
+        8142999.815,
+        -284160.315
+      ]
+    },
+    {
+      "x": 2003.88,
+      "y": 2857.0,
+      "bbox_px": [
+        2003,
+        2856,
+        3,
+        4
+      ],
+      "id": "G17",
+      "status": "unreviewed",
+      "world_cell": [
+        62,
+        89
+      ],
+      "longitude_east_deg": 137.37416528862633,
+      "latitude_deg": -4.794784062596889,
+      "projected_m": [
+        8142812.095,
+        -284209.375
+      ]
+    },
+    {
+      "x": 276.1,
+      "y": 3035.1,
+      "bbox_px": [
+        275,
+        3034,
+        4,
+        4
+      ],
+      "id": "G18",
+      "status": "unreviewed",
+      "world_cell": [
+        8,
+        94
+      ],
+      "longitude_east_deg": 137.3668781152109,
+      "latitude_deg": -4.795535226278197,
+      "projected_m": [
+        8142380.15,
+        -284253.9
+      ]
+    },
+    {
+      "x": 6742.59,
+      "y": 3099.0,
+      "bbox_px": [
+        6737,
+        3092,
+        13,
+        14
+      ],
+      "id": "G19",
+      "status": "unreviewed",
+      "world_cell": [
+        210,
+        96
+      ],
+      "longitude_east_deg": 137.39415151461313,
+      "latitude_deg": -4.795804734190805,
+      "projected_m": [
+        8143996.7725,
+        -284269.875
+      ]
+    },
+    {
+      "x": 3142.74,
+      "y": 3104.86,
+      "bbox_px": [
+        3132,
+        3095,
+        22,
+        22
+      ],
+      "id": "G20",
+      "status": "unreviewed",
+      "world_cell": [
+        98,
+        97
+      ],
+      "longitude_east_deg": 137.3789686028885,
+      "latitude_deg": -4.795829449626924,
+      "projected_m": [
+        8143096.81,
+        -284271.34
+      ]
+    },
+    {
+      "x": 4513.82,
+      "y": 3139.93,
+      "bbox_px": [
+        4505,
+        3133,
+        20,
+        17
+      ],
+      "id": "G21",
+      "status": "unreviewed",
+      "world_cell": [
+        141,
+        98
+      ],
+      "longitude_east_deg": 137.38475134011577,
+      "latitude_deg": -4.795977362655016,
+      "projected_m": [
+        8143439.58,
+        -284280.1075
+      ]
+    },
+    {
+      "x": 2026.33,
+      "y": 3174.89,
+      "bbox_px": [
+        2024,
+        3174,
+        5,
+        4
+      ],
+      "id": "G22",
+      "status": "unreviewed",
+      "world_cell": [
+        63,
+        99
+      ],
+      "longitude_east_deg": 137.37425997489612,
+      "latitude_deg": -4.7961248117414765,
+      "projected_m": [
+        8142817.7075,
+        -284288.8475
+      ]
+    },
+    {
+      "x": 264.14,
+      "y": 3180.38,
+      "bbox_px": [
+        262,
+        3178,
+        5,
+        7
+      ],
+      "id": "G23",
+      "status": "unreviewed",
+      "world_cell": [
+        8,
+        99
+      ],
+      "longitude_east_deg": 137.36682767210237,
+      "latitude_deg": -4.796147966646643,
+      "projected_m": [
+        8142377.16,
+        -284290.22
+      ]
+    },
+    {
+      "x": 8089.45,
+      "y": 3778.23,
+      "bbox_px": [
+        8080,
+        3768,
+        21,
+        21
+      ],
+      "id": "G24",
+      "status": "unreviewed",
+      "world_cell": [
+        252,
+        118
+      ],
+      "longitude_east_deg": 137.39983210032796,
+      "latitude_deg": -4.79866948942525,
+      "projected_m": [
+        8144333.4875,
+        -284439.6825
+      ]
+    },
+    {
+      "x": 6057.55,
+      "y": 3818.87,
+      "bbox_px": [
+        6048,
+        3811,
+        21,
+        17
+      ],
+      "id": "G25",
+      "status": "unreviewed",
+      "world_cell": [
+        189,
+        119
+      ],
+      "longitude_east_deg": 137.39126225482516,
+      "latitude_deg": -4.798840894770609,
+      "projected_m": [
+        8143825.5125,
+        -284449.8425
+      ]
+    },
+    {
+      "x": 3040.94,
+      "y": 4210.79,
+      "bbox_px": [
+        3033,
+        4204,
+        17,
+        17
+      ],
+      "id": "G26",
+      "status": "unreviewed",
+      "world_cell": [
+        95,
+        131
+      ],
+      "longitude_east_deg": 137.3785392459949,
+      "latitude_deg": -4.800493876634607,
+      "projected_m": [
+        8143071.36,
+        -284547.8225
+      ]
+    },
+    {
+      "x": 8083.69,
+      "y": 4405.0,
+      "bbox_px": [
+        8075,
+        4397,
+        18,
+        16
+      ],
+      "id": "G27",
+      "status": "unreviewed",
+      "world_cell": [
+        252,
+        137
+      ],
+      "longitude_east_deg": 137.39980780665695,
+      "latitude_deg": -4.8013129866769795,
+      "projected_m": [
+        8144332.0475,
+        -284596.375
+      ]
+    },
+    {
+      "x": 5236.17,
+      "y": 4578.5,
+      "bbox_px": [
+        5234,
+        4575,
+        6,
+        8
+      ],
+      "id": "G28",
+      "status": "unreviewed",
+      "world_cell": [
+        163,
+        143
+      ],
+      "longitude_east_deg": 137.38779796047055,
+      "latitude_deg": -4.802044749162701,
+      "projected_m": [
+        8143620.1675,
+        -284639.75
+      ]
+    },
+    {
+      "x": 4116.18,
+      "y": 4737.92,
+      "bbox_px": [
+        4113,
+        4726,
+        9,
+        21
+      ],
+      "id": "G29",
+      "status": "unreviewed",
+      "world_cell": [
+        128,
+        148
+      ],
+      "longitude_east_deg": 137.38307423328678,
+      "latitude_deg": -4.802717127119321,
+      "projected_m": [
+        8143340.17,
+        -284679.605
+      ]
+    },
+    {
+      "x": 2020.36,
+      "y": 4828.43,
+      "bbox_px": [
+        2018,
+        4826,
+        5,
+        5
+      ],
+      "id": "G30",
+      "status": "unreviewed",
+      "world_cell": [
+        63,
+        150
+      ],
+      "longitude_east_deg": 137.37423479551836,
+      "latitude_deg": -4.803098866730748,
+      "projected_m": [
+        8142816.215,
+        -284702.2325
+      ]
+    },
+    {
+      "x": 6639.67,
+      "y": 4898.67,
+      "bbox_px": [
+        6634,
+        4894,
+        12,
+        12
+      ],
+      "id": "G31",
+      "status": "unreviewed",
+      "world_cell": [
+        207,
+        153
+      ],
+      "longitude_east_deg": 137.39371743395017,
+      "latitude_deg": -4.803395114552057,
+      "projected_m": [
+        8143971.0425,
+        -284719.7925
+      ]
+    },
+    {
+      "x": 236.31,
+      "y": 5085.72,
+      "bbox_px": [
+        232,
+        5079,
+        10,
+        13
+      ],
+      "id": "G32",
+      "status": "unreviewed",
+      "world_cell": [
+        7,
+        158
+      ],
+      "longitude_east_deg": 137.36671029486908,
+      "latitude_deg": -4.8041840262117335,
+      "projected_m": [
+        8142370.2025,
+        -284766.555
+      ]
+    },
+    {
+      "x": 1204.0,
+      "y": 5292.36,
+      "bbox_px": [
+        1201,
+        5290,
+        7,
+        6
+      ],
+      "id": "G33",
+      "status": "unreviewed",
+      "world_cell": [
+        37,
+        165
+      ],
+      "longitude_east_deg": 137.37079167377289,
+      "latitude_deg": -4.805055561658705,
+      "projected_m": [
+        8142612.125,
+        -284818.215
+      ]
+    },
+    {
+      "x": 5705.14,
+      "y": 5631.91,
+      "bbox_px": [
+        5696,
+        5623,
+        19,
+        18
+      ],
+      "id": "G34",
+      "status": "unreviewed",
+      "world_cell": [
+        178,
+        176
+      ],
+      "longitude_east_deg": 137.38977591236065,
+      "latitude_deg": -4.806487665128597,
+      "projected_m": [
+        8143737.41,
+        -284903.1025
+      ]
+    },
+    {
+      "x": 7704.54,
+      "y": 5680.01,
+      "bbox_px": [
+        7697,
+        5670,
+        16,
+        20
+      ],
+      "id": "G35",
+      "status": "unreviewed",
+      "world_cell": [
+        240,
+        177
+      ],
+      "longitude_east_deg": 137.39820868419895,
+      "latitude_deg": -4.8066905341520165,
+      "projected_m": [
+        8144237.26,
+        -284915.1275
+      ]
+    },
+    {
+      "x": 3703.92,
+      "y": 5696.24,
+      "bbox_px": [
+        3699,
+        5687,
+        12,
+        16
+      ],
+      "id": "G36",
+      "status": "unreviewed",
+      "world_cell": [
+        115,
+        178
+      ],
+      "longitude_east_deg": 137.3813354643971,
+      "latitude_deg": -4.806758986631229,
+      "projected_m": [
+        8143237.105,
+        -284919.185
+      ]
+    },
+    {
+      "x": 6839.09,
+      "y": 6116.8,
+      "bbox_px": [
+        6833,
+        6110,
+        12,
+        14
+      ],
+      "id": "G37",
+      "status": "unreviewed",
+      "world_cell": [
+        213,
+        191
+      ],
+      "longitude_east_deg": 137.39455851795535,
+      "latitude_deg": -4.808532762026011,
+      "projected_m": [
+        8144020.8975,
+        -285024.325
+      ]
+    },
+    {
+      "x": 3227.06,
+      "y": 6189.53,
+      "bbox_px": [
+        3216,
+        6182,
+        22,
+        19
+      ],
+      "id": "G38",
+      "status": "unreviewed",
+      "world_cell": [
+        100,
+        193
+      ],
+      "longitude_east_deg": 137.37932423523895,
+      "latitude_deg": -4.808839511798843,
+      "projected_m": [
+        8143117.89,
+        -285042.5075
+      ]
+    },
+    {
+      "x": 6917.52,
+      "y": 6275.18,
+      "bbox_px": [
+        6913,
+        6267,
+        10,
+        14
+      ],
+      "id": "G39",
+      "status": "unreviewed",
+      "world_cell": [
+        216,
+        196
+      ],
+      "longitude_east_deg": 137.3948893083401,
+      "latitude_deg": -4.809200753625367,
+      "projected_m": [
+        8144040.505,
+        -285063.92
+      ]
+    },
+    {
+      "x": 4810.71,
+      "y": 6599.54,
+      "bbox_px": [
+        4808,
+        6595,
+        6,
+        9
+      ],
+      "id": "G40",
+      "status": "unreviewed",
+      "world_cell": [
+        150,
+        206
+      ],
+      "longitude_east_deg": 137.38600351858483,
+      "latitude_deg": -4.810568790973312,
+      "projected_m": [
+        8143513.8025,
+        -285145.01
+      ]
+    },
+    {
+      "x": 6081.62,
+      "y": 6866.67,
+      "bbox_px": [
+        6071,
+        6858,
+        21,
+        18
+      ],
+      "id": "G41",
+      "status": "unreviewed",
+      "world_cell": [
+        190,
+        214
+      ],
+      "longitude_east_deg": 137.3913637736899,
+      "latitude_deg": -4.811695452142249,
+      "projected_m": [
+        8143831.53,
+        -285211.7925
+      ]
+    },
+    {
+      "x": 2447.91,
+      "y": 7037.33,
+      "bbox_px": [
+        2439,
+        7029,
+        22,
+        18
+      ],
+      "id": "G42",
+      "status": "unreviewed",
+      "world_cell": [
+        76,
+        219
+      ],
+      "longitude_east_deg": 137.37603805229514,
+      "latitude_deg": -4.812415236498521,
+      "projected_m": [
+        8142923.1025,
+        -285254.4575
+      ]
+    },
+    {
+      "x": 1885.57,
+      "y": 7140.83,
+      "bbox_px": [
+        1882,
+        7137,
+        8,
+        9
+      ],
+      "id": "G43",
+      "status": "unreviewed",
+      "world_cell": [
+        58,
+        223
+      ],
+      "longitude_east_deg": 137.37366629831118,
+      "latitude_deg": -4.812851763399225,
+      "projected_m": [
+        8142782.5175,
+        -285280.3325
+      ]
+    },
+    {
+      "x": 7214.58,
+      "y": 7192.4,
+      "bbox_px": [
+        7211,
+        7188,
+        9,
+        10
+      ],
+      "id": "G44",
+      "status": "unreviewed",
+      "world_cell": [
+        225,
+        224
+      ],
+      "longitude_east_deg": 137.3961422038099,
+      "latitude_deg": -4.813069267672357,
+      "projected_m": [
+        8144114.77,
+        -285293.225
+      ]
+    },
+    {
+      "x": 1351.47,
+      "y": 7328.87,
+      "bbox_px": [
+        1339,
+        7319,
+        22,
+        21
+      ],
+      "id": "G45",
+      "status": "unreviewed",
+      "world_cell": [
+        42,
+        229
+      ],
+      "longitude_east_deg": 137.37141365079748,
+      "latitude_deg": -4.813644850533605,
+      "projected_m": [
+        8142648.9925,
+        -285327.3425
+      ]
+    },
+    {
+      "x": 6399.11,
+      "y": 7887.38,
+      "bbox_px": [
+        6389,
+        7877,
+        21,
+        20
+      ],
+      "id": "G46",
+      "status": "unreviewed",
+      "world_cell": [
+        199,
+        246
+      ],
+      "longitude_east_deg": 137.39270283577397,
+      "latitude_deg": -4.816000450913431,
+      "projected_m": [
+        8143910.9025,
+        -285466.97
+      ]
+    },
+    {
+      "x": 4766.55,
+      "y": 8008.1,
+      "bbox_px": [
+        4757,
+        8000,
+        21,
+        15
+      ],
+      "id": "G47",
+      "status": "unreviewed",
+      "world_cell": [
+        148,
+        250
+      ],
+      "longitude_east_deg": 137.38581726710717,
+      "latitude_deg": -4.81650960576805,
+      "projected_m": [
+        8143502.7625,
+        -285497.15
+      ]
+    },
+    {
+      "x": 3104.12,
+      "y": 8074.2,
+      "bbox_px": [
+        3095,
+        8063,
+        20,
+        22
+      ],
+      "id": "G48",
+      "status": "unreviewed",
+      "world_cell": [
+        97,
+        252
+      ],
+      "longitude_east_deg": 137.37880571719862,
+      "latitude_deg": -4.816788392513328,
+      "projected_m": [
+        8143087.155,
+        -285513.675
+      ]
+    },
+    {
+      "x": 5714.43,
+      "y": 8091.24,
+      "bbox_px": [
+        5711,
+        8085,
+        8,
+        13
+      ],
+      "id": "G49",
+      "status": "unreviewed",
+      "world_cell": [
+        178,
+        252
+      ],
+      "longitude_east_deg": 137.38981509434043,
+      "latitude_deg": -4.816860261290025,
+      "projected_m": [
+        8143739.7325,
+        -285517.935
+      ]
+    },
+    {
+      "x": 2555.83,
+      "y": 8135.52,
+      "bbox_px": [
+        2550,
+        8128,
+        14,
+        14
+      ],
+      "id": "G50",
+      "status": "unreviewed",
+      "world_cell": [
+        79,
+        254
+      ],
+      "longitude_east_deg": 137.3764932212142,
+      "latitude_deg": -4.817047018885804,
+      "projected_m": [
+        8142950.0825,
+        -285529.005
+      ]
+    }
+  ]
+}

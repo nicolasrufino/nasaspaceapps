@@ -291,7 +291,8 @@ let dots = 0
 if (flags.has('drone_scout') && layers.rocks_fine) $('scoutBox').hidden = false
 $('scout').onclick = () => {
   if (flight) return
-  const flights = [...routeFlights(meta, route.cells), ...scoutPlan.map((f) => ({ waypoints: f.waypoints, metres: f.metres }))]
+  const flights = [...routeFlights(meta, route.cells).map((f) => ({ ...f, kind: 'route corridor' })),
+    ...scoutPlan.map((f) => ({ waypoints: f.waypoints, metres: f.metres, kind: f.kind === 'uncertain' ? 'least certain' : f.kind ?? 'extra' }))]
   if (!flights.length) return
   const metres = flights.reduce((m, f) => m + f.metres, 0)
   flight = { flights, k: 0, along: 0, speed: metres / 9, found: 0, before: route } // the whole scout plays in ~9 s
@@ -328,7 +329,7 @@ function tickFlight(dt) {
     dotsGeo.setDrawRange(0, dots)
     render()
   }
-  $('scoutStatus').textContent = `Flight ${flight.k + 1} of ${flight.flights.length} · ${flight.found} rock cells found · ` +
+  $('scoutStatus').textContent = `Flight ${flight.k + 1} of ${flight.flights.length} (${f.kind}) · ${flight.found} rock cells found · ` +
     `simulated helicopter flight, rocks from ${sourceLabel(meta, 'rocks_fine') || meta.sources?.all || 'rocks_fine'}`
 }
 
