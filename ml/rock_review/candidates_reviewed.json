@@ -1,0 +1,1067 @@
+{
+  "schema": "martian-map-rock-review-v1",
+  "source_file": "Gale_HiRISE_starter_25cm.png",
+  "source_sha256": "21c86b0f0408d06ca21cc0e9b2f7b6fa11eaa431bd6c437d8314883c01fd3196",
+  "source_metadata": {
+    "title": "Gale / Mount Sharp - HiRISE starter crop",
+    "source_product": "MSL Gale Merged Orthophoto Mosaic 25cm v3",
+    "source_url": "https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/MSL_Gale_Orthophoto_Mosaic_25cm_v3.tif",
+    "source_page": "https://astrogeology.usgs.gov/search/map/mars_msl_gale_merged_orthophoto_mosaic_25cm",
+    "credit": "Calef III and Parker / NASA / JPL-Caltech / USGS / University of Arizona",
+    "width": 1024,
+    "height": 1024,
+    "ground_sampling_m": 0.25,
+    "extent_m": [
+      256,
+      256
+    ],
+    "crop_pixel_window": [
+      65942,
+      153938,
+      1024,
+      1024
+    ],
+    "pixel_indexing": "zero-based, column then row",
+    "north_up": true,
+    "crs": "Mars_2000_Sphere, equirectangular, central longitude 0, standard parallel 0, sphere radius 3396190 m",
+    "upper_left_corner_projected_m": [
+      8142733.5,
+      -279648.5
+    ],
+    "geotransform": [
+      8142733.5,
+      0.25,
+      0,
+      -279648.5,
+      0,
+      -0.25
+    ],
+    "centre_latitude_deg": -4.72,
+    "centre_longitude_east_deg": 137.375,
+    "processing": "Exact unresampled 8-bit grayscale source pixel window, lossless PNG encoding; no contrast change or sharpening added",
+    "status": "Starter test area; not yet confirmed as the final team demo area; no rock annotations or model predictions",
+    "solar_geometry": "Not inferred: the source mosaic combines multiple acquisitions. Match the contributing observation before shadow-derived height estimation."
+  },
+  "coordinate_convention": "zero-based pixel centre indices; x right, y down",
+  "method": "Bright-object top-hat proposals (17 px kernel, threshold 18), size filtering and 30 px spacing; no learned model or shadow-height estimation.",
+  "review_status": "accepted_by_user",
+  "limitations": [
+    "Not exhaustive: 50 selected candidates were reviewed; missed rocks were not assessed.",
+    "User visual confirmation is not an independent expert or held-out evaluation.",
+    "Circles remain approximate review markers, not measured rock contours or diameters.",
+    "No rock height, detector accuracy/recall or navigation-safety metric is established by this review.",
+    "The final team footprint and world-grid alignment are still pending."
+  ],
+  "annotations": [
+    {
+      "x": 23.48,
+      "y": 67.83,
+      "radius_px": 14,
+      "candidate_bbox_px": [
+        15,
+        60,
+        19,
+        16
+      ],
+      "id": 1,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142739.495,
+      "projected_northing_m": -279665.5825,
+      "longitude_east_deg": 137.37294048271366,
+      "latitude_deg": -4.7181275347721225
+    },
+    {
+      "x": 134.91,
+      "y": 98.6,
+      "radius_px": 13,
+      "candidate_bbox_px": [
+        127,
+        90,
+        17,
+        18
+      ],
+      "id": 2,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142767.3525,
+      "projected_northing_m": -279673.275,
+      "longitude_east_deg": 137.37341045558847,
+      "latitude_deg": -4.718257311899994
+    },
+    {
+      "x": 247.7,
+      "y": 117.28,
+      "radius_px": 15,
+      "candidate_bbox_px": [
+        239,
+        107,
+        17,
+        21
+      ],
+      "id": 3,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142795.55,
+      "projected_northing_m": -279677.945,
+      "longitude_east_deg": 137.37388616446898,
+      "latitude_deg": -4.718336097624681
+    },
+    {
+      "x": 279.74,
+      "y": 73.85,
+      "radius_px": 14,
+      "candidate_bbox_px": [
+        271,
+        67,
+        19,
+        14
+      ],
+      "id": 4,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142803.56,
+      "projected_northing_m": -279667.0875,
+      "longitude_east_deg": 137.37402129801387,
+      "latitude_deg": -4.718152925032434
+    },
+    {
+      "x": 210.33,
+      "y": 182.36,
+      "radius_px": 12,
+      "candidate_bbox_px": [
+        205,
+        176,
+        10,
+        15
+      ],
+      "id": 5,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142786.2075,
+      "projected_northing_m": -279694.215,
+      "longitude_east_deg": 137.37372855084308,
+      "latitude_deg": -4.718610582365723
+    },
+    {
+      "x": 272.03,
+      "y": 159.55,
+      "radius_px": 15,
+      "candidate_bbox_px": [
+        262,
+        150,
+        21,
+        18
+      ],
+      "id": 6,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142801.6325,
+      "projected_northing_m": -279688.5125,
+      "longitude_east_deg": 137.37398877992305,
+      "latitude_deg": -4.718514377741519
+    },
+    {
+      "x": 350.81,
+      "y": 194.81,
+      "radius_px": 14,
+      "candidate_bbox_px": [
+        341,
+        188,
+        18,
+        19
+      ],
+      "id": 7,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142821.3275,
+      "projected_northing_m": -279697.3275,
+      "longitude_east_deg": 137.3743210464857,
+      "latitude_deg": -4.718663092123343
+    },
+    {
+      "x": 569.65,
+      "y": 236.69,
+      "radius_px": 14,
+      "candidate_bbox_px": [
+        560,
+        227,
+        16,
+        19
+      ],
+      "id": 8,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142876.0375,
+      "projected_northing_m": -279707.7975,
+      "longitude_east_deg": 137.3752440372775,
+      "latitude_deg": -4.718839727356207
+    },
+    {
+      "x": 696.31,
+      "y": 142.76,
+      "radius_px": 10,
+      "candidate_bbox_px": [
+        692,
+        137,
+        9,
+        11
+      ],
+      "id": 9,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142907.7025,
+      "projected_northing_m": -279684.315,
+      "longitude_east_deg": 137.37577824498032,
+      "latitude_deg": -4.718443563377627
+    },
+    {
+      "x": 815.04,
+      "y": 187.8,
+      "radius_px": 15,
+      "candidate_bbox_px": [
+        805,
+        181,
+        21,
+        12
+      ],
+      "id": 10,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142937.385,
+      "projected_northing_m": -279695.575,
+      "longitude_east_deg": 137.37627900670904,
+      "latitude_deg": -4.71863352638833
+    },
+    {
+      "x": 25.29,
+      "y": 305.1,
+      "radius_px": 13,
+      "candidate_bbox_px": [
+        17,
+        295,
+        15,
+        17
+      ],
+      "id": 11,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142739.9475,
+      "projected_northing_m": -279724.9,
+      "longitude_east_deg": 137.37294811666234,
+      "latitude_deg": -4.719128256875793
+    },
+    {
+      "x": 412.93,
+      "y": 357.04,
+      "radius_px": 15,
+      "candidate_bbox_px": [
+        403,
+        348,
+        21,
+        15
+      ],
+      "id": 12,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142836.8575,
+      "projected_northing_m": -279737.885,
+      "longitude_east_deg": 137.37458304697915,
+      "latitude_deg": -4.719347321679876
+    },
+    {
+      "x": 762.38,
+      "y": 302.51,
+      "radius_px": 10,
+      "candidate_bbox_px": [
+        758,
+        298,
+        12,
+        9
+      ],
+      "id": 13,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142924.22,
+      "projected_northing_m": -279724.2525,
+      "longitude_east_deg": 137.37605690519607,
+      "latitude_deg": -4.719117333159148
+    },
+    {
+      "x": 806.7,
+      "y": 288.46,
+      "radius_px": 10,
+      "candidate_bbox_px": [
+        800,
+        284,
+        12,
+        11
+      ],
+      "id": 14,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142935.3,
+      "projected_northing_m": -279720.74,
+      "longitude_east_deg": 137.3762438314979,
+      "latitude_deg": -4.719058075159584
+    },
+    {
+      "x": 831.41,
+      "y": 374.41,
+      "radius_px": 13,
+      "candidate_bbox_px": [
+        824,
+        366,
+        18,
+        17
+      ],
+      "id": 15,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142941.4775,
+      "projected_northing_m": -279742.2275,
+      "longitude_east_deg": 137.3763480496594,
+      "latitude_deg": -4.719420582281472
+    },
+    {
+      "x": 857.16,
+      "y": 311.38,
+      "radius_px": 15,
+      "candidate_bbox_px": [
+        849,
+        303,
+        17,
+        21
+      ],
+      "id": 16,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142947.915,
+      "projected_northing_m": -279726.47,
+      "longitude_east_deg": 137.37645665417818,
+      "latitude_deg": -4.71915474372542
+    },
+    {
+      "x": 909.19,
+      "y": 335.4,
+      "radius_px": 15,
+      "candidate_bbox_px": [
+        898,
+        328,
+        22,
+        16
+      ],
+      "id": 17,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142960.9225,
+      "projected_northing_m": -279732.475,
+      "longitude_east_deg": 137.37667609857087,
+      "latitude_deg": -4.719256051707593
+    },
+    {
+      "x": 958.85,
+      "y": 257.99,
+      "radius_px": 14,
+      "candidate_bbox_px": [
+        954,
+        248,
+        11,
+        19
+      ],
+      "id": 18,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142973.3375,
+      "projected_northing_m": -279713.1225,
+      "longitude_east_deg": 137.3768855471302,
+      "latitude_deg": -4.718929563327077
+    },
+    {
+      "x": 996.2,
+      "y": 315.13,
+      "radius_px": 14,
+      "candidate_bbox_px": [
+        988,
+        306,
+        19,
+        18
+      ],
+      "id": 19,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142982.675,
+      "projected_northing_m": -279727.4075,
+      "longitude_east_deg": 137.37704307640306,
+      "latitude_deg": -4.719170559917475
+    },
+    {
+      "x": 132.8,
+      "y": 443.3,
+      "radius_px": 10,
+      "candidate_bbox_px": [
+        128,
+        439,
+        12,
+        9
+      ],
+      "id": 20,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142766.825,
+      "projected_northing_m": -279759.45,
+      "longitude_east_deg": 137.37340155634442,
+      "latitude_deg": -4.7197111362736415
+    },
+    {
+      "x": 615.74,
+      "y": 470.69,
+      "radius_px": 12,
+      "candidate_bbox_px": [
+        609,
+        464,
+        15,
+        16
+      ],
+      "id": 21,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142887.56,
+      "projected_northing_m": -279766.2975,
+      "longitude_east_deg": 137.37543842882198,
+      "latitude_deg": -4.719826657740406
+    },
+    {
+      "x": 891.12,
+      "y": 503.46,
+      "radius_px": 14,
+      "candidate_bbox_px": [
+        882,
+        496,
+        19,
+        20
+      ],
+      "id": 22,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142956.405,
+      "projected_northing_m": -279774.49,
+      "longitude_east_deg": 137.37659988561342,
+      "latitude_deg": -4.719964870170707
+    },
+    {
+      "x": 973.76,
+      "y": 404.02,
+      "radius_px": 12,
+      "candidate_bbox_px": [
+        967,
+        396,
+        14,
+        16
+      ],
+      "id": 23,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142977.065,
+      "projected_northing_m": -279749.63,
+      "longitude_east_deg": 137.37694843230983,
+      "latitude_deg": -4.719545466933934
+    },
+    {
+      "x": 245.91,
+      "y": 610.37,
+      "radius_px": 15,
+      "candidate_bbox_px": [
+        235,
+        603,
+        22,
+        16
+      ],
+      "id": 24,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142795.1025,
+      "projected_northing_m": -279801.2175,
+      "longitude_east_deg": 137.37387861487332,
+      "latitude_deg": -4.720415779262053
+    },
+    {
+      "x": 399.3,
+      "y": 562.29,
+      "radius_px": 13,
+      "candidate_bbox_px": [
+        392,
+        559,
+        17,
+        8
+      ],
+      "id": 25,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142833.45,
+      "projected_northing_m": -279789.1975,
+      "longitude_east_deg": 137.37452556039312,
+      "latitude_deg": -4.720212994591658
+    },
+    {
+      "x": 505.86,
+      "y": 622.88,
+      "radius_px": 10,
+      "candidate_bbox_px": [
+        500,
+        619,
+        11,
+        9
+      ],
+      "id": 26,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142860.09,
+      "projected_northing_m": -279804.345,
+      "longitude_east_deg": 137.37497499330652,
+      "latitude_deg": -4.720468542078746
+    },
+    {
+      "x": 629.12,
+      "y": 529.75,
+      "radius_px": 15,
+      "candidate_bbox_px": [
+        620,
+        524,
+        21,
+        12
+      ],
+      "id": 27,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142890.905,
+      "projected_northing_m": -279781.0625,
+      "longitude_east_deg": 137.37549486099525,
+      "latitude_deg": -4.720075752221137
+    },
+    {
+      "x": 630.9,
+      "y": 580.54,
+      "radius_px": 13,
+      "candidate_bbox_px": [
+        621,
+        573,
+        17,
+        15
+      ],
+      "id": 28,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142891.35,
+      "projected_northing_m": -279793.76,
+      "longitude_east_deg": 137.3755023684144,
+      "latitude_deg": -4.720289966726323
+    },
+    {
+      "x": 715.31,
+      "y": 514.47,
+      "radius_px": 11,
+      "candidate_bbox_px": [
+        710,
+        511,
+        13,
+        7
+      ],
+      "id": 29,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142912.4525,
+      "projected_northing_m": -279777.2425,
+      "longitude_east_deg": 137.3758583803534,
+      "latitude_deg": -4.720011306510579
+    },
+    {
+      "x": 763.28,
+      "y": 615.28,
+      "radius_px": 11,
+      "candidate_bbox_px": [
+        758,
+        610,
+        10,
+        13
+      ],
+      "id": 30,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142924.445,
+      "projected_northing_m": -279802.445,
+      "longitude_east_deg": 137.37606070108214,
+      "latitude_deg": -4.720436487929516
+    },
+    {
+      "x": 422.75,
+      "y": 683.92,
+      "radius_px": 15,
+      "candidate_bbox_px": [
+        414,
+        672,
+        18,
+        22
+      ],
+      "id": 31,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142839.3125,
+      "projected_northing_m": -279819.605,
+      "longitude_east_deg": 137.37462446431408,
+      "latitude_deg": -4.720725987508881
+    },
+    {
+      "x": 546.45,
+      "y": 655.72,
+      "radius_px": 10,
+      "candidate_bbox_px": [
+        541,
+        650,
+        11,
+        12
+      ],
+      "id": 32,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142870.2375,
+      "projected_northing_m": -279812.555,
+      "longitude_east_deg": 137.3751461877693,
+      "latitude_deg": -4.720607049744632
+    },
+    {
+      "x": 708.37,
+      "y": 737.91,
+      "radius_px": 14,
+      "candidate_bbox_px": [
+        698,
+        730,
+        20,
+        16
+      ],
+      "id": 33,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142910.7175,
+      "projected_northing_m": -279833.1025,
+      "longitude_east_deg": 137.37582910985398,
+      "latitude_deg": -4.720953698497953
+    },
+    {
+      "x": 836.07,
+      "y": 643.46,
+      "radius_px": 15,
+      "candidate_bbox_px": [
+        826,
+        635,
+        21,
+        17
+      ],
+      "id": 34,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142942.6425,
+      "projected_northing_m": -279809.49,
+      "longitude_east_deg": 137.37636770391407,
+      "latitude_deg": -4.7205553413407415
+    },
+    {
+      "x": 910.14,
+      "y": 735.4,
+      "radius_px": 14,
+      "candidate_bbox_px": [
+        902,
+        729,
+        20,
+        14
+      ],
+      "id": 35,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142961.16,
+      "projected_northing_m": -279832.475,
+      "longitude_east_deg": 137.37668010533955,
+      "latitude_deg": -4.720943112193405
+    },
+    {
+      "x": 136.13,
+      "y": 775.99,
+      "radius_px": 13,
+      "candidate_bbox_px": [
+        127,
+        770,
+        18,
+        13
+      ],
+      "id": 36,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142767.6575,
+      "projected_northing_m": -279842.6225,
+      "longitude_east_deg": 137.37341560112299,
+      "latitude_deg": -4.721114306656203
+    },
+    {
+      "x": 262.98,
+      "y": 807.26,
+      "radius_px": 11,
+      "candidate_bbox_px": [
+        259,
+        800,
+        8,
+        14
+      ],
+      "id": 37,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142799.37,
+      "projected_northing_m": -279850.44,
+      "longitude_east_deg": 137.37395061017955,
+      "latitude_deg": -4.721246192609682
+    },
+    {
+      "x": 386.42,
+      "y": 875.63,
+      "radius_px": 15,
+      "candidate_bbox_px": [
+        376,
+        866,
+        21,
+        21
+      ],
+      "id": 38,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142830.23,
+      "projected_northing_m": -279867.5325,
+      "longitude_east_deg": 137.37447123704547,
+      "latitude_deg": -4.7215345534232185
+    },
+    {
+      "x": 478.72,
+      "y": 882.01,
+      "radius_px": 11,
+      "candidate_bbox_px": [
+        472,
+        876,
+        13,
+        14
+      ],
+      "id": 39,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142853.305,
+      "projected_northing_m": -279869.1275,
+      "longitude_east_deg": 137.37486052625255,
+      "latitude_deg": -4.721561462037968
+    },
+    {
+      "x": 554.36,
+      "y": 779.98,
+      "radius_px": 14,
+      "candidate_bbox_px": [
+        545,
+        776,
+        20,
+        11
+      ],
+      "id": 40,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142872.215,
+      "projected_northing_m": -279843.62,
+      "longitude_east_deg": 137.37517954939042,
+      "latitude_deg": -4.721131135084549
+    },
+    {
+      "x": 562.89,
+      "y": 865.37,
+      "radius_px": 12,
+      "candidate_bbox_px": [
+        555,
+        861,
+        16,
+        10
+      ],
+      "id": 41,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142874.3475,
+      "projected_northing_m": -279864.9675,
+      "longitude_east_deg": 137.37521552595527,
+      "latitude_deg": -4.721491280321757
+    },
+    {
+      "x": 720.85,
+      "y": 810.82,
+      "radius_px": 14,
+      "candidate_bbox_px": [
+        711,
+        806,
+        20,
+        11
+      ],
+      "id": 42,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142913.8375,
+      "projected_northing_m": -279851.33,
+      "longitude_east_deg": 137.37588174614112,
+      "latitude_deg": -4.721261207448005
+    },
+    {
+      "x": 966.87,
+      "y": 876.18,
+      "radius_px": 15,
+      "candidate_bbox_px": [
+        957,
+        870,
+        22,
+        12
+      ],
+      "id": 43,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142975.3425,
+      "projected_northing_m": -279867.67,
+      "longitude_east_deg": 137.37691937269292,
+      "latitude_deg": -4.721536873131386
+    },
+    {
+      "x": 212.51,
+      "y": 899.81,
+      "radius_px": 11,
+      "candidate_bbox_px": [
+        206,
+        896,
+        13,
+        8
+      ],
+      "id": 44,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142786.7525,
+      "projected_northing_m": -279873.5775,
+      "longitude_east_deg": 137.37373774532276,
+      "latitude_deg": -4.721636536229586
+    },
+    {
+      "x": 284.52,
+      "y": 907.33,
+      "radius_px": 10,
+      "candidate_bbox_px": [
+        279,
+        903,
+        11,
+        9
+      ],
+      "id": 45,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142804.755,
+      "projected_northing_m": -279875.4575,
+      "longitude_east_deg": 137.3740414583867,
+      "latitude_deg": -4.721668252966719
+    },
+    {
+      "x": 293.22,
+      "y": 982.5,
+      "radius_px": 12,
+      "candidate_bbox_px": [
+        286,
+        976,
+        15,
+        15
+      ],
+      "id": 46,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142806.93,
+      "projected_northing_m": -279894.25,
+      "longitude_east_deg": 137.37407815195226,
+      "latitude_deg": -4.721985293808516
+    },
+    {
+      "x": 305.72,
+      "y": 945.01,
+      "radius_px": 12,
+      "candidate_bbox_px": [
+        298,
+        939,
+        16,
+        12
+      ],
+      "id": 47,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142810.055,
+      "projected_northing_m": -279884.8775,
+      "longitude_east_deg": 137.37413087259245,
+      "latitude_deg": -4.721827174064483
+    },
+    {
+      "x": 533.24,
+      "y": 922.18,
+      "radius_px": 12,
+      "candidate_bbox_px": [
+        525,
+        917,
+        15,
+        11
+      ],
+      "id": 48,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142866.935,
+      "projected_northing_m": -279879.17,
+      "longitude_east_deg": 137.37509047259675,
+      "latitude_deg": -4.721730885087254
+    },
+    {
+      "x": 676.5,
+      "y": 994.13,
+      "radius_px": 9,
+      "candidate_bbox_px": [
+        672,
+        990,
+        10,
+        9
+      ],
+      "id": 49,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142902.75,
+      "projected_northing_m": -279897.1575,
+      "longitude_east_deg": 137.37569469330978,
+      "latitude_deg": -4.7220343450921405
+    },
+    {
+      "x": 830.13,
+      "y": 959.28,
+      "radius_px": 15,
+      "candidate_bbox_px": [
+        819,
+        951,
+        22,
+        20
+      ],
+      "id": 50,
+      "status": "accepted",
+      "reviewer": "Jules Rumeau",
+      "note": "Accepted in the user review of the first 50 numbered circles.",
+      "projected_easting_m": 8142941.1575,
+      "projected_northing_m": -279888.445,
+      "longitude_east_deg": 137.37634265106584,
+      "latitude_deg": -4.721887359947314
+    }
+  ],
+  "human_review": {
+    "reviewer": "Jules Rumeau",
+    "recorded_at_utc": "2026-11-14T21:31:25.138799+00:00",
+    "source": "Explicit confirmation in the project conversation",
+    "scope": "All 50 numbered circles in the first delivered review image correspond to rocks, according to Jules.",
+    "accepted_candidate_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50
+    ],
+    "precise_contours_reviewed": false,
+    "completeness_assessed": false
+  }
+}
