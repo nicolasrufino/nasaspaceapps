@@ -1,19 +1,17 @@
 # CD: the phone app on Azure Static Web Apps (HTTPS, so phone sensors work). Block D5 (#14), F3 (#47).
-#   push to main  -> production URL
-#   PR            -> preview URL, posted as a comment on the PR by the SWA bot
-#   PR closed     -> preview deleted
-# Not a required check, and it no-ops (green, with a notice) until the secret
-# AZURE_STATIC_WEB_APPS_API_TOKEN exists and app/package.json is on the branch.
+# Deploys only when someone asks (we ship fast; not every push needs a deploy):
+#   production -> Actions > Deploy > Run workflow on main   (or: gh workflow run deploy.yml)
+#                 serves https://nasa.nicolasrufino.com
+#   preview    -> add the `deploy` label to a PR; the SWA bot comments the preview URL.
+#                 New commits don't redeploy: remove and re-add the label.
+#   PR closed  -> its preview is deleted (Free plan: max 3 previews at once).
+# It no-ops (green, with a notice) until the secret AZURE_STATIC_WEB_APPS_API_TOKEN exists and app/package.json is on the branch.
 # Fork PRs get no secrets, so they no-op too (never pull_request_target: it would run fork code with our token).
 name: Deploy
 on:
-  push:
-    branches: [main]
-    paths: ['app/**', 'data/worlds/**', 'ml/exports/**', '.github/workflows/deploy.yml']
   pull_request:
-    types: [opened, synchronize, reopened, closed]
-    paths: ['app/**', 'data/worlds/**', 'ml/exports/**', '.github/workflows/deploy.yml']
-  workflow_dispatch: # first deploy after adding the secret: Actions > Deploy > Run workflow
+    types: [labeled, closed]
+  workflow_dispatch:
 
 # One deploy per PR (or main) at a time; a newer push replaces an older one.
 concurrency:
@@ -26,7 +24,7 @@ permissions:
 
 jobs:
   deploy:
-    if: github.event.action != 'closed'
+    if: github.event_name == 'workflow_dispatch' || github.event.label.name == 'deploy'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -38,6 +36,9 @@ jobs:
         run: |
           if [ -z "$TOKEN" ]; then
             echo "::notice::Deploy skipped: secret AZURE_STATIC_WEB_APPS_API_TOKEN is not set (or this is a fork PR)."
+            echo "go=false" >> "$GITHUB_OUTPUT"
+          elif [ "$GITHUB_EVENT_NAME" = workflow_dispatch ] && [ "$GITHUB_REF" != refs/heads/main ]; then
+            echo "::notice::Deploy skipped: run it on main for production; for a preview, label the PR 'deploy'."
             echo "go=false" >> "$GITHUB_OUTPUT"
           elif [ ! -f app/package.json ]; then
             echo "::notice::Deploy skipped: app/package.json does not exist on this branch yet."
@@ -81,7 +82,7 @@ jobs:
         run: echo "::notice::Deployed to ${{ steps.swa.outputs.static_web_app_url }}"
 
   close-preview:
-    if: github.event.action == 'closed'
+    if: github.event.action == 'closed' && contains(github.event.pull_request.labels.*.name, 'deploy')
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:

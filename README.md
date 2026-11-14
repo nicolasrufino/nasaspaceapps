@@ -131,7 +131,7 @@ Add a script to `package.json` and CI runs it, no workflow edits needed.
 
 ### CD
 
-The app deploys to **Azure Static Web Apps** (block D5, issue #14): `main` deploys the public link, and each PR can get a preview URL. Azure is also what makes us eligible for the Best Use of Technology award.
+The app deploys to **Azure Static Web Apps** (block D5, issue #14): it deploys only on request. Run **Actions > Deploy** on `main` to update the public link, https://nasa.nicolasrufino.com, or add the `deploy` label to a PR to get a preview URL. Azure is also what makes us eligible for the Best Use of Technology award.
 
 ## One-time setup (repo owner)
 
