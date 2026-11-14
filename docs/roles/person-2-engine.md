@@ -5,7 +5,7 @@
 **Owns:** `app/`.
 **Reads:** world files (contract §1), ONNX models (contract §2).
 **Writes:** app state and walk logs (contract §3).
-**Decides:** the stack by 12:30 (see `docs/PLAN.md` §5; suggestion: Babylon.js).
+**Stack:** web, three.js (decided from `docs/CRITIQUE.md`): one app for the game, the habitat and suit displays, and the public viewer.
 
 ## Foundation (do first)
 1. **11:30–12:30** Choose the stack with the team. Create the app project in `app/`. Load `data/worlds/synthetic/world.json` and `height.f32`; render the terrain as a mesh, colored by `terrain_class.u8`.
