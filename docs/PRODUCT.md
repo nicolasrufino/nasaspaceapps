@@ -66,7 +66,8 @@ Orbit sees everything, coarsely, for free. The drone sees fine detail, but only 
 - **Why we believe it works:** Ingenuity flew 72 times on Mars and scouted routes for Perseverance; one flight ruled out a target and saved the rover team about two months of driving. JPL's 2025 Skyfall concept proposes helicopters to scout landing sites for people.
 - **What it makes easier:** surprises move from the walk to the planning table.
 - **Objectives it meets:** R4 (route around obstacles), C6 (robots supporting the crew).
-- **In our demo:** the flight is simulated; what it reveals is real NASA data, the full-resolution images and elevation of the same slice, labelled "simulated drone view, real HiRISE data".
+- **How it sees in 3D:** the same idea as a bat's echolocation, but with light instead of sound, because Mars' thin air loses high-pitched sound within metres. The main sensor is cameras: overlapping photos turned into 3D, already done with Ingenuity's images at 5 cm detail. A laser adds exact height; radar could later show what is underneath. Details in `docs/RESEARCH.md` §13.
+- **In our demo:** the flight is simulated; what it reveals is real NASA data, the full-resolution images and elevation of the same slice, labelled "simulated drone view, real HiRISE data". As it flies, a scan sweep shows rays hitting the terrain and dots building up before the full detail fades in.
 
 ### Stage 3: Plan and pack. Decide before you leave
 

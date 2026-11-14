@@ -45,7 +45,7 @@ Each option on its own fails at least one need. Ours combines the parts that wor
 1. **Start** at a random spot inside the Gale site, on the habitat screen. Goal: boxwork.
 2. **Orbit only:** the map shows coarse layers and a first route.
 3. **Deploy the scout** (a 10-second animation). The drone flies Ingenuity-class legs (about 700 m and 3 minutes each). It covers the route corridor first, then the cells it is least sure about.
-4. **Reveal:** where it flies, the map switches to full-resolution HiRISE terrain and detected rocks, labelled "simulated drone view, real HiRISE data". A hidden rock field appears.
+4. **Reveal:** a scan sweep shows rays hitting the ground and dots building up (how a lidar or a bat "sees"); then, where it flies, the map switches to full-resolution HiRISE terrain and detected rocks, labelled "simulated drone view, real HiRISE data". A hidden rock field appears.
 5. **Re-plan and explain:** the new route avoids it. The "why this route" panel shows the extra distance, the effort, the slope limit, the rocks avoided and the margin home everywhere. The packing list updates.
 6. **Walk:** a judge carries the phone; real steps move the astronaut; the ring shrinks; at a stop, the science checklist runs.
 7. **Share:** export the map package; it "arrives" at mission control 11 minutes later.
