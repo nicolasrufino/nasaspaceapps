@@ -14,10 +14,12 @@ Five minutes, the organizers' seven parts. One argument runs through it: **there
 **2. Problem (0:30–1:00)**
 > NASA has decades of Mars data, but no map at the scale of one walk. Orbit misses rocks under a metre. Mission control can't guide you through a 20-minute delay. A rover scouting ahead moves at about 110 metres an hour, far slower than you walk. And exploring by eye is how plans break.
 
-**3. Solution in one sentence (1:00–1:15)**
+**3. Solution in one sentence and the five stages (1:00–1:45)**
 > **Martian Map turns NASA's Mars data into a science walk you can plan, preview and come home from, and makes the map better with every walk.**
 
-**4. Demo (1:15–3:00)**
+> We build the map in five stages, coarse to fine; each one tells the next where to look. **Orbit** first: it's the only data covering the whole site before anyone lands, and NASA already collected it. It shows where the science is and where not to go. But it can't see a knee-high rock or soft sand, so a **scout drone** flies the route first, the way Ingenuity scouted for Perseverance. Then we **plan and pack** before leaving, because Earth is up to 22 minutes away. On the **walk**, the suit display keeps the way home known, and every step adds detail. The **next walk** starts from a better map. For each of NASA's five objectives, today's tools do one stage; we connect all five.
+
+**4. Demo (1:45–3:00)**
 - Habitat screen, a random spot inside Gale crater, goal "boxwork". Orbit-only map and a first route.
 - Deploy the scout drone. It flies Ingenuity-sized legs along the route, then where it is least sure. Where it flies, the map sharpens: real full-resolution HiRISE terrain and detected rocks. A hidden rock field appears.
 - The route re-plans. "Why this route": +120 m, less effort, avoids the rock field, never steeper than the limit, home reachable everywhere *(numbers to measure)*. The packing list moves the drill to the rover.
@@ -39,14 +41,16 @@ Five minutes, the organizers' seven parts. One argument runs through it: **there
 2. There is no map at the scale of one walk (problem)
 3. On Mars, help is 4–22 minutes away (stakes)
 4. The one sentence
-5. How we make the map: the five-step loop
-6. Live demo
-7. Six NASA data sources, one view
-8. Proof: every piece is already proven at NASA
-9. Why this beats every option on its own (comparison table)
-10. Impact and money
-11. Team + next
-12. *(Backup)* Why a robot: lead, carry, relay, rescue
+5. Coarse to fine: the five stages and why each exists
+6. NASA's objectives, one by one: today's tools versus ours
+7. Live demo
+8. Six NASA data sources, one view
+9. Proof: every piece is already proven at NASA
+10. Why this beats every option on its own (comparison table)
+11. Impact and money
+12. Team + next
+13. *(Backup)* Why a robot: lead, carry, relay, rescue
+14. *(Backup)* The five NASA resources and how we use each
 
 ## Questions judges are likely to ask
 
