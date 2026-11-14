@@ -1,0 +1,36 @@
+<div class="bg-wrap"><div class="bg" id="bg">
+<svg class="bg-svg" aria-hidden="true"></svg>
+{{CELLS}}
+</div></div>
+<div class="bg-detail" id="bg-detail" aria-live="polite"><p class="muted">Click a block to see what goes inside it, what it needs first, and what it unlocks.</p></div>
+<script>
+(function(){
+  var B={{BLOCKS}}, bg=document.getElementById('bg'), svg=bg.querySelector('svg'), det=document.getElementById('bg-detail'), sel=null;
+  var deps={}; Object.keys(B).forEach(function(k){B[k].needs.forEach(function(n){(deps[n]=deps[n]||[]).push(k);});});
+  function box(id){return bg.querySelector('[data-id="'+id+'"]');}
+  function draw(){
+    var r=bg.getBoundingClientRect(), out='';
+    svg.setAttribute('width',bg.scrollWidth); svg.setAttribute('height',bg.scrollHeight);
+    Object.keys(B).forEach(function(k){B[k].needs.forEach(function(n){
+      var a=box(n),b=box(k); if(!a||!b)return;
+      var p=a.getBoundingClientRect(), q=b.getBoundingClientRect(), x1,y1,x2,y2,d;
+      var on=sel&&(sel===k||sel===n);
+      if(Math.abs(p.left-q.left)<20){x1=p.left-r.left;y1=p.top+p.height/2-r.top;x2=q.left-r.left;y2=q.top+q.height/2-r.top;d='M'+x1+','+y1+' C'+(x1-28)+','+y1+' '+(x2-28)+','+y2+' '+x2+','+y2;}
+      else{x1=p.right-r.left;y1=p.top+p.height/2-r.top;x2=q.left-r.left;y2=q.top+q.height/2-r.top;var m=(x2-x1)/2;d='M'+x1+','+y1+' C'+(x1+m)+','+y1+' '+(x2-m)+','+y2+' '+x2+','+y2;}
+      out+='<path d="'+d+'" class="'+(on?'on':'')+'" marker-end="url(#ah'+(on?'on':'')+')"/>';
+    });});
+    svg.innerHTML='<defs><marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L8,4 L0,8z" class="ah"/></marker><marker id="ahon" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L8,4 L0,8z" class="ahon"/></marker></defs>'+out;
+  }
+  function name(id){return '<b>'+id+'</b> '+B[id].title;}
+  function pick(id){
+    sel=(sel===id)?null:id;
+    bg.querySelectorAll('.blk').forEach(function(e){var i=e.dataset.id;e.classList.toggle('sel',i===sel);e.classList.toggle('need',!!sel&&B[sel].needs.indexOf(i)>=0);e.classList.toggle('unl',!!sel&&(deps[sel]||[]).indexOf(i)>=0);e.classList.toggle('dim',!!sel&&i!==sel&&B[sel].needs.indexOf(i)<0&&(deps[sel]||[]).indexOf(i)<0);});
+    if(!sel){det.innerHTML='<p class="muted">Click a block to see what goes inside it, what it needs first, and what it unlocks.</p>';}
+    else{var b=B[sel];det.innerHTML='<p class="lbl2">'+b.who+' · '+b.when+'</p><h3>'+sel+' '+b.title+'</h3><p>'+b.what+'</p><p><strong>Needs first:</strong> '+(b.needs.length?b.needs.map(name).join(', '):'nothing, start now')+'</p><p><strong>Unlocks:</strong> '+((deps[sel]||[]).length?deps[sel].map(name).join(', '):'nothing else waits on it')+'</p>'+(b.issue?'<p><strong>Issue:</strong> '+b.issue+'</p>':'');}
+    draw();
+  }
+  bg.addEventListener('click',function(e){var t=e.target.closest('.blk');if(t&&!e.target.closest('a'))pick(t.dataset.id);});
+  bg.addEventListener('keydown',function(e){var t=e.target.closest('.blk');if(t&&(e.key==='Enter'||e.key===' ')){e.preventDefault();pick(t.dataset.id);}});
+  if(window.ResizeObserver)new ResizeObserver(draw).observe(bg); window.addEventListener('load',draw); draw();
+})();
+</script>

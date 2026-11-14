@@ -2,6 +2,11 @@
 
 Read `docs/PRODUCT.md` (what we build), `docs/BUILD.md` (who builds what, and what each block needs first), `docs/CONTRACTS.md` and your person's brief in `docs/roles/` before writing code. Work on one block at a time; its GitHub issue says what it needs, what it unlocks and when it is done. Each folder (`ml/`, `app/`, `data/`, `agent/`) has its own `AGENTS.md` with its environment and check commands. Codex workflow: `docs/CODEX.md` (one task per git worktree).
 
+**Where things live (read these, in this order):** `docs/PRODUCT.md`, `docs/BUILD.md`, your brief in `docs/roles/`, `docs/CONTRACTS.md`. The pitch is `docs/PITCH.md` and its slides are in `docs/deck/`.
+- **Team page:** https://claude.ai/artifact/FxZ2AS4JSxE6d1RMbfXq6N, generated from these docs by `docs/team-page/build.py`. Don't edit or read `docs/team-page/plan.html`; read the docs it is built from.
+- **Pitch deck:** https://claude.ai/artifact/XiHnUGPaJkCCpBeHoWck41, source in `docs/deck/`.
+- claude.ai links need a sign-in. Agents that can't open them (Codex) use the repo files; they hold the same content.
+
 1. **Stay in your folder.** Person 1 (Jules): `ml/`, `agent/`. Person 2 (Nicolas): `app/`. Person 3 (Galsan): `data/`, `docs/`. Person X: `docs/` and agreed parts of `app/`.
 2. **Contracts are fixed.** Formats in `docs/CONTRACTS.md` change only in a PR that edits that file, approved by every owner. Add fields; never rename or remove.
 3. **Foundation before features.** The base demo (terrain, movement, energy, walk-back ring, buzz) must keep working. New features go behind a flag and default to off until they are stable.

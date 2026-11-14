@@ -1,0 +1,139 @@
+<h2 id="screens">What the app could look like</h2>
+<p class="col">A suggested design, not a decision. The order follows a Marswalk: plan, scout and pack, walk, investigate, and stay safe. The maps below are drawn from the real output of <code>make_world.py</code> (the synthetic world): terrain, terrain type and the energy needed to walk home from every point. The phone screen stands in for a suit display, so it is dark, high-contrast and readable at arm's length while walking. The map data is real; the numbers on the screens (margins, minutes, kilojoules) are illustrative.</p>
+
+<div class="screens">
+  <figure class="shot">
+    <div class="phone"><div class="hud">
+      <div class="hud-top"><span>Plan · Mount Sharp</span><span>Goal: boxwork</span><span>3 stops</span></div>
+      <div class="layers"><span class="on">Image · HiRISE</span><span class="on">Slope · DTM</span><span class="on">Sand · THEMIS</span><span>Minerals · CRISM</span><span>Dose · RAD</span></div>
+      <canvas data-scene="plan" width="320" height="300" aria-label="Plan view with science stops and route"></canvas>
+      <div class="pov"><div class="pov-img">Curiosity Mastcam photo of this stop</div><div><strong>Stop B · boxwork ridge</strong><br>Ridges 1–2 m, sulfate layer<br><span class="amber-t">Route avoids sand: +140 m, −18% effort</span></div></div>
+    </div></div>
+    <figcaption><strong>1. Plan (habitat display).</strong> Pick a science goal; the layers point to targets; the route goes around loose sand and steep slopes; each stop shows the rover's own photo, so the crew knows what to expect.<br><em>Why:</em> the challenge asks for a layered, hyperlocal view from several missions, starting from a science goal, with rover point-of-view images. Mars Trek and MMGIS show regional maps or serve rover teams on Earth; this view is built for one crew and one walk.</figcaption>
+  </figure>
+
+  <figure class="shot">
+    <div class="phone"><div class="hud">
+      <div class="hud-top"><span>Scout · drone flight 1</span><span class="ok">Route re-planned</span><span>Pack 14 kg</span></div>
+      <canvas data-scene="scout" width="320" height="300" aria-label="Drone path revealing rock fields along the route"></canvas>
+      <div class="chips2"><span class="chip">2 rock fields found · +120 m detour</span><span class="chip cy">Orbit missed both</span></div>
+      <ol class="stops"><li>Oxygen and water: 4 h + 1 h reserve</li><li>Core sampler, 6 sample bags (stops A, B)</li><li>Rock hammer, hand lens, sample marker flags</li><li class="amber-t">Drill kit 9 kg → rover carries it</li></ol>
+    </div></div>
+    <figcaption><strong>Scout and pack (habitat display).</strong> Before the walk, a drone flies the route and finds what orbit cannot see; the route re-plans. The packing list comes from the route: air and water with the reserve, the sampling kit for each target, and anything too heavy goes on the rover.<br><em>Why:</em> Ingenuity scouted routes for Perseverance across 72 flights, and one flight saved about two months of driving; NASA's statement asks how carrying equipment and supplies affects a suited astronaut.</figcaption>
+  </figure>
+
+  <figure class="shot">
+    <div class="phone"><div class="hud">
+      <div class="hud-top"><span>Walk · 02:14</span><span class="ok">O₂ 61%</span><span>Earth +11 min</span></div>
+      <canvas data-scene="explore" width="320" height="320" aria-label="Map with the walk-back ring"></canvas>
+      <div class="hud-bar"><div class="meter"><i style="width:60%"></i><b style="left:20%"></b></div><div class="row"><span>Margin <strong class="ok">34%</strong></span><span>Next stop 180 m · Home 11 min</span></div></div>
+      <div class="chips2"><span class="chip">Sand ahead · +90% effort</span><span class="chip cy">Buddy · scouting 40 m ahead</span></div>
+    </div></div>
+    <figcaption><strong>2. Walk (phone as the suit display).</strong> Real steps move you along the route. The cyan area is everywhere you can still reach and get home with the reserve; it shrinks as you spend energy and oxygen.<br><em>Why:</em> NASA's Artemis rules limit walks to 2 km, sized to a 1-hour return on emergency oxygen, and work it out before the walk. On Mars the crew needs that limit live, because the map will be wrong in places.</figcaption>
+  </figure>
+
+  <figure class="shot">
+    <div class="phone"><div class="hud">
+      <div class="hud-top"><span>Stop B · ridge</span><span>Rocks examined 3</span><span>Sampled 1</span></div>
+      <ol class="checklist"><li class="done">Look: wide photo of the ridge</li><li class="done">Get close: texture and veins</li><li class="done">Decide: ground tagged "bedrock"</li><li class="now">Sample or move on?</li></ol>
+      <div class="card2"><strong>Context card · sample B-1</strong><span>Cell 34,24 · slope 6° · thermal inertia high</span><span>CRISM: sulfate · dose so far 41 µGy</span><span>Photo · 14:22 local</span></div>
+      <div class="btns"><button type="button">Sample</button><button type="button" class="alt">Move on</button></div>
+    </div></div>
+    <figcaption><strong>3. At the stop.</strong> A short checklist (look, get close, decide, sample or move on) and a context card that records where the sample came from and what every layer said there.<br><em>Why:</em> this is how Perseverance investigates a target (images, close look, decide whether to core), and NASA notes a sample's place and context matter as much as the sample. On Mars the crew is the science team on site.</figcaption>
+  </figure>
+
+  <figure class="shot">
+    <div class="phone alert"><div class="hud">
+      <div class="hud-top"><span>Walk · 03:41</span><span class="bad">O₂ 38%</span><span>Earth +11 min</span></div>
+      <canvas data-scene="noreturn" width="320" height="320" aria-label="Astronaut outside the ring"></canvas>
+      <div class="warn"><strong>Turn back now</strong><span>Stop C is past the point of no return.</span></div>
+      <div class="btns"><button type="button">Show route home</button><button type="button" class="alt">Ask buddy for a ride</button></div>
+    </div></div>
+    <figcaption><strong>4. Point of no return.</strong> The phone vibrates and goes red when the energy needed to get home, plus the reserve, is more than what is left.<br><em>Why:</em> in NASA's 2022 Arizona field test, the first walk ended early when slopes the maps could not show blocked the route. On the Moon, help is seconds away; on Mars it is 4 to 22 minutes, so the device makes the call.</figcaption>
+  </figure>
+
+  <figure class="shot">
+    <div class="phone"><div class="hud">
+      <div class="hud-top"><span>Buddy rover</span><span class="ok">Battery 72%</span><span>Link good</span></div>
+      <canvas data-scene="buddy" width="320" height="200" aria-label="Rover and breadcrumb path"></canvas>
+      <div class="modes"><span class="on">Lead</span><span>Heel</span><span>Carry</span><span>Relay</span></div>
+      <div class="ladder"><button type="button" class="estop">E-STOP</button><button type="button">Hold</button><button type="button">Come to me</button><button type="button">Return to base</button></div>
+      <div class="health"><span>Rocks flagged ahead: 4</span><span>Camera: dusty</span><span>Payload 18 kg</span></div>
+    </div></div>
+    <figcaption><strong>5. Buddy rover.</strong> It leads and scouts the way Perseverance's AutoNav drives (observe, map, evaluate, choose, update), flags rocks the orbital image missed, carries tools and relays comms. The override ladder runs from emergency stop to return to base.<br><em>Why:</em> crews in NASA's 2022 desert test preferred "rover leads, crew follows"; NASA's new Lunar Terrain Vehicles (May 2026) drive with or without crew; the challenge suggests rovers that carry crew and tools.</figcaption>
+  </figure>
+
+  <figure class="shot">
+    <div class="phone"><div class="hud">
+      <div class="hud-top"><span>Hazards</span><span class="bad">Solar storm</span><span>Earth +11 min</span></div>
+      <canvas data-scene="storm" width="320" height="320" aria-label="Shelter markers during a solar storm"></canvas>
+      <div class="warn amber"><strong>Shelter in 18 min</strong><span>Nearest: rover (7 min) · ridge wall (12 min)</span></div>
+      <div class="chips2"><span class="chip">Dust τ 1.8 · rover power −22%</span><span class="chip">Next relay pass 14:05</span></div>
+    </div></div>
+    <figcaption><strong>6. Space weather and hazards.</strong> A solar-storm alert turns the map into walking minutes to shelter; dust lowers rover power; delay to Earth and the next relay pass stay visible.<br><em>Why:</em> the challenge asks for space-weather data because Mars radiation differs from Earth's and the Moon's. Curiosity measures it at Gale, and the May 2024 solar storm would have dosed someone beside it with about 30 chest X-rays.</figcaption>
+  </figure>
+</div>
+
+<script id="world64" type="application/json">{{WORLD64}}</script>
+<script>
+(function () {
+  var W = JSON.parse(document.getElementById('world64').textContent);
+  var n = W.n, B = W.base;
+  function shade(x, y) {
+    var i = y * n + x, hx = W.h[y * n + Math.min(x + 1, n - 1)] - W.h[i], hy = W.h[Math.min(y + 1, n - 1) * n + x] - W.h[i];
+    return Math.max(0.35, Math.min(1.15, 0.85 - (hx + hy) * 0.06));
+  }
+  var classTint = { 0: [120, 90, 70], 1: [150, 92, 60], 2: [118, 98, 86], 3: [186, 140, 84], 4: [96, 72, 60] };
+  var route = [[16, 32], [20, 30], [24, 28], [28, 26], [31, 25], [34, 24], [37, 23], [40, 22], [43, 21]];
+  function draw(cv, opt) {
+    var ctx = cv.getContext('2d'), w = cv.width, h = cv.height, sz = Math.min(w, h), ox = (w - sz) / 2, oy = (h - sz) / 2, c = sz / n;
+    ctx.fillStyle = '#05070b'; ctx.fillRect(0, 0, w, h);
+    var crop = opt.crop || [0, 0, n];
+    var cs = sz / crop[2];
+    for (var y = 0; y < crop[2]; y++) for (var x = 0; x < crop[2]; x++) {
+      var X = x + crop[0], Y = y + crop[1]; if (X >= n || Y >= n) continue;
+      var i = Y * n + X, t = classTint[W.c[i]] || classTint[0], s = shade(X, Y);
+      ctx.fillStyle = 'rgb(' + (t[0] * s | 0) + ',' + (t[1] * s | 0) + ',' + (t[2] * s | 0) + ')';
+      ctx.fillRect(ox + x * cs, oy + y * cs, cs + 0.6, cs + 0.6);
+      var g = W.g[i];
+      if (opt.ring != null && g >= 0 && g <= opt.ring) { ctx.fillStyle = 'rgba(56,220,255,0.48)'; ctx.fillRect(ox + x * cs, oy + y * cs, cs + 0.6, cs + 0.6); }
+      if (opt.rocks && W.r[i]) { var seen = opt.seen(X, Y); ctx.fillStyle = seen ? 'rgba(255,90,90,0.75)' : 'rgba(0,0,0,0)'; ctx.fillRect(ox + x * cs, oy + y * cs, cs + 0.6, cs + 0.6); }
+      if (opt.shelter && g >= 0 && g <= opt.shelter) { ctx.fillStyle = 'rgba(255,190,60,0.32)'; ctx.fillRect(ox + x * cs, oy + y * cs, cs + 0.6, cs + 0.6); }
+    }
+    function P(p) { return [ox + (p[0] - crop[0] + 0.5) * cs, oy + (p[1] - crop[1] + 0.5) * cs]; }
+    if (opt.route) {
+      ctx.strokeStyle = opt.routeColor || 'rgba(255,255,255,0.85)'; ctx.lineWidth = 2; ctx.setLineDash(opt.dash ? [5, 4] : []);
+      ctx.beginPath(); opt.route.forEach(function (p, k) { var q = P(p); k ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]); }); ctx.stroke(); ctx.setLineDash([]);
+    }
+    function dot(p, col, r, label) { var q = P(p); ctx.fillStyle = col; ctx.beginPath(); ctx.arc(q[0], q[1], r, 0, 7); ctx.fill(); ctx.strokeStyle = '#05070b'; ctx.lineWidth = 2; ctx.stroke(); if (label) { ctx.fillStyle = '#e8f6ff'; ctx.font = '600 12px Source Sans 3, sans-serif'; ctx.fillText(label, q[0] + r + 3, q[1] + 4); } }
+    function square(p, col, label) { var q = P(p); ctx.fillStyle = col; ctx.fillRect(q[0] - 6, q[1] - 6, 12, 12); ctx.strokeStyle = '#05070b'; ctx.lineWidth = 2; ctx.strokeRect(q[0] - 6, q[1] - 6, 12, 12); if (label) { ctx.fillStyle = '#e8f6ff'; ctx.font = '600 12px Source Sans 3, sans-serif'; ctx.fillText(label, q[0] + 9, q[1] + 4); } }
+    square(B, '#ffffff', 'Base');
+    (opt.stops || []).forEach(function (s) { dot(s[0], s[1], 6, s[2]); });
+    (opt.shelters || []).forEach(function (s) { square(s[0], '#ffbe3c', s[1]); });
+    if (opt.buddy) dot(opt.buddy, '#38dcff', 6, 'Buddy');
+    if (opt.drone) dot(opt.drone, '#ffd27a', 6, 'Drone');
+    if (opt.me) dot(opt.me, opt.meColor || '#7CFF8A', 7, 'You');
+  }
+  var scenes = {
+    explore: { ring: 100, route: route.slice(0, 6), me: route[5], buddy: [37, 22] },
+    noreturn: { ring: 45, route: route, me: route[8], meColor: '#ff5a5a', buddy: [41, 23] },
+    buddy: { crop: [14, 14, 36], ring: null, route: route.slice(0, 6), routeColor: 'rgba(56,220,255,0.9)', dash: true, me: route[5], buddy: [29, 27] },
+    plan: { ring: null, route: route.slice(0, 7), stops: [[[30, 40], '#7CFF8A', 'A'], [[37, 23], '#7CFF8A', 'B'], [[58, 10], '#ff5a5a', 'C']] },
+    scout: { ring: null, rocks: true, seen: function (x, y) { return route.some(function (p) { return Math.abs(p[0] - x) <= 6 && Math.abs(p[1] - y) <= 6; }); }, route: route, routeColor: 'rgba(56,220,255,0.9)', dash: true, drone: [43, 21] },
+    storm: { ring: null, shelter: 60, me: route[5], buddy: [24, 28], shelters: [[[24, 28], 'Rover'], [[40, 30], 'Crater wall']] }
+  };
+  document.querySelectorAll('canvas[data-scene]').forEach(function (cv) {
+    var k = cv.getAttribute('data-scene');
+    if (k !== 'debrief') { draw(cv, scenes[k]); return; }
+    var ctx = cv.getContext('2d'), w = cv.width, h = cv.height;
+    ctx.fillStyle = '#05070b'; ctx.fillRect(0, 0, w, h);
+    var pred = [0, 18, 41, 63, 88, 112, 131, 150, 167, 182], meas = [0, 20, 44, 70, 98, 124, 145, 166, 184, 199], max = 210;
+    ctx.strokeStyle = 'rgba(255,255,255,0.12)'; ctx.lineWidth = 1;
+    for (var g = 0; g <= 200; g += 50) { var yy = h - 24 - (g / max) * (h - 40); ctx.beginPath(); ctx.moveTo(34, yy); ctx.lineTo(w - 8, yy); ctx.stroke(); ctx.fillStyle = '#8fa3b8'; ctx.font = '11px Source Sans 3, sans-serif'; ctx.fillText(g, 6, yy + 4); }
+    function line(arr, col) { ctx.strokeStyle = col; ctx.lineWidth = 2.5; ctx.beginPath(); arr.forEach(function (v, i) { var x = 34 + i * (w - 46) / (arr.length - 1), y = h - 24 - (v / max) * (h - 40); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.stroke(); }
+    line(pred, '#38dcff'); line(meas, '#ffbe3c');
+    ctx.fillStyle = '#38dcff'; ctx.fillText('Predicted kJ', 40, 16); ctx.fillStyle = '#ffbe3c'; ctx.fillText('Measured kJ', 130, 16);
+    ctx.fillStyle = '#8fa3b8'; ctx.fillText('0 h', 30, h - 6); ctx.fillText('4 h', w - 26, h - 6);
+  });
+})();
+</script>
