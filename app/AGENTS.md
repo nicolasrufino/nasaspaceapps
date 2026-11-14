@@ -6,6 +6,7 @@ npm run dev        # http://localhost:5173, synthetic world; ?world=<name> loads
 npm run phone      # HTTPS on the LAN for a phone (accept the self-signed certificate once)
 npm test           # world files match world.json; layer colours
 npm run build      # dist/ for Azure Static Web Apps, world folders included
+# Feature flags (docs/PLAN.md §10) are off unless named in the URL: ?flags=layers_extra,pov_images
 ```
 
 Applies to everything under `app/`. The root `AGENTS.md` still applies.
