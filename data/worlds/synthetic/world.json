@@ -31,7 +31,8 @@
     "height",
     "slope",
     "terrain_class",
-    "cost_to_go"
+    "cost_to_go",
+    "rocks_fine"
   ],
   "sources": {
     "all": "synthetic terrain for development; real sites list NASA mission, instrument and date per layer"
@@ -41,6 +42,8 @@
     "slope": "slope.f32",
     "terrain_class": "terrain_class.u8",
     "cost_per_m": "cost_per_m.f32",
-    "cost_to_go": "cost_to_go.f32"
+    "cost_to_go": "cost_to_go.f32",
+    "rocks_fine": "rocks_fine.u8",
+    "cost_to_go_scouted": "cost_to_go_scouted.f32"
   }
 }

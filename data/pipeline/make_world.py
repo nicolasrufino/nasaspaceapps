@@ -56,7 +56,7 @@ def synthetic_classes(n, height, seed=7):
     return out
 
 
-def build(n, cell, base, energy_budget_j):
+def build(n, cell, base, energy_budget_j, blocked=None):
     h = synthetic_height(n, cell)
     cls = synthetic_classes(n, h)
     slope = array.array('f', [0.0]) * (n * n)
@@ -68,7 +68,7 @@ def build(n, cell, base, energy_budget_j):
 
     def step_cost(i, j, dist):
         """Joules to walk from cell i to neighbour j (distance dist m). inf if too steep."""
-        if slope[j] > KNOBS['max_slope_deg']:
+        if slope[j] > KNOBS['max_slope_deg'] or (blocked is not None and blocked[j]):
             return math.inf
         grade = 100.0 * (h[j] - h[i]) / dist
         return pandolf_watts(grade, CLASSES[cls[j]][1]) * dist / KNOBS['speed_mps']
@@ -96,6 +96,19 @@ def build(n, cell, base, energy_budget_j):
                     ctg[i] = nd
                     heapq.heappush(pq, (nd, i))
     return h, slope, cls, cost_per_m, ctg
+
+
+def synthetic_rocks(n, base, seed=7):
+    """Fine-scale rock fields orbit misses and a scout drone would reveal (1 = rock field)."""
+    rnd = random.Random(seed + 2)
+    rocks = array.array('B', [0]) * (n * n)
+    for _ in range(14):
+        cx, cy, r = rnd.uniform(0, n), rnd.uniform(0, n), rnd.uniform(2, 5)
+        for y in range(max(0, int(cy - r)), min(n, int(cy + r) + 1)):
+            for x in range(max(0, int(cx - r)), min(n, int(cx + r) + 1)):
+                if (x - cx) ** 2 + (y - cy) ** 2 <= r * r and abs(x - base[0]) + abs(y - base[1]) > 4:
+                    rocks[y * n + x] = 1
+    return rocks
 
 
 def path_home(ctg, n, start):
@@ -150,6 +163,15 @@ def write(out, n, cell, base, budget, h, slope, cls, cost_per_m, ctg):
                   'cost_per_m': 'cost_per_m.f32', 'cost_to_go': 'cost_to_go.f32'},
     }
     targets, route = synthetic_targets(n, ctg, base)
+    # what the scout drone reveals: hidden rock fields, and the way home once they are known
+    rocks = synthetic_rocks(n, base)
+    ctg_scouted = build(n, cell, base, budget, blocked=rocks)[-1]
+    with open(os.path.join(out, 'rocks_fine.u8'), 'wb') as f:
+        rocks.tofile(f)
+    with open(os.path.join(out, 'cost_to_go_scouted.f32'), 'wb') as f:
+        array.array('f', [min(v, big) for v in ctg_scouted]).tofile(f)
+    meta['files'].update({'rocks_fine': 'rocks_fine.u8', 'cost_to_go_scouted': 'cost_to_go_scouted.f32'})
+    meta['layers'] += ['rocks_fine']
     for name, obj in [('targets.json', targets), ('stops.json', []), ('route.json', route)]:
         with open(os.path.join(out, name), 'w') as f:
             json.dump(obj, f, indent=1)

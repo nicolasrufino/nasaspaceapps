@@ -6,10 +6,11 @@ One document, read top to bottom: what NASA asked for, what we build, how every 
 
 - **The problem today:** NASA's Mars data lives in separate tools built for rover teams and regional views (Mars Trek, MMGIS). Nothing layers it for one crew on one walk, with the science, the hazards and the way home together. On Mars, help is 4 to 22 minutes away.
 - **The challenge:** a layered, integrated map of one place on Mars, built from several NASA missions, that helps an astronaut plan and carry out a Marswalk safely while doing new science.
-- **Our answer:** **Martian Map turns NASA's Mars data into a science walk you can plan, preview and come home from.**
+- **Our answer:** **Martian Map turns NASA's Mars data into a science walk you can plan, preview and come home from, and makes the map better with every walk.**
 - **Where and why:** the boxwork ridges on Mount Sharp, Gale crater. NASA's challenge names them; Curiosity studied them in 2025; and Curiosity measured the radiation, weather and ground there, so one site gives us every layer. *(Alternative: Jezero, with Perseverance's images. The team decides.)*
-- **How it works:** the crew picks the science targets; Martian Map layers the data, plans the safest efficient walk, shows what each stop will look like from the ground, and keeps the walk-back limit live on the suit display while a buddy rover scouts ahead.
-- **The demo:** pick "boxwork" → the layers light up the targets → a route appears with rover photos of each stop → a judge walks the hallway with the phone as the suit display → the ring shrinks with every step → at a stop the phone runs the science checklist → past the point of no return it buzzes.
+- **The real problem:** there is no map at the scale of one walk. Orbit sees the region; it misses the rock field, the soft sand and the slope that decide whether a suited astronaut can get through.
+- **Our solution: a map that builds itself, walk by walk.** (1) Start from NASA's orbital layers. (2) A scout drone flies the route first and maps what orbit can't see. (3) Martian Map plans the best path and the packing list: what to bring, what is heavy, what the rover carries. (4) The crew walks for a science purpose (signs of past water and life), and the map grows as they go: photos, ground type, how hard each stretch was, markers they drop. (5) The next crew starts with a better map.
+- **The demo:** pick "boxwork" → the layers light up the targets → the scout drone flies the route and reveals a rock field orbit missed → the route re-plans and the packing list appears → a judge walks the hallway with the phone as the suit display → the ring shrinks with every step → at a stop the phone runs the science checklist and adds to the map → past the point of no return it buzzes.
 
 ## 1. The challenge, exactly
 
@@ -36,14 +37,28 @@ Optional considerations:
 
 ## 2. What we build
 
+### The map-making loop (the core of the solution)
+
+| Step | What happens | Who or what does it | Evidence it is real |
+|---|---|---|---|
+| **1. Orbit** | Start from NASA's layers: images, slope, sand, minerals, radiation | Data pipeline | HiRISE, THEMIS, CRISM, Curiosity RAD (section 4) |
+| **2. Scout** | A drone flies the planned route first and maps it at centimetre scale: rocks, drop-offs, sand the orbital images miss. The route re-plans | Scout drone (simulated in our app) | Ingenuity scouted routes for Perseverance in 72 flights (2021–2024); one flight ruled out a target and saved about two months of driving. JPL and AeroVironment's Skyfall concept (2025) proposes six helicopters to scout human landing sites |
+| **3. Plan and pack** | Best path (safe and efficient), effort per stretch, and a packing list from the route: oxygen and water margin, sampling tools for the targets, what the rover carries because it is heavy | Martian Map | NASA's statement asks about astronauts "carrying scientific equipment and other supplies"; NASA's 2022 field test found a loaded cart caused unacceptable fatigue |
+| **4. Walk and add** | The crew walks for the science goal. The map grows: photos, ground type from the classifier, how hard each stretch really was, markers and sample sites they drop | Crew, phone, buddy rover | Perseverance's AutoNav updates its local map as it drives; our classifier is trained on NASA's AI4Mars labels |
+| **5. Next walk** | The corrected map, real effort numbers and new hazards feed the next plan | Data pipeline | NASA calibrates its walking model on field traverses |
+
+This is why it is a tool and not a static map: the challenge allows "a tool or system that generates maps", and every walk makes the map better.
+
+**Why the walks happen at all.** Each walk has a science purpose. At Mount Sharp the boxwork ridges likely formed where groundwater flowed and left minerals behind (NASA's working idea, still being tested), the kind of place where signs of past habitability, and possibly life, are preserved. The map helps the crew get the most science per walk: which ridges to examine, which to sample, and what to leave for the next walk.
+
 **Who uses it:** a two-person Mars crew, the night before and during a surface walk, with Earth 4 to 22 minutes away.
 
 **Four modes, one mission** (the same steps Perseverance follows: choose a target, travel safely, investigate, decide what to keep):
 
 | Mode | Where | What happens |
 |---|---|---|
-| **1. Plan** | Habitat display | Pick a science goal. Layers highlight candidate targets. Martian Map plans a safe, efficient route, estimates time, energy, oxygen and radiation, and shows rover photos of every stop. The crew approves or edits. |
-| **2. Walk** | Phone as the suit display | Real steps move you along the route. The walk-back ring shows how far you can still go and get home. The buddy rover scouts ahead and updates the local map. Hazards and space-weather alerts appear when they matter. |
+| **1. Plan** | Habitat display | Pick a science goal. Layers highlight candidate targets. The scout drone flies the route and the map updates. Martian Map plans a safe, efficient route, estimates time, energy, oxygen and radiation, shows rover photos of every stop, and builds the packing list. The crew approves or edits. |
+| **2. Walk** | Phone as the suit display | Real steps move you along the route. The walk-back ring shows how far you can still go and get home. The buddy rover carries the heavy kit and updates the local map. Hazards and space-weather alerts appear when they matter. Every stretch walked is added to the map. |
 | **3. At the stop** | Phone | A short science checklist: look, get close, decide, sample or move on. Each sample gets a context card: place, layers, photo, time. Examine many targets, sample few. |
 | **4. Debrief** | Habitat display | Replay the walk; predicted versus measured; what the crew saw updates the map for the next walk. |
 
@@ -67,7 +82,10 @@ Optional considerations:
 | R4 safety limit | Walk-back ring and point-of-no-return alert | Energy needed to get home from every cell, precomputed; energy converted to oxygen | Same layers; NASA's walkback and 1-hour return rules |
 | R4 radiation | Dose for the walk; storm alert with minutes to shelter | Dose rate from RAD; shielding from terrain; live or replayed solar events | Curiosity RAD; DONKI |
 | C5 | Rover photos at each stop | Stops pinned to geotagged rover images | Curiosity Mastcam and Navcam raw images |
-| C6 | Buddy rover scouts and carries | Reinforcement-learning policy on the same map, compared with a scripted follower; AutoNav-like loop | Same layers |
+| C6, R4 | Scout drone maps the route before the walk; the route re-plans | Simulated flight over the site; a fine-scale hazard layer only the drone can see; path search re-runs | Ingenuity precedent; HiRISE as the starting map |
+| R4 mobility | Packing list and load plan from the route | Rules from route length, time, targets and terrain; heavy items assigned to the rover | Suit and load values from NASA studies |
+| C2 | The map grows with every walk | Walk log (photos, ground type, measured effort, markers) merged into the site files | Classifier on AI4Mars labels |
+| C6 | Buddy rover leads and carries | Reinforcement-learning policy on the same map, compared with a scripted follower; AutoNav-like loop | Same layers |
 | C1 | Habitat display and suit display | Game engine on the phone (Babylon.js or Unity) | |
 | Ground truth | What the crew sees corrects the map | Terrain classifier on photos (soil, bedrock, sand, big rock) | AI4Mars labels; rover images |
 | Delay | Mission control answers late, so the crew decides | Microsoft Foundry agent with a 20-second demo delay (Azure track) | |
@@ -107,6 +125,7 @@ This is six NASA missions or programs in one hyperlocal view, three more data ty
 
 ## 7. Robots and pairs
 
+- **The scout drone** flies before the crew does, the job Ingenuity proved for Perseverance. It maps the route at centimetre scale and finds what orbit can't (rock fields, drop-offs, soft sand). In our app the flight is simulated over the real site, revealing a hidden fine-scale hazard layer; the route re-plans when it lands.
 - **The buddy rover** leads by default (crews in NASA's 2022 desert test preferred it), scouts the route, carries tools and samples, relays comms behind ridges, and can bring an astronaut home. It is specified like NASA's new Lunar Terrain Vehicle (km/h, with or without crew), because today's Mars rovers are 20–30 times slower than a walking astronaut.
 - **Two astronauts** walk together, in sight of each other, as NASA's EVA rules require. The map shows both and the ring follows the more tired one.
 - **Override ladder:** E-STOP, hold, come to me, return to base along the path it came. On lost link it stops, then retreats.
@@ -146,13 +165,13 @@ The base must always work; every feature sits behind a flag and can be turned of
 
 **Foundation:** site map with three layers → route around obstacles → walk along it → walk-back ring and buzz → runs on one phone.
 
-**Features (flags):** `layers_extra` (thermal, spectral, radiation), `pov_images`, `science_stop`, `step_mode`, `buddy_scripted`, `buddy_rl`, `override`, `rideback_ring`, `storm`, `classifier`, `capcom`, `debrief`, `before_after`.
+**Features (flags):** `drone_scout`, `packing_list`, `map_grows`, `layers_extra` (thermal, spectral, radiation), `pov_images`, `science_stop`, `step_mode`, `buddy_scripted`, `buddy_rl`, `override`, `rideback_ring`, `storm`, `classifier`, `capcom`, `debrief`, `before_after`.
 
 | Milestone | Time | Done when |
 |---|---|---|
 | M0 Skeleton | Sat 12:30 | Stack chosen; synthetic world renders; ML env loads it |
 | M1 Walking core | Sat 16:00 | Route, energy, ring and buzz on one phone; first real Gale world with three layers |
-| M2 Demo-able | Sat 21:00 | Science targets, rover photos at stops, step mode, scripted buddy, classifier v1; deployed |
+| M2 Demo-able | Sat 21:00 | Science targets, rover photos at stops, drone scout re-plan, packing list, step mode, scripted buddy, classifier v1; deployed |
 | Overnight | to Sun 07:00 | More layers, RL buddy, storm alert, CAPCOM, validation numbers, backup video |
 | M3 Freeze | Sun 08:00 | Polish, project page, rehearse |
 | Submit | Sun ~13:30 (confirm) | Project page, video, demo link |
@@ -164,6 +183,8 @@ The base must always work; every feature sits behind a flag and can be turned of
 | Maps | Regional and global (Mars Trek) or built for rover teams on Earth (MMGIS) | One hyperlocal view, all layers, for this crew and this walk |
 | Planning | Map books and limits worked out on Earth | Planned and re-planned on site, with the same limits |
 | What a stop looks like | Unknown until you arrive | Rover photos of every stop |
+| Small hazards | Invisible from orbit until you reach them | A scout drone finds them first; the route re-plans |
+| What to bring | Planned by hand | A packing list from the route; heavy items ride on the rover |
 | How far you can go | Worked out before the walk; in NASA's 2022 field test the first walk ended early when unseen slopes blocked the route | Walk-back ring, every step, re-planned on the spot |
 | Turn-back call | Mission control by voice | The crew, with the device; Earth hears 4–22 minutes later |
 | Robots | Rovers work alone | A buddy rover scouts, carries and relays |
@@ -173,6 +194,8 @@ The base must always work; every feature sits behind a flag and can be turned of
 
 - Challenge statement and resources: https://www.spaceappschallenge.org/2026/challenges/interplanetary-survival-guide-martian-map/
 - How Perseverance drives (AutoNav): https://science.nasa.gov/resource/how-perseverance-drives-on-mars/
+- Ingenuity's 72 flights and scouting for Perseverance: https://www.planetary.org/space-missions/ingenuity and https://www.universetoday.com/152365/thanks-to-ingenuitys-pictures-perseverance-knows-where-to-drive-to-next
+- Skyfall helicopter concept (2025): https://www.space.com/astronomy/mars/wild-new-skyfall-mars-mission-would-drop-6-scout-helicopters-onto-the-red-planet-from-the-air
 - Perseverance science objectives and instruments: https://science.nasa.gov/mission/mars-2020-perseverance/science-objectives/
 - Sampling at Citadelle (the investigation sequence): https://science.nasa.gov/blog/kicking-off-the-sampling-sol-path-at-citadelle/
 - 5.7-terapixel CTX global mosaic: https://www.caltech.edu/about/news/scientists-unveil-a-57-terapixel-global-image-of-mars

@@ -30,3 +30,12 @@ def test_way_home_reaches_base_and_route_starts_there():
     assert len(targets) == 3
     assert mw.path_home(ctg, n, targets[0]['cell'])[-1] == base
     assert route['cells'][0] == base and route['cells'][-1] == base
+
+
+def test_scouted_rocks_never_make_the_way_home_cheaper():
+    n, base = 32, [8, 16]
+    *_, ctg = mw.build(n, 5.0, base, 2.5e5)
+    rocks = mw.synthetic_rocks(n, base)
+    *_, scouted = mw.build(n, 5.0, base, 2.5e5, blocked=rocks)
+    assert scouted[base[1] * n + base[0]] == 0.0
+    assert all(s >= c - 1e-6 for s, c in zip(scouted, ctg))
