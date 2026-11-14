@@ -1,6 +1,6 @@
 # Martian Map: the whole plan
 
-One document, read top to bottom: what NASA asked for, what we build, how every part answers the challenge, and how we build it. Evidence for every claim is in `docs/RESEARCH.md`.
+One document, read top to bottom: what NASA asked for, what we build, how every part answers the challenge, and how we build it. Evidence for every claim is in `docs/RESEARCH.md`. **New to the project? Read `docs/PRODUCT.md` first:** what the product is, each stage and why it exists, and why it beats the alternatives on every objective.
 
 ## 0. On one page
 
