@@ -27,6 +27,11 @@ One three.js web app shows it three ways: the habitat display, the tablet the cr
 
 Who leans where, and how each person uses AI: `docs/roles/README.md`.
 
+## Links
+
+- **Team page** (the whole plan, the build graph, roles, research): https://claude.ai/artifact/FxZ2AS4JSxE6d1RMbfXq6N. Built from this repo's docs: `docs/team-page/`.
+- **Pitch deck:** https://claude.ai/artifact/XiHnUGPaJkCCpBeHoWck41. Source: `docs/deck/`; script: `docs/PITCH.md`.
+
 ## Start here (people and agents)
 
 1. `docs/PRODUCT.md`: what we build and why each stage exists.

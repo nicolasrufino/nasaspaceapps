@@ -93,3 +93,4 @@ This makes Galsan's lane the heaviest overnight. If he falls behind, cut D6 to r
 2. Work against the fake world until the real files land.
 3. When you finish a block, close its issue and tell the people whose blocks list it under **Needs**.
 4. A new idea gets graded in `docs/CRITIQUE.md` first, then becomes a block here.
+5. After editing the table, run `python3 docs/team-page/sync_issues.py .` so every issue shows the new needs and unlocks, and rebuild the team page (`docs/team-page/README.md`).

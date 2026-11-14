@@ -27,7 +27,7 @@ Five minutes, the organizers' seven parts. One argument runs through it: **there
 - Export the map: mission control gets it 11 minutes later.
 
 **5. Space data inside, and proof (3:00–3:40)**
-> Six NASA data sources in one view: HiRISE images and terrain, THEMIS for loose sand, CRISM and the USGS map for science targets, and Curiosity's radiation and weather measured in this crater. And every piece is already proven at NASA. Shadow-based rock detection on HiRISE chose or checked the Phoenix, Gale, Jezero and InSight landing sites. Ingenuity scouted Perseverance's routes. Perseverance plans its own safe path. Walkback limits keep crews safe today. What's new is putting them together for the person on foot.
+> NASA asked for at least three data types; we use all eight it lists. Optical and terrain from HiRISE, THEMIS for loose sand, CRISM and the geologic map for science targets, Curiosity's radiation and weather measured in this crater, and its chemistry and subsurface readings along its path. And every piece is already proven at NASA. Shadow-based rock detection on HiRISE chose or checked the Phoenix, Gale, Jezero and InSight landing sites. Ingenuity scouted Perseverance's routes. Perseverance plans its own safe path. Walkback limits keep crews safe today. What's new is putting them together for the person on foot.
 
 **6. Impact: why it wins, who wins, how much (3:40–4:20)**
 > Side by side: orbit alone misses hazards; voice guidance fails with delay; rovers are too slow; walking blind breaks plans. Only the combination works, and it runs on the crew's side of the delay. NASA ranks surface mobility #2 of its 32 technology gaps and asks by name for "in-situ decision support tools" for Mars walks. It funds the rover (up to $4.6B) and the suit (up to $3.1B); nobody funds the map between them.
@@ -44,7 +44,7 @@ Five minutes, the organizers' seven parts. One argument runs through it: **there
 5. Coarse to fine: the five stages and why each exists
 6. NASA's objectives, one by one: today's tools versus ours
 7. Live demo
-8. Six NASA data sources, one view
+8. All eight NASA data types, each with a job
 9. Proof: every piece is already proven at NASA
 10. Why this beats every option on its own (comparison table)
 11. Impact and money

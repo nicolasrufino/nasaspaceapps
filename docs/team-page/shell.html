@@ -1,0 +1,290 @@
+<meta charset="utf-8">
+<title>Martian Map Team Plan</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Source+Code+Pro:wght@400;500&display=swap">
+<style>
+/* Layout: same paper look as the team brief; one reading column, sticky section chips, role cards in Mars-mission colors. Single light look on purpose, matching the brief. */
+:root{
+  --paper:#ffffff; --ink:#1F2937; --muted:#6B7280; --hair:#E5E7EB; --rule:#1F2937;
+  --nasablue:#0B3D91; --mars:#B4532A; --link:#006EB8; --wash:#F5F7FB; --mars-wash:#FBF3EF;
+  --p1:#6D3FA6; --p2:#0B6E8C; --p3:#0B3D91; --px:#8A6A10;
+  --font:"Source Sans 3","Source Sans Pro","Segoe UI",system-ui,sans-serif;
+  --mono:"Source Code Pro",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{background:var(--paper);scroll-behavior:smooth;scroll-padding-top:110px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--paper);color:var(--ink);font:17px/1.6 var(--font);margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--nasablue);outline-offset:2px}
+.gut{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);border-bottom:1px solid var(--hair);padding-block:10px}
+.top-in{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:8px}
+.top-row{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 16px;font-size:14px;color:var(--muted)}
+.top-row strong{color:var(--ink)}
+nav.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:thin}
+nav.chips a{flex:0 0 auto;font-size:13.5px;padding:3px 10px;border:1px solid var(--hair);border-radius:999px;color:var(--ink);white-space:nowrap}
+nav.chips a:hover{border-color:var(--nasablue);color:var(--nasablue);text-decoration:none}
+nav.chips a.r{font-weight:700}
+nav.chips a.r1{color:var(--p1)} nav.chips a.r2{color:var(--p2)} nav.chips a.r3{color:var(--p3)} nav.chips a.rx{color:var(--px)}
+
+main{max-width:980px;margin:0 auto;padding-block:20px 120px}
+.col{max-width:780px}
+.hero{padding:28px 0 8px}
+.hero .kicker{font-size:15px;letter-spacing:.06em;color:var(--muted);margin:0 0 6px}
+.hero h1{font-size:clamp(30px,5vw,42px);line-height:1.12;color:var(--nasablue);margin:0 0 12px;text-wrap:balance}
+.hero .one{font-size:21px;line-height:1.45;margin:0 0 16px;max-width:40em}
+.hero{max-width:980px}
+.hero .demo{color:var(--ink);max-width:62ch}
+
+.mile{margin:22px 0 8px;overflow-x:auto}
+.mile ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(6,minmax(128px,1fr));gap:0;min-width:760px;border-top:2px solid var(--nasablue)}
+.mile li{padding:10px 12px 4px 0;position:relative}
+.mile li::before{content:"";position:absolute;top:-7px;left:0;width:12px;height:12px;border-radius:50%;background:var(--paper);border:2px solid var(--nasablue)}
+.mile .t{font-weight:700;color:var(--nasablue);font-variant-numeric:tabular-nums;display:block;padding-top:6px}
+.mile .w{font-size:14.5px;line-height:1.4;display:block}
+
+main h2{font-size:28px;line-height:1.2;color:var(--nasablue);margin:56px 0 10px;padding-top:16px;border-top:1px solid var(--hair);text-wrap:balance}
+main h3{font-size:21px;color:var(--nasablue);margin:28px 0 6px}
+main h4{font-size:18px;margin:20px 0 4px}
+main p{margin:0 0 11px;max-width:70ch}
+main ul,main ol{padding-left:1.35em;margin:6px 0 12px}
+main li{margin:4px 0;max-width:68ch}
+code{font-family:var(--mono);font-size:.86em;background:var(--wash);padding:1px 4px;border-radius:3px;overflow-wrap:anywhere}
+pre code{background:none;padding:0}
+pre{background:var(--wash);padding:12px 14px;overflow-x:auto;border-radius:4px;font-size:14px;line-height:1.45}
+
+.tbl{overflow-x:auto;margin:14px 0 18px}
+table{border-collapse:collapse;width:100%;font-size:15.5px;line-height:1.45;min-width:620px;border-top:1.6px solid var(--rule);border-bottom:1.6px solid var(--rule)}
+th,td{text-align:left;vertical-align:top;padding:7px 12px 7px 0}
+thead th{font-weight:700;border-bottom:1px solid var(--rule)}
+
+figure.arch{margin:24px 0;padding:14px;border:1px solid var(--hair);border-radius:6px;overflow-x:auto}
+figure.arch figcaption{color:var(--muted);font-size:14.5px;margin-top:8px}
+
+.roles{display:grid;gap:22px;margin-top:10px}
+.role{border:1px solid var(--hair);border-left:5px solid var(--nasablue);padding:4px 20px 16px;border-radius:4px;min-width:0}
+.role.p1{border-left-color:var(--p1)} .role.p2{border-left-color:var(--p2)} .role.p3{border-left-color:var(--p3)} .role.px{border-left-color:var(--px);background:#FFFDF6}
+.role h2{border:0;margin:14px 0 6px;padding:0;font-size:25px}
+.role.p1 h2{color:var(--p1)} .role.p2 h2{color:var(--p2)} .role.p3 h2{color:var(--p3)} .role.px h2{color:var(--px)}
+.role h3{font-size:18px;color:var(--ink);margin:18px 0 4px}
+.brief{margin:12px 0 0;background:var(--wash);border-radius:4px;padding:12px 14px}
+.brief-text{font-size:15.5px}
+.brief-text p:last-child{margin:0}
+button.copy{font:600 14px var(--font);color:var(--paper);background:var(--nasablue);border:0;border-radius:4px;padding:6px 12px;cursor:pointer;margin-bottom:8px}
+button.copy:hover{filter:brightness(1.15)}
+
+.callout{background:var(--mars-wash);border-left:4px solid var(--mars);padding:12px 16px;margin:18px 0}
+.callout p:last-child{margin:0}
+
+
+.problem{background:var(--wash);border-left:4px solid var(--nasablue);padding:12px 16px;margin:6px 0 18px}
+.problem p:last-child{margin:0}
+.lbl2{font-weight:700;color:var(--nasablue);margin:0 0 4px;font-size:15px;letter-spacing:.04em;text-transform:uppercase}
+.loop{list-style:none;padding:0;margin:8px 0 18px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.loop li{position:relative;border:1px solid var(--hair);border-top:3px solid var(--nasablue);border-radius:4px;padding:10px 12px;display:flex;flex-direction:column;gap:4px;font-size:15px;line-height:1.35;max-width:none}
+.loop li:nth-child(2){border-top-color:#C99A2E}.loop li:nth-child(4){border-top-color:var(--mars)}
+.loop b{font-size:16px}
+.loop span{color:var(--muted)}
+@media (max-width:760px){.loop{grid-template-columns:1fr 1fr}}
+@media (max-width:460px){.loop{grid-template-columns:1fr}}
+
+.col.wide{max-width:980px}
+td.score{font-weight:700;text-align:center;font-variant-numeric:tabular-nums}
+strong.keep{color:#1B6B3A}strong.cut{color:#B42318}strong.simp{color:#8A6A10}
+/* app screen mockups: dark suit-display look inside the light page */
+.screens{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:28px 24px;margin:18px 0 8px}
+.shot{margin:0;min-width:0}
+.shot figcaption{font-size:15px;line-height:1.5;margin-top:10px;color:var(--ink)}
+.shot figcaption em{color:var(--muted);font-style:normal;font-weight:600}
+.phone{background:#0b0e14;border-radius:28px;padding:12px;max-width:344px;margin:0 auto;box-shadow:0 0 0 2px #1d2430}
+.phone.alert{box-shadow:0 0 0 3px #ff5a5a}
+.hud{background:#05070b;border-radius:18px;overflow:hidden;color:#e8f6ff;font:14px/1.35 var(--font);font-variant-numeric:tabular-nums}
+.hud canvas{display:block;width:100%;height:auto}
+.hud-top{display:flex;justify-content:space-between;gap:6px;padding:9px 12px;font-weight:600;font-size:13px;background:#0d1320}
+.ok{color:#7CFF8A}.bad{color:#ff6b6b}.amber-t{color:#ffbe3c}
+.hud-bar{padding:10px 12px 4px}
+.meter{position:relative;height:10px;background:#1a2230;border-radius:5px}
+.meter i{position:absolute;inset:0 auto 0 0;background:#38dcff;border-radius:5px}
+.meter b{position:absolute;top:-3px;width:2px;height:16px;background:#ffbe3c}
+.row{display:flex;justify-content:space-between;gap:8px;margin-top:7px;font-size:13.5px}
+.row.pad{padding:10px 12px}
+.chips2{display:flex;flex-wrap:wrap;gap:6px;padding:8px 12px 12px}
+.chip{font-size:12.5px;padding:3px 8px;border-radius:999px;background:#1a2230;color:#e8f6ff}
+.chip.cy{background:#0f3340;color:#9beeff}
+.warn{margin:10px 12px;padding:10px 12px;border-radius:10px;background:#3a0f12;border:1px solid #ff5a5a;display:flex;flex-direction:column;gap:2px}
+.warn strong{font-size:18px;color:#ff8a8a}
+.warn.amber{background:#3a2a0b;border-color:#ffbe3c}.warn.amber strong{color:#ffd27a}
+.btns{display:flex;gap:8px;padding:0 12px 12px}
+.btns button,.ladder button{flex:1;font:600 13.5px var(--font);border-radius:10px;border:0;padding:10px 6px;background:#1f6feb;color:#fff;cursor:default}
+.btns button.alt{background:#1a2230;color:#9beeff}
+.modes{display:flex;gap:6px;padding:10px 12px 0;flex-wrap:wrap}
+.modes span{font-size:13px;padding:5px 10px;border-radius:999px;background:#1a2230}
+.modes span.on{background:#38dcff;color:#05070b;font-weight:700}
+.ladder{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 12px}
+.ladder button{background:#1a2230;color:#e8f6ff}
+.ladder button.estop{background:#d92d2d;color:#fff;font-size:15px;grid-column:1/-1;padding:13px}
+.health{display:flex;flex-wrap:wrap;gap:6px 12px;padding:0 12px 12px;font-size:12.5px;color:#a9b8c8}
+.stops{margin:0;padding:10px 12px 12px 30px;font-size:13.5px}
+.layers{display:flex;flex-wrap:wrap;gap:5px;padding:8px 12px}
+.layers span{font-size:12px;padding:3px 8px;border-radius:999px;background:#1a2230;color:#8fa3b8}
+.layers span.on{background:#0f3340;color:#9beeff}
+.pov{display:flex;gap:10px;padding:10px 12px 12px;font-size:13px;line-height:1.4}
+.pov-img{flex:0 0 96px;height:72px;border-radius:8px;background:linear-gradient(160deg,#7a4a2c,#c58a55 60%,#e0b384);color:#fff;font-size:10.5px;padding:6px;display:flex;align-items:flex-end}
+.checklist{margin:0;padding:12px 12px 4px 32px;font-size:14px}
+.checklist li{margin:5px 0;color:#a9b8c8}
+.checklist li.done{color:#7CFF8A}
+.checklist li.now{color:#fff;font-weight:700}
+.card2{margin:8px 12px;padding:10px 12px;border-radius:10px;background:#0d1320;display:flex;flex-direction:column;gap:3px;font-size:13px;color:#c8d6e5}
+.card2 strong{color:#fff}
+.stops li{margin:3px 0}
+@media (max-width:560px){body{font-size:16.5px}main h2{font-size:24px}.role{padding:4px 14px 14px}}
+.bg-wrap{overflow-x:auto;margin:14px 0 8px;-webkit-overflow-scrolling:touch}
+.bg{position:relative;display:grid;grid-template-columns:118px repeat(5,minmax(178px,1fr));gap:6px;min-width:1080px}
+.bg-svg{position:absolute;left:0;top:0;pointer-events:none;overflow:visible;z-index:1}
+.bg-svg path{fill:none;stroke:#9AA3AF;stroke-width:1.3;opacity:.55}.bg-svg path.on{stroke:var(--mars);stroke-width:2.4;opacity:1}
+.bg-svg .ah{fill:#9AA3AF;stroke:none}.bg-svg .ahon{fill:var(--mars);stroke:none}
+.bg-h{font-size:13px;font-weight:700;color:var(--nasablue);padding:4px 6px;border-bottom:2px solid var(--nasablue)}
+.bg-lane{text-decoration:none;font-size:13.5px;font-weight:700;padding:8px 6px;border-radius:4px;color:#fff;display:flex;align-items:center}
+a.bg-lane:hover{filter:brightness(1.15);text-decoration:none}.bg-lane.p1{background:var(--p1)}.bg-lane.p2{background:var(--p2)}.bg-lane.p3{background:var(--p3)}.bg-lane.px{background:var(--px)}
+.bg-cell{display:flex;flex-direction:column;gap:7px;padding:6px 14px 10px;background:var(--wash);border-radius:4px;min-height:52px}
+.blk{position:relative;z-index:2;background:#fff;border:1px solid var(--hair);border-left:4px solid var(--nasablue);border-radius:4px;padding:6px 8px;font-size:13.5px;line-height:1.3;cursor:pointer;transition:opacity .15s,box-shadow .15s}
+.blk.p1{border-left-color:var(--p1)}.blk.p2{border-left-color:var(--p2)}.blk.p3{border-left-color:var(--p3)}.blk.px{border-left-color:var(--px)}
+.blk:hover,.blk:focus-visible{box-shadow:0 0 0 2px var(--link);outline:none}
+.blk .bid{font-family:var(--mono);font-weight:700;font-size:12px;color:var(--muted)}
+.blk .biss{display:block;font-size:12px;margin-top:2px}
+.blk.sel{box-shadow:0 0 0 3px var(--nasablue)}.blk.need{box-shadow:0 0 0 2px var(--mars)}.blk.unl{box-shadow:0 0 0 2px var(--link)}.blk.dim{opacity:.35}
+.bg-detail{border:1px solid var(--hair);border-radius:6px;padding:10px 16px;margin:8px 0 18px;min-height:64px}
+.bg-detail h3{margin:2px 0 6px}.bg-detail .muted{color:var(--muted);margin:0}
+.bg-key{font-size:14px;color:var(--muted)}
+</style>
+
+<header class="top gut">
+  <div class="top-in">
+    <div class="top-row"><span><strong>Martian Map</strong> • NASA Space Apps 2026 • Chicago</span><span>Team plan • updated Sat Nov 14</span></div>
+    <nav class="chips" aria-label="Sections">
+      <a href="#what">What it is</a><a href="#buildgraph">Build graph</a><a href="#overview-roles">Roles at a glance</a><a href="#resources">NASA resources</a><a href="#summary">Summary</a><a href="#best">Why it's best</a><a href="#challenge">Challenge</a><a href="#product">Product</a><a href="#fit">Requirement fit</a><a href="#layers">Data layers</a><a href="#marswalk">A Marswalk</a><a href="#safety">Safety</a><a href="#robots">Robots</a><a href="#why">Why NASA cares</a><a href="#stack">Stack</a><a href="#build">Build order</a><a href="#critique">Critique</a><a href="#screens">Screens</a><a href="#pitch">Pitch</a>
+      <a class="r r1" href="#p1">Person 1 ML</a><a class="r r2" href="#p2">Person 2 Engine</a><a class="r r3" href="#p3">Person 3 Data</a><a class="r rx" href="#px">Person X</a>
+      <a href="#codex">Codex</a><a href="#repo">GitHub repo</a><a href="#contracts">Contracts</a><a href="#research">Research</a>
+    </nav>
+  </div>
+</header>
+
+<main class="gut">
+  <section class="hero col" id="overview">
+    <p class="kicker">NASA SPACE APPS 2026 · INTERPLANETARY SURVIVAL GUIDE: MARTIAN MAP</p>
+    <h1>Martian Map Team Plan</h1>
+    <p class="one"><strong>Martian Map turns NASA's Mars data into a science walk you can plan, preview and come home from, and makes the map better with every walk.</strong></p>
+    <div class="problem"><p class="lbl2">The problem</p><p>There is no map at the scale of one walk. NASA's orbital data shows the region but misses the rock field, the soft sand and the slope that decide whether a suited astronaut gets through, and on Mars help is 4 to 22 minutes away.</p></div>
+    <p class="lbl2">Our solution: a map that builds itself, walk by walk</p>
+    <ol class="loop">
+      <li><b>1 Orbit</b><span>NASA's maps of the whole site: where the science is, where not to go, where to look closer</span></li>
+      <li><b>2 Scout</b><span>A drone flies the route first and finds the rocks and sand orbit can't see</span></li>
+      <li><b>3 Plan and pack</b><span>Safe, efficient route, margin home, packing list, decided before leaving</span></li>
+      <li><b>4 Walk and add</b><span>The suit display keeps the way home known; every step adds detail to the map</span></li>
+      <li><b>5 Next walk</b><span>The next crew starts from a better map and goes further</span></li>
+    </ol>
+    <p><strong>Coarse to fine:</strong> each stage sees more detail than the one before, covers less ground and costs more, so each one tells the next where to look.</p>
+    <div class="callout"><p><strong>How to read this page:</strong> start with <a href="#what">What Martian Map is</a>: the challenge, our answer, each of the five stages and why it exists, and why it beats what exists today on every NASA objective. Then the NASA resources and our slice of Mars, then the full plan, and then everything the team needs to build it: graded ideas, screens, pitch, roles, Codex, repo, file formats and research.</p></div>
+  </section>
+
+  <div class="mile" aria-label="Milestones">
+    <ol>
+      <li><span class="t">Sat 12:30 · M0</span><span class="w">Stack chosen; everyone runs the synthetic world</span></li>
+      <li><span class="t">Sat 16:00 · M1</span><span class="w">Route, ring and buzz on a phone; real Gale site with 3 layers</span></li>
+      <li><span class="t">Sat 21:00 · M2</span><span class="w">Targets, rover photos at stops, step mode, buddy, classifier</span></li>
+      <li><span class="t">Overnight</span><span class="w">More layers, RL buddy, storm alert, CAPCOM, numbers</span></li>
+      <li><span class="t">Sun 08:00 · M3</span><span class="w">Feature freeze; polish; rehearse</span></li>
+      <li><span class="t">Sun ~13:30</span><span class="w">Submit (confirm the local deadline)</span></li>
+    </ol>
+  </div>
+
+  <div class="col">
+    <h2 id="what">What Martian Map is, and why it works</h2>
+{{PRODUCT}}
+  </div>
+
+  <div class="col wide">
+    <h2 id="buildgraph">Who builds what, and when</h2>
+    <p>Four lanes, one per person. Each box is one block of work. Arrows point from a block to the blocks that need it first. Click a box to see what goes inside, what it needs and what it unlocks. <span class="bg-key">Orange: needed first. Blue: unlocked by it.</span></p>
+{{BUILDGRAPH}}
+{{BUILD}}
+  </div>
+
+  <div class="col wide">
+    <h2 id="resources">The NASA resources, explained</h2>
+{{DATA}}
+  </div>
+
+  <div class="col">
+{{PLAN}}
+  </div>
+
+  <div class="col wide">
+    <h2 id="critique">Critique: every idea, graded</h2>
+{{CRITIQUE}}
+  </div>
+
+{{SCREENS}}
+
+  <div class="col">
+    <h2 id="pitch">The pitch (draft 3)</h2>
+{{PITCH}}
+  </div>
+
+  <h2 id="roles">Roles: who builds what</h2>
+  <p class="col">Each card is for the person and for their coding agent. Paste the agent brief into your agent together with <code>AGENTS.md</code>. Person X joins later; nothing on the critical path waits for them.</p>
+  <div class="col wide" id="overview-roles">
+    <h3>The four roles at a glance</h3>
+{{OVERVIEW}}
+  </div>
+  <div class="roles">
+{{ROLES}}
+  </div>
+
+  <div class="col">
+    <h2 id="codex">Working with Codex</h2>
+{{CODEX}}
+    <h2 id="repo">GitHub repo</h2>
+    <p>The repo is set up with the foundation already working: <code>python3 data/pipeline/make_world.py</code> builds the shared world files in under a second, standard library only. Layout:</p>
+    <pre><code>{{TREE}}</code></pre>
+    <h3>Rules for coding agents (AGENTS.md)</h3>
+{{AGENTS}}
+    <h3>How we merge</h3>
+    <ul>
+      <li>One branch per task: <code>p1/...</code>, <code>p2/...</code>, <code>p3/...</code>, <code>px/...</code>. Pull requests into <code>main</code>; <code>main</code> always runs.</li>
+      <li>Each PR names its milestone and its feature flag (template included).</li>
+      <li>At each milestone time, whatever is late ships with its flag off.</li>
+    </ul>
+
+    <h2 id="contracts">Contracts (v1)</h2>
+{{CONTRACTS}}
+
+    <h2 id="research">Research: where NASA is today, and the evidence behind each choice</h2>
+{{RESEARCH}}
+  </div>
+</main>
+
+<script>
+document.querySelectorAll('button.copy').forEach(function (b) {
+  b.dataset.label = b.textContent;
+  b.addEventListener('click', function () {
+    var t = b.parentElement.querySelector('.brief-text');
+    var text = t.innerText.trim();
+    function done(msg) { b.textContent = msg; setTimeout(function () { b.textContent = b.dataset.label; }, 1600); }
+    function fallback() {
+      var r = document.createRange(); r.selectNodeContents(t);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      done('Selected: press Copy');
+    }
+    try {
+      navigator.clipboard.writeText(text).then(function () { done('Copied'); }, fallback);
+    } catch (e) { fallback(); }
+  });
+});
+</script>

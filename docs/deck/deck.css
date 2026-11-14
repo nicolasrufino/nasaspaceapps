@@ -1,0 +1,76 @@
+/* Mapier Design System look (tokens from project/ds/mapier/tokens.json), matching the Spotwing deck */
+:root {
+  --bg-dark: #0a0a0a;
+  --card-dark: #141414;
+  --border-dark: #242424;
+  --fg-dark: #f5f5f5;
+  --muted-dark: #9a9a9a;
+  --link-dark: #3792e0;
+  --bg-light: #fafafa;
+  --bg-light-2: #f3f3f3;
+  --card-light: #ffffff;
+  --border-light: #e6e6e6;
+  --fg-light: #1f1f1f;
+  --muted-light: #666666;
+  --primary: #1076c2;
+  --alarm: #e5484d;
+}
+body { font-family: Switzer, Arial, sans-serif; color: var(--fg-light); }
+section { padding: 128px; display: flex; flex-direction: column; gap: 48px; counter-increment: page; }
+section.dark { background: var(--bg-dark); color: var(--fg-dark); }
+section.dark2 { background: var(--card-dark); color: var(--fg-dark); }
+section.light { background: var(--bg-light); color: var(--fg-light); }
+section.with-foot { padding: 128px 128px 160px; }
+
+h1, h2, h3 { font-family: 'Google Sans Flex', Arial, sans-serif; font-weight: 500; }
+.eyebrow { font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 24px; color: var(--muted-light); }
+.dark .eyebrow, .dark2 .eyebrow { color: var(--muted-dark); }
+.title { font-size: 64px; line-height: 1.1; letter-spacing: -1.5px; }
+.lede { font-size: 44px; line-height: 1.3; color: var(--muted-light); }
+.dark .lede, .dark2 .lede { color: var(--muted-dark); }
+.body { font-size: 32px; line-height: 1.4; color: var(--muted-light); }
+.dark .body, .dark2 .body { color: var(--muted-dark); }
+
+.date { font-size: 160px; line-height: 1; letter-spacing: -4px; color: var(--fg-dark); }
+.hook { font-size: 44px; line-height: 1.3; color: var(--muted-dark); width: 1300px; }
+.hook-end { font-size: 44px; line-height: 1.3; color: var(--fg-dark); width: 1300px; }
+
+.statement { font-size: 112px; line-height: 1.05; letter-spacing: -3px; color: var(--fg-dark); width: 1550px; }
+.statement .hl { color: var(--link-dark); }
+
+.cols { display: flex; gap: 32px; }
+.card { flex: 1; background: var(--card-light); border: 1px solid var(--border-light); border-radius: 13px; padding: 40px; display: flex; flex-direction: column; gap: 20px; }
+.dark .card, .dark2 .card { background: var(--card-dark); border-color: var(--border-dark); }
+.dark2 .card { background: var(--bg-dark); }
+.card h3 { font-size: 44px; }
+.card .num { font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 72px; font-weight: 500; line-height: 1; color: var(--primary); }
+.dark .card .num, .dark2 .card .num { color: var(--link-dark); }
+.card .txt { font-size: 28px; line-height: 1.4; color: var(--muted-light); }
+.dark .card .txt, .dark2 .card .txt { color: var(--muted-dark); }
+
+.foot { position: absolute; left: 128px; bottom: 64px; width: 1664px; font-size: 24px; color: var(--muted-light); }
+.dark .foot, .dark2 .foot { color: var(--muted-dark); }
+
+/* demo slide: the product's own suit-display look */
+.demo-row { display: flex; gap: 64px; align-items: flex-start; }
+.phone { width: 440px; background: #05070b; border-radius: 56px; padding: 20px; display: flex; flex-direction: column; gap: 12px; border: 1px solid var(--border-dark); box-shadow: 0 24px 64px rgba(0,0,0,0.35); }
+.phone.alert { border: 3px solid var(--alarm); }
+.phone img { width: 398px; height: 398px; border-radius: 36px; object-fit: cover; }
+.hud { font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 24px; color: var(--fg-dark); padding: 4px 8px 0; }
+.hud .ok { color: #7cff8a; }
+.hud .bad { color: #ff8a8a; }
+.steps { flex: 1; display: flex; flex-direction: column; gap: 28px; }
+.step { font-size: 30px; line-height: 1.35; color: var(--muted-dark); }
+.step b { color: var(--fg-dark); font-weight: 500; }
+
+/* data pipeline */
+.pipe { display: flex; gap: 16px; align-items: stretch; }
+.stage { flex: 1; padding: 32px; display: flex; flex-direction: column; gap: 14px; background: var(--card-light); border: 1px solid var(--border-light); border-radius: 13px; }
+.stage h3 { font-size: 36px; color: var(--fg-light); }
+.stage .txt { font-size: 26px; line-height: 1.4; color: var(--muted-light); }
+.stage.out { background: var(--bg-dark); border-color: var(--bg-dark); }
+.stage.out h3 { color: var(--fg-dark); }
+.stage.out .txt { color: var(--muted-dark); }
+
+.rise { animation: rise 600ms ease-out both; animation-delay: calc(var(--i, 0) * 140ms); }
+@keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
