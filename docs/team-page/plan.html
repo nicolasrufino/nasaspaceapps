@@ -227,7 +227,7 @@ a.bg-lane:hover{filter:brightness(1.15);text-decoration:none}.bg-lane.p1{backgro
 <p><strong>Martian Map turns NASA's Mars data into a science walk you can plan, preview and come home from, and makes the map better with every walk.</strong></p>
 <p>What it is, concretely: <strong>one app, three views of the same map.</strong></p>
 <ul>
-<li><strong>The habitat display</strong> (the night before): pick a science goal, see the layers, send the scout drone, approve the route and the packing list.</li>
+<li><strong>The habitat display</strong> (the sol before): pick a science goal, see the layers, send the scout drone (it flies in daylight), approve the route and the packing list.</li>
 <li><strong>The tablet the crew carries</strong> (during the walk): a minimap like in a video game: where you are, where to go, the path, and the layers that matter (ground, minerals, chemistry, radiation). A science checklist at each stop.</li>
 <li><strong>The helmet HUD</strong> (during the walk): only what matters right now: how far you can still go and get home, heading, the next stop, alerts.</li>
 </ul>
@@ -295,10 +295,10 @@ a.bg-lane:hover{filter:brightness(1.15);text-decoration:none}.bg-lane.p1{backgro
 </ul>
 <h4 id="stage-2-scout-a-drone-looks-before-people-walk">Stage 2: Scout. A drone looks before people walk</h4>
 <ul>
-<li><strong>What happens:</strong> a small helicopter flies the planned route first. It covers the route corridor first, then anomalies (places where the layers disagree, such as firm-looking ground that the thermal data says is loose sand, a slope near the 25° limit, or an unusual mineral signal near a target), then the cells it is least sure about. Every cell it flies over updates every layer of the map. Where it flies, the map gains full detail: exact terrain and every rock. The route re-plans around what it found.</li>
+<li><strong>What happens:</strong> in daylight on the sol before the walk, a small helicopter flies the planned route first. It covers the route corridor first, then anomalies (places where the layers disagree, such as firm-looking ground that the thermal data says is loose sand, a slope near the 25° limit, or an unusual mineral signal near a target), then the cells it is least sure about. It avoids smooth sand, where camera navigation fails (what ended Ingenuity). Where it flies, the map gains centimetre detail: the terrain and the hazards below orbit's limit (rocks under about 1.5 m, half-metre drops). The route re-plans around what it found.</li>
 <li><strong>Why a scout at all:</strong> walk time is the scarcest resource. Finding a blocked path halfway through a walk costs oxygen, energy and maybe the walk. Finding it from the habitat costs a 3-minute flight.</li>
 <li><strong>Why a drone and not a rover:</strong> an Ingenuity-class drone covers about 700 m in 3 minutes. A rover on autonomous driving averages about 110 m an hour.</li>
-<li><strong>Why we believe it works:</strong> Ingenuity flew 72 times on Mars and scouted routes for Perseverance; one flight ruled out a target and saved the rover team about two months of driving. JPL's 2025 Skyfall concept proposes helicopters to scout landing sites for people.</li>
+<li><strong>Why we believe it works:</strong> Ingenuity flew 72 times on Mars as "an aerial scout" for Perseverance's drivers; its Flight 12 images confirmed the rover's route into South Séítah was drivable. NASA's SkyFall (three helicopters, contracted, launch late 2028) will scout exploration zones for crews, and MoonFall's four hopping drones will survey Artemis sites before astronauts arrive. Every link, every limit and our answers: <code>docs/RESEARCH.md</code> §14.</li>
 <li><strong>What it makes easier:</strong> surprises move from the walk to the planning table.</li>
 <li><strong>Objectives it meets:</strong> R4 (route around obstacles), C6 (robots supporting the crew).</li>
 <li><strong>How it sees in 3D:</strong> the same idea as a bat's echolocation, but with light instead of sound, because Mars' thin air loses high-pitched sound within metres. The main sensor is cameras: overlapping photos turned into 3D, already done with Ingenuity's images at 5 cm detail. A laser adds exact height; radar could later show what is underneath. Details in <code>docs/RESEARCH.md</code> §13.</li>
@@ -1855,7 +1855,7 @@ flowchart LR
 <td>2</td>
 <td>3</td>
 <td class="score">8</td>
-<td><strong class="cut">Cut for now.</strong> No walk-scale radar data for our slice. Mention it as next step (Skyfall proposes it)</td>
+<td><strong class="cut">Cut for now.</strong> No walk-scale radar data for our slice. Mention it as next step (NASA's SkyFall helicopters will carry it, 2028)</td>
 </tr>
 <tr>
 <td>The drone also flies to anomalies: hazard anomalies (layers disagree: image looks firm but thermal says sand; slope near the limit) and science anomalies (unusual mineral signal near a target)</td>
@@ -2352,7 +2352,15 @@ flowchart LR
 </tr>
 <tr>
 <td>Is the drone real?</td>
-<td>The flight is simulated; the data it reveals is real full-resolution HiRISE. Ingenuity proved the scouting job on Mars; JPL's Skyfall concept proposes scout helicopters for human landing sites.</td>
+<td>The flight is simulated and labelled. Ingenuity proved a helicopter can scout on Mars (72 flights, up to 704 m each); NASA's SkyFall helicopters are contracted to scout exploration zones for crews (launch late 2028).</td>
+</tr>
+<tr>
+<td>What does a drone see that HiRISE doesn't?</td>
+<td>HiRISE reliably sees rocks of about 1.5 m and up, with terrain points a metre apart. Ingenuity's images were about 4 cm per pixel and showed a half-metre crater peak HiRISE missed. A walker trips on what's in between. (<code>docs/RESEARCH.md</code> §14)</td>
+</tr>
+<tr>
+<td>Can it fly at night or over sand?</td>
+<td>No, and we plan for both: it flies in daylight on the sol before, and the scout plan avoids smooth sand, which is what ended Ingenuity. Without the drone the route falls back to orbit data, with less margin.</td>
 </tr>
 <tr>
 <td>How do you detect rocks?</td>
@@ -2978,9 +2986,11 @@ flowchart LR
     <h2 id="repo">GitHub repo</h2>
     <p>The repo is set up with the foundation already working: <code>python3 data/pipeline/make_world.py</code> builds the shared world files in under a second, standard library only. Layout:</p>
     <pre><code>.codex/config.toml
+.github/CODEOWNERS
 .github/ISSUE_TEMPLATE/task.md
 .github/pull_request_template.md
 .github/workflows/ci.yml
+.github/workflows/deploy.yml
 .gitignore
 .pytest_cache/.gitignore
 .pytest_cache/CACHEDIR.TAG
@@ -2998,7 +3008,9 @@ agent/AGENTS.md
 agent/README.md
 app/AGENTS.md
 app/README.md
+app/staticwebapp.config.json
 data/AGENTS.md
+data/pipeline/check_world.py
 data/pipeline/make_world.py
 docs/BUILD.md
 docs/CODEX.md
@@ -3022,15 +3034,23 @@ docs/team-page/screens.html
 docs/team-page/shell.html
 docs/team-page/sync_issues.py
 docs/team-page/world64.json
+ml/.gitignore
 ml/AGENTS.md
 ml/README.md
 ml/buddy_rover/.gitkeep
+ml/check_exports.py
 ml/exports/.gitkeep
+ml/requirements-ci.txt
 ml/requirements.txt
 ml/terrain_classifier/.gitkeep
 requirements.txt
+scripts/check-hygiene.sh
 scripts/protect-main.sh
+tests/test_agent_offline.py
 tests/test_make_world.py
+tests/test_ml_agent_hygiene.py
+tests/test_ml_exports.py
+tests/test_worlds.py
 </code></pre>
     <h3>Rules for coding agents (AGENTS.md)</h3>
 
@@ -3276,7 +3296,7 @@ tests/test_make_world.py
 <ul>
 <li><strong>Orbit cannot see everything:</strong> the Moon's best camera (LROC, about 0.5 m per pixel) reliably shows boulders of about 1 m and larger; Mars' HiRISE resolves 25–32 cm per pixel. (<a href="https://ntrs.nasa.gov/api/citations/20170001954/downloads/20170001954.pdf" target="_blank" rel="noopener">NTRS</a>)</li>
 <li><strong>Plans break on contact:</strong> in NASA's JETT3 field test (2022), maps matched what Artemis will have (1 m images, 1.5 m elevation). EVA 1 hit slopes over 16° and impassable drop-offs and ended short; EVAs 3 and 4 were replanned and shortened. Crews were told the planned path was a guide, not mandatory. (<a href="https://ntrs.nasa.gov/api/citations/20230010686/downloads/EHP-20021_JETT3_Test_Report_Baseline_20230010686.pdf" target="_blank" rel="noopener">NTRS JETT3</a>)</li>
-<li><strong>Scouting first:</strong> NASA Ames' "robotic recon" drives a rover over planned routes before the EVA to check hazards and rank targets; K10 rovers drove 45 km, mostly autonomously, at Haughton Crater in 2008. (<a href="https://ewh.ieee.org/conf/icra/2008/workshops/PlanetaryRovers/03Fong/icra08-prw-fong-1.pdf" target="_blank" rel="noopener">CMU/Ames</a>)</li>
+<li><strong>Scouting first:</strong> NASA Ames' "robotic recon" drives a rover over planned routes before the EVA to check hazards and rank targets; K10 rovers drove 45 km, mostly autonomously, at Haughton Crater in 2008. (<a href="https://ewh.ieee.org/conf/icra/2008/workshops/PlanetaryRovers/03Fong/icra08-prw-fong-1.pdf" target="_blank" rel="noopener">CMU/Ames</a>) At Black Point Lava Flow, a remotely driven rover scouted routes, the routes were revised, then two-person crews drove them (<a href="https://ri.cmu.edu/publications/assessment-of-robotic-recon-for-human-exploration-of-the-moon" target="_blank" rel="noopener">Fong, Bualat et al.</a>).</li>
 </ul>
 <h3 id="4-it-is-slow">4. It is slow</h3>
 <div class="tbl"><table>
@@ -3333,7 +3353,7 @@ tests/test_make_world.py
 <ul>
 <li><strong>Lunar Terrain Vehicle (May 26, 2026):</strong> NASA picked Astrolab (about $219M) and Lunar Outpost (about $220M, Pegasus, with GM, Goodyear and Leidos) from a contract worth up to $4.6B. Both drive <strong>with or without crew</strong>, up to 10 km/h, 20° slopes, 200 km range; on the Moon by 2028. Blue Origin delivers them ($188M). <a href="https://spacepolicyonline.com/news/nasa-awards-initial-moon-base-rover-and-lander-contracts/" target="_blank" rel="noopener">spacepolicyonline</a></li>
 <li><strong>JPL CADRE:</strong> three small rovers that share maps and positions; flying on IM-3 (no earlier than Q1 2027). <a href="https://www.nasa.gov/cooperative-autonomous-distributed-robotic-exploration-cadre" target="_blank" rel="noopener">NASA</a></li>
-<li><strong>MoonFall:</strong> 3–4 hopping drones to scout the south pole, including slopes rovers cannot reach (Firefly, $75M delivery). <a href="https://www.space.com/astronomy/moon/nasa-wants-to-use-a-fleet-of-moonfall-drones-to-scout-the-lunar-south-pole-we-believe-we-can-do-it" target="_blank" rel="noopener">Space.com</a></li>
+<li><strong>MoonFall:</strong> four JPL drones that hop on rocket thrust (no rotors) to survey Artemis landing sites at the south pole before astronauts arrive, including slopes rovers cannot reach; Firefly's $75M subcontract delivers them, no earlier than 2028. <a href="https://www.space.com/astronomy/moon/nasa-wants-to-use-a-fleet-of-moonfall-drones-to-scout-the-lunar-south-pole-we-believe-we-can-do-it" target="_blank" rel="noopener">Space.com</a></li>
 <li><strong>ARCHES (Mount Etna, 2022, DLR/ESA):</strong> robots in roles: a "scientist" rover, an "assistant" rover that also relays WiFi, and a "scout" drone; an astronaut drove a rover 23 km away with haptic feedback. Surface Avatar (2023–2025) had ISS astronauts command mixed teams including a humanoid and Spot. <a href="https://www.dlr.de/en/rm/latest/news/2022/robotics-team-practises-lunar-exploration-on-mount-etna" target="_blank" rel="noopener">DLR</a>, <a href="https://www.dlr.de/en/rm/latest/news/2025/surface-avatar-successful-completed" target="_blank" rel="noopener">DLR 2025</a></li>
 <li><strong>Legged robots:</strong> ETH's three ANYmal robots won the ESA-ESRIC Space Resources Challenge; JPL's NeBula-Spot is being developed to map caves on the Moon and Mars, without GPS. <a href="https://www.sciencedaily.com/releases/2023/07/230712165135.htm" target="_blank" rel="noopener">ScienceDaily</a>, <a href="https://www.jpl.nasa.gov/robotics-at-jpl/nebula-spot" target="_blank" rel="noopener">JPL</a></li>
 <li><strong>Follow-me astronaut assistants:</strong> Maryland's BioBot (NIAC) followed an astronaut and handled a suit umbilical, now on hold; a 2025 NASA report studies a rover that trails an astronaut closely. <a href="https://phys.org/news/2024-07-robotic-rover-astronauts-moonwalks.html" target="_blank" rel="noopener">phys.org</a>, <a href="https://ntrs.nasa.gov/citations/20250006905" target="_blank" rel="noopener">NTRS</a></li>
@@ -3555,7 +3575,7 @@ tests/test_make_world.py
 <li><strong>Its limit:</strong> a full scanning lidar is heavier and uses more power, and weight is the hardest limit on a Mars helicopter.</li>
 </ul>
 <h4 id="the-same-idea-with-radio-radar">The same idea with radio: radar</h4>
-<p>Radio echoes pass through the ground. Ground-penetrating radar shows what is underneath: buried ice, hollows, and how deep loose sand goes. JPL and AeroVironment's Skyfall concept proposes helicopters that send back high-resolution images and ground-penetrating radar data to scout landing sites for people. (<a href="https://www.space.com/astronomy/mars/nasas-skyfall-helicopters-will-show-us-parts-of-mars-weve-never-seen-before-scientists-say" target="_blank" rel="noopener">Space.com</a>) It answers "is it solid underneath?", not "where are the rocks?"</p>
+<p>Radio echoes pass through the ground. Ground-penetrating radar shows what is underneath: buried ice, hollows, and how deep loose sand goes. NASA's SkyFall mission (three helicopters, announced March 2026, launch late 2028) will carry cameras and ground-penetrating radar to scout exploration zones for crews and map ice. (<a href="https://www.space.com/astronomy/mars/nasas-skyfall-helicopters-will-show-us-parts-of-mars-weve-never-seen-before-scientists-say" target="_blank" rel="noopener">Space.com</a>) It answers "is it solid underneath?", not "where are the rocks?"</p>
 <h4 id="no-echo-at-all-cameras-photogrammetry">No echo at all: cameras (photogrammetry)</h4>
 <p>Take overlapping photos from different positions. Software matches the same points across photos and works out their 3D positions. This is called structure from motion, and it is how most drone maps on Earth are made.</p>
 <ul>
@@ -3601,7 +3621,7 @@ tests/test_make_world.py
 <td>Radio</td>
 <td><strong>Yes</strong></td>
 <td>Under the surface: ice, hollows, sand depth</td>
-<td>On rovers (Perseverance's RIMFAX); proposed for helicopters (Skyfall)</td>
+<td>On rovers (Perseverance's RIMFAX); planned on NASA's SkyFall helicopters (2028)</td>
 </tr>
 </tbody>
 </table></div>
@@ -3614,6 +3634,165 @@ tests/test_make_world.py
 <li>Once a stretch is covered, the full-detail terrain and image fade in, the rocks appear, and the route re-plans.</li>
 </ol>
 <p><strong>Labelled:</strong> "simulated scan, real NASA terrain". The flight and the sweep are simulated; the terrain they reveal is the real USGS/HiRISE data. In three.js this is a raycaster against a hidden full-detail mesh, about 50 lines behind the <code>drone_scout</code> flag.</p>
+<h3 id="14-can-the-scout-drone-actually-work">14. Can the scout drone actually work?</h3>
+<p>Checked Nov 14, 2026, because the whole pitch leans on it.</p>
+<p><strong>Verdict: yes, as long as we claim the right job.</strong> The drone's job is the hazards <em>smaller than orbit can see</em>: rocks under about 1.5 m, half-metre drops, the inside of a small crater. It flies in daylight on the sol before the walk. It is <strong>not</strong> "orbit is blurry". HiRISE already gives NASA slopes and big boulders, and a NASA judge will know that.</p>
+<h4 id="the-gap-a-drone-fills">The gap a drone fills</h4>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th></th>
+<th>HiRISE (orbit, best on Mars)</th>
+<th>Ingenuity-class drone</th>
+<th>What a walker needs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Rocks</strong></td>
+<td>Automated shadow counts find rocks of <strong>1.5 m and up</strong> (about 1.2 m at best). Smaller ones are extrapolated from a model curve, not seen (<a href="https://marsoweb.nas.nasa.gov/landingsites/msl/workshops/4th_workshop/talks/Golombek_Rocks_4th_Wkshp.pdf" target="_blank" rel="noopener">Golombek, MSL workshop</a>)</td>
+<td>Navcam <strong>3.6 cm per pixel</strong> at 10 m up; colour camera 0.5 cm per pixel (<a href="https://www.hou.usra.edu/meetings/lpsc2025/pdf/2685.pdf" target="_blank" rel="noopener">Maki et al., LPSC 2025</a>)</td>
+<td>Knee-high rocks and loose blocks. NASA publishes no step-height limit for suited walkers, so don't quote one</td>
+</tr>
+<tr>
+<td><strong>Height</strong></td>
+<td>Terrain points every 1–2 m, precise to tens of centimetres (<a href="https://www.uahirise.org/dtm/about.php" target="_blank" rel="noopener">HiRISE</a>). Features under 3–5 pixels are averaged away (<a href="https://marsoweb.nas.nasa.gov/landingsites/msl/workshops/4th_workshop/talks/3_Kirk_Slopes.pdf" target="_blank" rel="noopener">Kirk, USGS</a>)</td>
+<td>Flight 12: 5 cm terrain from about 200 images, matching HiRISE (<a href="https://www.jpl.nasa.gov/site/research/media/posters/2023/SP23018p.pdf" target="_blank" rel="noopener">JPL</a>). Full mission: 3.8 cm per pixel, internal height precision 3–6 cm (absolute position about 0.5 m). It shows a <strong>0.5 m crater peak that HiRISE misses</strong> (<a href="https://www.hou.usra.edu/meetings/lpsc2025/pdf/1302.pdf" target="_blank" rel="noopener">Zubarev et al., LPSC 2025</a>)</td>
+<td>Half-metre steps and drops; suits are rated for slopes up to 20°. Walking-pace planning "does not account for slope or obstacles (e.g., boulders)" (<a href="https://www.nasa.gov/wp-content/uploads/2017/02/eva-exp-0042_xeva_system_con_ops_rev_b_final_dtd_10192020_ref_doc.pdf" target="_blank" rel="noopener">NASA xEVA ConOps</a>)</td>
+</tr>
+<tr>
+<td><strong>Field tests</strong></td>
+<td>JETT3 planned on orbit-resolution maps (1 m images, 1.5 m elevation); controllers found it hard to match them to what crews saw (Conclusion 1.34) (<a href="https://ntrs.nasa.gov/citations/20230010686" target="_blank" rel="noopener">NTRS</a>)</td>
+<td>BASALT's aerial images at 15 cm per pixel were "not always of sufficient resolution" and the crews asked for high-resolution precursor imagery (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6442241/" target="_blank" rel="noopener">PMC</a>)</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Say on stage:</strong> "HiRISE is the right tool for picking a route by slope. But it only reliably sees rocks bigger than about 1.5 m, and its terrain points are a metre apart. A walking astronaut trips on what's smaller than that. Ingenuity's images, at about 4 cm per pixel, showed a half-metre crater peak HiRISE missed. Our scout fills that last metre, right before the walk."</p>
+<h4 id="every-link-in-the-chain-and-how-proven-it-is">Every link in the chain, and how proven it is</h4>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Link</th>
+<th>Status</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fly on Mars</td>
+<td><strong>Done on Mars</strong></td>
+<td>Ingenuity: 72 flights, 17.0 km, 128.8 minutes in the air, Apr 2021 to Jan 2024, against 5 planned test flights (<a href="https://science.nasa.gov/mission/mars-2020-perseverance/ingenuity-mars-helicopter/" target="_blank" rel="noopener">NASA</a>). Longest flight 704 m in 161 s (Flight 25) (<a href="https://www.jpl.nasa.gov/news/nasas-ingenuity-mars-helicopter-captures-video-of-record-flight" target="_blank" rel="noopener">JPL</a>)</td>
+</tr>
+<tr>
+<td>Scout for a ground team</td>
+<td><strong>Done on Mars</strong></td>
+<td>NASA called it "an aerial scout" for Perseverance's drivers. Flight 12's colour images confirmed the planned route into South Séítah was drivable. JPL's robotic ops chief engineer: "not all rover hazards can be identified" from orbit (<a href="https://science.nasa.gov/blogs/driving-farther-and-faster-with-autonomous-navigation-and-helicopter-scouting" target="_blank" rel="noopener">NASA</a>)</td>
+</tr>
+<tr>
+<td>Photos into centimetre 3D</td>
+<td><strong>Done on Mars data</strong></td>
+<td>Flight 12 and full-mission terrain models (table above)</td>
+</tr>
+<tr>
+<td>Re-plan around hazards</td>
+<td><strong>Done daily on Mars</strong></td>
+<td>Perseverance's AutoNav; our way home is a standard cheapest-path calculation</td>
+</tr>
+<tr>
+<td>Scout for crews</td>
+<td><strong>Contracted, not flown</strong></td>
+<td><strong>SkyFall:</strong> NASA announced it on Mar 24, 2026: three helicopters with cameras and ground-penetrating radar, launching late 2028 on SR-1 Freedom, to scout human exploration zones and map ice (<a href="https://www.jpl.nasa.gov/missions/skyfall/" target="_blank" rel="noopener">JPL</a>). AeroVironment won the build contract on Aug 27, 2026. FY27 funding is not settled, so say "contracted", not "funded". <strong>MoonFall:</strong> four JPL drones that hop on rocket thrust to survey Artemis landing sites before astronauts arrive; Firefly has a $75M subcontract to deliver them, no earlier than 2028 (<a href="https://www.jpl.nasa.gov/missions/moonfall/" target="_blank" rel="noopener">JPL</a>, <a href="https://satnews.com/2026/05/27/firefly-aerospace-wins-75-million-nasa-jpl-moonfall-subcontract-to-deliver-drones-to-the-moons-south-pole/" target="_blank" rel="noopener">SatNews</a>)</td>
+</tr>
+<tr>
+<td>A tool that computes the walk back</td>
+<td><strong>Asked for by NASA</strong></td>
+<td>JETT3 Conclusion 1.33: planning aids "were useful in assisting the EVA Task team in calculating walk back times", and the report recommends real-time tools (<a href="https://ntrs.nasa.gov/citations/20230010686" target="_blank" rel="noopener">NTRS</a>)</td>
+</tr>
+<tr>
+<td>Bigger scouts</td>
+<td><strong>Design studies</strong></td>
+<td>Mars Science Helicopter: 31 kg, 5 kg payload, 10 minutes of hover or 5 km of range (<a href="https://ntrs.nasa.gov/citations/20205008552" target="_blank" rel="noopener">NTRS</a>). AeroVironment's LPSC 2025 poster: a 6 kg craft that could hover over an EVA crew and stream video (<a href="https://www.universetoday.com/articles/exploring-mars-with-next-generation-helicopters" target="_blank" rel="noopener">Universe Today</a>)</td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="the-real-limits-and-what-we-do-about-each">The real limits, and what we do about each</h4>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Limit</th>
+<th>What happened to Ingenuity</th>
+<th>Our answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>No night flying</strong></td>
+<td>It navigated by camera. In winter the battery browned out and reset it every night (<a href="https://science.nasa.gov/missions/mars-2020-perseverance/ingenuity-helicopter/ingenuity-adapts-for-mars-winter-operations/" target="_blank" rel="noopener">NASA</a>)</td>
+<td>Fly in daylight on the sol before; the crew plans that evening</td>
+</tr>
+<tr>
+<td><strong>Featureless ground</strong></td>
+<td>Flight 72 ended the mission: over bland sand ripples the navigation "had too little information", it landed hard and broke its blades (<a href="https://www.jpl.nasa.gov/news/nasa-performs-first-aircraft-accident-investigation-on-another-world/" target="_blank" rel="noopener">JPL</a>)</td>
+<td>The scout plan does not fly over smooth sand; it routes over textured ground</td>
+</tr>
+<tr>
+<td><strong>Lost link</strong></td>
+<td>After Flight 52 a hill blocked the relay for 63 days (<a href="https://newatlas.com/space/nasa-contacts-ingenuity-mars-helicopter-after-two-month-silence" target="_blank" rel="noopener">New Atlas</a>)</td>
+<td>Base station on high ground; the drone stores images until the link returns</td>
+</tr>
+<tr>
+<td><strong>Short flights</strong></td>
+<td>Battery rated for 187 s of hard flying; longest real flight about 169 s (<a href="https://www.nasa.gov/wp-content/uploads/2024/01/battery-system-design-testing-and-operation-for-the-mars-perseverance-rover-and-ingenuity-helicopter.pdf" target="_blank" rel="noopener">NASA battery paper</a>)</td>
+<td>Our cap is 180 s and 700 m per flight, inside what flew. The plan flies the most important ground first</td>
+</tr>
+<tr>
+<td><strong>Dust and winter</strong></td>
+<td>Dust cut its solar charging</td>
+<td>No-scout fallback: the route and ring fall back to orbit-only data, with less margin</td>
+</tr>
+<tr>
+<td><strong>Can't see under a crust</strong></td>
+<td>Spirit sank at Troy through a thin crust into soft sand (<a href="https://www.usgs.gov/publications/spirit-mars-rover-mission-overview-and-selected-results-northern-home-plate-winter" target="_blank" rel="noopener">USGS</a>)</td>
+<td>No camera sees this. Thermal inertia flags loose ground; never claim the drone detects it</td>
+</tr>
+<tr>
+<td><strong>Crew workload</strong></td>
+<td>Remote driving with delay raised workload in LTV tests (NTRS 20240011392)</td>
+<td>The flight is pre-planned and autonomous; the crew only reviews the re-plan</td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="what-this-means-for-our-build-proposal-needs-p1-and-p3-to-agree-because-it-changes-a-contract">What this means for our build (proposal: needs P1 and P3 to agree, because it changes a contract)</h4>
+<p>Our current design has one weak spot. The "before" map is an 8 m version of the slice, and the "after" is HiRISE. HiRISE is also from orbit, so a judge can say "you already had that". Proposed fix:</p>
+<ol type="1">
+<li><strong>Before = everything HiRISE knows.</strong> Slopes from the 1 m terrain and rocks of 1.5 m and up go into <code>cost_to_go</code> before the drone flies. The 8 m grid stays, because it keeps the app fast on a phone, not because orbit is blurry.</li>
+<li><strong><code>rocks_fine</code> = hazards below HiRISE's limit.</strong>
+<ul>
+<li>Along the corridor: rocks of 0.5–1.5 m modelled from the HiRISE rock abundance with the size-frequency model NASA used for landing sites (Golombek), labelled "modelled".</li>
+<li>At Curiosity's real boxwork stops: the actual ground. The rover's positions through sol 4865 come from the <a href="https://planetarydata.jpl.nasa.gov/img/data/msl/msl_places/data_localizations/localized_pos.csv" target="_blank" rel="noopener">localized positions CSV</a> (341 KB). Its top-down Navcam mosaics (vertical "VRT" projection) for sols 4534–4843 are in the <a href="https://planetarydata.jpl.nasa.gov/img/data/msl/MSLMOS_1XXX/DATA/" target="_blank" rel="noopener">MSL mosaic archive</a>. They are PDS <code>.IMG</code> files; GDAL converts them. Test sol 4600 first to check alignment.</li>
+</ul></li>
+<li><strong>The scout plan skips smooth sand.</strong></li>
+<li><strong>Labels:</strong> "simulated flight · HiRISE (orbit) and Curiosity Navcam (ground) are real · small rocks modelled from HiRISE rock abundance".</li>
+<li><strong>R5 measures the gap:</strong> hazards below orbit's limit that the scouted route avoids. No published study has measured what a pre-EVA scout saves, so this is a first estimate. Label it as simulated.</li>
+</ol>
+<p><strong>Not worth it:</strong> moving to Jezero for real Ingenuity data. No Ingenuity terrain model is downloadable, only raw images, and we would lose the boxwork and Curiosity's instruments.</p>
+<h4 id="industry-check">Industry check</h4>
+<ul>
+<li><strong>SpaceX:</strong> we found no public work on scouting or drones. Starship did not go to Mars in 2026; in February 2026 Musk said the focus is now the Moon. One useful fact: SpaceX's Paul Wooster said four candidate landing sites that looked fine in medium-resolution orbit images were "too rough" in HiRISE. Resolution decides where you can go (<a href="https://www.space.com/36142-spacex-studying-mars-landing-sites.html" target="_blank" rel="noopener">Space.com</a>).</li>
+<li><strong>Startups:</strong> we found no YC or other startup doing Mars scouting or walk-scale maps. Cosmic Robotics (YC S26) builds construction robots for the Moon and Mars (<a href="https://www.ycombinator.com/companies/cosmic-robotics" target="_blank" rel="noopener">YC</a>).</li>
+<li><strong>NASA's Moon to Mars architecture (2024, 2025)</strong> does not call for aerial scouting before EVAs. Pitch this as taking MoonFall and SkyFall down to the scale of one walk, not as current NASA plan.</li>
+</ul>
+<h4 id="dont-say">Don't say</h4>
+<ul>
+<li>"Ingenuity changed Perseverance's route" or "saved two months of driving". Say "confirmed the route was drivable."</li>
+<li>"Orbit can't see rocks" or "HiRISE can't see slopes". Say "small hazards at walking scale."</li>
+<li>"3–6 cm accuracy" without "internal precision".</li>
+<li>"The drone detects soft sand."</li>
+<li>"SkyFall is funded", "SkyFall flies on Starship", or "six helicopters" (that was the 2025 company concept).</li>
+<li>"NASA plans scout drones for Artemis." MoonFall hops on rockets; nothing flies with rotors on the Moon.</li>
+<li>Any firm SpaceX Mars date.</li>
+</ul>
 
   </div>
 </main>

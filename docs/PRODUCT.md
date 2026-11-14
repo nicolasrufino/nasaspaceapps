@@ -25,7 +25,7 @@ Two facts make this hard.
 
 What it is, concretely: **one app, three views of the same map.**
 
-- **The habitat display** (the night before): pick a science goal, see the layers, send the scout drone, approve the route and the packing list.
+- **The habitat display** (the sol before): pick a science goal, see the layers, send the scout drone (it flies in daylight), approve the route and the packing list.
 - **The tablet the crew carries** (during the walk): a minimap like in a video game: where you are, where to go, the path, and the layers that matter (ground, minerals, chemistry, radiation). A science checklist at each stop.
 - **The helmet HUD** (during the walk): only what matters right now: how far you can still go and get home, heading, the next stop, alerts.
 
@@ -63,10 +63,10 @@ Orbit sees everything, coarsely, for free. The drone sees fine detail, but only 
 
 ### Stage 2: Scout. A drone looks before people walk
 
-- **What happens:** a small helicopter flies the planned route first. It covers the route corridor first, then anomalies (places where the layers disagree, such as firm-looking ground that the thermal data says is loose sand, a slope near the 25° limit, or an unusual mineral signal near a target), then the cells it is least sure about. Every cell it flies over updates every layer of the map. Where it flies, the map gains full detail: exact terrain and every rock. The route re-plans around what it found.
+- **What happens:** in daylight on the sol before the walk, a small helicopter flies the planned route first. It covers the route corridor first, then anomalies (places where the layers disagree, such as firm-looking ground that the thermal data says is loose sand, a slope near the 25° limit, or an unusual mineral signal near a target), then the cells it is least sure about. It avoids smooth sand, where camera navigation fails (what ended Ingenuity). Where it flies, the map gains centimetre detail: the terrain and the hazards below orbit's limit (rocks under about 1.5 m, half-metre drops). The route re-plans around what it found.
 - **Why a scout at all:** walk time is the scarcest resource. Finding a blocked path halfway through a walk costs oxygen, energy and maybe the walk. Finding it from the habitat costs a 3-minute flight.
 - **Why a drone and not a rover:** an Ingenuity-class drone covers about 700 m in 3 minutes. A rover on autonomous driving averages about 110 m an hour.
-- **Why we believe it works:** Ingenuity flew 72 times on Mars and scouted routes for Perseverance; one flight ruled out a target and saved the rover team about two months of driving. JPL's 2025 Skyfall concept proposes helicopters to scout landing sites for people.
+- **Why we believe it works:** Ingenuity flew 72 times on Mars as "an aerial scout" for Perseverance's drivers; its Flight 12 images confirmed the rover's route into South Séítah was drivable. NASA's SkyFall (three helicopters, contracted, launch late 2028) will scout exploration zones for crews, and MoonFall's four hopping drones will survey Artemis sites before astronauts arrive. Every link, every limit and our answers: `docs/RESEARCH.md` §14.
 - **What it makes easier:** surprises move from the walk to the planning table.
 - **Objectives it meets:** R4 (route around obstacles), C6 (robots supporting the crew).
 - **How it sees in 3D:** the same idea as a bat's echolocation, but with light instead of sound, because Mars' thin air loses high-pitched sound within metres. The main sensor is cameras: overlapping photos turned into 3D, already done with Ingenuity's images at 5 cm detail. A laser adds exact height; radar could later show what is underneath. Details in `docs/RESEARCH.md` §13.
