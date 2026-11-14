@@ -1,4 +1,6 @@
-# ml/ (Person 1: machine learning only)
+# ml/ (Jules, Person 1: machine learning)
+
+Your blocks and their order: `docs/BUILD.md`, lane P1.
 
 Applies to everything under `ml/`. The root `AGENTS.md` still applies.
 

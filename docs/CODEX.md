@@ -20,12 +20,12 @@ How each teammate sets up Codex so several agents can work at once without stepp
 
 | Environment | Who | Setup (run in the worktree) | Check before a PR |
 |---|---|---|---|
-| **ml** | Person 1 | `python3 -m venv .venv && . .venv/bin/activate && pip install -r ml/requirements.txt pytest` | `python ml/check_exports.py` (once it exists) and `pytest -q` |
-| **app** | Person 2 | Depends on the stack. Babylon.js: `cd app && npm install`. Unity: open `app/` in Unity Hub (Codex edits C# only) | The app's own test command (put it at the top of `app/AGENTS.md`), plus a phone test over HTTPS |
-| **data** | Person 3 | `python3 -m venv .venv && . .venv/bin/activate && pip install pytest ruff` (add `rasterio` only for the DTM loader) | `python3 data/pipeline/make_world.py && ruff check . && pytest -q` |
-| **agent** | Person 3, then X | `python3 -m venv .venv && . .venv/bin/activate && pip install pytest` plus the Azure / Foundry SDK; keys in `.env` | `pytest -q`; the app still works with the agent off |
-| **docs** | Person X | none | Links and numbers match the repo |
-| **orchestrator** | Person 3 (lead) | none; read-only clone on `main` | none (it does not write feature code) |
+| **ml** | Jules (P1) | `python3 -m venv .venv && . .venv/bin/activate && pip install -r ml/requirements.txt pytest` | `python ml/check_exports.py` (once it exists) and `pytest -q` |
+| **app** | Nicolas (P2) | three.js web app: `cd app && npm install` | The app's own test command (put it at the top of `app/AGENTS.md`), plus a phone test over HTTPS |
+| **data** | Galsan (P3) | `python3 -m venv .venv && . .venv/bin/activate && pip install pytest ruff` (add `rasterio` only for the DTM loader) | `python3 data/pipeline/make_world.py && ruff check . && pytest -q` |
+| **agent** | Jules (P1) | `python3 -m venv .venv && . .venv/bin/activate && pip install pytest` plus the Azure / Foundry SDK; keys in `.env` | `pytest -q`; the app still works with the agent off |
+| **docs** | Person X, else Galsan | none | Links and numbers match the repo |
+| **orchestrator** | Galsan (P3, lead) | none; read-only clone on `main` | none (it does not write feature code) |
 
 **Codex cloud:** if you use Codex in the cloud instead of on your laptop, create one environment per row above for this repo, paste the row's setup command into the environment's setup script, and add secrets (Azure keys) as environment secrets, never in the repo.
 

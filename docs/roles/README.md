@@ -1,12 +1,12 @@
 # The four roles at a glance
 
-Everyone touches the core: the world files, the walk and the demo. But each person leans toward one area. Use this page to decide who takes which role. Each person's full brief is in `docs/roles/` (and below on the team page); the blocks are in `docs/BUILD.md`.
+Everyone touches the core: the world files, the walk and the demo. But each person leans toward one area. Assigned: **Jules** is Person 1, **Nicolas** is Person 2, **Galsan** is Person 3 (lead). Person X is open. Each person's full brief is in `docs/roles/` (and below on the team page); the blocks are in `docs/BUILD.md`.
 
 ## Who leans where
 
 **Lead** = owns it and makes the calls. **Strong** = builds a lot of it. **Some** = needs to understand it and touch it. **Light** = needs to know it exists.
 
-| Area | Person 1 · ML | Person 2 · App | Person 3 · Data and systems | Person X · Story |
+| Area | Person 1 · Jules · ML | Person 2 · Nicolas · App | Person 3 · Galsan · Data and systems | Person X · Story |
 |---|---|---|---|---|
 | **System design and integration** | Some: model inputs and outputs | Strong: how the app is built (state, flags, views) | **Lead:** shared file formats, pipeline, repo, merges | Light |
 | **App, 3D and screens** | Light | **Lead** | Light: deploys it | Some: HUD look and before/after screen |
@@ -18,7 +18,7 @@ Everyone touches the core: the world files, the walk and the demo. But each pers
 
 ## How each person uses AI
 
-| | Person 1 · ML | Person 2 · App | Person 3 · Data and systems | Person X · Story |
+| | Person 1 · Jules · ML | Person 2 · Nicolas · App | Person 3 · Galsan · Data and systems | Person X · Story |
 |---|---|---|---|---|
 | **How much** | Medium volume, high effort | **Most volume** | Medium volume, high effort as orchestrator | Writing and design, little code |
 | **Codex profile** | `ml` (high) | `build` (medium), `fast` for CSS and small fixes | `orchestrator` (high), `build` for the pipeline | `fast` |
@@ -27,15 +27,15 @@ Everyone touches the core: the world files, the walk and the demo. But each pers
 
 **Most needed overall:** Person 2. The demo lives in the app, and the drone scout block waits on two other blocks, so it is the tightest lane. Person 3 comes next: real data unlocks targets, the scout plan and the pitch numbers.
 
-## Person 1 · Machine learning
+## Person 1 · Jules · Machine learning
 
 - **Primary focus:** turning NASA images into hazard data: rocks from their shadows, ground type from photos, and the numbers that prove it works.
 - **Leans toward:** Python, NumPy, PyTorch, image processing, experiments with a held-out test.
 - **Needs to know a little about:** the world file formats (`CONTRACTS.md` §1), how the app loads ONNX models, how the energy model makes the ring.
 - **Good fit if you:** have trained a model before, like measuring things, and are patient with data.
-- **Owns:** `ml/`. **First block:** R1, rock detector on one image tile. **Works most with:** Person 3 (images in, rocks out).
+- **Owns:** `ml/` and `agent/` (the CAPCOM agent on Azure, needed for Best Use of Technology). **First block:** R1, rock detector on one image tile. **Works most with:** Person 3 (images in, rocks out).
 
-## Person 2 · App and 3D
+## Person 2 · Nicolas · App and 3D
 
 - **Primary focus:** the thing people see and hold: the 3D view, minimap, plan mode, walk, drone scout and stops.
 - **Leans toward:** JavaScript, three.js, UI, phones and touch, fast iteration.
@@ -43,7 +43,7 @@ Everyone touches the core: the world files, the walk and the demo. But each pers
 - **Good fit if you:** are the strongest web or game developer, and like shipping something visible every hour.
 - **Owns:** `app/`. **First block:** E1, app with the 3D view and minimap. **Works most with:** Person 3 (files in) and Person X (HUD look).
 
-## Person 3 · Data, systems and integration (lead)
+## Person 3 · Galsan · Data, systems and integration (lead)
 
 - **Primary focus:** the foundation everyone builds on: the real Gale slice, all eight data types, the cost and way-home maths, the drone's flight plan, deployment, and keeping the pieces fitting together.
 - **Leans toward:** system design, Python scripts, GIS data (elevation models, images, coordinates), reading NASA papers, Git discipline.
@@ -57,4 +57,4 @@ Everyone touches the core: the world files, the walk and the demo. But each pers
 - **Leans toward:** presenting, writing, visual design, light front-end work.
 - **Needs to know a little about:** the coarse-to-fine idea (`PRODUCT.md`), what is real and what is simulated, and which numbers the repo has measured.
 - **Good fit if you:** are the best speaker on the team and care how things look.
-- **Owns:** the slides, the project page, HUD styling. **First block:** X1, the helmet HUD view. **Works most with:** Person 2 (screens) and Person 1 (numbers). Also builds the CAPCOM agent if we enter the Azure track.
+- **Owns:** the slides, the project page, HUD styling. **First block:** X1, the helmet HUD view. **Works most with:** Person 2 (screens) and Person 1 (numbers). Nobody is assigned yet; see the fallbacks in `docs/BUILD.md`.

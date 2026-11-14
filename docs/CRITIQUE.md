@@ -43,6 +43,10 @@ Each idea is scored 0–3 on five tests (15 points):
 | A ground-penetrating radar layer | 1 | 1 | 1 | 2 | 3 | **8** | **Cut for now.** No walk-scale radar data for our slice. Mention it as next step (Skyfall proposes it) |
 | The drone also flies to anomalies: hazard anomalies (layers disagree: image looks firm but thermal says sand; slope near the limit) and science anomalies (unusual mineral signal near a target) | 3 | 3 | 3 | 3 | 3 | **15** | **Keep.** One extra term in the drone's priority score, computed from layers we already have. It makes the scout find both danger and science |
 | 3D used as a visual aid; all route maths on the 2D grid with a height per cell | 3 | 3 | 3 | 3 | 3 | **15** | **Keep.** People walk on the surface, so a separate 3D graph adds work and nothing else |
+| Aim the pitch at Best Use of Science first | 3 | 3 | 3 | 3 | 3 | **15** | **Keep.** Our strongest fit: real data from eight instrument types, and every claim tested |
+| Make Azure real for Best Use of Technology: host on Azure Static Web Apps and run CAPCOM on Microsoft Foundry | 2 | 3 | 2 | 3 | 3 | **13** | **Keep.** Without Azure we are not eligible. CAPCOM moves to Jules so it doesn't wait on Person X |
+| Art & Technology through the 3D view, scan sweep and HUD | 2 | 2 | 3 | 3 | 3 | **13** | **Keep**, as polish only |
+| Build features for Global Connection | 1 | 1 | 2 | 2 | 3 | **9** | **Simplify** to one line about the GeoJSON export and the public link |
 | Rock detection on real HiRISE images using the shadow method NASA used for landing sites | 3 | 3 | 2 | 3 | 3 | **14** | **Keep.** Real computer vision on real NASA data. Person 1's first job |
 | A classifier on images rendered by our game engine | 1 | 1 | 1 | 0 | 2 | **5** | **Cut.** It would only learn our own textures |
 | AI4Mars ground classifier on real rover photos at stops | 2 | 2 | 2 | 3 | 3 | **12** | **Keep**, after rock detection |

@@ -33,7 +33,7 @@ Five minutes, the organizers' seven parts. One argument runs through it: **there
 > Side by side: orbit alone misses hazards; voice guidance fails with delay; rovers are too slow; walking blind breaks plans. Only the combination works, and it runs on the crew's side of the delay. NASA ranks surface mobility #2 of its 32 technology gaps and asks by name for "in-situ decision support tools" for Mars walks. It funds the rover (up to $4.6B) and the suit (up to $3.1B); nobody funds the map between them.
 
 **7. Team + next (4:20–5:00)**
-> One line per person *(names and roles)*. Next: real drone imagery from an analog field test, the same engine for the first crewed Moon landing in 2028, and people on Earth who walk far from help. The first people on Mars will get one chance at each walk. This is the map they should carry.
+> Jules built the vision models and the Azure mission-control agent; Nicolas built the app and the 3D map; Galsan built the data pipeline from NASA's missions. *(Adjust to what each person actually shipped.)* Next: real drone imagery from an analog field test, the same engine for the first crewed Moon landing in 2028, and people on Earth who walk far from help. The first people on Mars will get one chance at each walk. This is the map they should carry.
 
 ## Slides (in order)
 
@@ -52,6 +52,22 @@ Five minutes, the organizers' seven parts. One argument runs through it: **there
 13. *(Backup)* Why a robot: lead, carry, relay, rescue
 14. *(Backup)* The five NASA resources and how we use each
 
+## Local awards (Chicago)
+
+The four local categories, how well we fit each, and what to show. Grades are in `docs/CRITIQUE.md`.
+
+| Award | What the judges look for | Our fit | What we show | Verdict |
+|---|---|---|---|---|
+| **Best Use of Science** | The best and most valid use of science or the scientific method | **Strongest.** Eight types of NASA data, a science goal driving every walk, and claims we test | Every layer named with its mission; predictions checked against measurements (rock detector against hand-checked rocks, held-out classifier accuracy, the ring under ±30% energy error, predicted versus measured effort from walk logs); simulated parts labelled | **Main target.** Lead the pitch with it |
+| **Best Use of Technology** | The most innovative use of technology. **Must use Microsoft Azure** | Good, **only if Azure is real** | App hosted on Azure Static Web Apps (#14); CAPCOM agent on Microsoft Foundry answering through the delay (#42); vision models running in the browser; the drone's scan sweep | **Second target.** #14 and #42 are now required, not optional |
+| **Art & Technology** | Technical and creative skills combined | Good | 3D terrain, the scan sweep, the helmet HUD, the before/after screen | **Third.** Comes from polish, no extra features |
+| **Global Connection** | Connecting people around the world through technology | Weak | One line: the map exports as GeoJSON that any crew, scientist or mission control can open, and the viewer is a public link | **Don't chase it.** Nothing extra to build |
+
+**One line per award, if asked:**
+- *Science:* "Every claim on screen is a measurement from a NASA instrument or a number our code tested."
+- *Technology:* "The map runs on Azure, and mission control is an AI agent on Microsoft Foundry that answers 20 minutes late, so the crew's device has to decide."
+- *Art & Technology:* "A drone that sees like a bat, but with light, and a helmet display you can read while walking."
+
 ## Questions judges are likely to ask
 
 | Question | Answer |
@@ -69,6 +85,6 @@ Ask three people, five minutes each:
 1. "After hearing this once, what does it do?" (tests the one sentence)
 2. "Which part convinced you it works?" (tells us which proof to lead with)
 3. "What would make you doubt the route?" (tells us which number to show)
-4. For the Azure track: "What does Microsoft need to see?"
+4. For Best Use of Technology: "Is hosting plus a Foundry agent enough Azure, or do you expect more?"
 
 Write the answers in `docs/pitch-notes.md` and change this draft.

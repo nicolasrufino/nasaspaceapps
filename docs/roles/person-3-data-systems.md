@@ -1,32 +1,38 @@
-# Person 3: Data, systems and integration (lead)
+# Person 3: Data, systems and integration (Galsan, lead)
 
-**Mission:** the foundation everyone builds on, and keeping the pieces fitting together: real Mars terrain into world files, the energy model, deployment, and the team's merge discipline. (The CAPCOM agent moved to Person X, #42.)
+**Who:** Galsan (GitHub `Galsan2005`). Lane P3 in `docs/BUILD.md`. Runs the Codex orchestrator and the merges.
+
+**Mission:** the foundation everyone builds on, and keeping the pieces fitting together: the real Gale slice in world files, all eight data types, the walking-cost and way-home maths, the drone's flight plan, the Azure deployment, and the team's merge discipline.
 
 **Owns:** `data/`, `docs/`, the repo settings and deployment.
-**Writes:** world files (contract §1), the CAPCOM API (contract §4).
+**Writes:** world files (contract §1), `scout_plan.json`.
 
-## Foundation (do first)
-1. **11:30–12:00** Push this repo; add teammates; protect `main` (PRs only). Everyone runs `python3 data/pipeline/make_world.py`.
-2. **12:00–15:00** Real Mars world with at least three NASA layers (optical, topography, thermal; then spectral or geology, and radiation). Site: Mount Sharp boxwork in Gale (suggested; NASA's statement names it and Curiosity measured radiation and weather there). one HiRISE elevation model (DTM) tile from the Mars area we pick (Gale, to match NASA's Curiosity route map, or Jezero, to match the Perseverance images). Downsample to 2–5 m per cell, about 256×256 cells. Write `data/pipeline/load_dtm.py` that feeds it into the same `build()` and writes `data/worlds/gale/` (or `jezero/`). Terrain classes: start from the USGS geologic map units; later from Person 1's classifier.
-3. **By 16:00** Export the real world and tell Person 2 the folder name (M1).
+## Your blocks, in order
 
-## Features (in this order)
-3b. `targets.json` for the boxwork goal, `stops.json` with Curiosity raw images near each target, and `route.json` from the pipeline (cheapest safe path through the stops, slope and sand limits applied).
-4. Energy model upgrade: replace the simple gravity scaling with NASA JSC's field-modified walking model (Kim et al. 2024) if the paper gives enough detail; otherwise keep Pandolf and say so. Same function, so nothing else changes.
-5. Deployment: Azure Static Web Apps (web stack) or a build pipeline (Unity). One link or one APK the team can open.
-6. CAPCOM agent (`agent/`): Microsoft Foundry agent with tools `get_state`, `explain_ring`, `nearest_safe_point`; replies delayed 20 s; Azure Speech for voice. Contract §4.
-7. Validation numbers for the pitch: for example, the percent of a traverse with at least 20% margin, and how the ring changes under ±30% energy-model error.
-8. Until Person X arrives: keep a running list of pitch facts and screenshots in `docs/pitch-notes.md`.
+| Block | When | What | Needs | Issue |
+|---|---|---|---|---|
+| D1 Pick and cut the slice | M0 | 2 × 2 km box in Mars Trek with boxwork, sand, a slope over 15° and a rock field hard to see at 8 m; cut the USGS 1 m terrain and 25 cm images; make the 8 m orbit view (`docs/DATA.md`) | nothing | #13 |
+| D2 Real world files | M1 | `data/pipeline/load_dtm.py` feeds the slice into `build()` and `write()` in `make_world.py`: slope, walking cost, cost home from every square; add sand (THEMIS) and science (CRISM, Fraeman et al. local map). Tell Nicolas the folder name | D1 | #13 |
+| D3 Targets, stops, first route | M2 | `targets.json` (boxwork, regions from Curiosity's route map), `stops.json` with Curiosity raw photos, `route.json` on the orbit view | D2 | #20 |
+| D4 Scout plan | M2 | `scout_plan.json`: route strip first, then anomalies (layers disagree; unusual minerals near a target), then the least certain squares; Ingenuity-class legs (about 700 m, 3 min) | D3 | #32 |
+| D5 Deploy on Azure | M2 | Azure Static Web Apps link a stranger's phone can open. Azure makes us eligible for Best Use of Technology | E2 | #14 |
+| D6 All eight data types | Overnight | Radiation (RAD), weather (REMS); chemical (ChemCam, APXS) and geophysical (DAN) as points along Curiosity's path. Verify each exists for our slice first | D2 | #40 |
+| D7 The map grows | Overnight | Merge walk logs back into the site files | E6 | #27 |
+| F3 Final deploy | Freeze | Last deploy; check the link on three phones | D5 | #47 |
+
+If Person X hasn't joined by M2, you also take **X2, the packing list** (#26), keep the pitch notes in `docs/pitch-notes.md`, and write the project page with Nicolas at the freeze.
+
+**Energy model upgrade (if time):** replace the simple gravity scaling with NASA JSC's field-modified walking model (Kim et al. 2024) if the paper gives enough detail; otherwise keep Pandolf and say so. Same function, nothing else changes.
 
 ## Done when
-- `data/worlds/<real>/` exists and loads in the app.
-- The demo link works on a phone that is not ours.
-- The agent replies with a delay and its tool calls are visible.
+- `data/worlds/gale/` exists, loads in the app, and lists every layer with its source.
+- The Azure link works on a phone that is not ours.
 
 ## Integration rules you enforce
-- PRs into `main` only; each PR says which milestone and which flag it touches.
+- PRs into `main` only; each PR names its block, milestone and flag.
 - Contract changes need every owner's approval.
-- At each milestone time, `main` must run. If a feature is late, it ships with its flag off.
+- At each milestone, `main` must run. A late feature ships with its flag off.
+- Run the orchestrator's "status" about once an hour (`docs/CODEX.md` §3).
 
 ## Agent brief (paste into your coding agent)
-> You are helping Person 3 (data, systems and integration) on Martian Map, a NASA Space Apps project. Read `AGENTS.md`, `docs/PLAN.md` and `docs/CONTRACTS.md` first. Work in `data/`, `agent/` and `docs/`. First: `data/pipeline/load_dtm.py` that reads a HiRISE DTM tile, downsamples it to about 256×256 cells at 2–5 m, and passes it through `build()` and `write()` in `make_world.py` so the output matches CONTRACTS §1 exactly; keep `make_world.py`'s self-check passing. Then: a CAPCOM service in `agent/` per CONTRACTS §4 (Microsoft Foundry agent, tools get_state, explain_ring, nearest_safe_point, replies delayed by delay_s, every tool call logged). Never change a contract without updating CONTRACTS.md in the same PR. Commit small, working steps.
+> You are helping Galsan (Person 3, data, systems and integration) on Martian Map, a NASA Space Apps project. Read `AGENTS.md`, `docs/PRODUCT.md`, `docs/BUILD.md` (lane P3), `docs/DATA.md` and `docs/CONTRACTS.md` first. Work in `data/` and `docs/`. First: `data/pipeline/load_dtm.py` that reads the USGS Gale 1 m terrain model for our 2 × 2 km box, makes the 8 m orbit view, and passes it through `build()` and `write()` in `make_world.py` so the output matches CONTRACTS §1 exactly; keep `make_world.py`'s tests passing. Then targets, stops and route; then `scout_plan.json` (route strip, then anomalies, then least-certain cells). Never change a contract without updating CONTRACTS.md in the same PR. Never read binary data files; use `world.json` and printed summaries. One issue per session; small, working commits.

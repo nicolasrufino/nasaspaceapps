@@ -1,38 +1,38 @@
-# Person 2: Engine and phone experience
+# Person 2: App and 3D (Nicolas)
 
-**Mission:** the thing people hold: the game on the phone. Terrain, astronaut, ring, buzz, buddy rover, step mode.
+**Who:** Nicolas (GitHub `nicolasrufino`). Lane P2 in `docs/BUILD.md`. The tightest lane: the demo lives here.
+
+**Mission:** the thing people see and hold. One three.js web app with three views of the same map: the habitat display (plan), the tablet minimap the crew carries, and the helmet HUD.
 
 **Owns:** `app/`.
-**Reads:** world files (contract §1), ONNX models (contract §2).
+**Reads:** world files (contract §1), ONNX models (contract §2), `scout_plan.json`.
 **Writes:** app state and walk logs (contract §3).
-**Stack:** web, three.js (decided from `docs/CRITIQUE.md`): one app for the game, the habitat and suit displays, and the public viewer.
+**Stack:** web, three.js (decided in `docs/CRITIQUE.md`). Hosted on Azure Static Web Apps by Galsan.
 
-## Foundation (do first)
-1. **11:30–12:30** Choose the stack with the team. Create the app project in `app/`. Load `data/worlds/synthetic/world.json` and `height.f32`; render the terrain as a mesh, colored by `terrain_class.u8`.
-2. **12:30–14:00** Astronaut marker that moves cell by cell (touch, arrow keys or a joystick). Energy left drains by the cost of each move (difference of `cost_to_go` is a good proxy; or the per-step cost from Person 3's helper).
-3. **14:00–16:00** Walk-back ring: highlight cells where `cost_to_go <= energy_left - reserve`. Point of no return: vibrate and show a warning when the astronaut's cell leaves the ring. Runs on one phone over HTTPS (M1).
+## Your blocks, in order
 
-## Features (in this order, each behind a flag)
-0a. Layer toggles for every layer the world lists (`world.json` `layers`), each with its mission and date; targets from `targets.json`; the planned route from `route.json`.
-0b. `pov_images`: tap a stop to see the rover photo from `stops.json` (with credit).
-0c. `science_stop`: at a stop, the checklist (look, get close, decide, sample or move on) and a context card saved to the log (place, layer values, photo, time).
-4. `step_mode`: real steps move the astronaut (motion sensor step detection + compass heading; one step about 0.7 m). Test in the hallway.
-5. `buddy_scripted`: a rover that follows on low-cost cells. Then `buddy_rl`: load `buddy_policy.onnx`, build the 27-value observation, take the argmax action. Same rover, switchable.
-6. Load the real Mars world from Person 3 (just a different folder).
-7. `classifier` / `camera_mode`: run `terrain_cls.onnx` on a Perseverance image or the phone camera; show the class and its walking cost.
-8. HUD in the style of a suit display: energy and oxygen left (`kj_per_l_o2`), margin, distance and minutes home, terrain class, buddy status, delay to Earth. Big, high-contrast, readable while walking. The suggested screens are on the team plan page.
-9. `override`: E-STOP, hold, come to me, return to base along the breadcrumb path; on lost link the rover stops, then retreats.
-10. `storm` and `dust`: walking minutes to the nearest shelter during a solar storm; dust lowers rover power and visibility.
-11. `capcom`: show messages from the agent with their delay.
-12. Log each walk (contract §3) for the debrief replay.
+| Block | When | What | Needs | Issue |
+|---|---|---|---|---|
+| E1 App, 3D view and minimap | M0 | Load `world.json` and the binary layers; 3D terrain as one mesh raised by `height.f32`; flat minimap coloured by layer | nothing | #8, #9 |
+| E2 Walking core | M1 | Move along the route; energy and oxygen drain (`kj_per_l_o2`); walk-back ring = cells where `cost_to_go <= energy_left - reserve`; point-of-no-return buzz; works on a phone over HTTPS | E1 | #10 |
+| E3 Plan mode | M1 | Layer toggles from `world.json` (each with mission and date), targets, the route, stop previews with rover photos | E1 | #21 |
+| E4 Drone scout | M2 | Fly the scout plan; scan sweep (three.js Raycaster onto a hidden full-detail mesh, dots build up); fade in full detail and rocks; switch to `cost_to_go_scouted`; re-plan | E3, D4 | #25 |
+| E5 Why this route | M2 | Panel: cost per stretch, the rejected alternative, slope, rocks, sand, margin home | E4 | #33 |
+| E6 Stops and step mode | M2 | Checklist at each stop (look, get close, decide, sample) and a context card; real steps (motion sensor, about 0.7 m each) and compass heading; write the walk log | E2 | #22, #11 |
+| E7 Buddy rover and override | Overnight | Scripted lead, heel, return along the breadcrumb path; E-STOP, hold, come to me, return to base | E2 | #12 |
+| E8 Export the map | Overnight | Map package and GeoJSON for mission control, "arriving" after the delay | E4 | #34 |
+| F2 Fixes only | Freeze | Switch off anything unstable; rehearse the demo walk | E4, E6 | #46 |
+
+If Person X hasn't joined by M2, you also take **X1, the helmet HUD view** (#41): a second layout of the walk showing the ring, heading, next stop and alerts.
 
 ## Done when
-- The foundation works on a phone with the synthetic world and with the real Mars world, every feature flag off.
-- Turning any one feature off does not break anything.
+- The foundation runs on a phone with the synthetic world and the real Gale world, with every flag off.
+- Turning any one feature off breaks nothing.
 
 ## Don't
-- Don't run pathfinding on the phone: the ring is a lookup in `cost_to_go`.
-- Don't hard-code the world size or cell size: read `world.json`.
+- Don't pathfind on the phone: the ring is a lookup in `cost_to_go`.
+- Don't hard-code world or cell size: read `world.json`.
+- Don't do route maths in 3D: the 3D view is only for showing the ground.
 
 ## Agent brief (paste into your coding agent)
-> You are helping Person 2 (engine and phone) on Martian Map, a NASA Space Apps project. Read `AGENTS.md`, `docs/PLAN.md` and `docs/CONTRACTS.md` first. Work only inside `app/`. Build, in order: load `data/worlds/<name>/world.json` and the binary layers (float32 and uint8, little-endian, row-major, row 0 north); render the terrain colored by class; move an astronaut cell by cell and drain energy; draw the walk-back ring as every cell where `cost_to_go <= energy_left - reserve`; vibrate and warn at the point of no return. Then add features behind flags: step_mode (motion-sensor steps plus compass), buddy_scripted, buddy_rl (onnx model, contract §2 observation), classifier, capcom, logging (contract §3). Never hard-code sizes; never pathfind on the phone. Keep the app working with every flag off. Commit small, working steps.
+> You are helping Nicolas (Person 2, app and 3D) on Martian Map, a NASA Space Apps project. Read `AGENTS.md`, `docs/PRODUCT.md`, `docs/BUILD.md` (lane P2) and `docs/CONTRACTS.md` first. Work only inside `app/`, a three.js web app. Load `data/worlds/<name>/world.json` and the binary layers (float32 and uint8, little-endian, row-major, row 0 north). Build the P2 blocks in order: 3D terrain from the height grid plus a flat minimap; the walk with energy and oxygen drain, the walk-back ring (`cost_to_go <= energy_left - reserve`) and the point-of-no-return buzz; plan mode with layer toggles, targets, route and stop photos; the drone scout with a scan sweep that reveals `rocks_fine.u8` and switches to `cost_to_go_scouted`; the why-this-route panel; stops and step mode with walk logs (contract §3). Every feature behind a flag; the app works with every flag off. Never pathfind on the phone. One issue per session; small, working commits.

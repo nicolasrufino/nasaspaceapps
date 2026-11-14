@@ -1,40 +1,73 @@
 # Martian Map
 
-**Your phone tells you, step by step, how far you can still walk on Mars and make it home.**
+**Martian Map turns NASA's Mars data into a science walk you can plan, preview and come home from, and makes the map better with every walk.**
 
-NASA Space Apps 2026 (Chicago), challenge: *Interplanetary Survival Guide: Martian Map*.
+NASA Space Apps 2026 (Chicago), challenge *Interplanetary Survival Guide: Martian Map*.
 
-A phone stands in for a spacesuit display. Real steps move an astronaut across real Mars terrain; every step costs energy from a published walking model; a walk-back ring shows how far you can still go and get home; a trained buddy rover scouts ahead; mission control answers 20 seconds late.
+## What it is, in one minute
 
-## Start here
-1. `docs/PLAN.md`: the problem, the stack, the build order, the timeline.
-   `docs/RESEARCH.md`: how NASA plans surface EVAs, robots, hazards, funding.
-   `docs/PITCH.md`: the 5-minute pitch draft and likely judge questions.
-   `docs/CRITIQUE.md`: every idea graded before we build it.
-   `docs/DATA.md`: each NASA resource, what it is, and how we use it; our slice of Mars.
-2. `docs/CONTRACTS.md`: the file and model formats everyone shares.
-3. Your role brief in `docs/roles/`.
-4. `AGENTS.md`: rules for coding agents (each folder has its own too).
-5. `docs/CODEX.md`: Codex setup prompt, one environment per task, the orchestrator prompt.
+There is no map of Mars detailed enough for one walk, and Earth is 4 to 22 minutes away. So we build the map in five stages, coarse to fine, each telling the next where to look:
+
+1. **Orbit:** NASA's layers for one 2 × 2 km slice of Mount Sharp, Gale crater.
+2. **Scout:** a drone flies the route strip, then anomalies, then uncertain spots, and reveals the rocks and sand orbit can't see.
+3. **Plan and pack:** the safe, efficient route to the science stops, the margin home and the packing list.
+4. **Walk and add:** a tablet minimap and a helmet HUD keep the way home known; every step adds to the map.
+5. **Next walk:** starts from a better map.
+
+One three.js web app shows it three ways: the habitat display, the tablet the crew carries, and the helmet HUD. Full story: `docs/PRODUCT.md`.
+
+## The team
+
+| Lane | Who | Focus | Brief |
+|---|---|---|---|
+| Person 1 | **Jules** | Machine learning: rock detection, ground classifier, CAPCOM agent on Azure | `docs/roles/person-1-ml.md` |
+| Person 2 | **Nicolas** | App and 3D: views, walk, drone scout, stops | `docs/roles/person-2-engine.md` |
+| Person 3 | **Galsan** (lead) | Data, systems and integration: real Gale slice, all data layers, Azure deploy, merges | `docs/roles/person-3-data-systems.md` |
+| Person X | Open | Story, HUD design, pitch, project page | `docs/roles/person-x.md` |
+
+Who leans where, and how each person uses AI: `docs/roles/README.md`.
+
+## Start here (people and agents)
+
+1. `docs/PRODUCT.md`: what we build and why each stage exists.
+2. `docs/BUILD.md`: **who builds what, in what order.** Every block has an owner, its prerequisites and a GitHub issue.
+3. `docs/CONTRACTS.md`: the file and model formats everyone shares. This is how nobody waits on anybody.
+4. Your role brief in `docs/roles/`.
+5. `AGENTS.md`: rules for coding agents (each folder has its own too). Codex setup: `docs/CODEX.md`.
+
+Background: `docs/PLAN.md` (the whole plan), `docs/DATA.md` (each NASA resource and our slice), `docs/CRITIQUE.md` (every idea graded), `docs/PITCH.md` (the pitch and the local awards), `docs/RESEARCH.md` (the evidence).
+
+## Local awards we aim for
+
+1. **Best Use of Science** (main target): eight types of NASA data, every claim tested.
+2. **Best Use of Technology** (requires Microsoft Azure): hosted on Azure Static Web Apps; CAPCOM agent on Microsoft Foundry.
+3. **Art & Technology**: 3D terrain, the drone's scan sweep, the helmet HUD.
 
 ## Quick start
+
 ```bash
 python3 data/pipeline/make_world.py   # builds data/worlds/synthetic/ (standard library only)
 ```
 
+Everyone builds against `data/worlds/synthetic/` from the first minute; the real Gale slice drops in later through the same files.
+
 ## Layout
+
 | Folder | Owner | What lives there |
 |---|---|---|
-| `data/` | Person 3 | Terrain pipeline and world files |
-| `ml/` | Person 1 | Terrain classifier and buddy rover training; ONNX exports |
-| `app/` | Person 2 | The phone game (stack chosen Sat 12:30) |
-| `agent/` | Person 3, then Person X | CAPCOM agent (Microsoft Foundry) |
-| `docs/` | Everyone | Plan, contracts, role briefs, pitch notes |
+| `data/` | Galsan | Pipeline and world files |
+| `ml/` | Jules | Rock detection, ground classifier, buddy rover; ONNX exports |
+| `agent/` | Jules | CAPCOM agent (Microsoft Foundry) |
+| `app/` | Nicolas | The three.js web app |
+| `docs/` | Everyone (Galsan merges) | Product, build plan, contracts, role briefs, pitch |
 
 ## How we work
-- Branch per task, named `yourname/what-it-does` (see How we ship below). PRs into `main`; CI must be green; `main` always runs.
-- Foundation first. Every feature is behind a flag and can be turned off.
-- Contract changes need every owner's approval.
+
+- **One block, one issue, one branch, one PR.** Take the next block in your lane whose prerequisites are done (`docs/BUILD.md`), branch `yourname/what-it-does`, open a PR that names the block, the milestone and the flag.
+- **`main` always runs.** CI must be green; every feature sits behind a flag and ships switched off if it is late.
+- **Contracts change only with every owner's approval.**
+- **New idea? Grade it first** in `docs/CRITIQUE.md`. 8 or less: don't build it.
+- **Numbers only from code.** No invented metric reaches the pitch.
 
 ---
 
@@ -54,7 +87,7 @@ gh pr merge --auto --squash           # merges itself the moment CI goes green
 
 Then go back to `main`, pull, and start the next thing. Don't babysit PRs.
 
-### Rules that keep 5 people fast
+### Rules that keep the team fast
 
 - **Small PRs, merged within ~1 hour.** Long branches = merge conflicts at 3am.
 - **Pull `main` often** (`git pull --rebase origin main` on your branch).
@@ -93,11 +126,7 @@ Add a script to `package.json` and CI runs it, no workflow edits needed.
 
 ### CD
 
-Connect the repo to Vercel (or Netlify/Render). Every PR gets a preview URL, `main` deploys to prod. To make the preview deploy a merge requirement too:
-
-```bash
-./scripts/protect-main.sh ci Vercel
-```
+The app deploys to **Azure Static Web Apps** (block D5, issue #14): `main` deploys the public link, and each PR can get a preview URL. Azure is also what makes us eligible for the Best Use of Technology award.
 
 ## One-time setup (repo owner)
 
