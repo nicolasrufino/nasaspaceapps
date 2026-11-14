@@ -2,7 +2,7 @@
 
 **Who:** Galsan (GitHub `Galsan2005`). Lane P3 in `docs/BUILD.md`. Runs the Codex orchestrator and the merges.
 
-**Mission:** the foundation everyone builds on, and keeping the pieces fitting together: the real Gale slice in world files, all eight data types, the walking-cost and way-home maths, the drone's flight plan, the Azure deployment, and the team's merge discipline.
+**Mission:** the foundation everyone builds on, and keeping the pieces fitting together: the real Gale slice in world files, all eight data types, the walking-cost and way-home maths, the helicopter's flight plan, the Azure deployment, and the team's merge discipline.
 
 **Owns:** `data/`, `docs/`, the repo settings and deployment.
 **Writes:** world files (contract §1), `scout_plan.json`.

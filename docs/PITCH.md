@@ -23,7 +23,7 @@ Five minutes, the organizers' seven parts. One argument runs through it: **there
 
 ## The argument in one breath
 
-> There is no map at the scale of one Mars walk. Orbit misses the rocks, mission control is 20 minutes away, rovers are too slow to scout ahead, and walking in blind breaks the plan. Martian Map makes the map: orbit gives the base, a scout drone flies the route first, the device plans the path and the packing list, and every walk makes the map better. Each piece is already proven at NASA. We put them in the crew's hands.
+> There is no map at the scale of one Mars walk. Orbit misses the rocks, mission control is 20 minutes away, rovers are too slow to scout ahead, and walking in blind breaks the plan. Martian Map makes the map: orbit gives the base, a NASA JPL-style scout helicopter flies the route first, the device plans the path and the packing list, and every walk makes the map better. Each piece is already proven at NASA. We put them in the crew's hands.
 
 ## The script
 
@@ -36,12 +36,12 @@ Five minutes, the organizers' seven parts. One argument runs through it: **there
 **3. Solution in one sentence and the five stages (1:00–1:45)**
 > **Martian Map turns NASA's Mars data into a science walk you can plan, preview and come home from, and makes the map better with every walk.**
 
-> We build the map in five stages, coarse to fine; each one tells the next where to look. **Orbit** first: it's the only data covering the whole site before anyone lands, and NASA already collected it. It shows where the science is and where not to go. But it can't see a knee-high rock or soft sand, so a **scout drone** flies the route first, the way Ingenuity scouted for Perseverance. Then we **plan and pack** before leaving, because Earth is up to 22 minutes away. On the **walk**, the suit display keeps the way home known, and every step adds detail. The **next walk** starts from a better map. For each of NASA's five objectives, today's tools do one stage; we connect all five.
+> We build the map in five stages, coarse to fine; each one tells the next where to look. **Orbit** first: it's the only data covering the whole site before anyone lands, and NASA already collected it. It shows where the science is and where not to go. But it can't see a knee-high rock or soft sand, so a **scout helicopter**, the kind NASA JPL flew on Mars (Ingenuity) and is now building for crews (SkyFall), flies the route first, the way Ingenuity scouted for Perseverance. Then we **plan and pack** before leaving, because Earth is up to 22 minutes away. On the **walk**, the suit display keeps the way home known, and every step adds detail. The **next walk** starts from a better map. For each of NASA's five objectives, today's tools do one stage; we connect all five.
 
 **4. Demo (1:45–3:00)**
 - Habitat screen, the fixed Gale boxwork scenario with five default science stops. Orbit-only map and a first route.
-- Deploy the scout drone. It flies Ingenuity-sized legs along the route, then where it is least sure. Where it flies, the map sharpens: real full-resolution HiRISE terrain and detected rocks. A hidden rock field appears.
-- The first re-plan crosses zero of the 12 newly discovered hazard cells on the original route: 1238.8 to 1247.4 m, 329.6 to 334.1 kJ (+1.36% effort). Six unobserved stored hazards remain on the new route. Repeat "Fly the new route": after three passes, the final 1243.5 m route is fully scanned and crosses zero stored hazard cells. This takes 21 simulated flight legs and 14.05 km of drone travel; drone energy is excluded. Unmapped real hazards can remain.
+- Deploy the scout helicopter. It flies Ingenuity-sized legs along the route, then where it is least sure. Where it flies, the map sharpens: real full-resolution HiRISE terrain and detected rocks. A hidden rock field appears.
+- The first re-plan crosses zero of the 12 newly discovered hazard cells on the original route: 1238.8 to 1247.4 m, 329.6 to 334.1 kJ (+1.36% effort). Six unobserved stored hazards remain on the new route. Repeat "Fly the new route": after three passes, the final 1243.5 m route is fully scanned and crosses zero stored hazard cells. This takes 21 simulated flight legs and 14.05 km of helicopter travel; helicopter energy is excluded. Unmapped real hazards can remain.
 - A judge carries the phone (the suit display). Real steps move the astronaut; the ring of "can still get home" shrinks. At a stop, the science checklist runs. Past the point of no return, it buzzes.
 - Export the map for mission control. A live CAPCOM/Foundry reply is deferred, not a demo step.
 
@@ -90,18 +90,18 @@ The four local categories, how well we fit each, and what to show. Grades are in
 **One line per award, if asked:**
 - *Science:* "Every claim on screen is a measurement from a NASA instrument or a number our code tested."
 - *Technology:* "Azure Static Web Apps hosts the map. Planning and the simulated scout run locally in the browser."
-- *Art & Technology:* "A drone that sees like a bat, but with light, and a helmet display you can read while walking."
+- *Art & Technology:* "A helicopter that sees like a bat, but with light, and a helmet display you can read while walking."
 
 ## Questions judges are likely to ask
 
 | Question | Answer |
 |---|---|
 | Why not just use Mars Trek or MMGIS? | They are built for regional views and for rover teams on Earth. We layer the same data for one crew on one walk, with the science, hazards and the way home together, and it works with no link to Earth. |
-| Is the drone real? | The flight is simulated and labelled. Ingenuity proved a helicopter can scout on Mars (72 flights, up to 704 m each); NASA's SkyFall helicopters are contracted to scout exploration zones for crews (launch late 2028). In the demo, full-resolution HiRISE stands in for what its cameras would see. |
-| What does a drone see that HiRISE doesn't? | HiRISE reliably sees rocks of about 1.5 m and up, with terrain points a metre apart. Ingenuity's images were about 4 cm per pixel and showed a half-metre crater peak HiRISE missed. A walker trips on what's in between. (`docs/RESEARCH.md` §14) |
-| Can it fly at night or over sand? | No, and we plan for both: it flies in daylight on the sol before, and the scout plan avoids smooth sand, which is what ended Ingenuity. Without the drone the route falls back to orbit data, with less margin. |
+| Is the helicopter real? | The flight is simulated and labelled. Ingenuity proved a helicopter can scout on Mars (72 flights, up to 704 m each); NASA's SkyFall helicopters are contracted to scout exploration zones for crews (launch late 2028). In the demo, full-resolution HiRISE stands in for what its cameras would see. |
+| What does a helicopter see that HiRISE doesn't? | HiRISE reliably sees rocks of about 1.5 m and up, with terrain points a metre apart. Ingenuity's images were about 4 cm per pixel and showed a half-metre crater peak HiRISE missed. A walker trips on what's in between. (`docs/RESEARCH.md` §14) |
+| Can it fly at night or over sand? | No, and we plan for both: it flies in daylight on the sol before, and the scout plan avoids smooth sand, which is what ended Ingenuity. Without the helicopter the route falls back to orbit data, with less margin. |
 | How do you detect rocks? | Shadow-based proposals in HiRISE: 23 visually accepted, two uncertain and excluded. Acceptance is not precision/recall. Separate reference-mosaic correspondence matched 0/31 accepted locations; do not hide that limitation. |
-| How accurate is the energy model? | This is a sensitivity test, not field calibration. At ±30% walking cost, departure ring area changes +26.1% / −21.2% after the first scout pass. The final route's minimum spare margin is 245.7 / 145.3 / 44.8 kJ at 0.7× / 1× / 1.3×, after home and reserve. Drone energy is excluded. |
+| How accurate is the energy model? | This is a sensitivity test, not field calibration. At ±30% walking cost, departure ring area changes +26.1% / −21.2% after the first scout pass. The final route's minimum spare margin is 245.7 / 145.3 / 44.8 kJ at 0.7× / 1× / 1.3×, after home and reserve. Helicopter energy is excluded. |
 | Was the classifier trained on Ingenuity views at five metres? | No. It uses AI4Mars Curiosity ground photos in Gale. Five metres is a proposed future scouting altitude. Ground-view accuracy does not establish aerial performance or exact-site coverage. |
 | Did the retraining improve it? | The selected new head gets 278/302 versus the current 275/302 on an additional expert sample. The gain's grouped 95% interval includes zero, and the older test falls by one correct crop. We keep the published model and report the experiment; no 95% reliability claim. |
 | Does MobileNet produce slopes or the 3D map? | No. It predicts a majority terrain category for a crop. The current map and slopes use orbital terrain products; pixel segmentation and reconstruction are separate tasks. |
