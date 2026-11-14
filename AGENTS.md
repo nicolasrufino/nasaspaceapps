@@ -1,6 +1,6 @@
 # Rules for coding agents (all roles)
 
-Read `docs/PLAN.md`, `docs/CONTRACTS.md` and your person's brief in `docs/roles/` before writing code.
+Read `docs/PLAN.md`, `docs/CONTRACTS.md` and your person's brief in `docs/roles/` before writing code. Each folder (`ml/`, `app/`, `data/`, `agent/`) has its own `AGENTS.md` with its environment and check commands. Codex workflow: `docs/CODEX.md` (one task per git worktree).
 
 1. **Stay in your folder.** Person 1: `ml/`. Person 2: `app/`. Person 3: `data/`, `agent/`, `docs/`. Person X: `docs/` and agreed parts of `app/`.
 2. **Contracts are fixed.** Formats in `docs/CONTRACTS.md` change only in a PR that edits that file, approved by every owner. Add fields; never rename or remove.
