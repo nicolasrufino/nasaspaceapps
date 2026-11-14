@@ -13,6 +13,9 @@
 3. **14:00–16:00** Walk-back ring: highlight cells where `cost_to_go <= energy_left - reserve`. Point of no return: vibrate and show a warning when the astronaut's cell leaves the ring. Runs on one phone over HTTPS (M1).
 
 ## Features (in this order, each behind a flag)
+0a. Layer toggles for every layer the world lists (`world.json` `layers`), each with its mission and date; targets from `targets.json`; the planned route from `route.json`.
+0b. `pov_images`: tap a stop to see the rover photo from `stops.json` (with credit).
+0c. `science_stop`: at a stop, the checklist (look, get close, decide, sample or move on) and a context card saved to the log (place, layer values, photo, time).
 4. `step_mode`: real steps move the astronaut (motion sensor step detection + compass heading; one step about 0.7 m). Test in the hallway.
 5. `buddy_scripted`: a rover that follows on low-cost cells. Then `buddy_rl`: load `buddy_policy.onnx`, build the 27-value observation, take the argmax action. Same rover, switchable.
 6. Load the real Mars world from Person 3 (just a different folder).

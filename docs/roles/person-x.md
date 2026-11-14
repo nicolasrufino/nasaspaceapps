@@ -11,9 +11,9 @@
 2. Take over `docs/pitch-notes.md` from Person 3.
 
 ## Then
-3. **Before/after page** (flag `before_after`): the table in PLAN §8 as a screen in the app, with Apollo 14 on the left and our walk-back ring on the right.
+3. **Before/after page** (flag `before_after`): the table in PLAN §8 as a screen in the app, with today's tools on the left and Martian Map on the right.
 4. **HUD design pass** with Person 2: high contrast, large type, readable while walking.
-5. **The 5-minute pitch** in the organizers' seven parts: hook (Apollo 14, Feb 6, 1971), problem (20-minute delay), one sentence, demo (the hallway walk), space data (Mars Trek terrain, USGS geologic map, Perseverance images, NASA's walking model), impact (every Mars EVA; suits capped at $3.1B in task orders), team + next.
+5. **The 5-minute pitch** in the organizers' seven parts: hook (NASA's 2022 Arizona field test), problem (separate maps, 4–22 minute delay), one sentence, demo (the hallway walk), space data (Mars Trek terrain, USGS geologic map, Perseverance images, NASA's walking model), impact (every Mars EVA; suits capped at $3.1B in task orders), team + next.
 6. **30-second video** and the **project page** (the global judges read only this): exact NASA data used, validation numbers, limits, the AI-use disclosure.
 
 ## Agent brief (paste into your coding agent)

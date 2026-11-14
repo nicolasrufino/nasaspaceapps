@@ -27,6 +27,15 @@
     "speed_mps": 1.0,
     "max_slope_deg": 25.0
   },
+  "layers": [
+    "height",
+    "slope",
+    "terrain_class",
+    "cost_to_go"
+  ],
+  "sources": {
+    "all": "synthetic terrain for development; real sites list NASA mission, instrument and date per layer"
+  },
   "files": {
     "height": "height.f32",
     "slope": "slope.f32",

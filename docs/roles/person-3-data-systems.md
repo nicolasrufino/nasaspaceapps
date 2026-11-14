@@ -7,10 +7,11 @@
 
 ## Foundation (do first)
 1. **11:30–12:00** Push this repo; add teammates; protect `main` (PRs only). Everyone runs `python3 data/pipeline/make_world.py`.
-2. **12:00–15:00** Real Mars world: one HiRISE elevation model (DTM) tile from the Mars area we pick (Gale, to match NASA's Curiosity route map, or Jezero, to match the Perseverance images). Downsample to 2–5 m per cell, about 256×256 cells. Write `data/pipeline/load_dtm.py` that feeds it into the same `build()` and writes `data/worlds/gale/` (or `jezero/`). Terrain classes: start from the USGS geologic map units; later from Person 1's classifier.
+2. **12:00–15:00** Real Mars world with at least three NASA layers (optical, topography, thermal; then spectral or geology, and radiation). Site: Mount Sharp boxwork in Gale (suggested; NASA's statement names it and Curiosity measured radiation and weather there). one HiRISE elevation model (DTM) tile from the Mars area we pick (Gale, to match NASA's Curiosity route map, or Jezero, to match the Perseverance images). Downsample to 2–5 m per cell, about 256×256 cells. Write `data/pipeline/load_dtm.py` that feeds it into the same `build()` and writes `data/worlds/gale/` (or `jezero/`). Terrain classes: start from the USGS geologic map units; later from Person 1's classifier.
 3. **By 16:00** Export the real world and tell Person 2 the folder name (M1).
 
 ## Features (in this order)
+3b. `targets.json` for the boxwork goal, `stops.json` with Curiosity raw images near each target, and `route.json` from the pipeline (cheapest safe path through the stops, slope and sand limits applied).
 4. Energy model upgrade: replace the simple gravity scaling with NASA JSC's field-modified walking model (Kim et al. 2024) if the paper gives enough detail; otherwise keep Pandolf and say so. Same function, so nothing else changes.
 5. Deployment: Azure Static Web Apps (web stack) or a build pipeline (Unity). One link or one APK the team can open.
 6. CAPCOM agent (`agent/`): Microsoft Foundry agent with tools `get_state`, `explain_ring`, `nearest_safe_point`; replies delayed 20 s; Azure Speech for voice. Contract §4.
