@@ -3,6 +3,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { loadWorld, layerRGB, sourceLabel } from './world.js'
 import { startWalk, stepTo, ringMask, ringLimit, appState, oxygenL } from './walk.js'
 import { planTour, MAX_STOPS } from './plan.js'
+import { routeFlights, scanAt, pointAlong } from './scout.js'
 
 const $ = (id) => document.getElementById(id)
 const params = new URLSearchParams(location.search)
@@ -21,9 +22,14 @@ try {
 }
 const targets = await optionalJSON('targets.json', [])
 const photos = await optionalJSON('stops.json', []) // rover photos per stop (contract: stops.json)
+const scoutPlan = await optionalJSON('scout_plan.json', []) // pipeline's extra helicopter flights (D4), when it exists
+let flight = null // helicopter in the air: { flights, k, along, speed, found, before }
 const { meta, layers } = world
 const { width: W, height: H, cell_size_m: cs } = meta
+// The way home the ring and walk read. Live: cells the helicopter scouts switch to cost_to_go_scouted (E4).
 const ctg = layers.cost_to_go
+const scanned = new Uint8Array(W * H) // cells the helicopter has seen
+const rockSeen = (i) => scanned[i] && layers.rocks_fine?.[i]
 const cellPos = ([x, y], lift = 0) => new THREE.Vector3(x * cs, layers.height[y * W + x] + lift, y * cs)
 $('title').textContent = `${meta.name} · ${W}×${H} cells · ${cs} m`
 
@@ -58,6 +64,9 @@ const pins = new THREE.Group() // science stops, rebuilt when the plan changes
 scene.add(pins)
 const walker = new THREE.Mesh(new THREE.CapsuleGeometry(span / 200, span / 60, 4, 12), new THREE.MeshBasicMaterial({ color: 0x35e0ff }))
 scene.add(walker)
+const beforeLine = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineDashedMaterial({ color: 0xff3b30, dashSize: span / 100, gapSize: span / 150 }))
+beforeLine.visible = false // the route before the scout flight, for the before/after
+scene.add(beforeLine)
 const routeLine = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.8 }))
 scene.add(routeLine)
 
@@ -75,7 +84,11 @@ function resize() {
 }
 addEventListener('resize', resize)
 resize()
-renderer.setAnimationLoop(() => {
+let lastFrame = performance.now()
+renderer.setAnimationLoop((now) => {
+  const dt = Math.min((now - lastFrame) / 1000, 0.1)
+  lastFrame = now
+  if (flight) tickFlight(dt)
   controls.update()
   renderer.render(scene, camera)
 })
@@ -112,7 +125,9 @@ let route // { cells, stops, dropped, energy_j, minutes }
 let blocked = null // rocks the scout has found (E4); the planner routes around them
 const allStops = () => [...targets, ...custom]
 
-function replan() {
+function replan(keepBefore = false) {
+  beforeLine.visible = keepBefore
+  if (!keepBefore) $('scoutStatus').textContent = ''
   route = planTour(world, allStops().filter((s) => included.has(s.id)), blocked)
   routeLine.geometry.dispose()
   routeLine.geometry = new THREE.BufferGeometry().setFromPoints(route.cells.map((c) => cellPos(c, 1)))
@@ -233,7 +248,8 @@ function paintMinimap(inside) {
   const img = ctx.createImageData(W, H)
   for (let i = 0; i < W * H; i++) {
     const f = inside[i] ? 1 : 0.35
-    img.data.set([layerColors[i * 3] * f, layerColors[i * 3 + 1] * f, layerColors[i * 3 + 2] * f, 255], i * 4)
+    if (rockSeen(i)) img.data.set([230, 40, 40, 255], i * 4)
+    else img.data.set([layerColors[i * 3] * f, layerColors[i * 3 + 1] * f, layerColors[i * 3 + 2] * f, 255], i * 4)
   }
   ctx.putImageData(img, 0, 0)
   ctx.fillStyle = '#ffffffb0'
@@ -247,6 +263,94 @@ function paintMinimap(inside) {
   ctx.fillRect(meta.base_cell[0] - 1, meta.base_cell[1] - 1, 3, 3)
   ctx.fillStyle = '#35e0ff'
   ctx.fillRect(walk.cell[0] - 1, walk.cell[1] - 1, 3, 3)
+}
+
+// --- Helicopter scout (block E4, flag drone_scout): flies the planned route, reveals rocks, re-plans. ---
+const heli = new THREE.Group()
+const heliSize = span / 150
+heli.add(new THREE.Mesh(new THREE.SphereGeometry(heliSize, 16, 12), new THREE.MeshStandardMaterial({ color: 0xeeeeee })))
+const rotor = new THREE.Mesh(new THREE.BoxGeometry(heliSize * 6, heliSize / 6, heliSize / 2), new THREE.MeshBasicMaterial({ color: 0x222222 }))
+rotor.position.y = heliSize * 1.3
+heli.add(rotor)
+const ALT = span / 25 // flying height above the ground, for the view only
+const beam = new THREE.Mesh(new THREE.ConeGeometry(15, ALT, 24, 1, true), // 15 m = SWATH_M
+  new THREE.MeshBasicMaterial({ color: 0x35e0ff, transparent: true, opacity: 0.18, side: THREE.DoubleSide, depthWrite: false }))
+beam.position.y = -ALT / 2
+heli.add(beam)
+heli.visible = false
+scene.add(heli)
+const dotPos = new Float32Array(W * H * 3)
+const dotCol = new Float32Array(W * H * 3)
+const dotsGeo = new THREE.BufferGeometry()
+dotsGeo.setAttribute('position', new THREE.BufferAttribute(dotPos, 3))
+dotsGeo.setAttribute('color', new THREE.BufferAttribute(dotCol, 3))
+dotsGeo.setDrawRange(0, 0)
+scene.add(new THREE.Points(dotsGeo, new THREE.PointsMaterial({ size: span / 300, vertexColors: true })))
+let dots = 0
+
+if (flags.has('drone_scout') && layers.rocks_fine) $('scoutBox').hidden = false
+$('scout').onclick = () => {
+  if (flight) return
+  const flights = [...routeFlights(meta, route.cells), ...scoutPlan.map((f) => ({ waypoints: f.waypoints, metres: f.metres }))]
+  if (!flights.length) return
+  const metres = flights.reduce((m, f) => m + f.metres, 0)
+  flight = { flights, k: 0, along: 0, speed: metres / 9, found: 0, before: route } // the whole scout plays in ~9 s
+  pause()
+  $('scout').disabled = true
+  heli.visible = true
+}
+
+function tickFlight(dt) {
+  rotor.rotation.y += dt * 40
+  const f = flight.flights[flight.k]
+  flight.along += flight.speed * dt
+  const p = pointAlong(meta, f.waypoints, flight.along)
+  if (!p) {
+    flight.k++
+    flight.along = 0
+    if (flight.k >= flight.flights.length) land()
+    return
+  }
+  const [x, y] = p
+  const ground = layers.height[Math.round(y) * W + Math.round(x)]
+  heli.position.set(x * cs, ground + ALT, y * cs)
+  const fresh = scanAt(meta, scanned, x, y)
+  for (const i of fresh) {
+    const rock = layers.rocks_fine[i]
+    if (rock) flight.found++
+    if (layers.cost_to_go_scouted) ctg[i] = layers.cost_to_go_scouted[i]
+    dotPos.set([(i % W) * cs, layers.height[i] + 0.5, Math.floor(i / W) * cs], dots * 3)
+    dotCol.set(rock ? [1, 0.2, 0.15] : [0.55, 0.95, 1], dots * 3)
+    dots++
+  }
+  if (fresh.length) {
+    dotsGeo.attributes.position.needsUpdate = dotsGeo.attributes.color.needsUpdate = true
+    dotsGeo.setDrawRange(0, dots)
+    render()
+  }
+  $('scoutStatus').textContent = `Flight ${flight.k + 1} of ${flight.flights.length} · ${flight.found} rock cells found · ` +
+    `simulated helicopter flight, rocks from ${sourceLabel(meta, 'rocks_fine') || meta.sources?.all || 'rocks_fine'}`
+}
+
+function land() {
+  const { before, found } = flight
+  flight = null
+  heli.visible = false
+  $('scout').disabled = false
+  $('scout').textContent = 'Fly the new route'
+  blocked = Uint8Array.from(scanned, (v, i) => v && layers.rocks_fine[i])
+  const crossed = before.cells.filter(([x, y]) => blocked[y * W + x]).length
+  beforeLine.geometry.dispose()
+  beforeLine.geometry = new THREE.BufferGeometry().setFromPoints(before.cells.map((c) => cellPos(c, 1.5)))
+  beforeLine.computeLineDistances()
+  replan(crossed > 0)
+  $('scoutStatus').textContent = !crossed
+    ? `Scouted: ${found} rock cells found, none on the route. The route stands.`
+    : `Scouted: ${found} rock cells found; the old route (red dashes) crossed ${crossed}. ` +
+      `New route avoids them: ${kj(before.energy_j)} → ${kj(route.energy_j)}` +
+      (route.dropped.length > before.dropped.length
+        ? `; now doesn't fit: ${route.dropped.filter((d) => !before.dropped.includes(d)).map((d) => allStops().find((s) => s.id === d)?.name ?? d).join(', ')}`
+        : '')
 }
 
 // --- Walk (block E2): along the planned route, energy and oxygen drain, ring, point of no return. ---
@@ -281,7 +385,8 @@ function render() {
   const inside = ringMask(ctg, ringLimit(meta, walk))
   for (let i = 0; i < W * H; i++) {
     const f = inside[i] ? 1 : 0.45
-    for (let c = 0; c < 3; c++) colors.array[i * 3 + c] = layerColors[i * 3 + c] * f
+    if (rockSeen(i)) colors.array.set([200, 35, 35], i * 3)
+    else for (let c = 0; c < 3; c++) colors.array[i * 3 + c] = layerColors[i * 3 + c] * f
   }
   colors.needsUpdate = true
   walker.position.copy(cellPos(walk.cell, span / 100))
