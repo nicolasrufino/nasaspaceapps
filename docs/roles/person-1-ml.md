@@ -13,7 +13,7 @@
 
 ## Features (in this order)
 4. **By 16:00** `terrain_cls.onnx` v1: MobileNetV3-small or ResNet18 fine-tuned on 128×128 patches, 5 classes. Report held-out accuracy and a confusion matrix.
-5. **By 21:00** Buddy rover trained with PPO on the synthetic world, then on the real Mars world when Person 3 exports it. Reward: lead the astronaut by 2–6 cells along low-cost cells, scout ahead, head home under 35% energy, large penalty for steep cells. The rover is LTV-class (it can move several cells per astronaut step); see `docs/RESEARCH.md` §6. Compare against the scripted follower (same metric) so the RL is shown against a baseline.
+5. **By 21:00** Buddy rover trained with PPO on the synthetic world, then on the real Mars world when Person 3 exports it. Reward: lead the astronaut by 2–6 cells along low-cost cells, scout ahead, head home under 35% energy, large penalty for steep cells. The rover is LTV-class (it can move several cells per astronaut step); see `docs/RESEARCH.md` §7 and §10. Compare against the scripted follower (same metric) so the RL is shown against a baseline.
 6. **Overnight** Retrain on the real world with randomized start points; record a short clip of the policy for the pitch; write the numbers in `ml/exports/*.json`.
 7. **Stretch** Classify the real Mars tile's terrain from orbital or rover images and hand Person 3 a `terrain_class.u8` layer.
 

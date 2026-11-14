@@ -21,3 +21,12 @@ def test_steeper_and_sandier_costs_more():
     uphill_soil = mw.pandolf_watts(10, mw.CLASSES[1][1])
     flat_sand = mw.pandolf_watts(0, mw.CLASSES[3][1])
     assert uphill_soil > flat_soil and flat_sand > flat_soil
+
+
+def test_way_home_reaches_base_and_route_starts_there():
+    n, base = 32, [8, 16]
+    *_, ctg = mw.build(n, 5.0, base, 2.5e5)
+    targets, route = mw.synthetic_targets(n, ctg, base)
+    assert len(targets) == 3
+    assert mw.path_home(ctg, n, targets[0]['cell'])[-1] == base
+    assert route['cells'][0] == base and route['cells'][-1] == base

@@ -14,6 +14,17 @@ A world is a folder in `data/worlds/<name>/`, produced by `data/pipeline/make_wo
 | `terrain_class.u8` | uint8 | 0 unknown, 1 soil, 2 bedrock, 3 sand, 4 big rock (AI4Mars classes). |
 | `cost_per_m.f32` | float32 | Walking cost on flat ground for that class, J per metre (for display). |
 | `cost_to_go.f32` | float32 | **Energy in joules to walk from this cell back to base**, by the cheapest route. `3e38` = cannot get back. |
+| `optical.png` | image, `width`×`height` | HiRISE (or CTX) image of the site, aligned to the grid. *Real sites only.* |
+| `thermal_inertia.f32` | float32 | THEMIS thermal inertia (low = loose sand or dust, high = rock). *Optional.* |
+| `science.u8` | uint8 | Science value of the cell for the site's goal: 0 none, 1 low, 2 medium, 3 high (from CRISM minerals and geologic units). *Optional.* |
+| `dose_rate.f32` | float32 | Radiation dose rate in µGy per hour (Curiosity RAD background, reduced where terrain shields the sky). *Optional.* |
+| `targets.json` | JSON list | Science targets: `{"id", "name", "cell": [x, y], "goal", "why", "sources": [...]}`. |
+| `stops.json` | JSON list | Rover photos for stops: `{"target_id" or "cell", "image_url", "caption", "credit", "sol"}` (Curiosity Mastcam/Navcam raw images). |
+| `route.json` | JSON | The planned route: `{"cells": [[x, y], ...], "stops": ["target id", ...], "energy_j", "minutes", "dose_ugy"}`, computed by the pipeline. |
+
+Optional layers may be missing in a world; the app hides that layer's toggle. `world.json` lists which layers exist under `"layers"` and each layer's mission, instrument and date under `"sources"`.
+
+**The way home is always known:** from any cell, step to the neighbour with the lowest `cost_to_go` until you reach base. No search is needed on the phone.
 
 Index of cell (x, y): `y * width + x`. World position of a cell centre: `x * cell_size_m`, `y * cell_size_m`.
 

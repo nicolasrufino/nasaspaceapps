@@ -98,6 +98,38 @@ def build(n, cell, base, energy_budget_j):
     return h, slope, cls, cost_per_m, ctg
 
 
+def path_home(ctg, n, start):
+    """Cells from start to base, always stepping to the cheapest neighbour (the way home on the phone)."""
+    path, cur = [start], start
+    while ctg[cur[1] * n + cur[0]] > 0:
+        x, y = cur
+        nxt = min(((x + dx, y + dy) for dx in (-1, 0, 1) for dy in (-1, 0, 1)
+                   if (dx or dy) and 0 <= x + dx < n and 0 <= y + dy < n), key=lambda c: ctg[c[1] * n + c[0]])
+        if ctg[nxt[1] * n + nxt[0]] >= ctg[cur[1] * n + cur[0]]:
+            break  # unreachable from here
+        path.append(list(nxt))
+        cur = nxt
+    return path
+
+
+def synthetic_targets(n, ctg, base):
+    """Three reachable demo targets at different distances, plus an out-and-back route through them."""
+    reach = sorted((v, i) for i, v in enumerate(ctg) if v < math.inf)
+    picks = [reach[int(len(reach) * f)][1] for f in (0.35, 0.6, 0.85)]
+    targets = [{'id': f'T{k + 1}', 'name': f'Target {k + 1} (synthetic)', 'cell': [i % n, i // n],
+                'goal': 'demo', 'why': 'Synthetic placeholder until the real site exists', 'sources': []}
+               for k, i in enumerate(picks)]
+    cells = []
+    for tg in targets:  # ponytail: out-and-back per target; the real pipeline plans stop-to-stop
+        home = path_home(ctg, n, tg['cell'])
+        cells += home[::-1][1:] if cells else home[::-1]
+        cells += home[1:]
+    energy = sum(2 * ctg[tg['cell'][1] * n + tg['cell'][0]] for tg in targets)
+    route = {'cells': cells, 'stops': [tg['id'] for tg in targets], 'energy_j': round(energy),
+             'minutes': None, 'dose_ugy': None, 'note': 'synthetic out-and-back route'}
+    return targets, route
+
+
 def write(out, n, cell, base, budget, h, slope, cls, cost_per_m, ctg):
     os.makedirs(out, exist_ok=True)
     big = 3.0e38  # unreachable cells: float32-safe "infinity"
@@ -112,9 +144,15 @@ def write(out, n, cell, base, budget, h, slope, cls, cost_per_m, ctg):
         'base_cell': base, 'gravity_mps2': G_MARS, 'energy_budget_j': budget, 'reserve_fraction': 0.2,
         'kj_per_l_o2': 20.1,
         'classes': {str(k): v[0] for k, v in CLASSES.items()}, 'knobs': KNOBS,
+        'layers': ['height', 'slope', 'terrain_class', 'cost_to_go'],
+        'sources': {'all': 'synthetic terrain for development; real sites list NASA mission, instrument and date per layer'},
         'files': {'height': 'height.f32', 'slope': 'slope.f32', 'terrain_class': 'terrain_class.u8',
                   'cost_per_m': 'cost_per_m.f32', 'cost_to_go': 'cost_to_go.f32'},
     }
+    targets, route = synthetic_targets(n, ctg, base)
+    for name, obj in [('targets.json', targets), ('stops.json', []), ('route.json', route)]:
+        with open(os.path.join(out, name), 'w') as f:
+            json.dump(obj, f, indent=1)
     with open(os.path.join(out, 'world.json'), 'w') as f:
         json.dump(meta, f, indent=2)
 

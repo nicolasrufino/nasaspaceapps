@@ -1,0 +1,35 @@
+[
+ {
+  "id": "T1",
+  "name": "Target 1 (synthetic)",
+  "cell": [
+   74,
+   72
+  ],
+  "goal": "demo",
+  "why": "Synthetic placeholder until the real site exists",
+  "sources": []
+ },
+ {
+  "id": "T2",
+  "name": "Target 2 (synthetic)",
+  "cell": [
+   89,
+   108
+  ],
+  "goal": "demo",
+  "why": "Synthetic placeholder until the real site exists",
+  "sources": []
+ },
+ {
+  "id": "T3",
+  "name": "Target 3 (synthetic)",
+  "cell": [
+   110,
+   11
+  ],
+  "goal": "demo",
+  "why": "Synthetic placeholder until the real site exists",
+  "sources": []
+ }
+]
