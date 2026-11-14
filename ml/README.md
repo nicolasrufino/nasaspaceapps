@@ -16,3 +16,5 @@ ONNX Runtime inference. Reproduce with
 `python -m ml.export_placeholders --out ml/runs/placeholders` (fresh directory).
 The generator refuses to overwrite existing models, including future trained
 exports. ONNX opset 17 / IR 8; no PyTorch is needed for these fixtures.
+
+The [Gale starter rock review](rock_review/README.md) contains the R1 review handoff for #31: 50 locations visually accepted by Jules, the preserved initial proposals, source provenance and a reproducible proposal script. It is not yet the shadow-based detector or final hazard mask.
