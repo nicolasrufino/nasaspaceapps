@@ -5,7 +5,9 @@ cd app && npm install
 npm run dev        # http://localhost:5173, synthetic world; ?world=<name> loads data/worlds/<name>/
 npm run phone      # HTTPS on the LAN for a phone (accept the self-signed certificate once)
 npm test           # world files match world.json; layer colours
-npm run build      # dist/ for Azure Static Web Apps, world folders included
+npm run build      # dist/ for Azure Static Web Apps, world folders included; then scripts/check-dist.mjs:
+                   #   worlds in dist, JS budget 250 kB gzipped, headless Chrome boot of every world, no flags
+npm run check      # test + build: the same gate as CI (~3 s)
 ```
 
 Applies to everything under `app/`. The root `AGENTS.md` still applies.

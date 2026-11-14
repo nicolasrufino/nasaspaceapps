@@ -7,7 +7,9 @@
     "phone": "vite --mode phone",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "node --test"
+    "test": "node --test",
+    "postbuild": "node scripts/check-dist.mjs",
+    "check": "npm test && npm run build"
   },
   "dependencies": {
     "three": "^0.187.0"
