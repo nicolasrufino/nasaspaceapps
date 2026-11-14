@@ -48,14 +48,15 @@ is a sharpened color mosaic; 0.25 m pixel spacing does not guarantee recognition
 of 0.25 m objects. One same-window comparison with the original grayscale mosaic
 did not remove the visual ambiguity. No extra sharpening is applied here.
 
-The new-site review is **partial**. Jules reviewed G01–G40 on 2026-11-14:
+Jules reviewed **all 50 new-site proposals** on 2026-11-14. Review coverage is
+complete; 16 judgments remain uncertain (`reviewed_with_uncertainty`):
 
 | Decision | IDs |
 |---|---|
-| Accepted (25) | G02, G04, G05, G06, G10–G17, G19, G21, G28–G30, G32–G34, G36–G40 |
+| Accepted (31) | G02, G04, G05, G06, G10–G17, G19, G21, G28–G30, G32–G34, G36–G40, G44, G46–G50 |
 | Rejected (3) | G09, G23, G31 |
-| Uncertain (12) | G01, G03, G07, G08, G18, G20, G22, G24–G27, G35 |
-| Unreviewed (10) | G41–G50 |
+| Uncertain (16) | G01, G03, G07, G08, G18, G20, G22, G24–G27, G35, G41–G43, G45 |
+| Unreviewed (0) | None |
 
 G01 is a tentative yes with explicit uncertainty; it is not accepted. G02 is
 explicitly certain. G09 is a tentative no. The second sheet has 8 accepted and
@@ -65,10 +66,17 @@ and 5 uncertain decisions. Its spoken "Image 3 non" is interpreted as G23,
 the third candidate on that sheet, between explicit G22 and G24 judgments;
 this interpretation was stated to Jules. The fourth sheet has 8 accepted,
 1 rejected (G31) and 1 uncertain (G35) decision. G33 and G34 were spoken out
-of order but both explicitly accepted. The exact responses are retained in
+of order but both explicitly accepted. The fifth sheet has 6 accepted and
+4 uncertain decisions. The exact responses are retained in
 `final_site_review.json`. The generator and `final_site_candidates.json` remain
 the frozen, unreviewed proposal source; use the separate decisions to interpret
 review status. These counts summarize judgments, not detector accuracy.
+
+Use the 31 accepted and 3 rejected proposals as development references for
+error analysis. Keep the 16 uncertain decisions out of binary training labels
+and scored comparisons unless later evidence resolves them. Independent
+annotation of separate areas is still needed to assess missed rocks and
+evaluate a detector without reusing its development references.
 
 The user's earlier tentative acceptance of the 12 S-prefixed bright/dark pairs
 concerned the old crop only. None of these selected-proposal reviews is a
