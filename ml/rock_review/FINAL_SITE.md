@@ -48,19 +48,22 @@ is a sharpened color mosaic; 0.25 m pixel spacing does not guarantee recognition
 of 0.25 m objects. One same-window comparison with the original grayscale mosaic
 did not remove the visual ambiguity. No extra sharpening is applied here.
 
-The new-site review is **partial**. Jules reviewed G01–G20 on 2026-11-14:
+The new-site review is **partial**. Jules reviewed G01–G30 on 2026-11-14:
 
 | Decision | IDs |
 |---|---|
-| Accepted (13) | G02, G04, G05, G06, G10–G17, G19 |
-| Rejected (1) | G09 |
-| Uncertain (6) | G01, G03, G07, G08, G18, G20 |
-| Unreviewed (30) | G21–G50 |
+| Accepted (17) | G02, G04, G05, G06, G10–G17, G19, G21, G28–G30 |
+| Rejected (2) | G09, G23 |
+| Uncertain (11) | G01, G03, G07, G08, G18, G20, G22, G24–G27 |
+| Unreviewed (20) | G31–G50 |
 
 G01 is a tentative yes with explicit uncertainty; it is not accepted. G02 is
 explicitly certain. G09 is a tentative no. The second sheet has 8 accepted and
 2 uncertain decisions. Its ambiguous spoken "Image C" reference was explicitly
-clarified by Jules as G16 accepted. The exact responses are retained in
+clarified by Jules as G16 accepted. The third sheet has 4 accepted, 1 rejected
+and 5 uncertain decisions. Its spoken "Image 3 non" is interpreted as G23,
+the third candidate on that sheet, between explicit G22 and G24 judgments;
+this interpretation was stated to Jules. The exact responses are retained in
 `final_site_review.json`. The generator and `final_site_candidates.json` remain
 the frozen, unreviewed proposal source; use the separate decisions to interpret
 review status. These counts summarize judgments, not detector accuracy.

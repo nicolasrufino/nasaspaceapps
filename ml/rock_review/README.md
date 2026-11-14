@@ -4,8 +4,8 @@
 The original accepted records below remain historical test references, about
 5 km north of the final site. Use [FINAL_SITE.md](FINAL_SITE.md) for the new
 source-verified, grid-aligned proposals on the real demo area.
-The first two new-site sheets are reviewed: 13 accepted, 1 rejected, 6 uncertain;
-30 proposals remain unreviewed. Decisions and the exact user responses are in
+The first three new-site sheets are reviewed: 17 accepted, 2 rejected, 11 uncertain;
+20 proposals remain unreviewed. Decisions and the exact user responses are in
 `final_site_review.json`; the frozen proposal coordinates are unchanged.
 
 This handoff makes the same starter review available to Jules, Luca and Nicolas. **Jules has visually accepted all 50 numbered circles in the first delivered image as corresponding to rocks.** Their positions lie on a real 256 × 256 m Gale crop. The proposals use bright-object morphology; this is **preparation for R1**, not the completed shadow-based detector, a trained model, a final hazard map or a measured accuracy result. Issue #31 remains open.
