@@ -3,7 +3,7 @@
   "candidate_file": "final_site_candidates.json",
   "candidate_file_sha256": "59b2517d9677d436bff3fa7b171b0c9d859c056bdc0e13d853f0f75ce5d574f1",
   "source_rgb_pixel_sha256": "7594cf078e70af1684b0b9bfafb47f27adb381abdba1aeb50c4af8363d1f6949",
-  "review_status": "partial",
+  "review_status": "reviewed_with_uncertainty",
   "missing_decision_status": "unreviewed",
   "scope": "User assessment of visible isolated-rock correspondence on the final Gale site. Decisions do not validate shadows, contours, heights, missed rocks or navigation safety. Original accepted locations and S-prefixed reviews are separate.",
   "reviews": [
@@ -96,6 +96,27 @@
         {"id": "G38", "status": "accepted"},
         {"id": "G39", "status": "accepted"},
         {"id": "G40", "status": "accepted"}
+      ]
+    },
+    {
+      "reviewer": "Jules Rumeau",
+      "date": "2026-11-14",
+      "timezone": "America/Chicago",
+      "sheet": "final_site_details_5.png",
+      "sheet_sha256": "f6a400270d7533df9379ca35cadea759c63dee9468d6ce02f89fa4e4cf14af2b",
+      "question": "Dernière planche : parmi G41–G50, quels repères correspondent à un rocher isolé ? Donne « oui », « non » ou « incertain » pour chaque numéro de 41 à 50. Les cas trop flous peuvent rester incertains.",
+      "user_statement": "41, incertain, 42 incertain, 43 incertain, 44 oui, 45 incertain, 46 oui, 47 oui, 48 oui, 49 oui, 50 oui.",
+      "decisions": [
+        {"id": "G41", "status": "uncertain"},
+        {"id": "G42", "status": "uncertain"},
+        {"id": "G43", "status": "uncertain"},
+        {"id": "G44", "status": "accepted"},
+        {"id": "G45", "status": "uncertain"},
+        {"id": "G46", "status": "accepted"},
+        {"id": "G47", "status": "accepted"},
+        {"id": "G48", "status": "accepted"},
+        {"id": "G49", "status": "accepted"},
+        {"id": "G50", "status": "accepted"}
       ]
     }
   ]
