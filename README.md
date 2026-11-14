@@ -1,5 +1,7 @@
 # NASA Space Apps
 
+Repo: https://github.com/nicolasrufino/nasaspaceapps
+
 ## How we ship (read this once, takes 2 min)
 
 `main` is protected: **nothing lands without a PR and green CI.** No direct pushes, not even admins.
