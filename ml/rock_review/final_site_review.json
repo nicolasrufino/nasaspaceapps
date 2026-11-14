@@ -55,6 +55,27 @@
         {"id": "G19", "status": "accepted"},
         {"id": "G20", "status": "uncertain"}
       ]
+    },
+    {
+      "reviewer": "Jules Rumeau",
+      "date": "2026-11-14",
+      "timezone": "America/Chicago",
+      "sheet": "final_site_details_3.png",
+      "sheet_sha256": "38badd0cc0f332eb696fe8ec7a0d0e741093e0f773acb676737927d6bcfe2f3f",
+      "question": "Pour poursuivre R1/R3, quels repères de la planche G21–G30 correspondent à un rocher isolé ? Réponds « oui », « non » ou « incertain » par identifiant. Laisse incertains les détails trop flous.",
+      "user_statement": "L'image 1. L'image 21 oui. L'image 22, je suis pas sûr. Image 3 non. Image 4. D'accord. Image 24, je suis pas sûr, incertain. Image 25 incertain. Image 26 incertain. Image 27 incertain. Image 28 certain. Image 29 certain. Image 30 certain.",
+      "decisions": [
+        {"id": "G21", "status": "accepted"},
+        {"id": "G22", "status": "uncertain"},
+        {"id": "G23", "status": "rejected", "note": "Image 3 is interpreted as G23, the third candidate on this sheet, between the explicit G22 and G24 judgments; this interpretation was stated to the user."},
+        {"id": "G24", "status": "uncertain", "note": "Uses the user's explicit Image 24 uncertain statement after the preceding speech fragment."},
+        {"id": "G25", "status": "uncertain"},
+        {"id": "G26", "status": "uncertain"},
+        {"id": "G27", "status": "uncertain"},
+        {"id": "G28", "status": "accepted", "note": "User explicitly says certain."},
+        {"id": "G29", "status": "accepted", "note": "User explicitly says certain."},
+        {"id": "G30", "status": "accepted", "note": "User explicitly says certain."}
+      ]
     }
   ]
 }
