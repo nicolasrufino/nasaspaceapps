@@ -4,12 +4,14 @@ Terrain classifier (`terrain_classifier/`) and buddy rover (`buddy_rover/`). Exp
 
 ## R2 integration fixtures
 
-`exports/terrain_cls.onnx` and `exports/buddy_policy.onnx` are **untrained
-placeholders**, marked in both the ONNX metadata and the adjacent JSON.
-They return constant logits favouring unknown terrain and stay respectively;
-these are wiring fixtures, not predictions or validated navigation behavior.
-Nico can load them using the existing contract names, float32 types and shapes.
-Keep classifier/RL behavior off until a trained replacement is evaluated.
+`exports/buddy_policy.onnx` is an **untrained placeholder**, marked in the
+ONNX metadata and adjacent JSON. It returns constant logits favouring stay;
+this is a wiring fixture, not a validated navigation policy.
+`exports/terrain_cls.onnx` is now the measured R4 baseline described in
+[terrain_classifier/README.md](terrain_classifier/README.md). It classifies rover
+ground photos, not orbital pixels, and transfers poorly to Perseverance in the
+initial evaluation. Keep classifier/RL app features off pending integration QA.
+Both use the existing contract names, float32 types and shapes.
 
 Install `ml/requirements-ci.txt`, then run `python ml/check_exports.py` for real
 ONNX Runtime inference. Reproduce with
