@@ -18,8 +18,13 @@
       #layers { display: grid; gap: 4px; }
       #layers label { display: flex; gap: 6px; align-items: start; }
       #layers small, #detail small, .src, figcaption { display: block; color: #cdbba8; font-size: 12px; }
-      #targets { display: flex; flex-wrap: wrap; gap: 4px; }
-      #targets button[aria-pressed=true] { background: #ffd23f; }
+      #targets { display: grid; gap: 4px; }
+      .stop { display: flex; gap: 6px; align-items: center; }
+      .stop .name { flex: 1; text-align: left; }
+      .stop button[aria-pressed=true] { background: #ffd23f; }
+      .warn { color: #ff8a6a; }
+      .warn:empty { display: none; }
+      #map { cursor: crosshair; }
       #detail p { margin: 4px 0; }
       #detail figure { margin: 6px 0 0; }
       #detail img { width: 100%; border-radius: 4px; }
@@ -51,7 +56,9 @@
         <small id="sources" class="src"></small>
         <h2>Science stops</h2>
         <div id="route"></div>
+        <div id="dropped" class="warn"></div>
         <div id="targets"></div>
+        <small class="src">Tick the stops for this walk. Tap the minimap to add your own stop.</small>
         <div id="detail" aria-live="polite"></div>
       </section>
       <section id="walk" hidden role="status" aria-live="polite">

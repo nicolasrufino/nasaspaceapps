@@ -8,11 +8,15 @@ const ETA = [1.2, 1.1, 1.0, 2.1, 1.5] // unknown, soil, bedrock, sand, big rock
 const idx = (meta, [x, y]) => y * meta.width + x
 
 // Joules to walk from cell a to neighbour b.
-export function stepCost(meta, height, cls, a, b) {
-  const dist = meta.cell_size_m * Math.hypot(a[0] - b[0], a[1] - b[1])
-  const grade = (100 * (height[idx(meta, b)] - height[idx(meta, a)])) / dist
+export const stepCost = (meta, height, cls, a, b) => stepCostIdx(meta, height, cls, idx(meta, a), idx(meta, b))
+
+// Same, by cell index (the planner calls this millions of times, so no arrays).
+export function stepCostIdx(meta, height, cls, i, j) {
+  const w = meta.width
+  const dist = meta.cell_size_m * Math.hypot((i % w) - (j % w), Math.floor(i / w) - Math.floor(j / w))
+  const grade = (100 * (height[j] - height[i])) / dist
   const { body_kg: W, load_kg: L, speed_mps: V } = meta.knobs
-  const eta = ETA[cls[idx(meta, b)]] ?? ETA[0]
+  const eta = ETA[cls[j]] ?? ETA[0]
   const watts = 1.5 * W + 2 * (W + L) * (L / W) ** 2 + eta * (W + L) * (1.5 * V * V + 0.35 * V * Math.max(grade, 0))
   return (watts * (meta.gravity_mps2 / 9.81) * dist) / V
 }
