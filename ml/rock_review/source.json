@@ -1,0 +1,45 @@
+{
+  "source_file": "Gale_HiRISE_starter_25cm.png",
+  "source_sha256": "21c86b0f0408d06ca21cc0e9b2f7b6fa11eaa431bd6c437d8314883c01fd3196",
+  "source_metadata": {
+    "title": "Gale / Mount Sharp - HiRISE starter crop",
+    "source_product": "MSL Gale Merged Orthophoto Mosaic 25cm v3",
+    "source_url": "https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/MSL_Gale_Orthophoto_Mosaic_25cm_v3.tif",
+    "source_page": "https://astrogeology.usgs.gov/search/map/mars_msl_gale_merged_orthophoto_mosaic_25cm",
+    "credit": "Calef III and Parker / NASA / JPL-Caltech / USGS / University of Arizona",
+    "width": 1024,
+    "height": 1024,
+    "ground_sampling_m": 0.25,
+    "extent_m": [
+      256,
+      256
+    ],
+    "crop_pixel_window": [
+      65942,
+      153938,
+      1024,
+      1024
+    ],
+    "pixel_indexing": "zero-based, column then row",
+    "north_up": true,
+    "crs": "Mars_2000_Sphere, equirectangular, central longitude 0, standard parallel 0, sphere radius 3396190 m",
+    "upper_left_corner_projected_m": [
+      8142733.5,
+      -279648.5
+    ],
+    "geotransform": [
+      8142733.5,
+      0.25,
+      0,
+      -279648.5,
+      0,
+      -0.25
+    ],
+    "centre_latitude_deg": -4.72,
+    "centre_longitude_east_deg": 137.375,
+    "processing": "Exact unresampled 8-bit grayscale source pixel window, lossless PNG encoding; no contrast change or sharpening added",
+    "status": "Starter test area; not yet confirmed as the final team demo area; no rock annotations or model predictions",
+    "solar_geometry": "Not inferred: the source mosaic combines multiple acquisitions. Match the contributing observation before shadow-derived height estimation."
+  },
+  "source_pixel_sha256": "9d17b1864c40ab721011e82ab15362d1a9769fb0072838576681abb8842f2144"
+}

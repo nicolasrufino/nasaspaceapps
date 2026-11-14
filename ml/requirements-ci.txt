@@ -3,3 +3,6 @@
 numpy
 onnx>=1.17
 onnxruntime>=1.20
+# Reproduce and validate the R1 review utility (no training framework required).
+Pillow
+opencv-python-headless
