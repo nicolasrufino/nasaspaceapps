@@ -1,0 +1,99 @@
+[
+ {
+  "id": "altadena",
+  "name": "Altadena drill site",
+  "cell": [
+   132,
+   126
+  ],
+  "goal": "Boxwork edge: first drill of the campaign",
+  "why": "Curiosity drilled here (its 43rd hole) at the edge of the boxwork unit, June 2025.",
+  "sources": [
+   "https://science.nasa.gov/blog/curiosity-blog-sols-4566-4567-drilling-success/",
+   "Curiosity position on sol 4564: NASA MMGIS MSL waypoints"
+  ],
+  "sol": 4564,
+  "lonlat": [
+   137.383541,
+   -4.799847
+  ]
+ },
+ {
+  "id": "ridge_top",
+  "name": "Top of the ramp: main boxwork",
+  "cell": [
+   103,
+   158
+  ],
+  "goal": "Reach the boxwork ridges",
+  "why": "After an 11 m sand-covered ramp the rover reached the top of the ridge and the start of the main boxwork region.",
+  "sources": [
+   "https://science.nasa.gov/blog/curiosity-blog-sols-4602-4603-on-top-of-the-ridge/",
+   "https://science.nasa.gov/blog/curiosity-blog-sols-4600-4601-up-and-over-the-sand-covered-ramp/",
+   "Curiosity position on sol 4600: NASA MMGIS MSL waypoints"
+  ],
+  "sol": 4600,
+  "lonlat": [
+   137.379686,
+   -4.804189
+  ]
+ },
+ {
+  "id": "overlook",
+  "name": "Scenic overlook (360 panorama)",
+  "cell": [
+   100,
+   163
+  ],
+  "goal": "See the ridge-and-hollow pattern",
+  "why": "A look-about stop picked from HiRISE images to photograph the right-angle ridge pattern.",
+  "sources": [
+   "https://science.nasa.gov/blog/curiosity-blog-sols-4611-4613-scenic-overlook",
+   "Curiosity position on sol 4611: NASA MMGIS MSL waypoints"
+  ],
+  "sol": 4611,
+  "lonlat": [
+   137.37932,
+   -4.80474
+  ]
+ },
+ {
+  "id": "valle_de_la_luna",
+  "name": "Valle de la Luna (hollow drill)",
+  "cell": [
+   113,
+   186
+  ],
+  "goal": "Sample a boxwork hollow",
+  "why": "Bedrock drilled in the Monte Grande hollow (44th hole), Oct 2025: the \"low\" of the ridge/hollow pair.",
+  "sources": [
+   "https://science.nasa.gov/blog/curiosity-blog-sols-4689-4694-drill-in-the-boxwork-unit-is-go/",
+   "https://science.nasa.gov/blog/curiosity-blog-sols-4709-4715-drilling-high-and-low-in-the-boxwork-unit",
+   "Curiosity position on sol 4693: NASA MMGIS MSL waypoints"
+  ],
+  "sol": 4693,
+  "lonlat": [
+   137.381035,
+   -4.807839
+  ]
+ },
+ {
+  "id": "nevado_sajama",
+  "name": "Nevado Sajama (ridge drill)",
+  "cell": [
+   113,
+   187
+  ],
+  "goal": "Sample a boxwork ridge",
+  "why": "Ridge-top bedrock drilled Nov 2025 (45th hole), the \"high\" of the pair, to compare with Valle de la Luna.",
+  "sources": [
+   "https://science.nasa.gov/solar-system/curiosity-blog-sols-4716-4722-drilling-success-at-nevado-sajama",
+   "Curiosity position on sol 4718: NASA MMGIS MSL waypoints"
+  ],
+  "sol": 4718,
+  "lonlat": [
+   137.381004,
+   -4.808008
+  ]
+ }
+]
