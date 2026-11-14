@@ -13,6 +13,9 @@ are outside this box. Their approval is preserved and is never transferred.
 - `final_site_candidates.json`: 50 **new, unreviewed** bright-object proposals,
   IDs G01–G50, distributed across the actual box. Each has original pixel
   coordinates, Mars projected coordinates, lat/lon and the actual world cell.
+- `final_site_review.json`: user decisions for those frozen proposals, linked
+  to the candidate file, source pixels and reviewed sheet by SHA-256 hashes.
+  IDs without a decision remain unreviewed; uncertain decisions stay uncertain.
 - A source overview and five enlarged contact sheets are generated locally.
   Every 16 x 16 m detail shows the original pixels at left and the review marker
   at right, enlarged 4x by nearest-neighbour. Source imagery stays ignored.
@@ -45,8 +48,23 @@ is a sharpened color mosaic; 0.25 m pixel spacing does not guarantee recognition
 of 0.25 m objects. One same-window comparison with the original grayscale mosaic
 did not remove the visual ambiguity. No extra sharpening is applied here.
 
-The new G01–G50 review is **pending**. The user's tentative acceptance of the 12
-S-prefixed bright/dark pairs concerned the old crop only. Neither review is a
+The new-site review is **partial**. Jules reviewed G01–G10 on 2026-11-14:
+
+| Decision | IDs |
+|---|---|
+| Accepted (5) | G02, G04, G05, G06, G10 |
+| Rejected (1) | G09 |
+| Uncertain (4) | G01, G03, G07, G08 |
+| Unreviewed (40) | G11–G50 |
+
+G01 is a tentative yes with explicit uncertainty; it is not accepted. G02 is
+explicitly certain. G09 is a tentative no. The exact response is retained in
+`final_site_review.json`. The generator and `final_site_candidates.json` remain
+the frozen, unreviewed proposal source; use the separate decisions to interpret
+review status. These counts summarize judgments, not detector accuracy.
+
+The user's earlier tentative acceptance of the 12 S-prefixed bright/dark pairs
+concerned the old crop only. None of these selected-proposal reviews is a
 held-out precision/recall measurement or a measured minimum detectable size.
 
 No `rocks_fine.u8` is generated or written into Luca's world. His existing layer
