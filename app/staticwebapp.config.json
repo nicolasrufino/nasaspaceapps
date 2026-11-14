@@ -1,0 +1,18 @@
+{
+  "mimeTypes": {
+    ".f32": "application/octet-stream",
+    ".u8": "application/octet-stream",
+    ".onnx": "application/octet-stream",
+    ".wasm": "application/wasm",
+    ".mjs": "text/javascript"
+  },
+  "globalHeaders": {
+    "Cache-Control": "no-cache"
+  },
+  "routes": [
+    {
+      "route": "/assets/*",
+      "headers": { "Cache-Control": "public, max-age=31536000, immutable" }
+    }
+  ]
+}
