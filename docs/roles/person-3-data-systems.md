@@ -1,8 +1,8 @@
 # Person 3: Data, systems and integration (lead)
 
-**Mission:** the foundation everyone builds on, and keeping the pieces fitting together: real Mars terrain into world files, the energy model, deployment, the CAPCOM agent, and the team's merge discipline.
+**Mission:** the foundation everyone builds on, and keeping the pieces fitting together: real Mars terrain into world files, the energy model, deployment, and the team's merge discipline. (The CAPCOM agent moved to Person X, #42.)
 
-**Owns:** `data/`, `agent/`, `docs/`, the repo settings and deployment.
+**Owns:** `data/`, `docs/`, the repo settings and deployment.
 **Writes:** world files (contract §1), the CAPCOM API (contract §4).
 
 ## Foundation (do first)
