@@ -1,68 +1,70 @@
-# The pitch (draft 2, Sat Nov 14)
+# The pitch (draft 3, Sat Nov 14)
 
-Five minutes, seven parts, the organizers' format. Test this draft on mentors and judges **today**, then change it. Numbers marked *(to measure)* come from our own runs before Sunday.
+Five minutes, the organizers' seven parts. One argument runs through it: **there is no map at the scale of one walk; every option today fails on its own; ours combines pieces NASA has already proven, and we show it working.** Numbers marked *(to measure)* come from our own runs before Sunday.
+
+## The argument in one breath
+
+> There is no map at the scale of one Mars walk. Orbit misses the rocks, mission control is 20 minutes away, rovers are too slow to scout ahead, and walking in blind breaks the plan. Martian Map makes the map: orbit gives the base, a scout drone flies the route first, the device plans the path and the packing list, and every walk makes the map better. Each piece is already proven at NASA. We put them in the crew's hands.
 
 ## The script
 
 **1. Hook (0:00–0:30)**
-> Arizona, 2022. NASA astronauts rehearse a moonwalk with the maps Artemis will actually have. On the very first walk, a slope those maps couldn't show blocks the route, and the walk ends early. That was the Moon, with help seconds away. On Mars, help is 20 minutes away.
+> Arizona, 2022. NASA astronauts rehearse a moonwalk with the maps Artemis will actually have. On the first walk, a slope those maps couldn't show blocks the route, and the walk ends early. That was the Moon, with help seconds away. On Mars, help is 20 minutes away.
 
 **2. Problem (0:30–1:00)**
-> NASA has decades of Mars data from orbiters and rovers, but it lives in separate maps built for regions and whole planets, not for one walk. The first Mars crews will need it layered for the exact ground they cross, with science targets, hazards and the way home. And on Mars, a message takes 4 to 22 minutes each way, so the turn-back call has to be made on the spot.
+> NASA has decades of Mars data, but no map at the scale of one walk. Orbit misses rocks under a metre. Mission control can't guide you through a 20-minute delay. A rover scouting ahead moves at about 110 metres an hour, far slower than you walk. And exploring by eye is how plans break.
 
 **3. Solution in one sentence (1:00–1:15)**
 > **Martian Map turns NASA's Mars data into a science walk you can plan, preview and come home from, and makes the map better with every walk.**
->
-> How: orbit gives the base layers; a scout drone flies the route first, the way Ingenuity scouted for Perseverance; we plan the path and the packing list; the crew walks for the science and adds to the map; the next crew starts from a better one.
 
 **4. Demo (1:15–3:00)**
-- On the habitat screen: pick "boxwork" on Mount Sharp. Toggle the layers (image, slope, thermal, minerals, radiation); the targets light up.
-- The route appears. The scout drone flies it and reveals a rock field orbit missed; the route re-plans around it, longer but safer. The packing list appears; the heavy drill goes on the rover. Tap a stop: Curiosity's own photo of it.
-- A judge takes the phone (the suit display) and walks the hallway. Real steps move the astronaut along the route; the walk-back ring shrinks.
-- At the first stop, the science checklist: look, get close, decide, sample. The context card saves where and why.
-- The buddy rover scouts ahead and flags rocks the orbital image missed. At the point of no return the phone buzzes red. Mission control answers 20 seconds later: too late, which is the point.
+- Habitat screen, a random spot inside Gale crater, goal "boxwork". Orbit-only map and a first route.
+- Deploy the scout drone. It flies Ingenuity-sized legs along the route, then where it is least sure. Where it flies, the map sharpens: real full-resolution HiRISE terrain and detected rocks. A hidden rock field appears.
+- The route re-plans. "Why this route": +120 m, less effort, avoids the rock field, never steeper than the limit, home reachable everywhere *(numbers to measure)*. The packing list moves the drill to the rover.
+- A judge carries the phone (the suit display). Real steps move the astronaut; the ring of "can still get home" shrinks. At a stop, the science checklist runs. Past the point of no return, it buzzes.
+- Export the map: mission control gets it 11 minutes later.
 
-**5. Space data inside (3:00–3:40)**
-> Six NASA data sources in one hyperlocal view: HiRISE images and terrain, CTX context, THEMIS thermal inertia to find loose sand, CRISM minerals and the USGS geologic map to find science targets, Curiosity's radiation and weather measurements from this very crater, and Curiosity's photos of each stop. Walking cost comes from a published energy model, the same family NASA's Johnson Space Center calibrates on field traverses. A classifier trained on NASA's AI4Mars labels checks the ground *(accuracy to measure)*.
+**5. Space data inside, and proof (3:00–3:40)**
+> Six NASA data sources in one view: HiRISE images and terrain, THEMIS for loose sand, CRISM and the USGS map for science targets, and Curiosity's radiation and weather measured in this crater. And every piece is already proven at NASA. Shadow-based rock detection on HiRISE chose or checked the Phoenix, Gale, Jezero and InSight landing sites. Ingenuity scouted Perseverance's routes. Perseverance plans its own safe path. Walkback limits keep crews safe today. What's new is putting them together for the person on foot.
 
-**6. Impact: who wins, how much (3:40–4:20)**
-> NASA ranks moving crews across planetary surfaces #2 of 32 technology gaps, and asks by name for "in-situ decision support tools" for Mars spacewalks. It is spending up to $4.6 billion on rovers that drive with or without crew and up to $3.1 billion on new suits. Nobody is funding the layer between the two: the one that tells the person in the suit what they can still do. That layer protects every surface walk, and every hour of crew time is worth over $130,000.
+**6. Impact: why it wins, who wins, how much (3:40–4:20)**
+> Side by side: orbit alone misses hazards; voice guidance fails with delay; rovers are too slow; walking blind breaks plans. Only the combination works, and it runs on the crew's side of the delay. NASA ranks surface mobility #2 of its 32 technology gaps and asks by name for "in-situ decision support tools" for Mars walks. It funds the rover (up to $4.6B) and the suit (up to $3.1B); nobody funds the map between them.
 
 **7. Team + next (4:20–5:00)**
-> One line per person *(names and roles)*. Next: test it with an analog field team, run the same engine for the first crewed Moon landing in 2028, and bring it to people on Earth who walk far from help: firefighters, search and rescue. The first people on Mars will have one chance at each walk. This is the map they should carry.
+> One line per person *(names and roles)*. Next: real drone imagery from an analog field test, the same engine for the first crewed Moon landing in 2028, and people on Earth who walk far from help. The first people on Mars will get one chance at each walk. This is the map they should carry.
 
-## Slides (one idea each)
+## Slides (in order)
 
-1. Arizona, 2022: NASA's field test, the plan breaking on the first walk.
-2. Mars data exists, but not for one walk: separate regional maps versus one layered view.
-3. Mars: 4–22 minutes each way; plans break on unseen ground; the crew decides.
-4. The one sentence.
-4b. How we make the map: orbit → scout → plan and pack → walk and add → next walk.
-5. Live demo: plan (layers, targets, route, rover photos), then walk (phone as suit display).
-6. Six NASA data sources, one view: each layer and its job.
-7. Why a robot: lead, carry, relay, rescue (field-test evidence).
-8. Impact and money: #2 of 32, need 8.06, $4.6B rovers, $3.1B suits, the gap.
-9. Team + next. Close on the first Mars crew.
+1. Arizona, 2022 (hook)
+2. There is no map at the scale of one walk (problem)
+3. On Mars, help is 4–22 minutes away (stakes)
+4. The one sentence
+5. How we make the map: the five-step loop
+6. Live demo
+7. Six NASA data sources, one view
+8. Proof: every piece is already proven at NASA
+9. Why this beats every option on its own (comparison table)
+10. Impact and money
+11. Team + next
+12. *(Backup)* Why a robot: lead, carry, relay, rescue
 
 ## Questions judges are likely to ask
 
 | Question | Answer |
 |---|---|
-| Why not just use Mars Trek or MMGIS? | They are built for regional views and for rover teams on Earth. We layer the same NASA data for one crew on one walk, with the science, the hazards and the way home together, and it works with no link to Earth. |
-| Astronauts don't use phones. | The phone stands in for the helmet or wrist display. NASA has let astronauts carry their own phones since February 2026, and the phone has the sensors a suit display needs. |
-| How do you know where you are without GPS? | Step counting and heading on a terrain map, the same idea as rover visual odometry. In the demo, the steps are real. |
-| How accurate is the energy model? | It is a published model (Pandolf) with a simple Mars gravity correction. We show how the ring moves under ±30% model error *(to measure)*. The upgrade path is NASA JSC's field-calibrated model. |
-| Why reinforcement learning for the rover? | We compare it with a scripted follower on the same map *(numbers to measure)*. If it is not better, we say so. |
-| Why not just use the rover and skip the EVA? | Humans do adaptive science far faster. The robot takes the slow, heavy and risky parts so crew hours go to science. |
-| Does wind matter on Mars? | Barely as a force (the air is about 1% as dense as Earth's). The danger is dust, which we model as lost rover power and visibility. |
-| What about the Moon? | The same engine with Moon gravity; the first crewed landing is now planned for Artemis IV in 2028. |
+| Why not just use Mars Trek or MMGIS? | They are built for regional views and for rover teams on Earth. We layer the same data for one crew on one walk, with the science, hazards and the way home together, and it works with no link to Earth. |
+| Is the drone real? | The flight is simulated; the data it reveals is real full-resolution HiRISE. Ingenuity proved the scouting job on Mars; JPL's Skyfall concept proposes scout helicopters for human landing sites. |
+| How do you detect rocks? | From their shadows in HiRISE images, the method NASA used to check landing sites. We report agreement with hand-checked rocks *(to measure)*. |
+| How accurate is the energy model? | A published walking model with a simple Mars-gravity correction; we show how the ring moves if it is off by ±30% *(to measure)*. The upgrade path is NASA's field-calibrated model. |
+| Astronauts don't use phones. | The phone stands in for the helmet or wrist display. NASA has let astronauts carry their own phones since February 2026. |
+| What about the Moon? | The same engine with Moon gravity; the first crewed landing is planned for 2028. |
 
 ## Test it with judges and mentors today
 
 Ask three people, five minutes each:
 1. "After hearing this once, what does it do?" (tests the one sentence)
-2. "What would make you trust the ring?" (tells us which validation number to show)
-3. "Which matters more to you: the buddy rover or the energy model?" (tells us where to spend overnight hours)
+2. "Which part convinced you it works?" (tells us which proof to lead with)
+3. "What would make you doubt the route?" (tells us which number to show)
 4. For the Azure track: "What does Microsoft need to see?"
 
 Write the answers in `docs/pitch-notes.md` and change this draft.
