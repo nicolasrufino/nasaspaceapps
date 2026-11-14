@@ -44,6 +44,9 @@ Each idea is scored 0–3 on five tests (15 points):
 | Share the map with mission control, other crew and scientists (export a map package and a GeoJSON file; it "arrives" after the delay) | 2 | 2 | 3 | 3 | 3 | **13** | **Keep** as an export. Cut live syncing |
 | Live multiplayer sync with mission control | 1 | 1 | 1 | 2 | 2 | **7** | **Cut.** Show the delay instead |
 | Packing list from the route | 3 | 2 | 3 | 3 | 3 | **14** | **Keep** |
+| Simulate one 2 × 2 km slice of Gale, not the whole planet | 3 | 2 | 3 | 3 | 3 | **14** | **Keep.** Hyperlocal is what the challenge asks for, and USGS already publishes 1 m terrain and 25 cm images there |
+| Use NASA Worldview (Earth imagery) in the Mars map | 0 | 0 | 3 | 1 | 3 | **7** | **Cut.** It has no Mars data; we say so instead of forcing it in |
+| Use Perseverance raw images at a Gale site | 1 | 2 | 3 | 3 | 3 | **12** | **Keep, as a classifier test.** Stop photos come from Curiosity, the rover that was actually there |
 | Walk-back ring and walking with real steps | 3 | 3 | 3 | 3 | 3 | **15** | **Keep.** Foundation |
 | The map grows from walk logs | 2 | 2 | 2 | 3 | 3 | **12** | **Keep**, overnight |
 | Buddy rover trained with reinforcement learning | 2 | 2 | 1 | 3 | 3 | **11** | **Simplify.** Scripted rover first; RL only if Person 1 finishes rock detection early |
