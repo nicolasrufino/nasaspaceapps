@@ -29,9 +29,9 @@ If Person X hasn't joined by M2, you also take **X2, the packing list** (#26), k
 - The Azure link works on a phone that is not ours.
 
 ## Integration rules you enforce
-- PRs into `main` only; each PR names its block, milestone and flag.
+- PRs into `dev`; each PR names its block, milestone and flag. `main` moves only by a release PR `dev` -> `main` at a milestone.
 - Contract changes need every owner's approval.
-- At each milestone, `main` must run. A late feature ships with its flag off.
+- `dev` must always run; at each milestone, `main` must run. A late feature ships with its flag off.
 - Run the orchestrator's "status" about once an hour (`docs/CODEX.md` §3).
 
 ## Agent brief (paste into your coding agent)

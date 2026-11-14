@@ -1,5 +1,6 @@
 # CD: the phone app on Azure Static Web Apps (HTTPS, so phone sensors work). Block D5 (#14), F3 (#47).
-#   push to main  -> production URL
+#   push to main  -> production URL (the official build we submit)
+#   push to dev   -> the team's "dev" test URL (a named SWA environment), where merged work is tried first
 #   PR            -> preview URL, posted as a comment on the PR by the SWA bot
 #   PR closed     -> preview deleted
 # Not a required check, and it no-ops (green, with a notice) until the secret
@@ -8,7 +9,7 @@
 name: Deploy
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
     paths: ['app/**', 'data/worlds/**', 'ml/exports/**', '.github/workflows/deploy.yml']
   pull_request:
     types: [opened, synchronize, reopened, closed]
@@ -76,6 +77,8 @@ jobs:
           skip_app_build: true
           skip_api_build: true
           production_branch: main
+          # dev gets a stable named environment; main and PRs keep their default behaviour.
+          deployment_environment: ${{ github.ref == 'refs/heads/dev' && 'dev' || '' }}
 
       - if: steps.swa.outputs.static_web_app_url != ''
         run: echo "::notice::Deployed to ${{ steps.swa.outputs.static_web_app_url }}"

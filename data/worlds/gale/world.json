@@ -1,0 +1,98 @@
+{
+  "contract_version": 1,
+  "name": "gale",
+  "source": "real",
+  "width": 256,
+  "height": 256,
+  "cell_size_m": 8.0,
+  "row_order": "north_to_south",
+  "base_cell": [
+    105,
+    161
+  ],
+  "gravity_mps2": 3.71,
+  "energy_budget_j": 600000.0,
+  "reserve_fraction": 0.2,
+  "kj_per_l_o2": 20.1,
+  "classes": {
+    "0": "unknown",
+    "1": "soil",
+    "2": "bedrock",
+    "3": "sand",
+    "4": "big_rock"
+  },
+  "knobs": {
+    "body_kg": 75.0,
+    "load_kg": 60.0,
+    "speed_mps": 1.0,
+    "max_slope_deg": 25.0
+  },
+  "layers": [
+    "optical",
+    "height",
+    "slope",
+    "terrain_class",
+    "cost_to_go",
+    "rocks_fine"
+  ],
+  "sources": {
+    "height": {
+      "mission": "MRO",
+      "instrument": "HiRISE stereo (USGS MSL Gale merged DEM 1 m)",
+      "date": "v3 mosaic, accessed 2026-11"
+    },
+    "slope": {
+      "mission": "MRO",
+      "instrument": "HiRISE stereo (from the 8 m height)",
+      "date": "v3 mosaic, accessed 2026-11"
+    },
+    "terrain_class": "Estimate: HiRISE albedo + DTM roughness, until terrain_cls.onnx and THEMIS",
+    "cost_to_go": "Pandolf walking model on the HiRISE terrain (make_world.py)",
+    "rocks_fine": "Estimate: rough at 1 m (HiRISE DTM) but gentle at 8 m; shadow rock detection to follow (#31)",
+    "optical": {
+      "mission": "MRO",
+      "instrument": "HiRISE colour (USGS MSL Gale LRGB 25 cm)",
+      "date": "v3 mosaic, accessed 2026-11"
+    },
+    "targets": {
+      "mission": "MSL Curiosity",
+      "instrument": "rover positions (MMGIS waypoints)",
+      "date": "2025"
+    }
+  },
+  "files": {
+    "height": "height.f32",
+    "slope": "slope.f32",
+    "terrain_class": "terrain_class.u8",
+    "cost_per_m": "cost_per_m.f32",
+    "cost_to_go": "cost_to_go.f32",
+    "rocks_fine": "rocks_fine.u8",
+    "cost_to_go_scouted": "cost_to_go_scouted.f32",
+    "optical": "optical.png",
+    "scout_plan": "scout_plan.json"
+  },
+  "site": {
+    "name": "Gale crater, lower Mount Sharp boxwork",
+    "centre_lonlat": [
+      137.383,
+      -4.8
+    ],
+    "bbox_deg": {
+      "west": 137.36571151288496,
+      "east": 137.4002625116344,
+      "south": -4.817283123000793,
+      "north": -4.782732124251374
+    },
+    "projection": "+proj=eqc +lat_ts=0 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +R=3396190 +units=m +no_defs=True"
+  },
+  "height_offset_m": -3919.4,
+  "energy_budget_note": "knob: sized so the five-stop Curiosity tour uses ~80% of usable energy",
+  "scout": {
+    "flights": 5,
+    "metres": 3441,
+    "cells_revealed": 1271,
+    "rock_cells_seen_corridor_only": 39,
+    "rock_cells_seen_with_plan": 88,
+    "note": "extra flights after the route corridor; made by data/pipeline/scout_plan.py"
+  }
+}
