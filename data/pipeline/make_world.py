@@ -110,6 +110,7 @@ def write(out, n, cell, base, budget, h, slope, cls, cost_per_m, ctg):
         'contract_version': 1, 'name': os.path.basename(out.rstrip('/')), 'source': 'synthetic',
         'width': n, 'height': n, 'cell_size_m': cell, 'row_order': 'north_to_south',
         'base_cell': base, 'gravity_mps2': G_MARS, 'energy_budget_j': budget, 'reserve_fraction': 0.2,
+        'kj_per_l_o2': 20.1,
         'classes': {str(k): v[0] for k, v in CLASSES.items()}, 'knobs': KNOBS,
         'files': {'height': 'height.f32', 'slope': 'slope.f32', 'terrain_class': 'terrain_class.u8',
                   'cost_per_m': 'cost_per_m.f32', 'cost_to_go': 'cost_to_go.f32'},

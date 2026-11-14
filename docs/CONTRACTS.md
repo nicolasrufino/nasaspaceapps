@@ -21,6 +21,10 @@ Index of cell (x, y): `y * width + x`. World position of a cell centre: `x * cel
 
 **Point of no return:** the moment `cost_to_go[current_cell] > energy_left - reserve`. The phone buzzes.
 
+**Oxygen:** the app converts energy to oxygen with `kj_per_l_o2` in `world.json` (about 20 kJ per litre of oxygen), so the HUD can show oxygen left. Energy is the common driver of oxygen, CO2 and heat.
+
+**Reserve:** `reserve_fraction` stands for NASA's 1-hour emergency return plus about 30 minutes of dust removal and getting back inside.
+
 **Energy model:** Pandolf (1977) metabolic rate with a terrain factor per class, scaled to Mars gravity. It is a simple first version, marked in the code. The planned upgrade is NASA JSC's field-modified model (Kim et al. 2024).
 
 ## 2. Models (owner: Person 1)
@@ -41,7 +45,8 @@ All models ship as ONNX in `ml/exports/`, so they run in a web engine (onnxrunti
   - `[14:23]` 3×3 terrain class around the buddy / 4
   - `[23:27]` last action, one-hot (4)
 - Output `action_logits`: float32 `[1, 9]`: stay, N, NE, E, SE, S, SW, W, NW.
-- Behaviour goal: stay within 2–6 cells of the astronaut, scout ahead along low-cost cells, and head home when energy left drops below 35%.
+- Behaviour goal (default mode "lead"): stay 2–6 cells **ahead** of the astronaut along low-cost cells (field tests rated rover-leads acceptable and crew-leads not), never enter cells steeper than the slope limit, and head home along the breadcrumb path when the astronaut's energy left drops below 35%.
+- Other modes (heel, carry, relay, rescue) are scripted on top of the same grid for now.
 - If the shape needs to change, change it here first.
 
 ## 3. App state (owner: Person 2)
