@@ -46,6 +46,8 @@ for (const name of ['synthetic', 'gale']) {
       if (blocked[i] || layers.cost_to_go_scouted[i] > usable) assert.equal(s[i], 0)
       assert.ok(s[i] >= 0 && s[i] <= 1)
     }
-    assert.ok(s[meta.base_cell[1] * meta.width + meta.base_cell[0]] > 0.99) // home: nothing to spend
+    const home = meta.base_cell[1] * meta.width + meta.base_cell[0]
+    const sci = layers.science ? 0.4 + 0.2 * layers.science[home] : 1 // same science weight as bestAreas
+    assert.ok(s[home] > 0.99 * sci) // home: nothing to spend
   })
 }
