@@ -33,7 +33,10 @@
     "slope",
     "terrain_class",
     "cost_to_go",
-    "rocks_fine"
+    "rocks_fine",
+    "thermal_inertia",
+    "science",
+    "dose_rate"
   ],
   "sources": {
     "height": {
@@ -58,6 +61,36 @@
       "mission": "MSL Curiosity",
       "instrument": "rover positions (MMGIS waypoints)",
       "date": "2025"
+    },
+    "thermal_inertia": {
+      "mission": "Mars Odyssey",
+      "instrument": "THEMIS night IR (Mars Trek 100 m mosaic; relative 0-255, higher = rockier)",
+      "date": "2002-2018 mosaic"
+    },
+    "science": {
+      "mission": "MRO",
+      "instrument": "CRISM hydration browse, 5 obs (FRT000058A3, FRT0000B6F1, HRL0000BABA, FRT0001BBA1, FRT0001CA91); tertiles 1-3",
+      "date": "MTRDR"
+    },
+    "dose_rate": {
+      "mission": "MSL Curiosity",
+      "instrument": "RAD mean 0.210 mGy/day (Hassler 2014) x HiRISE sky-view factor (estimate)",
+      "date": "2012-13 (solar max)"
+    },
+    "chem_points": {
+      "mission": "MSL Curiosity",
+      "instrument": "ChemCam + APXS, 421 points",
+      "date": "sols 4480-4900"
+    },
+    "neutron_points": {
+      "mission": "MSL Curiosity",
+      "instrument": "DAN passive, 323 sols (relative hydrogen)",
+      "date": "sols 4480-4900"
+    },
+    "weather": {
+      "mission": "MSL Curiosity",
+      "instrument": "REMS, 412 sols",
+      "date": "sols 4480-4900"
     }
   },
   "files": {
@@ -69,7 +102,13 @@
     "rocks_fine": "rocks_fine.u8",
     "cost_to_go_scouted": "cost_to_go_scouted.f32",
     "optical": "optical.png",
-    "scout_plan": "scout_plan.json"
+    "scout_plan": "scout_plan.json",
+    "thermal_inertia": "thermal_inertia.f32",
+    "science": "science.u8",
+    "dose_rate": "dose_rate.f32",
+    "chem_points": "chem_points.json",
+    "neutron_points": "neutron_points.json",
+    "weather": "weather.json"
   },
   "site": {
     "name": "Gale crater, lower Mount Sharp boxwork",
@@ -94,5 +133,15 @@
     "rock_cells_seen_corridor_only": 39,
     "rock_cells_seen_with_plan": 88,
     "note": "extra flights after the route corridor; made by data/pipeline/scout_plan.py"
+  },
+  "data_types": {
+    "optical": "optical",
+    "topographic": "height",
+    "thermal": "thermal_inertia",
+    "spectral": "science",
+    "radiation": "dose_rate",
+    "atmospheric": "weather",
+    "chemical": "chem_points",
+    "geophysical": "neutron_points"
   }
 }
