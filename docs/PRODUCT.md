@@ -23,10 +23,13 @@ Two facts make this hard.
 
 **Martian Map turns NASA's Mars data into a science walk you can plan, preview and come home from, and makes the map better with every walk.**
 
-What it is, concretely: **one app with two screens.**
+What it is, concretely: **one app, three views of the same map.**
 
 - **The habitat display** (the night before): pick a science goal, see the layers, send the scout drone, approve the route and the packing list.
-- **The suit display** (during the walk; a phone stands in for it): your position on the route, how far you can still go and get home, alerts, and a science checklist at each stop.
+- **The tablet the crew carries** (during the walk): a minimap like in a video game: where you are, where to go, the path, and the layers that matter (ground, minerals, chemistry, radiation). A science checklist at each stop.
+- **The helmet HUD** (during the walk): only what matters right now: how far you can still go and get home, heading, the next stop, alerts.
+
+In the demo a phone plays the tablet and switches to the HUD view.
 
 Who uses it: a two-person crew on Mars, before, during and after a walk. Where we build it: one 2 km × 2 km slice of lower Mount Sharp in Gale crater (see `docs/DATA.md`).
 
@@ -98,7 +101,7 @@ Orbit sees everything, coarsely, for free. The drone sees fine detail, but only 
 |---|---|---|---|
 | **R1** Several missions in one view | Mars Trek and JPL's MMGIS layer the data, for rover teams and regional views | Layers from orbiters and Curiosity, combined into one walk plan | The layers don't just sit side by side; together they decide the route, the load and the margin home |
 | **R2** From a science goal to a site | Scientists pick targets by hand from separate maps | Pick "boxwork"; targets light up from the minerals and geology; a checklist at each stop | The goal drives everything after it: the route, the stops, the packing list |
-| **R3** At least three data types | Each tool shows its own data | Optical, elevation, thermal, spectral, radiation, weather, rover photos | Each layer has a job in the plan (slope limits, sand avoidance, dose), not just a picture |
+| **R3** At least three data types | Each tool shows its own data | All eight types NASA lists: optical, topographic, thermal, spectral, radiation, atmospheric, and chemical and geophysical as points along Curiosity's path; plus rover photos | Each layer has a job in the plan (slope limits, sand avoidance, dose), not just a picture |
 | **R4** Safety: obstacles, loads, space weather | Orbit-only maps miss small hazards; plans broke in the 2022 test; voice guidance fails with delay | Scout drone before the walk; energy and oxygen per step; point-of-no-return alert; storm warnings | Hazards are found before the walk, and the margin home is known at every step, on the crew's side of the delay |
 | **R5** Hyperlocal, one walk | Mars Trek is regional and global | One 2 × 2 km slice at walk detail, which gets finer with every walk | Detail improves exactly where people walk |
 | **C5, C6** Rover views; robots and pairs | Rover photos sit in a separate gallery | Rover photos at each stop; a drone that scouts; a buddy rover that carries | The robots do the jobs that save crew time and strength |

@@ -11,6 +11,7 @@
 2. Take over `docs/pitch-notes.md` from Person 3.
 
 ## Then
+0. **Your build blocks** (`docs/BUILD.md`, lane PX): helmet HUD view (#41), packing list (#26), pitch tests (#16), before/after and project page (#17), CAPCOM agent if we enter the Azure track (#42).
 3. **Before/after page** (flag `before_after`): the table in PLAN §8 as a screen in the app, with today's tools on the left and Martian Map on the right.
 4. **HUD design pass** with Person 2: high contrast, large type, readable while walking.
 5. **The 5-minute pitch** in the organizers' seven parts: hook (NASA's 2022 Arizona field test), problem (separate maps, 4–22 minute delay), one sentence, demo (the hallway walk), space data (Mars Trek terrain, USGS geologic map, Perseverance images, NASA's walking model), impact (every Mars EVA; suits capped at $3.1B in task orders), team + next.
