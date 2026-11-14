@@ -1,0 +1,25 @@
+# Codex profiles for this repo: quality first, no wasted tokens.
+# Use: codex --profile <name>. Model names change; check /model in Codex and edit here.
+# If your Codex ignores project config, copy this into ~/.codex/config.toml.
+model = "gpt-5.5"
+model_reasoning_effort = "medium"
+
+# Plans, PR reviews, contract changes, merge conflicts: mistakes here cost hours.
+[profiles.orchestrator]
+model = "gpt-5.5"
+model_reasoning_effort = "high"
+
+# RL reward design, energy model, training bugs: hard reasoning, few files.
+[profiles.ml]
+model = "gpt-5.5"
+model_reasoning_effort = "high"
+
+# Everyday feature work in app/, data/, agent/.
+[profiles.build]
+model = "gpt-5.5"
+model_reasoning_effort = "medium"
+
+# Docs, renames, CSS, boilerplate, small fixes: mistakes are cheap and visible.
+[profiles.fast]
+model = "gpt-5.4-mini"
+model_reasoning_effort = "low"

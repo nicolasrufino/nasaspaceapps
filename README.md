@@ -12,7 +12,8 @@ A phone stands in for a spacesuit display. Real steps move an astronaut across r
    `docs/PITCH.md`: the 5-minute pitch draft and likely judge questions.
 2. `docs/CONTRACTS.md`: the file and model formats everyone shares.
 3. Your role brief in `docs/roles/`.
-4. `AGENTS.md`: rules for coding agents (paste your role's agent brief too).
+4. `AGENTS.md`: rules for coding agents (each folder has its own too).
+5. `docs/CODEX.md`: Codex setup prompt, one environment per task, the orchestrator prompt.
 
 ## Quick start
 ```bash
