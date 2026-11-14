@@ -130,6 +130,8 @@ This is why it is a tool and not a static map: the challenge allows "a tool or s
 
 ## 4. The data layers
 
+The plain-words guide to every NASA resource (the five NASA listed and the ones we add), and the exact slice of Mars we build, is in `docs/DATA.md`.
+
 | Layer | Mission and instrument | What it tells the astronaut | Used for |
 |---|---|---|---|
 | Optical | MRO HiRISE (about 25–50 cm per pixel); CTX mosaic (5 m) for context | What the ground looks like; large rocks | Map base, obstacle mask |

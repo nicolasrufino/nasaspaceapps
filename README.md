@@ -11,6 +11,7 @@ A phone stands in for a spacesuit display. Real steps move an astronaut across r
    `docs/RESEARCH.md`: how NASA plans surface EVAs, robots, hazards, funding.
    `docs/PITCH.md`: the 5-minute pitch draft and likely judge questions.
    `docs/CRITIQUE.md`: every idea graded before we build it.
+   `docs/DATA.md`: each NASA resource, what it is, and how we use it; our slice of Mars.
 2. `docs/CONTRACTS.md`: the file and model formats everyone shares.
 3. Your role brief in `docs/roles/`.
 4. `AGENTS.md`: rules for coding agents (each folder has its own too).
