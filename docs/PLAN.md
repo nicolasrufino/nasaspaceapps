@@ -201,6 +201,8 @@ This is six NASA missions or programs in one hyperlocal view, three more data ty
 
 ## 10. Build order: foundation first
 
+**Who builds what, block by block, with prerequisites: `docs/BUILD.md`** (drawn as a four-lane graph on the team page).
+
 The base must always work; every feature sits behind a flag and can be turned off.
 
 **Foundation:** site map with three layers → route around obstacles → walk along it → walk-back ring and buzz → runs on one phone.
