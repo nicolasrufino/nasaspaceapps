@@ -1,8 +1,40 @@
-# NASA Space Apps
+# Martian Map
 
-Repo: https://github.com/nicolasrufino/nasaspaceapps
+**Your phone tells you, step by step, how far you can still walk on Mars and make it home.**
 
-## How we ship (read this once, takes 2 min)
+NASA Space Apps 2026 (Chicago), challenge: *Interplanetary Survival Guide: Martian Map*.
+
+A phone stands in for a spacesuit display. Real steps move an astronaut across real Mars terrain; every step costs energy from a published walking model; a walk-back ring shows how far you can still go and get home; a trained buddy rover scouts ahead; mission control answers 20 seconds late.
+
+## Start here
+1. `docs/PLAN.md`: the problem, the stack, the build order, the timeline.
+2. `docs/CONTRACTS.md`: the file and model formats everyone shares.
+3. Your role brief in `docs/roles/`.
+4. `AGENTS.md`: rules for coding agents (paste your role's agent brief too).
+
+## Quick start
+```bash
+python3 data/pipeline/make_world.py   # builds data/worlds/synthetic/ (standard library only)
+```
+
+## Layout
+| Folder | Owner | What lives there |
+|---|---|---|
+| `data/` | Person 3 | Terrain pipeline and world files |
+| `ml/` | Person 1 | Terrain classifier and buddy rover training; ONNX exports |
+| `app/` | Person 2 | The phone game (stack chosen Sat 12:30) |
+| `agent/` | Person 3, then Person X | CAPCOM agent (Microsoft Foundry) |
+| `docs/` | Everyone | Plan, contracts, role briefs, pitch notes |
+
+## How we work
+- Branch per task, named `yourname/what-it-does` (see How we ship below). PRs into `main`; CI must be green; `main` always runs.
+- Foundation first. Every feature is behind a flag and can be turned off.
+- Contract changes need every owner's approval.
+
+---
+
+# How we ship
+
 
 `main` is protected: **nothing lands without a PR and green CI.** No direct pushes, not even admins.
 

@@ -9,3 +9,14 @@ __pycache__/
 .env*.local
 .DS_Store
 .vercel
+
+# Martian Map
+Library/
+Temp/
+Logs/
+UserSettings/
+*.apk
+logs/
+data/raw/
+ml/runs/
+ml/data/

@@ -1,0 +1,2 @@
+# Root requirements are for CI only (ruff + pytest run on every PR).
+# Heavy ML packages go in ml/requirements.txt so CI stays fast.
