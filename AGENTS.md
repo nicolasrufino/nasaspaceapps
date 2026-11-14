@@ -10,3 +10,5 @@ Read `docs/PLAN.md`, `docs/CONTRACTS.md` and your person's brief in `docs/roles/
 6. **No secrets in the repo.** Keys go in environment variables or `.env` (ignored by git).
 7. **Phone first.** Test on a phone over HTTPS. No pathfinding on the phone; the walk-back ring is a lookup in `cost_to_go`.
 8. **Cite NASA data by name** in code comments and in the project page (Mars Trek, USGS geologic map, Perseverance raw images, HiRISE DTM, AI4Mars).
+9. **Do not read data files.** Binary world layers (`*.f32`, `*.u8`), datasets, model weights and logs waste tokens. Use `world.json` and the scripts' printed summaries.
+10. **Model and effort per job:** see `docs/CODEX.md` §6.

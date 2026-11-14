@@ -55,3 +55,24 @@ git pull
 ```
 
 Then pick the next issue (ask the orchestrator) and make a new worktree.
+
+## 6. Models and effort: quality first, no waste
+
+Spend reasoning where a mistake costs hours; save it where a mistake is cheap and visible. Profiles are in `.codex/config.toml` (start Codex with `codex --profile <name>`). Model names change often: check `/model` in Codex and edit the file.
+
+| Job | Profile | Effort | Why |
+|---|---|---|---|
+| Orchestrator: status, PR reviews, contract questions, merge conflicts | `orchestrator` | high | One bad call blocks several people |
+| ML: reward design, training bugs, ONNX export | `ml` | high | Subtle errors look like working code |
+| Energy model and walk-back ring logic | `ml` | high | The demo's core number must be right |
+| Features in `app/`, `data/`, `agent/` | `build` | medium | The everyday default |
+| Docs, CSS, renames, boilerplate, small fixes | `fast` | low | Errors show up at once and cost little |
+
+**How we keep tokens useful**
+1. **One issue per session.** Start a fresh session (in its own worktree) for each issue. Long sessions drag old context into every reply.
+2. **Plan with high effort once, build with medium.** Ask for a short plan first on hard issues, approve it, then implement.
+3. **Point at files.** Name the files and the section of a doc (for example "CONTRACTS.md §2"). Folder `AGENTS.md` files keep each agent's context small.
+4. **Never read data.** Binary world files (`*.f32`, `*.u8`), datasets, model weights and logs are not for reading. Use `world.json` and the scripts' printed summaries.
+5. **Short outputs.** Run `pytest -q` and `ruff check .`, and paste only failures back into the session.
+6. **Hand off in the PR, not the chat.** End every task with a PR description that says what changed and what is left. The next agent starts from that.
+7. **Orchestrator on a schedule.** Ask for "status" at each milestone or about once an hour, not after every commit. Its answer is capped at 25 lines.
