@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Martian Map</title>
+    <style>
+      html, body { margin: 0; height: 100%; overflow: hidden; background: #1a0f0a; color: #f3e6d8; font: 14px system-ui, sans-serif; }
+      #scene { display: block; width: 100%; height: 100%; touch-action: none; }
+      #minimap { position: fixed; right: max(12px, env(safe-area-inset-right)); bottom: max(12px, env(safe-area-inset-bottom));
+        background: #0008; padding: 8px; border-radius: 8px; display: grid; gap: 6px; }
+      #minimap canvas { width: min(38vmin, 260px); aspect-ratio: auto; image-rendering: pixelated; border: 1px solid #fff4; }
+      #minimap select { font: inherit; padding: 4px; }
+      #status { position: fixed; left: 12px; top: 12px; background: #0008; padding: 6px 10px; border-radius: 6px; }
+    </style>
+  </head>
+  <body>
+    <canvas id="scene"></canvas>
+    <div id="status">Loading world…</div>
+    <div id="minimap">
+      <label>Minimap layer <select id="layer" aria-label="Minimap layer"></select></label>
+      <canvas id="map" aria-label="Minimap of the site, north up"></canvas>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
