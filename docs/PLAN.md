@@ -12,6 +12,44 @@ One document, read top to bottom: what NASA asked for, what we build, how every 
 - **Our solution: a map that builds itself, walk by walk.** (1) Start from NASA's orbital layers. (2) A scout drone flies the route first and maps what orbit can't see. (3) Martian Map plans the best path and the packing list: what to bring, what is heavy, what the rover carries. (4) The crew walks for a science purpose (signs of past water and life), and the map grows as they go: photos, ground type, how hard each stretch was, markers they drop. (5) The next crew starts with a better map.
 - **The demo:** pick "boxwork" → the layers light up the targets → the scout drone flies the route and reveals a rock field orbit missed → the route re-plans and the packing list appears → a judge walks the hallway with the phone as the suit display → the ring shrinks with every step → at a stop the phone runs the science checklist and adds to the map → past the point of no return it buzzes.
 
+### Why this is the best solution
+
+What a crew could do today, and why each option falls short on its own:
+
+| Option | Sees small hazards | Works with a 4–22 min delay | Keeps the way home known | Gets more science per walk | Uses proven NASA methods |
+|---|---|---|---|---|---|
+| Orbital maps only (HiRISE, Mars Trek) | No: misses rocks under about 1 m | Yes | No | Partly | Yes |
+| Mission control plans and guides by voice | Only what orbit sees | **No** | Only before the walk | Partly | Yes |
+| A rover scouts first | Yes | Yes | No | Yes | Yes, but rovers average about 110 m/h, 20–30 times slower than a walking astronaut |
+| The crew explores by eye | Only once there | Yes | No | Partly; plans broke on the first walk in NASA's 2022 test | No |
+| **Martian Map: orbit + scout drone + plan on the device + a map that grows** | **Yes** | **Yes** | **Yes, every step** | **Yes** | **Yes, each piece** |
+
+Each option on its own fails at least one need. Ours combines the parts that work, and runs on the crew's side of the delay.
+
+### How we know it can work
+
+- **Every piece is already proven at NASA, separately.**
+  - Rocks detected automatically from their shadows in HiRISE images chose or checked the Phoenix, Gale, Jezero and InSight landing sites.
+  - Ingenuity flew 72 times and scouted routes for Perseverance.
+  - Perseverance's AutoNav plans its own safe path between stops.
+  - Walkback limits and the 1-hour return rule are how NASA keeps crews safe today.
+- **What is new is putting them together for the person on foot, on the device, with no link to Earth.**
+- **What we will measure in our demo** (numbers come from our code, not guesses):
+  - how many rock-field cells the scouted route avoids that the orbit-only route crosses;
+  - how much margin home the route keeps at every point;
+  - how the ring changes if our energy model is off by ±30%;
+  - the rock detector's agreement with hand-checked rocks.
+
+### The demo, step by step (about 1:45)
+
+1. **Start** at a random spot inside the Gale site, on the habitat screen. Goal: boxwork.
+2. **Orbit only:** the map shows coarse layers and a first route.
+3. **Deploy the scout** (a 10-second animation). The drone flies Ingenuity-class legs (about 700 m and 3 minutes each). It covers the route corridor first, then the cells it is least sure about.
+4. **Reveal:** where it flies, the map switches to full-resolution HiRISE terrain and detected rocks, labelled "simulated drone view, real HiRISE data". A hidden rock field appears.
+5. **Re-plan and explain:** the new route avoids it. The "why this route" panel shows the extra distance, the effort, the slope limit, the rocks avoided and the margin home everywhere. The packing list updates.
+6. **Walk:** a judge carries the phone; real steps move the astronaut; the ring shrinks; at a stop, the science checklist runs.
+7. **Share:** export the map package; it "arrives" at mission control 11 minutes later.
+
 ## 1. The challenge, exactly
 
 What NASA's statement asks (Space Apps 2026, *Interplanetary Survival Guide: Martian Map*):
@@ -42,7 +80,7 @@ Optional considerations:
 | Step | What happens | Who or what does it | Evidence it is real |
 |---|---|---|---|
 | **1. Orbit** | Start from NASA's layers: images, slope, sand, minerals, radiation | Data pipeline | HiRISE, THEMIS, CRISM, Curiosity RAD (section 4) |
-| **2. Scout** | A drone flies the planned route first and maps it at centimetre scale: rocks, drop-offs, sand the orbital images miss. The route re-plans | Scout drone (simulated in our app) | Ingenuity scouted routes for Perseverance in 72 flights (2021–2024); one flight ruled out a target and saved about two months of driving. JPL and AeroVironment's Skyfall concept (2025) proposes six helicopters to scout human landing sites |
+| **2. Scout** | A drone flies the planned route first. It covers the route corridor, then the cells it is least sure about, within Ingenuity-class limits (about 700 m and 3 minutes per flight). Where it flies, the map gains full-resolution terrain and detected rocks; the route re-plans | Scout drone (simulated flight in our app; the data it reveals is real full-resolution HiRISE) | Ingenuity scouted routes for Perseverance in 72 flights (2021–2024); one flight ruled out a target and saved about two months of driving. JPL and AeroVironment's Skyfall concept (2025) proposes six helicopters to scout human landing sites |
 | **3. Plan and pack** | Best path (safe and efficient), effort per stretch, and a packing list from the route: oxygen and water margin, sampling tools for the targets, what the rover carries because it is heavy | Martian Map | NASA's statement asks about astronauts "carrying scientific equipment and other supplies"; NASA's 2022 field test found a loaded cart caused unacceptable fatigue |
 | **4. Walk and add** | The crew walks for the science goal. The map grows: photos, ground type from the classifier, how hard each stretch really was, markers and sample sites they drop | Crew, phone, buddy rover | Perseverance's AutoNav updates its local map as it drives; our classifier is trained on NASA's AI4Mars labels |
 | **5. Next walk** | The corrected map, real effort numbers and new hazards feed the next plan | Data pipeline | NASA calibrates its walking model on field traverses |
@@ -142,7 +180,7 @@ This is six NASA missions or programs in one hyperlocal view, three more data ty
 
 - **Data pipeline (Python):** reads the NASA layers for the site and writes the shared files (`docs/CONTRACTS.md`), including the cost of walking home from every cell.
 - **Models (Python, exported to ONNX):** terrain classifier; buddy rover policy.
-- **App (game engine on the phone):** draws the layers in 3D, plans and follows the route, runs the ring and the science checklist. Babylon.js (web, opens from a QR code) is suggested unless someone has shipped Unity to a phone; the team decides. Both read the same files and models.
+- **App (game engine on the phone):** draws the layers in 3D, plans and follows the route, runs the ring and the science checklist. **Decision from the critique (`docs/CRITIQUE.md`): web, with three.js.** One app is the game, the habitat display, the suit display and the public viewer that anyone can open from a QR code. Unity would need a second codebase for the viewer.
 - **CAPCOM agent (Microsoft Foundry):** explains the layers and the plan, with a delay. Also our Azure-track piece.
 
 | | **A. Babylon.js (web game engine), TypeScript** | **B. Unity 6, C#** |
@@ -165,7 +203,7 @@ The base must always work; every feature sits behind a flag and can be turned of
 
 **Foundation:** site map with three layers → route around obstacles → walk along it → walk-back ring and buzz → runs on one phone.
 
-**Features (flags):** `drone_scout`, `packing_list`, `map_grows`, `layers_extra` (thermal, spectral, radiation), `pov_images`, `science_stop`, `step_mode`, `buddy_scripted`, `buddy_rl`, `override`, `rideback_ring`, `storm`, `classifier`, `capcom`, `debrief`, `before_after`.
+**Features (flags):** `drone_scout`, `why_route`, `export`, `packing_list`, `map_grows`, `layers_extra` (thermal, spectral, radiation), `pov_images`, `science_stop`, `step_mode`, `buddy_scripted`, `buddy_rl`, `override`, `rideback_ring`, `storm`, `classifier`, `capcom`, `debrief`, `before_after`.
 
 | Milestone | Time | Done when |
 |---|---|---|

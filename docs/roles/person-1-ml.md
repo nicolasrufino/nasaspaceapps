@@ -1,6 +1,6 @@
 # Person 1: Machine learning (only ML)
 
-**Mission:** the two trained models that make the map smarter: a terrain classifier and a buddy rover. Nothing else. Other people integrate your exports.
+**Mission:** computer vision and models on real NASA data. **First: rock detection on full-resolution HiRISE images** (the shadow method NASA used to check landing sites), aggregated into `rocks_fine.u8` for the site. Second: the AI4Mars ground classifier for rover photos. Stretch: the RL buddy rover. Other people integrate your outputs.
 
 **Owns:** `ml/` (training code, notebooks, `ml/exports/`).
 **Reads:** world files in `data/worlds/` (see `docs/CONTRACTS.md` §1).

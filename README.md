@@ -10,6 +10,7 @@ A phone stands in for a spacesuit display. Real steps move an astronaut across r
 1. `docs/PLAN.md`: the problem, the stack, the build order, the timeline.
    `docs/RESEARCH.md`: how NASA plans surface EVAs, robots, hazards, funding.
    `docs/PITCH.md`: the 5-minute pitch draft and likely judge questions.
+   `docs/CRITIQUE.md`: every idea graded before we build it.
 2. `docs/CONTRACTS.md`: the file and model formats everyone shares.
 3. Your role brief in `docs/roles/`.
 4. `AGENTS.md`: rules for coding agents (each folder has its own too).

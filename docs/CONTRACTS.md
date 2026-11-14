@@ -18,7 +18,8 @@ A world is a folder in `data/worlds/<name>/`, produced by `data/pipeline/make_wo
 | `thermal_inertia.f32` | float32 | THEMIS thermal inertia (low = loose sand or dust, high = rock). *Optional.* |
 | `science.u8` | uint8 | Science value of the cell for the site's goal: 0 none, 1 low, 2 medium, 3 high (from CRISM minerals and geologic units). *Optional.* |
 | `dose_rate.f32` | float32 | Radiation dose rate in µGy per hour (Curiosity RAD background, reduced where terrain shields the sky). *Optional.* |
-| `rocks_fine.u8` | uint8 | Fine-scale hazards (1 = rock field or drop-off) that orbit misses and the **scout drone reveals**. Hidden in the app until the drone has flown over that cell. Synthetic now; real sites use HiRISE boulder mapping or a simulated scout. |
+| `rocks_fine.u8` | uint8 | Fine-scale hazards (1 = rock field or drop-off) that orbit misses and the **scout drone reveals**. Hidden in the app until the drone has flown over that cell. Synthetic now. For real sites: rock density from shadow-based rock detection on full-resolution HiRISE images (Person 1), the method NASA used to check landing sites. |
+| `scout_plan.json` | JSON | The drone's flights, computed by the pipeline: `[{"flight": 1, "waypoints": [[x, y], ...], "seconds", "metres", "cells_revealed"}]`. Each flight is at most about 700 m and 180 s (Ingenuity-class). It covers the route corridor first, then the least certain cells. |
 | `cost_to_go_scouted.f32` | float32 | `cost_to_go` recomputed with `rocks_fine` cells impassable: the way home once the drone has scouted. |
 | `targets.json` | JSON list | Science targets: `{"id", "name", "cell": [x, y], "goal", "why", "sources": [...]}`. |
 | `stops.json` | JSON list | Rover photos for stops: `{"target_id" or "cell", "image_url", "caption", "credit", "sol"}` (Curiosity Mastcam/Navcam raw images). |
@@ -73,6 +74,8 @@ What the app knows each tick. The agent and the logs use the same shape.
 ```
 
 Each walk is logged as JSON lines to `logs/` (or local storage on the phone) for the debrief replay and the validation numbers. **The map grows from this log:** each entry may add `{"cell", "kind": "photo" | "ground" | "effort" | "marker" | "sample", "value", "time"}`, and the pipeline merges these into the site files for the next walk.
+
+**Map export** (app, flag `export`): one JSON package (`world.json` plus the changed layers, the route, the walk log) and a GeoJSON of the route, stops, samples and markers, for mission control, the other crew and scientists. The app shows when it "arrives" given the current delay.
 
 **Packing list** (app, from the planned route): walk time and energy give oxygen and water with the reserve; each target adds its sampling kit; terrain adds safety items (rock fields, sand); anything over the astronaut's load limit is assigned to the rover. Shown on the plan screen.
 

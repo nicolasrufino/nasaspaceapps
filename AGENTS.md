@@ -12,3 +12,4 @@ Read `docs/PLAN.md`, `docs/CONTRACTS.md` and your person's brief in `docs/roles/
 8. **Cite NASA data by name** in code comments and in the project page (Mars Trek, USGS geologic map, Perseverance raw images, HiRISE DTM, AI4Mars).
 9. **Do not read data files.** Binary world layers (`*.f32`, `*.u8`), datasets, model weights and logs waste tokens. Use `world.json` and the scripts' printed summaries.
 10. **Model and effort per job:** see `docs/CODEX.md` §6.
+11. **Grade new ideas first.** Before building a feature that is not in `docs/PLAN.md`, add it to `docs/CRITIQUE.md` and score it. 8 or less: do not build it.
