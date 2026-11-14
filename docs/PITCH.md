@@ -21,7 +21,7 @@ Five minutes, seven parts, the organizers' format. Test this draft on mentors an
 - The buddy rover scouts ahead and flags rocks the orbital image missed. At the point of no return the phone buzzes red. Mission control answers 20 seconds later: too late, which is the point.
 
 **5. Space data inside (3:00–3:40)**
-> Six NASA missions in one hyperlocal view: HiRISE images and terrain, CTX context, THEMIS thermal inertia to find loose sand, CRISM minerals and the USGS geologic map to find science targets, Curiosity's radiation and weather measurements from this very crater, and Curiosity's photos of each stop. Walking cost comes from a published energy model, the same family NASA's Johnson Space Center calibrates on field traverses. A classifier trained on NASA's AI4Mars labels checks the ground *(accuracy to measure)*.
+> Six NASA data sources in one hyperlocal view: HiRISE images and terrain, CTX context, THEMIS thermal inertia to find loose sand, CRISM minerals and the USGS geologic map to find science targets, Curiosity's radiation and weather measurements from this very crater, and Curiosity's photos of each stop. Walking cost comes from a published energy model, the same family NASA's Johnson Space Center calibrates on field traverses. A classifier trained on NASA's AI4Mars labels checks the ground *(accuracy to measure)*.
 
 **6. Impact: who wins, how much (3:40–4:20)**
 > NASA ranks moving crews across planetary surfaces #2 of 32 technology gaps, and asks by name for "in-situ decision support tools" for Mars spacewalks. It is spending up to $4.6 billion on rovers that drive with or without crew and up to $3.1 billion on new suits. Nobody is funding the layer between the two: the one that tells the person in the suit what they can still do. That layer protects every surface walk, and every hour of crew time is worth over $130,000.
@@ -36,7 +36,7 @@ Five minutes, seven parts, the organizers' format. Test this draft on mentors an
 3. Mars: 4–22 minutes each way; plans break on unseen ground; the crew decides.
 4. The one sentence.
 5. Live demo: plan (layers, targets, route, rover photos), then walk (phone as suit display).
-6. Six missions, one view: each layer and its job.
+6. Six NASA data sources, one view: each layer and its job.
 7. Why a robot: lead, carry, relay, rescue (field-test evidence).
 8. Impact and money: #2 of 32, need 8.06, $4.6B rovers, $3.1B suits, the gap.
 9. Team + next. Close on the first Mars crew.
