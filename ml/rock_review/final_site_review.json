@@ -1,0 +1,32 @@
+{
+  "schema": "martian-map-final-site-decisions-v1",
+  "candidate_file": "final_site_candidates.json",
+  "candidate_file_sha256": "59b2517d9677d436bff3fa7b171b0c9d859c056bdc0e13d853f0f75ce5d574f1",
+  "source_rgb_pixel_sha256": "7594cf078e70af1684b0b9bfafb47f27adb381abdba1aeb50c4af8363d1f6949",
+  "review_status": "partial",
+  "missing_decision_status": "unreviewed",
+  "scope": "User assessment of visible isolated-rock correspondence on the final Gale site. Decisions do not validate shadows, contours, heights, missed rocks or navigation safety. Original accepted locations and S-prefixed reviews are separate.",
+  "reviews": [
+    {
+      "reviewer": "Jules Rumeau",
+      "date": "2026-11-14",
+      "timezone": "America/Chicago",
+      "sheet": "final_site_details_1.png",
+      "sheet_sha256": "5f03120086c2cf8a2b0c4985b2e0894d164f7f830efef506d4e35ae0f1002ee7",
+      "question": "Pour terminer la validation des rochers sur le nouveau site de Luca : sur cette planche G01–G10, quels identifiants montrent clairement un rocher isolé ? L’image brute est à gauche, le repère à droite. Tu peux répondre « incertain » si c’est illisible ; les 50 anciens emplacements restent validés.",
+      "user_statement": "Pour l'image 1, je suis incertain, mais je pense que oui. Pour l'image 2, oui, je suis sûr. Pour l'image 3, incertain. L'image 4, oui. L'image 5, oui. L'image 6, oui. L'image 7, je suis pas sûr. Image 8, je suis pas sûr. Image 9, je dirais non, et image 10, oui.",
+      "decisions": [
+        {"id": "G01", "status": "uncertain", "note": "Tentative yes; user explicitly remains uncertain."},
+        {"id": "G02", "status": "accepted", "note": "User explicitly says yes and certain."},
+        {"id": "G03", "status": "uncertain"},
+        {"id": "G04", "status": "accepted"},
+        {"id": "G05", "status": "accepted"},
+        {"id": "G06", "status": "accepted"},
+        {"id": "G07", "status": "uncertain"},
+        {"id": "G08", "status": "uncertain"},
+        {"id": "G09", "status": "rejected", "note": "Tentative no: je dirais non."},
+        {"id": "G10", "status": "accepted"}
+      ]
+    }
+  ]
+}
