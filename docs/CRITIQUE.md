@@ -32,6 +32,7 @@ Each idea is scored 0–3 on five tests (15 points):
 | Idea | Fit | Judges | Feasible | Honest | Safe | Total | Verdict and what to do |
 |---|---|---|---|---|---|---|---|
 | Drone scout demo in the game: deploy, explore, reveal, re-plan | 3 | 3 | 2 | 2 | 3 | **13** | **Keep.** It is the solution in action. Label the flight as simulated |
+| Whole-area helicopter survey (SkyFall-style fleet) before choosing stops: strips over the slice, reachable area first; shows flights and sols per fleet size; a "best areas" layer (round trip fits the budget, not too steep, no rocks seen, scouted, science value) | 3 | 3 | 2 | 2 | 3 | **13** | **Keep**, behind `drone_scout`. Turns "explore the area" into a hardware answer (how many helicopters, how many sols). Label the flight simulated and the flights-per-sol rate an estimate |
 | Drop the player anywhere on Mars at random | 1 | 1 | 0 | 1 | 1 | **4** | **Cut.** No hyperlocal data at most places, and it loses the science goal |
 | Random start inside our prepared site (Gale; maybe Jezero) | 3 | 2 | 3 | 3 | 3 | **14** | **Keep.** Same idea, real data everywhere |
 | Start inside the spaceship and walk to the drone | 2 | 2 | 1 | 3 | 2 | **10** | **Simplify** to a 10-second deploy animation from the habitat screen. No walkable interior |
