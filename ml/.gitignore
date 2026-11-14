@@ -1,0 +1,21 @@
+# Weights, checkpoints and datasets never go in git. Only ml/exports/*.onnx (+ .json) ship.
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.bin
+*.h5
+*.keras
+*.pkl
+*.pickle
+*.joblib
+*.npy
+*.npz
+*.tflite
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+wandb/
+lightning_logs/
+tensorboard/
