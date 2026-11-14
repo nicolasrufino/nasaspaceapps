@@ -3,3 +3,6 @@ gymnasium
 stable-baselines3
 onnx
 onnxruntime
+numpy
+Pillow
+opencv-python-headless
