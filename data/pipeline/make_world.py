@@ -18,7 +18,7 @@ import random
 G_EARTH, G_MARS = 9.81, 3.71
 # Pandolf (1977) terrain factor eta, mapped to AI4Mars classes (soil, bedrock, sand, big rock).
 CLASSES = {0: ('unknown', 1.2), 1: ('soil', 1.1), 2: ('bedrock', 1.0), 3: ('sand', 2.1), 4: ('big_rock', 1.5)}
-KNOBS = dict(body_kg=75.0, load_kg=60.0, speed_mps=1.0, max_slope_deg=25.0)
+KNOBS = {'body_kg': 75.0, 'load_kg': 60.0, 'speed_mps': 1.0, 'max_slope_deg': 25.0}
 
 
 def pandolf_watts(grade_pct, eta, k=KNOBS):
