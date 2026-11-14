@@ -2,6 +2,17 @@
 
 The build graph for four people. Each block is one thing someone builds. **Needs** lists the blocks that must be done first; everything else can start right away. The team page draws this table as a graph with one lane per person.
 
+## The team
+
+| Lane | Who | GitHub | Role brief |
+|---|---|---|---|
+| P1 | **Jules** | `julesrumeautennis-cmd` | `docs/roles/person-1-ml.md` |
+| P2 | **Nicolas** | `nicolasrufino` | `docs/roles/person-2-engine.md` |
+| P3 | **Galsan** (lead) | `Galsan2005` | `docs/roles/person-3-data-systems.md` |
+| PX | Open: joins later, or the fallbacks below | — | `docs/roles/person-x.md` |
+
+Every block's GitHub issue is assigned to its lane's owner and repeats what it needs, what it unlocks and when it is due.
+
 ## Why nobody waits
 
 1. **A fake world already exists.** `data/worlds/synthetic/` has every world file: height, slope, ground type, walking cost, cost home from every square, rocks, targets, stops and a route. Everyone builds against it from 9:00 on Saturday.
@@ -35,6 +46,7 @@ The build graph for four people. Each block is one thing someone builds. **Needs
 | R3 | Rocks for our slice | P1 | M1 | Run the detector on the real slice and write `rocks_fine.u8`; report agreement with the hand-checked rocks | R1, D1 | #31 |
 | R4 | Ground classifier | P1 | M2 | Soil, bedrock, sand, big rock from AI4Mars labels; tested on Perseverance photos; exported to ONNX | R2 | #6 |
 | R5 | Numbers for the pitch | P1 | Overnight | Rocks avoided by the scouted route versus orbit only; margin home along the route; ring change if energy is off by ±30% | R3, D4 | #15 |
+| R7 | CAPCOM agent on Azure | P1 | Overnight | Microsoft Foundry agent playing mission control, answering through a 20-second delay; tools read the app state. Needed for Best Use of Technology | E2 | #42 |
 | R6 | Buddy rover RL (stretch) | P1 | Overnight | Grid environment and a PPO "lead" policy, compared with the scripted rover | R2, D2 | #4, #7 |
 | E1 | App, 3D view and minimap | P2 | M0 | three.js app that loads the world files; 3D terrain from the height grid; flat minimap coloured by layer | — | #8, #9 |
 | E2 | Walking core | P2 | M1 | Move along the route; energy and oxygen drain; walk-back ring from the cost home; point-of-no-return buzz; works on a phone | E1 | #10 |
@@ -48,22 +60,32 @@ The build graph for four people. Each block is one thing someone builds. **Needs
 | D2 | Real world files | P3 | M1 | Run the pipeline on the slice: slope, walking cost, cost home from every square; add sand (THEMIS) and science (CRISM, local geologic map) | D1 | #13 |
 | D3 | Targets, stops, first route | P3 | M2 | Boxwork targets; Curiosity photos at each stop; the rough route on the orbit view | D2 | #20 |
 | D4 | Scout plan | P3 | M2 | `scout_plan.json`: route strip first, then anomalies, then the least certain squares | D3 | #32 |
-| D5 | Deploy | P3 | M2 | A public link that a stranger's phone can open | E2 | #14 |
+| D5 | Deploy on Azure | P3 | M2 | A public link on Azure Static Web Apps that a stranger's phone can open; Azure makes us eligible for Best Use of Technology | E2 | #14 |
 | D6 | All eight data types | P3 | Overnight | Radiation (RAD) and weather (REMS) for the slice; chemical (ChemCam, APXS) and geophysical (DAN) as points along Curiosity's path | D2 | #40 |
 | D7 | The map grows | P3 | Overnight | Merge walk logs (photos, ground type, real effort, markers) back into the site files | E6 | #27 |
 | X1 | Helmet HUD view | PX | M2 | The walk as a heads-up display: ring, heading, next stop, alerts only; same state as the tablet minimap | E2 | #41 |
 | X2 | Packing list | PX | M2 | What to bring and its weight from the route; heavy items go to the rover | D3 | #26 |
 | X3 | Test the pitch | PX | M2 | Three mentors or judges, three questions each; log the answers | — | #16 |
 | X4 | Before/after and project page | PX | Overnight | Today's tools versus Martian Map as a screen; the project page with every dataset, the numbers and the limits | R5 | #17 |
-| X5 | CAPCOM agent (Azure, optional) | PX | Overnight | Microsoft Foundry agent that answers late, through a 20-second delay | E2 | #42 |
-| F1 | Numbers into the slides | P1 | Freeze | Final numbers on the proof slide | R5 | — |
-| F2 | Fixes only | P2 | Freeze | Switch off anything unstable; rehearse the demo walk | E4, E6 | — |
-| F3 | Final deploy | P3 | Freeze | Last deploy; check the link on three phones | D5 | — |
-| F4 | Video and submit | PX | Freeze | 30-second video; submit the project page | X4 | — |
+| F1 | Numbers into the slides | P1 | Freeze | Final numbers on the proof slide | R5 | #45 |
+| F2 | Fixes only | P2 | Freeze | Switch off anything unstable; rehearse the demo walk | E4, E6 | #46 |
+| F3 | Final deploy | P3 | Freeze | Last deploy; check the link on three phones | D5 | #47 |
+| F4 | Video and submit | PX | Freeze | 30-second video; submit the project page | X4 | #48 |
 
 ## Person X arrives later
 
-Nothing waits on Person X. Their blocks (HUD, packing list, pitch tests, project page) all build on work that already exists. Until they arrive, Person 3 holds the pitch notes, and Person 2 can show the walk on the tablet view alone.
+Nothing waits on Person X. Their blocks (HUD, packing list, pitch tests, project page) all build on work that already exists. Until they arrive, Galsan holds the pitch notes, and Nicolas can show the walk on the tablet view alone.
+
+**If nobody has joined by M2 (Sat 21:00), these fallbacks apply:**
+
+| Block | Falls to | Why |
+|---|---|---|
+| X1 Helmet HUD view | Nicolas | It is a second layout of the walk he builds |
+| X2 Packing list | Galsan | It is rules on the route data he owns |
+| X3 Test the pitch | Whoever is free at dinner | Ten minutes per mentor |
+| X4 Project page, F4 video and submit | Galsan and Nicolas at the freeze | Galsan writes, Nicolas records the demo |
+
+This makes Galsan's lane the heaviest overnight. If he falls behind, cut D6 to radiation and weather only.
 
 ## How to use this
 

@@ -12,6 +12,8 @@ One document, read top to bottom: what NASA asked for, what we build, how every 
 - **Our solution: a map that builds itself, walk by walk.** (1) Start from NASA's orbital layers. (2) A scout drone flies the route first and maps what orbit can't see. (3) Martian Map plans the best path and the packing list: what to bring, what is heavy, what the rover carries. (4) The crew walks for a science purpose (signs of past water and life), and the map grows as they go: photos, ground type, how hard each stretch was, markers they drop. (5) The next crew starts with a better map.
 - **The demo:** pick "boxwork" → the layers light up the targets → the scout drone flies the route and reveals a rock field orbit missed → the route re-plans and the packing list appears → a judge walks the hallway with the phone as the suit display → the ring shrinks with every step → at a stop the phone runs the science checklist and adds to the map → past the point of no return it buzzes.
 
+**Local awards:** Best Use of Science is our main target, then Best Use of Technology (requires Azure: hosting plus the CAPCOM agent), then Art & Technology. See `docs/PITCH.md`, Local awards.
+
 ### Why this is the best solution
 
 What a crew could do today, and why each option falls short on its own:
@@ -124,7 +126,7 @@ This is why it is a tool and not a static map: the challenge allows "a tool or s
 | R4 mobility | Packing list and load plan from the route | Rules from route length, time, targets and terrain; heavy items assigned to the rover | Suit and load values from NASA studies |
 | C2 | The map grows with every walk | Walk log (photos, ground type, measured effort, markers) merged into the site files | Classifier on AI4Mars labels |
 | C6 | Buddy rover leads and carries | Reinforcement-learning policy on the same map, compared with a scripted follower; AutoNav-like loop | Same layers |
-| C1 | Habitat display and suit display | Game engine on the phone (Babylon.js or Unity) | |
+| C1 | Habitat display, tablet minimap and helmet HUD | One three.js web app with three views | |
 | Ground truth | What the crew sees corrects the map | Terrain classifier on photos (soil, bedrock, sand, big rock) | AI4Mars labels; rover images |
 | Delay | Mission control answers late, so the crew decides | Microsoft Foundry agent with a 20-second demo delay (Azure track) | |
 
@@ -183,14 +185,14 @@ This is six NASA missions or programs in one hyperlocal view, three more data ty
 - **Data pipeline (Python):** reads the NASA layers for the site and writes the shared files (`docs/CONTRACTS.md`), including the cost of walking home from every cell.
 - **Models (Python, exported to ONNX):** terrain classifier; buddy rover policy.
 - **App (game engine on the phone):** draws the layers in 3D, plans and follows the route, runs the ring and the science checklist. **Decision from the critique (`docs/CRITIQUE.md`): web, with three.js.** One app is the game, the habitat display, the suit display and the public viewer that anyone can open from a QR code. Unity would need a second codebase for the viewer.
-- **CAPCOM agent (Microsoft Foundry):** explains the layers and the plan, with a delay. Also our Azure-track piece.
+- **CAPCOM agent (Microsoft Foundry):** explains the layers and the plan, with a delay. With Azure hosting, it makes us eligible for Best Use of Technology. Built by Jules.
 
-| | **A. Babylon.js (web game engine), TypeScript** | **B. Unity 6, C#** |
-|---|---|---|
-| Runs on the phone | In the browser from a QR code; judges can open it | Native app (Android APK; iPhone through Xcode) |
-| On-device ML | onnxruntime-web | Unity Inference Engine (formerly Sentis) |
-| Deploy | Minutes (Azure Static Web Apps) | Build times, phone signing |
-| Risk in 26 hours | Low | Medium to high without prior Unity mobile experience |
+| Piece | Stack |
+|---|---|
+| App | three.js web app, served from Azure Static Web Apps; opens on any phone from a link or QR code |
+| On-device ML | onnxruntime-web, in the browser |
+| CAPCOM | Microsoft Foundry agent (Azure) |
+| Pipeline and models | Python; models exported to ONNX |
 
 | Piece | Type | If it fails |
 |---|---|---|

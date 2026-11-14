@@ -1,4 +1,6 @@
-# data/ (Person 3: terrain pipeline and world files)
+# data/ (Galsan, Person 3: pipeline and world files)
+
+Your blocks and their order: `docs/BUILD.md`, lane P3.
 
 Applies to everything under `data/`. The root `AGENTS.md` still applies.
 

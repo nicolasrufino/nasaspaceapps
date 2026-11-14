@@ -1,30 +1,40 @@
-# Person 1: Machine learning (only ML)
+# Person 1: Machine learning (Jules)
 
-**Mission:** computer vision and models on real NASA data. **First: rock detection on full-resolution HiRISE images** (the shadow method NASA used to check landing sites), aggregated into `rocks_fine.u8` for the site. Second: the AI4Mars ground classifier for rover photos. Stretch: the RL buddy rover. Other people integrate your outputs.
+**Who:** Jules (GitHub `julesrumeautennis-cmd`). Lane P1 in `docs/BUILD.md`.
 
-**Owns:** `ml/` (training code, notebooks, `ml/exports/`).
-**Reads:** world files in `data/worlds/` (see `docs/CONTRACTS.md` §1).
-**Writes:** `ml/exports/terrain_cls.onnx`, `ml/exports/buddy_policy.onnx`, and a `.json` next to each with metrics (contract §2).
+**Mission:** turn NASA images into hazard data, and prove it works. First: rocks found from their shadows in full-resolution HiRISE images (the method NASA used to check landing sites). Second: a ground classifier for rover photos. Overnight: the CAPCOM agent on Azure and the proof numbers. Stretch: the RL buddy rover.
 
-## Foundation (do first)
-1. **11:30–12:30** Python env: `torch`, `gymnasium`, `stable-baselines3`, `onnx`, `onnxruntime`. Load `data/worlds/synthetic/` into a 2D grid env (`ml/buddy_rover/env.py`) that matches the observation in contract §2. A random policy runs without errors.
-2. **12:30–14:00** Export a **trivial** `buddy_policy.onnx` (for example, an untrained network with the right input and output shapes) and push it. This unblocks Person 2 immediately: they can wire the model before it is good.
-3. **12:30–14:00, in parallel** Check the AI4Mars dataset size before downloading (Zenodo / data.nasa.gov). Take a subset if it is large. If the download is too slow, hand-label about 200 patches from Perseverance raw images (listed by NASA) and say so on the data slide.
+**Owns:** `ml/` and `agent/`.
+**Reads:** world files in `data/worlds/` (`docs/CONTRACTS.md` §1).
+**Writes:** `rocks_fine.u8` for Galsan's world folder, `ml/exports/terrain_cls.onnx`, `ml/exports/buddy_policy.onnx`, a metrics `.json` next to each (contract §2), and the CAPCOM service (contract §4).
 
-## Features (in this order)
-4. **By 16:00** `terrain_cls.onnx` v1: MobileNetV3-small or ResNet18 fine-tuned on 128×128 patches, 5 classes. Report held-out accuracy and a confusion matrix.
-5. **By 21:00** Buddy rover trained with PPO on the synthetic world, then on the real Mars world when Person 3 exports it. Reward: lead the astronaut by 2–6 cells along low-cost cells, scout ahead, head home under 35% energy, large penalty for steep cells. The rover is LTV-class (it can move several cells per astronaut step); see `docs/RESEARCH.md` §7 and §10. Compare against the scripted follower (same metric) so the RL is shown against a baseline.
-6. **Overnight** Retrain on the real world with randomized start points; record a short clip of the policy for the pitch; write the numbers in `ml/exports/*.json`.
-7. **Stretch** Classify the real Mars tile's terrain from orbital or rover images and hand Person 3 a `terrain_class.u8` layer.
+## Your blocks, in order
+
+| Block | When | What | Needs | Issue |
+|---|---|---|---|---|
+| R1 Rock detector v0 | M0 | Shadow-based rock detection on one downloaded 25 cm USGS tile of Gale; hand-check 50 rocks | nothing | #31 |
+| R2 Placeholder models | M0 | Shape-correct `terrain_cls.onnx` and `buddy_policy.onnx` plus `ml/check_exports.py`, so Nicolas can load models now | nothing | #5 |
+| R3 Rocks for our slice | M1 | Run the detector on Galsan's slice, write `rocks_fine.u8`, report agreement with the hand-checked rocks | R1, D1 | #31 |
+| R4 Ground classifier | M2 | MobileNetV3-small or ResNet18 on 128×128 AI4Mars patches (soil, bedrock, sand, big rock); held-out accuracy and confusion matrix; tested on Perseverance photos | R2 | #6 |
+| R7 CAPCOM agent on Azure | Overnight | Microsoft Foundry agent with tools `get_state`, `explain_ring`, `nearest_safe_point`; replies delayed 20 s; every tool call logged. **Required for the Best Use of Technology award** | E2 | #42 |
+| R5 Numbers for the pitch | Overnight | Rocks avoided by the scouted route versus orbit only; margin home along the route; ring change if energy is off by ±30% | R3, D4 | #15 |
+| R6 Buddy rover RL (stretch) | Overnight | Grid env (27-value observation, contract §2) and PPO "lead" policy, compared with the scripted rover | R2, D2 | #4, #7 |
+| F1 Numbers into the slides | Freeze | Final numbers on the proof slide | R5 | #45 |
+
+**Tips:**
+- Check the AI4Mars download size first; take a subset if it is large.
+- For the rover, train on the grid state, not pixels: fast on a laptop. Reward: lead the astronaut by 2–6 cells on low-cost cells, head home under 35% energy, big penalty for steep cells.
+- Azure keys live in environment variables or `.env`, never in the repo.
 
 ## Done when
-- Both ONNX files load in `onnxruntime` with the contract shapes (`python ml/check_exports.py` passes).
-- Each has a metrics JSON with a held-out number and the data source.
+- `python ml/check_exports.py` passes; each ONNX file has a metrics JSON with a held-out number and its data source.
+- `rocks_fine.u8` is in the real world folder, with the agreement number written to a file.
+- CAPCOM answers late in the demo, and the app works if it is down.
 
 ## Don't
 - Don't change contract shapes without a PR to `docs/CONTRACTS.md`.
-- Don't block on the engine choice: ONNX works in both.
-- Don't train on pixels for the rover; train on the grid state (fast on a laptop).
+- Don't train a classifier on images our own engine rendered; it only learns our textures.
+- Don't put a number in the pitch that a script in this repo didn't write.
 
 ## Agent brief (paste into your coding agent)
-> You are helping Person 1 (machine learning) on Martian Map, a NASA Space Apps project. Read `AGENTS.md`, `docs/PLAN.md` and `docs/CONTRACTS.md` first. Work only inside `ml/`. Goals in order: (1) a Gymnasium grid env that loads `data/worlds/<name>/` and produces the 27-value observation in CONTRACTS §2; (2) export a shape-correct `ml/exports/buddy_policy.onnx` immediately, even untrained; (3) a terrain classifier (5 AI4Mars classes, 128×128 RGB input) exported to `ml/exports/terrain_cls.onnx` with held-out accuracy in `terrain_cls.json`; (4) PPO training for the buddy rover with the reward in `docs/roles/person-1-ml.md`, compared against a scripted follower. Add `ml/check_exports.py` that loads both ONNX files with onnxruntime and asserts the contract shapes. Never change contract shapes without editing CONTRACTS.md in the same PR. Commit small, working steps.
+> You are helping Jules (Person 1, machine learning) on Martian Map, a NASA Space Apps project. Read `AGENTS.md`, `docs/PRODUCT.md`, `docs/BUILD.md` (lane P1) and `docs/CONTRACTS.md` first. Work inside `ml/` and `agent/`. Do the P1 blocks in order: (R1) shadow-based rock detection on a 25 cm USGS HiRISE tile of Gale, with a hand-checked sample; (R2) shape-correct placeholder `ml/exports/terrain_cls.onnx` and `buddy_policy.onnx` plus `ml/check_exports.py`; (R3) `rocks_fine.u8` for the real world folder with an agreement number; (R4) an AI4Mars ground classifier exported to ONNX with held-out accuracy in `terrain_cls.json`; (R7) a CAPCOM service in `agent/` per CONTRACTS §4 on Microsoft Foundry, replies delayed by `delay_s`, every tool call logged, keys from the environment. Never change contract shapes without editing CONTRACTS.md in the same PR. One issue per session; small, working commits; numbers only from code you ran.
