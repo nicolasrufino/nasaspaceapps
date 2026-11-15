@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # One-time GitHub setup. Run after the repo exists on GitHub and CI has run once.
+# Protects main (official submission) and dev (team test branch) with the same rules.
 #   ./scripts/protect-main.sh            -> requires "ci"
 #   ./scripts/protect-main.sh ci Vercel  -> also requires the Vercel preview deploy (CD)
 # Note: rulesets on PRIVATE repos need GitHub Pro/Team. Public repos are free.
@@ -23,7 +24,7 @@ body=$(cat <<JSON
   "name": "protect-main",
   "target": "branch",
   "enforcement": "active",
-  "conditions": {"ref_name": {"include": ["~DEFAULT_BRANCH"], "exclude": []}},
+  "conditions": {"ref_name": {"include": ["~DEFAULT_BRANCH", "refs/heads/dev"], "exclude": []}},
   "rules": [
     {"type": "deletion"},
     {"type": "non_fast_forward"},

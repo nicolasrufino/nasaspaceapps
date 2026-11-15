@@ -25,6 +25,10 @@
       .warn { color: #ff8a6a; }
       .warn:empty { display: none; }
       #map { cursor: crosshair; }
+      #whyTable { border-collapse: collapse; width: 100%; }
+      #whyTable th, #whyTable td { text-align: left; padding: 1px 6px 1px 0; font-weight: normal; }
+      #whyTable th { color: #f3e6d8; }
+      #whyNotes { margin: 4px 0; padding-left: 1.1em; }
       #detail p { margin: 4px 0; }
       #detail figure { margin: 6px 0 0; }
       #detail img { width: 100%; border-radius: 4px; }
@@ -59,9 +63,16 @@
         <div id="dropped" class="warn"></div>
         <div id="targets"></div>
         <small class="src">Tick the stops for this walk. Tap the minimap to add your own stop.</small>
+        <div id="whyBox" hidden>
+          <h2>Why this route</h2>
+          <table id="whyTable" class="src"></table>
+          <ul id="whyNotes" class="src"></ul>
+        </div>
         <div id="scoutBox" hidden>
           <h2>Scout</h2>
-          <button id="scout">Send the helicopter</button>
+          <div class="row">
+            <button id="scout">Fly the route</button>
+          </div>
           <p id="scoutStatus" class="src" aria-live="polite"></p>
         </div>
         <div id="detail" aria-live="polite"></div>

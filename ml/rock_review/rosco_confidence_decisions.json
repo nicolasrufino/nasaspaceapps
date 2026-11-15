@@ -1,0 +1,52 @@
+{
+  "status": "reviewed_with_uncertainty",
+  "reviewer": "Jules Rumeau",
+  "review_date_local": "2026-11-14",
+  "timezone": "America/Chicago",
+  "candidate_file": "rosco_confidence_review.json",
+  "candidate_file_sha256": "c145726b5a9f9723b9ae01fdd21b83b2a2355f4501e2eaa6671232a6195deb3e",
+  "source_pixel_sha256": "a1b7b945e5eacfd094f57a0206bc093280c0662fd4378a8a8ec907817beb8b36",
+  "sheet_sha256": {
+    "review_1.png": "3405d0451877eea72e06ca014a1d42bbd3720953c3f087d894751370070db8a3",
+    "review_2.png": "b01b6bfa652656bb8d33d9e7b0184f8cd49964e7def83e034f1023ad78b691a6"
+  },
+  "question": "Is there an isolated rock with a neighboring shadow? Yes / no / uncertain; reject ridges or depressions. Original pixels at left; model rock and shadow markers at right.",
+  "reviews": [
+    {
+      "user_response_verbatim": "Image 1, oui, rocher. Image 2, incertain. Je dirais plutôt crête. Image 3, oui, rocher, certain. Image 4, oui, rocher, certain. Image 5, oui, rocher, certain. Image 6, oui, rocher, certain.",
+      "decisions": [
+        {
+          "id": "H01",
+          "status": "accepted",
+          "note": "User visually identifies a rock."
+        },
+        {
+          "id": "H02",
+          "status": "uncertain",
+          "note": "Explicit uncertainty; leans toward a ridge."
+        },
+        {
+          "id": "H03",
+          "status": "accepted",
+          "note": "User visually identifies a rock."
+        },
+        {
+          "id": "H04",
+          "status": "accepted",
+          "note": "User visually identifies a rock."
+        },
+        {
+          "id": "H05",
+          "status": "accepted",
+          "note": "User visually identifies a rock."
+        },
+        {
+          "id": "H06",
+          "status": "accepted",
+          "note": "User visually identifies a rock."
+        }
+      ]
+    }
+  ],
+  "scope": "Visual correspondence of six selected model proposals only. No measured boundaries, size validation, calibrated precision, recall or world hazard approval."
+}

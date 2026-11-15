@@ -1,0 +1,577 @@
+[
+  {
+    "candidate_id": "HRC00001",
+    "native_pixel": [
+      7955.89990234375,
+      616.5
+    ],
+    "nominal_world_projected_m": [
+      8144323.452740794,
+      -283650.92842969956
+    ],
+    "registered_world_projected_m": [
+      8144284.29606489,
+      -283612.88773141237
+    ],
+    "visual_status": "accepted",
+    "world_cell": [
+      246,
+      14
+    ],
+    "extrapolated": true,
+    "near_cell_boundary": false,
+    "boundary_distance_m": 2.1122685876349863
+  },
+  {
+    "candidate_id": "HRC00002",
+    "native_pixel": [
+      1338.800048828125,
+      2146.39990234375
+    ],
+    "nominal_world_projected_m": [
+      8142649.745349242,
+      -284037.8962602555
+    ],
+    "registered_world_projected_m": [
+      8142612.85380035,
+      -284007.7256878535
+    ],
+    "visual_status": "unreviewed",
+    "world_cell": [
+      37,
+      64
+    ],
+    "extrapolated": false,
+    "near_cell_boundary": true,
+    "boundary_distance_m": 0.7256878535386022
+  },
+  {
+    "candidate_id": "HRC00003",
+    "native_pixel": [
+      3443.5,
+      2410.60009765625
+    ],
+    "nominal_world_projected_m": [
+      8143182.101206529,
+      -284104.72218543914
+    ],
+    "registered_world_projected_m": [
+      8143145.493858082,
+      -284071.6921553268
+    ],
+    "visual_status": "unreviewed",
+    "world_cell": [
+      104,
+      72
+    ],
+    "extrapolated": false,
+    "near_cell_boundary": true,
+    "boundary_distance_m": 0.692155326757188
+  },
+  {
+    "candidate_id": "HRC00004",
+    "native_pixel": [
+      1326.199951171875,
+      2678.10009765625
+    ],
+    "nominal_world_projected_m": [
+      8142646.558322138,
+      -284172.3827523267
+    ],
+    "registered_world_projected_m": [
+      8142610.378658578,
+      -284141.97629450425
+    ],
+    "visual_status": "unreviewed",
+    "world_cell": [
+      37,
+      80
+    ],
+    "extrapolated": false,
+    "near_cell_boundary": true,
+    "boundary_distance_m": 1.0237054957252667
+  },
+  {
+    "candidate_id": "HRC00005",
+    "native_pixel": [
+      1258.0999755859375,
+      2798.0
+    ],
+    "nominal_world_projected_m": [
+      8142629.333339135,
+      -284202.7098377934
+    ],
+    "registered_world_projected_m": [
+      8142593.316357298,
+      -284172.3349614462
+    ],
+    "visual_status": "unreviewed",
+    "world_cell": [
+      35,
+      84
+    ],
+    "extrapolated": false,
+    "near_cell_boundary": false,
+    "boundary_distance_m": 2.3163572989469685
+  },
+  {
+    "candidate_id": "HRC00006",
+    "native_pixel": [
+      2285.10009765625,
+      3200.800048828125
+    ],
+    "nominal_world_projected_m": [
+      8142889.099359519,
+      -284304.592752358
+    ],
+    "registered_world_projected_m": [
+      8142853.587537664,
+      -284272.6926502155
+    ],
+    "visual_status": "unreviewed",
+    "world_cell": [
+      67,
+      97
+    ],
+    "extrapolated": false,
+    "near_cell_boundary": true,
+    "boundary_distance_m": 1.4124623352505523
+  },
+  {
+    "candidate_id": "HRC00007",
+    "native_pixel": [
+      1857.199951171875,
+      4603.60009765625
+    ],
+    "nominal_world_projected_m": [
+      8142780.867709119,
+      -284659.41236556746
+    ],
+    "registered_world_projected_m": [
+      8142747.247074638,
+      -284627.40259977995
+    ],
+    "visual_status": "unreviewed",
+    "world_cell": [
+      54,
+      141
+    ],
+    "extrapolated": false,
+    "near_cell_boundary": false,
+    "boundary_distance_m": 3.597400220038253
+  },
+  {
+    "candidate_id": "HRC00008",
+    "native_pixel": [
+      1840.0999755859375,
+      4867.10009765625
+    ],
+    "nominal_world_projected_m": [
+      8142776.542497747,
+      -284726.06118566036
+    ],
+    "registered_world_projected_m": [
+      8142743.275016995,
+      -284693.94862177665
+    ],
+    "visual_status": "accepted",
+    "world_cell": [
+      54,
+      149
+    ],
+    "extrapolated": false,
+    "near_cell_boundary": true,
+    "boundary_distance_m": 0.27501699640384913
+  },
+  {
+    "candidate_id": "HRC00009",
+    "native_pixel": [
+      1943.699951171875,
+      4895.2998046875
+    ],
+    "nominal_world_projected_m": [
+      8142802.746733551,
+      -284733.19392645964
+    ],
+    "registered_world_projected_m": [
+      8142769.513574456,
+      -284700.93340213224
+    ],
+    "visual_status": "unreviewed",
+    "world_cell": [
+      57,
+      150
+    ],
+    "extrapolated": false,
+    "near_cell_boundary": false,
+    "boundary_distance_m": 2.0665978677725434
+  },
+  {
+    "candidate_id": "HRC00010",
+    "native_pixel": [
+      1893.300048828125,
+      4896.2001953125
+    ],
+    "nominal_world_projected_m": [
+      8142789.998748641,
+      -284733.42166829185
+    ],
+    "registered_world_projected_m": [
+      8142756.768454491,
+      -284701.22618886345
+    ],
+    "visual_status": "unreviewed",
+    "world_cell": [
+      55,
+      150
+    ],
+    "extrapolated": false,
+    "near_cell_boundary": true,
+    "boundary_distance_m": 1.7738111365399618
+  },
+  {
+    "candidate_id": "HRC00011",
+    "native_pixel": [
+      2182.60009765625,
+      4900.5
+    ],
+    "nominal_world_projected_m": [
+      8142863.173347908,
+      -284734.5092466942
+    ],
+    "registered_world_projected_m": [
+      8142829.939278056,
+      -284701.9359116486
+    ],
+    "visual_status": "unreviewed",
+    "world_cell": [
+      64,
+      150
+    ],
+    "extrapolated": false,
+    "near_cell_boundary": true,
+    "boundary_distance_m": 1.0607219427089376
+  },
+  {
+    "candidate_id": "HRC00012",
+    "native_pixel": [
+      2199.5,
+      5049.2001953125
+    ],
+    "nominal_world_projected_m": [
+      8142867.447953415,
+      -284772.1209831845
+    ],
+    "registered_world_projected_m": [
+      8142834.4123032605,
+      -284739.45514672063
+    ],
+    "visual_status": "unreviewed",
+    "world_cell": [
+      65,
+      155
+    ],
+    "extrapolated": false,
+    "near_cell_boundary": false,
+    "boundary_distance_m": 3.4123032610966675
+  },
+  {
+    "candidate_id": "HRC00013",
+    "native_pixel": [
+      2143.60009765625,
+      5064.7998046875
+    ],
+    "nominal_world_projected_m": [
+      8142853.308816661,
+      -284776.0666968799
+    ],
+    "registered_world_projected_m": [
+      8142820.2958817035,
+      -284743.46607637376
+    ],
+    "visual_status": "unreviewed",
+    "world_cell": [
+      63,
+      156
+    ],
+    "extrapolated": false,
+    "near_cell_boundary": true,
+    "boundary_distance_m": 0.46607637375723243
+  },
+  {
+    "candidate_id": "HRC00014",
+    "native_pixel": [
+      1900.199951171875,
+      5089.0
+    ],
+    "nominal_world_projected_m": [
+      8142791.743987161,
+      -284782.1878143888
+    ],
+    "registered_world_projected_m": [
+      8142758.771451973,
+      -284749.8919019566
+    ],
+    "visual_status": "unreviewed",
+    "world_cell": [
+      55,
+      156
+    ],
+    "extrapolated": false,
+    "near_cell_boundary": true,
+    "boundary_distance_m": 0.2285480253311789
+  },
+  {
+    "candidate_id": "HRC00015",
+    "native_pixel": [
+      1844.699951171875,
+      5109.10009765625
+    ],
+    "nominal_world_projected_m": [
+      8142777.706000385,
+      -284787.27186673245
+    ],
+    "registered_world_projected_m": [
+      8142744.762189345,
+      -284755.03851560544
+    ],
+    "visual_status": "accepted",
+    "world_cell": [
+      54,
+      157
+    ],
+    "extrapolated": false,
+    "near_cell_boundary": true,
+    "boundary_distance_m": 1.7621893461670197
+  },
+  {
+    "candidate_id": "HRC00016",
+    "native_pixel": [
+      1862.0,
+      5116.7998046875
+    ],
+    "nominal_world_projected_m": [
+      8142782.081817623,
+      -284789.2194052095
+    ],
+    "registered_world_projected_m": [
+      8142749.147739746,
+      -284756.9599274691
+    ],
+    "visual_status": "unreviewed",
+    "world_cell": [
+      54,
+      157
+    ],
+    "extrapolated": false,
+    "near_cell_boundary": true,
+    "boundary_distance_m": 1.852260253067243
+  },
+  {
+    "candidate_id": "HRC00017",
+    "native_pixel": [
+      2048.0,
+      5117.10009765625
+    ],
+    "nominal_world_projected_m": [
+      8142829.1280435715,
+      -284789.29536032164
+    ],
+    "registered_world_projected_m": [
+      8142796.188240842,
+      -284756.7941165309
+    ],
+    "visual_status": "unreviewed",
+    "world_cell": [
+      60,
+      157
+    ],
+    "extrapolated": false,
+    "near_cell_boundary": false,
+    "boundary_distance_m": 2.205883469070841
+  },
+  {
+    "candidate_id": "HRC00018",
+    "native_pixel": [
+      2170.0,
+      5148.10009765625
+    ],
+    "nominal_world_projected_m": [
+      8142859.986320805,
+      -284797.13639797963
+    ],
+    "registered_world_projected_m": [
+      8142827.083980734,
+      -284764.4619626274
+    ],
+    "visual_status": "accepted",
+    "world_cell": [
+      64,
+      158
+    ],
+    "extrapolated": false,
+    "near_cell_boundary": false,
+    "boundary_distance_m": 2.538037372565441
+  },
+  {
+    "candidate_id": "HRC00019",
+    "native_pixel": [
+      1982.5999755859375,
+      5169.89990234375
+    ],
+    "nominal_world_projected_m": [
+      8142812.585977304,
+      -284802.65036860836
+    ],
+    "registered_world_projected_m": [
+      8142779.718980436,
+      -284770.2090330996
+    ],
+    "visual_status": "accepted",
+    "world_cell": [
+      58,
+      159
+    ],
+    "extrapolated": false,
+    "near_cell_boundary": false,
+    "boundary_distance_m": 3.209033099557473
+  },
+  {
+    "candidate_id": "HRC00020",
+    "native_pixel": [
+      1820.0,
+      5172.2001953125
+    ],
+    "nominal_world_projected_m": [
+      8142771.458476279,
+      -284803.23219711776
+    ],
+    "registered_world_projected_m": [
+      8142738.599913344,
+      -284771.0009960306
+    ],
+    "visual_status": "unreviewed",
+    "world_cell": [
+      53,
+      159
+    ],
+    "extrapolated": false,
+    "near_cell_boundary": false,
+    "boundary_distance_m": 3.5999133442587663
+  },
+  {
+    "candidate_id": "HRC00021",
+    "native_pixel": [
+      2359.0,
+      5379.7998046875
+    ],
+    "nominal_world_projected_m": [
+      8142907.7913568495,
+      -284855.7417569531
+    ],
+    "registered_world_projected_m": [
+      8142875.192829651,
+      -284822.7118759755
+    ],
+    "visual_status": "unreviewed",
+    "world_cell": [
+      70,
+      165
+    ],
+    "extrapolated": false,
+    "near_cell_boundary": true,
+    "boundary_distance_m": 0.2881240245023946
+  },
+  {
+    "candidate_id": "HRC00022",
+    "native_pixel": [
+      5266.2001953125,
+      5743.0
+    ],
+    "nominal_world_projected_m": [
+      8143643.128976552,
+      -284947.60841530265
+    ],
+    "registered_world_projected_m": [
+      8143610.920688469,
+      -284910.62961905455
+    ],
+    "visual_status": "unreviewed",
+    "world_cell": [
+      162,
+      176
+    ],
+    "extrapolated": false,
+    "near_cell_boundary": true,
+    "boundary_distance_m": 0.3703809454182192
+  },
+  {
+    "candidate_id": "HRC00023",
+    "native_pixel": [
+      5508.60009765625,
+      6279.7998046875
+    ],
+    "nominal_world_projected_m": [
+      8143704.440807601,
+      -285083.38478573353
+    ],
+    "registered_world_projected_m": [
+      8143672.942829184,
+      -285045.83642652835
+    ],
+    "visual_status": "unreviewed",
+    "world_cell": [
+      170,
+      193
+    ],
+    "extrapolated": false,
+    "near_cell_boundary": true,
+    "boundary_distance_m": 1.1635734716285242
+  },
+  {
+    "candidate_id": "HRC00024",
+    "native_pixel": [
+      2887.60009765625,
+      6899.7998046875
+    ],
+    "nominal_world_projected_m": [
+      8143041.493720454,
+      -285240.20553889335
+    ],
+    "registered_world_projected_m": [
+      8143010.911700107,
+      -285205.7678482054
+    ],
+    "visual_status": "uncertain",
+    "world_cell": [
+      87,
+      213
+    ],
+    "extrapolated": false,
+    "near_cell_boundary": true,
+    "boundary_distance_m": 1.2321517946106724
+  },
+  {
+    "candidate_id": "HRC00025",
+    "native_pixel": [
+      5952.5,
+      8034.2998046875
+    ],
+    "nominal_world_projected_m": [
+      8143816.719383429,
+      -285527.16222350596
+    ],
+    "registered_world_projected_m": [
+      8143787.554487263,
+      -285488.2048310819
+    ],
+    "visual_status": "unreviewed",
+    "world_cell": [
+      184,
+      249
+    ],
+    "extrapolated": true,
+    "near_cell_boundary": true,
+    "boundary_distance_m": 1.2048310819011476
+  }
+]

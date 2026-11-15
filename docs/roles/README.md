@@ -25,7 +25,7 @@ Everyone touches the core: the world files, the walk and the demo. But each pers
 | **Why** | Training and vision bugs look like working code, so each answer needs thinking and checking | The most blocks (8), mostly independent screens and features: ideal for parallel agents, one per worktree | One bad call on a shared file format blocks everyone | Drafts of the pitch, page and HUD look; the numbers come only from the repo |
 | **Watch out for** | Never accept a metric you didn't run yourself | Keep one feature per session so contexts stay small | Run "status" about once an hour, not after every commit | Never let AI invent a number or a NASA claim |
 
-**Most needed overall:** Person 2. The demo lives in the app, and the drone scout block waits on two other blocks, so it is the tightest lane. Person 3 comes next: real data unlocks targets, the scout plan and the pitch numbers.
+**Most needed overall:** Person 2. The demo lives in the app, and the helicopter scout block waits on two other blocks, so it is the tightest lane. Person 3 comes next: real data unlocks targets, the scout plan and the pitch numbers.
 
 ## Person 1 · Jules · Machine learning
 
@@ -37,7 +37,7 @@ Everyone touches the core: the world files, the walk and the demo. But each pers
 
 ## Person 2 · Nicolas · App and 3D
 
-- **Primary focus:** the thing people see and hold: the 3D view, minimap, plan mode, walk, drone scout and stops.
+- **Primary focus:** the thing people see and hold: the 3D view, minimap, plan mode, walk, helicopter scout and stops.
 - **Leans toward:** JavaScript, three.js, UI, phones and touch, fast iteration.
 - **Needs to know a little about:** what each world file means, what the ring is computing, and the flags system.
 - **Good fit if you:** are the strongest web or game developer, and like shipping something visible every hour.
@@ -45,7 +45,7 @@ Everyone touches the core: the world files, the walk and the demo. But each pers
 
 ## Person 3 · Galsan · Data, systems and integration (lead)
 
-- **Primary focus:** the foundation everyone builds on: the real Gale slice, all eight data types, the cost and way-home maths, the drone's flight plan, deployment, and keeping the pieces fitting together.
+- **Primary focus:** the foundation everyone builds on: the real Gale slice, all eight data types, the cost and way-home maths, the helicopter's flight plan, deployment, and keeping the pieces fitting together.
 - **Leans toward:** system design, Python scripts, GIS data (elevation models, images, coordinates), reading NASA papers, Git discipline.
 - **Needs to know a little about:** how the app and models read the files, and what the pitch claims, so every claim has data behind it.
 - **Good fit if you:** think in systems, are careful, and can say no to scope creep. This person runs the orchestrator and merges.

@@ -1,0 +1,7 @@
+# Review links hash exact bytes; keep these new artifacts stable on Windows.
+rosco_*.json text eol=lf
+single_observation_source.json text eol=lf
+registration_*.json text eol=lf
+registered_candidates.json text eol=lf
+r3_*.json text eol=lf
+final_site_*.json text eol=lf

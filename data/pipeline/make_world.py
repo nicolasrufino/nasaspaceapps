@@ -56,9 +56,10 @@ def synthetic_classes(n, height, seed=7):
     return out
 
 
-def build(n, cell, base, energy_budget_j, blocked=None):
-    h = synthetic_height(n, cell)
-    cls = synthetic_classes(n, h)
+def build(n, cell, base, energy_budget_j, blocked=None, h=None, cls=None):
+    """Slope, walking cost and cost home. h / cls: real height and classes (row-major, n*n); default synthetic."""
+    h = synthetic_height(n, cell) if h is None else h
+    cls = synthetic_classes(n, h) if cls is None else cls
     slope = array.array('f', [0.0]) * (n * n)
     for y in range(n):
         for x in range(n):
@@ -99,7 +100,7 @@ def build(n, cell, base, energy_budget_j, blocked=None):
 
 
 def synthetic_rocks(n, base, seed=7):
-    """Fine-scale rock fields orbit misses and a scout drone would reveal (1 = rock field)."""
+    """Fine-scale rock fields orbit misses and a scout helicopter would reveal (1 = rock field)."""
     rnd = random.Random(seed + 2)
     rocks = array.array('B', [0]) * (n * n)
     for _ in range(14):
@@ -143,7 +144,8 @@ def synthetic_targets(n, ctg, base):
     return targets, route
 
 
-def write(out, n, cell, base, budget, h, slope, cls, cost_per_m, ctg):
+def write(out, n, cell, base, budget, h, slope, cls, cost_per_m, ctg, site=None):
+    """Write a world. site (real sites): dict with meta, targets, stops, route, rocks, extra_files."""
     os.makedirs(out, exist_ok=True)
     big = 3.0e38  # unreachable cells: float32-safe "infinity"
     layers = [('height.f32', h, 'f'), ('slope.f32', slope, 'f'), ('terrain_class.u8', cls, 'B'),
@@ -162,17 +164,24 @@ def write(out, n, cell, base, budget, h, slope, cls, cost_per_m, ctg):
         'files': {'height': 'height.f32', 'slope': 'slope.f32', 'terrain_class': 'terrain_class.u8',
                   'cost_per_m': 'cost_per_m.f32', 'cost_to_go': 'cost_to_go.f32'},
     }
-    targets, route = synthetic_targets(n, ctg, base)
-    # what the scout drone reveals: hidden rock fields, and the way home once they are known
-    rocks = synthetic_rocks(n, base)
-    ctg_scouted = build(n, cell, base, budget, blocked=rocks)[-1]
+    if site:
+        meta.update(site['meta'])
+        targets, route, rocks, stops = site['targets'], site['route'], site['rocks'], site['stops']
+    else:
+        targets, route = synthetic_targets(n, ctg, base)
+        rocks, stops = synthetic_rocks(n, base), []  # what the scout helicopter reveals: hidden rock fields
+    # the way home once the helicopter has revealed the rocks
+    ctg_scouted = build(n, cell, base, budget, blocked=rocks, h=h, cls=cls)[-1]
     with open(os.path.join(out, 'rocks_fine.u8'), 'wb') as f:
         rocks.tofile(f)
     with open(os.path.join(out, 'cost_to_go_scouted.f32'), 'wb') as f:
         array.array('f', [min(v, big) for v in ctg_scouted]).tofile(f)
     meta['files'].update({'rocks_fine': 'rocks_fine.u8', 'cost_to_go_scouted': 'cost_to_go_scouted.f32'})
     meta['layers'] += ['rocks_fine']
-    for name, obj in [('targets.json', targets), ('stops.json', []), ('route.json', route)]:
+    for name, data, code in (site or {}).get('extra_files', []):  # optional layers (THEMIS, science, ...)
+        with open(os.path.join(out, name), 'wb') as f:
+            array.array(code, data).tofile(f)
+    for name, obj in [('targets.json', targets), ('stops.json', stops), ('route.json', route)]:
         with open(os.path.join(out, name), 'w') as f:
             json.dump(obj, f, indent=1)
     with open(os.path.join(out, 'world.json'), 'w') as f:

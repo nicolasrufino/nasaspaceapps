@@ -1,0 +1,123 @@
+{
+  "schema": "martian-map-final-site-decisions-v1",
+  "candidate_file": "final_site_candidates.json",
+  "candidate_file_sha256": "59b2517d9677d436bff3fa7b171b0c9d859c056bdc0e13d853f0f75ce5d574f1",
+  "source_rgb_pixel_sha256": "7594cf078e70af1684b0b9bfafb47f27adb381abdba1aeb50c4af8363d1f6949",
+  "review_status": "reviewed_with_uncertainty",
+  "missing_decision_status": "unreviewed",
+  "scope": "User assessment of visible isolated-rock correspondence on the final Gale site. Decisions do not validate shadows, contours, heights, missed rocks or navigation safety. Original accepted locations and S-prefixed reviews are separate.",
+  "reviews": [
+    {
+      "reviewer": "Jules Rumeau",
+      "date": "2026-11-14",
+      "timezone": "America/Chicago",
+      "sheet": "final_site_details_1.png",
+      "sheet_sha256": "5f03120086c2cf8a2b0c4985b2e0894d164f7f830efef506d4e35ae0f1002ee7",
+      "question": "Pour terminer la validation des rochers sur le nouveau site de Luca : sur cette planche G01–G10, quels identifiants montrent clairement un rocher isolé ? L’image brute est à gauche, le repère à droite. Tu peux répondre « incertain » si c’est illisible ; les 50 anciens emplacements restent validés.",
+      "user_statement": "Pour l'image 1, je suis incertain, mais je pense que oui. Pour l'image 2, oui, je suis sûr. Pour l'image 3, incertain. L'image 4, oui. L'image 5, oui. L'image 6, oui. L'image 7, je suis pas sûr. Image 8, je suis pas sûr. Image 9, je dirais non, et image 10, oui.",
+      "decisions": [
+        {"id": "G01", "status": "uncertain", "note": "Tentative yes; user explicitly remains uncertain."},
+        {"id": "G02", "status": "accepted", "note": "User explicitly says yes and certain."},
+        {"id": "G03", "status": "uncertain"},
+        {"id": "G04", "status": "accepted"},
+        {"id": "G05", "status": "accepted"},
+        {"id": "G06", "status": "accepted"},
+        {"id": "G07", "status": "uncertain"},
+        {"id": "G08", "status": "uncertain"},
+        {"id": "G09", "status": "rejected", "note": "Tentative no: je dirais non."},
+        {"id": "G10", "status": "accepted"}
+      ]
+    },
+    {
+      "reviewer": "Jules Rumeau",
+      "date": "2026-11-14",
+      "timezone": "America/Chicago",
+      "sheet": "final_site_details_2.png",
+      "sheet_sha256": "1424a4c7c7fe75f74a6807a985f962c663ef10e6d83a1fc6cb0053842ecb4670",
+      "question": "Sur la nouvelle planche G11–G20 affichée ci-dessus, lesquels correspondent à un rocher isolé ? Réponds « oui », « non » ou « incertain » par identifiant ; laisse incertains les détails trop flous. Image brute à gauche, repère à droite.",
+      "user_statement": "Yeah, localhost. I don't know if that just says...   Image 11, oui. C'est certain. Image 12, c'est certain. Image 13, c'est certain. Image 14, c'est certain. Image 15, c'est certain. Image C, c'est certain. Image 17, oui. Image 18, incertain. Image 19, oui. Image 20, not sure. I don't think I could.",
+      "clarifications": [
+        {
+          "question": "Quand tu dis « Image C, c’est certain », parles-tu de G16, entre G15 et G17 ?",
+          "user_statement": "Oui, G16 est accepté",
+          "resolves_id": "G16"
+        }
+      ],
+      "decisions": [
+        {"id": "G11", "status": "accepted", "note": "User explicitly says certain."},
+        {"id": "G12", "status": "accepted", "note": "User explicitly says certain."},
+        {"id": "G13", "status": "accepted", "note": "User explicitly says certain."},
+        {"id": "G14", "status": "accepted", "note": "User explicitly says certain."},
+        {"id": "G15", "status": "accepted", "note": "User explicitly says certain."},
+        {"id": "G16", "status": "accepted", "note": "Ambiguous Image C reference explicitly clarified by the user as G16 accepted."},
+        {"id": "G17", "status": "accepted"},
+        {"id": "G18", "status": "uncertain"},
+        {"id": "G19", "status": "accepted"},
+        {"id": "G20", "status": "uncertain"}
+      ]
+    },
+    {
+      "reviewer": "Jules Rumeau",
+      "date": "2026-11-14",
+      "timezone": "America/Chicago",
+      "sheet": "final_site_details_3.png",
+      "sheet_sha256": "38badd0cc0f332eb696fe8ec7a0d0e741093e0f773acb676737927d6bcfe2f3f",
+      "question": "Pour poursuivre R1/R3, quels repères de la planche G21–G30 correspondent à un rocher isolé ? Réponds « oui », « non » ou « incertain » par identifiant. Laisse incertains les détails trop flous.",
+      "user_statement": "L'image 1. L'image 21 oui. L'image 22, je suis pas sûr. Image 3 non. Image 4. D'accord. Image 24, je suis pas sûr, incertain. Image 25 incertain. Image 26 incertain. Image 27 incertain. Image 28 certain. Image 29 certain. Image 30 certain.",
+      "decisions": [
+        {"id": "G21", "status": "accepted"},
+        {"id": "G22", "status": "uncertain"},
+        {"id": "G23", "status": "rejected", "note": "Image 3 is interpreted as G23, the third candidate on this sheet, between the explicit G22 and G24 judgments; this interpretation was stated to the user."},
+        {"id": "G24", "status": "uncertain", "note": "Uses the user's explicit Image 24 uncertain statement after the preceding speech fragment."},
+        {"id": "G25", "status": "uncertain"},
+        {"id": "G26", "status": "uncertain"},
+        {"id": "G27", "status": "uncertain"},
+        {"id": "G28", "status": "accepted", "note": "User explicitly says certain."},
+        {"id": "G29", "status": "accepted", "note": "User explicitly says certain."},
+        {"id": "G30", "status": "accepted", "note": "User explicitly says certain."}
+      ]
+    },
+    {
+      "reviewer": "Jules Rumeau",
+      "date": "2026-11-14",
+      "timezone": "America/Chicago",
+      "sheet": "final_site_details_4.png",
+      "sheet_sha256": "174f2a362c2406899c54a158d0e34af82751e935590bc457da838634cf0660bc",
+      "question": "Sur la planche G31–G40 affichée ci-dessus, lesquels correspondent à un rocher isolé ? Donne « oui », « non » ou « incertain » pour chaque numéro de 31 à 40. Les détails trop flous peuvent rester incertains.",
+      "user_statement": "G 31. Non. G 32, oui. G 34. Oui. G 33, oui. G 35, incertain. G 36, oui. G 37, oui. G 38, oui. G 39, oui. G 40, oui.",
+      "decisions": [
+        {"id": "G31", "status": "rejected"},
+        {"id": "G32", "status": "accepted"},
+        {"id": "G33", "status": "accepted"},
+        {"id": "G34", "status": "accepted"},
+        {"id": "G35", "status": "uncertain"},
+        {"id": "G36", "status": "accepted"},
+        {"id": "G37", "status": "accepted"},
+        {"id": "G38", "status": "accepted"},
+        {"id": "G39", "status": "accepted"},
+        {"id": "G40", "status": "accepted"}
+      ]
+    },
+    {
+      "reviewer": "Jules Rumeau",
+      "date": "2026-11-14",
+      "timezone": "America/Chicago",
+      "sheet": "final_site_details_5.png",
+      "sheet_sha256": "f6a400270d7533df9379ca35cadea759c63dee9468d6ce02f89fa4e4cf14af2b",
+      "question": "Dernière planche : parmi G41–G50, quels repères correspondent à un rocher isolé ? Donne « oui », « non » ou « incertain » pour chaque numéro de 41 à 50. Les cas trop flous peuvent rester incertains.",
+      "user_statement": "41, incertain, 42 incertain, 43 incertain, 44 oui, 45 incertain, 46 oui, 47 oui, 48 oui, 49 oui, 50 oui.",
+      "decisions": [
+        {"id": "G41", "status": "uncertain"},
+        {"id": "G42", "status": "uncertain"},
+        {"id": "G43", "status": "uncertain"},
+        {"id": "G44", "status": "accepted"},
+        {"id": "G45", "status": "uncertain"},
+        {"id": "G46", "status": "accepted"},
+        {"id": "G47", "status": "accepted"},
+        {"id": "G48", "status": "accepted"},
+        {"id": "G49", "status": "accepted"},
+        {"id": "G50", "status": "accepted"}
+      ]
+    }
+  ]
+}

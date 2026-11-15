@@ -1,0 +1,100 @@
+{
+  "method": "NASA/JPL ROSCO native rock detector; single-observation development run",
+  "source": {
+    "observation": "ESP_019698_1750",
+    "source_url": "https://hirise-pds.lpl.arizona.edu/PDS/DTM/ESP/ORB_019600_019699/ESP_019698_1750_ESP_019988_1750/ESP_019698_1750_RED_A_01_ORTHO.JP2",
+    "credit": "NASA/JPL-Caltech/University of Arizona",
+    "source_window": [
+      12535,
+      12565,
+      8097,
+      8098
+    ],
+    "width": 8097,
+    "height": 8098,
+    "crs_wkt": "PROJCS[\"Equirectangular MARS\",GEOGCS[\"GCS_MARS\",DATUM[\"unnamed\",SPHEROID[\"unnamed\",3396190,0]],PRIMEM[\"Reference meridian\",0],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]]],PROJECTION[\"Equirectangular\"],PARAMETER[\"standard_parallel_1\",0],PARAMETER[\"central_meridian\",137.38],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]",
+    "geotransform": [
+      -846.9585354124474,
+      0.2529366986449,
+      0.0,
+      -283494.86648663564,
+      0.0,
+      -0.2529366986449
+    ],
+    "site_bounds_in_source_crs": [
+      -846.9457518094206,
+      -285543.0,
+      1201.0542481914663,
+      -283495.0
+    ],
+    "sampling_m_per_px": 0.2529366986449,
+    "pixel_sha256": "a1b7b945e5eacfd094f57a0206bc093280c0662fd4378a8a8ec907817beb8b36",
+    "illumination": {
+      "incidence_deg": 57.493071,
+      "rdr_sun_cw_from_right_deg": 192.527174,
+      "rdr_north_cw_from_right_deg": 270.0,
+      "ortho_north_cw_from_right_deg": 270.0,
+      "ortho_sun_cw_from_right_deg": 192.527174,
+      "rosco_sun_ccw_from_right_deg": 167.472826,
+      "shadow_cw_from_right_deg": 12.527174000000002,
+      "acquisition_start": "2010-10-09T09:11:38.350",
+      "scope": "Observation-level geometry; no local slope correction"
+    },
+    "rdr_label": {
+      "url": "https://hirise-pds.lpl.arizona.edu/PDS/RDR/ESP/ORB_019600_019699/ESP_019698_1750/ESP_019698_1750_RED.LBL",
+      "sha256": "7f3abe8c34c39101f0afac769fa54066d8c577af5cc2f60477fc2d434254ecb6"
+    },
+    "ortho_label": {
+      "url": "https://hirise-pds.lpl.arizona.edu/PDS/DTM/ESP/ORB_019600_019699/ESP_019698_1750_ESP_019988_1750/ESP_019698_1750_RED_A_01_ORTHO.LBL",
+      "sha256": "b3628b26ed92ba78604383e07372e21fc8ce503f732ad2d04c9e9bc81b6c3362"
+    },
+    "processing": "Native grayscale window, no resampling, sharpening or contrast adjustment",
+    "labels_transferred": false,
+    "world_hazard_layer_written": false
+  },
+  "rosco_version": "Version_20260909",
+  "rosco_commit": "e930eb2c8e62569bd23350070a2ab676b5ef604d",
+  "dll_sha256": "150ee77acb5e77d6a6c4a7e890017775843b7306c752ead239e81cddfe07dea0",
+  "parameters": {
+    "gamma": 1.2000000476837158,
+    "sun_incidence_angle": 57.493072509765625,
+    "sun_azimuth_angle": 167.4728240966797,
+    "min_shadow_size": 3.0,
+    "ground_resolution": 0.2529366910457611,
+    "confidence_threshold": 0.0,
+    "min_shadow_size_split": 100.0,
+    "spliting_ratio": 0.5,
+    "rock_elongate_ratio": 4.0,
+    "mean_gradient_threshold": 0.0,
+    "max_shadow_size": 800.0,
+    "gamma_threshold_override": 0
+  },
+  "preset": "shadow-shapes",
+  "parameter_origin": "Upstream ESP_046282 test preset with this observation's scale/illumination; shadow-shapes additionally disables gradient/confidence rejection for error analysis",
+  "parameters_tuned_on_gale_review": false,
+  "completed_tiles": 289,
+  "detections": 25473,
+  "excluded_model_point_outside_image": 11,
+  "detections_inside_world": 25473,
+  "review_counts_on_other_image": {
+    "uncertain": 16,
+    "accepted": 31,
+    "rejected": 3
+  },
+  "geographic_proximity_matches": [],
+  "candidate_file_sha256": "59b2517d9677d436bff3fa7b171b0c9d859c056bdc0e13d853f0f75ce5d574f1",
+  "review_file_sha256": "34d221ff4451149207f713ffb234c9180c62a8ef91931e52d69e090dccacc66a",
+  "visual_labels_transferred": false,
+  "relative_image_registration_verified": false,
+  "precision": null,
+  "recall": null,
+  "world_hazard_layer_written": false,
+  "limitations": [
+    "The G labels refer to a different mosaic. Proximity within 2 m is not a validated rock match or accuracy.",
+    "ROSCO scores describe model fit, not calibrated probabilities of rock identity.",
+    "Native widths and heights are in pixels; metre estimates multiply by native sampling once.",
+    "Physical estimates assume the observation-level illumination and no local slope correction.",
+    "The starting preset is not validated on Gale. Ridges, scarps and albedo can produce false positives.",
+    "Any hash-selected proposals require review; no decisions are inherited from G01-G50."
+  ]
+}

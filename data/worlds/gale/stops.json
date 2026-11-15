@@ -1,0 +1,37 @@
+[
+ {
+  "target_id": "altadena",
+  "image_url": "https://mars.nasa.gov/msl-raw-images/msss/04564/mcam/4564ML1077450011801954C00_DXXX.jpg",
+  "caption": "Altadena drill site: Curiosity Mast Left, sol 4564",
+  "credit": "NASA/JPL-Caltech/MSSS",
+  "sol": 4564
+ },
+ {
+  "target_id": "ridge_top",
+  "image_url": "https://mars.nasa.gov/msl-raw-images/msss/04600/mcam/4600ML1079580061803305C00_DXXX.jpg",
+  "caption": "Top of the ramp: main boxwork: Curiosity Mast Left, sol 4600",
+  "credit": "NASA/JPL-Caltech/MSSS",
+  "sol": 4600
+ },
+ {
+  "target_id": "overlook",
+  "image_url": "https://mars.nasa.gov/msl-raw-images/msss/04611/mcam/4611ML1080011311803649C00_DXXX.jpg",
+  "caption": "Scenic overlook (360 panorama): Curiosity Mast Left, sol 4611",
+  "credit": "NASA/JPL-Caltech/MSSS",
+  "sol": 4611
+ },
+ {
+  "target_id": "valle_de_la_luna",
+  "image_url": "https://mars.nasa.gov/msl-raw-images/msss/04693/mcam/4693ML1084970011207071C00_DXXX.jpg",
+  "caption": "Valle de la Luna (hollow drill): Curiosity Mast Left, sol 4693",
+  "credit": "NASA/JPL-Caltech/MSSS",
+  "sol": 4693
+ },
+ {
+  "target_id": "nevado_sajama",
+  "image_url": "https://mars.nasa.gov/msl-raw-images/msss/04718/mcam/4718ML1086120011107923C00_DXXX.jpg",
+  "caption": "Nevado Sajama (ridge drill): Curiosity Mast Left, sol 4718",
+  "credit": "NASA/JPL-Caltech/MSSS",
+  "sol": 4718
+ }
+]

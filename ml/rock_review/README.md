@@ -1,6 +1,35 @@
 # Gale starter rock review — R1 / issue #31
 
-This handoff makes the same starter review available to Jules, Luca and Nicolas. **Jules has visually accepted all 50 numbered circles in the first delivered image as corresponding to rocks.** Their positions lie on a real 256 × 256 m Gale crop. The proposals use bright-object morphology; this is **preparation for R1**, not the completed shadow-based detector, a trained model, a final hazard map or a measured accuracy result. Issue #31 remains open.
+**R3 export work:** [R3.md](R3.md) describes the frozen 25-candidate review,
+local registration checks and conservative positive-hazard export. The
+delivery adds only human-accepted points; uncertain and unreviewed proposals
+are excluded. Counts and exact evidence are in `../exports/rocks.json`.
+A preview cannot stage a world.
+All 25 H proposals have been reviewed: 23 accepted and two uncertain (H02,
+H13). The final delivery uses the complete-review gate.
+
+**Current site:** Luca delivered a different Gale footprint in #63 on `dev`.
+The original accepted records below remain historical test references, about
+5 km north of the final site. Use [FINAL_SITE.md](FINAL_SITE.md) for the new
+source-verified, grid-aligned proposals on the real demo area.
+All 50 new-site proposals have been reviewed: 31 accepted, 3 rejected and 16
+uncertain. Decisions and the exact user responses are in
+`final_site_review.json`; the frozen proposal coordinates are unchanged.
+The fixed shadow-pair baseline has now been measured on that real site:
+8,973 possible pairs, matching 7/31 accepted and 1/3 rejected reference points
+within 2 m; uncertain points are excluded. These are correspondence counts,
+not detector accuracy. See `final_site_baseline_metrics.json` and `FINAL_SITE.md`.
+
+**Native detector:** [ROSCO.md](ROSCO.md) documents the official NASA/JPL
+native detector on a single HiRISE acquisition covering this site, with verified
+observation-level solar geometry. The development run produces 25 candidates;
+the initial six-point review is preserved and extended by `r3_decisions.json`.
+R3 adds accepted points to the existing world hazards without transferring
+the old visual labels to a different image.
+The subsequent [registration step](REGISTRATION.md) corrects a roughly 49 m
+image offset and supplies candidate cells with boundary/extrapolation flags.
+
+The remainder of this page preserves the historical starter handoff. **Jules visually accepted all 50 numbered circles in that first image as corresponding to rocks.** Their positions lie on a real 256 × 256 m Gale crop. Those bright-object proposals alone were preparation for R1, not a final hazard map or an accuracy measurement. Current delivery evidence is in [R3.md](R3.md).
 
 ## Start here
 
@@ -66,7 +95,45 @@ Use a fresh output directory for each run. Preserve reviewed decisions separatel
 
 1. Detection and evaluation using the accepted reference locations, with a separate assessment of missed rocks where recall is needed.
 2. Shadow-based detection with the contributing observation's illumination geometry; the mosaic does not provide one valid Sun angle for every pixel.
-3. Luca's confirmed final region and world-grid transform for R3.
+3. Final-site proposals and independent annotation; Luca's site/grid have now landed in #63 on dev.
 4. An actual rock-density/footprint-to-grid export and documented validation. Checking the 50 selected proposals alone does not measure recall; missed rocks need an independently annotated area.
 
 No quality or navigation-safety claim is made from this preliminary review.
+
+## Image-only shadow-pair baseline (R1 continuation)
+
+`shadow_baseline.py` pairs nearby bright top-hat and dark black-hat components.
+The dark component is only a possible shadow. No contributing acquisition or
+illumination angle has been verified for this mosaic crop (the official USGS
+metadata page returned HTTP 403 during this run). No heights or physical rock
+boundaries are calculated. A component box is an image-processing diagnostic.
+
+```sh
+python -m ml.rock_review.shadow_baseline ml/data/Gale_HiRISE_starter_25cm.png ml/runs/shadow-v1
+```
+
+Use a fresh run directory. It writes all detections, metrics and a fixed hash
+sample of 12 new proposals for review. The accepted 50-location record is never
+modified. `baseline_metrics.json` is the measured result from this run:
+812 pairs, only 2 of 50 reference locations matched within 8 pixels (2 m).
+This baseline is **not suitable for world hazard integration**. The negative
+result is retained; thresholds were not retuned to inflate agreement.
+
+Matching maximizes the number of one-to-one centroid correspondences within the
+fixed distance limit; review-circle radii are not used. This is selected-reference
+correspondence, not precision or recall. Unmatched proposals cannot be labeled
+false alarms without review, and missed-rock completeness is unknown. The new
+12-tile visual review is provisionally accepted with low confidence: Jules said
+he could not see the image well and thought the proposals looked correct. The
+exact statement is in `shadow_review.json`; it does not validate shadow geometry
+or measure precision. It is separate from the original 50 accepted locations.
+
+Next: obtain the contributing observation/illumination metadata, improve the
+method based on reviewed errors, then evaluate on a separately annotated area.
+Luca has since delivered the real site via #63 on `dev`: 2048 m square centred
+at -4.800, 137.383 E, 256 x 256 cells at 8 m. This starter crop is outside it,
+about 5 km north. The real site's current `rocks_fine` is explicitly a DTM
+roughness estimate. R3 needs a suitable detector and independent final-site
+annotations; no `rocks_fine.u8`, fabricated heights or final-site metrics are
+emitted by this experiment. Luca's source/grid recipe is in `cut_slice.py` and
+`docs/DATA.md` on `dev`.

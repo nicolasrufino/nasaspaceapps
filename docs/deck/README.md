@@ -11,3 +11,15 @@ This folder is the deck's **source**, so agents and people can read and review i
 The script, timing, slide order and judge Q&A are in `docs/PITCH.md`; that file is the source of truth for what we say. The slides render only inside the Slides artifact (fonts and images live there), so edit them in a Claude session with access to the artifact, then copy the changed `slides/*.html` back here.
 
 Rules for anyone editing slides: no number we have not measured (`AGENTS.md` rule 5); label anything simulated; keep it to five minutes.
+
+F1 source update (2026-11-14): `proof`, `data`, `demo` and `next` now use the
+measured R5 scenario and R4 follow-up, with actual ground-image provenance and
+R7/Foundry marked deferred. This commit updates the repository source only;
+the external Claude Slides artifact still needs synchronization by a session
+with access. Local HTML previews can check text and spacing with fallback fonts,
+but cannot validate that artifact's private fonts and embedded demo screenshots.
+
+Evidence: `ml/exports/pitch_metrics.json`,
+`ml/terrain_classifier/gale_experiment_v2.json`, and
+`ml/terrain_classifier/PROVENANCE.md`. Keep the initial 93.1% and additional
+91.1% Curiosity measurements distinct; neither is an aerial or big-rock score.

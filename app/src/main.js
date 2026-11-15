@@ -1,15 +1,22 @@
+import { parseWalkNotes, showWalkNotes } from './walk-notes.js'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { loadWorld, layerRGB, sourceLabel } from './world.js'
 import { startWalk, stepTo, ringMask, ringLimit, appState, oxygenL } from './walk.js'
 import { planTour, MAX_STOPS } from './plan.js'
 import { routeFlights, scanAt, pointAlong } from './scout.js'
+import { bestAreas } from './best-areas.js'
+import { stretches, describe, lowestMargin, shortestAlternative } from './why.js'
+import { initStops } from './stops.js'
+import { initSteps } from './steps.js'
 
 const $ = (id) => document.getElementById(id)
 const params = new URLSearchParams(location.search)
-const worldName = params.get('world') ?? 'synthetic'
-// Feature flags (docs/PLAN.md §10), all off by default: ?flags=layers_extra,pov_images
-const flags = new Set((params.get('flags') ?? '').split(',').filter(Boolean))
+// The bare link is the judges' link: the Gale demo with the demo features on.
+// ?world=synthetic loads the test world; ?flags= (empty) switches every feature off (docs/PLAN.md §10).
+const DEMO_FLAGS = 'drone_scout,why_route,layers_extra,pov_images,science_stop,step_mode'
+const worldName = params.get('world') ?? 'gale'
+const flags = new Set((params.get('flags') ?? DEMO_FLAGS).split(',').filter(Boolean))
 const base = `${import.meta.env.BASE_URL}${worldName}`
 const optionalJSON = (file, fallback) => fetch(`${base}/${file}`).then((r) => (r.ok ? r.json() : fallback)).catch(() => fallback)
 
@@ -26,6 +33,12 @@ const scoutPlan = await optionalJSON('scout_plan.json', []) // pipeline's extra 
 let flight = null // helicopter in the air: { flights, k, along, speed, found, before }
 const { meta, layers } = world
 const { width: W, height: H, cell_size_m: cs } = meta
+const walkNotesUrl = `${base}/walk.jsonl`
+const walkNotes = flags.has('map_grows')
+  ? await fetch(walkNotesUrl).then(async (response) =>
+    response.ok ? parseWalkNotes(await response.text(), W, H) : []).catch(() => [])
+  : []
+showWalkNotes($('layers'), walkNotes, walkNotesUrl)
 // The way home the ring and walk read. Live: cells the helicopter scouts switch to cost_to_go_scouted (E4).
 const ctg = layers.cost_to_go
 const scanned = new Uint8Array(W * H) // cells the helicopter has seen
@@ -64,6 +77,9 @@ const pins = new THREE.Group() // science stops, rebuilt when the plan changes
 scene.add(pins)
 const walker = new THREE.Mesh(new THREE.CapsuleGeometry(span / 200, span / 60, 4, 12), new THREE.MeshBasicMaterial({ color: 0x35e0ff }))
 scene.add(walker)
+const altLine = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineDashedMaterial({ color: 0xd0d0d0, dashSize: span / 120, gapSize: span / 120 }))
+altLine.visible = false // E5: the shortest-distance route the planner rejected
+scene.add(altLine)
 const beforeLine = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineDashedMaterial({ color: 0xff3b30, dashSize: span / 100, gapSize: span / 150 }))
 beforeLine.visible = false // the route before the scout flight, for the before/after
 scene.add(beforeLine)
@@ -99,16 +115,25 @@ const EXTRA = ['thermal_inertia', 'science', 'dose_rate'] // THEMIS, CRISM, Curi
 const shownLayers = meta.layers.filter((n) => layers[n] && n !== 'rocks_fine' && (!EXTRA.includes(n) || flags.has('layers_extra')))
 let layerName = 'terrain_class'
 let layerColors = layerRGB(layerName, layers[layerName])
+// Colours for a layer; "best areas" is computed from what is known now (best-areas.js), not read from a file.
+const colorsFor = (name) => layerRGB(name, name === 'best_areas' ? bestAreas(world, ctg, scanned, blocked) : layers[name])
+function refreshLayer() {
+  if (layerName === 'best_areas') layerColors = colorsFor(layerName)
+}
 $('sources').textContent = meta.sources?.all ?? '' // applies to every layer without its own source
-$('layers').append(...shownLayers.map((name) => {
+const BEST = 'best_areas'
+const layerSource = (name) => name === BEST
+  ? 'Computed: round trip from base fits the usable energy, slope within the limit, no rocks seen; unscouted ground counts half'
+  : sourceLabel(meta, name)
+$('layers').append(...[...shownLayers, BEST].map((name) => {
   const label = document.createElement('label')
   label.innerHTML = `<input type="radio" name="layer"><span><b></b><small></small></span>`
   label.querySelector('input').checked = name === layerName
   label.querySelector('b').textContent = name.replaceAll('_', ' ')
-  label.querySelector('small').textContent = sourceLabel(meta, name)
+  label.querySelector('small').textContent = layerSource(name)
   label.querySelector('input').onchange = () => {
     layerName = name
-    layerColors = layerRGB(name, layers[name])
+    layerColors = colorsFor(name)
     render()
   }
   return label
@@ -125,14 +150,66 @@ let route // { cells, stops, dropped, energy_j, minutes }
 let blocked = null // rocks the scout has found (E4); the planner routes around them
 const allStops = () => [...targets, ...custom]
 
+let scoutBefore = null // { cells, energy_j, crossed }: the route before the last scout, for E5
 function replan(keepBefore = false) {
   beforeLine.visible = keepBefore
+  if (!keepBefore) scoutBefore = null
   if (!keepBefore) $('scoutStatus').textContent = ''
   route = planTour(world, allStops().filter((s) => included.has(s.id)), blocked)
+  refreshLayer()
   routeLine.geometry.dispose()
   routeLine.geometry = new THREE.BufferGeometry().setFromPoints(route.cells.map((c) => cellPos(c, 1)))
+  if (flags.has('why_route')) explain()
   reset() // a new plan starts a new walk; reset also draws the stops
 }
+
+// --- Why this route (block E5, flag why_route): numbers for each stretch, the tightest moment,
+// and the alternatives the planner beat. Measures; decides nothing. ---
+function explain() {
+  $('whyBox').hidden = !route.stops.length
+  altLine.visible = false
+  if (!route.stops.length) return
+  const name = (id) => allStops().find((s) => s.id === id)?.name ?? id
+  const ends = ['Base', ...route.stops.map(name), 'Base']
+  const stopCells = route.stops.map((id) => allStops().find((s) => s.id === id).cell)
+  const parts = stretches(route, stopCells)
+  const pct = (v) => `${Math.round(v * 100)}%`
+  const rows = parts.map((p, k) => {
+    const d = describe(world, p)
+    return `<tr><td>${esc(ends[k])} → ${esc(ends[k + 1])}</td><td>${Math.round(d.metres)}</td><td>${Math.round(d.energy_j / 1000)}</td>` +
+      `<td>${d.minutes.toFixed(1)}</td><td>${d.steepest_deg.toFixed(0)}°</td><td>${pct(d.sand_share)}</td></tr>`
+  })
+  $('whyTable').innerHTML = `<tr><th>Stretch</th><th>m</th><th>kJ</th><th>min</th><th>Steepest</th><th>Sand</th></tr>${rows.join('')}`
+
+  const all = describe(world, route.cells, blocked)
+  const notes = []
+  const steepK = parts.findIndex((p) => describe(world, p).steepest_deg === all.steepest_deg)
+  notes.push(`Steepest ground: ${all.steepest_deg.toFixed(0)}° on ${ends[steepK]} → ${ends[steepK + 1]} (the limit is ${meta.knobs.max_slope_deg}°).`)
+  const low = lowestMargin(world, route.cells, ctg)
+  let at = 0
+  for (let n = 0, k = 0; k < parts.length; k++) if (low.index <= (n += parts[k].length - 1)) { at = k; break }
+  notes.push(`Tightest moment: ${kj(low.margin_j)} to spare after the way home and the ${kj(meta.reserve_fraction * meta.energy_budget_j)} reserve, on ${ends[at]} → ${ends[at + 1]}.`)
+
+  const altCells = shortestAlternative(world, stopCells, blocked)
+  const alt = describe(world, altCells)
+  const extra = alt.energy_j - all.energy_j
+  if (extra < all.energy_j * 0.01) notes.push('The shortest route through these stops is also the easiest here.')
+  else {
+    const why = []
+    if (alt.sand_share > all.sand_share + 0.02) why.push(`${pct(alt.sand_share)} of it is sand (ours ${pct(all.sand_share)})`)
+    if (alt.climb_m > all.climb_m + 1) why.push(`it climbs ${Math.round(alt.climb_m)} m (ours ${Math.round(all.climb_m)} m)`)
+    if (alt.steepest_deg > all.steepest_deg + 0.5) why.push(`it gets as steep as ${alt.steepest_deg.toFixed(0)}°`)
+    notes.push(`Rejected (grey dashes): the shortest route through the same stops is ${Math.round(all.metres - alt.metres)} m shorter ` +
+      `but costs ${kj(alt.energy_j)} (+${Math.round((extra / all.energy_j) * 100)}%)${why.length ? `: ${why.join(', ')}` : ''}.`)
+    altLine.geometry.dispose()
+    altLine.geometry = new THREE.BufferGeometry().setFromPoints(altCells.map((c) => cellPos(c, 0.6)))
+    altLine.computeLineDistances()
+    altLine.visible = true
+  }
+  if (scoutBefore?.crossed) notes.push(`Before scouting (red dashes), the route crossed ${scoutBefore.crossed} rock cells the helicopter found; avoiding them costs ${kj(all.energy_j - scoutBefore.energy_j)} more.`)
+  $('whyNotes').replaceChildren(...notes.map((t) => Object.assign(document.createElement('li'), { textContent: t })))
+}
+const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c])
 
 function drawStops() {
   pins.clear()
@@ -259,45 +336,78 @@ function paintMinimap(inside) {
     ctx.fillStyle = !included.has(s.id) ? '#8a8a8a' : route.dropped.includes(s.id) ? '#ff5a3d' : s.custom ? '#ff9f1c' : '#ffd23f'
     ctx.fillRect(s.cell[0] - r, s.cell[1] - r, 2 * r + 1, 2 * r + 1)
   }
+  ctx.fillStyle = '#f488ee'
+  for (const { cell: [x, y] } of walkNotes) ctx.fillRect(x - 1, y - 1, 3, 3)
   ctx.fillStyle = '#fff'
   ctx.fillRect(meta.base_cell[0] - 1, meta.base_cell[1] - 1, 3, 3)
   ctx.fillStyle = '#35e0ff'
   ctx.fillRect(walk.cell[0] - 1, walk.cell[1] - 1, 3, 3)
+  field?.paint(ctx)
 }
 
 // --- Helicopter scout (block E4, flag drone_scout): flies the planned route, reveals rocks, re-plans. ---
-const heli = new THREE.Group()
 const heliSize = span / 150
-heli.add(new THREE.Mesh(new THREE.SphereGeometry(heliSize, 16, 12), new THREE.MeshStandardMaterial({ color: 0xeeeeee })))
-const rotor = new THREE.Mesh(new THREE.BoxGeometry(heliSize * 6, heliSize / 6, heliSize / 2), new THREE.MeshBasicMaterial({ color: 0x222222 }))
-rotor.position.y = heliSize * 1.3
-heli.add(rotor)
 const ALT = span / 25 // flying height above the ground, for the view only
-const beam = new THREE.Mesh(new THREE.ConeGeometry(15, ALT, 24, 1, true), // 15 m = SWATH_M
-  new THREE.MeshBasicMaterial({ color: 0x35e0ff, transparent: true, opacity: 0.18, side: THREE.DoubleSide, depthWrite: false }))
-beam.position.y = -ALT / 2
-heli.add(beam)
-heli.visible = false
-scene.add(heli)
+function makeHeli() {
+  const g = new THREE.Group()
+  g.add(new THREE.Mesh(new THREE.SphereGeometry(heliSize, 16, 12), new THREE.MeshStandardMaterial({ color: 0xeeeeee })))
+  const rotor = new THREE.Mesh(new THREE.BoxGeometry(heliSize * 6, heliSize / 6, heliSize / 2), new THREE.MeshBasicMaterial({ color: 0x222222 }))
+  rotor.position.y = heliSize * 1.3
+  g.add(rotor)
+  const beam = new THREE.Mesh(new THREE.ConeGeometry(15, ALT, 24, 1, true), // 15 m = SWATH_M
+    new THREE.MeshBasicMaterial({ color: 0x35e0ff, transparent: true, opacity: 0.18, side: THREE.DoubleSide, depthWrite: false }))
+  beam.position.y = -ALT / 2
+  g.add(beam)
+  g.visible = false
+  g.userData.rotor = rotor
+  scene.add(g)
+  return g
+}
+const heli = makeHeli()
+const rotor = heli.userData.rotor
+function placeHeli(h, [x, y]) {
+  h.position.set(x * cs, layers.height[Math.round(y) * W + Math.round(x)] + ALT, y * cs)
+}
 const dotPos = new Float32Array(W * H * 3)
 const dotCol = new Float32Array(W * H * 3)
 const dotsGeo = new THREE.BufferGeometry()
 dotsGeo.setAttribute('position', new THREE.BufferAttribute(dotPos, 3))
 dotsGeo.setAttribute('color', new THREE.BufferAttribute(dotCol, 3))
 dotsGeo.setDrawRange(0, 0)
-scene.add(new THREE.Points(dotsGeo, new THREE.PointsMaterial({ size: span / 300, vertexColors: true })))
+const scanDots = new THREE.Points(dotsGeo, new THREE.PointsMaterial({ size: span / 300, vertexColors: true }))
+scanDots.visible = false // shown while helicopters fly; after landing the terrain itself shows the rocks
+scene.add(scanDots)
 let dots = 0
+
+// Cells seen for the first time: switch their way home to the scouted one, add scan dots. Returns rocks found.
+function reveal(fresh) {
+  let rocks = 0
+  for (const i of fresh) {
+    const rock = layers.rocks_fine[i]
+    rocks += rock
+    if (layers.cost_to_go_scouted) ctg[i] = layers.cost_to_go_scouted[i]
+    dotPos.set([(i % W) * cs, layers.height[i] + 0.5, Math.floor(i / W) * cs], dots * 3)
+    dotCol.set(rock ? [1, 0.2, 0.15] : [0.55, 0.95, 1], dots * 3)
+    dots++
+  }
+  if (fresh.length) {
+    dotsGeo.attributes.position.needsUpdate = dotsGeo.attributes.color.needsUpdate = true
+    dotsGeo.setDrawRange(0, dots)
+  }
+  return rocks
+}
 
 if (flags.has('drone_scout') && layers.rocks_fine) $('scoutBox').hidden = false
 $('scout').onclick = () => {
   if (flight) return
-  const flights = [...routeFlights(meta, route.cells), ...scoutPlan.map((f) => ({ waypoints: f.waypoints, metres: f.metres }))]
+  const flights = [...routeFlights(meta, route.cells).map((f) => ({ ...f, kind: 'route corridor' })),
+    ...scoutPlan.map((f) => ({ waypoints: f.waypoints, metres: f.metres, kind: f.kind === 'uncertain' ? 'least certain' : f.kind ?? 'extra' }))]
   if (!flights.length) return
   const metres = flights.reduce((m, f) => m + f.metres, 0)
   flight = { flights, k: 0, along: 0, speed: metres / 9, found: 0, before: route } // the whole scout plays in ~9 s
   pause()
   $('scout').disabled = true
-  heli.visible = true
+  heli.visible = scanDots.visible = true
 }
 
 function tickFlight(dt) {
@@ -311,35 +421,23 @@ function tickFlight(dt) {
     if (flight.k >= flight.flights.length) land()
     return
   }
-  const [x, y] = p
-  const ground = layers.height[Math.round(y) * W + Math.round(x)]
-  heli.position.set(x * cs, ground + ALT, y * cs)
-  const fresh = scanAt(meta, scanned, x, y)
-  for (const i of fresh) {
-    const rock = layers.rocks_fine[i]
-    if (rock) flight.found++
-    if (layers.cost_to_go_scouted) ctg[i] = layers.cost_to_go_scouted[i]
-    dotPos.set([(i % W) * cs, layers.height[i] + 0.5, Math.floor(i / W) * cs], dots * 3)
-    dotCol.set(rock ? [1, 0.2, 0.15] : [0.55, 0.95, 1], dots * 3)
-    dots++
-  }
-  if (fresh.length) {
-    dotsGeo.attributes.position.needsUpdate = dotsGeo.attributes.color.needsUpdate = true
-    dotsGeo.setDrawRange(0, dots)
-    render()
-  }
-  $('scoutStatus').textContent = `Flight ${flight.k + 1} of ${flight.flights.length} · ${flight.found} rock cells found · ` +
+  placeHeli(heli, p)
+  const fresh = scanAt(meta, scanned, p[0], p[1])
+  flight.found += reveal(fresh)
+  if (fresh.length) render()
+  $('scoutStatus').textContent = `Flight ${flight.k + 1} of ${flight.flights.length} (${f.kind}) · ${flight.found} rock cells found · ` +
     `simulated helicopter flight, rocks from ${sourceLabel(meta, 'rocks_fine') || meta.sources?.all || 'rocks_fine'}`
 }
 
 function land() {
   const { before, found } = flight
   flight = null
-  heli.visible = false
+  heli.visible = scanDots.visible = false
   $('scout').disabled = false
   $('scout').textContent = 'Fly the new route'
   blocked = Uint8Array.from(scanned, (v, i) => v && layers.rocks_fine[i])
   const crossed = before.cells.filter(([x, y]) => blocked[y * W + x]).length
+  scoutBefore = { cells: before.cells, energy_j: before.energy_j, crossed }
   beforeLine.geometry.dispose()
   beforeLine.geometry = new THREE.BufferGeometry().setFromPoints(before.cells.map((c) => cellPos(c, 1.5)))
   beforeLine.computeLineDistances()
@@ -355,18 +453,27 @@ function land() {
 
 // --- Walk (block E2): along the planned route, energy and oxygen drain, ring, point of no return. ---
 let walk, k, timer
+// Block E6 (flags science_stop, step_mode): stop checklist, markers, warnings, walk log; real steps. Off: null.
+const field = flags.has('science_stop') || flags.has('step_mode')
+  ? initStops({ world, checklist: flags.has('science_stop'), flags, photos, scene, pin, cellPos, span, getWalk: () => walk, panel: $('walk'), map })
+  : null
+const steps = flags.has('step_mode')
+  ? initSteps({ panel: $('walk'), cs, segment: () => (k < route.cells.length - 1 ? [route.cells[k], route.cells[k + 1]] : null), blocked: () => !!field?.blocking(), step })
+  : null
 function reset() {
   pause()
   walk = startWalk(meta)
   k = 0
+  field?.reset(route, allStops())
   document.body.classList.remove('danger')
   drawStops()
   render()
 }
 
 function step() {
-  if (k >= route.cells.length - 1 || walk.energy_left_j <= 0) return pause()
+  if (k >= route.cells.length - 1 || walk.energy_left_j <= 0 || field?.blocking()) return pause()
   if (stepTo(world, walk, route.cells[++k])) buzz()
+  if (field?.arrive(k)) pause()
   render()
 }
 
@@ -393,8 +500,10 @@ function render() {
   paintMinimap(inside)
 
   const s = appState(world, walk)
+  if (steps?.live) s.mode = 'step'
   window.appState = s // contract §3: what CAPCOM and the walk log read
   const margin = ringLimit(meta, walk) - s.cost_to_go_j
+  field?.onRender(s, margin)
   $('energy').value = Math.max(walk.energy_left_j, 0) / meta.energy_budget_j
   $('stats').textContent = [
     `Energy ${kj(walk.energy_left_j)} of ${kj(meta.energy_budget_j)}`,

@@ -8,8 +8,13 @@ import { stepCostIdx } from './walk.js'
 const NB = [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]]
 export const MAX_STOPS = 12 // ponytail: exact order search is 2^k·k²; past ~12 stops switch to a greedy order
 
-// Energy (J) to walk from `from` to every cell, and the previous cell on that cheapest path (Dijkstra).
-export function costFrom({ meta, layers }, from, blocked) {
+// Step costs the search can minimise: walking energy (the default), or plain distance (E5's alternative).
+export const energyCost = (meta, layers, i, j) => stepCostIdx(meta, layers.height, layers.terrain_class, i, j)
+export const distanceCost = (meta, layers, i, j) =>
+  meta.cell_size_m * Math.hypot((i % meta.width) - (j % meta.width), Math.floor(i / meta.width) - Math.floor(j / meta.width))
+
+// Cost (J by default) to walk from `from` to every cell, and the previous cell on that cheapest path (Dijkstra).
+export function costFrom({ meta, layers }, from, blocked, cost = energyCost) {
   const { width: W, height: H } = meta
   const dist = new Float64Array(W * H).fill(Infinity)
   const prev = new Int32Array(W * H).fill(-1)
@@ -26,7 +31,7 @@ export function costFrom({ meta, layers }, from, blocked) {
       if (nx < 0 || ny < 0 || nx >= W || ny >= H) continue
       const j = ny * W + nx
       if (layers.slope[j] > meta.knobs.max_slope_deg || blocked?.[j]) continue
-      const nd = d + stepCostIdx(meta, layers.height, layers.terrain_class, i, j)
+      const nd = d + cost(meta, layers, i, j)
       if (nd < dist[j]) {
         dist[j] = nd
         prev[j] = i
@@ -97,7 +102,7 @@ export function planTour(world, stops, blocked) {
   }
 }
 
-function pathCells(prev, W, to) {
+export function pathCells(prev, W, to) {
   const out = []
   for (let i = to; i >= 0; i = prev[i]) out.unshift([i % W, (i - (i % W)) / W])
   return out

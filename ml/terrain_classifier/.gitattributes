@@ -1,0 +1,2 @@
+# Generated evidence hashes must survive Windows checkouts unchanged.
+expanded_manifest_v3.json text eol=lf

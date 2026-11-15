@@ -10,12 +10,12 @@ We do not simulate the whole planet. We build **one slice: about 2 km × 2 km of
   - USGS already publishes detailed terrain and images for Curiosity's area.
   - Curiosity measured the radiation and weather here and photographed the ground.
 - **Two resolutions of the same box:**
-  - A coarse "orbit view" of about 8 m per cell (256 × 256 cells): the map before the drone flies.
-  - The full 1 m terrain and 25 cm images: what the drone "reveals".
+  - A coarse "orbit view" of about 8 m per cell (256 × 256 cells): the map before the helicopter flies.
+  - The full 1 m terrain and 25 cm images: what the helicopter "reveals".
 - **What the box must contain** (Person 3 picks it in Mars Trek):
   - boxwork ridges (the science);
   - at least one sand patch and one slope over 15° (the hazards);
-  - a rock field that is hard to see at 8 m (the drone's moment).
+  - a rock field that is hard to see at 8 m (the helicopter's moment).
 
 ## The five resources NASA listed for this challenge
 
@@ -31,8 +31,8 @@ We do not simulate the whole planet. We build **one slice: about 2 km × 2 km of
 
 | Data | Where from | What it does in our map |
 |---|---|---|
-| **Gale merged terrain model, 1 m** | [USGS Astrogeology](https://astrogeology.usgs.gov/search/map/mars_msl_gale_merged_dem_1m) (built from HiRISE) | Slopes for walking cost and the slope limit; the "drone reveal" terrain |
-| **Gale merged image mosaic, 25 cm** | [USGS Astrogeology](https://astrogeology.usgs.gov/search/map/mars_msl_gale_merged_orthophoto_mosaic_25cm) (HiRISE) | The "drone reveal" image; rock detection from shadows |
+| **Gale merged terrain model, 1 m** | [USGS Astrogeology](https://astrogeology.usgs.gov/search/map/mars_msl_gale_merged_dem_1m) (built from HiRISE) | Slopes for walking cost and the slope limit; the "helicopter reveal" terrain |
+| **Gale merged image mosaic, 25 cm** | [USGS Astrogeology](https://astrogeology.usgs.gov/search/map/mars_msl_gale_merged_orthophoto_mosaic_25cm) (HiRISE) | The "helicopter reveal" image; rock detection from shadows |
 | **Detailed geologic map of lower Mount Sharp** | [Fraeman et al. 2016](https://pmc.ncbi.nlm.nih.gov/articles/PMC5101845), from Curiosity's mission data | Rock units at walk scale; science targets |
 | **THEMIS thermal inertia** | Mars Odyssey (NASA PDS) | Where the ground is loose sand or dust |
 | **CRISM minerals** | Mars Reconnaissance Orbiter (NASA PDS) | Where water-related minerals point to science targets |
@@ -41,13 +41,21 @@ We do not simulate the whole planet. We build **one slice: about 2 km × 2 km of
 | **DONKI** | [NASA CCMC](https://ccmc.gsfc.nasa.gov/tools/DONKI/) | Solar storm alerts for the shelter warning |
 | **AI4Mars** | NASA / JPL | Labels (soil, bedrock, sand, big rock) to train the ground classifier |
 
+## The box we chose (D1, done)
+
+- **Centre** −4.800° N, 137.383° E; **2048 × 2048 m** (lat −4.8173..−4.7827, lon 137.3657..137.4003), equirectangular Mars sphere (r = 3,396,190 m), same grid as the USGS mosaics. Full georeferencing in `data/raw/gale/slice.json` (made by `data/pipeline/cut_slice.py`).
+- **Why here:** it holds Curiosity's 2025 boxwork route (sols ~4480–4900: the Altadena, Valle de la Luna and Nevado Sajama drill sites, the ramp and the overlook), buttes with slopes over 25°, dark sand in the hollows, and blocky ground that only shows at 1 m.
+- **Files:** USGS 1 m DEM ([MSL_Gale_DEM_Mosaic_1m_v3.tif](https://planetarymaps.usgs.gov/mosaic/Mars/MSL/MSL_Gale_DEM_Mosaic_1m_v3.tif)) and 25 cm HiRISE colour ([MSL_Gale_HiRISE-LRGB_78quads_sharp_cog.tif](https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/Mars/MSL/MSL_Gale_HiRISE-LRGB_78quads_sharp_cog.tif)); the lossless greyscale 25 cm mosaic also works (`--ortho gray`, ~1.5 GB read). Only the box is read; nothing large goes in Git.
+- **Rebuild:** `pip install -r data/pipeline/requirements-gdal.txt`, then `python3 data/pipeline/cut_slice.py --lat -4.800 --lon 137.383 --ortho color` , `python3 data/pipeline/make_gale.py`, `python3 data/pipeline/add_d6_layers.py`, `python3 data/pipeline/terrain_1m.py` and `python3 data/pipeline/scout_plan.py data/worlds/gale` → `data/worlds/gale/` (open the app with `?world=gale`; add `&flags=drone_scout` for the helicopter).
+- **Note:** the 256 m rock-review test patch at −4.720°, 137.375° E is about 5 km north of this box, outside it.
+
 ## How the data flows
 
 1. **Mars Trek:** choose the box.
-2. **USGS 1 m terrain and 25 cm images:** cut the box. Make an 8 m "orbit view" and keep the full resolution for the drone.
+2. **USGS 1 m terrain and 25 cm images:** cut the box. Make an 8 m "orbit view" and keep the full resolution for the helicopter.
 3. **Layers:** THEMIS (sand), CRISM and the local geologic map (science), slope (from terrain), rocks (from image shadows).
 4. **Targets:** the boxwork ridges and the regions named on Curiosity's route map.
-5. **Route:** plan on the orbit view, then re-plan after the drone reveals detail.
+5. **Route:** plan on the orbit view, then re-plan after the helicopter reveals detail.
 6. **Stops:** Curiosity raw images near each target.
 7. **Safety:** RAD dose, REMS weather, DONKI storms.
 8. **Ground truth:** the classifier, trained on AI4Mars and tested on Perseverance images.

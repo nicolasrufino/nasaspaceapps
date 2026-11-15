@@ -1,0 +1,160 @@
+{
+  "status": "complete_review",
+  "reviewer": "Jules Rumeau",
+  "timezone": "America/Chicago",
+  "candidate_file_sha256": "024e23b6a777acde3d0b01ae98ef11ffcc1a828e7e40f291fcee3a71d69286a3",
+  "source_pixel_sha256": "a1b7b945e5eacfd094f57a0206bc093280c0662fd4378a8a8ec907817beb8b36",
+  "imported_h01_h06": {
+    "file": "rosco_confidence_decisions.json",
+    "sha256": "32d5474eea1d90673aa3b9f63282c66336cea97761f2b264c6f1d7e0234733ee",
+    "condition": "Same native source pixels and exact candidate coordinates; no cross-acquisition label transfer"
+  },
+  "reviews": [
+    {
+      "user_response_verbatim": "Image 1, oui, rocher. Image 2, incertain. Je dirais plutôt crête. Image 3, oui, rocher, certain. Image 4, oui, rocher, certain. Image 5, oui, rocher, certain. Image 6, oui, rocher, certain.",
+      "decisions": [
+        {
+          "id": "H01",
+          "status": "accepted",
+          "note": "User visually identifies a rock."
+        },
+        {
+          "id": "H02",
+          "status": "uncertain",
+          "note": "Explicit uncertainty; leans toward a ridge."
+        },
+        {
+          "id": "H03",
+          "status": "accepted",
+          "note": "User visually identifies a rock."
+        },
+        {
+          "id": "H04",
+          "status": "accepted",
+          "note": "User visually identifies a rock."
+        },
+        {
+          "id": "H05",
+          "status": "accepted",
+          "note": "User visually identifies a rock."
+        },
+        {
+          "id": "H06",
+          "status": "accepted",
+          "note": "User visually identifies a rock."
+        }
+      ]
+    },
+    {
+      "user_response_verbatim": "tous sont corect et valide de 07 12",
+      "decisions": [
+        {
+          "id": "H07",
+          "status": "accepted",
+          "note": "User explicitly accepts H07 through H12."
+        },
+        {
+          "id": "H08",
+          "status": "accepted",
+          "note": "User explicitly accepts H07 through H12."
+        },
+        {
+          "id": "H09",
+          "status": "accepted",
+          "note": "User explicitly accepts H07 through H12."
+        },
+        {
+          "id": "H10",
+          "status": "accepted",
+          "note": "User explicitly accepts H07 through H12."
+        },
+        {
+          "id": "H11",
+          "status": "accepted",
+          "note": "User explicitly accepts H07 through H12."
+        },
+        {
+          "id": "H12",
+          "status": "accepted",
+          "note": "User explicitly accepts H07 through H12."
+        }
+      ]
+    },
+    {
+      "user_response_verbatim": "Treize incertain. Quatorze, quinze, seize, dix-sept, dix-huit, rush. Et je suis certain pour le reste, à part treize.",
+      "decisions": [
+        {
+          "id": "H13",
+          "status": "uncertain",
+          "note": "User explicitly uncertain."
+        },
+        {
+          "id": "H14",
+          "status": "accepted",
+          "note": "User certain for H14-H18; H13 is the explicit exception."
+        },
+        {
+          "id": "H15",
+          "status": "accepted",
+          "note": "User certain for H14-H18; H13 is the explicit exception."
+        },
+        {
+          "id": "H16",
+          "status": "accepted",
+          "note": "User certain for H14-H18; H13 is the explicit exception."
+        },
+        {
+          "id": "H17",
+          "status": "accepted",
+          "note": "User certain for H14-H18; H13 is the explicit exception."
+        },
+        {
+          "id": "H18",
+          "status": "accepted",
+          "note": "User certain for H14-H18; H13 is the explicit exception."
+        }
+      ]
+    },
+    {
+      "user_response_verbatim": "tous sont corect cest valide",
+      "decisions": [
+        {
+          "id": "H19",
+          "status": "accepted",
+          "note": "User explicitly validates the entire requested H19-H25 group."
+        },
+        {
+          "id": "H20",
+          "status": "accepted",
+          "note": "User explicitly validates the entire requested H19-H25 group."
+        },
+        {
+          "id": "H21",
+          "status": "accepted",
+          "note": "User explicitly validates the entire requested H19-H25 group."
+        },
+        {
+          "id": "H22",
+          "status": "accepted",
+          "note": "User explicitly validates the entire requested H19-H25 group."
+        },
+        {
+          "id": "H23",
+          "status": "accepted",
+          "note": "User explicitly validates the entire requested H19-H25 group."
+        },
+        {
+          "id": "H24",
+          "status": "accepted",
+          "note": "User explicitly validates the entire requested H19-H25 group."
+        },
+        {
+          "id": "H25",
+          "status": "accepted",
+          "note": "User explicitly validates the entire requested H19-H25 group."
+        }
+      ]
+    }
+  ],
+  "scope": "Positive rock identification only; uncertainty is retained and excluded from the verified-positive mask."
+}

@@ -9,8 +9,8 @@ One document, read top to bottom: what NASA asked for, what we build, how every 
 - **Our answer:** **Martian Map turns NASA's Mars data into a science walk you can plan, preview and come home from, and makes the map better with every walk.**
 - **Where and why:** the boxwork ridges on Mount Sharp, Gale crater. NASA's challenge names them; Curiosity studied them in 2025; and Curiosity measured the radiation, weather and ground there, so one site gives us every layer. *(Alternative: Jezero, with Perseverance's images. The team decides.)*
 - **The real problem:** there is no map at the scale of one walk. Orbit sees the region; it misses the rock field, the soft sand and the slope that decide whether a suited astronaut can get through.
-- **Our solution: a map that builds itself, walk by walk.** (1) Start from NASA's orbital layers. (2) A scout drone flies the route first and maps what orbit can't see. (3) Martian Map plans the best path and the packing list: what to bring, what is heavy, what the rover carries. (4) The crew walks for a science purpose (signs of past water and life), and the map grows as they go: photos, ground type, how hard each stretch was, markers they drop. (5) The next crew starts with a better map.
-- **The demo:** pick "boxwork" → the layers light up the targets → the scout drone flies the route and reveals a rock field orbit missed → the route re-plans and the packing list appears → a judge walks the hallway with the phone as the suit display → the ring shrinks with every step → at a stop the phone runs the science checklist and adds to the map → past the point of no return it buzzes.
+- **Our solution: a map that builds itself, walk by walk.** (1) Start from NASA's orbital layers. (2) A NASA JPL-style scout helicopter flies the route first and maps what orbit can't see. (3) Martian Map plans the best path and the packing list: what to bring, what is heavy, what the rover carries. (4) The crew walks for a science purpose (signs of past water and life), and the map grows as they go: photos, ground type, how hard each stretch was, markers they drop. (5) The next crew starts with a better map.
+- **The demo:** pick "boxwork" → the layers light up the targets → the scout helicopter flies the route and reveals a rock field orbit missed → the route re-plans and the packing list appears → a judge walks the hallway with the phone as the suit display → the ring shrinks with every step → at a stop the phone runs the science checklist and adds to the map → past the point of no return it buzzes.
 
 **Local awards:** Best Use of Science is our main target, then Best Use of Technology (requires Azure: hosting plus the CAPCOM agent), then Art & Technology. See `docs/PITCH.md`, Local awards.
 
@@ -24,7 +24,7 @@ What a crew could do today, and why each option falls short on its own:
 | Mission control plans and guides by voice | Only what orbit sees | **No** | Only before the walk | Partly | Yes |
 | A rover scouts first | Yes | Yes | No | Yes | Yes, but rovers average about 110 m/h, 20–30 times slower than a walking astronaut |
 | The crew explores by eye | Only once there | Yes | No | Partly; plans broke on the first walk in NASA's 2022 test | No |
-| **Martian Map: orbit + scout drone + plan on the device + a map that grows** | **Yes** | **Yes** | **Yes, every step** | **Yes** | **Yes, each piece** |
+| **Martian Map: orbit + scout helicopter + plan on the device + a map that grows** | **Yes** | **Yes** | **Yes, every step** | **Yes** | **Yes, each piece** |
 
 Each option on its own fails at least one need. Ours combines the parts that work, and runs on the crew's side of the delay.
 
@@ -46,8 +46,8 @@ Each option on its own fails at least one need. Ours combines the parts that wor
 
 1. **Start** at a random spot inside the Gale site, on the habitat screen. Goal: boxwork.
 2. **Orbit only:** the map shows coarse layers and a first route.
-3. **Deploy the scout** (a 10-second animation). The drone flies Ingenuity-class legs (about 700 m and 3 minutes each). It covers the route corridor first, then anomalies (places where the layers disagree, such as firm-looking ground that the thermal data says is loose sand, a slope near the 25° limit, or an unusual mineral signal near a target), then the cells it is least sure about.
-4. **Reveal:** a scan sweep shows rays hitting the ground and dots building up (how a lidar or a bat "sees"); then, where it flies, the map switches to full-resolution HiRISE terrain and detected rocks, labelled "simulated drone view, real HiRISE data". A hidden rock field appears.
+3. **Deploy the scout** (a 10-second animation). The helicopter flies Ingenuity-class legs (about 700 m and 3 minutes each). It covers the route corridor first, then anomalies (places where the layers disagree, such as firm-looking ground that the thermal data says is loose sand, a slope near the 25° limit, or an unusual mineral signal near a target), then the cells it is least sure about.
+4. **Reveal:** a scan sweep shows rays hitting the ground and dots building up (how a lidar or a bat "sees"); then, where it flies, the map switches to full-resolution HiRISE terrain and detected rocks, labelled "simulated helicopter view, real HiRISE data". A hidden rock field appears.
 5. **Re-plan and explain:** the new route avoids it. The "why this route" panel shows the extra distance, the effort, the slope limit, the rocks avoided and the margin home everywhere. The packing list updates.
 6. **Walk:** a judge carries the phone; real steps move the astronaut; the ring shrinks; at a stop, the science checklist runs.
 7. **Share:** export the map package; it "arrives" at mission control 11 minutes later.
@@ -82,7 +82,7 @@ Optional considerations:
 | Step | What happens | Who or what does it | Evidence it is real |
 |---|---|---|---|
 | **1. Orbit** | Start from NASA's layers: images, slope, sand, minerals, radiation | Data pipeline | HiRISE, THEMIS, CRISM, Curiosity RAD (section 4) |
-| **2. Scout** | A drone flies the planned route first. It covers the route corridor first, then anomalies (places where the layers disagree, such as firm-looking ground that the thermal data says is loose sand, a slope near the 25° limit, or an unusual mineral signal near a target), then the cells it is least sure about, within Ingenuity-class limits (about 700 m and 3 minutes per flight). Where it flies, the map gains full-resolution terrain and detected rocks; the route re-plans | Scout drone (simulated flight in our app; the data it reveals is real full-resolution HiRISE) | Ingenuity scouted routes for Perseverance in 72 flights (2021–2024); one flight ruled out a target and saved about two months of driving. JPL and AeroVironment's Skyfall concept (2025) proposes six helicopters to scout human landing sites |
+| **2. Scout** | A helicopter flies the planned route first. It covers the route corridor first, then anomalies (places where the layers disagree, such as firm-looking ground that the thermal data says is loose sand, a slope near the 25° limit, or an unusual mineral signal near a target), then the cells it is least sure about, within Ingenuity-class limits (about 700 m and 3 minutes per flight). Where it flies, the map gains full-resolution terrain and detected rocks; the route re-plans | Scout helicopter (simulated flight in our app; the data it reveals is real full-resolution HiRISE) | Ingenuity scouted routes for Perseverance in 72 flights (2021–2024); one flight ruled out a target and saved about two months of driving. JPL and AeroVironment's Skyfall concept (2025) proposes six helicopters to scout human landing sites |
 | **3. Plan and pack** | Best path (safe and efficient), effort per stretch, and a packing list from the route: oxygen and water margin, sampling tools for the targets, what the rover carries because it is heavy | Martian Map | NASA's statement asks about astronauts "carrying scientific equipment and other supplies"; NASA's 2022 field test found a loaded cart caused unacceptable fatigue |
 | **4. Walk and add** | The crew walks for the science goal. The map grows: photos, ground type from the classifier, how hard each stretch really was, markers and sample sites they drop | Crew, phone, buddy rover | Perseverance's AutoNav updates its local map as it drives; our classifier is trained on NASA's AI4Mars labels |
 | **5. Next walk** | The corrected map, real effort numbers and new hazards feed the next plan | Data pipeline | NASA calibrates its walking model on field traverses |
@@ -97,7 +97,7 @@ This is why it is a tool and not a static map: the challenge allows "a tool or s
 
 | Mode | Where | What happens |
 |---|---|---|
-| **1. Plan** | Habitat display | Pick a science goal. Layers highlight candidate targets. The scout drone flies the route and the map updates. Martian Map plans a safe, efficient route, estimates time, energy, oxygen and radiation, shows rover photos of every stop, and builds the packing list. The crew approves or edits. |
+| **1. Plan** | Habitat display | Pick a science goal. Layers highlight candidate targets. The scout helicopter flies the route and the map updates. Martian Map plans a safe, efficient route, estimates time, energy, oxygen and radiation, shows rover photos of every stop, and builds the packing list. The crew approves or edits. |
 | **2. Walk** | Phone as the suit display | Real steps move you along the route. The walk-back ring shows how far you can still go and get home. The buddy rover carries the heavy kit and updates the local map. Hazards and space-weather alerts appear when they matter. Every stretch walked is added to the map. |
 | **3. At the stop** | Phone | A short science checklist: look, get close, decide, sample or move on. Each sample gets a context card: place, layers, photo, time. Examine many targets, sample few. |
 | **4. Debrief** | Habitat display | Replay the walk; predicted versus measured; what the crew saw updates the map for the next walk. |
@@ -122,7 +122,7 @@ This is why it is a tool and not a static map: the challenge allows "a tool or s
 | R4 safety limit | Walk-back ring and point-of-no-return alert | Energy needed to get home from every cell, precomputed; energy converted to oxygen | Same layers; NASA's walkback and 1-hour return rules |
 | R4 radiation | Dose for the walk; storm alert with minutes to shelter | Dose rate from RAD; shielding from terrain; live or replayed solar events | Curiosity RAD; DONKI |
 | C5 | Rover photos at each stop | Stops pinned to geotagged rover images | Curiosity Mastcam and Navcam raw images |
-| C6, R4 | Scout drone maps the route before the walk; the route re-plans | Simulated flight over the site; a fine-scale hazard layer only the drone can see; path search re-runs | Ingenuity precedent; HiRISE as the starting map |
+| C6, R4 | Scout helicopter maps the route before the walk; the route re-plans | Simulated flight over the site; a fine-scale hazard layer only the helicopter can see; path search re-runs | Ingenuity precedent; HiRISE as the starting map |
 | R4 mobility | Packing list and load plan from the route | Rules from route length, time, targets and terrain; heavy items assigned to the rover | Suit and load values from NASA studies |
 | C2 | The map grows with every walk | Walk log (photos, ground type, measured effort, markers) merged into the site files | Classifier on AI4Mars labels |
 | C6 | Buddy rover leads and carries | Reinforcement-learning policy on the same map, compared with a scripted follower; AutoNav-like loop | Same layers |
@@ -167,7 +167,7 @@ This is six NASA missions or programs in one hyperlocal view, three more data ty
 
 ## 7. Robots and pairs
 
-- **The scout drone** flies before the crew does, the job Ingenuity proved for Perseverance. It maps the route at centimetre scale and finds what orbit can't (rock fields, drop-offs, soft sand). In our app the flight is simulated over the real site, revealing a hidden fine-scale hazard layer; the route re-plans when it lands.
+- **The scout helicopter** flies before the crew does, the job Ingenuity proved for Perseverance. It maps the route at centimetre scale and finds what orbit can't (rock fields, drop-offs, soft sand). In our app the flight is simulated over the real site, revealing a hidden fine-scale hazard layer; the route re-plans when it lands.
 - **The buddy rover** leads by default (crews in NASA's 2022 desert test preferred it), scouts the route, carries tools and samples, relays comms behind ridges, and can bring an astronaut home. It is specified like NASA's new Lunar Terrain Vehicle (km/h, with or without crew), because today's Mars rovers are 20–30 times slower than a walking astronaut.
 - **Two astronauts** walk together, in sight of each other, as NASA's EVA rules require. The map shows both and the ring follows the more tired one.
 - **Override ladder:** E-STOP, hold, come to me, return to base along the path it came. On lost link it stops, then retreats.
@@ -209,13 +209,13 @@ The base must always work; every feature sits behind a flag and can be turned of
 
 **Foundation:** site map with three layers → route around obstacles → walk along it → walk-back ring and buzz → runs on one phone.
 
-**Features (flags):** `drone_scout`, `why_route`, `export`, `packing_list`, `map_grows`, `layers_extra` (thermal, spectral, radiation), `pov_images`, `science_stop`, `step_mode`, `buddy_scripted`, `buddy_rl`, `override`, `rideback_ring`, `storm`, `classifier`, `capcom`, `debrief`, `before_after`.
+**Features (flags):** `drone_scout` (the helicopter scout), `why_route`, `export`, `packing_list`, `map_grows`, `layers_extra` (thermal, spectral, radiation), `pov_images`, `science_stop`, `step_mode`, `buddy_scripted`, `buddy_rl`, `override`, `rideback_ring`, `storm`, `classifier`, `capcom`, `debrief`, `before_after`.
 
 | Milestone | Time | Done when |
 |---|---|---|
 | M0 Skeleton | Sat 12:30 | Stack chosen; synthetic world renders; ML env loads it |
 | M1 Walking core | Sat 16:00 | Route, energy, ring and buzz on one phone; first real Gale world with three layers |
-| M2 Demo-able | Sat 21:00 | Science targets, rover photos at stops, drone scout re-plan, packing list, step mode, scripted buddy, classifier v1; deployed |
+| M2 Demo-able | Sat 21:00 | Science targets, rover photos at stops, helicopter scout re-plan, packing list, step mode, scripted buddy, classifier v1; deployed |
 | Overnight | to Sun 07:00 | More layers, RL buddy, storm alert, CAPCOM, validation numbers, backup video |
 | M3 Freeze | Sun 08:00 | Polish, project page, rehearse |
 | Submit | Sun ~13:30 (confirm) | Project page, video, demo link |
@@ -227,7 +227,7 @@ The base must always work; every feature sits behind a flag and can be turned of
 | Maps | Regional and global (Mars Trek) or built for rover teams on Earth (MMGIS) | One hyperlocal view, all layers, for this crew and this walk |
 | Planning | Map books and limits worked out on Earth | Planned and re-planned on site, with the same limits |
 | What a stop looks like | Unknown until you arrive | Rover photos of every stop |
-| Small hazards | Invisible from orbit until you reach them | A scout drone finds them first; the route re-plans |
+| Small hazards | Invisible from orbit until you reach them | A scout helicopter finds them first; the route re-plans |
 | What to bring | Planned by hand | A packing list from the route; heavy items ride on the rover |
 | How far you can go | Worked out before the walk; in NASA's 2022 field test the first walk ended early when unseen slopes blocked the route | Walk-back ring, every step, re-planned on the spot |
 | Turn-back call | Mission control by voice | The crew, with the device; Earth hears 4–22 minutes later |

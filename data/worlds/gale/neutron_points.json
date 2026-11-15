@@ -1,0 +1,3878 @@
+[
+ {
+  "sol": 4480,
+  "cell": [
+   167,
+   70
+  ],
+  "hours": 29.7,
+  "thermal_cps": 4.085,
+  "epithermal_cps": 2.045,
+  "thermal_epithermal_ratio": 1.997,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4481,
+  "cell": [
+   164,
+   71
+  ],
+  "hours": 30.2,
+  "thermal_cps": 4.386,
+  "epithermal_cps": 2.11,
+  "thermal_epithermal_ratio": 2.079,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4482,
+  "cell": [
+   164,
+   71
+  ],
+  "hours": 8.6,
+  "thermal_cps": 4.439,
+  "epithermal_cps": 2.11,
+  "thermal_epithermal_ratio": 2.104,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4483,
+  "cell": [
+   164,
+   71
+  ],
+  "hours": 41.1,
+  "thermal_cps": 4.658,
+  "epithermal_cps": 2.172,
+  "thermal_epithermal_ratio": 2.145,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4484,
+  "cell": [
+   162,
+   76
+  ],
+  "hours": 45.8,
+  "thermal_cps": 5.144,
+  "epithermal_cps": 2.299,
+  "thermal_epithermal_ratio": 2.237,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4485,
+  "cell": [
+   162,
+   76
+  ],
+  "hours": 13.0,
+  "thermal_cps": 5.039,
+  "epithermal_cps": 2.267,
+  "thermal_epithermal_ratio": 2.223,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4486,
+  "cell": [
+   162,
+   76
+  ],
+  "hours": 35.7,
+  "thermal_cps": 5.016,
+  "epithermal_cps": 2.266,
+  "thermal_epithermal_ratio": 2.213,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4487,
+  "cell": [
+   163,
+   78
+  ],
+  "hours": 37.6,
+  "thermal_cps": 4.795,
+  "epithermal_cps": 2.267,
+  "thermal_epithermal_ratio": 2.115,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4489,
+  "cell": [
+   163,
+   80
+  ],
+  "hours": 36.5,
+  "thermal_cps": 4.933,
+  "epithermal_cps": 2.33,
+  "thermal_epithermal_ratio": 2.117,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4490,
+  "cell": [
+   163,
+   82
+  ],
+  "hours": 18.9,
+  "thermal_cps": 5.7,
+  "epithermal_cps": 2.464,
+  "thermal_epithermal_ratio": 2.313,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4491,
+  "cell": [
+   163,
+   82
+  ],
+  "hours": 31.8,
+  "thermal_cps": 5.669,
+  "epithermal_cps": 2.439,
+  "thermal_epithermal_ratio": 2.324,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4492,
+  "cell": [
+   164,
+   85
+  ],
+  "hours": 10.7,
+  "thermal_cps": 5.992,
+  "epithermal_cps": 2.427,
+  "thermal_epithermal_ratio": 2.469,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4493,
+  "cell": [
+   163,
+   85
+  ],
+  "hours": 37.8,
+  "thermal_cps": 5.565,
+  "epithermal_cps": 2.336,
+  "thermal_epithermal_ratio": 2.382,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4494,
+  "cell": [
+   161,
+   87
+  ],
+  "hours": 13.0,
+  "thermal_cps": 5.166,
+  "epithermal_cps": 2.254,
+  "thermal_epithermal_ratio": 2.292,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4495,
+  "cell": [
+   161,
+   87
+  ],
+  "hours": 13.0,
+  "thermal_cps": 5.174,
+  "epithermal_cps": 2.261,
+  "thermal_epithermal_ratio": 2.289,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4496,
+  "cell": [
+   161,
+   88
+  ],
+  "hours": 40.7,
+  "thermal_cps": 5.422,
+  "epithermal_cps": 2.292,
+  "thermal_epithermal_ratio": 2.366,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4497,
+  "cell": [
+   157,
+   90
+  ],
+  "hours": 19.6,
+  "thermal_cps": 6.029,
+  "epithermal_cps": 2.32,
+  "thermal_epithermal_ratio": 2.599,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4498,
+  "cell": [
+   157,
+   90
+  ],
+  "hours": 42.1,
+  "thermal_cps": 5.807,
+  "epithermal_cps": 2.356,
+  "thermal_epithermal_ratio": 2.465,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4499,
+  "cell": [
+   156,
+   91
+  ],
+  "hours": 10.5,
+  "thermal_cps": 5.479,
+  "epithermal_cps": 2.483,
+  "thermal_epithermal_ratio": 2.206,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4500,
+  "cell": [
+   156,
+   91
+  ],
+  "hours": 53.8,
+  "thermal_cps": 5.125,
+  "epithermal_cps": 2.42,
+  "thermal_epithermal_ratio": 2.118,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4501,
+  "cell": [
+   154,
+   90
+  ],
+  "hours": 10.7,
+  "thermal_cps": 4.787,
+  "epithermal_cps": 2.353,
+  "thermal_epithermal_ratio": 2.035,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4502,
+  "cell": [
+   154,
+   90
+  ],
+  "hours": 11.5,
+  "thermal_cps": 4.831,
+  "epithermal_cps": 2.359,
+  "thermal_epithermal_ratio": 2.048,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4503,
+  "cell": [
+   151,
+   89
+  ],
+  "hours": 45.1,
+  "thermal_cps": 4.964,
+  "epithermal_cps": 2.325,
+  "thermal_epithermal_ratio": 2.136,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4504,
+  "cell": [
+   150,
+   89
+  ],
+  "hours": 13.4,
+  "thermal_cps": 5.313,
+  "epithermal_cps": 2.314,
+  "thermal_epithermal_ratio": 2.296,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4505,
+  "cell": [
+   150,
+   89
+  ],
+  "hours": 57.1,
+  "thermal_cps": 5.15,
+  "epithermal_cps": 2.3,
+  "thermal_epithermal_ratio": 2.239,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4506,
+  "cell": [
+   149,
+   88
+  ],
+  "hours": 10.7,
+  "thermal_cps": 4.951,
+  "epithermal_cps": 2.235,
+  "thermal_epithermal_ratio": 2.215,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4507,
+  "cell": [
+   148,
+   89
+  ],
+  "hours": 41.4,
+  "thermal_cps": 5.03,
+  "epithermal_cps": 2.247,
+  "thermal_epithermal_ratio": 2.239,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4508,
+  "cell": [
+   144,
+   92
+  ],
+  "hours": 10.6,
+  "thermal_cps": 5.754,
+  "epithermal_cps": 2.29,
+  "thermal_epithermal_ratio": 2.513,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4509,
+  "cell": [
+   144,
+   92
+  ],
+  "hours": 29.8,
+  "thermal_cps": 5.707,
+  "epithermal_cps": 2.318,
+  "thermal_epithermal_ratio": 2.462,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4510,
+  "cell": [
+   144,
+   96
+  ],
+  "hours": 39.9,
+  "thermal_cps": 5.566,
+  "epithermal_cps": 2.368,
+  "thermal_epithermal_ratio": 2.35,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4511,
+  "cell": [
+   144,
+   99
+  ],
+  "hours": 34.4,
+  "thermal_cps": 5.799,
+  "epithermal_cps": 2.446,
+  "thermal_epithermal_ratio": 2.371,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4512,
+  "cell": [
+   144,
+   101
+  ],
+  "hours": 15.5,
+  "thermal_cps": 5.695,
+  "epithermal_cps": 2.38,
+  "thermal_epithermal_ratio": 2.393,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4513,
+  "cell": [
+   144,
+   101
+  ],
+  "hours": 24.2,
+  "thermal_cps": 5.854,
+  "epithermal_cps": 2.41,
+  "thermal_epithermal_ratio": 2.429,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4514,
+  "cell": [
+   142,
+   106
+  ],
+  "hours": 26.3,
+  "thermal_cps": 4.952,
+  "epithermal_cps": 2.21,
+  "thermal_epithermal_ratio": 2.241,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4515,
+  "cell": [
+   142,
+   106
+  ],
+  "hours": 10.9,
+  "thermal_cps": 4.949,
+  "epithermal_cps": 2.174,
+  "thermal_epithermal_ratio": 2.276,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4516,
+  "cell": [
+   142,
+   106
+  ],
+  "hours": 29.7,
+  "thermal_cps": 4.923,
+  "epithermal_cps": 2.255,
+  "thermal_epithermal_ratio": 2.184,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4518,
+  "cell": [
+   141,
+   108
+  ],
+  "hours": 59.7,
+  "thermal_cps": 4.73,
+  "epithermal_cps": 2.288,
+  "thermal_epithermal_ratio": 2.068,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4519,
+  "cell": [
+   141,
+   109
+  ],
+  "hours": 13.2,
+  "thermal_cps": 6.142,
+  "epithermal_cps": 2.38,
+  "thermal_epithermal_ratio": 2.58,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4522,
+  "cell": [
+   141,
+   109
+  ],
+  "hours": 23.0,
+  "thermal_cps": 6.247,
+  "epithermal_cps": 2.402,
+  "thermal_epithermal_ratio": 2.6,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4523,
+  "cell": [
+   141,
+   109
+  ],
+  "hours": 31.5,
+  "thermal_cps": 5.516,
+  "epithermal_cps": 2.335,
+  "thermal_epithermal_ratio": 2.363,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4524,
+  "cell": [
+   140,
+   111
+  ],
+  "hours": 9.0,
+  "thermal_cps": 4.948,
+  "epithermal_cps": 2.278,
+  "thermal_epithermal_ratio": 2.172,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4525,
+  "cell": [
+   140,
+   111
+  ],
+  "hours": 38.6,
+  "thermal_cps": 4.974,
+  "epithermal_cps": 2.28,
+  "thermal_epithermal_ratio": 2.181,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4526,
+  "cell": [
+   140,
+   113
+  ],
+  "hours": 43.8,
+  "thermal_cps": 5.47,
+  "epithermal_cps": 2.275,
+  "thermal_epithermal_ratio": 2.405,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4527,
+  "cell": [
+   140,
+   115
+  ],
+  "hours": 52.6,
+  "thermal_cps": 5.72,
+  "epithermal_cps": 2.242,
+  "thermal_epithermal_ratio": 2.552,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4528,
+  "cell": [
+   139,
+   117
+  ],
+  "hours": 8.8,
+  "thermal_cps": 5.477,
+  "epithermal_cps": 2.1,
+  "thermal_epithermal_ratio": 2.608,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4529,
+  "cell": [
+   139,
+   117
+  ],
+  "hours": 26.6,
+  "thermal_cps": 5.477,
+  "epithermal_cps": 2.095,
+  "thermal_epithermal_ratio": 2.615,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4530,
+  "cell": [
+   138,
+   118
+  ],
+  "hours": 28.9,
+  "thermal_cps": 5.423,
+  "epithermal_cps": 2.135,
+  "thermal_epithermal_ratio": 2.54,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4531,
+  "cell": [
+   135,
+   119
+  ],
+  "hours": 11.2,
+  "thermal_cps": 5.266,
+  "epithermal_cps": 2.122,
+  "thermal_epithermal_ratio": 2.482,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4532,
+  "cell": [
+   135,
+   119
+  ],
+  "hours": 53.4,
+  "thermal_cps": 5.69,
+  "epithermal_cps": 2.168,
+  "thermal_epithermal_ratio": 2.624,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4533,
+  "cell": [
+   132,
+   119
+  ],
+  "hours": 10.1,
+  "thermal_cps": 6.537,
+  "epithermal_cps": 2.257,
+  "thermal_epithermal_ratio": 2.897,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4534,
+  "cell": [
+   132,
+   119
+  ],
+  "hours": 51.8,
+  "thermal_cps": 6.218,
+  "epithermal_cps": 2.28,
+  "thermal_epithermal_ratio": 2.727,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4535,
+  "cell": [
+   131,
+   120
+  ],
+  "hours": 8.8,
+  "thermal_cps": 6.0,
+  "epithermal_cps": 2.312,
+  "thermal_epithermal_ratio": 2.596,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4536,
+  "cell": [
+   131,
+   120
+  ],
+  "hours": 28.1,
+  "thermal_cps": 6.019,
+  "epithermal_cps": 2.309,
+  "thermal_epithermal_ratio": 2.606,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4537,
+  "cell": [
+   131,
+   120
+  ],
+  "hours": 28.6,
+  "thermal_cps": 5.643,
+  "epithermal_cps": 2.296,
+  "thermal_epithermal_ratio": 2.457,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4538,
+  "cell": [
+   129,
+   121
+  ],
+  "hours": 15.1,
+  "thermal_cps": 5.318,
+  "epithermal_cps": 2.267,
+  "thermal_epithermal_ratio": 2.346,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4539,
+  "cell": [
+   129,
+   121
+  ],
+  "hours": 46.3,
+  "thermal_cps": 5.389,
+  "epithermal_cps": 2.277,
+  "thermal_epithermal_ratio": 2.367,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4540,
+  "cell": [
+   127,
+   122
+  ],
+  "hours": 16.1,
+  "thermal_cps": 5.821,
+  "epithermal_cps": 2.326,
+  "thermal_epithermal_ratio": 2.502,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4541,
+  "cell": [
+   127,
+   122
+  ],
+  "hours": 36.0,
+  "thermal_cps": 5.821,
+  "epithermal_cps": 2.34,
+  "thermal_epithermal_ratio": 2.487,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4542,
+  "cell": [
+   127,
+   122
+  ],
+  "hours": 9.0,
+  "thermal_cps": 5.876,
+  "epithermal_cps": 2.319,
+  "thermal_epithermal_ratio": 2.534,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4543,
+  "cell": [
+   127,
+   122
+  ],
+  "hours": 30.4,
+  "thermal_cps": 5.809,
+  "epithermal_cps": 2.318,
+  "thermal_epithermal_ratio": 2.506,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4544,
+  "cell": [
+   126,
+   122
+  ],
+  "hours": 31.8,
+  "thermal_cps": 5.523,
+  "epithermal_cps": 2.287,
+  "thermal_epithermal_ratio": 2.415,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4546,
+  "cell": [
+   125,
+   123
+  ],
+  "hours": 57.6,
+  "thermal_cps": 5.185,
+  "epithermal_cps": 2.294,
+  "thermal_epithermal_ratio": 2.26,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4547,
+  "cell": [
+   120,
+   125
+  ],
+  "hours": 30.7,
+  "thermal_cps": 5.775,
+  "epithermal_cps": 2.31,
+  "thermal_epithermal_ratio": 2.5,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4548,
+  "cell": [
+   114,
+   127
+  ],
+  "hours": 50.3,
+  "thermal_cps": 5.716,
+  "epithermal_cps": 2.264,
+  "thermal_epithermal_ratio": 2.525,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4549,
+  "cell": [
+   113,
+   129
+  ],
+  "hours": 11.3,
+  "thermal_cps": 5.36,
+  "epithermal_cps": 2.209,
+  "thermal_epithermal_ratio": 2.426,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4550,
+  "cell": [
+   113,
+   129
+  ],
+  "hours": 25.6,
+  "thermal_cps": 5.366,
+  "epithermal_cps": 2.2,
+  "thermal_epithermal_ratio": 2.44,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4551,
+  "cell": [
+   113,
+   129
+  ],
+  "hours": 13.4,
+  "thermal_cps": 5.336,
+  "epithermal_cps": 2.201,
+  "thermal_epithermal_ratio": 2.425,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4552,
+  "cell": [
+   109,
+   132
+  ],
+  "hours": 29.1,
+  "thermal_cps": 5.269,
+  "epithermal_cps": 2.233,
+  "thermal_epithermal_ratio": 2.359,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4553,
+  "cell": [
+   109,
+   132
+  ],
+  "hours": 46.5,
+  "thermal_cps": 5.24,
+  "epithermal_cps": 2.23,
+  "thermal_epithermal_ratio": 2.35,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4554,
+  "cell": [
+   109,
+   132
+  ],
+  "hours": 41.1,
+  "thermal_cps": 5.303,
+  "epithermal_cps": 2.21,
+  "thermal_epithermal_ratio": 2.4,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4555,
+  "cell": [
+   108,
+   136
+  ],
+  "hours": 8.9,
+  "thermal_cps": 5.263,
+  "epithermal_cps": 2.157,
+  "thermal_epithermal_ratio": 2.44,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4556,
+  "cell": [
+   108,
+   136
+  ],
+  "hours": 13.0,
+  "thermal_cps": 5.386,
+  "epithermal_cps": 2.2,
+  "thermal_epithermal_ratio": 2.448,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4557,
+  "cell": [
+   108,
+   136
+  ],
+  "hours": 8.9,
+  "thermal_cps": 5.289,
+  "epithermal_cps": 2.191,
+  "thermal_epithermal_ratio": 2.414,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4558,
+  "cell": [
+   109,
+   136
+  ],
+  "hours": 24.9,
+  "thermal_cps": 5.068,
+  "epithermal_cps": 2.203,
+  "thermal_epithermal_ratio": 2.3,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4559,
+  "cell": [
+   109,
+   136
+  ],
+  "hours": 12.1,
+  "thermal_cps": 5.047,
+  "epithermal_cps": 2.187,
+  "thermal_epithermal_ratio": 2.308,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4560,
+  "cell": [
+   109,
+   137
+  ],
+  "hours": 35.8,
+  "thermal_cps": 5.561,
+  "epithermal_cps": 2.275,
+  "thermal_epithermal_ratio": 2.444,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4561,
+  "cell": [
+   109,
+   137
+  ],
+  "hours": 34.1,
+  "thermal_cps": 5.916,
+  "epithermal_cps": 2.31,
+  "thermal_epithermal_ratio": 2.561,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4562,
+  "cell": [
+   109,
+   137
+  ],
+  "hours": 9.5,
+  "thermal_cps": 5.91,
+  "epithermal_cps": 2.304,
+  "thermal_epithermal_ratio": 2.565,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4563,
+  "cell": [
+   109,
+   137
+  ],
+  "hours": 22.0,
+  "thermal_cps": 5.945,
+  "epithermal_cps": 2.33,
+  "thermal_epithermal_ratio": 2.552,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4564,
+  "cell": [
+   109,
+   137
+  ],
+  "hours": 17.2,
+  "thermal_cps": 5.95,
+  "epithermal_cps": 2.321,
+  "thermal_epithermal_ratio": 2.564,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4566,
+  "cell": [
+   109,
+   137
+  ],
+  "hours": 11.5,
+  "thermal_cps": 5.958,
+  "epithermal_cps": 2.324,
+  "thermal_epithermal_ratio": 2.564,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4567,
+  "cell": [
+   109,
+   137
+  ],
+  "hours": 21.5,
+  "thermal_cps": 5.942,
+  "epithermal_cps": 2.324,
+  "thermal_epithermal_ratio": 2.557,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4568,
+  "cell": [
+   109,
+   137
+  ],
+  "hours": 18.0,
+  "thermal_cps": 5.952,
+  "epithermal_cps": 2.292,
+  "thermal_epithermal_ratio": 2.597,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4569,
+  "cell": [
+   109,
+   137
+  ],
+  "hours": 11.6,
+  "thermal_cps": 5.984,
+  "epithermal_cps": 2.309,
+  "thermal_epithermal_ratio": 2.591,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4570,
+  "cell": [
+   109,
+   137
+  ],
+  "hours": 21.9,
+  "thermal_cps": 5.948,
+  "epithermal_cps": 2.296,
+  "thermal_epithermal_ratio": 2.591,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4571,
+  "cell": [
+   106,
+   140
+  ],
+  "hours": 22.1,
+  "thermal_cps": 5.596,
+  "epithermal_cps": 2.208,
+  "thermal_epithermal_ratio": 2.534,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4572,
+  "cell": [
+   105,
+   141
+  ],
+  "hours": 8.1,
+  "thermal_cps": 5.356,
+  "epithermal_cps": 2.147,
+  "thermal_epithermal_ratio": 2.495,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4573,
+  "cell": [
+   105,
+   141
+  ],
+  "hours": 52.8,
+  "thermal_cps": 5.432,
+  "epithermal_cps": 2.194,
+  "thermal_epithermal_ratio": 2.476,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4574,
+  "cell": [
+   101,
+   146
+  ],
+  "hours": 3.8,
+  "thermal_cps": 5.53,
+  "epithermal_cps": 2.272,
+  "thermal_epithermal_ratio": 2.434,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4575,
+  "cell": [
+   101,
+   146
+  ],
+  "hours": 51.4,
+  "thermal_cps": 5.714,
+  "epithermal_cps": 2.258,
+  "thermal_epithermal_ratio": 2.53,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4576,
+  "cell": [
+   98,
+   152
+  ],
+  "hours": 3.6,
+  "thermal_cps": 6.251,
+  "epithermal_cps": 2.281,
+  "thermal_epithermal_ratio": 2.741,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4577,
+  "cell": [
+   98,
+   152
+  ],
+  "hours": 32.5,
+  "thermal_cps": 6.367,
+  "epithermal_cps": 2.274,
+  "thermal_epithermal_ratio": 2.8,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4578,
+  "cell": [
+   98,
+   152
+  ],
+  "hours": 33.7,
+  "thermal_cps": 5.943,
+  "epithermal_cps": 2.254,
+  "thermal_epithermal_ratio": 2.637,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4580,
+  "cell": [
+   95,
+   152
+  ],
+  "hours": 35.0,
+  "thermal_cps": 4.798,
+  "epithermal_cps": 2.15,
+  "thermal_epithermal_ratio": 2.232,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4581,
+  "cell": [
+   92,
+   155
+  ],
+  "hours": 12.4,
+  "thermal_cps": 5.466,
+  "epithermal_cps": 2.22,
+  "thermal_epithermal_ratio": 2.462,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4582,
+  "cell": [
+   92,
+   155
+  ],
+  "hours": 28.2,
+  "thermal_cps": 5.555,
+  "epithermal_cps": 2.216,
+  "thermal_epithermal_ratio": 2.506,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4583,
+  "cell": [
+   92,
+   155
+  ],
+  "hours": 19.4,
+  "thermal_cps": 5.583,
+  "epithermal_cps": 2.252,
+  "thermal_epithermal_ratio": 2.479,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4584,
+  "cell": [
+   92,
+   155
+  ],
+  "hours": 23.0,
+  "thermal_cps": 5.6,
+  "epithermal_cps": 2.253,
+  "thermal_epithermal_ratio": 2.486,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4586,
+  "cell": [
+   90,
+   157
+  ],
+  "hours": 37.0,
+  "thermal_cps": 5.835,
+  "epithermal_cps": 2.112,
+  "thermal_epithermal_ratio": 2.763,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4587,
+  "cell": [
+   90,
+   157
+  ],
+  "hours": 21.0,
+  "thermal_cps": 6.018,
+  "epithermal_cps": 2.171,
+  "thermal_epithermal_ratio": 2.772,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4588,
+  "cell": [
+   88,
+   158
+  ],
+  "hours": 43.4,
+  "thermal_cps": 6.272,
+  "epithermal_cps": 2.29,
+  "thermal_epithermal_ratio": 2.739,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4589,
+  "cell": [
+   87,
+   156
+  ],
+  "hours": 9.8,
+  "thermal_cps": 6.34,
+  "epithermal_cps": 2.288,
+  "thermal_epithermal_ratio": 2.771,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4590,
+  "cell": [
+   87,
+   156
+  ],
+  "hours": 20.8,
+  "thermal_cps": 6.343,
+  "epithermal_cps": 2.308,
+  "thermal_epithermal_ratio": 2.748,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4591,
+  "cell": [
+   87,
+   156
+  ],
+  "hours": 22.9,
+  "thermal_cps": 6.069,
+  "epithermal_cps": 2.283,
+  "thermal_epithermal_ratio": 2.658,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4592,
+  "cell": [
+   86,
+   156
+  ],
+  "hours": 14.3,
+  "thermal_cps": 5.862,
+  "epithermal_cps": 2.284,
+  "thermal_epithermal_ratio": 2.566,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4593,
+  "cell": [
+   86,
+   156
+  ],
+  "hours": 25.0,
+  "thermal_cps": 5.861,
+  "epithermal_cps": 2.27,
+  "thermal_epithermal_ratio": 2.582,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4594,
+  "cell": [
+   86,
+   156
+  ],
+  "hours": 25.4,
+  "thermal_cps": 5.879,
+  "epithermal_cps": 2.234,
+  "thermal_epithermal_ratio": 2.631,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4595,
+  "cell": [
+   86,
+   160
+  ],
+  "hours": 26.9,
+  "thermal_cps": 5.92,
+  "epithermal_cps": 2.199,
+  "thermal_epithermal_ratio": 2.692,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4596,
+  "cell": [
+   85,
+   161
+  ],
+  "hours": 26.5,
+  "thermal_cps": 6.105,
+  "epithermal_cps": 2.212,
+  "thermal_epithermal_ratio": 2.76,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4597,
+  "cell": [
+   83,
+   164
+  ],
+  "hours": 31.1,
+  "thermal_cps": 6.094,
+  "epithermal_cps": 2.232,
+  "thermal_epithermal_ratio": 2.73,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4598,
+  "cell": [
+   83,
+   164
+  ],
+  "hours": 29.6,
+  "thermal_cps": 6.118,
+  "epithermal_cps": 2.207,
+  "thermal_epithermal_ratio": 2.772,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4599,
+  "cell": [
+   81,
+   168
+  ],
+  "hours": 10.0,
+  "thermal_cps": 5.938,
+  "epithermal_cps": 2.123,
+  "thermal_epithermal_ratio": 2.797,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4600,
+  "cell": [
+   81,
+   168
+  ],
+  "hours": 52.3,
+  "thermal_cps": 6.033,
+  "epithermal_cps": 2.151,
+  "thermal_epithermal_ratio": 2.805,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4601,
+  "cell": [
+   80,
+   169
+  ],
+  "hours": 8.0,
+  "thermal_cps": 5.866,
+  "epithermal_cps": 2.064,
+  "thermal_epithermal_ratio": 2.842,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4602,
+  "cell": [
+   80,
+   169
+  ],
+  "hours": 43.7,
+  "thermal_cps": 6.062,
+  "epithermal_cps": 2.135,
+  "thermal_epithermal_ratio": 2.839,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4603,
+  "cell": [
+   80,
+   170
+  ],
+  "hours": 8.0,
+  "thermal_cps": 6.444,
+  "epithermal_cps": 2.177,
+  "thermal_epithermal_ratio": 2.959,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4604,
+  "cell": [
+   80,
+   170
+  ],
+  "hours": 27.5,
+  "thermal_cps": 6.475,
+  "epithermal_cps": 2.191,
+  "thermal_epithermal_ratio": 2.955,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4605,
+  "cell": [
+   79,
+   171
+  ],
+  "hours": 38.0,
+  "thermal_cps": 6.784,
+  "epithermal_cps": 2.303,
+  "thermal_epithermal_ratio": 2.945,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4606,
+  "cell": [
+   79,
+   171
+  ],
+  "hours": 23.3,
+  "thermal_cps": 7.038,
+  "epithermal_cps": 2.377,
+  "thermal_epithermal_ratio": 2.96,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4607,
+  "cell": [
+   79,
+   171
+  ],
+  "hours": 7.6,
+  "thermal_cps": 7.061,
+  "epithermal_cps": 2.344,
+  "thermal_epithermal_ratio": 3.012,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4608,
+  "cell": [
+   79,
+   171
+  ],
+  "hours": 25.8,
+  "thermal_cps": 7.058,
+  "epithermal_cps": 2.361,
+  "thermal_epithermal_ratio": 2.989,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4609,
+  "cell": [
+   79,
+   171
+  ],
+  "hours": 25.6,
+  "thermal_cps": 7.134,
+  "epithermal_cps": 2.333,
+  "thermal_epithermal_ratio": 3.058,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4610,
+  "cell": [
+   78,
+   173
+  ],
+  "hours": 8.0,
+  "thermal_cps": 7.201,
+  "epithermal_cps": 2.317,
+  "thermal_epithermal_ratio": 3.108,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4611,
+  "cell": [
+   78,
+   173
+  ],
+  "hours": 29.6,
+  "thermal_cps": 7.239,
+  "epithermal_cps": 2.34,
+  "thermal_epithermal_ratio": 3.093,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4613,
+  "cell": [
+   77,
+   174
+  ],
+  "hours": 9.1,
+  "thermal_cps": 6.616,
+  "epithermal_cps": 2.263,
+  "thermal_epithermal_ratio": 2.923,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4614,
+  "cell": [
+   77,
+   174
+  ],
+  "hours": 56.8,
+  "thermal_cps": 6.598,
+  "epithermal_cps": 2.271,
+  "thermal_epithermal_ratio": 2.905,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4615,
+  "cell": [
+   79,
+   176
+  ],
+  "hours": 8.0,
+  "thermal_cps": 6.938,
+  "epithermal_cps": 2.261,
+  "thermal_epithermal_ratio": 3.069,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4616,
+  "cell": [
+   79,
+   176
+  ],
+  "hours": 43.2,
+  "thermal_cps": 6.844,
+  "epithermal_cps": 2.27,
+  "thermal_epithermal_ratio": 3.015,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4617,
+  "cell": [
+   79,
+   178
+  ],
+  "hours": 29.7,
+  "thermal_cps": 6.659,
+  "epithermal_cps": 2.279,
+  "thermal_epithermal_ratio": 2.922,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4618,
+  "cell": [
+   79,
+   178
+  ],
+  "hours": 49.0,
+  "thermal_cps": 6.673,
+  "epithermal_cps": 2.283,
+  "thermal_epithermal_ratio": 2.923,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4619,
+  "cell": [
+   79,
+   178
+  ],
+  "hours": 8.1,
+  "thermal_cps": 6.769,
+  "epithermal_cps": 2.289,
+  "thermal_epithermal_ratio": 2.957,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4620,
+  "cell": [
+   79,
+   178
+  ],
+  "hours": 16.5,
+  "thermal_cps": 6.801,
+  "epithermal_cps": 2.281,
+  "thermal_epithermal_ratio": 2.982,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4621,
+  "cell": [
+   79,
+   178
+  ],
+  "hours": 45.4,
+  "thermal_cps": 6.946,
+  "epithermal_cps": 2.338,
+  "thermal_epithermal_ratio": 2.971,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4622,
+  "cell": [
+   79,
+   178
+  ],
+  "hours": 31.3,
+  "thermal_cps": 6.854,
+  "epithermal_cps": 2.285,
+  "thermal_epithermal_ratio": 3.0,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4623,
+  "cell": [
+   82,
+   178
+  ],
+  "hours": 35.1,
+  "thermal_cps": 6.553,
+  "epithermal_cps": 2.271,
+  "thermal_epithermal_ratio": 2.885,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4624,
+  "cell": [
+   82,
+   178
+  ],
+  "hours": 27.1,
+  "thermal_cps": 6.382,
+  "epithermal_cps": 2.241,
+  "thermal_epithermal_ratio": 2.847,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4625,
+  "cell": [
+   82,
+   179
+  ],
+  "hours": 22.2,
+  "thermal_cps": 6.327,
+  "epithermal_cps": 2.241,
+  "thermal_epithermal_ratio": 2.823,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4626,
+  "cell": [
+   81,
+   181
+  ],
+  "hours": 21.5,
+  "thermal_cps": 6.287,
+  "epithermal_cps": 2.265,
+  "thermal_epithermal_ratio": 2.775,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4627,
+  "cell": [
+   81,
+   181
+  ],
+  "hours": 37.3,
+  "thermal_cps": 6.314,
+  "epithermal_cps": 2.256,
+  "thermal_epithermal_ratio": 2.799,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4628,
+  "cell": [
+   81,
+   181
+  ],
+  "hours": 21.1,
+  "thermal_cps": 6.58,
+  "epithermal_cps": 2.261,
+  "thermal_epithermal_ratio": 2.91,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4629,
+  "cell": [
+   79,
+   182
+  ],
+  "hours": 42.8,
+  "thermal_cps": 7.108,
+  "epithermal_cps": 2.323,
+  "thermal_epithermal_ratio": 3.059,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4630,
+  "cell": [
+   81,
+   183
+  ],
+  "hours": 8.8,
+  "thermal_cps": 7.31,
+  "epithermal_cps": 2.381,
+  "thermal_epithermal_ratio": 3.07,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4631,
+  "cell": [
+   81,
+   183
+  ],
+  "hours": 22.4,
+  "thermal_cps": 7.3,
+  "epithermal_cps": 2.411,
+  "thermal_epithermal_ratio": 3.028,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4632,
+  "cell": [
+   81,
+   183
+  ],
+  "hours": 9.7,
+  "thermal_cps": 7.333,
+  "epithermal_cps": 2.405,
+  "thermal_epithermal_ratio": 3.05,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4633,
+  "cell": [
+   81,
+   183
+  ],
+  "hours": 25.5,
+  "thermal_cps": 6.423,
+  "epithermal_cps": 2.282,
+  "thermal_epithermal_ratio": 2.815,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4634,
+  "cell": [
+   80,
+   186
+  ],
+  "hours": 54.7,
+  "thermal_cps": 5.377,
+  "epithermal_cps": 2.154,
+  "thermal_epithermal_ratio": 2.496,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4635,
+  "cell": [
+   76,
+   185
+  ],
+  "hours": 12.5,
+  "thermal_cps": 7.44,
+  "epithermal_cps": 2.447,
+  "thermal_epithermal_ratio": 3.04,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4636,
+  "cell": [
+   76,
+   185
+  ],
+  "hours": 40.5,
+  "thermal_cps": 7.101,
+  "epithermal_cps": 2.363,
+  "thermal_epithermal_ratio": 3.005,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4637,
+  "cell": [
+   78,
+   186
+  ],
+  "hours": 12.4,
+  "thermal_cps": 5.657,
+  "epithermal_cps": 2.095,
+  "thermal_epithermal_ratio": 2.701,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4638,
+  "cell": [
+   78,
+   186
+  ],
+  "hours": 32.4,
+  "thermal_cps": 5.71,
+  "epithermal_cps": 2.093,
+  "thermal_epithermal_ratio": 2.729,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4639,
+  "cell": [
+   78,
+   186
+  ],
+  "hours": 24.7,
+  "thermal_cps": 5.824,
+  "epithermal_cps": 2.178,
+  "thermal_epithermal_ratio": 2.675,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4640,
+  "cell": [
+   78,
+   186
+  ],
+  "hours": 11.0,
+  "thermal_cps": 6.135,
+  "epithermal_cps": 2.246,
+  "thermal_epithermal_ratio": 2.732,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4641,
+  "cell": [
+   78,
+   186
+  ],
+  "hours": 54.7,
+  "thermal_cps": 6.066,
+  "epithermal_cps": 2.255,
+  "thermal_epithermal_ratio": 2.69,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4642,
+  "cell": [
+   78,
+   187
+  ],
+  "hours": 7.6,
+  "thermal_cps": 6.037,
+  "epithermal_cps": 2.235,
+  "thermal_epithermal_ratio": 2.701,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4643,
+  "cell": [
+   78,
+   187
+  ],
+  "hours": 60.0,
+  "thermal_cps": 6.108,
+  "epithermal_cps": 2.268,
+  "thermal_epithermal_ratio": 2.693,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4644,
+  "cell": [
+   78,
+   188
+  ],
+  "hours": 8.1,
+  "thermal_cps": 6.238,
+  "epithermal_cps": 2.279,
+  "thermal_epithermal_ratio": 2.737,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4645,
+  "cell": [
+   78,
+   188
+  ],
+  "hours": 42.1,
+  "thermal_cps": 6.308,
+  "epithermal_cps": 2.275,
+  "thermal_epithermal_ratio": 2.772,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4646,
+  "cell": [
+   78,
+   188
+  ],
+  "hours": 24.0,
+  "thermal_cps": 6.35,
+  "epithermal_cps": 2.246,
+  "thermal_epithermal_ratio": 2.827,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4647,
+  "cell": [
+   79,
+   188
+  ],
+  "hours": 27.0,
+  "thermal_cps": 6.089,
+  "epithermal_cps": 2.213,
+  "thermal_epithermal_ratio": 2.752,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4648,
+  "cell": [
+   81,
+   189
+  ],
+  "hours": 28.2,
+  "thermal_cps": 5.767,
+  "epithermal_cps": 2.176,
+  "thermal_epithermal_ratio": 2.65,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4649,
+  "cell": [
+   81,
+   189
+  ],
+  "hours": 26.6,
+  "thermal_cps": 5.756,
+  "epithermal_cps": 2.152,
+  "thermal_epithermal_ratio": 2.675,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4650,
+  "cell": [
+   81,
+   189
+  ],
+  "hours": 24.1,
+  "thermal_cps": 5.912,
+  "epithermal_cps": 2.163,
+  "thermal_epithermal_ratio": 2.733,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4651,
+  "cell": [
+   82,
+   189
+  ],
+  "hours": 10.7,
+  "thermal_cps": 6.116,
+  "epithermal_cps": 2.171,
+  "thermal_epithermal_ratio": 2.817,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4652,
+  "cell": [
+   82,
+   189
+  ],
+  "hours": 49.5,
+  "thermal_cps": 6.1,
+  "epithermal_cps": 2.189,
+  "thermal_epithermal_ratio": 2.787,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4653,
+  "cell": [
+   82,
+   189
+  ],
+  "hours": 33.6,
+  "thermal_cps": 6.117,
+  "epithermal_cps": 2.209,
+  "thermal_epithermal_ratio": 2.769,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4654,
+  "cell": [
+   82,
+   190
+  ],
+  "hours": 10.7,
+  "thermal_cps": 6.16,
+  "epithermal_cps": 2.205,
+  "thermal_epithermal_ratio": 2.794,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4655,
+  "cell": [
+   82,
+   190
+  ],
+  "hours": 48.8,
+  "thermal_cps": 5.961,
+  "epithermal_cps": 2.178,
+  "thermal_epithermal_ratio": 2.737,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4656,
+  "cell": [
+   82,
+   191
+  ],
+  "hours": 43.0,
+  "thermal_cps": 5.553,
+  "epithermal_cps": 2.266,
+  "thermal_epithermal_ratio": 2.45,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4657,
+  "cell": [
+   82,
+   191
+  ],
+  "hours": 15.9,
+  "thermal_cps": 5.568,
+  "epithermal_cps": 2.266,
+  "thermal_epithermal_ratio": 2.457,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4658,
+  "cell": [
+   82,
+   191
+  ],
+  "hours": 38.7,
+  "thermal_cps": 5.581,
+  "epithermal_cps": 2.263,
+  "thermal_epithermal_ratio": 2.466,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4659,
+  "cell": [
+   82,
+   191
+  ],
+  "hours": 23.7,
+  "thermal_cps": 5.599,
+  "epithermal_cps": 2.248,
+  "thermal_epithermal_ratio": 2.491,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4660,
+  "cell": [
+   83,
+   193
+  ],
+  "hours": 46.3,
+  "thermal_cps": 6.028,
+  "epithermal_cps": 2.254,
+  "thermal_epithermal_ratio": 2.674,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4661,
+  "cell": [
+   83,
+   193
+  ],
+  "hours": 29.2,
+  "thermal_cps": 6.181,
+  "epithermal_cps": 2.226,
+  "thermal_epithermal_ratio": 2.776,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4662,
+  "cell": [
+   83,
+   193
+  ],
+  "hours": 19.5,
+  "thermal_cps": 5.241,
+  "epithermal_cps": 2.212,
+  "thermal_epithermal_ratio": 2.369,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4663,
+  "cell": [
+   84,
+   194
+  ],
+  "hours": 42.7,
+  "thermal_cps": 3.516,
+  "epithermal_cps": 2.147,
+  "thermal_epithermal_ratio": 1.637,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4664,
+  "cell": [
+   84,
+   195
+  ],
+  "hours": 27.9,
+  "thermal_cps": 4.863,
+  "epithermal_cps": 2.19,
+  "thermal_epithermal_ratio": 2.221,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4665,
+  "cell": [
+   84,
+   196
+  ],
+  "hours": 18.8,
+  "thermal_cps": 5.751,
+  "epithermal_cps": 2.177,
+  "thermal_epithermal_ratio": 2.641,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4666,
+  "cell": [
+   84,
+   196
+  ],
+  "hours": 11.3,
+  "thermal_cps": 5.787,
+  "epithermal_cps": 2.174,
+  "thermal_epithermal_ratio": 2.663,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4667,
+  "cell": [
+   84,
+   196
+  ],
+  "hours": 21.3,
+  "thermal_cps": 6.148,
+  "epithermal_cps": 2.212,
+  "thermal_epithermal_ratio": 2.779,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4668,
+  "cell": [
+   86,
+   197
+  ],
+  "hours": 32.1,
+  "thermal_cps": 6.67,
+  "epithermal_cps": 2.264,
+  "thermal_epithermal_ratio": 2.946,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4669,
+  "cell": [
+   86,
+   197
+  ],
+  "hours": 24.2,
+  "thermal_cps": 6.799,
+  "epithermal_cps": 2.289,
+  "thermal_epithermal_ratio": 2.97,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4670,
+  "cell": [
+   89,
+   197
+  ],
+  "hours": 34.0,
+  "thermal_cps": 7.153,
+  "epithermal_cps": 2.306,
+  "thermal_epithermal_ratio": 3.101,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4671,
+  "cell": [
+   89,
+   197
+  ],
+  "hours": 32.2,
+  "thermal_cps": 6.881,
+  "epithermal_cps": 2.286,
+  "thermal_epithermal_ratio": 3.01,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4672,
+  "cell": [
+   92,
+   199
+  ],
+  "hours": 30.6,
+  "thermal_cps": 6.432,
+  "epithermal_cps": 2.227,
+  "thermal_epithermal_ratio": 2.888,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4673,
+  "cell": [
+   92,
+   200
+  ],
+  "hours": 27.3,
+  "thermal_cps": 6.156,
+  "epithermal_cps": 2.236,
+  "thermal_epithermal_ratio": 2.753,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4674,
+  "cell": [
+   94,
+   202
+  ],
+  "hours": 13.1,
+  "thermal_cps": 5.826,
+  "epithermal_cps": 2.301,
+  "thermal_epithermal_ratio": 2.532,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4675,
+  "cell": [
+   94,
+   202
+  ],
+  "hours": 29.4,
+  "thermal_cps": 5.86,
+  "epithermal_cps": 2.28,
+  "thermal_epithermal_ratio": 2.57,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4676,
+  "cell": [
+   94,
+   202
+  ],
+  "hours": 23.3,
+  "thermal_cps": 5.826,
+  "epithermal_cps": 2.279,
+  "thermal_epithermal_ratio": 2.556,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4677,
+  "cell": [
+   94,
+   202
+  ],
+  "hours": 20.4,
+  "thermal_cps": 5.941,
+  "epithermal_cps": 2.292,
+  "thermal_epithermal_ratio": 2.592,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4678,
+  "cell": [
+   95,
+   202
+  ],
+  "hours": 8.6,
+  "thermal_cps": 6.051,
+  "epithermal_cps": 2.302,
+  "thermal_epithermal_ratio": 2.628,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4679,
+  "cell": [
+   95,
+   202
+  ],
+  "hours": 36.8,
+  "thermal_cps": 6.086,
+  "epithermal_cps": 2.285,
+  "thermal_epithermal_ratio": 2.664,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4680,
+  "cell": [
+   95,
+   202
+  ],
+  "hours": 39.1,
+  "thermal_cps": 6.08,
+  "epithermal_cps": 2.254,
+  "thermal_epithermal_ratio": 2.698,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4681,
+  "cell": [
+   92,
+   199
+  ],
+  "hours": 8.6,
+  "thermal_cps": 6.255,
+  "epithermal_cps": 2.17,
+  "thermal_epithermal_ratio": 2.882,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4682,
+  "cell": [
+   92,
+   199
+  ],
+  "hours": 24.1,
+  "thermal_cps": 6.303,
+  "epithermal_cps": 2.178,
+  "thermal_epithermal_ratio": 2.893,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4683,
+  "cell": [
+   92,
+   199
+  ],
+  "hours": 26.3,
+  "thermal_cps": 6.274,
+  "epithermal_cps": 2.164,
+  "thermal_epithermal_ratio": 2.899,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4684,
+  "cell": [
+   91,
+   199
+  ],
+  "hours": 21.9,
+  "thermal_cps": 6.456,
+  "epithermal_cps": 2.207,
+  "thermal_epithermal_ratio": 2.925,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4685,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 7.6,
+  "thermal_cps": 6.55,
+  "epithermal_cps": 2.262,
+  "thermal_epithermal_ratio": 2.896,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4686,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 20.2,
+  "thermal_cps": 6.601,
+  "epithermal_cps": 2.258,
+  "thermal_epithermal_ratio": 2.924,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4687,
+  "cell": [
+   90,
+   196
+  ],
+  "hours": 30.8,
+  "thermal_cps": 7.096,
+  "epithermal_cps": 2.26,
+  "thermal_epithermal_ratio": 3.14,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4688,
+  "cell": [
+   90,
+   196
+  ],
+  "hours": 11.0,
+  "thermal_cps": 7.437,
+  "epithermal_cps": 2.25,
+  "thermal_epithermal_ratio": 3.305,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4689,
+  "cell": [
+   90,
+   196
+  ],
+  "hours": 11.9,
+  "thermal_cps": 7.413,
+  "epithermal_cps": 2.269,
+  "thermal_epithermal_ratio": 3.267,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4690,
+  "cell": [
+   90,
+   196
+  ],
+  "hours": 13.6,
+  "thermal_cps": 7.414,
+  "epithermal_cps": 2.273,
+  "thermal_epithermal_ratio": 3.262,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4691,
+  "cell": [
+   90,
+   196
+  ],
+  "hours": 10.1,
+  "thermal_cps": 7.445,
+  "epithermal_cps": 2.265,
+  "thermal_epithermal_ratio": 3.287,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4693,
+  "cell": [
+   90,
+   196
+  ],
+  "hours": 17.7,
+  "thermal_cps": 7.466,
+  "epithermal_cps": 2.273,
+  "thermal_epithermal_ratio": 3.284,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4694,
+  "cell": [
+   90,
+   196
+  ],
+  "hours": 6.2,
+  "thermal_cps": 7.445,
+  "epithermal_cps": 2.256,
+  "thermal_epithermal_ratio": 3.301,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4695,
+  "cell": [
+   90,
+   196
+  ],
+  "hours": 34.9,
+  "thermal_cps": 7.496,
+  "epithermal_cps": 2.281,
+  "thermal_epithermal_ratio": 3.286,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4696,
+  "cell": [
+   90,
+   196
+  ],
+  "hours": 42.5,
+  "thermal_cps": 7.493,
+  "epithermal_cps": 2.27,
+  "thermal_epithermal_ratio": 3.3,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4697,
+  "cell": [
+   90,
+   196
+  ],
+  "hours": 10.6,
+  "thermal_cps": 7.488,
+  "epithermal_cps": 2.293,
+  "thermal_epithermal_ratio": 3.266,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4698,
+  "cell": [
+   90,
+   196
+  ],
+  "hours": 10.6,
+  "thermal_cps": 7.504,
+  "epithermal_cps": 2.275,
+  "thermal_epithermal_ratio": 3.298,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4699,
+  "cell": [
+   90,
+   196
+  ],
+  "hours": 5.6,
+  "thermal_cps": 7.474,
+  "epithermal_cps": 2.252,
+  "thermal_epithermal_ratio": 3.319,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4701,
+  "cell": [
+   90,
+   196
+  ],
+  "hours": 8.7,
+  "thermal_cps": 7.516,
+  "epithermal_cps": 2.244,
+  "thermal_epithermal_ratio": 3.35,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4702,
+  "cell": [
+   90,
+   196
+  ],
+  "hours": 16.7,
+  "thermal_cps": 7.46,
+  "epithermal_cps": 2.267,
+  "thermal_epithermal_ratio": 3.291,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4703,
+  "cell": [
+   90,
+   196
+  ],
+  "hours": 9.6,
+  "thermal_cps": 7.461,
+  "epithermal_cps": 2.246,
+  "thermal_epithermal_ratio": 3.321,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4704,
+  "cell": [
+   90,
+   196
+  ],
+  "hours": 15.8,
+  "thermal_cps": 7.402,
+  "epithermal_cps": 2.246,
+  "thermal_epithermal_ratio": 3.295,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4705,
+  "cell": [
+   90,
+   196
+  ],
+  "hours": 10.7,
+  "thermal_cps": 7.457,
+  "epithermal_cps": 2.23,
+  "thermal_epithermal_ratio": 3.344,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4706,
+  "cell": [
+   90,
+   196
+  ],
+  "hours": 23.8,
+  "thermal_cps": 7.476,
+  "epithermal_cps": 2.263,
+  "thermal_epithermal_ratio": 3.303,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4707,
+  "cell": [
+   90,
+   196
+  ],
+  "hours": 9.7,
+  "thermal_cps": 7.447,
+  "epithermal_cps": 2.255,
+  "thermal_epithermal_ratio": 3.302,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4708,
+  "cell": [
+   90,
+   196
+  ],
+  "hours": 13.0,
+  "thermal_cps": 7.416,
+  "epithermal_cps": 2.256,
+  "thermal_epithermal_ratio": 3.287,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4710,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 6.8,
+  "thermal_cps": 6.971,
+  "epithermal_cps": 2.293,
+  "thermal_epithermal_ratio": 3.04,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4711,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 56.5,
+  "thermal_cps": 6.809,
+  "epithermal_cps": 2.283,
+  "thermal_epithermal_ratio": 2.983,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4712,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 8.7,
+  "thermal_cps": 6.514,
+  "epithermal_cps": 2.2,
+  "thermal_epithermal_ratio": 2.96,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4713,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 24.8,
+  "thermal_cps": 6.486,
+  "epithermal_cps": 2.219,
+  "thermal_epithermal_ratio": 2.922,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4714,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 13.1,
+  "thermal_cps": 6.535,
+  "epithermal_cps": 2.237,
+  "thermal_epithermal_ratio": 2.921,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4715,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 10.9,
+  "thermal_cps": 6.552,
+  "epithermal_cps": 2.224,
+  "thermal_epithermal_ratio": 2.946,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4716,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 51.8,
+  "thermal_cps": 6.626,
+  "epithermal_cps": 2.256,
+  "thermal_epithermal_ratio": 2.936,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4717,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 11.9,
+  "thermal_cps": 6.52,
+  "epithermal_cps": 2.234,
+  "thermal_epithermal_ratio": 2.919,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4718,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 29.6,
+  "thermal_cps": 6.529,
+  "epithermal_cps": 2.239,
+  "thermal_epithermal_ratio": 2.917,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4719,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 12.5,
+  "thermal_cps": 6.543,
+  "epithermal_cps": 2.223,
+  "thermal_epithermal_ratio": 2.944,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4720,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 9.5,
+  "thermal_cps": 6.53,
+  "epithermal_cps": 2.223,
+  "thermal_epithermal_ratio": 2.937,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4721,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 42.3,
+  "thermal_cps": 6.406,
+  "epithermal_cps": 2.216,
+  "thermal_epithermal_ratio": 2.891,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4722,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 9.8,
+  "thermal_cps": 6.56,
+  "epithermal_cps": 2.212,
+  "thermal_epithermal_ratio": 2.966,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4723,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 26.7,
+  "thermal_cps": 6.561,
+  "epithermal_cps": 2.237,
+  "thermal_epithermal_ratio": 2.933,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4724,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 13.0,
+  "thermal_cps": 6.559,
+  "epithermal_cps": 2.226,
+  "thermal_epithermal_ratio": 2.947,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4725,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 49.6,
+  "thermal_cps": 6.583,
+  "epithermal_cps": 2.235,
+  "thermal_epithermal_ratio": 2.945,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4726,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 16.2,
+  "thermal_cps": 6.578,
+  "epithermal_cps": 2.213,
+  "thermal_epithermal_ratio": 2.972,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4727,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 12.1,
+  "thermal_cps": 6.552,
+  "epithermal_cps": 2.228,
+  "thermal_epithermal_ratio": 2.94,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4728,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 13.9,
+  "thermal_cps": 6.575,
+  "epithermal_cps": 2.216,
+  "thermal_epithermal_ratio": 2.968,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4729,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 7.6,
+  "thermal_cps": 6.512,
+  "epithermal_cps": 2.211,
+  "thermal_epithermal_ratio": 2.946,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4730,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 21.2,
+  "thermal_cps": 6.406,
+  "epithermal_cps": 2.199,
+  "thermal_epithermal_ratio": 2.913,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4731,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 13.6,
+  "thermal_cps": 6.523,
+  "epithermal_cps": 2.218,
+  "thermal_epithermal_ratio": 2.94,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4732,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 17.9,
+  "thermal_cps": 6.514,
+  "epithermal_cps": 2.215,
+  "thermal_epithermal_ratio": 2.941,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4734,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 20.0,
+  "thermal_cps": 6.5,
+  "epithermal_cps": 2.231,
+  "thermal_epithermal_ratio": 2.914,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4735,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 31.1,
+  "thermal_cps": 6.527,
+  "epithermal_cps": 2.231,
+  "thermal_epithermal_ratio": 2.926,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4736,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 20.8,
+  "thermal_cps": 6.523,
+  "epithermal_cps": 2.217,
+  "thermal_epithermal_ratio": 2.943,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4737,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 6.0,
+  "thermal_cps": 6.497,
+  "epithermal_cps": 2.218,
+  "thermal_epithermal_ratio": 2.929,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4738,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 25.4,
+  "thermal_cps": 6.531,
+  "epithermal_cps": 2.222,
+  "thermal_epithermal_ratio": 2.939,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4739,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 28.3,
+  "thermal_cps": 6.58,
+  "epithermal_cps": 2.233,
+  "thermal_epithermal_ratio": 2.946,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4740,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 23.9,
+  "thermal_cps": 6.563,
+  "epithermal_cps": 2.239,
+  "thermal_epithermal_ratio": 2.932,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4741,
+  "cell": [
+   90,
+   195
+  ],
+  "hours": 36.1,
+  "thermal_cps": 6.408,
+  "epithermal_cps": 2.167,
+  "thermal_epithermal_ratio": 2.956,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4742,
+  "cell": [
+   90,
+   195
+  ],
+  "hours": 7.0,
+  "thermal_cps": 6.15,
+  "epithermal_cps": 2.102,
+  "thermal_epithermal_ratio": 2.926,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4743,
+  "cell": [
+   90,
+   195
+  ],
+  "hours": 13.9,
+  "thermal_cps": 6.153,
+  "epithermal_cps": 2.088,
+  "thermal_epithermal_ratio": 2.947,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4744,
+  "cell": [
+   90,
+   195
+  ],
+  "hours": 12.5,
+  "thermal_cps": 6.163,
+  "epithermal_cps": 2.095,
+  "thermal_epithermal_ratio": 2.941,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4745,
+  "cell": [
+   90,
+   195
+  ],
+  "hours": 25.8,
+  "thermal_cps": 6.145,
+  "epithermal_cps": 2.09,
+  "thermal_epithermal_ratio": 2.941,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4746,
+  "cell": [
+   90,
+   195
+  ],
+  "hours": 16.3,
+  "thermal_cps": 6.144,
+  "epithermal_cps": 2.107,
+  "thermal_epithermal_ratio": 2.916,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4747,
+  "cell": [
+   90,
+   195
+  ],
+  "hours": 22.5,
+  "thermal_cps": 6.171,
+  "epithermal_cps": 2.083,
+  "thermal_epithermal_ratio": 2.963,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4748,
+  "cell": [
+   90,
+   195
+  ],
+  "hours": 33.0,
+  "thermal_cps": 6.436,
+  "epithermal_cps": 2.139,
+  "thermal_epithermal_ratio": 3.009,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4749,
+  "cell": [
+   91,
+   196
+  ],
+  "hours": 6.1,
+  "thermal_cps": 7.221,
+  "epithermal_cps": 2.319,
+  "thermal_epithermal_ratio": 3.114,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4750,
+  "cell": [
+   91,
+   196
+  ],
+  "hours": 27.1,
+  "thermal_cps": 7.298,
+  "epithermal_cps": 2.295,
+  "thermal_epithermal_ratio": 3.18,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4751,
+  "cell": [
+   91,
+   196
+  ],
+  "hours": 13.2,
+  "thermal_cps": 7.307,
+  "epithermal_cps": 2.3,
+  "thermal_epithermal_ratio": 3.177,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4752,
+  "cell": [
+   91,
+   196
+  ],
+  "hours": 65.7,
+  "thermal_cps": 7.003,
+  "epithermal_cps": 2.266,
+  "thermal_epithermal_ratio": 3.091,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4753,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 15.9,
+  "thermal_cps": 6.115,
+  "epithermal_cps": 2.177,
+  "thermal_epithermal_ratio": 2.809,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4754,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 78.7,
+  "thermal_cps": 6.124,
+  "epithermal_cps": 2.176,
+  "thermal_epithermal_ratio": 2.815,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4755,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 92.6,
+  "thermal_cps": 6.066,
+  "epithermal_cps": 2.175,
+  "thermal_epithermal_ratio": 2.79,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4756,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 33.1,
+  "thermal_cps": 6.117,
+  "epithermal_cps": 2.169,
+  "thermal_epithermal_ratio": 2.821,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4757,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 121.0,
+  "thermal_cps": 6.265,
+  "epithermal_cps": 2.205,
+  "thermal_epithermal_ratio": 2.841,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4758,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 21.5,
+  "thermal_cps": 6.145,
+  "epithermal_cps": 2.172,
+  "thermal_epithermal_ratio": 2.829,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4759,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 67.2,
+  "thermal_cps": 6.141,
+  "epithermal_cps": 2.179,
+  "thermal_epithermal_ratio": 2.818,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4760,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 73.9,
+  "thermal_cps": 6.176,
+  "epithermal_cps": 2.197,
+  "thermal_epithermal_ratio": 2.811,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4761,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 19.8,
+  "thermal_cps": 6.156,
+  "epithermal_cps": 2.163,
+  "thermal_epithermal_ratio": 2.846,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4762,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 47.7,
+  "thermal_cps": 6.14,
+  "epithermal_cps": 2.161,
+  "thermal_epithermal_ratio": 2.841,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4764,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 136.8,
+  "thermal_cps": 6.346,
+  "epithermal_cps": 2.235,
+  "thermal_epithermal_ratio": 2.839,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4767,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 135.8,
+  "thermal_cps": 6.357,
+  "epithermal_cps": 2.233,
+  "thermal_epithermal_ratio": 2.846,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4770,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 107.6,
+  "thermal_cps": 6.31,
+  "epithermal_cps": 2.224,
+  "thermal_epithermal_ratio": 2.837,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4788,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 19.0,
+  "thermal_cps": 6.178,
+  "epithermal_cps": 2.189,
+  "thermal_epithermal_ratio": 2.823,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4789,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 11.9,
+  "thermal_cps": 6.41,
+  "epithermal_cps": 2.167,
+  "thermal_epithermal_ratio": 2.958,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4791,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 17.6,
+  "thermal_cps": 6.434,
+  "epithermal_cps": 2.179,
+  "thermal_epithermal_ratio": 2.953,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4792,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 4.0,
+  "thermal_cps": 6.392,
+  "epithermal_cps": 2.174,
+  "thermal_epithermal_ratio": 2.94,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4793,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 23.9,
+  "thermal_cps": 6.433,
+  "epithermal_cps": 2.19,
+  "thermal_epithermal_ratio": 2.937,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4795,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 22.0,
+  "thermal_cps": 6.43,
+  "epithermal_cps": 2.182,
+  "thermal_epithermal_ratio": 2.947,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4796,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 10.6,
+  "thermal_cps": 6.404,
+  "epithermal_cps": 2.192,
+  "thermal_epithermal_ratio": 2.921,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4797,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 15.5,
+  "thermal_cps": 6.403,
+  "epithermal_cps": 2.162,
+  "thermal_epithermal_ratio": 2.962,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4798,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 21.4,
+  "thermal_cps": 6.422,
+  "epithermal_cps": 2.193,
+  "thermal_epithermal_ratio": 2.928,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4799,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 5.7,
+  "thermal_cps": 6.377,
+  "epithermal_cps": 2.196,
+  "thermal_epithermal_ratio": 2.904,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4800,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 10.7,
+  "thermal_cps": 6.454,
+  "epithermal_cps": 2.207,
+  "thermal_epithermal_ratio": 2.924,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4801,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 4.8,
+  "thermal_cps": 6.421,
+  "epithermal_cps": 2.19,
+  "thermal_epithermal_ratio": 2.932,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4803,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 20.0,
+  "thermal_cps": 6.422,
+  "epithermal_cps": 2.196,
+  "thermal_epithermal_ratio": 2.925,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4804,
+  "cell": [
+   90,
+   197
+  ],
+  "hours": 13.1,
+  "thermal_cps": 6.429,
+  "epithermal_cps": 2.199,
+  "thermal_epithermal_ratio": 2.923,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4805,
+  "cell": [
+   91,
+   197
+  ],
+  "hours": 21.0,
+  "thermal_cps": 6.393,
+  "epithermal_cps": 2.189,
+  "thermal_epithermal_ratio": 2.921,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4808,
+  "cell": [
+   93,
+   196
+  ],
+  "hours": 12.7,
+  "thermal_cps": 6.302,
+  "epithermal_cps": 2.197,
+  "thermal_epithermal_ratio": 2.869,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4809,
+  "cell": [
+   93,
+   196
+  ],
+  "hours": 46.4,
+  "thermal_cps": 6.333,
+  "epithermal_cps": 2.187,
+  "thermal_epithermal_ratio": 2.895,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4810,
+  "cell": [
+   94,
+   194
+  ],
+  "hours": 37.7,
+  "thermal_cps": 6.369,
+  "epithermal_cps": 2.249,
+  "thermal_epithermal_ratio": 2.833,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4811,
+  "cell": [
+   94,
+   194
+  ],
+  "hours": 23.8,
+  "thermal_cps": 6.466,
+  "epithermal_cps": 2.256,
+  "thermal_epithermal_ratio": 2.866,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4812,
+  "cell": [
+   94,
+   194
+  ],
+  "hours": 45.3,
+  "thermal_cps": 6.59,
+  "epithermal_cps": 2.255,
+  "thermal_epithermal_ratio": 2.922,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4813,
+  "cell": [
+   94,
+   194
+  ],
+  "hours": 47.1,
+  "thermal_cps": 6.367,
+  "epithermal_cps": 2.245,
+  "thermal_epithermal_ratio": 2.836,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4814,
+  "cell": [
+   95,
+   192
+  ],
+  "hours": 10.0,
+  "thermal_cps": 5.555,
+  "epithermal_cps": 2.188,
+  "thermal_epithermal_ratio": 2.539,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4815,
+  "cell": [
+   95,
+   192
+  ],
+  "hours": 40.7,
+  "thermal_cps": 5.591,
+  "epithermal_cps": 2.177,
+  "thermal_epithermal_ratio": 2.568,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4816,
+  "cell": [
+   96,
+   193
+  ],
+  "hours": 23.0,
+  "thermal_cps": 5.762,
+  "epithermal_cps": 2.214,
+  "thermal_epithermal_ratio": 2.602,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4817,
+  "cell": [
+   97,
+   193
+  ],
+  "hours": 9.0,
+  "thermal_cps": 5.6,
+  "epithermal_cps": 2.199,
+  "thermal_epithermal_ratio": 2.546,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4818,
+  "cell": [
+   97,
+   193
+  ],
+  "hours": 68.0,
+  "thermal_cps": 5.736,
+  "epithermal_cps": 2.225,
+  "thermal_epithermal_ratio": 2.578,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4819,
+  "cell": [
+   102,
+   196
+  ],
+  "hours": 12.2,
+  "thermal_cps": 6.821,
+  "epithermal_cps": 2.324,
+  "thermal_epithermal_ratio": 2.935,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4820,
+  "cell": [
+   102,
+   196
+  ],
+  "hours": 52.6,
+  "thermal_cps": 6.66,
+  "epithermal_cps": 2.298,
+  "thermal_epithermal_ratio": 2.898,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4821,
+  "cell": [
+   103,
+   195
+  ],
+  "hours": 14.3,
+  "thermal_cps": 6.544,
+  "epithermal_cps": 2.164,
+  "thermal_epithermal_ratio": 3.024,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4822,
+  "cell": [
+   103,
+   195
+  ],
+  "hours": 70.9,
+  "thermal_cps": 6.572,
+  "epithermal_cps": 2.189,
+  "thermal_epithermal_ratio": 3.002,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4823,
+  "cell": [
+   102,
+   196
+  ],
+  "hours": 26.3,
+  "thermal_cps": 5.228,
+  "epithermal_cps": 2.198,
+  "thermal_epithermal_ratio": 2.379,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4824,
+  "cell": [
+   102,
+   196
+  ],
+  "hours": 14.7,
+  "thermal_cps": 5.121,
+  "epithermal_cps": 2.219,
+  "thermal_epithermal_ratio": 2.308,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4825,
+  "cell": [
+   102,
+   196
+  ],
+  "hours": 47.6,
+  "thermal_cps": 5.107,
+  "epithermal_cps": 2.214,
+  "thermal_epithermal_ratio": 2.306,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4826,
+  "cell": [
+   102,
+   196
+  ],
+  "hours": 41.0,
+  "thermal_cps": 5.157,
+  "epithermal_cps": 2.211,
+  "thermal_epithermal_ratio": 2.332,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4827,
+  "cell": [
+   103,
+   197
+  ],
+  "hours": 30.9,
+  "thermal_cps": 5.303,
+  "epithermal_cps": 2.248,
+  "thermal_epithermal_ratio": 2.359,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4828,
+  "cell": [
+   104,
+   198
+  ],
+  "hours": 8.1,
+  "thermal_cps": 5.498,
+  "epithermal_cps": 2.304,
+  "thermal_epithermal_ratio": 2.386,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4829,
+  "cell": [
+   104,
+   198
+  ],
+  "hours": 36.1,
+  "thermal_cps": 5.5,
+  "epithermal_cps": 2.305,
+  "thermal_epithermal_ratio": 2.386,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4830,
+  "cell": [
+   104,
+   199
+  ],
+  "hours": 25.8,
+  "thermal_cps": 5.456,
+  "epithermal_cps": 2.243,
+  "thermal_epithermal_ratio": 2.432,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4831,
+  "cell": [
+   102,
+   203
+  ],
+  "hours": 12.7,
+  "thermal_cps": 5.508,
+  "epithermal_cps": 2.22,
+  "thermal_epithermal_ratio": 2.481,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4832,
+  "cell": [
+   102,
+   203
+  ],
+  "hours": 41.7,
+  "thermal_cps": 5.516,
+  "epithermal_cps": 2.228,
+  "thermal_epithermal_ratio": 2.476,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4833,
+  "cell": [
+   102,
+   203
+  ],
+  "hours": 30.6,
+  "thermal_cps": 5.513,
+  "epithermal_cps": 2.21,
+  "thermal_epithermal_ratio": 2.495,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4834,
+  "cell": [
+   103,
+   208
+  ],
+  "hours": 42.1,
+  "thermal_cps": 5.233,
+  "epithermal_cps": 2.321,
+  "thermal_epithermal_ratio": 2.255,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4835,
+  "cell": [
+   103,
+   208
+  ],
+  "hours": 8.0,
+  "thermal_cps": 5.091,
+  "epithermal_cps": 2.346,
+  "thermal_epithermal_ratio": 2.17,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4836,
+  "cell": [
+   103,
+   208
+  ],
+  "hours": 33.1,
+  "thermal_cps": 5.11,
+  "epithermal_cps": 2.351,
+  "thermal_epithermal_ratio": 2.173,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4837,
+  "cell": [
+   102,
+   209
+  ],
+  "hours": 23.3,
+  "thermal_cps": 5.125,
+  "epithermal_cps": 2.258,
+  "thermal_epithermal_ratio": 2.269,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4838,
+  "cell": [
+   100,
+   210
+  ],
+  "hours": 37.7,
+  "thermal_cps": 5.074,
+  "epithermal_cps": 2.199,
+  "thermal_epithermal_ratio": 2.307,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4839,
+  "cell": [
+   100,
+   210
+  ],
+  "hours": 24.4,
+  "thermal_cps": 4.9,
+  "epithermal_cps": 2.16,
+  "thermal_epithermal_ratio": 2.268,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4840,
+  "cell": [
+   97,
+   211
+  ],
+  "hours": 19.9,
+  "thermal_cps": 4.152,
+  "epithermal_cps": 2.003,
+  "thermal_epithermal_ratio": 2.073,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4841,
+  "cell": [
+   97,
+   212
+  ],
+  "hours": 27.9,
+  "thermal_cps": 4.825,
+  "epithermal_cps": 2.145,
+  "thermal_epithermal_ratio": 2.25,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ },
+ {
+  "sol": 4842,
+  "cell": [
+   96,
+   215
+  ],
+  "hours": 32.8,
+  "thermal_cps": 6.003,
+  "epithermal_cps": 2.368,
+  "thermal_epithermal_ratio": 2.536,
+  "source": "MSL DAN passive mode, PDS RDR (Geosciences Node)"
+ }
+]

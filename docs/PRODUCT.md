@@ -25,7 +25,7 @@ Two facts make this hard.
 
 What it is, concretely: **one app, three views of the same map.**
 
-- **The habitat display** (the night before): pick a science goal, see the layers, send the scout drone, approve the route and the packing list.
+- **The habitat display** (the sol before): pick a science goal, see the layers, send the scout helicopter (it flies in daylight), approve the route and the packing list.
 - **The tablet the crew carries** (during the walk): a minimap like in a video game: where you are, where to go, the path, and the layers that matter (ground, minerals, chemistry, radiation). A science checklist at each stop.
 - **The helmet HUD** (during the walk): only what matters right now: how far you can still go and get home, heading, the next stop, alerts.
 
@@ -37,12 +37,12 @@ Who uses it: a two-person crew on Mars, before, during and after a walk. Where w
 
 **Each stage sees more detail than the one before, covers less ground, and costs more. So each stage tells the next one where to look.**
 
-Orbit sees everything, coarsely, for free. The drone sees fine detail, but only along a few hundred metres per flight. The crew sees everything up close, but their walk time is the most precious thing on the mission. Martian Map spends each one where it matters most.
+Orbit sees everything, coarsely, for free. The helicopter sees fine detail, but only along a few hundred metres per flight. The crew sees everything up close, but their walk time is the most precious thing on the mission. Martian Map spends each one where it matters most.
 
 | Stage | Sees | Covers | Costs |
 |---|---|---|---|
 | 1. Orbit | 5 m to 25 cm | The whole site | Nothing: NASA already collected it |
-| 2. Scout drone | Centimetres | One route corridor | A few 3-minute flights |
+| 2. Scout helicopter | Centimetres | One route corridor | A few 3-minute flights |
 | 3. Plan and pack | (uses 1 and 2) | The chosen route | Minutes of crew time |
 | 4. Walk and add | Everything up close | Where the crew goes | The walk itself: oxygen, energy, risk |
 | 5. Next walk | All of the above, combined | The site, growing | Nothing extra |
@@ -56,21 +56,21 @@ Orbit sees everything, coarsely, for free. The drone sees fine detail, but only 
 - **What it makes easier:**
   - **Where to go:** minerals and geology point to the science (the boxwork ridges, places where water once flowed).
   - **Where not to go:** slopes too steep for a suit, sand fields, high-radiation exposure.
-  - **Where to look closer:** it narrows 4 km² down to a few corridors, so the drone flies only where it matters.
+  - **Where to look closer:** it narrows 4 km² down to a few corridors, so the helicopter flies only where it matters.
 - **Its limit, and why we don't stop here:** orbit cannot see the small things that stop a person on foot (rocks under about 1 m, soft sand, short steep steps). The JETT3 test showed that plans built on orbit-scale maps break on contact.
 - **Objectives it meets:** R1 (several missions in one view), R2 (science goal to targets), R3 (several data types), R5 (one site, not a region).
 - **In our demo:** the "orbit view" is a coarse version of the slice, about the detail most of Mars has.
 
-### Stage 2: Scout. A drone looks before people walk
+### Stage 2: Scout. A helicopter looks before people walk
 
-- **What happens:** a small helicopter flies the planned route first. It covers the route corridor first, then anomalies (places where the layers disagree, such as firm-looking ground that the thermal data says is loose sand, a slope near the 25° limit, or an unusual mineral signal near a target), then the cells it is least sure about. Every cell it flies over updates every layer of the map. Where it flies, the map gains full detail: exact terrain and every rock. The route re-plans around what it found.
+- **What happens:** in daylight on the sol before the walk, a small scout helicopter flies the planned route first: the kind NASA JPL flew on Mars (Ingenuity) and is now having AeroVironment build for crew scouting (SkyFall, launch late 2028). It covers the route corridor first, then anomalies (places where the layers disagree, such as firm-looking ground that the thermal data says is loose sand, a slope near the 25° limit, or an unusual mineral signal near a target), then the cells it is least sure about. It avoids smooth sand, where camera navigation fails (what ended Ingenuity). Where it flies, the map gains centimetre detail: the terrain and the hazards below orbit's limit (rocks under about 1.5 m, half-metre drops). The route re-plans around what it found.
 - **Why a scout at all:** walk time is the scarcest resource. Finding a blocked path halfway through a walk costs oxygen, energy and maybe the walk. Finding it from the habitat costs a 3-minute flight.
-- **Why a drone and not a rover:** an Ingenuity-class drone covers about 700 m in 3 minutes. A rover on autonomous driving averages about 110 m an hour.
-- **Why we believe it works:** Ingenuity flew 72 times on Mars and scouted routes for Perseverance; one flight ruled out a target and saved the rover team about two months of driving. JPL's 2025 Skyfall concept proposes helicopters to scout landing sites for people.
+- **Why a helicopter and not a rover:** an Ingenuity-class helicopter covers about 700 m in 3 minutes. A rover on autonomous driving averages about 110 m an hour.
+- **Why we believe it works:** Ingenuity flew 72 times on Mars as "an aerial scout" for Perseverance's drivers; its Flight 12 images confirmed the rover's route into South Séítah was drivable. NASA's SkyFall (three helicopters, contracted, launch late 2028) will scout exploration zones for crews, and MoonFall's four hopping drones will survey Artemis sites before astronauts arrive. Every link, every limit and our answers: `docs/RESEARCH.md` §14.
 - **What it makes easier:** surprises move from the walk to the planning table.
 - **Objectives it meets:** R4 (route around obstacles), C6 (robots supporting the crew).
 - **How it sees in 3D:** the same idea as a bat's echolocation, but with light instead of sound, because Mars' thin air loses high-pitched sound within metres. The main sensor is cameras: overlapping photos turned into 3D, already done with Ingenuity's images at 5 cm detail. A laser adds exact height; radar could later show what is underneath. Details in `docs/RESEARCH.md` §13.
-- **In our demo:** the flight is simulated; what it reveals is real NASA data, the full-resolution images and elevation of the same slice, labelled "simulated drone view, real HiRISE data". As it flies, a scan sweep shows rays hitting the terrain and dots building up before the full detail fades in.
+- **In our demo:** the flight is simulated; what it reveals is real NASA data, the full-resolution images and elevation of the same slice, labelled "simulated helicopter view, real HiRISE data". As it flies, a scan sweep shows rays hitting the terrain and dots building up before the full detail fades in.
 
 ### Stage 3: Plan and pack. Decide before you leave
 
@@ -102,16 +102,16 @@ Orbit sees everything, coarsely, for free. The drone sees fine detail, but only 
 | **R1** Several missions in one view | Mars Trek and JPL's MMGIS layer the data, for rover teams and regional views | Layers from orbiters and Curiosity, combined into one walk plan | The layers don't just sit side by side; together they decide the route, the load and the margin home |
 | **R2** From a science goal to a site | Scientists pick targets by hand from separate maps | Pick "boxwork"; targets light up from the minerals and geology; a checklist at each stop | The goal drives everything after it: the route, the stops, the packing list |
 | **R3** At least three data types | Each tool shows its own data | All eight types NASA lists: optical, topographic, thermal, spectral, radiation, atmospheric, and chemical and geophysical as points along Curiosity's path; plus rover photos | Each layer has a job in the plan (slope limits, sand avoidance, dose), not just a picture |
-| **R4** Safety: obstacles, loads, space weather | Orbit-only maps miss small hazards; plans broke in the 2022 test; voice guidance fails with delay | Scout drone before the walk; energy and oxygen per step; point-of-no-return alert; storm warnings | Hazards are found before the walk, and the margin home is known at every step, on the crew's side of the delay |
+| **R4** Safety: obstacles, loads, space weather | Orbit-only maps miss small hazards; plans broke in the 2022 test; voice guidance fails with delay | Scout helicopter before the walk; energy and oxygen per step; point-of-no-return alert; storm warnings | Hazards are found before the walk, and the margin home is known at every step, on the crew's side of the delay |
 | **R5** Hyperlocal, one walk | Mars Trek is regional and global | One 2 × 2 km slice at walk detail, which gets finer with every walk | Detail improves exactly where people walk |
-| **C5, C6** Rover views; robots and pairs | Rover photos sit in a separate gallery | Rover photos at each stop; a drone that scouts; a buddy rover that carries | The robots do the jobs that save crew time and strength |
+| **C5, C6** Rover views; robots and pairs | Rover photos sit in a separate gallery | Rover photos at each stop; a helicopter that scouts; a buddy rover that carries | The robots do the jobs that save crew time and strength |
 
 The short version: **every tool that exists today does one stage. Martian Map connects all five, so each stage makes the next one better, and it runs with the crew, not on Earth.** (The option-by-option comparison is in `docs/PLAN.md`, section 0.)
 
 ## 7. What is real and what is simulated
 
-- **Real:** every data layer (NASA orbiters and Curiosity), the full-detail view the drone reveals, the walking-energy model, the route and safety maths, the classifier's training labels.
-- **Simulated:** the drone's flight, the astronaut (a judge walking with a phone), and the delay to mission control.
+- **Real:** every data layer (NASA orbiters and Curiosity), the full-detail view the helicopter reveals, the walking-energy model, the route and safety maths, the classifier's training labels.
+- **Simulated:** the helicopter's flight, the astronaut (a judge walking with a phone), and the delay to mission control.
 - **Not claimed:** that a phone is the suit display (it stands in for one), or numbers we haven't measured. Every number in the pitch comes from our code.
 
 ## Sources

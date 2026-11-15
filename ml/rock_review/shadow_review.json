@@ -1,0 +1,24 @@
+{
+  "schema": "martian-map-shadow-review-v1",
+  "reviewer": "Jules Rumeau",
+  "date": "2026-11-14",
+  "status": "provisionally_accepted_by_user",
+  "confidence": "low",
+  "source_pixel_sha256": "9d17b1864c40ab721011e82ab15362d1a9769fb0072838576681abb8842f2144",
+  "detection_ids": [
+    "S0255",
+    "S0623",
+    "S0487",
+    "S0489",
+    "S0366",
+    "S0030",
+    "S0528",
+    "S0456",
+    "S0270",
+    "S0192",
+    "S0052",
+    "S0457"
+  ],
+  "user_statement": "on va dire que ils sont tous bons car je vois mal et tres mal. je pense que cest correct",
+  "scope": "Tentative acceptance of the 12 displayed bright/dark pairs; user explicitly reported poor visibility. Not verified shadow geometry, contours, unbiased precision/recall or final-site validation."
+}
