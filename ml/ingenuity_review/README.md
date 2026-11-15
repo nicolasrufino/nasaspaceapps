@@ -32,13 +32,19 @@ rover camera's pose, scale or terrain distribution.
 
 ## Review and evaluation
 
+`review.html` now embeds all verified patch images, so opening just that file
+works without extracting a sibling `patches/` directory. Each annotation needs
+an explicit confirmation; choosing or suggesting a category does not create a
+human label. The browser keeps a local progress copy when storage is available;
+JSON export/import remains the portable backup.
+
 ```sh
 python -m ml.ingenuity_review.prepare ml/runs/ingenuity-review
 # Open ml/runs/ingenuity-review/review.html; export the human annotations.
 python -m ml.ingenuity_review.evaluate ml/runs/ingenuity-review ml/exports/terrain_cls.onnx ml/runs/ingenuity-eval --review /path/to/ingenuity-review.json
 ```
 
-The page shows no model predictions or altitude. Label the dominant material
+The default page shows no model predictions or altitude. Label the dominant material
 only when it covers at least 80% of the patch: soil, bedrock, sand or big rock;
 otherwise use unknown/mixed. This matches the baseline patch-purity rule but
 is still an image-level human judgment, not a segmentation mask or rock size
@@ -46,6 +52,27 @@ measurement. Record the reviewer and export regularly; an export can be
 imported to resume. Unexamined patches stay null. Do not replace human review
 with the model's own predictions. A second reviewer should adjudicate ambiguous
 cases before using this small set for model comparison.
+
+### Optional assisted review requested by Jules
+
+To prefill categories for human confirmation from an existing inference run:
+
+```sh
+python -m ml.ingenuity_review.build_review ml/runs/ingenuity-review ml/runs/ingenuity-assisted.html --suggestions ml/runs/ingenuity-baseline
+```
+
+The inference directory must contain matching `metrics.json` and
+`predictions.json`. The builder checks the manifest/model provenance and every
+image's pixels. Suggestions are clearly labeled, and labels stay null until
+the reviewer confirms each image. Skipping a suggestion does not accept it.
+
+Assisted exports record the mode and suggestion model hash. They are **not an
+independent blind test**, including when a reviewer confirms every proposal.
+The independent evaluator rejects them instead of reporting biased accuracy.
+Use a different reviewer who has not seen these suggestions, or an untouched
+flight set, for a subsequent blind benchmark. The blind page refuses assisted
+imports. Legacy blind exports remain readable. This does not promote a model
+or settle the flight-height question.
 
 Evaluation verifies the manifest and every patch's pixels. It reports confusion,
 class recalls, supported-class balanced accuracy and coverage overall and by

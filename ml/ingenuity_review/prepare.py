@@ -139,10 +139,9 @@ def run(destination):
                "reviewed": 0, "validated_height_agl": 0, "accuracy": None, "flight_height_decision": None,
                "status": "Ready for blind human annotation; not an evaluated or altitude-stratified benchmark"}
     dump(destination/"summary.json", summary)
-    template = (HERE/"review.html").read_text(encoding="utf-8")
-    data = {"manifest_sha256": manifest_sha,
-            "records": [{k: r[k] for k in ("id", "file")} for r in records]}
-    (destination/"review.html").write_text(template.replace("__PACK_DATA__", json.dumps(data)), encoding="utf-8")
+    from ml.ingenuity_review.build_review import build
+
+    build(destination, destination/"review.html")
     print(json.dumps(summary), flush=True)
     return summary
 

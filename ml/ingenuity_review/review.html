@@ -1,20 +1,21 @@
-<!doctype html><html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width">
-<title>Ingenuity — annotation indépendante</title>
-<style>body{font:18px system-ui;max-width:960px;margin:32px auto;padding:16px;background:#121922;color:#ecf0f4}button,select,input{font:inherit;padding:8px;margin:4px}img{width:384px;height:384px;image-rendering:pixelated;max-width:100%}button:focus-visible,select:focus-visible{outline:3px solid #7fe0de}label{display:block}small{color:#bdc9d6}.controls{display:flex;flex-wrap:wrap;gap:12px}h1{font-size:28px}</style>
-<h1>Ingenuity : 200 images à annoter</h1>
-<p>Choisissez la matière qui occupe au moins 80 % du carré. Sinon choisissez « incertain / mixte ». Une roche visible ne suffit pas à conclure qu’elle bloque un astronaute. Aucun résultat du modèle n’est affiché.</p>
-<label>Votre nom <input id="reviewer" autocomplete="name"></label><p id="progress"></p>
+<!doctype html>
+<html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ingenuity — catégories à confirmer</title>
+<style>
+*{box-sizing:border-box}body{font:17px/1.5 system-ui;max-width:1060px;margin:24px auto;padding:20px;background:#121922;color:#ecf0f4}h1{font-size:30px;margin:0 0 8px}p{margin:10px 0}button,select,input{font:inherit;padding:10px 12px;border:1px solid #718198;border-radius:6px}button{cursor:pointer;background:#253343;color:#fff}button:disabled{opacity:.45;cursor:default}button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #7fe0de;outline-offset:2px}label{display:block;margin:10px 0}input[type=text]{max-width:100%;background:#fff}select{display:block;width:100%;margin-top:8px}.grid{display:grid;grid-template-columns:minmax(280px,384px) 1fr;gap:28px;margin:20px 0}.image-box{background:#0c1118;min-height:280px;display:grid;place-items:center;border:1px solid #344356;border-radius:8px;overflow:hidden}img{display:block;width:100%;aspect-ratio:1;image-rendering:pixelated}.small,small{color:#bdc9d6;font-size:14px}.controls{display:flex;gap:8px;flex-wrap:wrap}.note{background:#1d2a38;border-left:3px solid #7fe0de;padding:12px 16px;border-radius:4px}.primary{background:#a6eadc;color:#12252b;font-weight:700;width:100%;margin:16px 0}.status{color:#a6eadc;font-weight:600}#image-error{color:#ffb9af}details{margin-top:18px}summary{cursor:pointer}#message{min-height:28px}progress{width:100%;height:9px;accent-color:#a6eadc}input[type=file]{max-width:100%;font-size:14px}@media(max-width:700px){body{padding:16px;margin:0}h1{font-size:25px}.grid{grid-template-columns:1fr;gap:12px}.image-box{max-width:384px}button{min-height:44px}}
+</style>
+<h1>Ingenuity : catégories à confirmer</h1><p id="intro"></p><div class="note" id="mode-note"></div>
+<label for="reviewer">Votre nom <input id="reviewer" type="text" autocomplete="name" placeholder="Jules"></label>
+<p id="progress" aria-live="polite"></p><progress id="bar" max="200" value="0"></progress>
+<div class="grid">
+<div><div class="image-box"><img id="patch" alt="Carré de terrain Ingenuity à examiner"></div><p id="image-error" role="alert" hidden></p><p class="small">Pixels originaux, agrandis sans interpolation · 128 × 128 pixels</p></div>
+<div><p id="identity"></p><p id="suggestion" class="note"></p>
+<label for="choice">Catégorie à confirmer</label><select id="choice"><option value="">À choisir</option><option value="soil">Sol fin / soil</option><option value="bedrock">Roche en place / bedrock</option><option value="sand">Sable / sand</option><option value="big_rock">Grosse roche / big rock</option><option value="unknown">Incertain / mixte</option></select>
+<p id="confirmed" class="status" aria-live="polite"></p><button id="confirm" class="primary" disabled>Confirmer et suivant</button>
+<div class="controls"><button id="previous">Précédent</button><button id="next">Passer sans confirmer</button><button id="unconfirm">Annuler la validation</button></div>
+<details><summary>Comment choisir la catégorie ?</summary><p><strong>Sol fin :</strong> surface terreuse ou poussiéreuse. <strong>Roche en place :</strong> dalle ou affleurement continu. <strong>Sable :</strong> terrain sableux identifiable, notamment des rides ou dunes. <strong>Grosse roche :</strong> bloc rocheux isolé dominant le carré.</p><p>Choisissez une matière seulement si elle occupe au moins 80 % du carré. Sinon, ou si l’image est trop ambiguë, choisissez « incertain / mixte ». L’apparence ne permet pas à elle seule de mesurer la hauteur d’un obstacle.</p></details>
+</div></div>
+<div class="controls"><button id="save">Exporter mes validations JSON</button></div><p id="message" role="status"></p>
 <label>Reprendre un export précédent <input id="resume" type="file" accept=".json,application/json"></label>
-<img id="patch" alt="Carré de terrain Ingenuity à annoter"><p id="identity"></p>
-<label>Classe <select id="choice"><option value="">À examiner</option><option value="soil">Sol fin / soil</option><option value="bedrock">Roche en place / bedrock</option><option value="sand">Sable / sand</option><option value="big_rock">Grosse roche / big rock</option><option value="unknown">Incertain / mixte</option></select></label>
-<div class="controls"><button id="previous">Précédent</button><button id="next">Suivant</button><button id="save">Exporter les annotations JSON</button></div>
-<p id="message" role="status"></p><small>Les choix restent dans cette page tant qu’elle est ouverte. Exportez régulièrement avant de la fermer. Les pixels sont agrandis sans interpolation ; le carré source fait 128 × 128 pixels. L’altitude et les prédictions sont masquées pendant l’annotation.</small>
-<script>
-const pack=__PACK_DATA__;let current=0;const labels={};
-const byId=id=>document.getElementById(id);
-byId('resume').onchange=async e=>{try{const result=JSON.parse(await e.target.files[0].text());const allowed=['soil','bedrock','sand','big_rock','unknown',null];if(result.manifest_sha256!==pack.manifest_sha256||!result.reviewer?.trim()||result.annotations.length!==pack.records.length)throw Error('Cet export ne correspond pas à ce lot.');const ids=new Set();for(const r of result.annotations){if(ids.has(r.id)||!pack.records.some(p=>p.id===r.id)||!allowed.includes(r.label))throw Error('Annotations invalides.');ids.add(r.id);}for(const r of result.annotations)labels[r.id]=r.label||'';byId('reviewer').value=result.reviewer;current=Math.max(0,pack.records.findIndex(r=>!labels[r.id]));render();byId('message').textContent='Annotations restaurées.';}catch(error){byId('message').textContent=error.message;}};
-function render(){const r=pack.records[current];byId('patch').src=r.file;byId('identity').textContent=r.id;byId('choice').value=labels[r.id]||'';byId('progress').textContent=`${current+1} / ${pack.records.length} — ${Object.values(labels).filter(Boolean).length} examinés`;byId('previous').disabled=current===0;byId('next').disabled=current===pack.records.length-1;}
-byId('choice').onchange=e=>{labels[pack.records[current].id]=e.target.value;render();};
-byId('previous').onclick=()=>{if(current>0)current--;render();};byId('next').onclick=()=>{if(current<pack.records.length-1)current++;render();};
-byId('save').onclick=()=>{const reviewer=byId('reviewer').value.trim();if(!reviewer){byId('message').textContent='Indiquez votre nom avant l’export.';return;}const result={manifest_sha256:pack.manifest_sha256,reviewer,reviewed_at:new Date().toISOString(),annotations:pack.records.map(r=>({id:r.id,label:labels[r.id]||null}))};const url=URL.createObjectURL(new Blob([JSON.stringify(result,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='ingenuity-review.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);byId('message').textContent='Annotations exportées. Les carrés non examinés restent sans label.';};render();
-</script></html>
+<p class="small" id="storage-note"></p><small>Images NASA/JPL-Caltech · Toutes les images sont intégrées dans ce fichier. Aucune connexion nécessaire.</small>
+<script>const pack=__PACK_DATA__;</script><script>__REVIEW_JS__</script></html>

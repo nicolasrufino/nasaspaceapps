@@ -15,6 +15,10 @@ OUTPUT_CLASSES = ("unknown", "soil", "bedrock", "sand", "big_rock")
 
 def validate_review(manifest_bytes, review):
     records = json.loads(manifest_bytes)["records"]
+    if (review.get("review_mode", "blind") != "blind" or review.get("independent_human_test") is False
+            or review.get("suggestion_model_sha256")
+            or any(r.get("suggestion") is not None for r in review.get("annotations", []))):
+        raise ValueError("Assisted annotations are not an independent test; obtain a separate blind review")
     if review.get("manifest_sha256") != sha(manifest_bytes):
         raise ValueError("Review belongs to another manifest")
     if not isinstance(review.get("reviewer"), str) or not review["reviewer"].strip():
