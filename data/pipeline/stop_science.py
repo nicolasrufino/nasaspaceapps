@@ -38,7 +38,7 @@ def main():
         x, y = t["cell"]
         c, c_m = nearest(chem, t["cell"], t["sol"], cell_m)
         # DAN rides on the rover, so the reading for the stop is the one from the sol the rover was there.
-        # We match by sol, not position: the cells in neutron_points.json are about 200 m off (to fix).
+        # Matched by sol. (The cells in neutron_points.json now come from the rover traverse, fixed in #171.)
         d = min(neutron, key=lambda p: abs(p["sol"] - t["sol"]))
         d = d if abs(d["sol"] - t["sol"]) <= 2 else None
         w = weather.get(t["sol"])

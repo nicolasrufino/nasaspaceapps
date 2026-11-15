@@ -256,19 +256,19 @@ def dan(grid, by_sol):
             b = f.read()
         for i in range(len(b) // 71):
             rec = b[i * 71:(i + 1) * 71]
-            lat, lon, _, _, dur, ctn_bg, ctn, cetn_bg, cetn = struct.unpack('>9f', rec[27:63])
+            _lat, _lon, _, _, dur, ctn_bg, ctn, cetn_bg, cetn = struct.unpack('>9f', rec[27:63])
             if dur <= 0:
                 continue
-            d = per.setdefault(sol, {'t': 0.0, 'th': 0.0, 'ep': 0.0, 'll': []})
+            d = per.setdefault(sol, {'t': 0.0, 'th': 0.0, 'ep': 0.0})
             d['t'] += dur
             d['th'] += (ctn - ctn_bg) - (cetn - cetn_bg)  # CTN sees thermal + epithermal; CETN only epithermal
             d['ep'] += cetn - cetn_bg
-            d['ll'].append((lon, lat))
     out = []
     for sol, d in sorted(per.items()):
-        lon = float(np.median([q[0] for q in d['ll']]))
-        lat = float(np.median([q[1] for q in d['ll']]))
-        cell = lonlat_to_cell(grid, lon, lat) or lonlat_to_cell(grid, *pos_before_sol(by_sol, sol))
+        # Position: the rover's traverse waypoint for the sol (NASA/JPL MSL MMGIS, the same source as ChemCam), not
+        # the lat/lon stored in the DAN record. Those sit in another localisation frame: on our grid they land a
+        # constant ~190 m (22 cells west, 10 south) from the rover's mapped position on every sol checked (#171).
+        cell = lonlat_to_cell(grid, *pos_before_sol(by_sol, sol))
         if cell is None or d['ep'] <= 0:
             continue
         out.append({'sol': sol, 'cell': cell, 'hours': round(d['t'] / 3600, 1),

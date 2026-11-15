@@ -31,3 +31,15 @@ def test_points_sit_inside_the_grid(world):
             for p in json.loads(path.read_text()):
                 x, y = p['cell']
                 assert 0 <= x < n and 0 <= y < n
+
+
+def test_dan_cells_sit_on_the_rover_stops():
+    """#171: DAN readings are placed at the rover's traverse position for the sol, within 2 cells of the stop."""
+    import json
+    import pathlib
+    world = pathlib.Path(__file__).parents[1] / 'data' / 'worlds' / 'gale'
+    dan = {p['sol']: p['cell'] for p in json.loads((world / 'neutron_points.json').read_text())}
+    for t in json.loads((world / 'targets.json').read_text()):
+        if t.get('sol') in dan:
+            dx, dy = dan[t['sol']][0] - t['cell'][0], dan[t['sol']][1] - t['cell'][1]
+            assert max(abs(dx), abs(dy)) <= 2, (t['id'], dan[t['sol']], t['cell'])
