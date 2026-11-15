@@ -6,7 +6,9 @@ One place for what the team decided, why, and what is still open. **Add a line h
 
 | Date | Decision | Why | Who | Where it lives |
 |---|---|---|---|---|
-| 2026-11-15 | **Belief map v1 built on Jules's current rock layer** (R3), not waiting for the whole-slice ROSCO run: chance of hidden rocks from 8 m slope and relief, fitted by script; refit when the new export lands | Nothing waits on his run; the swap is one command. The 1 m layers were dropped because they echo the estimate (Luca's `unsure`: 0.757 on the estimate, 0.441 on real rocks) | Nicolas | `app/src/belief.js`, `app/scripts/belief-fit.mjs`, flag `belief` |
+| 2026-11-15 | **P1 labels: registered reviewed ROSCO positives first; separate human negatives; Ingenuity flights held out** | No-detection cells and the DTM mask are not independent negative truth; the height test must not leak into adaptation | Jules | `ml/LABEL_POLICY.md`; `ml/ingenuity_review/README.md` |
+| 2026-11-15 | **Audit full Gale coverage after registration** | The original crop missed full coverage of 2,490 edge cells under the affine model. Expanded native run: all 65,536 cells covered, 289 tiles, 25 proposals; no new hazard-mask inference | Jules | `ml/rock_review/FULL_SLICE.md`; `full_slice_metrics.json` |
+| 2026-11-15 | **Belief map v1 prototype built behind `belief`** (#118) | Fitted on the DTM-plus-reviewed mask; its model-selection diagnostic is not independent validation or calibrated ground truth. Full-slice coverage alone does not provide negative labels for a refit | Nicolas; P1 evidence audit | `app/src/belief.js`, `app/scripts/belief-fit.mjs`; `ml/LABEL_POLICY.md` |
 | 2026-11-15 | **3 helicopter flights per walk** (each of the 3 flies once on the scouting sol); up to 6 only with habitat charging, labelled as our assumption | SkyFall flies every other sol (NASA mission package) and crews walk every other sol (HEOMD-415). Tested on Gale: 3 flights leave 0 hidden hazards on the final route and match "knowing every rock" (630.5 kJ); no flights leave 8 | Nicolas | `docs/OPERATIONS.md`; `app/scripts/flight-budget-check.json` |
 | 2026-11-15 | **1 km per flight** (`FLIGHT_M`), the low end of SkyFall's 1–2 km | 2 km in 2.5 min needs 13 m/s, above Ingenuity's 10 m/s record; 700 m is what Ingenuity flew. Gale result is the same at 700 m | Nicolas (his "go with the recommendation", refined by the test) | `FLIGHT_M = 1000` in `app/src/scout.js`; R5 regenerated in the same change after #99. The fixed-route walking figures and 14 total flight legs are unchanged; extra pipeline flights retain their existing lengths |
 | 2026-11-15 | **Scouting sol, then walk sol:** helicopters fly at 9:30 AM on the crew's rest sol; the walk runs about 7:15 AM–3:15 PM next sol, Sun at least 15° up | NASA's rest-sol rule, daylight flying, shadows; same-sol leaves under 2 h of walking | Nicolas | `docs/OPERATIONS.md` |
@@ -47,27 +49,25 @@ Recommendations with evidence and the holes checked: `docs/DECISION-BRIEFS.md` (
 
 | Question | Options | Needs | Blocks |
 |---|---|---|---|
-| **How high the helicopter flies** [4] | Low (about 2–4 m, matches the rover images the model learns from; dusty) / about 10 m (safe; needs the model adapted to the air view). Deciding test: run the rover-trained model on labelled Ingenuity images | Nicolas | Helicopter-view model, flight planner |
-| **Labels for sensing** | Start with the reviewed ROSCO rocks / also project Curiosity's labelled images onto Gale cells | Jules, Nicolas | Belief-map training |
+| **How high the helicopter flies** [4] | About 4 m / about 10 m remain candidate settings, neither certified safe here. First measure transfer on independently labeled Ingenuity patches with validated per-image geometry; separately validate flight clearance and operations | Nicolas | Helicopter-view model, flight planner |
 
 ## Missing: not built or not available yet
+
+Integration status: #94 (`af3d666`), #99 (`b668204`), #115 (detail tiles) and #117 (1 km runtime flights with regenerated R5) are merged into `dev`.
 
 - **Habitat (spaceship) 3D model** and the muted-grey unexplored look with a scanning reveal (brief §9).
 - **Plan-mode timeline strip** (scouting sol, walk sol, Sun height, last safe turn-back time; `docs/OPERATIONS.md`).
 - **SkyFall 3D scene** (muted grey, reveal mask, 1 m tiles, three helicopters with real camera footprints): build order in `docs/SCOUT-3D.md`.
-- **`detail_tiles` pointer in `world.json`:** tiles are on Azure (#103) but `world.json` doesn't point to them yet (Luca runs `make_tiles.py --base-url`).
-- **Jules's PR #99** (R3/R5/F1 refresh at 20°): green CI but conflicts with `dev`; needs a rebase.
-- **ROSCO over the whole Gale slice** (Jules): not started.
+- **ROSCO validation after the completed full-slice run:** review sampled negative areas and missed rocks; calibrate size/density before any probability layer. Coverage report: `ml/rock_review/FULL_SLICE.md`.
 - **Helicopter docking for images:** Ingenuity's radio (about 80 kbit/s) is too slow for a strip of images; we assume a dock or cable at the habitat (brief §7).
 - **Classifier observations on the map:** browser ground-photo inference is implemented, but photo-to-cell registration, reviewed observations and a validated rule for updating layers/route costs are still missing. A relative model score is not a safety probability.
 
-- **Belief map:** v1 built (flag `belief`, scored 0.729 on real reviewed rocks). Missing: ROSCO over the whole slice with rock sizes and "looked, found nothing" cells, then a refit.
-- **Ground truth at a walker's scale:** Curiosity's labelled images placed on Gale cells; labelled helicopter images (Ingenuity's colour images).
+- **Belief-map calibration:** v1 is implemented behind `belief` (#118), but its 0.729 AUC is a development/model-selection diagnostic against unreviewed negative cells, not independent ground-truth validation. Full-slice detections and estimated sizes are available; cells without detections remain unlabeled, not confirmed empty.
+- **Ground truth at a walker's scale:** verify Curiosity image/site overlap and camera-to-map projection. The 200-patch Ingenuity pack is prepared, with zero human labels and no validated altitude AGL yet (`ml/ingenuity_review/`).
 - **The scouting planner in the app:** K candidate routes, value of information, flight planner with the daylight window and no-fly cells, the re-plan loop and "why this flight". It exists only in the toy simulator so far.
 - **Sun and shadow model** (Mars24 algorithm) for flight windows and walking windows.
 - **Generated test worlds** where hidden rocks follow orbit features (today's synthetic rocks are random), and the **benchmark** on them and on Gale.
 - **Compute time** of value of information at Gale size (256 × 256), to measure.
-- **Integrate PR #94 and #99:** contracts need all owners' approval; the new formulas and evidence are staged in those branches.
 - **Real-phone test** over HTTPS.
 
 ## How slopes enter the algorithm

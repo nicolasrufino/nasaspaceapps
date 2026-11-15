@@ -50,9 +50,9 @@ A route is blocked if any cell on it is. Rock fields come in patches, so neighbo
 | Label source | What it is | Status |
 |---|---|---|
 | `rocks_fine` in our Gale world | Cells rough at 1 m but gentle at 8 m | A **rule on orbit data**, not ground truth (see the caveat below) |
-| ROSCO rocks reviewed by Jules | 31 accepted, 3 rejected, 16 uncertain of 50 | Real but few (`ml/rock_review/FINAL_SITE.md`) |
-| Curiosity's own drive through this slice | Rover images with terrain labels (AI4Mars has a "big rock" class) at known rover positions | **The best ground truth for our site.** Needs the images projected onto map cells: real work, to scope with Jules |
-| Ingenuity flights over Jezero | Helicopter images and HiRISE of the same ground | Exactly "orbit vs helicopter" pairs, but no labels yet |
+| Registered ROSCO H proposals reviewed by Jules | 23 accepted, two uncertain of 25; accepted points occupy 22 cells | Positive sample only (`ml/rock_review/R3.md`). The separate G mosaic review has 31 accepted / 3 rejected / 16 uncertain |
+| Curiosity labeled imagery | AI4Mars ground-image labels and rover pose metadata | Site overlap, camera geometry and terrain projection must be verified before these become map-cell labels |
+| Ingenuity flights over Jezero | Color images with PDS provenance; 200-patch test pack prepared | Human labels and image-to-orbit correspondence are still pending; this is not a registered paired dataset yet |
 
 **First measurement (`app/scripts/sensing-check.mjs`, numbers in `sensing-check.json`).** On Gale, can coarse orbit features (8 m slope, 8 m relief, THEMIS) predict `rocks_fine`? Trained on the west half, scored on the east half:
 
@@ -130,15 +130,15 @@ A route is blocked if any cell on it is. Rock fields come in patches, so neighbo
 **So: Moon data is a pre-training option for the rock part, never the whole answer, and never the test.** The test must be on Mars ground truth.
 
 **What we can start now (each step graded on held-out data, like `sensing-check.mjs`):**
-1. **Big rocks, no training:** run ROSCO across the whole Gale slice. Rock count per cell, then rock-size law, then chance of a walker-sized rock, then chance the cell is blocked. Check against Jules's 31 accepted and 3 rejected rocks. This replaces today's circular `rocks_fine`.
-2. **Ground type, training with labels we already have:** a small model on HiRISE 25 cm patches for sand, soil and bedrock. Labels come from Curiosity's own drive in our slice (AI4Mars ground labels placed on the map at the rover's logged positions). Held out: a stretch of the drive the model never saw.
+1. **Big rocks, no training:** the registered full-slice ROSCO run is complete (`ml/rock_review/FULL_SLICE.md`). It supplies proposals and estimated dimensions, not a validated probability layer. Keep the 23 accepted H positives and separately review negative areas/missed rocks. Calibrate size and density on independent data before proposing any replacement of `rocks_fine`.
+2. **Ground type, training with labels we already have:** a small model on HiRISE 25 cm patches for sand, soil and bedrock. Labels can come from Curiosity only after site overlap, camera pose and terrain projection are verified; the rover position alone cannot locate image pixels. Held out: a stretch of the drive the model never saw.
 3. **Rock detector, pre-trained on the Moon:** pre-train on lunar boulders and RMaM-2020, fine-tune on Mars HiRISE rocks (ROSCO plus Jules's review). Keep it only if it beats step 1 on the held-out Mars rocks.
 4. **Every flight adds labels:** in the app, cells the helicopter confirms become new examples, so the map improves as it is used.
 
-Steps 2 and 3 are ML work in `ml/` (Jules); step 1 is a pipeline layer. None of them is built yet.
+Steps 2 and 3 are pending ML work in `ml/` (Jules). Step 1 has a completed native detector run and reviewed positives; negative-area validation and probability calibration remain open. The chosen labels and holdout rules are in `ml/LABEL_POLICY.md`.
 
 **Plan for sensing:**
-1. **Now (rules):** a belief map from orbit features, calibrated so that "10% chance" really means about 10%. **Built 2026-11-15** (`app/src/belief.js`, flag `belief`; see `app/HOW-IT-WORKS.md` §12).
+1. **Prototype now:** a belief map from orbit features is built behind `belief` (#118). Calibration is still pending: its ranking/model-selection diagnostic uses unreviewed negative cells and some training overlap, so a displayed 10% is not a validated 10% probability. See `app/HOW-IT-WORKS.md` §12 and `ml/LABEL_POLICY.md`.
 2. **With Jules (ML):** a small image model on 25 cm HiRISE patches, trained on reviewed ROSCO rocks and, if feasible, Curiosity's labelled ground. Graded by the same held-out check.
 3. **Benchmark honestly:** generated worlds where hidden rocks *depend on* the orbit features in a known way. Today's synthetic rocks are random, so there nothing can be predicted, and only the "flying confirms" half can be tested.
 
@@ -164,7 +164,7 @@ The expectation is estimated by **sampling**: draw many possible "true" worlds f
 
 ### D. The flight planner: turn chosen strips into flights
 
-Order the strips into flights: the shortest order between take-off and landing spots, solved exactly for a handful (as the walking planner already does). Each flight is at most 700 m, in the midday window, and avoids no-fly cells. Spread the flights over sols.
+Order the strips into flights: the shortest order between take-off and landing spots, solved exactly for a handful (as the walking planner already does). Each flight is at most 1,000 m in the selected SkyFall scenario, in the midday window, and avoids no-fly cells. Spread the flights over sols.
 
 ### E. Learn, then re-plan
 
@@ -213,7 +213,7 @@ The result is a curve of **route quality against flights**. Ours should get clos
 1. Belief map from orbit (rules first, calibrated) and an uncertainty layer (§2A). Generated worlds whose hidden rocks follow orbit features, so prediction can be tested.
 2. K candidate routes on expected cost.
 3. Value-of-information scoring by sampling; greedy flight choice with the stop rule.
-4. Flight planner: order, 700 m, daylight window, no-fly cells (reuses the walking planner's code).
+4. Flight planner: order, 1,000 m, daylight window, no-fly cells (reuses the walking planner's code).
 5. Re-plan loop and the screen: 3D detail appears where flown, and each flight shows **why it was chosen** (its value in kJ and risk).
 6. The benchmark, and its numbers for the pitch.
 7. The exploration modes.
@@ -240,7 +240,7 @@ Later: a learned belief map (with Jules); a learned scouting policy, compared on
 | [Fission Surface Power](https://www.universetoday.com/articles/nasa-is-building-a-nuclear-reactor-to-power-lunar-and-martian-exploration) | NASA project, 40 kW, aimed at the early 2030s, designed to carry over to Mars | The power a crewed base could have |
 
 - **Our helicopter, adapted from SkyFall:** SkyFall's fleet of three and its sensors (the proof that the scouting job is planned). **Recharged at the habitat's power**, the way Dragonfly recharges from its generator, instead of from its own small solar panel. With a crew on the surface, flights per sol are then limited by daylight and the battery, not by sunlight on the helicopter. This is **our design assumption**, not a NASA plan, and the docs and app must say so.
-- **How we model the gaps:** every missing number is a **knob, marked as an estimate**. Per-flight range defaults to Ingenuity's flown limit (about 700 m), the only Mars-measured number. Flights per helicopter per sol is a knob. A news claim of 300 km per mission is unverified and not used.
+- **How we model the gaps:** every missing number is a **knob, marked as an estimate**. Per-flight range is 1,000 m in the selected SkyFall scenario (#117); about 700 m is the Ingenuity flight-distance reference, not proof that the SkyFall scenario has flown. Flights per helicopter per sol is a knob. A news claim of 300 km per mission is unverified and not used.
 - **Daylight only:** cameras need light, and Ingenuity flew around midday local time.
 
 ## 8. To decide
@@ -248,4 +248,4 @@ Later: a learned belief map (with Jules); a learned scouting policy, compared on
 1. Which mode first: **reach the targets** (fits the demo) or **build a network** (the long-term story)?
 2. Agree on "the algorithm decides, ML improves the belief map", with a learned policy only as a later comparison?
 3. Flight budget per campaign: a number of flights, or a number of sols? (SkyFall publishes neither; whichever we pick is a knob.)
-4. Labels for sensing: scope projecting Curiosity's labelled images onto Gale cells with Jules, or start from the reviewed ROSCO rocks only?
+4. Labels for sensing: P1 starts with registered reviewed ROSCO positives and separately reviewed negatives; Curiosity projection remains a later step after geometric validation (`ml/LABEL_POLICY.md`).

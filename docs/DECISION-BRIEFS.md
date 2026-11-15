@@ -61,39 +61,16 @@ Written 2026-11-15.
 
 **Status: open.** Nicolas's question: the terrain model learns from **rover** images; the helicopter **flies**. Does that change anything for the machine learning?
 
-**Short answer: yes. Height is the biggest factor, so we either fly near rover height or adapt the model to the air view. One small test tells us which.**
+**Short answer: rover-to-helicopter transfer needs measurement. Height alone does not determine image scale, viewing angle or flight safety.** Our own Curiosity-to-Perseverance gap already shows that camera and terrain differences matter even without a large height change.
 
-**What the research says.**
-- **Height matters more than camera tilt.** A drone segmentation study measured accuracy changing by **3–25% with flight height**, but only **0.5% with camera angle** ([ASCE 2021](https://ascelibrary.com/doi/10.1061/9780784483893.109)).
-- **Ground-trained models degrade as the drone climbs.** In a ground-to-aerial study, a model trained on ground-view labels lost about **46% of its accuracy** going from the lowest to the highest flight level. Training on unlabelled flying images as well (self-distillation) cut the loss to about 21% ([Progressive Self-Distillation, 2022](https://arxiv.org/pdf/2208.13404)). [FlyAwareV2](https://arxiv.org/pdf/2510.13243) reports the same pattern: the bigger the altitude difference, the bigger the drop.
-- **SkyFall carries two colour cameras: one pointing straight down, one pointing at the horizon** (same 13 MP sensor, 143° × 106° field of view; mission package §IV). The horizon camera gives a slanted, rover-like view at any height, and the downward one is for maps.
-- **Our own data agrees:** Jules's model scored 93% on Curiosity but 48% on Perseverance, both at about 2 m. Even a different camera at the same height breaks it.
-- **No labelled helicopter terrain dataset exists for Mars** (AI4Mars is rover images only). Ingenuity's images are public but unlabelled.
+The [Ingenuity instrument documentation](https://an.rsl.wustl.edu/help/Content/About%20the%20mission/M20/Instruments/M20%20HELI.htm) specifies a color camera tilted 45° downward and 0.26 mrad/pixel angular resolution. The earlier calculation using average field of view divided by image width did not establish local ground sampling, and the claim that 4 m recreates the rover's angle and scale was unsupported. The fixed 2.6× resize prescription is therefore withdrawn until per-image camera geometry is validated.
 
-**Why height matters: it changes how many pixels a rock gets (scale) and how much of its side you see (angle).** The numbers for our cameras:
-- Curiosity's Navcam: 0.82 mrad per pixel, about 2 m up ([WUSTL](https://an.rsl.wustl.edu/help/Content/About%20the%20mission/MSL/Instruments/MSL%20Navcam.htm)).
-- Ingenuity's colour camera: about 0.42 mrad per pixel (102° over 4,208 pixels).
-- So the helicopter sees the ground **at the same angle and the same scale as the rover's training images when it flies at about 4 m** (2 m × 0.82 / 0.42).
-- At 10 m, the same view angle is about **2.6× coarser** than the training images. A 0.3 m rock is still about 14 pixels across, but it looks smaller than anything the model learned from.
+**Test now prepared:** `ml/ingenuity_review/` freezes 200 native RGB patches from 50 PDS frames across ten flights, selected before inference. The independent annotation page hides predictions and altitude. All labels are still pending; baseline inference has run, but accuracy remains null.
 
-**The two options:**
+Next: human labels, per-image height above local terrain and camera footprints, then comparison of the frozen baseline and any adapted model on held-out flights. HELI_M_FRAME pose offsets are preserved as telemetry, not relabeled as terrain-relative altitude. Approximately 5 m observations must not be presented as a measured 4 m test. Unlabeled adaptation images must come from different flights.
 
-| | Fly low (about 4 m) | Fly at about 10 m |
-|---|---|---|
-| Model | Sees what it was trained on | Needs adapting |
-| Dust | Ingenuity raised dust up to 3.6 m on landing and at 5.1–5.7 m in flight ([Lemmon 2022](https://pmc.ncbi.nlm.nih.gov/articles/PMC10078181)): images may be hazy, which is its own domain shift | Clearer |
-| Clearance | About 2.3 m over Gale's highest ridges | Plenty |
+**4 m and 10 m remain hypotheses.** Report classifier quality and missing altitude bands; do not convert a low score at 10 m into an instruction to fly at 4 m. Clearance, dust, navigation, energy and actual camera footprints require separate engineering checks. Height stays a scenario knob. Label policy and full protocol: `ml/LABEL_POLICY.md` and `ml/ingenuity_review/README.md`.
 
-**How we adapt the model at 10 m (known techniques, cheap):**
-1. Shrink the rover training images by about 2.6×, so training looks like flight.
-2. Add Ingenuity's unlabelled images with the self-distillation method above.
-3. **Label about 200 patches of Ingenuity colour images** as the test set.
-
-**Recommendation:** do not decide by guessing. Jules runs the rover-trained model on the labelled Ingenuity patches, with and without step 1, grouped by Ingenuity's height in each image.
-- If the adapted model holds up at 10 m: fly at 10 m.
-- If it does not: fly at about 4 m on clear sols and treat hazy images as unknown.
-
-The app keeps height as a knob either way, so nothing waits on this.
 ---
 
 ## 5. What "blocked" means for a suited walker
@@ -121,7 +98,7 @@ The app keeps height as a knob either way, so nothing waits on this.
 **Status: accepted by Nicolas, 2026-11-15** (rewritten after his question: follow what the challenge asks).
 
 **First, the words:**
-- A **strip** is the piece of ground one flight photographs: a path of up to 700 m, about 30 m wide.
+- A **strip** is the piece of ground one flight photographs: a path of up to 1,000 m in the selected SkyFall scenario, about 30 m wide (estimated footprint).
 - Each sol, the planner looks at every strip it could fly along the candidate routes. The **best strip** is the one whose photos would change the walking plan the most.
 
 **What "change the plan" means has to follow the challenge.** NASA asks for a walk that is **safe first**, **does new science**, and works at the scale of one walk. So a flight's value is measured on those three, in that order:
@@ -162,7 +139,7 @@ The app keeps height as a knob either way, so nothing waits on this.
 - **SkyFall as published (solar only):** each helicopter flies every other sol. With all three resting the sol before, the scouting sol gives **3 flights of 1–2 km each**. That is 3–6 km of ground, and the Gale tour route is about 1.3 km. This baseline needs no assumption from us.
 - **This lines up with NASA's crew rule.** Crews keep a non-walk sol between walks; helicopters keep a non-flight sol between flights. Helicopters fly on the crew's rest sol and recharge on the walk sol.
 - **With habitat charging (our assumption):** a second wave around 12:15 PM becomes possible (recharge about 2.5 h, estimate), so **up to 6 flights**. It needs a warm dock that charges and pulls the images off by cable.
-- **Per-flight distance:** SkyFall says 1–2 km per flight sol; the app uses 700 m (Ingenuity's longest flight). **New decision:** switch the knob to SkyFall's figure.
+- **Per-flight distance:** SkyFall says 1–2 km per flight sol; the app now uses 1,000 m, with regenerated pitch evidence merged in #117. This is a SkyFall scenario assumption, not an Ingenuity flight record.
 - **Recommendation for Nicolas:** plan on **3 flights per walk** (published), show 6 as the "habitat charging" upgrade, and report the benchmark at 3 and 6.
 ---
 
