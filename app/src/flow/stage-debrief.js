@@ -122,9 +122,13 @@ export default {
 
       const pct = Math.round((route.energy_j / app.usableJ) * 100)
       const extra = before ? Math.round((route.energy_j - before.energy_j) / 1000) : 0
-      const cost = extra > 0 ? `costs ${extra} kJ more` : extra < 0 ? `costs ${-extra} kJ less` : 'costs the same energy'
+      const extraPct = before ? ((route.energy_j - before.energy_j) / before.energy_j) * 100 : 0
+      const cost = extra > 0 ? `costs ${extra} kJ more (+${extraPct.toFixed(1)}%)` : extra < 0 ? `costs ${-extra} kJ less (${extraPct.toFixed(1)}%)` : 'costs the same energy'
+      // pct is the whole route's share of the energy you may spend walking (budget minus reserve), not the difference.
+      const share = `The whole walk uses ${pct}% of the ${ui.kj(app.usableJ)} kJ you can spend walking; the reserve stays untouched.`
       const sum = ui.section('')
-      sum.append(p(before ? `The scouted route ${cost} and uses ${pct}% of the walking budget.` : `The route uses ${pct}% of the walking budget.`))
+      if (before) sum.append(p(`The scouted route ${cost} than the one planned from orbit.`))
+      sum.append(p(share))
 
       const options = ui.details('More actions & model details', visionBtn)
       if (app.scout.left() > 0) options.querySelector('.f-details-body').append(againBtn)
