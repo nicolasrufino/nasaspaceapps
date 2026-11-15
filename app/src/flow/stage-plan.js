@@ -1,6 +1,7 @@
 // Stage 1: select stops on the NASA HiRISE map or with explicit add/remove buttons.
 // Selection, route preferences and calculations still belong to the existing app bridge.
 import { scienceGoalOn, goalCard, stopCheck, loadCandidates } from './goal.js'
+import { findButton } from './find.js'
 const MIN_STOPS = 3
 
 export default {
@@ -35,20 +36,24 @@ export default {
     const reasons = ui.h('div', 'f-list')
     for (const s of app.stops().filter((s) => !s.custom)) reasons.append(ui.item({ title: s.name, sub: s.why ?? s.goal ?? '' }))
     const more = ui.details('More options & stop details', reasons)
-    ui.body.append(intro, ...(goal ? [goalCard(ui)] : []), sug, mine, how, more)
+    const gc = goal ? goalCard(ui) : null
+    ui.body.append(intro, ...(gc ? [gc] : []), sug, mine, how, more)
 
     // Optional candidate sites keep their existing evidence and action, under More options.
-    let picks = [], live = true
+    let picks = [], live = true, closeFind = null
     if (goal) loadCandidates().then((c) => {
       if (!live || !c.length) return
       picks = c
       const sec = ui.section('Sites the map suggests')
       sec.append(Object.assign(ui.h('p', 'dim'), { textContent: 'Ranked from ridges and hollows in the 1 m HiRISE terrain. A guide; the crew decides.' }),
-        ui.button(`+ Add ${c.length} candidate sites`, () => {
-          const have = new Set(app.stops().filter((s) => s.included).map((s) => `${s.cell}`))
-          for (const p of c) if (!have.has(`${p.cell}`)) { app.addStop(p.cell); have.add(`${p.cell}`) }
-        }))
+        ui.button(`+ Add ${c.length} candidate sites`, addCands))
       more.querySelector('.f-details-body').prepend(sec)
+      function addCands() {
+        const have = new Set(app.stops().filter((s) => s.included).map((s) => `${s.cell}`))
+        for (const p of c) if (!have.has(`${p.cell}`)) { app.addStop(p.cell); have.add(`${p.cell}`) }
+      }
+      // "How the map finds boxwork" (find.js), right after the science goal; hidden by ?off=find or a missing file.
+      findButton(ui, app, c, addCands).then((f) => { if (live && f) { gc.after(f.el); closeFind = f.close } })
     })
 
     const go = ui.button('Plan the route', () => ui.go('analyse'), true)
@@ -105,6 +110,6 @@ export default {
     map.onTap((cell) => app.addStop(cell))
     const off = app.on('plan', draw)
     draw()
-    return () => { live = false; off() }
+    return () => { live = false; off(); closeFind?.() }
   },
 }
