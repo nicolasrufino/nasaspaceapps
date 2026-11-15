@@ -71,8 +71,14 @@ export default {
     const totals = ui.stats([['m² of ground scanned', '0', 'scout'], ['rock cells found', '0', 'hazard'], ['on the route', '0', 'hazard']])
     const stripM = Math.round(2 * (app.scout.swathM ?? 15))
     const stripLabel = payloadOn ? `about ${stripM} m, our estimate` : `the ${stripM} m strip the camera sees`
-    const legend = ui.h('div', 'sc-legend', `<span><i style="background:${SCOUT}"></i>${stripLabel}</span><span><i style="background:${HAZARD}"></i>rocks too big to step over (over 0.3 m)</span>`)
-    scanSec.append(totals.el, legend)
+    const legend = ui.h('div', 'sc-legend', `<span><i style="background:${SCOUT}"></i>${stripLabel}</span><span><i style="background:${HAZARD}"></i>rock field: blocks over 0.3 m, walk around</span>`)
+    // Why a walker avoids rock fields: NASA ICES-2025-294 step limit; NASA JETT3 2022 (NTRS 20230010686), docs/RESEARCH.md.
+    const why = ui.details('Why avoid rock fields?', ...[
+      `A rock cell is a ${cs} m square packed with rocks, not one rock. A suited astronaut can’t step over anything higher than 0.3 m (NASA ICES-2025-294), so the walk goes around the whole field.`,
+      'Found on foot, a field means an unplanned detour paid from the energy needed to get home. Found from the air, the route goes around it before anyone leaves.',
+      'In NASA’s 2022 JETT3 field test, walks ended short on ground the maps missed.',
+    ].map((t) => ui.h('p', 'dim', t)))
+    scanSec.append(totals.el, legend, why)
     const technical = ui.details('Battery estimate & data sources', heliSec, ui.model(MODELS.scan))
     ui.body.append(flightSec, scanSec, detSec, technical)
 
