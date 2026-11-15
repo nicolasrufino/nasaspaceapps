@@ -3,7 +3,7 @@
 import { costFrom, energyCost, planTour } from '../../app/src/plan.js'
 import { describe } from '../../app/src/why.js'
 import { stepCost, reserveJ } from '../../app/src/walk.js'
-import { routeFlights, scanAt, pointAlong } from '../../app/src/scout.js'
+import { createScout, launchScoutFlight, completeScoutFlight, scanFlight, FLIGHT_ANIMATION_S } from '../../app/src/scout.js'
 
 const at = (meta, [x, y]) => y * meta.width + x
 const count = (values) => values.reduce((sum, value) => sum + Number(Boolean(value)), 0)
@@ -15,46 +15,34 @@ export function hazardContacts(meta, cells, mask) {
     cells: unique.map((i) => [i % meta.width, Math.floor(i / meta.width)]) }
 }
 
-export function simulateScout(world, route, extraFlights, mode = '60fps', previouslyScanned = null) {
+export function simulateScout(world, targets, mode = '60fps', previouslyScanned = null) {
   const { meta, layers } = world
-  const flights = [...routeFlights(meta, route.cells), ...extraFlights]
   const scanned = previouslyScanned ? Uint8Array.from(previouslyScanned) : new Uint8Array(meta.width * meta.height)
   if (scanned.length !== meta.width * meta.height) throw new Error('Wrong scout mask size')
   const priorHazards = count(scanned.map((v, i) => v && layers.rocks_fine[i]))
-  if (mode === 'spatial4m') {
-    // Deterministic spatial audit, includes endpoints. The current UI instead
-    // samples at animation frames; do not label this as an exact UI replay.
-    for (const f of flights) for (let k = 1; k < f.waypoints.length; k++) {
-      const [a, b] = [f.waypoints[k - 1], f.waypoints[k]]
-      const distance = meta.cell_size_m * Math.hypot(b[0] - a[0], b[1] - a[1])
-      const n = Math.max(1, Math.ceil(distance / 4))
-      for (let s = 0; s <= n; s++) scanAt(meta, scanned, a[0] + (b[0] - a[0]) * s / n, a[1] + (b[1] - a[1]) * s / n)
+  const state = createScout(world, targets, { scanned })
+  const fps = Number(mode.replace('fps', ''))
+  if (mode !== 'spatial2m' && ![30, 60, 120].includes(fps)) throw new Error('Unsupported fixed frame rate')
+  for (let f; (f = launchScoutFlight(world, state));) {
+    if (mode === 'spatial2m') scanFlight(meta, scanned, f)
+    else {
+      // Same spatial scanner and per-flight animation speed as main.js.
+      let along = 0
+      do {
+        scanFlight(meta, scanned, f, along)
+        along = Math.min(f.metres, along + (f.metres / FLIGHT_ANIMATION_S) * Math.min(1 / fps, .1))
+      } while (along < f.metres)
+      scanFlight(meta, scanned, f, f.metres)
     }
-  } else {
-    const fps = Number(mode.replace('fps', ''))
-    if (![30, 60, 120].includes(fps)) throw new Error('Unsupported fixed frame rate')
-    const speed = flights.reduce((sum, f) => sum + f.metres, 0) / 9
-    if (!(speed > 0)) throw new Error('Scout path has no length')
-    // Mirrors main.js tickFlight: cap dt, advance before scanning, reset on
-    // flight change, discard overshoot and do not add an unobserved endpoint.
-    for (const f of flights) {
-      let along = 0, ticks = 0
-      for (;;) {
-        if (++ticks > 100000) throw new Error('Scout simulation did not terminate')
-        along += speed * Math.min(1 / fps, .1)
-        const point = pointAlong(meta, f.waypoints, along)
-        if (!point) break
-        scanAt(meta, scanned, ...point)
-      }
-    }
+    completeScoutFlight(world, state)
   }
-  const blocked = Uint8Array.from(scanned, (seen, i) => seen && layers.rocks_fine[i])
-  // This is the app's existing per-cell switch, not a fresh partial-map search.
   const displayedReturn = Float64Array.from(layers.cost_to_go,
-    (value, i) => scanned[i] ? layers.cost_to_go_scouted[i] : value)
-  return { scanned, blocked, displayedReturn, flights: flights.length,
-    flight_metres: flights.reduce((sum, f) => sum + f.metres, 0),
-    scanned_cells: count(scanned), discovered_hazard_cells: count(blocked), newly_discovered_hazard_cells: count(blocked) - priorHazards }
+    (value, i) => scanned[i] && layers.cost_to_go_scouted ? layers.cost_to_go_scouted[i] : value)
+  return { scanned, blocked: state.blocked, route: state.route, history: state.flights,
+    displayedReturn, flights: state.flights.length,
+    flight_metres: state.flights.reduce((sum, f) => sum + f.metres, 0),
+    scanned_cells: count(scanned), discovered_hazard_cells: count(state.blocked),
+    newly_discovered_hazard_cells: count(state.blocked) - priorHazards }
 }
 
 export function knownReturnCosts(world, blocked) {
@@ -166,46 +154,42 @@ export function energySensitivity(world, route, displayedReturn, auditedReturn) 
       known_hazards_ring_audit: ringStats(world.meta, auditedReturn, p.nominal_spent_j, scale) })) }))
 }
 
-export function repeatScouting(world, targets, flights, reviewed, initial, maxPasses = 10) {
-  let route = initial, scanned = null, sample, audit
-  const passes = []
-  for (let pass = 1; pass <= maxPasses; pass++) {
-    sample = simulateScout(world, route, flights, '60fps', scanned)
-    scanned = sample.scanned
-    const before = hazardContacts(world.meta, route.cells, sample.blocked)
-    route = planTour(world, targets, sample.blocked)
-    const hidden = hazardContacts(world.meta, route.cells, world.layers.rocks_fine)
-    const seen = route.cells.every((c) => scanned[at(world.meta, c)])
-    passes.push({ pass, newly_discovered_hazard_cells: sample.newly_discovered_hazard_cells,
-      total_discovered_hazard_cells: sample.discovered_hazard_cells,
-      previous_route_discovered_hazard_cells: before.unique_cells,
-      new_route_all_layer_hazard_cells: hidden.unique_cells, new_route_fully_scanned: seen,
-      route_energy_j: route.energy_j, flights: sample.flights, flight_metres: sample.flight_metres })
-    if (seen && hidden.unique_cells === 0) break
-  }
-  audit = knownReturnCosts(world, sample.blocked)
-  return { stop_condition: 'All route vertices scanned and zero crossings in the stored hazard layer; at most 10 passes',
-    converged: passes.at(-1).new_route_fully_scanned && passes.at(-1).new_route_all_layer_hazard_cells === 0,
-    passes, total_flights: passes.reduce((n, p) => n + p.flights, 0),
-    total_flight_metres: passes.reduce((n, p) => n + p.flight_metres, 0),
-    final_route: measureRoute(world, route, sample.blocked, reviewed, sample.displayedReturn, audit),
-    energy_sensitivity: energySensitivity(world, route, sample.displayedReturn, audit) }
+// Retain the report key for consumers; each pass is now ONE flight and its re-plan.
+export function repeatScouting(world, reviewed, sample) {
+  const observed = new Uint8Array(sample.scanned.length), seen = new Uint8Array(sample.scanned.length)
+  const passes = sample.history.map((f, i) => {
+    f.found.forEach((cell) => (observed[cell] = 1))
+    scanFlight(world.meta, seen, { ...f, next_sample_m: 0 })
+    return { pass: i + 1, newly_discovered_hazard_cells: f.found.length,
+      total_discovered_hazard_cells: count(observed),
+      previous_route_discovered_hazard_cells: hazardContacts(world.meta, f.before.cells, observed).unique_cells,
+      new_route_all_layer_hazard_cells: hazardContacts(world.meta, f.after.cells, world.layers.rocks_fine).unique_cells,
+      new_route_fully_scanned: f.after.cells.every((c) => seen[at(world.meta, c)]),
+      route_energy_j: f.after.energy_j, flights: 1, flight_metres: f.metres }
+  })
+  const audit = knownReturnCosts(world, sample.blocked)
+  return { stop_condition: 'At most 3 flights; stop early when the current route is already scanned. Re-plan after each flight.',
+    converged: sample.route.cells.every((c) => sample.scanned[at(world.meta, c)]) &&
+      hazardContacts(world.meta, sample.route.cells, world.layers.rocks_fine).unique_cells === 0,
+    passes, total_flights: sample.flights, total_flight_metres: sample.flight_metres,
+    final_route: measureRoute(world, sample.route, sample.blocked, reviewed, sample.displayedReturn, audit),
+    energy_sensitivity: energySensitivity(world, sample.route, sample.displayedReturn, audit) }
 }
 
-export function calculate(world, targets, extraFlights, reviewed) {
+export function calculate(world, targets, reviewed) {
   const before = planTour(world, targets)
   if (!before.stops.length) throw new Error('Demo route visits no science stops')
-  const scout = simulateScout(world, before, extraFlights)
-  const after = planTour(world, targets, scout.blocked)
+  const scout = simulateScout(world, targets)
+  const after = scout.route
   const home = knownReturnCosts(world, scout.blocked)
   const unblockedHome = knownReturnCosts(world, null)
   const prior = measureRoute(world, before, scout.blocked, reviewed, world.layers.cost_to_go, unblockedHome)
   const updated = measureRoute(world, after, scout.blocked, reviewed, scout.displayedReturn, home)
   const trace = routeProfile(world, after.cells, home)
   const sensitivity = energySensitivity(world, after, scout.displayedReturn, home)
-  const sampling = ['30fps', '60fps', '120fps', 'spatial4m'].map((mode) => {
-    const sample = mode === '60fps' ? scout : simulateScout(world, before, extraFlights, mode)
-    const route = mode === '60fps' ? after : planTour(world, targets, sample.blocked)
+  const sampling = ['30fps', '60fps', '120fps', 'spatial2m'].map((mode) => {
+    const sample = mode === '60fps' ? scout : simulateScout(world, targets, mode)
+    const route = sample.route
     return { mode, scanned_cells: sample.scanned_cells, discovered_hazard_cells: sample.discovered_hazard_cells,
       reviewed_clearance_cells_seen: count(sample.blocked.map((v, i) => v && reviewed[i])),
       before_crossings: hazardContacts(world.meta, before.cells, sample.blocked),
@@ -226,7 +210,7 @@ export function calculate(world, targets, extraFlights, reviewed) {
       scanned_cells: scout.scanned_cells, discovered_hazard_cells: scout.discovered_hazard_cells,
       reviewed_clearance_cells_seen: count(scout.blocked.map((v, i) => v && reviewed[i])) },
     sampling_sensitivity: sampling, energy_sensitivity: sensitivity,
-    repeated_scout: repeatScouting(world, targets, extraFlights, reviewed, before),
+    repeated_scout: repeatScouting(world, reviewed, scout),
     app_return_lookup_audit: { maximum_underestimate_j_on_route: Math.max(0, ...differences),
       maximum_overestimate_j_on_route: Math.max(0, ...differences.map((v) => -v)) },
     nominal_audited_profile: trace }

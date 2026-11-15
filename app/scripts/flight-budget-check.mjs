@@ -8,7 +8,7 @@
 import { readFileSync, writeFileSync } from 'node:fs'
 import { parseLayer } from '../src/world.js'
 import { planTour, costFrom, pathCells } from '../src/plan.js'
-import { scanAt, pointAlong, SWATH_M } from '../src/scout.js'
+import { scanAt, pointAlong, SWATH_M, createScout, launchScoutFlight, completeScoutFlight } from '../src/scout.js'
 
 const SKYFALL_FLIGHT_S = 150, INGENUITY_TOP_MPS = 10, INGENUITY_LONGEST_M = 704, INGENUITY_LONGEST_S = 169.5
 
@@ -56,24 +56,16 @@ function coverage(flights, D) {
   return { flights, metres_each: D, route_corridor_seen_pct: +(100 * corridorSeen / onRoute.size).toFixed(1), hazard_cells_near_route: hazards, hazard_cells_seen: hazardsSeen }
 }
 // 4. The real loop: fly the next unseen stretch of the current route, re-plan around what was found, repeat.
-//    Route-only scouting (the published baseline; our value-of-information planner is not built yet).
+//    Route-only scouting (the published baseline; value-of-information is a separate addition).
 //    ponytail: each flight covers D metres along the route from its first unseen point (SkyFall-style, resting in the
 //    field between flights); transit from the habitat is not charged. All Gale stops lie within 354 m of base.
 const allRocks = layers.rocks_fine
 const oracle = planTour(world, targets, allRocks)
 function loop(flights, D) {
-  const seen = new Uint8Array(N), blocked = new Uint8Array(N)
-  let used = 0
-  for (; used < flights; used++) {
-    const r = planTour(world, targets, blocked)
-    const total = len(r.cells)
-    let start = -1
-    for (let a = 0; a <= total; a += 2) { const p = pointAlong(meta, r.cells, a); if (p && !seen[Math.round(p[1]) * W + Math.round(p[0])]) { start = a; break } }
-    if (start < 0) break // whole current route already seen
-    for (let a = start; a <= Math.min(total, start + D); a += 2) { const p = pointAlong(meta, r.cells, a); if (p) scanAt(meta, seen, p[0], p[1]) }
-    seen.forEach((v, i) => v && allRocks[i] && (blocked[i] = 1))
-  }
-  const final = planTour(world, targets, blocked)
+  const state = createScout(world, targets, { maxFlights: flights, flightLimit: D })
+  while (launchScoutFlight(world, state)) completeScoutFlight(world, state)
+  const { route: final, scanned: seen } = state
+  const used = state.flights.length
   const unseenHazardsOnRoute = final.cells.filter(([x, y]) => allRocks[y * W + x] && !seen[y * W + x]).length
   return { flights_budget: flights, metres_each: D, flights_used: used,
     unseen_hazard_cells_on_final_route: unseenHazardsOnRoute,

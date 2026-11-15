@@ -92,13 +92,13 @@ test('hazard visits do not become individual-rock or unique-cell counts', () => 
 test('scout preserves accumulated observations without mutating inputs or leaking distant hazards', () => {
   const world = fixture()
   world.layers.rocks_fine[15] = 1
-  const route = { cells: [[0, 0], [1, 0], [0, 0]] }
-  const first = simulateScout(world, route, [], '60fps')
+  const targets = [{ id: 'near', cell: [1, 0] }]
+  const first = simulateScout(world, targets, '60fps')
   assert.equal(first.blocked[15], 0)
   assert.equal(first.discovered_hazard_cells, 0)
   const old = new Uint8Array(16)
   old[15] = 1
-  const again = simulateScout(world, route, [], '60fps', old)
+  const again = simulateScout(world, targets, '60fps', old)
   assert.equal(again.blocked[15], 1)
   assert.equal(again.newly_discovered_hazard_cells, 0)
   assert.equal(old.reduce((a, b) => a + b, 0), 1)
@@ -116,7 +116,16 @@ test('Gale report separates observed hazards, hidden hazards, model accuracy and
   assert.deepEqual(new Set(r.orbit_only.stops), new Set(r.after_scout.stops))
   assert.deepEqual(new Set(r.orbit_only.stops), new Set(r.repeated_scout.final_route.stops))
   assert.equal(r.after_scout.discovered_hazards.unique_cells, 0)
-  assert.ok(r.after_scout.all_layer_hazards.unique_cells > 0, 'The first-pass limitation must remain visible')
+  assert.equal(r.after_scout.all_layer_hazards.unique_cells, 0)
+  assert.equal(r.scout.flights, 3)
+  assert.equal(r.repeated_scout.total_flights, 3)
+  assert.ok(r.repeated_scout.passes.every((p) => p.flights === 1 && p.flight_metres <= 1000))
+  assert.ok(r.repeated_scout.passes[0].new_route_all_layer_hazard_cells > 0, 'Must re-plan and scout again')
+  for (const sample of r.sampling_sensitivity) {
+    assert.equal(sample.after_energy_j, r.after_scout.energy_j)
+    assert.equal(sample.scanned_cells, r.scout.scanned_cells)
+    assert.equal(sample.discovered_hazard_cells, r.scout.discovered_hazard_cells)
+  }
   assert.ok(r.repeated_scout.converged)
   assert.equal(r.repeated_scout.final_route.all_layer_hazards.unique_cells, 0)
   assert.equal(r.repeated_scout.passes.at(-1).new_route_fully_scanned, true)
