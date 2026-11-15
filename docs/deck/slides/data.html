@@ -1,17 +1,7 @@
 <section id="data" class="light with-foot">
-<p class="eyebrow">SPACE DATA INSIDE</p>
-<h2 class="title">All eight data types NASA lists, each with a job</h2>
-<div class="pipe" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
-<div class="stage rise" style="--i:1;padding:26px"><h3>See</h3><p class="txt">Optical: HiRISE and CTX images (MRO)</p></div>
-<div class="stage rise" style="--i:2;padding:26px"><h3>Slope</h3><p class="txt">Topographic: terrain model sets walking cost and the slope limit</p></div>
-<div class="stage rise" style="--i:3;padding:26px"><h3>Sand</h3><p class="txt">Thermal: THEMIS finds loose ground (Odyssey)</p></div>
-<div class="stage rise" style="--i:4;padding:26px"><h3>Science</h3><p class="txt">Spectral: CRISM minerals and the geologic map pick targets</p></div>
-<div class="stage rise" style="--i:5;padding:26px"><h3>Safety</h3><p class="txt">Radiation and atmosphere: Curiosity RAD, REMS; DONKI storms</p></div>
-<div class="stage rise" style="--i:6;padding:26px"><h3>Rock chemistry</h3><p class="txt">Chemical and geophysical: ChemCam, APXS, DAN along Curiosity’s path</p></div>
-<div class="stage rise" style="--i:7;padding:26px"><h3>Hazards</h3><p class="txt">Rocks detected from their shadows in 25 cm images</p></div>
-<div class="stage out rise" style="--i:8;padding:26px"><h3>Ground view</h3><p class="txt">AI4Mars Curiosity photos: terrain-classifier training and tests</p></div>
-</div>
-<p class="body">23 visually accepted rock proposals. Ground classifier: 91.1% on 302 additional Curiosity crops; no big-rock test examples.</p>
-<p class="foot">Sources: NASA MRO HiRISE, CTX, CRISM; Mars Odyssey THEMIS; USGS Gale terrain and images; Fraeman et al. 2016; Curiosity RAD, REMS, ChemCam, APXS, DAN, Mastcam; NASA DONKI.</p>
-<aside>3:00 to 3:20. Name each data type and its job. Chemistry and subsurface are points along Curiosity's path, not full maps. R3 has 23 visually accepted proposals and two uncertain proposals excluded; acceptance is not measured detector precision or recall. AI4Mars is ground-view Curiosity imagery from Gale, not Ingenuity. Exact overlap with Luca's target slice is not established. A proposed scout flight at approximately five metres is a scenario assumption, not training-data altitude or a validated camera configuration. The current 3D map and slopes come from orbital terrain products, not this classifier.</aside>
+<p class="eyebrow">MISSION VESTA · VESTA SCOUT</p>
+<h2 class="title">NASA sources in the map</h2>
+<div class="cols"><div class="card rise" style="--i:1"><h3>HiRISE / USGS</h3><p class="txt">The image and relief of Gale; slopes and walk-scale crossings.</p></div><div class="card rise" style="--i:2"><h3>THEMIS / CRISM</h3><p class="txt">Thermal and mineral context for the site and its science stops.</p></div><div class="card rise" style="--i:3"><h3>Curiosity</h3><p class="txt">Stop photographs, radiation context and field-stop information.</p></div></div>
+<p class="foot">Sources displayed in /scout/; data/worlds/gale/world.json; docs/DATA.md.</p>
+<aside>3:00–3:20. Name the mission beside each visible view. HiRISE provides orbital image and terrain products; the simulation does not reconstruct new helicopter imagery. The additional chemistry, weather and DAN files are context, not a claim of a rendered layer everywhere.</aside>
 </section>
