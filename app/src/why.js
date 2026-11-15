@@ -26,7 +26,7 @@ export function stretches(route, stopCells) {
 export function describe({ meta, layers }, cells, blocked) {
   const W = meta.width
   const at = ([x, y]) => y * W + x
-  let metres = 0, energy = 0, steepest = 0, sand = 0, rocks = 0
+  let metres = 0, energy = 0, steepest = 0, sand = 0, rocks = 0, climb = 0
   cells.forEach((c, k) => {
     const i = at(c)
     steepest = Math.max(steepest, layers.slope[i])
@@ -35,10 +35,11 @@ export function describe({ meta, layers }, cells, blocked) {
     if (!k) return
     const p = cells[k - 1]
     metres += meta.cell_size_m * Math.hypot(c[0] - p[0], c[1] - p[1])
+    climb += Math.max(0, layers.height[i] - layers.height[at(p)])
     energy += stepCostIdx(meta, layers.height, layers.terrain_class, at(p), i)
   })
   return { metres, energy_j: energy, minutes: metres / meta.knobs.speed_mps / 60, steepest_deg: steepest,
-    sand_share: cells.length ? sand / cells.length : 0, rock_cells: rocks }
+    sand_share: cells.length ? sand / cells.length : 0, rock_cells: rocks, climb_m: climb }
 }
 
 // The tightest moment of the walk: least energy to spare after the way home and the reserve.
