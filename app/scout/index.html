@@ -175,6 +175,16 @@
          Vision panels would show for a moment. Same test as main.js's flowMode. -->
     <script>if (!/[?&](vision|world|flags)(=|&|$)/.test(location.search)) document.documentElement.classList.add('flow-boot')</script>
     <style>html.flow-boot body:not(.flow) > * { visibility: hidden; }</style>
+    <style>
+      /* Vesta Vision (body.vision): no Walk, no route explanation, Scout look (app/src/flow/flow.css colours and type). */
+      body.vision #hud [data-tab=walk], body.vision #walk, body.vision #visionBar, body.vision #whyBox, body.vision #hud [role=tablist] { display: none !important; }
+      body.vision { font-family: "IBM Plex Sans", "Rethink Sans", system-ui, sans-serif; }
+      body.vision .panel, body.vision #viewBtn, body.vision #visionNote { background: #1d1c1b !important; color: #f3f2ef !important; border: 0 !important; border-radius: 8px !important; box-shadow: none !important; font-family: inherit !important; }
+      body.vision #hud h2 { font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: #a9a6a2; }
+      body.vision #hud button, body.vision #viewBtn { background: #2a2927 !important; color: #f3f2ef !important; border: 0 !important; border-radius: 8px !important; font-weight: 600 !important; }
+      body.vision #hud button:hover, body.vision #viewBtn:hover { background: #f3f2ef !important; color: #191919 !important; }
+      body.vision #hud .src, body.vision #hud small { color: #a9a6a2; }
+    </style>
   </head>
   <body>
     <canvas id="scene"></canvas>
