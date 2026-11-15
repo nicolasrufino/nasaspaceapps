@@ -49,19 +49,7 @@
     </section>
 
     <section class="products" id="products" aria-label="Mission products">
-      <a class="product" href="../">
-        <h2>
-          <svg class="icon layers" viewBox="0 0 64 48" aria-hidden="true">
-            <path class="l1" d="M8 34 32 44 56 34 32 24Z"/>
-            <path class="l2" d="M8 24 32 34 56 24 32 14Z"/>
-            <path class="l3" d="M8 14 32 24 56 14 32 4Z"/>
-          </svg>
-          Vesta Vision
-        </h2>
-        <p>Map the terrain and choose where to explore using NASA’s Mars data.
-          <span class="go">Open the map <span aria-hidden="true">→</span></span></p>
-      </a>
-      <a class="product" href="../">
+      <a class="product scout" href="../">
         <h2>
           <!-- Ingenuity-style: solar panel, two stacked rotors, body, four legs -->
           <svg class="icon heli" viewBox="0 0 64 48" aria-hidden="true">
@@ -74,11 +62,34 @@
           </svg>
           Vesta Scout
         </h2>
-        <p>Fly a simulated scout helicopter, like NASA’s Ingenuity, along the route to see the terrain in more detail.
-          <span class="go">Fly the scout <span aria-hidden="true">→</span></span></p>
+        <p>Plan a science walk on NASA’s Mars data. A simulated scout helicopter, like NASA’s Ingenuity, flies the
+          route first and reveals the hazards orbit can’t see. Then you walk with the way home always known.
+          <span class="go">Open Vesta Scout <span aria-hidden="true">→</span></span></p>
       </a>
+      <div class="product later">
+        <h2>
+          <svg class="icon layers" viewBox="0 0 64 48" aria-hidden="true">
+            <path class="l1" d="M8 34 32 44 56 34 32 24Z"/>
+            <path class="l2" d="M8 24 32 34 56 24 32 14Z"/>
+            <path class="l3" d="M8 14 32 24 56 14 32 4Z"/>
+          </svg>
+          Vesta Vision
+          <span class="tag">Coming later</span>
+        </h2>
+        <p>A Google Earth for Mars: one explorable map of the planet, built from NASA’s orbit data and sharpened by
+          everything our scouts and models learn.</p>
+      </div>
     </section>
   </main>
   <script type="module" src="./mars.js"></script>
+  <script type="module">
+    // The helicopter flies a loop over the Scout row and lands back: once when the row comes into view, then on hover.
+    const scout = document.querySelector('.scout')
+    const fly = () => scout.classList.add('fly')
+    scout.querySelector('.heli').addEventListener('animationend', (e) => e.animationName === 'fly' && scout.classList.remove('fly'))
+    scout.addEventListener('pointerenter', fly)
+    scout.addEventListener('focus', fly)
+    new IntersectionObserver(([e], o) => { if (e.isIntersecting) { fly(); o.disconnect() } }, { threshold: 0.6 }).observe(scout)
+  </script>
 </body>
 </html>
