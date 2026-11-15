@@ -1,15 +1,7 @@
-<section id="demo" class="dark">
-<p class="eyebrow">LIVE DEMO · MOUNT SHARP BOXWORK, GALE CRATER</p>
-<div class="demo-row">
-<div class="phone"><p class="hud">Plan · <span class="ok">3 stops</span></p><img src="/_blob/2891d1881bb3407e5daf3e32147c60c6" alt="Map of Mars terrain with the route and the cyan area the astronaut can reach and still get home"></div>
-<div class="phone alert"><p class="hud">Walk · <span class="bad">Turn back now</span></p><img src="/_blob/b735c5037ae7d402b41962c2f893b411" alt="The astronaut, in red, past the point of no return"></div>
-<div class="steps">
-<p class="step rise" style="--i:1"><b>Orbit only:</b> random spot in Gale, goal “boxwork”, a first route on the coarse map.</p>
-<p class="step rise" style="--i:2"><b>Scout:</b> the helicopter flies the route, then the anomalies; its scan sweep reveals real HiRISE detail and a hidden rock field.</p>
-<p class="step rise" style="--i:3"><b>Re-plan:</b> the route goes around it, with the reasons; the packing list puts the drill on the rover.</p>
-<p class="step rise" style="--i:4"><b>Walk:</b> a judge carries the tablet; real steps move the astronaut; flip to the helmet HUD; the reachable area shrinks.</p>
-<p class="step rise" style="--i:5"><b>Turn back:</b> past the point of no return it buzzes; export the map for mission control.</p>
-</div>
-</div>
-<aside>1:45 to 3:00. Screenshots illustrate the UI; measured proof uses the fixed Gale scenario with five default stops, the PR #94 worst scenario, a 3165.2 kJ budget and 1899.1 kJ reserve. Runtime route flights use the 1 km SkyFall scenario limit; this is not a flight record. Use the current dev app at /scout/?world=gale&scenario=worst, then repeat Fly the new route two times in total. The flight reveals stored HiRISE/world layers; it is simulated, not a new helicopter reconstruction. First re-plan: 6 to zero discovered hazard cells, +36.7 m and +1.33% walking energy; two stored hazards remain unobserved. Final route after two passes: 1311.4 m and zero stored hazard crossings. The simulated flights do not enforce campaign flight-count, recharge or daylight limits. CAPCOM/Foundry is deferred. Hand the phone to a judge only after testing that device.</aside>
+<section id="demo" class="dark with-foot">
+<p class="eyebrow">MISSION VESTA · VESTA SCOUT</p>
+<h2 class="title">Five stops, three flights, then the walk</h2>
+<div class="demo-row"><img class="build-shot" src="assets/scout-three-flights.png" alt="Actual F4 build after three flights: final route fully scouted, 621 to 630 kJ"><div class="steps"><p class="step"><b>Map:</b> open Imagery, then Hazards and its legend.</p><p class="step"><b>Scout:</b> click “Fly the route” once. Watch three flights and a re-plan after each.</p><p class="step"><b>Result:</b> five stops remain; the route is fully scouted.</p><p class="step"><b>Walk:</b> press Step and show energy, cost home and margin.</p></div></div>
+<p class="foot">Actual F4 build capture, 2026-11-15. NASA/JPL-Caltech/University of Arizona; USGS Gale imagery. Flights simulated.</p>
+<aside>1:45–3:00. Use /scout/ with the default Gale worst scenario and no custom stops. A single click starts the capped campaign. The red dashed line is the original route. “44 found” counts hazards around the flown corridors; 8 to 0 counts unique stored hazard cells on the route. Six of the original cells are actually observed; two are bypassed without being scanned. Do not interchange those counts. Step mode on a physical phone is only shown after that device passes F11.</aside>
 </section>

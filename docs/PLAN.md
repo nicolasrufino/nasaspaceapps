@@ -1,6 +1,8 @@
-# Martian Map: the whole plan
+# Mission VESTA: current demo and historical plan
 
 One document, read top to bottom: what NASA asked for, what we build, how every part answers the challenge, and how we build it. Evidence for every claim is in `docs/RESEARCH.md`. **New to the project? Read `docs/PRODUCT.md` first:** what the product is, each stage and why it exists, and why it beats the alternatives on every objective.
+
+> **Accepted rescope, 2026-11-15:** [SPEC.md](SPEC.md) replaces the earlier scope and build order below. The product submitted is **Vesta Scout**. This document preserves the original vision for context; sections 1–12 are not a list of shipped capabilities. The current demo below and [PITCH.md](PITCH.md) describe what to show. Packing list, helmet HUD, export, buddy rover, storm and CAPCOM are not demo promises.
 
 ## 0. On one page
 
@@ -10,9 +12,9 @@ One document, read top to bottom: what NASA asked for, what we build, how every 
 - **Where and why:** the boxwork ridges on Mount Sharp, Gale crater. NASA's challenge names them; Curiosity studied them in 2025; and Curiosity measured the radiation, weather and ground there, so one site gives us every layer. *(Alternative: Jezero, with Perseverance's images. The team decides.)*
 - **The real problem:** there is no map at the scale of one walk. Orbit sees the region; it misses the rock field, the soft sand and the slope that decide whether a suited astronaut can get through.
 - **Our solution: a map that builds itself, walk by walk.** (1) Start from NASA's orbital layers. (2) A NASA JPL-style scout helicopter flies the route first and maps what orbit can't see. (3) Martian Map plans the best path and the packing list: what to bring, what is heavy, what the rover carries. (4) The crew walks for a science purpose (signs of past water and life), and the map grows as they go: photos, ground type, how hard each stretch was, markers they drop. (5) The next crew starts with a better map.
-- **The demo:** pick "boxwork" → the layers light up the targets → the scout helicopter flies the route and reveals a rock field orbit missed → the route re-plans and the packing list appears → a judge walks the hallway with the phone as the suit display → the ring shrinks with every step → at a stop the phone runs the science checklist and adds to the map → past the point of no return it buzzes.
+- **The demo:** open `/scout/` on Gale with five default stops → inspect imagery and the hazard legend → fly one campaign of at most three 1 km flights → re-plan after every landing → show the fully scanned final route and its return margin → use Walk / Step.
 
-**Local awards:** Best Use of Science is our main target, then Best Use of Technology (requires Azure: hosting plus the CAPCOM agent), then Art & Technology. See `docs/PITCH.md`, Local awards.
+**Local awards:** eligibility and the Azure award question are tracked by Galsan in F1 #121. Azure Static Web Apps hosting is live; CAPCOM is cut from the submission.
 
 ### Why this is the best solution
 
@@ -42,15 +44,19 @@ Each option on its own fails at least one need. Ours combines the parts that wor
   - how the ring changes if our energy model is off by ±30%;
   - the rock detector's agreement with hand-checked rocks.
 
-### The demo, step by step (about 1:45)
+### The current demo, step by step (about 1:30)
 
-1. **Start** at a random spot inside the Gale site, on the habitat screen. Goal: boxwork.
-2. **Orbit only:** the map shows coarse layers and a first route.
-3. **Deploy the scout** (a 10-second animation). The helicopter flies Ingenuity-class legs (about 700 m and 3 minutes each). It covers the route corridor first, then anomalies (places where the layers disagree, such as firm-looking ground that the thermal data says is loose sand, a slope near the 20° limit, or an unusual mineral signal near a target), then the cells it is least sure about.
-4. **Reveal:** a scan sweep shows rays hitting the ground and dots building up (how a lidar or a bat "sees"); then, where it flies, the map switches to full-resolution HiRISE terrain and detected rocks, labelled "simulated helicopter view, real HiRISE data". A hidden rock field appears.
-5. **Re-plan and explain:** the new route avoids it. The "why this route" panel shows the extra distance, the effort, the slope limit, the rocks avoided and the margin home everywhere. The packing list updates.
-6. **Walk:** a judge carries the phone; real steps move the astronaut; the ring shrinks; at a stop, the science checklist runs.
-7. **Share:** export the map package; it "arrives" at mission control 11 minutes later.
+1. Open **bare `/scout/`**, Gale, with the five default science stops. Initial walking energy is about **621 kJ**. Inspect HiRISE imagery, true-scale terrain and the Hazards legend.
+2. Click **Fly the route** once. Each flight animates for ten seconds and covers at most 1 km; landing triggers a re-plan before the next flight starts.
+3. After the three flights, show **44 found hazard cells**, **fully scouted**, and about **630 kJ**. The stored layer's route crossings fall from **8 to 0**; the five stops stay the same. Flight distances are 1,000 m, 1,000 m and 215.4 m. A fourth flight is disabled.
+4. Switch to **Walk**, press **Step**, and explain the margin home. Use real phone sensing only after the actual device has passed the release rehearsal.
+5. Explain the bounds: stored grid hazards, a simulated sensor footprint, and an assumed walking-energy model. Transit, helicopter return-to-base, recharge, daylight and flight energy are not modelled. These results do not certify safety on Mars.
+
+Numbers and definitions: [R5](../ml/pitch_metrics/PITCH_NUMBERS.md). Full five-minute script: [PITCH.md](PITCH.md). F4 supersedes the earlier seven-flight/14-leg demo. A2/A6 are separately gated additions, not prerequisites for this baseline.
+
+---
+
+The following sections record the **pre-rescope vision**. Consult SPEC.md for what is in the submission.
 
 ## 1. The challenge, exactly
 
