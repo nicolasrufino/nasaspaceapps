@@ -84,6 +84,12 @@ jobs:
         run: |
           npm run build
           npx playwright test --shard=${{ matrix.shard }}/4
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-shard-${{ matrix.shard }}
+          path: app/test-results/
+          retention-days: 7
 
   # P3: world files are the contract every lane reads. Pipeline must run, every world must validate.
   data:
