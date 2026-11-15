@@ -105,7 +105,7 @@ const renderer = new THREE.WebGLRenderer({ canvas: $('scene'), antialias: true }
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
 const scene = new THREE.Scene()
 scene.background = new THREE.Color(0xc9a27e) // dusty Mars sky
-const richSky = flags.has('sky') || params.has('sky') || demoMode // flag sky: dust band, Sun with its bluish glow, matching haze
+const richSky = flags.has('sky') || params.has('sky') || params.has('vision') || demoMode // on in Vesta Vision and the Demo. flag sky: dust band, Sun with its bluish glow, matching haze
 if (!richSky) scene.add(makeSky())
 scene.add(terrain)
 scene.add(new THREE.HemisphereLight(0xffe8d0, 0x402015, 1.2))
