@@ -26,18 +26,21 @@ One place for what the team decided, why, and what is still open. **Add a line h
 
 ## Open: still to decide
 
+Recommendations with evidence and the holes checked: `docs/DECISION-BRIEFS.md` (brief number in brackets).
+
 | Question | Options | Needs | Blocks |
 |---|---|---|---|
-| **Approve PR #94** (routes on crossings + measured energy: gravity 0.68, sand 2.4×; Gale tour 332 → 617 kJ) | Approve / change | Jules (P1) and Nicolas (P2); Jules must re-export R3 first | Honest energy numbers in the pitch |
-| **Rebuild world files at 20°** | With #94 or as its own PR | Luca or Galsan; Jules's R3 hashes change too | The 20° decision taking effect |
-| **Which scouting mode first** | Reach the targets (fits the demo) / build a network (long-term story) | Nicolas | Build step 7, the demo script |
-| **How high the helicopter flies** | About 2 m (rover-like view, but rotor dust and 0.3 m ridge clearance) / above about 6 m with a slanted camera (proposed) | Nicolas | Helicopter-view model, flight planner |
+| **Approve PR #94** [1] (routes on crossings + measured energy: gravity 0.68, sand 2.4×; Gale tour 332 → 617 kJ) | Approve / change | Jules (P1) and Nicolas (P2); Jules must re-export R3 first | Honest energy numbers in the pitch |
+| **Rebuild world files at 20°** [1] | With #94 (one R3 re-export, recommended) or as its own PR | Luca or Galsan; Jules's R3 hashes change too | The 20° decision taking effect |
+| **Energy budget** [2] | Auto-sized to the tour (today) / from a real suit figure (1,200 BTU/h, 8 h, 1.5 h reserve; in #94, recommended) | Team, raised by Luca in #94 | Honest ring and pitch numbers |
+| **Which scouting mode first** [3] | Reach the targets (fits the demo) / build a network (long-term story) | Nicolas | Build step 7, the demo script |
+| **How high the helicopter flies** [4] | About 2 m (rover-like view, but rotor dust and 0.3 m ridge clearance) / about 10 m with the camera 45° below the horizon (recommended) | Nicolas | Helicopter-view model, flight planner |
 | **Labels for sensing** | Start with the reviewed ROSCO rocks / also project Curiosity's labelled images onto Gale cells | Jules, Nicolas | Belief-map training |
-| **What "blocked" means for a suited walker** | Rock height threshold; Luca uses NASA's 0.3 m step limit for ledges | Team | Belief map, rock-size law cut-off |
-| **Stop rule: what a flight is worth** | How many kJ of walking a flight must save (1.0 kJ in the toy) | Nicolas | Value-of-information planner |
-| **Flight budget per campaign** | A number of flights / a number of sols; flights per helicopter per sol | Team | Flight planner |
-| **Walking window before sunset** | How long before sunset a walk must end | Team | Sun model, plan mode |
-| **Demo look** | 3D view starts coarse and fills in where flown | Nicolas | Re-plan loop screen |
+| **What "blocked" means for a suited walker** [5] | Rock height threshold; Luca uses NASA's 0.3 m step limit for ledges | Team | Belief map, rock-size law cut-off |
+| **Stop rule: what a flight is worth** [6] | How many kJ of walking a flight must save (1.0 kJ in the toy) | Nicolas | Value-of-information planner |
+| **Flight budget per campaign** [7] | A number of flights / a number of sols; flights per helicopter per sol | Team | Flight planner |
+| **Walking window before sunset** [8] | How long before sunset a walk must end | Team | Sun model, plan mode |
+| **Demo look** [9] | 3D view starts coarse and fills in where flown | Nicolas | Re-plan loop screen |
 
 ## Missing: not built or not available yet
 
