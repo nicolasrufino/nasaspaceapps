@@ -1,0 +1,1020 @@
+{
+  "status": "reviewed_positive_hazard_additions",
+  "observation": "ESP_019698_1750",
+  "source_url": "https://hirise-pds.lpl.arizona.edu/PDS/DTM/ESP/ORB_019600_019699/ESP_019698_1750_ESP_019988_1750/ESP_019698_1750_RED_A_01_ORTHO.JP2",
+  "source_pixel_sha256": "a1b7b945e5eacfd094f57a0206bc093280c0662fd4378a8a8ec907817beb8b36",
+  "site": {
+    "name": "Gale crater, lower Mount Sharp boxwork",
+    "centre_lonlat": [
+      137.383,
+      -4.8
+    ],
+    "bbox_deg": {
+      "west": 137.36571151288496,
+      "east": 137.4002625116344,
+      "south": -4.817283123000793,
+      "north": -4.782732124251374
+    },
+    "projection": "+proj=eqc +lat_ts=0 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +R=3396190 +units=m +no_defs=True"
+  },
+  "grid": {
+    "width": 256,
+    "height": 256,
+    "cell_size_m": 8.0,
+    "row_order": "north_to_south"
+  },
+  "artifact_sha256": {
+    "r3_candidates.json": "024e23b6a777acde3d0b01ae98ef11ffcc1a828e7e40f291fcee3a71d69286a3",
+    "r3_decisions.json": "66dc4b234fabc86f5832e6a220717110a1406fc565710db76d5e34139eb7eaca",
+    "r3_alignment.json": "9950cd04bfb1ca8f2189dbdcd58657d8a87646b5cc7c33a3a53fdeae6e623c51",
+    "r3_world_reference.json": "e7dc500816aa4a294268370195eb5e44178ae761759696fc18ddddc318b34c9c",
+    "registration_metrics.json": "3325264b48d86e186af4279833e02c75f5300dc9fc398115b03d99dffbd6fc97",
+    "registered_candidates.json": "5458984f184d49ce4289259cb99d0468d82971f5afd0aaee00e753849ac8f5b1",
+    "single_observation_source.json": "ff6f0f4c1c26580044b61f78b1d1ed288294039f59a5f664c5e5a89d236538e2"
+  },
+  "review_counts": {
+    "accepted": 16,
+    "uncertain": 2,
+    "unreviewed": 7
+  },
+  "candidate_count": 25,
+  "review_complete": false,
+  "delivery_scope": "Accepted positive additions only; unresolved proposals excluded, coverage not exhaustive",
+  "selected_proposal_agreement": {
+    "accepted": 16,
+    "resolved": 16,
+    "fraction": 1.0,
+    "meaning": "Human acceptance among resolved frozen proposals; excludes uncertainty; not recall or held-out accuracy"
+  },
+  "g_mosaic_reference_matches": [],
+  "g_mosaic_review_counts": {
+    "uncertain": 16,
+    "accepted": 31,
+    "rejected": 3
+  },
+  "precision": null,
+  "recall": null,
+  "clearance_policy": {
+    "cells": 1,
+    "meaning": "Point cell plus eight neighbours; 8 m padding is a demo design choice, not measured rock size"
+  },
+  "accepted_points": [
+    {
+      "id": "H01",
+      "detection_id": "HRC00019",
+      "cell": [
+        58,
+        159
+      ],
+      "registered_world_projected_m": [
+        8142779.718980436,
+        -284770.2090330996
+      ],
+      "clearance_cells": [
+        [
+          57,
+          158
+        ],
+        [
+          58,
+          158
+        ],
+        [
+          59,
+          158
+        ],
+        [
+          57,
+          159
+        ],
+        [
+          58,
+          159
+        ],
+        [
+          59,
+          159
+        ],
+        [
+          57,
+          160
+        ],
+        [
+          58,
+          160
+        ],
+        [
+          59,
+          160
+        ]
+      ]
+    },
+    {
+      "id": "H03",
+      "detection_id": "HRC00015",
+      "cell": [
+        54,
+        157
+      ],
+      "registered_world_projected_m": [
+        8142744.762189345,
+        -284755.03851560544
+      ],
+      "clearance_cells": [
+        [
+          53,
+          156
+        ],
+        [
+          54,
+          156
+        ],
+        [
+          55,
+          156
+        ],
+        [
+          53,
+          157
+        ],
+        [
+          54,
+          157
+        ],
+        [
+          55,
+          157
+        ],
+        [
+          53,
+          158
+        ],
+        [
+          54,
+          158
+        ],
+        [
+          55,
+          158
+        ]
+      ]
+    },
+    {
+      "id": "H04",
+      "detection_id": "HRC00001",
+      "cell": [
+        246,
+        14
+      ],
+      "registered_world_projected_m": [
+        8144284.29606489,
+        -283612.88773141237
+      ],
+      "clearance_cells": [
+        [
+          245,
+          13
+        ],
+        [
+          246,
+          13
+        ],
+        [
+          247,
+          13
+        ],
+        [
+          245,
+          14
+        ],
+        [
+          246,
+          14
+        ],
+        [
+          247,
+          14
+        ],
+        [
+          245,
+          15
+        ],
+        [
+          246,
+          15
+        ],
+        [
+          247,
+          15
+        ]
+      ]
+    },
+    {
+      "id": "H05",
+      "detection_id": "HRC00018",
+      "cell": [
+        64,
+        158
+      ],
+      "registered_world_projected_m": [
+        8142827.083980734,
+        -284764.4619626274
+      ],
+      "clearance_cells": [
+        [
+          63,
+          157
+        ],
+        [
+          64,
+          157
+        ],
+        [
+          65,
+          157
+        ],
+        [
+          63,
+          158
+        ],
+        [
+          64,
+          158
+        ],
+        [
+          65,
+          158
+        ],
+        [
+          63,
+          159
+        ],
+        [
+          64,
+          159
+        ],
+        [
+          65,
+          159
+        ]
+      ]
+    },
+    {
+      "id": "H06",
+      "detection_id": "HRC00008",
+      "cell": [
+        54,
+        149
+      ],
+      "registered_world_projected_m": [
+        8142743.275016995,
+        -284693.94862177665
+      ],
+      "clearance_cells": [
+        [
+          53,
+          148
+        ],
+        [
+          54,
+          148
+        ],
+        [
+          55,
+          148
+        ],
+        [
+          53,
+          149
+        ],
+        [
+          54,
+          149
+        ],
+        [
+          55,
+          149
+        ],
+        [
+          53,
+          150
+        ],
+        [
+          54,
+          150
+        ],
+        [
+          55,
+          150
+        ]
+      ]
+    },
+    {
+      "id": "H07",
+      "detection_id": "HRC00009",
+      "cell": [
+        57,
+        150
+      ],
+      "registered_world_projected_m": [
+        8142769.513574456,
+        -284700.93340213224
+      ],
+      "clearance_cells": [
+        [
+          56,
+          149
+        ],
+        [
+          57,
+          149
+        ],
+        [
+          58,
+          149
+        ],
+        [
+          56,
+          150
+        ],
+        [
+          57,
+          150
+        ],
+        [
+          58,
+          150
+        ],
+        [
+          56,
+          151
+        ],
+        [
+          57,
+          151
+        ],
+        [
+          58,
+          151
+        ]
+      ]
+    },
+    {
+      "id": "H08",
+      "detection_id": "HRC00022",
+      "cell": [
+        162,
+        176
+      ],
+      "registered_world_projected_m": [
+        8143610.920688469,
+        -284910.62961905455
+      ],
+      "clearance_cells": [
+        [
+          161,
+          175
+        ],
+        [
+          162,
+          175
+        ],
+        [
+          163,
+          175
+        ],
+        [
+          161,
+          176
+        ],
+        [
+          162,
+          176
+        ],
+        [
+          163,
+          176
+        ],
+        [
+          161,
+          177
+        ],
+        [
+          162,
+          177
+        ],
+        [
+          163,
+          177
+        ]
+      ]
+    },
+    {
+      "id": "H09",
+      "detection_id": "HRC00010",
+      "cell": [
+        55,
+        150
+      ],
+      "registered_world_projected_m": [
+        8142756.768454491,
+        -284701.22618886345
+      ],
+      "clearance_cells": [
+        [
+          54,
+          149
+        ],
+        [
+          55,
+          149
+        ],
+        [
+          56,
+          149
+        ],
+        [
+          54,
+          150
+        ],
+        [
+          55,
+          150
+        ],
+        [
+          56,
+          150
+        ],
+        [
+          54,
+          151
+        ],
+        [
+          55,
+          151
+        ],
+        [
+          56,
+          151
+        ]
+      ]
+    },
+    {
+      "id": "H10",
+      "detection_id": "HRC00023",
+      "cell": [
+        170,
+        193
+      ],
+      "registered_world_projected_m": [
+        8143672.942829184,
+        -285045.83642652835
+      ],
+      "clearance_cells": [
+        [
+          169,
+          192
+        ],
+        [
+          170,
+          192
+        ],
+        [
+          171,
+          192
+        ],
+        [
+          169,
+          193
+        ],
+        [
+          170,
+          193
+        ],
+        [
+          171,
+          193
+        ],
+        [
+          169,
+          194
+        ],
+        [
+          170,
+          194
+        ],
+        [
+          171,
+          194
+        ]
+      ]
+    },
+    {
+      "id": "H11",
+      "detection_id": "HRC00017",
+      "cell": [
+        60,
+        157
+      ],
+      "registered_world_projected_m": [
+        8142796.188240842,
+        -284756.7941165309
+      ],
+      "clearance_cells": [
+        [
+          59,
+          156
+        ],
+        [
+          60,
+          156
+        ],
+        [
+          61,
+          156
+        ],
+        [
+          59,
+          157
+        ],
+        [
+          60,
+          157
+        ],
+        [
+          61,
+          157
+        ],
+        [
+          59,
+          158
+        ],
+        [
+          60,
+          158
+        ],
+        [
+          61,
+          158
+        ]
+      ]
+    },
+    {
+      "id": "H12",
+      "detection_id": "HRC00005",
+      "cell": [
+        35,
+        84
+      ],
+      "registered_world_projected_m": [
+        8142593.316357298,
+        -284172.3349614462
+      ],
+      "clearance_cells": [
+        [
+          34,
+          83
+        ],
+        [
+          35,
+          83
+        ],
+        [
+          36,
+          83
+        ],
+        [
+          34,
+          84
+        ],
+        [
+          35,
+          84
+        ],
+        [
+          36,
+          84
+        ],
+        [
+          34,
+          85
+        ],
+        [
+          35,
+          85
+        ],
+        [
+          36,
+          85
+        ]
+      ]
+    },
+    {
+      "id": "H14",
+      "detection_id": "HRC00016",
+      "cell": [
+        54,
+        157
+      ],
+      "registered_world_projected_m": [
+        8142749.147739746,
+        -284756.9599274691
+      ],
+      "clearance_cells": [
+        [
+          53,
+          156
+        ],
+        [
+          54,
+          156
+        ],
+        [
+          55,
+          156
+        ],
+        [
+          53,
+          157
+        ],
+        [
+          54,
+          157
+        ],
+        [
+          55,
+          157
+        ],
+        [
+          53,
+          158
+        ],
+        [
+          54,
+          158
+        ],
+        [
+          55,
+          158
+        ]
+      ]
+    },
+    {
+      "id": "H15",
+      "detection_id": "HRC00003",
+      "cell": [
+        104,
+        72
+      ],
+      "registered_world_projected_m": [
+        8143145.493858082,
+        -284071.6921553268
+      ],
+      "clearance_cells": [
+        [
+          103,
+          71
+        ],
+        [
+          104,
+          71
+        ],
+        [
+          105,
+          71
+        ],
+        [
+          103,
+          72
+        ],
+        [
+          104,
+          72
+        ],
+        [
+          105,
+          72
+        ],
+        [
+          103,
+          73
+        ],
+        [
+          104,
+          73
+        ],
+        [
+          105,
+          73
+        ]
+      ]
+    },
+    {
+      "id": "H16",
+      "detection_id": "HRC00014",
+      "cell": [
+        55,
+        156
+      ],
+      "registered_world_projected_m": [
+        8142758.771451973,
+        -284749.8919019566
+      ],
+      "clearance_cells": [
+        [
+          54,
+          155
+        ],
+        [
+          55,
+          155
+        ],
+        [
+          56,
+          155
+        ],
+        [
+          54,
+          156
+        ],
+        [
+          55,
+          156
+        ],
+        [
+          56,
+          156
+        ],
+        [
+          54,
+          157
+        ],
+        [
+          55,
+          157
+        ],
+        [
+          56,
+          157
+        ]
+      ]
+    },
+    {
+      "id": "H17",
+      "detection_id": "HRC00013",
+      "cell": [
+        63,
+        156
+      ],
+      "registered_world_projected_m": [
+        8142820.2958817035,
+        -284743.46607637376
+      ],
+      "clearance_cells": [
+        [
+          62,
+          155
+        ],
+        [
+          63,
+          155
+        ],
+        [
+          64,
+          155
+        ],
+        [
+          62,
+          156
+        ],
+        [
+          63,
+          156
+        ],
+        [
+          64,
+          156
+        ],
+        [
+          62,
+          157
+        ],
+        [
+          63,
+          157
+        ],
+        [
+          64,
+          157
+        ]
+      ]
+    },
+    {
+      "id": "H18",
+      "detection_id": "HRC00020",
+      "cell": [
+        53,
+        159
+      ],
+      "registered_world_projected_m": [
+        8142738.599913344,
+        -284771.0009960306
+      ],
+      "clearance_cells": [
+        [
+          52,
+          158
+        ],
+        [
+          53,
+          158
+        ],
+        [
+          54,
+          158
+        ],
+        [
+          52,
+          159
+        ],
+        [
+          53,
+          159
+        ],
+        [
+          54,
+          159
+        ],
+        [
+          52,
+          160
+        ],
+        [
+          53,
+          160
+        ],
+        [
+          54,
+          160
+        ]
+      ]
+    }
+  ],
+  "positive_cells": 119,
+  "existing_dtm_cells": 963,
+  "reviewed_point_density": {
+    "cell_area_m2": 64.0,
+    "meaning": "Counts of accepted native detections before clearance padding; incomplete sampling, not total rock abundance",
+    "occupied_cells": [
+      {
+        "cell": [
+          246,
+          14
+        ],
+        "count": 1,
+        "rocks_per_m2": 0.015625
+      },
+      {
+        "cell": [
+          104,
+          72
+        ],
+        "count": 1,
+        "rocks_per_m2": 0.015625
+      },
+      {
+        "cell": [
+          35,
+          84
+        ],
+        "count": 1,
+        "rocks_per_m2": 0.015625
+      },
+      {
+        "cell": [
+          54,
+          149
+        ],
+        "count": 1,
+        "rocks_per_m2": 0.015625
+      },
+      {
+        "cell": [
+          55,
+          150
+        ],
+        "count": 1,
+        "rocks_per_m2": 0.015625
+      },
+      {
+        "cell": [
+          57,
+          150
+        ],
+        "count": 1,
+        "rocks_per_m2": 0.015625
+      },
+      {
+        "cell": [
+          55,
+          156
+        ],
+        "count": 1,
+        "rocks_per_m2": 0.015625
+      },
+      {
+        "cell": [
+          63,
+          156
+        ],
+        "count": 1,
+        "rocks_per_m2": 0.015625
+      },
+      {
+        "cell": [
+          54,
+          157
+        ],
+        "count": 2,
+        "rocks_per_m2": 0.03125
+      },
+      {
+        "cell": [
+          60,
+          157
+        ],
+        "count": 1,
+        "rocks_per_m2": 0.015625
+      },
+      {
+        "cell": [
+          64,
+          158
+        ],
+        "count": 1,
+        "rocks_per_m2": 0.015625
+      },
+      {
+        "cell": [
+          53,
+          159
+        ],
+        "count": 1,
+        "rocks_per_m2": 0.015625
+      },
+      {
+        "cell": [
+          58,
+          159
+        ],
+        "count": 1,
+        "rocks_per_m2": 0.015625
+      },
+      {
+        "cell": [
+          162,
+          176
+        ],
+        "count": 1,
+        "rocks_per_m2": 0.015625
+      },
+      {
+        "cell": [
+          170,
+          193
+        ],
+        "count": 1,
+        "rocks_per_m2": 0.015625
+      }
+    ]
+  },
+  "added_cells": 119,
+  "combined_cells": 1082,
+  "files": {
+    "rocks_verified.u8": {
+      "bytes": 65536,
+      "sha256": "7a689cba0ccbe2ef3ed4abf558222044d77e3ca760092f597ce9e61a3b76432d"
+    },
+    "rocks_fine.u8": {
+      "bytes": 65536,
+      "sha256": "3ad75231004ff967d49541da1dee321dedd2a088cebace2af3f72406db0ab515"
+    }
+  },
+  "limitations": [
+    "Only accepted H points are added; uncertain, rejected and unreviewed points are excluded.",
+    "Existing DTM roughness estimates remain estimates; this review does not validate them.",
+    "A zero cell is not certified safe. Unmarked rocks and other dangers can be missed.",
+    "Rock dimensions/heights are not validated and do not determine the mask.",
+    "Image-relative placement is checked locally; absolute Mars geodetic accuracy is not measured.",
+    "The earlier G mosaic labels and northern starter labels are preserved, not transferred across images."
+  ],
+  "staged_world": {
+    "cost_to_go_scouted_sha256": "13beb6f4d3cde8ba0d5edb40c181a76f7d69b729250962bffec095ba50f74813",
+    "world_semantic_sha256": "c6f91a13cf1b698c862392c5f2a3fd784c2cea2ea1a6c077a7b0ae5ed75d2109",
+    "changed_files": [
+      "rocks_fine.u8",
+      "cost_to_go_scouted.f32",
+      "world.json"
+    ]
+  }
+}

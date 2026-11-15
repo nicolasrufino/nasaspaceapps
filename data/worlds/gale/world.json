@@ -51,7 +51,7 @@
     },
     "terrain_class": "Estimate: HiRISE albedo + DTM roughness, until terrain_cls.onnx and THEMIS",
     "cost_to_go": "Pandolf walking model on the HiRISE terrain (make_world.py)",
-    "rocks_fine": "Estimate: rough at 1 m (HiRISE DTM) but gentle at 8 m; shadow rock detection to follow (#31)",
+    "rocks_fine": "HiRISE DTM roughness estimate retained + human-reviewed NASA/JPL ROSCO positive rocks from ESP_019698_1750 (2010-10-09), registered to the USGS Gale mosaic; 8 m clearance padding. Positive additions only, not complete hazard coverage.",
     "optical": {
       "mission": "MRO",
       "instrument": "HiRISE colour (USGS MSL Gale LRGB 25 cm)",

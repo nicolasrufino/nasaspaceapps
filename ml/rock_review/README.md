@@ -1,5 +1,11 @@
 # Gale starter rock review — R1 / issue #31
 
+**R3 export work:** [R3.md](R3.md) describes the frozen 25-candidate review,
+local registration checks and conservative positive-hazard export. The
+delivery adds only human-accepted points; uncertain and unreviewed proposals
+are excluded. Counts and exact evidence are in `../exports/rocks.json`.
+A preview cannot stage a world.
+
 **Current site:** Luca delivered a different Gale footprint in #63 on `dev`.
 The original accepted records below remain historical test references, about
 5 km north of the final site. Use [FINAL_SITE.md](FINAL_SITE.md) for the new
@@ -12,15 +18,16 @@ The fixed shadow-pair baseline has now been measured on that real site:
 within 2 m; uncertain points are excluded. These are correspondence counts,
 not detector accuracy. See `final_site_baseline_metrics.json` and `FINAL_SITE.md`.
 
-**Next detector experiment:** [ROSCO.md](ROSCO.md) documents the official NASA/JPL
+**Native detector:** [ROSCO.md](ROSCO.md) documents the official NASA/JPL
 native detector on a single HiRISE acquisition covering this site, with verified
 observation-level solar geometry. The development run produces 25 candidates;
-Jules reviewed six: five accepted and one uncertain. It does not replace the world hazards
-or transfer the existing visual labels to a different image.
+the initial six-point review is preserved and extended by `r3_decisions.json`.
+R3 adds accepted points to the existing world hazards without transferring
+the old visual labels to a different image.
 The subsequent [registration step](REGISTRATION.md) corrects a roughly 49 m
 image offset and supplies candidate cells with boundary/extrapolation flags.
 
-This handoff makes the same starter review available to Jules, Luca and Nicolas. **Jules has visually accepted all 50 numbered circles in the first delivered image as corresponding to rocks.** Their positions lie on a real 256 × 256 m Gale crop. The proposals use bright-object morphology; this is **preparation for R1**, not the completed shadow-based detector, a trained model, a final hazard map or a measured accuracy result. Issue #31 remains open.
+The remainder of this page preserves the historical starter handoff. **Jules visually accepted all 50 numbered circles in that first image as corresponding to rocks.** Their positions lie on a real 256 × 256 m Gale crop. Those bright-object proposals alone were preparation for R1, not a final hazard map or an accuracy measurement. Current delivery evidence is in [R3.md](R3.md).
 
 ## Start here
 
