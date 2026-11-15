@@ -4,10 +4,11 @@
 // MSL ChemCam/APXS, DAN, REMS (NASA PDS); dose = RAD mean × sky view (an estimate). Rover photos: stops.json (NASA/JPL-Caltech/MSSS).
 // Nothing here touches the energy or the route: the log goes on app.scienceLog as [{ target_id, tasks_done, minutes, dose_ugy }].
 
+import { stopCheck } from './goal.js'
+
 export const STOP_MIN = 30 // 2.5 h of stop time ÷ 5 stops: the budget's own planning assumption
-// Which check of the goal each Curiosity stop serves (issue #166; NASA: "Curiosity rover sees Martian spiderwebs up close").
+// Which check of the goal each Curiosity stop serves, as a kind (goal.js has the words; issue #166).
 export const SERVES = { nevado_sajama: 'ridge', valle_de_la_luna: 'hollow', overlook: 'pattern', ridge_top: 'pattern', altadena: 'edge' }
-const SERVES_TEXT = { ridge: 'ridge against hollow: the ridge side', hollow: 'ridge against hollow: the hollow side', pattern: 'the boxwork pattern and its fractures', edge: 'the edge of the boxwork' }
 export const RIDGE = 'nevado_sajama', HOLLOW = 'valle_de_la_luna'
 export const TASKS = [
   { id: 'look', title: 'Look around', who: 'crew, eyes and camera', min: 3 },
@@ -88,7 +89,7 @@ export function createStopScience(ui, app, data) {
         }
         return box
       }
-      case 'closeup': return SERVES[stop.id] ? `Serves the check: ${SERVES_TEXT[SERVES[stop.id]]}.` : 'Close-up taken.'
+      case 'closeup': return stopCheck(stop.id) ? `Serves the check: ${stopCheck(stop.id)}.` : 'Close-up taken.'
       case 'chem': return c
         ? `SiO₂ ${c.oxides_wt_pct.SiO2} · MgO ${c.oxides_wt_pct.MgO} · CaO ${c.oxides_wt_pct.CaO} wt%. Curiosity's ${c.instrument} measured this here on sol ${c.sol}${c.metres_away ? `, ${c.metres_away} m away` : ''}.`
         : 'No Curiosity chemistry within 60 m of this stop.'
