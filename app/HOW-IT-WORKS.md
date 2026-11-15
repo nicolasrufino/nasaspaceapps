@@ -204,6 +204,24 @@ The **View** button switches between Map, Follow (camera 14 m behind the astrona
 
 **Loading and opening.** The whole-slice picture is one image (`overview.jpg`, 2048 px, 1 m per pixel, stitched from the same HiRISE tiles and hosted beside them); if it is missing the app stitches the 64 tiles itself. The page opens about 2.4 km above the middle of the slice, holds for 1.2 s, then eases down to the habitat over 4 s. Any tap, scroll or key skips it; it is off when the device asks for reduced motion.
 
+## 13b. The guided mission (Vesta Scout) and the helicopter battery
+
+Vesta Scout runs in four stages (`app/src/flow/`, plan in `docs/UX-PLAN.md`): **Plan** at the habitat on a 2D orbit map, **Read the orbit map**, **Scout** behind the helicopter, **Choose the walk**. The map screen with every layer is Vesta Vision (`/scout/?vision`).
+
+- **Route priority.** *Easiest* is the planner's least-energy route. *Shortest* keeps the same stops in the same order and joins them by least distance; its energy is then measured with the same walking model. While the scout flies it re-plans by least energy, whichever was chosen.
+- **Unseen ground** (stage 2): the length of the route whose cells no helicopter has looked at, summed step by step.
+- **Hidden-rock estimate** (stage 2): the belief map of §12, shown relative to its highest value near the route. Experimental, not calibrated.
+- **Helicopter battery** (stage 3, `app/src/flow/heli-energy.js`), an **estimate**: Ingenuity's flight power, about 350 W (JPL Ingenuity landing press kit), and its battery, 38.8 Wh when new at 0 °C (NASA/JPL battery slide deck, six Sony VTC4 cells), on SkyFall's flight profile of 1 km in 2.5 minutes (`docs/OPERATIONS.md`).
+
+```
+flight seconds = metres / (1000 m / 150 s)
+energy used    = 350 W x flight seconds          (14.6 Wh for 1 km)
+battery left   = 1 - energy used / 38.8 Wh       (about 62% after 1 km)
+```
+
+  38.8 Wh is the whole battery, not the usable part (NASA gives no usable share), so the percentage is optimistic. Each flight starts full: three helicopters, one flight each.
+- **The scan on screen is simulated**: found rocks come from the hidden-rock layer (`rocks_fine`), not from a live classifier.
+
 ## 14. What is real and what is simulated
 
 - **Real:** terrain, slope and images (NASA MRO HiRISE via USGS), the Curiosity stops and their photos, the walking-energy formula, all the route and safety maths.

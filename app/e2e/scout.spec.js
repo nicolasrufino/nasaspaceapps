@@ -4,7 +4,7 @@ test('Gale scouts three times, replans, and leaves the walk usable without runti
   const errors = [], requests = []
   page.on('pageerror', (e) => errors.push(e.message))
   page.on('request', (r) => requests.push(r.url()))
-  await page.goto('/scout/')
+  await page.goto('/scout/?vision')
   await expect(page.locator('#route')).toContainText('621 kJ')
   await page.getByRole('button', { name: 'Fly the route', exact: true }).click()
   await expect(page.locator('#scoutStatus')).toContainText('Flight 1 of 3')
