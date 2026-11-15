@@ -74,8 +74,7 @@ export function initStops({ world, checklist, flags, photos, scene, pin, cellPos
     const id = `M${markers.length + 1}`
     markers.push({ id, cell })
     const p = pin(0xff3bd4)
-    p.rotation.x = Math.PI
-    p.position.copy(cellPos(cell, span / 80))
+    p.position.copy(cellPos(cell, 1))
     group.add(p)
     write(cell, 'marker', { id })
   }
