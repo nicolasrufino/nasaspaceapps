@@ -25,7 +25,7 @@
     "body_kg": 75.0,
     "load_kg": 60.0,
     "speed_mps": 1.0,
-    "max_slope_deg": 25.0,
+    "max_slope_deg": 20.0,
     "gravity_energy_factor": 0.68,
     "sand_cost_ratio": 2.4,
     "eta": [
@@ -196,10 +196,10 @@
   },
   "scout": {
     "flights": 5,
-    "metres": 3456,
-    "cells_revealed": 1203,
-    "rock_cells_seen_corridor_only": 35,
-    "rock_cells_seen_with_plan": 78,
+    "metres": 3423,
+    "cells_revealed": 1202,
+    "rock_cells_seen_corridor_only": 31,
+    "rock_cells_seen_with_plan": 98,
     "note": "extra flights after the route corridor; made by data/pipeline/scout_plan.py"
   }
 }

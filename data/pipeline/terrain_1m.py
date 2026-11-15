@@ -5,7 +5,7 @@
 
 Why: an 8 m cell's slope averages away what stops a person on foot: boxwork ridges and hollows (~1-2 m),
 fractures, ledges and short steep steps. NASA's JETT3 test had 1 m maps and still hit impassable drop-offs.
-On our slice, 35% of the cells that look walkable at 8 m hide a stretch steeper than 25 deg at 2 m scale.
+On our slice, 35% of the cells that look walkable at 8 m hide a stretch steeper than 25 deg at 2 m scale (measured at the earlier 25 deg limit; the limit is now 20 deg).
 
 What it adds (all on the same 256 x 256 grid; row 0 north):
   Views (grid layers the app can show)

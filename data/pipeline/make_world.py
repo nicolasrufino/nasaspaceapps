@@ -16,7 +16,8 @@ import os
 import random
 
 G_EARTH, G_MARS = 9.81, 3.71
-KNOBS = {'body_kg': 75.0, 'load_kg': 60.0, 'speed_mps': 1.0, 'max_slope_deg': 25.0,
+# max_slope_deg 20: NASA xEVA walking limit, slopes up to 20 deg (NTRS 20210000827; team decision 2026-11-15, was 25).
+KNOBS = {'body_kg': 75.0, 'load_kg': 60.0, 'speed_mps': 1.0, 'max_slope_deg': 20.0,
          # Energy model fixes (docs/SCOUTING.md section 2, #83). Estimates until the hypogravity model is adopted:
          # walking at 0.38 g measured ~68% of Earth's oxygen use (2018 LBPP study; to verify), not 38%;
          # sand costs 2.1-2.7x hard ground (Lejeune et al. 1998); 2.4 = middle of that range.
