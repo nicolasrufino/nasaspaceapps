@@ -97,6 +97,9 @@ test('flags-off walking keeps the energy model and reset working', async ({ page
   const errors = []
   page.on('pageerror', (e) => errors.push(e.message))
   await page.goto('/scout/?world=synthetic&flags=')
+  // Vision hides the Walk tab since #205; these tests still exercise the shared walk logic, so show it again.
+  await page.waitForFunction(() => document.body.classList.contains('vision'))
+  await page.evaluate(() => document.body.classList.remove('vision'))
   await page.waitForFunction(() => window.vesta)
   await page.getByRole('tab', { name: 'Walk', exact: true }).click()
   await page.getByRole('button', { name: 'Walk', exact: true }).click()

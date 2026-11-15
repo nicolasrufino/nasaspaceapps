@@ -19,6 +19,9 @@ test('flags off keeps the map usable and fetches no classifier assets', async ({
   page.on('request', (r) => { if (/\.onnx|\.wasm|terrain-worker|terrain-runner/.test(r.url())) assets.push(r.url()) })
   page.on('pageerror', (e) => errors.push(e.message))
   await page.goto('/scout/?world=synthetic&flags=')
+  // Vision hides the Walk tab since #205; these tests still exercise the shared walk logic, so show it again.
+  await page.waitForFunction(() => document.body.classList.contains('vision'))
+  await page.evaluate(() => document.body.classList.remove('vision'))
   await expect(page.locator('#title')).toContainText('cells')
   await page.getByRole('tab', { name: 'Walk', exact: true }).click()
   await page.getByRole('button', { name: 'Step', exact: true }).click()
@@ -42,6 +45,9 @@ test('real WASM inference matches CPU reference; invalid files and failed loads 
   })
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('/scout/?world=gale&flags=classifier,science_stop,step_mode')
+  // Vision hides the Walk tab since #205; these tests still exercise the shared walk logic, so show it again.
+  await page.waitForFunction(() => document.body.classList.contains('vision'))
+  await page.evaluate(() => document.body.classList.remove('vision'))
   await expect(page.locator('#title')).toContainText('cells')
   await page.getByRole('tab', { name: 'Walk', exact: true }).click()
   await page.locator('#terrainClassifier summary').click()

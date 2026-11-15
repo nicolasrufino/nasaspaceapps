@@ -5,6 +5,9 @@ test('opt-in VOI runs in a worker, stops below its value threshold, and leaves t
   page.on('pageerror', (e) => errors.push(e.message))
   page.on('worker', (worker) => workers.push(worker.url()))
   await page.goto('/scout/?flags=drone_scout,why_flight,voi')
+  // Vision hides the Walk tab since #205; these tests still exercise the shared walk logic, so show it again.
+  await page.waitForFunction(() => document.body.classList.contains('vision'))
+  await page.evaluate(() => document.body.classList.remove('vision'))
   await expect(page.locator('#route')).toContainText('621 kJ')
   await page.getByRole('button', { name: 'Fly the route', exact: true }).click()
   await expect(page.locator('#scoutStatus')).toContainText('Comparing possible flights')
