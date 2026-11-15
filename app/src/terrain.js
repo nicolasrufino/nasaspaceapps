@@ -9,12 +9,22 @@ const SIZE = 2048
 // The material: imagery times the vertex colour (ring dimming, found rocks) in the Imagery view; in any other view
 // the layer colour is laid over the image's brightness, so the ground detail still shows through.
 export function terrainMaterial() {
-  const uniforms = { uOverlay: { value: 1 }, uHasMap: { value: 0 } }
+  // uHoles: rectangles [x0, z0, x1, z1] where a 1 m detail tile is drawn instead (tiles.js); this mesh is cut away there.
+  const uniforms = { uOverlay: { value: 1 }, uHasMap: { value: 0 },
+    uHoles: { value: Array.from({ length: 9 }, () => new THREE.Vector4()) }, uHoleCount: { value: 0 } }
   const mat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 1 })
   mat.onBeforeCompile = (shader) => {
     Object.assign(shader.uniforms, uniforms)
+    shader.vertexShader = shader.vertexShader
+      .replace('#include <common>', '#include <common>\nvarying vec2 vXZ;')
+      .replace('#include <begin_vertex>', '#include <begin_vertex>\nvXZ = position.xz;')
     shader.fragmentShader = shader.fragmentShader
-      .replace('#include <common>', '#include <common>\nuniform float uOverlay;\nuniform float uHasMap;')
+      .replace('#include <common>', '#include <common>\nuniform float uOverlay;\nuniform float uHasMap;\nuniform vec4 uHoles[9];\nuniform int uHoleCount;\nvarying vec2 vXZ;')
+      .replace('#include <clipping_planes_fragment>', `#include <clipping_planes_fragment>
+        for (int i = 0; i < 9; i++) {
+          if (i >= uHoleCount) break;
+          if (vXZ.x > uHoles[i].x && vXZ.y > uHoles[i].y && vXZ.x < uHoles[i].z && vXZ.y < uHoles[i].w) discard;
+        }`)
       .replace('#include <color_fragment>', `
         vec3 vc = pow(vColor.rgb, vec3(2.2)); // layer colours are sRGB bytes
         float lum = dot(diffuseColor.rgb, vec3(0.299, 0.587, 0.114));
