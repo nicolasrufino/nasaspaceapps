@@ -66,6 +66,43 @@ A route is blocked if any cell on it is. Rock fields come in patches, so neighbo
 - **Our label is circular on Gale.** `rocks_fine` is itself computed from the 1 m orbit DTM. A model using that DTM would score near-perfectly and prove nothing. **Real labels must come from the ground:** Curiosity's images or reviewed rocks.
 - **A weak predictor is still useful.** Value of information needs *probabilities*, not certainties. Even a weak but honest prediction tells the planner where uncertainty is, and every flight adds labels.
 
+#### Training sensing: what is missing, whether Moon data helps, and what we start now
+
+**What training needs:** pairs of (orbit picture of a place, what is really on the ground there, at the scale that stops a walker). Here is what exists for each part:
+
+| Need | Exists? |
+|---|---|
+| Orbit pictures | Yes, plenty: HiRISE 25 cm and its DTMs |
+| Big rocks seen from orbit (about 1.5 m and up) | Yes. Shadows at a known sun angle. NASA's automated rock detector measured about 10 million rocks this way, and above about 1.5 m HiRISE sees the same rocks landers see on the ground ([Golombek et al.](https://experts.arizona.edu/en/publications/size-frequency-distributions-of-rocks-on-the-northern-plains-of-m-2/)). ROSCO is that detector, already running on our site |
+| Rocks smaller than orbit can see (what actually trips a walker) | Not detectable from orbit. They are **predicted** from the big-rock count by the rock-size law used for every landing site |
+| Ground type (sand, soil, bedrock) from orbit | NASA already does this. **SPOC-HiRISE** (JPL) labels every 25 cm HiRISE pixel with one of 17 terrain classes, more than 90% agreement with people, used in Curiosity's ground operations ([SPOC](https://nasa-jpl.github.io/SPOC)). Only its small onboard version is open source; the HiRISE model is not released |
+| Ground truth at a walker's scale | **This is what is missing.** On Mars it exists only where rovers drove (AI4Mars labels on Curiosity's images; very few "big rock" examples: 9 in Jules's training set) and under Ingenuity's flights (images, no labels) |
+| What counts as "blocked" for a suited walker | No published threshold found. It will be a knob, marked as an estimate |
+
+**Does Moon data help? Partly, for one part, and we should say exactly which.**
+
+| Moon data | What it gives |
+|---|---|
+| [Global lunar boulder map (Aussel et al., 2025)](https://eos.org/editor-highlights/nearly-94-million-boulders-mapped-on-the-moon-using-deep-learning) | About 94 million boulders found by a neural network on LRO NAC images, 60° S to 60° N. [Maps on Zenodo](https://zenodo.org/records/15520275) |
+| [RMaM-2020 (Bickel et al., 2021)](https://www.frontiersin.org/articles/10.3389/frsen.2021.640034/pdf) | 2,822 labelled rockfalls on **both** Moon (NAC) and Mars (HiRISE) images, built for training detectors |
+
+- **Helps:** finding rocks by their shadows in orbit images. The physics is the same: a rock at a known sun angle casts a shadow of a predictable length. The Moon has far more labels than Mars, so it is good **pre-training** for a rock detector, which we then fine-tune on Mars.
+- **Does not help:**
+  - sand and soft ground (the Moon has no wind-blown sand or dunes);
+  - Mars dust and weathering, which change how rocks look;
+  - small rocks: the lunar map lists boulders of about 4.5 m and up, much bigger than what stops a walker.
+- **Bonus for the pitch:** the same tool works on the Moon for Artemis, where this data is native.
+
+**So: Moon data is a pre-training option for the rock part, never the whole answer, and never the test.** The test must be on Mars ground truth.
+
+**What we can start now (each step graded on held-out data, like `sensing-check.mjs`):**
+1. **Big rocks, no training:** run ROSCO across the whole Gale slice. Rock count per cell, then rock-size law, then chance of a walker-sized rock, then chance the cell is blocked. Check against Jules's 31 accepted and 3 rejected rocks. This replaces today's circular `rocks_fine`.
+2. **Ground type, training with labels we already have:** a small model on HiRISE 25 cm patches for sand, soil and bedrock. Labels come from Curiosity's own drive in our slice (AI4Mars ground labels placed on the map at the rover's logged positions). Held out: a stretch of the drive the model never saw.
+3. **Rock detector, pre-trained on the Moon:** pre-train on lunar boulders and RMaM-2020, fine-tune on Mars HiRISE rocks (ROSCO plus Jules's review). Keep it only if it beats step 1 on the held-out Mars rocks.
+4. **Every flight adds labels:** in the app, cells the helicopter confirms become new examples, so the map improves as it is used.
+
+Steps 2 and 3 are ML work in `ml/` (Jules); step 1 is a pipeline layer. None of them is built yet.
+
 **Plan for sensing:**
 1. **Now (rules):** a belief map from orbit features, calibrated so that "10% chance" really means about 10%, with an uncertainty layer. Can be done in the hackathon.
 2. **With Jules (ML):** a small image model on 25 cm HiRISE patches, trained on reviewed ROSCO rocks and, if feasible, Curiosity's labelled ground. Graded by the same held-out check.
@@ -158,6 +195,17 @@ Later: a learned belief map (with Jules); a learned scouting policy, compared on
   - 13 MP colour and near-infrared cameras, ground-penetrating radar, air temperature sensors and a micro dosimeter;
   - purpose: map hidden ice and the terrain above and below ground, to find safe and resource-rich places and scout landing sites.
 - **What JPL does not publish:** flight range, flight time, battery, recharge time and flights per sol.
+- **Other helicopters that fill SkyFall's gaps:**
+
+| Craft | Status | What it shows |
+|---|---|---|
+| [Ingenuity](https://www.avinc.com/solution/ingenuity-mars-helicopter/) | Flew 72 times, 2021–2024 | Range 625–704 m and up to about 170 s per flight; solar recharge |
+| [Mars Science Helicopter](https://spectrum.ieee.org/the-next-mars-helicopter) | NASA concept (JPL, Ames, AeroVironment) | About 30 kg hexacopter, about 5 kg payload, roughly 10–12 km per flight ([JPL poster](https://www.jpl.nasa.gov/site/research/media/posters/2021/R21015p.pdf), [arXiv](https://arxiv.org/pdf/2203.03704.pdf)). IEEE Spectrum reports its solar cell recharges the battery **over one Martian day** (single source) |
+| [Mars Sample Recovery Helicopters](https://aiaa.org/2022/07/29/nasa-pair-of-ingenuity-inspired-helicopters-will-be-part-of-mars-sample-return-mission/) | Planned 2022; Mars Sample Return since restructured | Ingenuity-class, about 700 m from the lander |
+| [Dragonfly](https://rps.jpl.nasa.gov/internal_resources/854/Dragonfly%20line%20art.pdf) (Titan) | Launch 2028 | **Recharges its battery between flights from a nuclear generator** of about 100 W, not the Sun: flying from a charged battery, refilled by a small steady source |
+| [Fission Surface Power](https://www.universetoday.com/articles/nasa-is-building-a-nuclear-reactor-to-power-lunar-and-martian-exploration) | NASA project, 40 kW, aimed at the early 2030s, designed to carry over to Mars | The power a crewed base could have |
+
+- **Our helicopter, adapted from SkyFall:** SkyFall's fleet of three and its sensors (the proof that the scouting job is planned). **Recharged at the habitat's power**, the way Dragonfly recharges from its generator, instead of from its own small solar panel. With a crew on the surface, flights per sol are then limited by daylight and the battery, not by sunlight on the helicopter. This is **our design assumption**, not a NASA plan, and the docs and app must say so.
 - **How we model the gaps:** every missing number is a **knob, marked as an estimate**. Per-flight range defaults to Ingenuity's flown limit (about 700 m), the only Mars-measured number. Flights per helicopter per sol is a knob. A news claim of 300 km per mission is unverified and not used.
 - **Daylight only:** cameras need light, and Ingenuity flew around midday local time.
 
