@@ -120,3 +120,11 @@ Assess false detections and missed rocks in separate
 areas before selecting a density threshold. Until then R1/R3 remains open;
 this experiment does not unlock R5 proof claims or a scientific rock-hazard
 replacement. There is no new app flag, contract change or deployed web behavior.
+
+## Current coverage audit
+
+The initial run above is historical. [FULL_SLICE.md](FULL_SLICE.md) records the
+2026-11-15 rerun and expanded native window needed after registration. The
+registered site is now covered under the frozen affine model. All H human
+decisions are in [R3.md](R3.md); detection coverage alone is not recall or
+evidence of empty ground.

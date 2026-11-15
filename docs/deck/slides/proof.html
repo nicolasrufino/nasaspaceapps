@@ -1,12 +1,7 @@
 <section id="proof" class="light with-foot">
-<p class="eyebrow">MEASURED ON OUR GALE DEMO</p>
-<h2 class="title">Fewer known hazards, with a measured margin home</h2>
-<div class="cols">
-<div class="card rise" style="--i:1"><p class="num">12 → 0</p><p class="txt">Discovered hazard cells crossed after the first re-plan. Walking energy rises 1.36%.</p></div>
-<div class="card rise" style="--i:2"><p class="num">3</p><p class="txt">Scout passes to scan the whole final route: 0 stored hazard cells crossed. 21 flight legs, 14.05 km simulated.</p></div>
-<div class="card rise" style="--i:3"><p class="num">44.8 kJ</p><p class="txt">Minimum spare margin with walking costs 30% higher, after paying for home and the reserve.</p></div>
-<div class="card rise" style="--i:4"><p class="num">91.1%</p><p class="txt">275 / 302 additional Curiosity ground-image crops classified correctly. No big-rock test examples.</p></div>
-</div>
-<p class="foot">Sources: ml/exports/pitch_metrics.json; ml/terrain_classifier/gale_experiment_v2.json. Simulated flight; drone energy excluded. These tests do not certify field safety.</p>
-<aside>3:20 to 3:40. The first re-plan removes 12 discovered DTM-derived hazard cells from the route but still crosses six unobserved stored cells. Repeat scouting: three passes scan the full final route, crossing zero stored hazard cells; unmapped hazards can remain. The five-stop final route costs 334.7 kJ and covers 1243.5 m. With a 600 kJ budget and 120 kJ reserve, minimum extra margin is 145.3 kJ nominally or 44.8 kJ with walking costs raised 30%. The classifier is separate: Curiosity NAV ground photos, original 148/159 (93.1%), additional 275/302 (91.1%). A new head got 278/302 but failed the predeclared promotion gates, so v1 stays published. This classifier did not create the orbital route layers. Do not call this Ingenuity imagery, aerial accuracy or rock-detection recall.</aside>
+<p class="eyebrow">MISSION VESTA · VESTA SCOUT</p>
+<h2 class="title">Three flights: the final route avoids the stored hazards</h2>
+<div class="cols"><div class="card"><p class="num" style="font-size:64px">6 → 0</p><p class="txt">Distinct stored hazard cells crossed, with the same five stops.</p></div><div class="card"><p class="num" style="font-size:64px">3 flights</p><p class="txt">Re-plan after each. Final route fully scanned; 2.22 km of corridor flight.</p></div><div class="card"><p class="num" style="font-size:48px">621.4 → 630.5</p><p class="txt">kJ of walking energy. Avoiding hazards costs 1.46% more effort.</p></div><div class="card"><p class="num" style="font-size:64px">446.5 kJ</p><p class="txt">Spare margin at +30% walking cost, after the way home and reserve.</p></div></div>
+<p class="foot">ml/exports/pitch_metrics.json · fixed Gale worst scenario. Grid cells are not individual rocks. Transit, recharge and helicopter energy excluded.</p>
+<aside>3:20–3:45. Fixed Gale simulation. Flights: 1000 m, 1000 m, 215.4 m. Final route: 1311.4 m, 630.5 kJ. Nominal minimum spare margin 635.6 kJ; at +30% walking cost, 446.5 kJ. Zero refers to the stored grid layer. It does not certify that no real hazard exists. Reviewed-rock-clearance cells crossed initially: 0; do not attribute the route benefit to hand-checked rocks.</aside>
 </section>

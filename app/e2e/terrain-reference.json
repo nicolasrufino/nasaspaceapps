@@ -1,0 +1,13 @@
+{
+  "reference": "Python Pillow bilinear RGB resize 256 to 128; ONNX Runtime CPU. Deterministic synthetic fixture, not accuracy evaluation.",
+  "model_sha256": "6ca2d33f28420c661ef4bf689005ff68027708dfcc445a4f82198729ee8d97d3",
+  "tensor_sha256": "c77290311faa3cc72527bdbc71b11668de404079833be57da07c2fcb46e4e814",
+  "logits": [
+    -100.0,
+    -9.25944709777832,
+    -5.790037631988525,
+    6.771705627441406,
+    3.346470832824707
+  ],
+  "predicted_name": "Sand"
+}

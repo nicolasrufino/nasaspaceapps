@@ -30,7 +30,8 @@ from rasterio.warp import transform as warp_xy
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import itertools
 
-from make_world import KNOBS, build, path_home, write
+import terrain_1m
+from make_world import CLASSES, KNOBS, build, path_home, write
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 RAW = os.path.join(HERE, '..', 'raw', 'gale')
@@ -61,6 +62,15 @@ TARGETS = [
          'why': 'Ridge-top bedrock drilled Nov 2025 (45th hole), the "high" of the pair, to compare with Valle de la Luna.',
          'sources': ['https://science.nasa.gov/solar-system/curiosity-blog-sols-4716-4722-drilling-success-at-nevado-sajama']},
 ]
+# Energy budget (see energy_budget_note in world.json). 1200 BTU/hr: NASA sizing average for future planetary
+# EVAs (ICES-2026-127, Mars spacesuit mass requirements) and the advanced suit's 8 h design point.
+SUIT_RATE_J_PER_H = 1200 * 1055.06
+RESERVE_HOURS = 1.5   # contract section 1: 1 h emergency return + ~30 min dust removal and getting inside
+STOP_HOURS = 0.5      # estimate: science time per stop (look, get close, decide, sample)
+STOPS_PLANNED = 5
+SCENARIOS = {'ideal': ('Fresh EVA: 8 h of suit', 8.0),
+             'worst': ('Late in the EVA: 5 h of suit left after 3 h of station work', 5.0)}
+DEFAULT_SCENARIO = 'worst'
 CAMS = ['NAV_LEFT_B', 'NAV_RIGHT_B', 'MAST_LEFT', 'MAST_RIGHT', 'FHAZ_LEFT_B']
 
 
@@ -140,13 +150,24 @@ def main():
     rocks = ((steep1 > 0.04) & (s8 < 15) & (cls != 4)).astype('u1')
     by, bx = np.ogrid[:n, :n]
     rocks[(bx - base[0]) ** 2 + (by - base[1]) ** 2 <= 9] = 0
+    # keep positives already in the world (e.g. human-reviewed rocks from ml/rock_review, R3): add, never remove
+    rocks_src = None
+    old = os.path.join(a.out, 'rocks_fine.u8')
+    if os.path.exists(old) and os.path.getsize(old) == n * n:
+        rocks |= np.fromfile(old, 'u1').reshape(n, n)
+        with open(os.path.join(a.out, 'world.json')) as f:
+            rocks_src = json.load(f).get('sources', {}).get('rocks_fine')
+
+    # --- walk-scale crossings and terrain views from the 1 m terrain (terrain_1m.py) ---
+    views = terrain_1m.compute(h1, n, k1, KNOBS['max_slope_deg'], base)
+    P = array.array('B', views['passable'].ravel().tolist())
 
     hmin = float(h8.min())
     H = (h8 - hmin).astype('f4').ravel().tolist()
     C = array.array('B', cls.ravel().tolist())
     R = array.array('B', rocks.ravel().tolist())
     budget0 = 1.0e6
-    h, slope, cls_a, cost_per_m, ctg = build(n, cell, base, budget0, h=H, cls=C)
+    h, slope, cls_a, cost_per_m, ctg = build(n, cell, base, budget0, h=H, cls=C, passable=P)
 
     # --- targets at Curiosity's logged positions, nudged to the nearest cell with a way home ---
     ctg_np = np.array(ctg).reshape(n, n)
@@ -172,16 +193,22 @@ def main():
     cells, energy, legs = [base], 0.0, [t['cell'] for t in order] + [base]
     prev = base
     for goal in legs:
-        ctg_goal = build(n, cell, goal, budget0, h=H, cls=C)[-1]
-        leg = path_home(ctg_goal, n, prev)
+        ctg_goal = build(n, cell, goal, budget0, h=H, cls=C, passable=P)[-1]
+        leg = path_home(ctg_goal, n, prev, passable=P)
         energy += ctg_goal[prev[1] * n + prev[0]]
         cells += leg[1:]
         prev = goal
     metres = sum(cell * math.hypot(b[0] - a_[0], b[1] - a_[1]) for a_, b in itertools.pairwise(cells))
     minutes = metres / KNOBS['speed_mps'] / 60
-    reserve = 0.2
-    # Knob, not a measurement: the budget is sized so the full Curiosity tour uses about 80% of the usable energy.
-    budget = float(math.ceil(energy / (1 - reserve) / 0.8 / 1e5) * 1e5)
+    # Energy budget from NASA suit figures, as two scenarios (ideal and worst case); the default is the cautious one.
+    scenarios = {}
+    for sid, (name, hours_left) in SCENARIOS.items():
+        walk_h = hours_left - STOPS_PLANNED * STOP_HOURS
+        b = walk_h * SUIT_RATE_J_PER_H
+        scenarios[sid] = {'name': name, 'suit_hours_left': hours_left, 'stop_hours': STOPS_PLANNED * STOP_HOURS,
+                          'energy_budget_j': round(b), 'reserve_fraction': round(RESERVE_HOURS * SUIT_RATE_J_PER_H / b, 4)}
+    budget = float(scenarios[DEFAULT_SCENARIO]['energy_budget_j'])
+    reserve = scenarios[DEFAULT_SCENARIO]['reserve_fraction']
     route = {'cells': [list(map(int, c)) for c in cells], 'stops': [t['id'] for t in order],
              'energy_j': round(energy), 'minutes': round(minutes, 1), 'dose_ugy': None,
              'note': 'least-energy legs between Curiosity campaign stops (pipeline, D3)'}
@@ -213,18 +240,31 @@ def main():
                                                                                   meta_slice['centre']['lat']],
                  'bbox_deg': meta_slice['bbox_deg'], 'projection': meta_slice['projection']['proj4']},
         'height_offset_m': round(hmin, 2),
-        'energy_budget_note': 'knob: sized so the five-stop Curiosity tour uses ~80% of usable energy',
+        'energy_budget_note': ('Walking energy = (suit hours left - time at stops) x 1200 BTU/hr (NASA planetary suit sizing '
+                               'rate, ICES-2026-127; xEMU/AEMU 8 h at 1200 BTU/hr). Reserve = 1.5 h at that rate (1 h '
+                               'emergency return + 30 min dust and ingress). Stops: 5 x 30 min (estimate). Scenario '
+                               f'{DEFAULT_SCENARIO!r} is the default; the app can switch with ?scenario=.'),
+        'scenarios': scenarios, 'default_scenario': DEFAULT_SCENARIO,
+        'reserve_fraction': reserve,
         'sources': {
             'height': {'mission': 'MRO', 'instrument': 'HiRISE stereo (USGS MSL Gale merged DEM 1 m)', 'date': date},
             'slope': {'mission': 'MRO', 'instrument': 'HiRISE stereo (from the 8 m height)', 'date': date},
             'terrain_class': 'Estimate: HiRISE albedo + DTM roughness, until terrain_cls.onnx and THEMIS',
-            'cost_to_go': 'Pandolf walking model on the HiRISE terrain (make_world.py)',
-            'rocks_fine': 'Estimate: rough at 1 m (HiRISE DTM) but gentle at 8 m; shadow rock detection to follow (#31)',
+            'rocks_fine': rocks_src or 'Estimate: rough at 1 m (HiRISE DTM) but gentle at 8 m; shadow rock detection to follow (#31)',
+            'cost_to_go': 'Pandolf walking model (gravity factor and sand from #83) over walk-scale crossings (passable.u8)',
             'optical': {'mission': 'MRO', 'instrument': 'HiRISE colour (USGS MSL Gale LRGB 25 cm)', 'date': date},
             'targets': {'mission': 'MSL Curiosity', 'instrument': 'rover positions (MMGIS waypoints)', 'date': '2025'},
         },
     }
-    site = {'meta': site_meta, 'targets': targets, 'stops': stops, 'route': route, 'rocks': R}
+    site_meta['knobs'] = {**KNOBS, 'eta': [CLASSES[c][1] for c in range(5)], **terrain_1m.KNOBS}
+    ext = {'u1': ('.u8', 'B'), 'f4': ('.f32', 'f')}
+    extra = []
+    for name, arr in views.items():
+        suffix, code = ext[arr.dtype.str[1:]]
+        extra.append((name + suffix, arr.ravel().tolist(), code))
+        site_meta['sources'][name] = terrain_1m.SOURCES[name]
+    site = {'meta': site_meta, 'targets': targets, 'stops': stops, 'route': route, 'rocks': R, 'passable': P,
+            'extra_files': extra}
     write(a.out, n, cell, base, budget, h, slope, cls_a, cost_per_m, ctg, site=site)
     Image.fromarray((np.clip((albedo - lo) / (hi - lo), 0, 1) * 255).astype('u1')).save(os.path.join(a.out, 'optical.png'))
     wj = os.path.join(a.out, 'world.json')
@@ -233,6 +273,10 @@ def main():
     m['name'] = 'gale'
     m['files']['optical'] = 'optical.png'
     m['layers'].insert(0, 'optical')
+    for name, arr in views.items():
+        m['files'][name] = name + ext[arr.dtype.str[1:]][0]
+        if name in terrain_1m.VIEWS and name not in m['layers']:
+            m['layers'].append(name)
     with open(wj, 'w') as f:
         json.dump(m, f, indent=2)
 
@@ -241,7 +285,11 @@ def main():
     print(f'wrote {os.path.abspath(a.out)}: {n}x{n} at {cell:g} m, base {base}, {reach} cells can get home')
     print(f'classes {counts}; hidden rock cells {int(rocks.sum())}')
     print(f'route: {len(order)} stops {route["stops"]}, {metres:.0f} m, {minutes:.0f} min, {energy / 1e3:.0f} kJ; '
-          f'budget knob {budget / 1e3:.0f} kJ; stops with photos {len(stops)}')
+          f'stops with photos {len(stops)}')
+    for sid, sc in scenarios.items():
+        usable = sc['energy_budget_j'] * (1 - sc['reserve_fraction'])
+        print(f"scenario {sid}: budget {sc['energy_budget_j'] / 1e6:.2f} MJ, reserve {sc['reserve_fraction'] * 100:.0f}%, "
+              f"usable {usable / 1e6:.2f} MJ; tour uses {energy / usable * 100:.0f}%")
 
 
 if __name__ == '__main__':

@@ -20,3 +20,5 @@ logs/
 data/raw/
 ml/runs/
 ml/data/
+app/test-results/
+app/playwright-report/

@@ -11,8 +11,8 @@
     161
   ],
   "gravity_mps2": 3.71,
-  "energy_budget_j": 600000.0,
-  "reserve_fraction": 0.2,
+  "energy_budget_j": 3165180.0,
+  "reserve_fraction": 0.6,
   "kj_per_l_o2": 20.1,
   "classes": {
     "0": "unknown",
@@ -25,7 +25,16 @@
     "body_kg": 75.0,
     "load_kg": 60.0,
     "speed_mps": 1.0,
-    "max_slope_deg": 25.0,
+    "max_slope_deg": 20.0,
+    "gravity_energy_factor": 0.68,
+    "sand_cost_ratio": 2.4,
+    "eta": [
+      1.2,
+      1.1,
+      1.0,
+      4.372,
+      1.5
+    ],
     "step_max_m": 0.3,
     "steep_run_m": 3.0,
     "lane_offset_m": 2.0
@@ -37,9 +46,6 @@
     "terrain_class",
     "cost_to_go",
     "rocks_fine",
-    "thermal_inertia",
-    "science",
-    "dose_rate",
     "terrain",
     "fine_steep",
     "dropoff",
@@ -48,7 +54,10 @@
     "open_dirs",
     "reach",
     "chokepoint",
-    "unsure"
+    "unsure",
+    "thermal_inertia",
+    "science",
+    "dose_rate"
   ],
   "sources": {
     "height": {
@@ -62,8 +71,8 @@
       "date": "v3 mosaic, accessed 2026-11"
     },
     "terrain_class": "Estimate: HiRISE albedo + DTM roughness, until terrain_cls.onnx and THEMIS",
-    "cost_to_go": "Pandolf walking model on the HiRISE terrain (make_world.py)",
     "rocks_fine": "HiRISE DTM roughness estimate retained + human-reviewed NASA/JPL ROSCO positive rocks from ESP_019698_1750 (2010-10-09), registered to the USGS Gale mosaic; 8 m clearance padding. Positive additions only, not complete hazard coverage.",
+    "cost_to_go": "Pandolf walking model (gravity factor and sand from #83) over walk-scale crossings (passable.u8)",
     "optical": {
       "mission": "MRO",
       "instrument": "HiRISE colour (USGS MSL Gale LRGB 25 cm)",
@@ -74,6 +83,16 @@
       "instrument": "rover positions (MMGIS waypoints)",
       "date": "2025"
     },
+    "terrain": "Hillshade of the 1 m HiRISE terrain, averaged to 8 m",
+    "fine_steep": "% of the cell steeper than the slope limit at 2 m scale (1 m HiRISE terrain)",
+    "dropoff": "Largest height change between neighbouring 1 m points, m (1 m HiRISE terrain)",
+    "crevice": "Deepest trough or fracture narrower than ~5 m, m (1 m HiRISE terrain)",
+    "landform": "0 flat, 1 slope, 2 ridge, 3 hollow (height vs 21 m neighbourhood, 1 m HiRISE terrain)",
+    "open_dirs": "Neighbours you can step to (0-8), checked along the 1 m profile; step limit 0.3 m (NASA ICES-2025-294)",
+    "reach": "1 = reachable from base through passable crossings",
+    "chokepoint": "How many reachable cells' shortest way from base passes here, log scale 0-1 (1 = all)",
+    "unsure": "Share of crossings close to a limit: where the helicopter should look (0-1)",
+    "passable": "Bit k: can step to neighbour k (order as app/src/plan.js NB); see data/pipeline/terrain_1m.py",
     "thermal_inertia": {
       "mission": "Mars Odyssey",
       "instrument": "THEMIS night IR (Mars Trek 100 m mosaic; relative 0-255, higher = rockier)",
@@ -103,17 +122,7 @@
       "mission": "MSL Curiosity",
       "instrument": "REMS, 412 sols",
       "date": "sols 4480-4900"
-    },
-    "terrain": "Hillshade of the 1 m HiRISE terrain, averaged to 8 m",
-    "fine_steep": "% of the cell steeper than the slope limit at 2 m scale (1 m HiRISE terrain)",
-    "dropoff": "Largest height change between neighbouring 1 m points, m (1 m HiRISE terrain)",
-    "crevice": "Deepest trough or fracture narrower than ~5 m, m (1 m HiRISE terrain)",
-    "landform": "0 flat, 1 slope, 2 ridge, 3 hollow (height vs 21 m neighbourhood, 1 m HiRISE terrain)",
-    "open_dirs": "Neighbours you can step to (0-8), checked along the 1 m profile; step limit 0.3 m (NASA ICES-2025-294)",
-    "reach": "1 = reachable from base through passable crossings",
-    "chokepoint": "How many reachable cells' shortest way from base passes here, log scale 0-1 (1 = all)",
-    "unsure": "Share of crossings close to a limit: where the helicopter should look (0-1)",
-    "passable": "Bit k: can step to neighbour k (order as app/src/plan.js NB); see data/pipeline/terrain_1m.py"
+    }
   },
   "files": {
     "height": "height.f32",
@@ -124,13 +133,6 @@
     "rocks_fine": "rocks_fine.u8",
     "cost_to_go_scouted": "cost_to_go_scouted.f32",
     "optical": "optical.png",
-    "scout_plan": "scout_plan.json",
-    "thermal_inertia": "thermal_inertia.f32",
-    "science": "science.u8",
-    "dose_rate": "dose_rate.f32",
-    "chem_points": "chem_points.json",
-    "neutron_points": "neutron_points.json",
-    "weather": "weather.json",
     "terrain": "terrain.u8",
     "fine_steep": "fine_steep.u8",
     "dropoff": "dropoff.f32",
@@ -140,7 +142,14 @@
     "reach": "reach.u8",
     "chokepoint": "chokepoint.f32",
     "unsure": "unsure.f32",
-    "passable": "passable.u8"
+    "passable": "passable.u8",
+    "thermal_inertia": "thermal_inertia.f32",
+    "science": "science.u8",
+    "dose_rate": "dose_rate.f32",
+    "chem_points": "chem_points.json",
+    "neutron_points": "neutron_points.json",
+    "weather": "weather.json",
+    "scout_plan": "scout_plan.json"
   },
   "site": {
     "name": "Gale crater, lower Mount Sharp boxwork",
@@ -157,15 +166,24 @@
     "projection": "+proj=eqc +lat_ts=0 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +R=3396190 +units=m +no_defs=True"
   },
   "height_offset_m": -3919.4,
-  "energy_budget_note": "knob: sized so the five-stop Curiosity tour uses ~80% of usable energy",
-  "scout": {
-    "flights": 5,
-    "metres": 3441,
-    "cells_revealed": 1271,
-    "rock_cells_seen_corridor_only": 39,
-    "rock_cells_seen_with_plan": 88,
-    "note": "extra flights after the route corridor; made by data/pipeline/scout_plan.py"
+  "energy_budget_note": "Walking energy = (suit hours left - time at stops) x 1200 BTU/hr (NASA planetary suit sizing rate, ICES-2026-127; xEMU/AEMU 8 h at 1200 BTU/hr). Reserve = 1.5 h at that rate (1 h emergency return + 30 min dust and ingress). Stops: 5 x 30 min (estimate). Scenario 'worst' is the default; the app can switch with ?scenario=.",
+  "scenarios": {
+    "ideal": {
+      "name": "Fresh EVA: 8 h of suit",
+      "suit_hours_left": 8.0,
+      "stop_hours": 2.5,
+      "energy_budget_j": 6963396,
+      "reserve_fraction": 0.2727
+    },
+    "worst": {
+      "name": "Late in the EVA: 5 h of suit left after 3 h of station work",
+      "suit_hours_left": 5.0,
+      "stop_hours": 2.5,
+      "energy_budget_j": 3165180,
+      "reserve_fraction": 0.6
+    }
   },
+  "default_scenario": "worst",
   "data_types": {
     "optical": "optical",
     "topographic": "height",
@@ -175,5 +193,17 @@
     "atmospheric": "weather",
     "chemical": "chem_points",
     "geophysical": "neutron_points"
+  },
+  "scout": {
+    "flights": 5,
+    "metres": 3423,
+    "cells_revealed": 1202,
+    "rock_cells_seen_corridor_only": 31,
+    "rock_cells_seen_with_plan": 98,
+    "note": "extra flights after the route corridor; made by data/pipeline/scout_plan.py"
+  },
+  "detail_tiles": {
+    "url": "https://marsmapchi.blob.core.windows.net/tiles/gale/tiles.json",
+    "note": "Optional 1 m terrain + 25 cm HiRISE tiles for the 3D view (make_tiles.py)"
   }
 }

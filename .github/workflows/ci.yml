@@ -50,6 +50,8 @@ jobs:
           npm run typecheck --if-present
           npm test --if-present
           npm run build --if-present
+          npx playwright install --with-deps chromium
+          npm run test:browser
 
   # P3: world files are the contract every lane reads. Pipeline must run, every world must validate.
   data:

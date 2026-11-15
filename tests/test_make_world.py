@@ -9,7 +9,7 @@ spec.loader.exec_module(mw)
 
 def test_cost_to_go_is_zero_at_base_and_grows_outward():
     n, base = 32, [8, 16]
-    *_, ctg = mw.build(n, 5.0, base, 2.5e5)
+    *_, ctg = mw.build(n, 8.0, base, 2.5e5)  # 8 m cells as in the worlds (at 5 m the 20 deg limit walls the base in)
     b = base[1] * n + base[0]
     assert ctg[b] == 0.0
     near, far = ctg[b + 1], ctg[b + 10]

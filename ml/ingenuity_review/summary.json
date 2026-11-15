@@ -1,0 +1,23 @@
+{
+  "manifest_sha256": "817ce8d6afce9d9a98b958d17abc0ef234ccf9cb73ec00e69b2e2bd804f39c60",
+  "source_index_sha256": "5cf33ffbcd1aef8bce33225e4fca6190f3ca34e58a25a3f8831e1543ccd7c971",
+  "frames": 50,
+  "patches": 200,
+  "flights": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    9,
+    10,
+    11,
+    12,
+    13
+  ],
+  "reviewed": 0,
+  "validated_height_agl": 0,
+  "accuracy": null,
+  "flight_height_decision": null,
+  "status": "Ready for blind human annotation; not an evaluated or altitude-stratified benchmark"
+}

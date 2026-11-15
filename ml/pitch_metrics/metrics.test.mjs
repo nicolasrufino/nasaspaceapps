@@ -40,6 +40,17 @@ test('energy uncertainty scales spent energy AND return cost without scaling res
   assert.throws(() => routeProfile(world, route, costs, 0), /Invalid/)
 })
 
+test('return audit follows homebound crossings, including one-way links', () => {
+  const world = fixture()
+  world.layers.passable = new Uint8Array(16)
+  world.layers.passable[1] = 1 << 3 // west from [1, 0] to base, no eastbound link
+  const home = knownReturnCosts(world, null)
+  assert.equal(home[1], stepCost(world.meta, world.layers.height, world.layers.terrain_class, [1, 0], [0, 0]))
+  assert.equal(home[2], Infinity)
+  assert.equal(costFrom(world, [0, 0]).dist[1], Infinity)
+  assert.equal(world.layers.passable[0], 0)
+})
+
 test('twenty-percent share is distance weighted with threshold interpolation', () => {
   const profile = [
     { distance_m: 0, margin_after_reserve_j: 30, cell: [0, 0] },
@@ -81,13 +92,13 @@ test('hazard visits do not become individual-rock or unique-cell counts', () => 
 test('scout preserves accumulated observations without mutating inputs or leaking distant hazards', () => {
   const world = fixture()
   world.layers.rocks_fine[15] = 1
-  const route = { cells: [[0, 0], [1, 0], [0, 0]] }
-  const first = simulateScout(world, route, [], '60fps')
+  const targets = [{ id: 'near', cell: [1, 0] }]
+  const first = simulateScout(world, targets, '60fps')
   assert.equal(first.blocked[15], 0)
   assert.equal(first.discovered_hazard_cells, 0)
   const old = new Uint8Array(16)
   old[15] = 1
-  const again = simulateScout(world, route, [], '60fps', old)
+  const again = simulateScout(world, targets, '60fps', old)
   assert.equal(again.blocked[15], 1)
   assert.equal(again.newly_discovered_hazard_cells, 0)
   assert.equal(old.reduce((a, b) => a + b, 0), 1)
@@ -98,11 +109,23 @@ test('Gale report separates observed hazards, hidden hazards, model accuracy and
   const report = buildReport()
   const r = report.results
   const { world } = loadInputs()
+  assert.equal(report.scenario.energy_scenario, world.meta.default_scenario)
+  assert.equal(report.scenario.energy_budget_j, world.meta.scenarios[world.meta.default_scenario].energy_budget_j)
+  assert.ok(report.source_sha256['data/worlds/gale/passable.u8'])
   // Same selected stops: avoid claiming a lower cost by silently dropping science.
   assert.deepEqual(new Set(r.orbit_only.stops), new Set(r.after_scout.stops))
   assert.deepEqual(new Set(r.orbit_only.stops), new Set(r.repeated_scout.final_route.stops))
   assert.equal(r.after_scout.discovered_hazards.unique_cells, 0)
-  assert.ok(r.after_scout.all_layer_hazards.unique_cells > 0, 'The first-pass limitation must remain visible')
+  assert.equal(r.after_scout.all_layer_hazards.unique_cells, 0)
+  assert.equal(r.scout.flights, 3)
+  assert.equal(r.repeated_scout.total_flights, 3)
+  assert.ok(r.repeated_scout.passes.every((p) => p.flights === 1 && p.flight_metres <= 1000))
+  assert.ok(r.repeated_scout.passes[0].new_route_all_layer_hazard_cells > 0, 'Must re-plan and scout again')
+  for (const sample of r.sampling_sensitivity) {
+    assert.equal(sample.after_energy_j, r.after_scout.energy_j)
+    assert.equal(sample.scanned_cells, r.scout.scanned_cells)
+    assert.equal(sample.discovered_hazard_cells, r.scout.discovered_hazard_cells)
+  }
   assert.ok(r.repeated_scout.converged)
   assert.equal(r.repeated_scout.final_route.all_layer_hazards.unique_cells, 0)
   assert.equal(r.repeated_scout.passes.at(-1).new_route_fully_scanned, true)

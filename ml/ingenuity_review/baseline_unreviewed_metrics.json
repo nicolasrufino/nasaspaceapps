@@ -1,0 +1,512 @@
+{
+  "manifest_sha256": "817ce8d6afce9d9a98b958d17abc0ef234ccf9cb73ec00e69b2e2bd804f39c60",
+  "model_sha256": "6ca2d33f28420c661ef4bf689005ff68027708dfcc445a4f82198729ee8d97d3",
+  "review_sha256": null,
+  "row_classes": [
+    "soil",
+    "bedrock",
+    "sand",
+    "big_rock"
+  ],
+  "column_classes": [
+    "unknown",
+    "soil",
+    "bedrock",
+    "sand",
+    "big_rock"
+  ],
+  "overall": {
+    "patches": 200,
+    "reviewed": 0,
+    "unknown_excluded": 0,
+    "scored": 0,
+    "confusion_matrix": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "accuracy": null,
+    "recall": {
+      "soil": null,
+      "bedrock": null,
+      "sand": null,
+      "big_rock": null
+    },
+    "balanced_accuracy_supported_classes": null
+  },
+  "by_flight": {
+    "2": {
+      "patches": 12,
+      "reviewed": 0,
+      "unknown_excluded": 0,
+      "scored": 0,
+      "confusion_matrix": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "accuracy": null,
+      "recall": {
+        "soil": null,
+        "bedrock": null,
+        "sand": null,
+        "big_rock": null
+      },
+      "balanced_accuracy_supported_classes": null
+    },
+    "3": {
+      "patches": 16,
+      "reviewed": 0,
+      "unknown_excluded": 0,
+      "scored": 0,
+      "confusion_matrix": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "accuracy": null,
+      "recall": {
+        "soil": null,
+        "bedrock": null,
+        "sand": null,
+        "big_rock": null
+      },
+      "balanced_accuracy_supported_classes": null
+    },
+    "4": {
+      "patches": 20,
+      "reviewed": 0,
+      "unknown_excluded": 0,
+      "scored": 0,
+      "confusion_matrix": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "accuracy": null,
+      "recall": {
+        "soil": null,
+        "bedrock": null,
+        "sand": null,
+        "big_rock": null
+      },
+      "balanced_accuracy_supported_classes": null
+    },
+    "5": {
+      "patches": 24,
+      "reviewed": 0,
+      "unknown_excluded": 0,
+      "scored": 0,
+      "confusion_matrix": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "accuracy": null,
+      "recall": {
+        "soil": null,
+        "bedrock": null,
+        "sand": null,
+        "big_rock": null
+      },
+      "balanced_accuracy_supported_classes": null
+    },
+    "6": {
+      "patches": 24,
+      "reviewed": 0,
+      "unknown_excluded": 0,
+      "scored": 0,
+      "confusion_matrix": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "accuracy": null,
+      "recall": {
+        "soil": null,
+        "bedrock": null,
+        "sand": null,
+        "big_rock": null
+      },
+      "balanced_accuracy_supported_classes": null
+    },
+    "9": {
+      "patches": 24,
+      "reviewed": 0,
+      "unknown_excluded": 0,
+      "scored": 0,
+      "confusion_matrix": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "accuracy": null,
+      "recall": {
+        "soil": null,
+        "bedrock": null,
+        "sand": null,
+        "big_rock": null
+      },
+      "balanced_accuracy_supported_classes": null
+    },
+    "10": {
+      "patches": 20,
+      "reviewed": 0,
+      "unknown_excluded": 0,
+      "scored": 0,
+      "confusion_matrix": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "accuracy": null,
+      "recall": {
+        "soil": null,
+        "bedrock": null,
+        "sand": null,
+        "big_rock": null
+      },
+      "balanced_accuracy_supported_classes": null
+    },
+    "11": {
+      "patches": 20,
+      "reviewed": 0,
+      "unknown_excluded": 0,
+      "scored": 0,
+      "confusion_matrix": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "accuracy": null,
+      "recall": {
+        "soil": null,
+        "bedrock": null,
+        "sand": null,
+        "big_rock": null
+      },
+      "balanced_accuracy_supported_classes": null
+    },
+    "12": {
+      "patches": 20,
+      "reviewed": 0,
+      "unknown_excluded": 0,
+      "scored": 0,
+      "confusion_matrix": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "accuracy": null,
+      "recall": {
+        "soil": null,
+        "bedrock": null,
+        "sand": null,
+        "big_rock": null
+      },
+      "balanced_accuracy_supported_classes": null
+    },
+    "13": {
+      "patches": 20,
+      "reviewed": 0,
+      "unknown_excluded": 0,
+      "scored": 0,
+      "confusion_matrix": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "accuracy": null,
+      "recall": {
+        "soil": null,
+        "bedrock": null,
+        "sand": null,
+        "big_rock": null
+      },
+      "balanced_accuracy_supported_classes": null
+    }
+  },
+  "height_stratified": false,
+  "flight_height_decision": null,
+  "limitations": [
+    "Patches from one frame/flight are correlated; patch count is not an independent sample count.",
+    "Unknown/mixed patches excluded from accuracy and counted separately.",
+    "This measures terrain classification, not obstacle height, flight safety or occupancy.",
+    "Per-image terrain-relative altitude is unvalidated; no 4 m versus 10 m comparison."
+  ]
+}

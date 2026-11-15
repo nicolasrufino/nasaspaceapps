@@ -11,7 +11,7 @@
     64
   ],
   "gravity_mps2": 3.71,
-  "energy_budget_j": 250000.0,
+  "energy_budget_j": 450000.0,
   "reserve_fraction": 0.2,
   "kj_per_l_o2": 20.1,
   "classes": {
@@ -25,7 +25,16 @@
     "body_kg": 75.0,
     "load_kg": 60.0,
     "speed_mps": 1.0,
-    "max_slope_deg": 25.0
+    "max_slope_deg": 20.0,
+    "gravity_energy_factor": 0.68,
+    "sand_cost_ratio": 2.4,
+    "eta": [
+      1.2,
+      1.1,
+      1.0,
+      4.372,
+      1.5
+    ]
   },
   "layers": [
     "height",

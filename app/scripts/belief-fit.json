@@ -1,0 +1,129 @@
+{
+ "labels": "rocks_fine.u8 sha256:15ebe3865779117d (R3: DTM estimate + 23 reviewed rocks)",
+ "reviewed_rock_cells": 22,
+ "validation": {
+  "status": "development_model_selection_diagnostic",
+  "calibrated_probability": false,
+  "independent_human_test": false,
+  "reviewed_positive_cells_evaluated": 3,
+  "reviewed_positive_cells_in_training": 2,
+  "negative_proxy_cells_evaluated": 48664,
+  "negative_labels": "Unreviewed zero cells in the existing mask; not human-confirmed empty ground",
+  "model_selected_on_this_diagnostic": true,
+  "calibration": "Matching the mean proxy-label rate does not establish probability calibration"
+ },
+ "chosen": [
+  "slope_ratio",
+  "relief_8m"
+ ],
+ "candidates": [
+  {
+   "weights": {
+    "features": [
+     "slope_ratio",
+     "relief_8m",
+     "unsure",
+     "thermal_inertia"
+    ],
+    "mean": [
+     0.50032,
+     1.19948,
+     0.14578,
+     183.96554
+    ],
+    "sd": [
+     0.23997,
+     0.56266,
+     0.22453,
+     12.38662
+    ],
+    "bias": -4.0685,
+    "w": [
+     -0.3005,
+     -0.0249,
+     0.7464,
+     -0.1653
+    ]
+   },
+   "auc_east_vs_rock_layer": 0.726,
+   "auc_vs_reviewed_rocks": 0.248,
+   "east_rock_rate": 0.018,
+   "east_mean_predicted": 0.0202
+  },
+  {
+   "weights": {
+    "features": [
+     "slope_ratio",
+     "relief_8m",
+     "thermal_inertia"
+    ],
+    "mean": [
+     0.50032,
+     1.19948,
+     183.96554
+    ],
+    "sd": [
+     0.23997,
+     0.56266,
+     12.38662
+    ],
+    "bias": -3.8468,
+    "w": [
+     -0.0351,
+     0.2935,
+     -0.2667
+    ]
+   },
+   "auc_east_vs_rock_layer": 0.674,
+   "auc_vs_reviewed_rocks": 0.473,
+   "east_rock_rate": 0.018,
+   "east_mean_predicted": 0.0212
+  },
+  {
+   "weights": {
+    "features": [
+     "slope_ratio",
+     "relief_8m"
+    ],
+    "mean": [
+     0.50032,
+     1.19948
+    ],
+    "sd": [
+     0.23997,
+     0.56266
+    ],
+    "bias": -3.8142,
+    "w": [
+     -0.054,
+     0.2733
+    ]
+   },
+   "auc_east_vs_rock_layer": 0.687,
+   "auc_vs_reviewed_rocks": 0.729,
+   "east_rock_rate": 0.018,
+   "east_mean_predicted": 0.022
+  },
+  {
+   "weights": {
+    "features": [
+     "unsure"
+    ],
+    "mean": [
+     0.14578
+    ],
+    "sd": [
+     0.22453
+    ],
+    "bias": -4.028,
+    "w": [
+     0.6045
+    ]
+   },
+   "auc_east_vs_rock_layer": 0.757,
+   "auc_vs_reviewed_rocks": 0.441,
+   "east_rock_rate": 0.018,
+   "east_mean_predicted": 0.0214
+  }
+ ]
+}

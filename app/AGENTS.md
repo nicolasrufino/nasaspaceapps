@@ -6,7 +6,7 @@ npm run dev        # http://localhost:5173 home page; /scout/ is the app (Gale d
 npm run phone      # HTTPS on the LAN for a phone (accept the self-signed certificate once)
 npm test           # world files match world.json; layer colours
 npm run build      # dist/ for Azure Static Web Apps, world folders included
-# Feature flags (docs/PLAN.md §10): the bare URL turns the demo set on; ?flags= turns all off, ?flags=a,b picks
+# Feature flags (docs/PLAN.md §10): the bare URL turns the demo set on; ?flags= turns all off, ?flags=a,b picks. On in the demo set since the rescope: detail (1 m tiles near the camera). Off by default: classifier, belief (chance of hidden rocks)
 ```
 
 Applies to everything under `app/`. The root `AGENTS.md` still applies.

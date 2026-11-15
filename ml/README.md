@@ -20,3 +20,11 @@ The generator refuses to overwrite existing models, including future trained
 exports. ONNX opset 17 / IR 8; no PyTorch is needed for these fixtures.
 
 The [Gale starter rock review](rock_review/README.md) contains the R1 review handoff for #31: 50 locations visually accepted by Jules, the preserved initial proposals, source provenance and a reproducible proposal script. It is not yet the shadow-based detector or final hazard mask.
+
+## P1 evidence audit (2026-11-15)
+
+The [registered full-slice ROSCO run](rock_review/FULL_SLICE.md) is complete.
+The [200-patch Ingenuity pack](ingenuity_review/README.md) is ready for human
+annotation; no height decision or new accuracy is claimed.
+[Label policy](LABEL_POLICY.md) separates orbital positives, reviewed negatives,
+rover training data and held-out helicopter flights.

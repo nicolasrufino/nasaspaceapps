@@ -1,0 +1,212 @@
+{
+  "source": {
+    "observation": "ESP_019698_1750",
+    "source_url": "https://hirise-pds.lpl.arizona.edu/PDS/DTM/ESP/ORB_019600_019699/ESP_019698_1750_ESP_019988_1750/ESP_019698_1750_RED_A_01_ORTHO.JP2",
+    "credit": "NASA/JPL-Caltech/University of Arizona",
+    "source_window": [
+      12535,
+      12565,
+      8271,
+      8280
+    ],
+    "width": 8271,
+    "height": 8280,
+    "crs_wkt": "PROJCS[\"Equirectangular MARS\",GEOGCS[\"GCS_MARS\",DATUM[\"unnamed\",SPHEROID[\"unnamed\",3396190,0]],PRIMEM[\"Reference meridian\",0],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]]],PROJECTION[\"Equirectangular\"],PARAMETER[\"standard_parallel_1\",0],PARAMETER[\"central_meridian\",137.38],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]",
+    "geotransform": [
+      -846.9585354124474,
+      0.2529366986449,
+      0.0,
+      -283494.86648663564,
+      0.0,
+      -0.2529366986449
+    ],
+    "site_bounds_in_source_crs": [
+      -846.9457518094206,
+      -285588.9995606376,
+      1244.8435144663815,
+      -283495.0
+    ],
+    "sampling_m_per_px": 0.2529366986449,
+    "pixel_sha256": "f4367b59661a58353fcbbb7c84dc52f3fc98018b49c81e6b073ec52b08bda49d",
+    "illumination": {
+      "incidence_deg": 57.493071,
+      "rdr_sun_cw_from_right_deg": 192.527174,
+      "rdr_north_cw_from_right_deg": 270.0,
+      "ortho_north_cw_from_right_deg": 270.0,
+      "ortho_sun_cw_from_right_deg": 192.527174,
+      "rosco_sun_ccw_from_right_deg": 167.472826,
+      "shadow_cw_from_right_deg": 12.527174000000002,
+      "acquisition_start": "2010-10-09T09:11:38.350",
+      "scope": "Observation-level geometry; no local slope correction"
+    },
+    "rdr_label": {
+      "url": "https://hirise-pds.lpl.arizona.edu/PDS/RDR/ESP/ORB_019600_019699/ESP_019698_1750/ESP_019698_1750_RED.LBL",
+      "sha256": "7f3abe8c34c39101f0afac769fa54066d8c577af5cc2f60477fc2d434254ecb6"
+    },
+    "ortho_label": {
+      "url": "https://hirise-pds.lpl.arizona.edu/PDS/DTM/ESP/ORB_019600_019699/ESP_019698_1750_ESP_019988_1750/ESP_019698_1750_RED_A_01_ORTHO.LBL",
+      "sha256": "b3628b26ed92ba78604383e07372e21fc8ce503f732ad2d04c9e9bc81b6c3362"
+    },
+    "processing": "Native grayscale window, no resampling, sharpening or contrast adjustment",
+    "labels_transferred": false,
+    "world_hazard_layer_written": false
+  },
+  "source_jp2_sha256": "8fe50227c8c24ec2c0578c2d6d2dd7801da07e0f0acc4b33d80ef14189763047",
+  "original_review_pixels_unchanged": true,
+  "frozen_r3_candidates_sha256": "024e23b6a777acde3d0b01ae98ef11ffcc1a828e7e40f291fcee3a71d69286a3",
+  "exact_frozen_candidate_matches": [
+    {
+      "full_slice_id": "FS001",
+      "frozen_r3_id": "H04"
+    },
+    {
+      "full_slice_id": "FS002",
+      "frozen_r3_id": "H23"
+    },
+    {
+      "full_slice_id": "FS003",
+      "frozen_r3_id": "H15"
+    },
+    {
+      "full_slice_id": "FS004",
+      "frozen_r3_id": "H13"
+    },
+    {
+      "full_slice_id": "FS005",
+      "frozen_r3_id": "H12"
+    },
+    {
+      "full_slice_id": "FS006",
+      "frozen_r3_id": "H25"
+    },
+    {
+      "full_slice_id": "FS007",
+      "frozen_r3_id": "H19"
+    },
+    {
+      "full_slice_id": "FS008",
+      "frozen_r3_id": "H06"
+    },
+    {
+      "full_slice_id": "FS009",
+      "frozen_r3_id": "H07"
+    },
+    {
+      "full_slice_id": "FS010",
+      "frozen_r3_id": "H09"
+    },
+    {
+      "full_slice_id": "FS011",
+      "frozen_r3_id": "H20"
+    },
+    {
+      "full_slice_id": "FS012",
+      "frozen_r3_id": "H22"
+    },
+    {
+      "full_slice_id": "FS013",
+      "frozen_r3_id": "H17"
+    },
+    {
+      "full_slice_id": "FS014",
+      "frozen_r3_id": "H16"
+    },
+    {
+      "full_slice_id": "FS015",
+      "frozen_r3_id": "H03"
+    },
+    {
+      "full_slice_id": "FS016",
+      "frozen_r3_id": "H14"
+    },
+    {
+      "full_slice_id": "FS017",
+      "frozen_r3_id": "H11"
+    },
+    {
+      "full_slice_id": "FS018",
+      "frozen_r3_id": "H05"
+    },
+    {
+      "full_slice_id": "FS019",
+      "frozen_r3_id": "H01"
+    },
+    {
+      "full_slice_id": "FS020",
+      "frozen_r3_id": "H18"
+    },
+    {
+      "full_slice_id": "FS021",
+      "frozen_r3_id": "H21"
+    },
+    {
+      "full_slice_id": "FS022",
+      "frozen_r3_id": "H08"
+    },
+    {
+      "full_slice_id": "FS023",
+      "frozen_r3_id": "H10"
+    },
+    {
+      "full_slice_id": "FS024",
+      "frozen_r3_id": "H02"
+    },
+    {
+      "full_slice_id": "FS025",
+      "frozen_r3_id": "H24"
+    }
+  ],
+  "target_projected_bounds": [
+    8142310.999999999,
+    -285543.0,
+    8144359.0,
+    -283495.0
+  ],
+  "registration_file_sha256": "3325264b48d86e186af4279833e02c75f5300dc9fc398115b03d99dffbd6fc97",
+  "coverage_definition": "All four corners of each 8 m world cell inside native footprint under frozen affine model",
+  "old_crop_registered_coverage": {
+    "total_cells": 65536,
+    "fully_covered_cells": 63046,
+    "not_fully_covered_cells": 2490
+  },
+  "expanded_crop_registered_coverage": {
+    "total_cells": 65536,
+    "fully_covered_cells": 65536,
+    "not_fully_covered_cells": 0
+  },
+  "registration_extrapolated_at_edges": true,
+  "extraction_margin_m": 4,
+  "rosco_version": "Version_20260909",
+  "rosco_commit": "e930eb2c8e62569bd23350070a2ab676b5ef604d",
+  "dll_sha256": "150ee77acb5e77d6a6c4a7e890017775843b7306c752ead239e81cddfe07dea0",
+  "preset": "confidence-only",
+  "parameters": {
+    "gamma": 1.2000000476837158,
+    "sun_incidence_angle": 57.493072509765625,
+    "sun_azimuth_angle": 167.4728240966797,
+    "min_shadow_size": 3.0,
+    "ground_resolution": 0.2529366910457611,
+    "confidence_threshold": 0.699999988079071,
+    "min_shadow_size_split": 100.0,
+    "spliting_ratio": 0.5,
+    "rock_elongate_ratio": 4.0,
+    "mean_gradient_threshold": 0.0,
+    "max_shadow_size": 800.0,
+    "gamma_threshold_override": 0
+  },
+  "completed_tiles": 289,
+  "detections": 25,
+  "detections_inside_world": 25,
+  "excluded_model_point_outside_image": 0,
+  "reviewed_candidates": 0,
+  "labels_transferred": false,
+  "world_hazard_layer_written": false,
+  "precision": null,
+  "recall": null,
+  "limitations": [
+    "Coverage is conditional on the fitted image-relative registration; edge extrapolation is not independently validated.",
+    "No detection is not a negative ground-truth label. All new proposals need review.",
+    "Dimensions are shadow-model estimates without local slope correction.",
+    "Exact frozen-proposal matches are listed by geometry and unchanged source pixels, never by candidate order; human decisions remain in r3_decisions.json."
+  ]
+}
