@@ -2,6 +2,16 @@
 
 The phone game: three.js + Vite. Run commands: `app/AGENTS.md`. Reads `data/worlds/<name>/` and `ml/exports/*.onnx`. See `docs/roles/person-2-engine.md`.
 
+S4 (#169): the SkyFall payload card and a report after each landing show by default; `/scout/?scout_payload=0` hides them.
+Pick at least three stops, plan the route, then send the scout. Reports stay on screen after the last
+landing until **Review the walk**. Bare `/scout/` and `?scout_payload=0` keep the existing flow.
+This is a stage-local flag: do not add `flags=` or `world=` (those select the legacy Vision UI).
+The full strip uses the existing scout sampling, with unique grid cells counted once per flight;
+overlap between flights is included in each report. Missing optional layers say **Unavailable**.
+Radiation is mean dose rate (µGy/h), not accumulated dose. REMS is historical ground context with
+its sol labelled; neither weather nor instruments are live sensor simulations. The 30 m strip is
+our estimate, not a NASA guarantee. No world contracts or routing calculations change.
+
 The R4 model is connected to the M2 Walk view behind `classifier` (off in the default demo).
 Open `/scout/?world=gale&flags=classifier,science_stop,step_mode`, select **Walk → Classify a ground photo**,
 choose a JPEG/PNG/WebP at least 256 × 256, tap or arrow-key the crop, then **Analyze selected area**.

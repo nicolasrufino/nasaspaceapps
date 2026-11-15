@@ -231,6 +231,7 @@ function tickView(dt) {
   } else if (flight) {
     controls.target.lerp(heli.position, 1 - Math.exp(-dt * 3)) // watch the helicopter
     if (flight.zoom > 0) { // ease in close at take-off (a 1.2 m helicopter is invisible from far); then the user's zoom is theirs
+      const dt = frameElapsed // real time, so a slow renderer still gets there
       flight.zoom -= dt
       const off = camera.position.clone().sub(controls.target)
       camera.position.copy(controls.target).add(off.setLength(THREE.MathUtils.lerp(off.length(), CHASE_M, 1 - Math.exp(-dt * 2.5))))
@@ -265,10 +266,12 @@ function tickIntro(dt) {
 }
 
 let lastFrame = performance.now()
+let frameElapsed = 0
 let lastTiles = 0
 renderer.setAnimationLoop((now) => {
   const elapsed = Math.max(0, (now - lastFrame) / 1000)
   const dt = Math.min(elapsed, 0.1) // smooth camera/character motion, not the flight clock
+  frameElapsed = Math.min(elapsed, 1)
   lastFrame = now
   if (flight?.active) tickFlight(elapsed) // spatial scanning retains every crossed sample, even on a slow frame
   walker.position.lerp(walkerGoal, 1 - Math.exp(-dt * 6))
@@ -384,7 +387,7 @@ const kj = (j) => `${Math.round(Math.max(j, 0) / 1000)} kJ`
 // --- Science stops and the planned route. Targets come from targets.json (picked from the data);
 // the crew can add their own by tapping the minimap. The planner picks the order and the path. ---
 const custom = [] // stops the crew added
-const included = new Set(targets.map((t) => t.id))
+const included = new Set(flowMode ? [] : targets.map((t) => t.id)) // the guided mission starts with no stops chosen
 let selected = null
 let route // { cells, stops, dropped, energy_j, minutes }
 let blocked = null // rocks the scout has found (E4); the planner routes around them
@@ -696,7 +699,6 @@ async function startNextFlight() {
     flight.along = 0
     emit('flight:start', { n: flightsUsed + 1, of: MAX_FLIGHTS, metres: next.metres, waypoints: next.waypoints, kind: next.kind })
     flight.zoom = 3 // seconds of easing the camera in
-    camera.clearViewOffset()
     flight.camOff ??= camera.position.clone().sub(controls.target) // put back after the last landing
     heli.userData.beam.visible = heli.visible = heliIcon.visible = scanDots.visible = true
   }
@@ -709,6 +711,7 @@ function tickFlight(dt) {
   flight.along = Math.min(f.metres, flight.along + (f.metres / (flightSeconds ?? FLIGHT_ANIMATION_S)) * dt) // slow enough to see the discovery
   const fresh = scanFlight(meta, scanned, f, flight.along)
   flight.found += reveal(fresh)
+  if (fresh.length) emit('scan', { n: flightsUsed + 1, along: flight.along, seen: fresh.length, rocks: fresh.filter((i) => layers.rocks_fine[i]) })
   const climb = Math.min(1, flight.along / 20, (f.metres - flight.along) / 20) // take off and land over 20 m (drawn only; the scan is unchanged)
   placeHeli(heli, pointAlong(meta, f.waypoints, flight.along) ?? f.waypoints.at(-1), Math.max(0.3, ALT * climb))
   heliIcon.position.copy(heli.position)
@@ -757,11 +760,12 @@ function land() {
 
 // --- Walk (block E2): along the planned route, energy and oxygen drain, ring, point of no return. ---
 let walk, k, timer
+let walkMs = 120 // playback: milliseconds per 8 m step
 // Block E6 (flags science_stop, step_mode): stop checklist, markers, warnings, walk log; real steps. Off: null.
-const field = flags.has('science_stop') || flags.has('step_mode')
+const field = flowMode ? null : (flags.has('science_stop') || flags.has('step_mode')) // the mission's walk preview has no checklists to stop it
   ? initStops({ world, checklist: flags.has('science_stop'), flags, photos, scene, pin, cellPos, span, getWalk: () => walk, panel: $('walk'), map })
   : null
-const steps = flags.has('step_mode')
+const steps = flowMode ? null : flags.has('step_mode')
   ? initSteps({ panel: $('walk'), cs, segment: () => (k < route.cells.length - 1 ? [route.cells[k], route.cells[k + 1]] : null), blocked: () => !!field?.blocking(), step })
   : null
 function reset() {
@@ -785,7 +789,7 @@ function step() {
 function play() {
   if (flight) return
   unlockAudio()
-  timer ??= setInterval(step, 120) // ponytail: fixed playback speed; a speed knob when the demo asks for one
+  timer ??= setInterval(step, walkMs)
   $('play').textContent = 'Pause'
 }
 function pause() {
@@ -882,8 +886,15 @@ const app = {
   stops: () => allStops().map((s) => ({ ...s, included: included.has(s.id), dropped: route.dropped.includes(s.id), photo: photos.find((p) => p.target_id === s.id) })),
   toggleStop(id) { if (flight) return; included.has(id) ? included.delete(id) : included.add(id); replan() },
   addStop(cell) { if (flight) return; const id = `C${++customCount}`; custom.push({ id, name: `Your stop ${customCount}`, cell, custom: true, why: 'Picked on the map.' }); included.add(id); replan() },
+  removeStop(id) { if (flight) return; const c = custom.findIndex((s) => s.id === id); if (c >= 0) custom.splice(c, 1); included.delete(id); replan() },
   route: () => route, // { cells, stops, dropped, energy_j, minutes }
+  maxSlopeDeg: meta.knobs.max_slope_deg,
+  hazardColors: () => hazardRGB(world, scanned, reviewed), // Uint8Array(W*H*3): green walkable, amber near the limit, red too steep or rock
+  // Cells on the straight line between two cells (for "the simplest plan"), both ends included.
+  line([x0, y0], [x1, y1]) { const n = Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0)) || 1; return Array.from({ length: n + 1 }, (_, t) => [Math.round(x0 + ((x1 - x0) * t) / n), Math.round(y0 + ((y1 - y0) * t) / n)]) },
   describe: (cells) => describe(world, cells, blocked), // { metres, energy_j, minutes, steepest_deg, sand_share, climb_m, ... }
+  // Shift the 3D picture right by `px` so its centre sits in the middle of the area the rail leaves free (0 = centred).
+  viewShift(px, py = 0) { px || py ? camera.setViewOffset(innerWidth, innerHeight, -px, py, innerWidth, innerHeight) : camera.clearViewOffset() }, // py: shift up
   objective: () => objective,
   setObjective(o) { if (flight) return; objective = o; replan() },
   scanned, // Uint8Array(W*H): 1 where a helicopter has looked
@@ -891,6 +902,7 @@ const app = {
   blocked: () => blocked,
   belief: () => beliefMap(world, scanned, blocked), // Float32Array(W*H) chance of a hidden rock; experimental
   imagery: () => imageryCanvas, // 2048 px canvas of the slice, north up, or null until loaded ('imagery' event)
+  orbitalImageUrl: meta.files.optical ? `${base}/${meta.files.optical}` : null,
   scout: {
     start: () => $('scout').click(),
     flying: () => !!flight, used: () => flightsUsed, left: () => MAX_FLIGHTS - flightsUsed,
@@ -903,10 +915,12 @@ const app = {
     },
     swathM: SWATH_M, flightM: FLIGHT_M,
   },
-  walk: { play, pause, reset, state: () => ({ k, of: route.cells.length - 1, energy_left_j: walk.energy_left_j }) },
+  walk: { play, pause, reset, step, playing: () => !!timer,
+    speed(ms) { walkMs = ms; if (timer) { pause(); play() } }, // milliseconds per 8 m step (120 = normal)
+    seek(n) { const on = !!timer; reset(); while (k < Math.min(n, route.cells.length - 1)) stepTo(world, walk, route.cells[++k]); render(); if (on) play() }, // jump to step n
+    state: () => ({ k, of: route.cells.length - 1, energy_left_j: walk.energy_left_j }) },
   // Cameras: 'habitat' (third person beside the astronaut and the habitat), 'walker' (behind the astronaut), 'map'.
   camera(mode) {
-    camera.clearViewOffset()
     if (mode === 'walker') return setView('follow')
     setView('map')
     if (mode === 'habitat') { // low, beside the astronaut, the habitat behind; the subject sits lower right so the centre is free for the 2D map
@@ -914,7 +928,6 @@ const app = {
       controls.target.set((b.x + hab.x) / 2, groundAt(b.x, b.z) + 2.4, (b.z + hab.z) / 2)
       const cx = b.x + 12, cz = b.z + 20
       camera.position.set(cx, Math.max(groundAt(cx, cz) + 2, groundAt(b.x, b.z) + 4.5), cz)
-      if (innerWidth > 760) camera.setViewOffset(innerWidth, innerHeight, -innerWidth * 0.3, -innerHeight * 0.18, innerWidth, innerHeight)
     }
   },
 }

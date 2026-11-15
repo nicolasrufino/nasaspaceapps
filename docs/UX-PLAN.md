@@ -3,6 +3,79 @@
 Proposed 2026-11-15, 8:30 AM. Submission closes 1:30 PM. Status: **accepted by Nicolas 15 Nov; being built in `app/src/flow/`.** Vision lives at `/scout/?vision` for now (not `/vision/`).
 Source: Nicolas's direction of 15 Nov. Site in both products: the Gale crater slice (2 × 2 km of lower Mount Sharp), the one the app already uses.
 
+## 0. Version 2 (Nicolas's review of the first build, 15 Nov, about 9 AM): built in `app/src/flow/`
+
+This section replaces §2 and §4 below where they differ.
+
+### What changes everywhere
+- **You are inside the habitat.** Stages 1, 2 and 4 are a full-screen console: the 2D orbit map and solid panels. No 3D scene behind them. The 3D scene appears only when the helicopter flies (stage 3) and in the walk preview.
+- **Type:** Rethink Sans only, the font of the landing page's body and of "Vesta Scout" there. The Michroma title font is dropped.
+- **Panels:** solid, no outline, no transparency.
+- **Getting around:** a "Mission VESTA" link (top left) back to the landing page; a Back button on every stage; finished steps in the stepper can be tapped.
+- **Nothing advances by itself.** Every stage ends with a button the user presses.
+
+### Stage 1. Choose where to go
+- **What it is:** the crew at the console, looking at the only thing they have: the orbit picture.
+- **Starts empty.** No stops are chosen for you.
+- **Two ways to add a stop:** tap anywhere on the map, or pick from "Suggested by the science team" (our five targets, each with its one-line reason and rover photo).
+- **At least 3 stops** before you can go on (the planner takes up to 12).
+- **How to walk it:** Easiest or Shortest, as a preference only. **No metres, energy or minutes yet**, and no route line: nothing has been worked out. The stops are just pins.
+- **Button:** "Plan the route".
+
+### Stage 2. How the route is found (was "Read the orbit map")
+A step-by-step explainer of the algorithm on your own stops. The user moves with Next and Back; each step is one picture on the map and at most two sentences. It is the part that matters most.
+
+| Step | What the map shows | What it says (numbers computed live) |
+|---|---|---|
+| 1. The straight line | Straight lines joining your stops, with the parts that cross steep ground in red | "The simplest plan joins the stops with straight lines. Here that crosses N m of ground steeper than 20°, the suit's limit." |
+| 2. From a picture to terrain | The slope colours fade in over the picture | "Orbit also gives height (HiRISE stereo). From height we get slope, and from slope and ground type the energy of every step." |
+| 3. The best route orbit can give | The Easiest or Shortest route draws; the numbers appear for the first time | "The least-energy route: N m, N kJ, N minutes. As far as orbit can tell." |
+| 4. What orbit cannot see | The hidden-rock estimate near the route; unseen stretches pulse | "Orbit sees rocks down to about 1.5 m. N m of this route has never been seen up close." |
+| 5. Where to send the helicopter | The flight corridors | "3 flights of 1 km. After each landing the route is planned again with what was found. (Planning with unknown blockages is the Canadian Traveller Problem.)" |
+
+- **Button on the last step:** "Send the scout". It is never automatic.
+- **Not said:** that NASA used straight-line planning. We have no source for it, so step 1 calls it "the simplest plan".
+
+### Stage 3. Scout
+Kept as built (third person behind the helicopter), plus what was missing: **what is being detected.**
+- **A detections list** (right): one row per find: what ("Rock field, 6 cells, about 380 m²"), where ("210 m into flight 1, near stop 2"), and what it means ("On the route: route moved, +8 kJ" or "Off the route: noted").
+- **A legend for the scan:** cyan = the 30 m strip the camera sees; red = rocks too big to step over (over 0.3 m).
+- **Totals:** ground scanned (m²), rock cells found, how many were on the route.
+- Still labelled a simulated scan.
+
+### Stage 4. Choose the walk
+- Back inside the habitat: the console layout of stage 1, with the comparison Nicolas liked (with and without the scout, both at once).
+- **Walk preview fixed:** it walks by itself, with Play/Pause, Step, speed and Restart, and a Back to the comparison.
+- Buttons: Preview the walk, Scout again, Change the stops, Explore in Vesta Vision.
+
+### Layout (from the reference research, 15 Nov)
+Four agents looked at games, drone and mission software, map apps and step-by-step explainers. They agree on three rules, which replace the centred square map with cards on both sides:
+
+1. **The map is the page.** It fills the screen, is never framed, and does not move or resize between steps.
+2. **One rail, same side, every stage.** A left rail about 360 px wide (a bottom sheet on a phone) holds everything else; only its content changes. Nothing floats over the middle of the map.
+3. **Fixed homes.** Top bar: back to Mission VESTA on the left, the four stages in the middle. Primary action: pinned to the bottom of the rail, always the same place. Numbers: a strip on the map, top right, that appears only once the numbers exist. Map tools and the mini map: bottom corners.
+
+| Stage | Rail (left) | On the map | Borrowed from |
+|---|---|---|---|
+| 1 Choose stops | Easiest/Shortest toggle; your stops as a numbered list with "2 of 3 needed"; "Suggested by the science team" below; **Plan the route** pinned at the bottom, off until 3 stops | Pins only. A row in the list and its pin highlight together | Komoot and Google Maps planners; Surviving Mars site select |
+| 2 How the route is found | "2 of 5" with a five-part progress bar you can tap; a short title; two sentences whose coloured words match the map's colours; the model-card line when a model is used; Back, and a Next button that names the next step. On step 5 Next becomes **Send the scout**, same place | One thing changes per step. The number strip (distance, energy, time) appears at step 3 | Mapbox storytelling; Red Blob Games; Ciechanowski; Nicky Case |
+| 3 Scout | Narrower rail: flight n of 3 with distance bar and battery; the detections list, newest first, each row "what, where, what it means"; totals; 2× and Skip at the bottom | The 3D chase view with the centre kept clear; mini map bottom right; scan legend beside it | DJI and Ghost Recon drone views |
+| 4 Choose the walk | Two route cards, "With the scout" and "Without", three numbers each and the difference; **Preview the walk** pinned at the bottom; Scout again, Change the stops, Vesta Vision | Both routes on one map. An energy-and-height strip along the bottom; in the preview its scrubber is the playback head, with Play/Pause, Step and speed at its left end | Google Maps alternatives; Komoot and Strava profile strip; Death Stranding results |
+
+The references themselves (links) are in the agents' reports, summarised in the PR that builds this.
+
+### Machine learning, said where it is used
+Each model gets one small "model card" line at the moment it matters: what it is, what it learned from, how good it measured, and its limit. Figures are from `ml/exports/` and `app/scripts/belief-fit.json`; nothing is rounded up.
+
+| Where | Model | The line on screen |
+|---|---|---|
+| Stage 2, step 4 (what orbit cannot see) | **Chance of hidden rocks**: logistic regression on two terrain features (slope ratio, 8 m relief) | "Rock-chance model: scores 0.73 (AUC) on a development check with reviewed rocks. Not calibrated: it ranks ground, it does not give true odds." |
+| Stage 2, step 4 and stage 3 (what the scout finds) | **Rock detections from orbit images**: ROSCO detector on HiRISE, each proposal checked by a person | "23 of 25 detector proposals confirmed by a person. Coverage is not complete, so no hit rate is claimed." |
+| Stage 3 (scan) | none live | "Simulated scan: rocks come from the stored rock layer (terrain roughness estimate plus the 23 reviewed rocks), not from a live classifier." |
+| Stage 4 and Vision (at a stop, from a ground photo) | **Ground-type classifier**: MobileNetV3-small features with a trained linear head, on NASA/JPL AI4Mars labels, running in the browser | "Ground classifier: 93% on 159 held-out Curiosity patches; 48% on 197 Perseverance patches, so it does not transfer to a new rover yet." |
+
+The fourth export, `buddy_policy`, is a placeholder and is not mentioned in the product.
+
 ## 1. The split
 
 | | Vesta Scout | Vesta Vision |

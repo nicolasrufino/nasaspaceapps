@@ -206,9 +206,12 @@ The **View** button switches between Map, Follow (camera 14 m behind the astrona
 
 ## 13b. The guided mission (Vesta Scout) and the helicopter battery
 
-Vesta Scout runs in four stages (`app/src/flow/`, plan in `docs/UX-PLAN.md`): **Plan** at the habitat on a 2D orbit map, **Read the orbit map**, **Scout** behind the helicopter, **Choose the walk**. The map screen with every layer is Vesta Vision (`/scout/?vision`).
+Vesta Scout runs in four stages (`app/src/flow/`, plan in `docs/UX-PLAN.md` §0): **Choose stops** on the 2D orbit map (it starts empty; at least 3), **How the route is found** (five steps the user moves through), **Scout** behind the helicopter, **Choose the walk**. The crew is inside the habitat, so only the flight and the walk preview show the 3D scene. The map screen with every layer is Vesta Vision (`/scout/?vision`).
 
 - **Route priority.** *Easiest* is the planner's least-energy route. *Shortest* keeps the same stops in the same order and joins them by least distance; its energy is then measured with the same walking model. While the scout flies it re-plans by least energy, whichever was chosen.
+- **The straight line** (stage 2, step 1): straight segments base → stops → base in the planned order; the metres of it on cells steeper than `max_slope_deg` (20°) are counted and drawn red.
+- **Detections** (stage 3): newly seen rock cells are grouped into one find until 40 m of flight pass without any; a find's area is cells × 64 m². "On the route" means one of its cells is on the route as planned at that moment. Ground scanned = newly seen cells × 64 m².
+- **Model lines** (`app/src/flow/models.js`): the rock-chance model (AUC 0.73 on a development check, not calibrated), the reviewed rock detections (23 of 25 proposals confirmed, no hit rate claimed), and the ground classifier (93% on 159 held-out Curiosity patches, 48% on 197 Perseverance patches), each copied from its export.
 - **Unseen ground** (stage 2): the length of the route whose cells no helicopter has looked at, summed step by step.
 - **Hidden-rock estimate** (stage 2): the belief map of §12, shown relative to its highest value near the route. Experimental, not calibrated.
 - **Helicopter battery** (stage 3, `app/src/flow/heli-energy.js`), an **estimate**: Ingenuity's flight power, about 350 W (JPL Ingenuity landing press kit), and its battery, 38.8 Wh when new at 0 °C (NASA/JPL battery slide deck, six Sony VTC4 cells), on SkyFall's flight profile of 1 km in 2.5 minutes (`docs/OPERATIONS.md`).
@@ -221,6 +224,18 @@ battery left   = 1 - energy used / 38.8 Wh       (about 62% after 1 km)
 
   38.8 Wh is the whole battery, not the usable part (NASA gives no usable share), so the percentage is optimistic. Each flight starts full: three helicopters, one flight each.
 - **The scan on screen is simulated**: found rocks come from the hidden-rock layer (`rocks_fine`), not from a live classifier.
+
+## 13c. The Visit step: what the crew measures at a stop (flag `stop_science`, off with `?off=stop_science`)
+
+In the walk preview the walker pauses at each stop and the rail lists what the crew does there. A helicopter carries cameras, radar, weather and radiation sensors, but no chemistry: that needs contact, so it is the crew's job.
+
+- **Time at a stop:** 30 minutes, a planning assumption (the plan's 2.5 h of stop time ÷ 5 stops). Tasks: look around 3, close-up 4, chemistry 8, water in the ground 5, weather and radiation 0 (the suit records it), sample 8. Going over 30 minutes only shows a warning; nothing here changes the energy or the route.
+- **Readings** come from `data/worlds/gale/stop_science.json` (`data/pipeline/stop_science.py`): the nearest real Curiosity measurement to each stop: ChemCam oxides (wt%), DAN thermal/epithermal neutron ratio (relative hydrogen, matched by sol), REMS temperature range and pressure. They stand in for the crew's own.
+- **Dose at a stop** = dose rate × minutes at the stop ÷ 60. The dose rate (µGy per hour) is Curiosity RAD's mean × the sky view at that spot, an estimate.
+- **Ridge against hollow:** once both Nevado Sajama (ridge) and Valle de la Luna (hollow) have had their chemistry read, a card shows the two readings side by side.
+- The log the crew builds is `app.scienceLog`: `[{ target_id, tasks_done, minutes, dose_ugy }]`.
+- **Science log** (#168), when the walk is back at the habitat: per stop the tasks done, minutes, dose, sample and the chemistry read; samples carried; dose at the stops = the sum of the stop doses (walking dose is not included: the walk's dose rate along the route is S6's number). The goal's three checks: ridge against hollow is answered when chemistry was read at both Nevado Sajama and Valle de la Luna; fractures when a close-up was taken at a ridge or pattern stop (Nevado Sajama, Overlook, Ridge top); nodules stay open, as they are for NASA.
+- **Completed tasks** are counted from this walk's log. **Reference walking dose and stay capacity** come from S6's `science_yield.json` (`ml/pitch_metrics/science_yield.py`, copy in `data/worlds/gale/`), explicitly labelled as a fixed reference scenario: walking dose = mean dose rate along that route × walking time; five stops × six tasks = 30 tasks; a 30-sol stay = at most 15 walks (2 sols each), 75 stops, 450 tasks if all are completed (our arithmetic). These are not the current walk's results. The reference dose is never added to the current stop dose: identical stop IDs do not establish identical route geometry. Hidden when the file is absent.
 
 ## 14. What is real and what is simulated
 

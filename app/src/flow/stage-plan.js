@@ -1,65 +1,76 @@
-// Stage 1, Plan: at the habitat. Choose the science stops on the orbit map and how to walk them, then send the scout.
+// Stage 1, Choose stops: inside the habitat, at the console. The orbit picture is all the crew has. It starts empty:
+// tap the map or pick a suggested stop; three or more, then "Plan the route". Nothing is worked out yet, so no
+// route line and no numbers are shown here (docs/UX-PLAN.md section 0).
+import { scienceGoalOn, goalCard, stopCheck, loadCandidates } from './goal.js'
+const MIN_STOPS = 3
+
 export default {
   enter(ui, app) {
-    app.camera('habitat')
     const { map } = ui
-    map.size('big')
-    map.caption('What we know from orbit', 'Tap a pin to drop or add a stop · tap the map to add your own · NASA MRO HiRISE')
-    ui.center.append(map.el)
+    map.caption('What we know from orbit', 'NASA MRO HiRISE imagery · USGS MSL Gale mosaic · tap to add a stop')
+    map.fit()
 
-    const how = ui.card('How should we walk it?')
+    const goal = scienceGoalOn()
+    const intro = ui.section('Where do you want to go?', true)
+    intro.append(Object.assign(ui.h('p', 'dim'), { textContent: `You are in the habitat. Pick the places worth the walk: tap the map, or take ${goal ? 'Curiosity’s stops' : 'the science team’s suggestions'}.` }))
+    const how = ui.section('How to walk it')
     const seg = ui.h('div', 'f-seg')
     const btn = { easiest: ui.button('Easiest', () => app.setObjective('easiest')), shortest: ui.button('Shortest', () => app.setObjective('shortest')) }
     seg.append(btn.easiest, btn.shortest)
-    const note = ui.h('p')
+    const note = ui.h('p', 'dim')
+    note.style.marginTop = '8px'
     how.append(seg, note)
+    const mine = ui.section(''), mineList = ui.h('div', 'f-list')
+    mine.append(ui.h('h3'), mineList)
+    const sug = ui.section(goal ? 'Curiosity’s five stops' : 'Suggested by the science team'), sugList = ui.h('div', 'f-list')
+    sug.append(sugList)
+    ui.body.append(...(goal ? [goalCard(ui)] : []), intro, how, mine, sug)
+    // Sites the map suggests: only when S5's candidates.json is there; nothing shows otherwise.
+    let picks = [], live = true
+    if (goal) loadCandidates().then((c) => {
+      if (!live || !c.length) return
+      picks = c
+      const sec = ui.section('Sites the map suggests'), note = Object.assign(ui.h('p', 'dim'), { textContent: 'Ranked from the 1 m HiRISE terrain where ridges and hollows are both common. A guide; the crew decides.' })
+      sec.append(note, ui.button(`Add ${c.length} sites`, () => { const have = new Set(app.stops().filter((s) => s.included).map((s) => `${s.cell}`)); for (const p of c) if (!have.has(`${p.cell}`)) app.addStop(p.cell) }))
+      sug.after(sec)
+      draw()
+    })
 
-    const numbers = ui.card('This walk')
-    const stats = ui.stats([['metres', '0'], ['kJ of walking', '0'], ['minutes', '0']])
-    const budget = ui.bar(), budgetNote = ui.h('p')
-    numbers.append(stats.el, budget.el, budgetNote)
+    const go = ui.button('Plan the route', () => ui.go('analyse'), true)
+    const hint = ui.h('div', 'f-small')
+    ui.foot.append(hint, go)
 
-    const stopCard = ui.card('Science stops')
-    const stopNote = ui.h('p')
-    stopCard.append(stopNote)
-    ui.left.append(how, numbers)
-    ui.right.append(stopCard)
-
-    const send = ui.button('Send the scout', () => ui.go('analyse'), true)
-    ui.bottom.append(send)
-
-    function draw() {
-      const route = app.route(), stops = app.stops(), d = app.describe(route.cells)
-      map.clear()
-      map.fit([app.meta.base_cell, ...stops.map((s) => s.cell)], 18)
+    let hot = null
+    function hover(id, v) {
+      hot = v ? id : null
+      drawPins() // Keep the hovered row mounted so its click/remove handler can run.
+    }
+    function drawPins() {
+      const stops = app.stops(), on = stops.filter((s) => s.included), off = stops.filter((s) => !s.included && !s.custom)
       const k = map.scale
-      map.line('route', route.cells, { color: '#fff', width: 2.2 * k })
       map.dots('stops', [
-        { id: 'base', cell: app.meta.base_cell, label: 'H', color: '#fff', r: 7 * k },
-        ...stops.map((s, n) => ({ id: s.id, cell: s.cell, label: n + 1, r: 7 * k, faded: !s.included, color: s.dropped && s.included ? '#ff5a3d' : s.custom ? '#ff9f1c' : '#ffd23f' })),
-      ], (id) => { if (id === 'base') return; pick(id); app.toggleStop(id) })
-      stats.set(0, Math.round(d.metres)); stats.set(1, ui.kj(route.energy_j)); stats.set(2, Math.round(route.minutes))
-      budget.set(route.energy_j / app.usableJ)
-      budgetNote.textContent = `${Math.round((route.energy_j / app.usableJ) * 100)}% of the ${ui.kj(app.usableJ)} kJ the suit can spend on walking, with the reserve kept.`
+        { id: 'base', cell: app.meta.base_cell, label: 'H', color: '#fff', r: 1.7 * k },
+        ...off.map((s) => ({ id: s.id, cell: s.cell, label: '+', color: '#f3f2ef', r: (s.id === hot ? 1.9 : 1.4) * k, faded: s.id !== hot })),
+        ...on.map((s, n) => ({ id: s.id, cell: s.cell, label: n + 1, color: '#ffd23f', r: (s.id === hot ? 2.1 : 1.7) * k })),
+      ], (id) => { if (id !== 'base') app.toggleStop(id) })
+    }
+    function draw() {
+      const stops = app.stops(), on = stops.filter((s) => s.included), off = stops.filter((s) => !s.included && !s.custom)
+      drawPins()
+      mine.querySelector('h3').textContent = on.length >= MIN_STOPS ? `Your stops · ${on.length}` : `Your stops · ${on.length} of ${MIN_STOPS} needed`
+      mineList.replaceChildren(...on.map((s, n) => ui.item({ n: n + 1, title: s.name, sub: s.custom ? (picks.find((p) => `${p.cell}` === `${s.cell}`)?.why ?? 'Picked on the map') : s.goal ?? '', onRemove: () => app.removeStop(s.id), onHover: (v) => hover(s.id, v) })))
+      if (!on.length) mineList.append(Object.assign(ui.h('p', 'dim'), { textContent: 'None yet.' }))
+      sugList.replaceChildren(...off.map((s) => ui.item({ title: s.name, sub: goal && stopCheck(s.id) ? `Check: ${stopCheck(s.id)}. ${s.why ?? ''}` : s.why ?? '', onClick: () => app.toggleStop(s.id), onHover: (v) => hover(s.id, v) })))
+      sug.hidden = !off.length
       const o = app.objective()
       btn.easiest.setAttribute('aria-pressed', o === 'easiest'); btn.shortest.setAttribute('aria-pressed', o === 'shortest')
-      note.textContent = o === 'easiest' ? 'Least energy: it goes around sand and steep ground.' : 'Least distance through the same stops, whatever the ground.'
-      const on = stops.filter((s) => s.included), out = on.filter((s) => s.dropped)
-      if (!picked) stopNote.textContent = `${on.length - out.length} of ${stops.length} stops fit in one walk.` + (out.length ? ` Too far for the reserve: ${out.map((s) => s.name).join(', ')}.` : '')
-      send.disabled = !route.stops.length || app.scout.left() <= 0
-    }
-    let picked = null
-    function pick(id) {
-      const s = app.stops().find((x) => x.id === id)
-      picked = id
-      stopCard.querySelector('h3').textContent = s.name
-      stopNote.textContent = s.why ?? ''
-      stopCard.querySelector('img')?.remove()
-      if (s.photo?.image_url) { const im = Object.assign(new Image(), { src: s.photo.image_url, alt: s.photo.caption ?? s.name }); im.style.cssText = 'width:100%;border-radius:8px;margin-top:8px;display:block'; stopCard.append(im) }
+      note.textContent = o === 'easiest' ? 'Least energy: around sand and steep ground.' : 'Least distance, whatever the ground.'
+      go.disabled = on.length < MIN_STOPS
+      hint.textContent = on.length < MIN_STOPS ? `Choose at least ${MIN_STOPS} stops.` : 'Next: see how the route is worked out.'
     }
     map.onTap((cell) => app.addStop(cell))
     const off = app.on('plan', draw)
     draw()
-    return off
+    return () => { live = false; off() }
   },
 }
