@@ -1,0 +1,19 @@
+{
+ "label": "rocks_fine (Gale estimate from the 1 m HiRISE DTM; not ground truth)",
+ "cells_walkable": 55386,
+ "rock_rate_west": 0.018779508138961315,
+ "rock_rate_east": 0.01592356687898089,
+ "auc_east_per_feature": {
+  "slope_8m": 0.5919947982028246,
+  "relief_8m": 0.6192557071871264,
+  "thermal_inertia": 0.4102784064157832
+ },
+ "auc_east_combined": 0.581319037142442,
+ "rocks_caught_by_top_20pct_east": 0.3372093023255814,
+ "weights": {
+  "bias": -3.9094021430703947,
+  "slope_8m": -0.07242084199299145,
+  "relief_8m": 0.018584742333152098,
+  "thermal_inertia": -0.23468772573349136
+ }
+}

@@ -4,7 +4,7 @@
 
 ## 1. The problem
 
-We know the slice only at orbit detail. Some of the ground that matters to a walker (rock fields, soft sand, short steep steps) is invisible from orbit. A helicopter flight can reveal a strip of ground, but flights are scarce: limited battery per flight (about 700 m), daylight only, and over Ingenuity's mission one flight per 13.6 sols on average.
+We know the slice only at orbit detail. Some of the ground that matters to a walker (rock fields, soft sand, short steep steps) is invisible from orbit. A helicopter flight can reveal a strip of ground, but flights are scarce. Our helicopters are modelled on **JPL's SkyFall** (see §7): a fleet of three, flying in daylight only, each flight limited by its battery.
 
 **Question:** which strips should the helicopter fly, in what order, so that the walking routes we finally choose are **nearly as good as if we knew everything**, using **as few flights as possible**? And when is it no longer worth flying?
 
@@ -26,15 +26,50 @@ Closest robotics work: a helicopter scouting for a rover on Mars ([Where to Map?
 
 ## 2. The algorithm, in five parts
 
-### A. The belief map: what we think each cell is
+### A. Sensing: predicting what might be blocked
 
-For every cell: the **chance it is blocked** and its **expected walking cost**, from orbit data:
-- slope near the 25° limit;
-- roughness;
-- loose ground from THEMIS thermal inertia;
-- how sure the ground-type estimate is.
+**The gap in the textbook version.** In the Canadian Traveller examples, each link's chance of being blocked is *given*. On Mars nobody gives us that number. We have to **predict it from what orbit shows**, and the whole planner is only as good as that prediction. So sensing has two halves:
 
-Cells the helicopter has seen become certain. This is where **machine learning belongs** (see §4).
+1. **Predict** (before flying): for every cell, the **chance it is blocked** and its **expected walking cost**, from the 2D orbit map. This is the *belief map*.
+2. **Confirm** (by flying): the helicopter's camera turns predictions into facts along the strips it flies. Cells it has seen become certain, and every one of them is a new labelled example for the predictor.
+
+A route is blocked if any cell on it is. Rock fields come in patches, so neighbouring cells are not independent. That is why we **sample whole possible worlds** (patches, not single cells) instead of multiplying cell chances.
+
+**What the predictor can use (all orbit, all already in our world or the repo):**
+
+| Input | Detail | Source |
+|---|---|---|
+| Slope and relief | 8 m grid | HiRISE stereo DTM (USGS Gale) |
+| Fine roughness | 1 m | HiRISE stereo DTM |
+| Image texture and rock shadows | 25 cm: rocks bigger than about 1 m cast visible shadows | HiRISE colour; NASA/JPL ROSCO rock detector (`ml/rock_review/ROSCO.md`) |
+| Loose ground vs rock | 100 m | THEMIS thermal inertia |
+| Rock-size model | Counts of big rocks predict how many small ones there are (Mars rocks follow an exponential size law) | Golombek and colleagues, used for every Mars landing site ([example](https://pmc.ncbi.nlm.nih.gov/articles/PMC7039939/figure/Fig10)) |
+
+**What can serve as labels (what was "really there"):**
+
+| Label source | What it is | Status |
+|---|---|---|
+| `rocks_fine` in our Gale world | Cells rough at 1 m but gentle at 8 m | A **rule on orbit data**, not ground truth (see the caveat below) |
+| ROSCO rocks reviewed by Jules | 31 accepted, 3 rejected, 16 uncertain of 50 | Real but few (`ml/rock_review/FINAL_SITE.md`) |
+| Curiosity's own drive through this slice | Rover images with terrain labels (AI4Mars has a "big rock" class) at known rover positions | **The best ground truth for our site.** Needs the images projected onto map cells: real work, to scope with Jules |
+| Ingenuity flights over Jezero | Helicopter images and HiRISE of the same ground | Exactly "orbit vs helicopter" pairs, but no labels yet |
+
+**First measurement (`app/scripts/sensing-check.mjs`, numbers in `sensing-check.json`).** On Gale, can coarse orbit features (8 m slope, 8 m relief, THEMIS) predict `rocks_fine`? Trained on the west half, scored on the east half:
+
+- Rock cells are rare: about **1.6–1.9%** of walkable cells.
+- Best single feature, 8 m relief: **AUC 0.62** (0.5 = guessing, 1.0 = perfect).
+- All three combined: **AUC 0.58**. A simple model trained on one half does not carry over well to the other.
+- Flying the **20% of cells it rates riskiest catches 34% of the rocks**, against 20% for flying at random.
+
+**What this means:**
+- **Coarse features alone are weak.** There is a real signal, but not enough. The signal must come from the fine data: the 25 cm image and the 1 m DTM.
+- **Our label is circular on Gale.** `rocks_fine` is itself computed from the 1 m orbit DTM. A model using that DTM would score near-perfectly and prove nothing. **Real labels must come from the ground:** Curiosity's images or reviewed rocks.
+- **A weak predictor is still useful.** Value of information needs *probabilities*, not certainties. Even a weak but honest prediction tells the planner where uncertainty is, and every flight adds labels.
+
+**Plan for sensing:**
+1. **Now (rules):** a belief map from orbit features, calibrated so that "10% chance" really means about 10%, with an uncertainty layer. Can be done in the hackathon.
+2. **With Jules (ML):** a small image model on 25 cm HiRISE patches, trained on reviewed ROSCO rocks and, if feasible, Curiosity's labelled ground. Graded by the same held-out check.
+3. **Benchmark honestly:** generated worlds where hidden rocks *depend on* the orbit features in a known way. Today's synthetic rocks are random, so there nothing can be predicted, and only the "flying confirms" half can be tested.
 
 ### B. Candidate routes: several ways between each pair of places
 
@@ -104,7 +139,7 @@ The result is a curve of **route quality against flights**. Ours should get clos
 
 ## 6. Build steps (each a PR)
 
-1. Belief map from orbit (rules first) and an uncertainty layer.
+1. Belief map from orbit (rules first, calibrated) and an uncertainty layer (§2A). Generated worlds whose hidden rocks follow orbit features, so prediction can be tested.
 2. K candidate routes on expected cost.
 3. Value-of-information scoring by sampling; greedy flight choice with the stop rule.
 4. Flight planner: order, 700 m, daylight window, no-fly cells (reuses the walking planner's code).
@@ -116,10 +151,19 @@ Later: a learned belief map (with Jules); a learned scouting policy, compared on
 
 ## 7. Facts to keep straight
 
-- **"Two months to recharge" is not supported.** Ingenuity recharged from its own solar panel; how long that took varied with dust and season, and in winter it could not keep its charge overnight ([NASA](https://www.nasa.gov/centers-and-facilities/jpl/nasas-ingenuity-mars-helicopter-recharges-its-batteries-in-flight/); [Universe Today](https://www.universetoday.com/articles/martian-dust-is-starting-to-darken-ingenuitys-solar-panel)). The "two months" in our docs is rover driving time that one Ingenuity flight saved. The average gap between flights over the mission was 13.6 sols (computed from the first and last flight dates), set by operations, season and dust, not by one recharge.
+- **The helicopters are modelled on SkyFall, not on a recharge rule.** We drop the "two months to recharge" idea. That figure was rover driving time one Ingenuity flight saved, not a recharge time. We also drop Ingenuity's average of one flight per 13.6 sols, which came from a technology demonstration.
+- **What JPL publishes for SkyFall** ([JPL SkyFall](https://www.jpl.nasa.gov/missions/skyfall/)):
+  - three helicopters, launch 2028;
+  - delivered by a mid-air deployment from the spacecraft, with no landing platform;
+  - 13 MP colour and near-infrared cameras, ground-penetrating radar, air temperature sensors and a micro dosimeter;
+  - purpose: map hidden ice and the terrain above and below ground, to find safe and resource-rich places and scout landing sites.
+- **What JPL does not publish:** flight range, flight time, battery, recharge time and flights per sol.
+- **How we model the gaps:** every missing number is a **knob, marked as an estimate**. Per-flight range defaults to Ingenuity's flown limit (about 700 m), the only Mars-measured number. Flights per helicopter per sol is a knob. A news claim of 300 km per mission is unverified and not used.
+- **Daylight only:** cameras need light, and Ingenuity flew around midday local time.
 
 ## 8. To decide
 
 1. Which mode first: **reach the targets** (fits the demo) or **build a network** (the long-term story)?
 2. Agree on "the algorithm decides, ML improves the belief map", with a learned policy only as a later comparison?
-3. Flight budget per campaign: a number of flights, or a number of sols?
+3. Flight budget per campaign: a number of flights, or a number of sols? (SkyFall publishes neither; whichever we pick is a knob.)
+4. Labels for sensing: scope projecting Curiosity's labelled images onto Gale cells with Jules, or start from the reviewed ROSCO rocks only?
