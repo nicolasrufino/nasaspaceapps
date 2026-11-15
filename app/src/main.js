@@ -894,7 +894,7 @@ const app = {
   line([x0, y0], [x1, y1]) { const n = Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0)) || 1; return Array.from({ length: n + 1 }, (_, t) => [Math.round(x0 + ((x1 - x0) * t) / n), Math.round(y0 + ((y1 - y0) * t) / n)]) },
   describe: (cells) => describe(world, cells, blocked), // { metres, energy_j, minutes, steepest_deg, sand_share, climb_m, ... }
   // Shift the 3D picture right by `px` so its centre sits in the middle of the area the rail leaves free (0 = centred).
-  viewShift(px) { px ? camera.setViewOffset(innerWidth, innerHeight, -px, 0, innerWidth, innerHeight) : camera.clearViewOffset() },
+  viewShift(px, py = 0) { px || py ? camera.setViewOffset(innerWidth, innerHeight, -px, py, innerWidth, innerHeight) : camera.clearViewOffset() }, // py: shift up
   objective: () => objective,
   setObjective(o) { if (flight) return; objective = o; replan() },
   scanned, // Uint8Array(W*H): 1 where a helicopter has looked
