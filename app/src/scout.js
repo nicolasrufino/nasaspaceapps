@@ -106,10 +106,10 @@ export function createScout(world, targets, { scanned, maxFlights = MAX_FLIGHTS,
     maxFlights, flightLimit, flights: [], active: null }
 }
 
-export function launchScoutFlight(world, scout) {
+export function launchScoutFlight(world, scout, select = nextRouteFlight) {
   if (scout.active) return scout.active
   if (scout.flights.length >= scout.maxFlights) return null
-  const f = nextRouteFlight(world.meta, scout.route.cells, scout.scanned, scout.flightLimit)
+  const f = select(world.meta, scout.route.cells, scout.scanned, scout.flightLimit)
   scout.active = f ? { ...f, before: scout.route } : null
   return scout.active
 }

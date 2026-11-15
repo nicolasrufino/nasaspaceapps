@@ -52,7 +52,7 @@ Each option on its own fails at least one need. Ours combines the parts that wor
 4. Switch to **Walk**, press **Step**, and explain the margin home. Use real phone sensing only after the actual device has passed the release rehearsal.
 5. Explain the bounds: stored grid hazards, a simulated sensor footprint, and an assumed walking-energy model. Transit, helicopter return-to-base, recharge, daylight and flight energy are not modelled. These results do not certify safety on Mars.
 
-Numbers and definitions: [R5](../ml/pitch_metrics/PITCH_NUMBERS.md). Full five-minute script: [PITCH.md](PITCH.md). F4 supersedes the earlier seven-flight/14-leg demo. A2 adds three measured landing explanations behind `why_flight`. A6 (`voi`) is a separately gated addition, not a prerequisite for this baseline.
+Numbers and definitions: [R5](../ml/pitch_metrics/PITCH_NUMBERS.md). Full five-minute script: [PITCH.md](PITCH.md). F4 supersedes the earlier seven-flight/14-leg demo. A2 adds three measured landing explanations behind `why_flight`. A6 is implemented behind `voi` and stays off: its [eleven-case comparison](../app/scripts/VOI_RESULTS.md) fails promotion.
 
 ---
 

@@ -1,0 +1,538 @@
+{
+  "config": {
+    "samples": 12,
+    "candidates": 3,
+    "strip_m": 500,
+    "min_gain_j": 1000,
+    "spread_multiplier": 2,
+    "risk_weight": 4,
+    "seed": 138
+  },
+  "promotion_passed": false,
+  "gate": "Every case: same stops, no more stored hazard crossings, retain full coverage if baseline has it, no greater walking energy (1 J tolerance) or flight distance.",
+  "source_sha256": {
+    "app/src/scout-voi.js": "c5d33457705e1300e523606aad8d17d33c7b4b2da8bf9e5652fdd45153ebb7f2",
+    "app/src/scout.js": "fbedd59e8f83fe71ab33c9f8871a8a6e89a309c3185ad80b81019f82b7f2f309",
+    "app/src/plan.js": "234b04b1e4a770847b089b675fec200802c0f0e6b71875b2e418b98d908f782b",
+    "app/src/walk.js": "85e9e1ae0cc771d6974c25b60ef30d90d9918631933a2a0b5146a7cb8ee7800f",
+    "app/src/belief.js": "866d782d32540a5617cce66ca76d18e408d7328d22ea00e9f1f3c69a6a46d819",
+    "app/src/belief-weights.js": "b2fd9a6bf3f279a8195c14e95b81594096217aed4131224c981acbc78c89a720",
+    "app/scripts/voi-worlds.mjs": "ea4b3783ad9b0353182bca54f4286183b264e2b5a13fc2fad35226fe7fac4b49",
+    "app/scripts/voi-benchmark.mjs": "eb428e25f559c4ee4e56e3d60ac6878047843c5d9e92b693d0f8c429807217d2"
+  },
+  "limitations": [
+    "Simulation, not field validation.",
+    "Uncalibrated belief model and assumed 2x2-cell correlation.",
+    "Counterfactual walking keeps the current stop order; failed runs cost 4x initial budget and are never dropped.",
+    "Transit, recharge, daylight and helicopter energy are excluded in BOTH strategies.",
+    "Timings are local-machine measurements; seeded route/value outputs are deterministic."
+  ],
+  "comparisons": [
+    {
+      "name": "Gale",
+      "baseline": {
+        "flights": 3,
+        "flight_metres": 2215.3910524340104,
+        "stops": [
+          "ridge_top",
+          "overlook",
+          "nevado_sajama",
+          "valle_de_la_luna",
+          "altadena"
+        ],
+        "route_energy_j": 630469.8979887598,
+        "hidden_hazard_cells_on_route": 0,
+        "fully_scanned": true,
+        "decisions": []
+      },
+      "voi": {
+        "flights": 0,
+        "flight_metres": 0,
+        "stops": [
+          "altadena",
+          "valle_de_la_luna",
+          "nevado_sajama",
+          "overlook",
+          "ridge_top"
+        ],
+        "route_energy_j": 621396.216852841,
+        "hidden_hazard_cells_on_route": 6,
+        "fully_scanned": false,
+        "decisions": [
+          {
+            "selected": false,
+            "reason": "No strip clears the estimated-value threshold; unscouted ground may remain.",
+            "candidates": 20,
+            "expected_gain_j": 0,
+            "best_gain_j": 692.1925152988697,
+            "sample_se_j": null,
+            "compute_ms": 4414.7484,
+            "failed_samples_before": 0,
+            "failed_samples_after": null
+          }
+        ]
+      },
+      "passes": false
+    },
+    {
+      "name": "Generated 1",
+      "baseline": {
+        "flights": 1,
+        "flight_metres": 778.038671967512,
+        "stops": [
+          "sample-1",
+          "sample-2",
+          "sample-3",
+          "sample-4",
+          "sample-5"
+        ],
+        "route_energy_j": 361850.8244144296,
+        "hidden_hazard_cells_on_route": 0,
+        "fully_scanned": true,
+        "decisions": []
+      },
+      "voi": {
+        "flights": 0,
+        "flight_metres": 0,
+        "stops": [
+          "sample-1",
+          "sample-2",
+          "sample-3",
+          "sample-4",
+          "sample-5"
+        ],
+        "route_energy_j": 359674.7474550819,
+        "hidden_hazard_cells_on_route": 1,
+        "fully_scanned": false,
+        "decisions": [
+          {
+            "selected": false,
+            "reason": "No strip clears the estimated-value threshold; unscouted ground may remain.",
+            "candidates": 18,
+            "expected_gain_j": 0,
+            "best_gain_j": 216.9017506056698,
+            "sample_se_j": null,
+            "compute_ms": 379.9526999999998,
+            "failed_samples_before": 2,
+            "failed_samples_after": null
+          }
+        ]
+      },
+      "passes": false
+    },
+    {
+      "name": "Generated 2",
+      "baseline": {
+        "flights": 2,
+        "flight_metres": 1012.7047609329938,
+        "stops": [
+          "sample-5",
+          "sample-4",
+          "sample-3",
+          "sample-2",
+          "sample-1"
+        ],
+        "route_energy_j": 364117.42846405675,
+        "hidden_hazard_cells_on_route": 0,
+        "fully_scanned": true,
+        "decisions": []
+      },
+      "voi": {
+        "flights": 0,
+        "flight_metres": 0,
+        "stops": [
+          "sample-5",
+          "sample-4",
+          "sample-3",
+          "sample-2",
+          "sample-1"
+        ],
+        "route_energy_j": 361030.0250761835,
+        "hidden_hazard_cells_on_route": 5,
+        "fully_scanned": false,
+        "decisions": [
+          {
+            "selected": false,
+            "reason": "No strip clears the estimated-value threshold; unscouted ground may remain.",
+            "candidates": 18,
+            "expected_gain_j": 0,
+            "best_gain_j": 354.96182916036923,
+            "sample_se_j": null,
+            "compute_ms": 283.8647999999994,
+            "failed_samples_before": 2,
+            "failed_samples_after": null
+          }
+        ]
+      },
+      "passes": false
+    },
+    {
+      "name": "Generated 3",
+      "baseline": {
+        "flights": 1,
+        "flight_metres": 777.2346314604054,
+        "stops": [
+          "sample-5",
+          "sample-4",
+          "sample-3",
+          "sample-2",
+          "sample-1"
+        ],
+        "route_energy_j": 348815.05755141453,
+        "hidden_hazard_cells_on_route": 0,
+        "fully_scanned": true,
+        "decisions": []
+      },
+      "voi": {
+        "flights": 0,
+        "flight_metres": 0,
+        "stops": [
+          "sample-5",
+          "sample-4",
+          "sample-3",
+          "sample-2",
+          "sample-1"
+        ],
+        "route_energy_j": 347998.6880375702,
+        "hidden_hazard_cells_on_route": 1,
+        "fully_scanned": false,
+        "decisions": [
+          {
+            "selected": false,
+            "reason": "No strip clears the estimated-value threshold; unscouted ground may remain.",
+            "candidates": 18,
+            "expected_gain_j": 0,
+            "best_gain_j": 922.5772586136105,
+            "sample_se_j": null,
+            "compute_ms": 270.23079999999936,
+            "failed_samples_before": 2,
+            "failed_samples_after": null
+          }
+        ]
+      },
+      "passes": false
+    },
+    {
+      "name": "Generated 4",
+      "baseline": {
+        "flights": 1,
+        "flight_metres": 752.6660889654817,
+        "stops": [
+          "sample-5",
+          "sample-4",
+          "sample-3",
+          "sample-2",
+          "sample-1"
+        ],
+        "route_energy_j": 366789.1022643719,
+        "hidden_hazard_cells_on_route": 0,
+        "fully_scanned": true,
+        "decisions": []
+      },
+      "voi": {
+        "flights": 0,
+        "flight_metres": 0,
+        "stops": [
+          "sample-5",
+          "sample-4",
+          "sample-3",
+          "sample-2",
+          "sample-1"
+        ],
+        "route_energy_j": 366789.1022643719,
+        "hidden_hazard_cells_on_route": 2,
+        "fully_scanned": false,
+        "decisions": [
+          {
+            "selected": false,
+            "reason": "No strip clears the estimated-value threshold; unscouted ground may remain.",
+            "candidates": 18,
+            "expected_gain_j": 0,
+            "best_gain_j": 862.2007404622467,
+            "sample_se_j": null,
+            "compute_ms": 339.9344999999994,
+            "failed_samples_before": 2,
+            "failed_samples_after": null
+          }
+        ]
+      },
+      "passes": false
+    },
+    {
+      "name": "Generated 5",
+      "baseline": {
+        "flights": 1,
+        "flight_metres": 760.9015869776645,
+        "stops": [
+          "sample-4",
+          "sample-3",
+          "sample-2",
+          "sample-5",
+          "sample-1"
+        ],
+        "route_energy_j": 349879.7510242537,
+        "hidden_hazard_cells_on_route": 0,
+        "fully_scanned": true,
+        "decisions": []
+      },
+      "voi": {
+        "flights": 0,
+        "flight_metres": 0,
+        "stops": [
+          "sample-4",
+          "sample-3",
+          "sample-2",
+          "sample-5",
+          "sample-1"
+        ],
+        "route_energy_j": 349879.7510242537,
+        "hidden_hazard_cells_on_route": 0,
+        "fully_scanned": false,
+        "decisions": [
+          {
+            "selected": false,
+            "reason": "No strip clears the estimated-value threshold; unscouted ground may remain.",
+            "candidates": 18,
+            "expected_gain_j": 0,
+            "best_gain_j": 428.6550967011911,
+            "sample_se_j": null,
+            "compute_ms": 291.1136999999999,
+            "failed_samples_before": 2,
+            "failed_samples_after": null
+          }
+        ]
+      },
+      "passes": false
+    },
+    {
+      "name": "Generated 6",
+      "baseline": {
+        "flights": 1,
+        "flight_metres": 774.1564209736035,
+        "stops": [
+          "sample-1",
+          "sample-5",
+          "sample-4",
+          "sample-3",
+          "sample-2"
+        ],
+        "route_energy_j": 384525.12527896283,
+        "hidden_hazard_cells_on_route": 0,
+        "fully_scanned": true,
+        "decisions": []
+      },
+      "voi": {
+        "flights": 0,
+        "flight_metres": 0,
+        "stops": [
+          "sample-1",
+          "sample-5",
+          "sample-4",
+          "sample-3",
+          "sample-2"
+        ],
+        "route_energy_j": 380142.3345518705,
+        "hidden_hazard_cells_on_route": 3,
+        "fully_scanned": false,
+        "decisions": [
+          {
+            "selected": false,
+            "reason": "No strip clears the estimated-value threshold; unscouted ground may remain.",
+            "candidates": 18,
+            "expected_gain_j": 0,
+            "best_gain_j": 134.9159891684782,
+            "sample_se_j": null,
+            "compute_ms": 391.64810000000034,
+            "failed_samples_before": 2,
+            "failed_samples_after": null
+          }
+        ]
+      },
+      "passes": false
+    },
+    {
+      "name": "Generated 7",
+      "baseline": {
+        "flights": 2,
+        "flight_metres": 885.4499269370542,
+        "stops": [
+          "sample-1",
+          "sample-2",
+          "sample-5",
+          "sample-3",
+          "sample-4"
+        ],
+        "route_energy_j": 392237.35765031225,
+        "hidden_hazard_cells_on_route": 0,
+        "fully_scanned": true,
+        "decisions": []
+      },
+      "voi": {
+        "flights": 0,
+        "flight_metres": 0,
+        "stops": [
+          "sample-1",
+          "sample-2",
+          "sample-5",
+          "sample-3",
+          "sample-4"
+        ],
+        "route_energy_j": 391154.8086302515,
+        "hidden_hazard_cells_on_route": 1,
+        "fully_scanned": false,
+        "decisions": [
+          {
+            "selected": false,
+            "reason": "No strip clears the estimated-value threshold; unscouted ground may remain.",
+            "candidates": 18,
+            "expected_gain_j": 0,
+            "best_gain_j": 1093.8166152702906,
+            "sample_se_j": null,
+            "compute_ms": 421.0583000000006,
+            "failed_samples_before": 2,
+            "failed_samples_after": null
+          }
+        ]
+      },
+      "passes": false
+    },
+    {
+      "name": "Generated 8",
+      "baseline": {
+        "flights": 1,
+        "flight_metres": 746.0386719675118,
+        "stops": [
+          "sample-4",
+          "sample-5",
+          "sample-3",
+          "sample-2",
+          "sample-1"
+        ],
+        "route_energy_j": 365038.29059592646,
+        "hidden_hazard_cells_on_route": 0,
+        "fully_scanned": true,
+        "decisions": []
+      },
+      "voi": {
+        "flights": 0,
+        "flight_metres": 0,
+        "stops": [
+          "sample-4",
+          "sample-5",
+          "sample-3",
+          "sample-2",
+          "sample-1"
+        ],
+        "route_energy_j": 365038.29059592646,
+        "hidden_hazard_cells_on_route": 0,
+        "fully_scanned": false,
+        "decisions": [
+          {
+            "selected": false,
+            "reason": "No strip clears the estimated-value threshold; unscouted ground may remain.",
+            "candidates": 18,
+            "expected_gain_j": 0,
+            "best_gain_j": 55.36528236865221,
+            "sample_se_j": null,
+            "compute_ms": 267.53850000000057,
+            "failed_samples_before": 2,
+            "failed_samples_after": null
+          }
+        ]
+      },
+      "passes": false
+    },
+    {
+      "name": "Generated 9",
+      "baseline": {
+        "flights": 2,
+        "flight_metres": 1468.8225099390847,
+        "stops": [
+          "sample-1",
+          "sample-2",
+          "sample-3",
+          "sample-5",
+          "sample-4"
+        ],
+        "route_energy_j": 389541.01491428167,
+        "hidden_hazard_cells_on_route": 0,
+        "fully_scanned": true,
+        "decisions": []
+      },
+      "voi": {
+        "flights": 0,
+        "flight_metres": 0,
+        "stops": [
+          "sample-1",
+          "sample-2",
+          "sample-3",
+          "sample-5",
+          "sample-4"
+        ],
+        "route_energy_j": 389541.01491428167,
+        "hidden_hazard_cells_on_route": 2,
+        "fully_scanned": false,
+        "decisions": [
+          {
+            "selected": false,
+            "reason": "No strip clears the estimated-value threshold; unscouted ground may remain.",
+            "candidates": 18,
+            "expected_gain_j": 0,
+            "best_gain_j": 539.8900216025504,
+            "sample_se_j": null,
+            "compute_ms": 372.77170000000115,
+            "failed_samples_before": 2,
+            "failed_samples_after": null
+          }
+        ]
+      },
+      "passes": false
+    },
+    {
+      "name": "Generated 10",
+      "baseline": {
+        "flights": 2,
+        "flight_metres": 1420.999133448222,
+        "stops": [
+          "sample-1",
+          "sample-2",
+          "sample-5",
+          "sample-3",
+          "sample-4"
+        ],
+        "route_energy_j": 388620.0346391766,
+        "hidden_hazard_cells_on_route": 0,
+        "fully_scanned": true,
+        "decisions": []
+      },
+      "voi": {
+        "flights": 0,
+        "flight_metres": 0,
+        "stops": [
+          "sample-4",
+          "sample-3",
+          "sample-2",
+          "sample-5",
+          "sample-1"
+        ],
+        "route_energy_j": 386515.27876217815,
+        "hidden_hazard_cells_on_route": 4,
+        "fully_scanned": false,
+        "decisions": [
+          {
+            "selected": false,
+            "reason": "No strip clears the estimated-value threshold; unscouted ground may remain.",
+            "candidates": 18,
+            "expected_gain_j": 0,
+            "best_gain_j": 405.0982813458298,
+            "sample_se_j": null,
+            "compute_ms": 284.09269999999924,
+            "failed_samples_before": 2,
+            "failed_samples_after": null
+          }
+        ]
+      },
+      "passes": false
+    }
+  ]
+}

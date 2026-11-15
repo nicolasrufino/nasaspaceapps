@@ -7,6 +7,7 @@ One place for what the team decided, why, and what is still open. **Add a line h
 | Date | Decision | Why | Who | Where it lives |
 |---|---|---|---|---|
 | 2026-11-15 | **Correct the pitch numerator: 6 distinct hazard cells, 8 route visits** | R5 already separates `unique_cells` (6) from `cell_visits` (8). F10 incorrectly described eight distinct cells and two unseen ones. Correct the deck/script: all six original cells are eventually observed; final route has zero. No route or energy calculation changes | Jules | `docs/PITCH.md`, `docs/deck/`, `docs/PLAN.md`; follow-up to #151 |
+| 2026-11-15 | **A6 implemented, `voi` stays off: its eleven-case comparison fails promotion** | Twelve sampled worlds, three alternatives per leg and paired counterfactual walking-cost reduction per metre do not beat F4 with the current uncalibrated belief model. Default thresholds select no flights; preserve the verified baseline | Jules | `app/src/scout-voi.js`, `app/scripts/VOI_RESULTS.md`; #138 |
 | 2026-11-15 | **A2: one measured explanation per landing (`why_flight`, enabled after validation)** | Display corridor length, newly observed hazard cells, distinct newly found route cells avoided, energy delta from `describe()` and any changed science selection. Never count unseen hazards as discoveries | Jules | `app/src/scout-why.js`; `why_flight`; #134 |
 | 2026-11-15 | **Flight playback uses elapsed time even below 10 fps** | The post-merge software-rendered browser check exposed discarded time in the smoothing clamp. Retain camera smoothing, scan every 2 m crossed, and include a 2 fps R5 replay; no weakened checks | Jules | #149; `app/src/main.js`, `ml/pitch_metrics/` |
 | 2026-11-15 | **F10: pitch and deck describe the three-flight build, with a portable local presentation** | Remove unbuilt demo promises, distinguish simulated hazard cells from reviewed rocks, credit Luca for D1–D4/D6, and source route numbers from R5. The private Claude artifact requires its owner to synchronize; repo sources and the local HTML are reviewable now | Jules | `docs/PITCH.md`, `docs/PLAN.md`, `docs/deck/`; #130 |
@@ -73,10 +74,10 @@ Integration status: #94 (`af3d666`), #99 (`b668204`), #115 (detail tiles) and #1
 
 - **Belief-map calibration:** v1 is implemented behind `belief` (#118), but its 0.729 AUC is a development/model-selection diagnostic against unreviewed negative cells, not independent ground-truth validation. Full-slice detections and estimated sizes are available; cells without detections remain unlabeled, not confirmed empty.
 - **Ground truth at a walker's scale:** verify Curiosity image/site overlap and camera-to-map projection. The 200-patch Ingenuity pack is prepared, with zero human labels and no validated altitude AGL yet (`ml/ingenuity_review/`).
-- **Scouting additions:** F4 now implements the three-flight route baseline with re-planning after each flight. K candidate routes, value of information (#138), daylight and no-fly constraints remain separate work.
+- **Scouting additions:** F4 now implements the three-flight route baseline with re-planning after each flight. K candidate routes and value of information are implemented behind `voi` (#138), but fail promotion; daylight and no-fly constraints remain separate work.
 - **Sun and shadow model** (Mars24 algorithm) for flight windows and walking windows.
-- **Generated test worlds** where hidden rocks follow orbit features (today's synthetic rocks are random), and the **benchmark** on them and on Gale.
-- **Compute time** of value of information at Gale size (256 × 256), to measure.
+- **Independent VOI validation:** ten seeded generated worlds and Gale are now benchmarked (`app/scripts/VOI_RESULTS.md`). Calibrated sensing and improved decisions are still needed before promotion.
+- **VOI device timings:** local compute times are recorded per decision in `app/scripts/voi-benchmark.json`; physical-phone performance remains to measure.
 - **Real-phone test** over HTTPS.
 
 ## How slopes enter the algorithm
