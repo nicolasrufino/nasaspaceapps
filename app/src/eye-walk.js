@@ -50,13 +50,13 @@ export function initEyeWalk({ speed, max }) {
   const reached = new Set()
   const label = Object.assign(document.createElement('div'), { id: 'eyeLabel', hidden: true })
   label.setAttribute('role', 'status')
-  label.style.cssText = 'position:fixed;left:50%;top:max(12px,env(safe-area-inset-top));transform:translateX(-50%);z-index:6;max-width:min(92vw,520px);padding:8px 14px;border-radius:10px;background:#141a22e6;color:#fff;font:600 15px system-ui,sans-serif;text-align:center;pointer-events:none'
+  label.style.cssText = 'position:fixed;left:50%;top:max(12px,env(safe-area-inset-top));transform:translateX(-50%);z-index:6;max-width:min(92vw,520px);padding:8px 14px;border-radius:10px;background:#1d1c1b;color:#f3f2ef;font:600 15px "IBM Plex Sans",system-ui,sans-serif;text-align:center;pointer-events:none;box-shadow:0 6px 20px #0006'
   const pad = Object.assign(document.createElement('div'), { id: 'eyePad', hidden: true })
   pad.style.cssText = 'position:fixed;left:max(12px,env(safe-area-inset-left));bottom:max(14px,env(safe-area-inset-bottom));z-index:6;display:grid;grid-template-columns:repeat(3,48px);grid-template-rows:repeat(2,48px);gap:4px;touch-action:none'
   for (const [k, text, col, row, name] of [['f', '▲', 2, 1, 'Walk forward'], ['l', '◀', 1, 2, 'Step left'], ['b', '▼', 2, 2, 'Walk back'], ['r', '▶', 3, 2, 'Step right']]) {
     const b = Object.assign(document.createElement('button'), { type: 'button', textContent: text })
     b.setAttribute('aria-label', name)
-    b.style.cssText = `grid-column:${col};grid-row:${row};border-radius:10px;border:1px solid #fff5;background:#141a22e6;color:#fff;font:600 18px system-ui,sans-serif;touch-action:none`
+    b.style.cssText = `grid-column:${col};grid-row:${row};border-radius:10px;border:0;background:#1d1c1b;color:#f3f2ef;font:600 18px system-ui,sans-serif;touch-action:none`
     const set = (v) => (e) => { e.preventDefault(); keys[k] = v }
     b.addEventListener('pointerdown', set(1)); b.addEventListener('pointerup', set(0)); b.addEventListener('pointerleave', set(0)); b.addEventListener('pointercancel', set(0))
     pad.append(b)

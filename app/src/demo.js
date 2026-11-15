@@ -32,26 +32,33 @@ export function lingerMs(html) {
 // Margin left after the way home and the reserve, from the app's own state (contract §3).
 export const marginJ = (s) => s.energy_left_j - s.reserve_j - s.cost_to_go_j
 
+// The Scout look from the live site (app/src/flow/flow.css: paper, ink, panel, panel2, mute; IBM Plex Sans), with a
+// clear order of reading: chapter label, title, body with the key numbers in bold, sources, then the controls.
 const CSS = `
 #demoCard{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(max(14px,env(safe-area-inset-bottom)) + 62px);z-index:7;
-  width:min(560px,calc(100vw - 24px));padding:14px 16px;border-radius:16px;background:#10161df0;border:1px solid #ffffff24;color:#eef3f7;
-  font:14px/1.45 "Rethink Sans",system-ui,sans-serif;box-shadow:0 12px 40px #000a}
+  width:min(560px,calc(100vw - 24px));padding:16px 18px 14px;border-radius:12px;background:#1d1c1b;color:#f3f2ef;
+  font:14px/1.5 "IBM Plex Sans",system-ui,sans-serif;box-shadow:0 10px 30px #0008}
 #demoCard[hidden]{display:none}
-#demoCard .ch{font-size:11px;font-weight:700;letter-spacing:.12em;color:#35e0ff;text-transform:uppercase}
-#demoCard h3{margin:2px 0 6px;font-size:18px;line-height:1.2}
-#demoCard p{margin:0 0 6px}
-#demoCard ul{margin:0 0 6px;padding-left:1.1em}
-#demoCard .src{font-size:11px;color:#9fb0c0}
-#demoCard .src a{color:#9fdcec}
-#demoCard .bar{display:flex;align-items:center;gap:8px;margin-top:8px}
+#demoCard .ch{font-size:11px;font-weight:700;letter-spacing:.08em;color:#a9a6a2;text-transform:uppercase}
+#demoCard h3{margin:3px 0 8px;font-size:19px;font-weight:700;line-height:1.2;letter-spacing:-.01em}
+#demoCard p{margin:0 0 8px;color:#e3dfd3}
+#demoCard ul{margin:0 0 8px;padding:0;list-style:none;color:#e3dfd3;border-radius:10px;background:#2a2927}
+#demoCard li{padding:8px 12px}#demoCard li+li{box-shadow:0 -1px #1d1c1b}
+#demoCard b{color:#fff;font-weight:700}
+#demoCard .src{font-size:11px;line-height:1.5;color:#a9a6a2;padding-top:8px;box-shadow:0 -1px #2a2927}
+#demoCard .src a{color:#e3dfd3;text-underline-offset:2px}
+#demoCard .bar{display:flex;align-items:center;gap:8px;margin-top:12px}
 #demoCard .dots{flex:1;display:flex;gap:4px}
-#demoCard .dots i{flex:1;height:3px;border-radius:2px;background:#ffffff26}
-#demoCard .dots i.on{background:#35e0ff}
-#demoCard .n{font-size:11px;color:#9fb0c0;font-variant-numeric:tabular-nums}
-#demoCard button[aria-pressed=true]{background:#34c759;color:#04210d}
-#demoCard button{font:600 13px "Rethink Sans",system-ui,sans-serif;min-height:36px;padding:0 12px;border-radius:9px;border:0;background:#ffffff1f;color:#fff;cursor:pointer}
-#demoCard button.go{background:#35e0ff;color:#08222b}
-#demoTab p{margin:0 0 8px;font-size:12px;color:#9fb0c0}`
+#demoCard .dots i{flex:1;height:4px;border-radius:2px;background:#2a2927}
+#demoCard .dots i.on{background:#e3dfd3}
+#demoCard .n{font-size:12px;color:#a9a6a2;font-variant-numeric:tabular-nums}
+#demoCard button{font:600 14px "IBM Plex Sans",system-ui,sans-serif;min-height:44px;padding:0 14px;border-radius:10px;border:0;background:#2a2927;color:#f3f2ef;cursor:pointer}
+#demoCard button:hover{background:#383530}
+#demoCard button.go,#demoCard button[aria-pressed=true]{background:#f3f2ef;color:#191919}
+#demoTab p{margin:0 0 10px;font-size:13px;line-height:1.45;color:#a9a6a2}
+#demoTab .lead{font-size:14px;color:#f3f2ef}
+#demoTab .row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#demoTab code{font-size:12px;color:#e3dfd3}`
 
 // app: the hooks main.js gives the guided mission. ui: { setLayer(name), contours(on), counts: { blocked, reviewed }, validation }
 export function initDemo(app, ui) {
@@ -68,7 +75,7 @@ export function initDemo(app, ui) {
   tab.setAttribute('aria-selected', 'false')
   const sec = Object.assign(document.createElement('section'), { id: 'demoTab', hidden: true })
   sec.innerHTML = `<h2>Mission walkthrough</h2>
-<p>One mission from start to finish on the real Gale data: the plan from orbit, three scout flights, the walk and the way home. Captions say where each number comes from.</p>
+<p class="lead">One mission from start to finish on the real Gale data: the plan from orbit, three scout flights, the walk and the way home. Captions say where each number comes from.</p>
 <div class="row"><button id="demoPlay" type="button">Step through</button><button id="demoAutoPlay" type="button">Autoplay</button></div>
 <p style="margin-top:8px">Step through: each scene waits for Next. Autoplay: each scene stays 15 to 20 seconds, then moves on.</p>
 <p style="margin-top:8px">Uses the energy scenario in the title. Add <code>&amp;scenario=ideal</code> to the link for a fresh 8 h suit.</p>`

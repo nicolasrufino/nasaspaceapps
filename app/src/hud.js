@@ -92,9 +92,10 @@ const CSS = `
 @media (prefers-reduced-motion:reduce){#helmet .alert.danger{animation:none}}
 @media (max-width:480px){#helmet .big{font-size:21px}#helmet .arc{width:96px;height:54px}}`
 
-export function initHud() {
+// accent: the colour of the gauges and marks (the demo passes the Scout paper colour).
+export function initHud({ accent = '#5fe6ff' } = {}) {
   const style = document.createElement('style')
-  style.textContent = CSS
+  style.textContent = CSS.replaceAll('#5fe6ff', accent)
   const el = document.createElement('div')
   el.id = 'helmet'
   el.hidden = true
@@ -102,7 +103,7 @@ export function initHud() {
 <div class="tape"><canvas width="1120" height="108" aria-hidden="true"></canvas></div>
 <div class="box left" role="status"><small>MARGIN HOME</small>
   <svg class="arc" viewBox="0 0 120 66"><path d="M10 60 A50 50 0 0 1 110 60" fill="none" stroke="#ffffff30" stroke-width="8" stroke-linecap="round"/>
-  <path id="hudArc" d="M10 60 A50 50 0 0 1 110 60" fill="none" stroke="#5fe6ff" stroke-width="8" stroke-linecap="round" pathLength="100" stroke-dasharray="100 100"/></svg>
+  <path id="hudArc" d="M10 60 A50 50 0 0 1 110 60" fill="none" stroke="${accent}" stroke-width="8" stroke-linecap="round" pathLength="100" stroke-dasharray="100 100"/></svg>
   <div class="big" id="hudMargin"></div>
   <div class="kv"><span>OXYGEN</span><span id="hudO2"></span></div><div class="bar"><i id="hudO2Bar"></i></div>
   <div class="kv"><span>ENERGY</span><span id="hudEnergy"></span></div><div class="bar"><i id="hudEnergyBar"></i></div></div>
@@ -134,7 +135,7 @@ export function initHud() {
     mx.beginPath()
     s.route.forEach(([cx, cy], i) => { const [x, y] = P(cx * s.cs, cy * s.cs); if (i) mx.lineTo(x, y); else mx.moveTo(x, y) })
     mx.stroke()
-    mx.strokeStyle = '#5fe6ff'
+    mx.strokeStyle = accent
     mx.beginPath()
     s.route.slice(s.k).forEach(([cx, cy], i) => { const [x, y] = P(cx * s.cs, cy * s.cs); if (i) mx.lineTo(x, y); else mx.moveTo(x, y) })
     mx.stroke()
@@ -144,7 +145,7 @@ export function initHud() {
     mx.fillStyle = '#fff'
     mx.fillRect(hx - 8, hy - 8, 16, 16)
     mx.restore()
-    mx.fillStyle = '#5fe6ff' // you, looking up the screen
+    mx.fillStyle = accent // you, looking up the screen
     mx.beginPath(); mx.moveTo(r, r - 16); mx.lineTo(r - 11, r + 11); mx.lineTo(r + 11, r + 11); mx.fill()
     mx.fillStyle = '#fff'
     mx.font = '600 20px ui-monospace,Menlo,monospace'
@@ -186,7 +187,7 @@ export function initHud() {
       ctx.font = '700 22px ui-monospace,Menlo,monospace'
       ctx.fillText(label, x + (off <= -58 ? 26 : off >= 58 ? -26 : 0), off <= -58 || off >= 58 ? 98 : 76)
     }
-    ctx.fillStyle = '#5fe6ff'
+    ctx.fillStyle = accent
     ctx.fillRect(w / 2 - 2, 36, 4, 40) // lubber line: where you are looking
   }
 
@@ -207,12 +208,12 @@ export function initHud() {
       tape(s.heading, marks)
       const frac = Math.max(0, Math.min(1, s.marginJ / s.usableJ))
       const a = alertFor(s.marginJ, frac)
-      const col = a?.level === 'danger' ? '#ff4b3e' : a ? '#ffb02e' : '#5fe6ff'
+      const col = a?.level === 'danger' ? '#ff4b3e' : a ? '#ffb02e' : accent
       q('hudArc').setAttribute('stroke-dasharray', `${(frac * 100).toFixed(1)} 100`)
       q('hudArc').setAttribute('stroke', col)
       q('hudMargin').textContent = s.marginJ >= 0 ? kj(s.marginJ) : `−${kj(-s.marginJ)}`
       q('hudMargin').style.color = a ? col : '#fff'
-      const left = Math.max(0, Math.min(1, s.energyJ / s.budgetJ)), low = left < 0.25 ? '#ffb02e' : '#5fe6ff'
+      const left = Math.max(0, Math.min(1, s.energyJ / s.budgetJ)), low = left < 0.25 ? '#ffb02e' : accent
       q('hudEnergy').textContent = `${Math.round(100 * left)}%`
       q('hudO2').textContent = `${s.o2L.toFixed(1)} L`
       for (const id of ['hudO2Bar', 'hudEnergyBar']) { q(id).style.width = `${100 * left}%`; q(id).style.background = low }

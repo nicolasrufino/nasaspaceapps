@@ -71,6 +71,7 @@ const scanned = new Uint8Array(W * H) // cells the helicopter has seen
 const rockSeen = (i) => scanned[i] && layers.rocks_fine?.[i]
 const cellPos = ([x, y], lift = 0) => new THREE.Vector3(x * cs, layers.height[y * W + x] + lift, y * cs)
 document.title = flowMode ? 'Vesta Scout' : 'Vesta Vision'
+if (demoMode) document.body.classList.add('demo') // the Scout look for every card (CSS in scout/index.html)
 if (!flowMode && !demoMode) document.body.classList.add('vision') // Vision: no Walk tab, no walk bar, no why-this-route (CSS in scout/index.html)
 // Title in four levels (styled in scout/index.html): product, site, the energy scenario, then the grid's size.
 const el = (tag, cls, text) => Object.assign(document.createElement(tag), { className: cls, textContent: text })
@@ -204,7 +205,7 @@ const guide = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMate
 guide.visible = false
 scene.add(guide)
 const eyeStops = () => route.stops.map((id) => allStops().find((s) => s.id === id)).map((s) => ({ id: s.id, name: s.name ?? s.id, x: s.cell[0] * cs, z: s.cell[1] * cs }))
-const hud = flags.has('hud') || params.has('hud') || demoMode ? initHud() : null
+const hud = flags.has('hud') || params.has('hud') || demoMode ? initHud(demoMode ? { accent: '#f3f2ef' } : undefined) : null
 const lookDir = new THREE.Vector3()
 const hudState = () => {
   camera.getWorldDirection(lookDir)

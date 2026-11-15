@@ -184,6 +184,31 @@
       body.vision #hud button, body.vision #viewBtn { background: #2a2927 !important; color: #f3f2ef !important; border: 0 !important; border-radius: 8px !important; font-weight: 600 !important; }
       body.vision #hud button:hover, body.vision #viewBtn:hover { background: #f3f2ef !important; color: #191919 !important; }
       body.vision #hud .src, body.vision #hud small { color: #a9a6a2; }
+      /* Demo (body.demo, /scout/?demo): every card in the Scout look of the live site (flow.css palette and type), with a soft
+         lift off the terrain and one order of reading on each card: small grey label, then the value or title, then detail. */
+      body.demo { font-family: "IBM Plex Sans", "Rethink Sans", system-ui, sans-serif; }
+      body.demo .panel, body.demo #viewBtn, body.demo #visionNote { background: #1d1c1b !important; color: #f3f2ef !important; border: 0 !important; border-radius: 12px !important;
+        box-shadow: 0 10px 30px #0008 !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; font-family: inherit !important; }
+      body.demo .panel::before, body.demo .panel::after { display: none !important; }
+      body.demo #hud h2, body.demo #legend b:first-child { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #a9a6a2; }
+      body.demo #hud button, body.demo #viewBtn, body.demo #visionBar button { background: #2a2927 !important; color: #f3f2ef !important; border: 0 !important; border-radius: 10px !important;
+        font: 600 14px "IBM Plex Sans", system-ui, sans-serif !important; box-shadow: none !important; }
+      body.demo #viewBtn, body.demo #visionBar button { background: #1d1c1b !important; box-shadow: 0 6px 20px #0006 !important; }
+      body.demo #hud button:hover, body.demo #viewBtn:hover, body.demo #visionBar button:hover { background: #383530 !important; }
+      body.demo #hud [role=tablist] { background: #2a2927 !important; border: 0 !important; border-radius: 10px !important; padding: 4px !important; box-shadow: none !important; }
+      body.demo #hud [role=tab] { background: none !important; color: #a9a6a2 !important; border-radius: 8px !important; }
+      body.demo #hud [role=tab][aria-selected=true], body.demo #hud #demoPlay, body.demo #scout:not(:disabled) { background: #f3f2ef !important; color: #191919 !important; }
+      body.demo #hud .src, body.demo #hud small, body.demo #legend small { color: #a9a6a2; }
+      body.demo #minimap canvas { border: 0; border-radius: 8px; }
+      body.demo #helmet { font-family: "IBM Plex Sans", system-ui, sans-serif; color: #f3f2ef; }
+      body.demo #helmet .visor { box-shadow: inset 0 0 90px #000a; }
+      body.demo #helmet .box { background: #1d1c1bf2; border: 0; border-radius: 12px; padding: 12px 14px; box-shadow: 0 10px 30px #0008; text-shadow: none; }
+      body.demo #helmet small { color: #a9a6a2; font-weight: 700; letter-spacing: .08em; font-size: 11px; }
+      body.demo #helmet .big { font-size: 28px; font-weight: 700; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+      body.demo #helmet .kv { font-variant-numeric: tabular-nums; padding-top: 5px; box-shadow: 0 -1px #2a2927; }
+      body.demo #helmet .kv span:first-child { color: #a9a6a2; font-weight: 500; }
+      body.demo #helmet .bar { height: 6px; background: #2a2927; }
+      body.demo #helmet .mini { background: #1d1c1bf2; border: 0; box-shadow: 0 10px 30px #0008; }
     </style>
   </head>
   <body>
