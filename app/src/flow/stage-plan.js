@@ -1,6 +1,6 @@
 // Stage 1: select stops on the NASA HiRISE map or with explicit add/remove buttons.
 // Selection, route preferences and calculations still belong to the existing app bridge.
-import { scienceGoalOn, goalCard, stopCheck, loadCandidates } from './goal.js'
+import { scienceGoalOn, goalCard, stopCheck, loadCandidates, goalsOn, goalsSection } from './goal.js'
 import { findButton } from './find.js'
 const MIN_STOPS = 3
 
@@ -36,8 +36,16 @@ export default {
     const reasons = ui.h('div', 'f-list')
     for (const s of app.stops().filter((s) => !s.custom)) reasons.append(ui.item({ title: s.name, sub: s.why ?? s.goal ?? '' }))
     const more = ui.details('More options & stop details', reasons)
-    const gc = goal ? goalCard(ui) : null
+    const goals = goal && goalsOn()
+    const addCurio = () => { for (const s of app.stops()) if (!s.custom && !s.included) app.toggleStop(s.id) }
+    const gc = goals ? goalsSection(ui, (id, note) => {
+      if (id === 'boxwork') return picks.length ? addCands() : (note.textContent = 'Boxwork sites are still loading.')
+      // ponytail: groundwater adds Curiosity's 5 stops: neutron_points.json has a DAN reading on each stop's sol (stops.json). Orbit-ranked cells are the upgrade.
+      addCurio(); note.textContent = 'Added Curiosity’s stops: DAN measured hydrogen on each stop’s sol. A guide; the crew decides.'
+    }) : goal ? goalCard(ui) : null
+    if (goals) sug.querySelector('h3').textContent = 'Or pick Curiosity’s stops'
     ui.body.append(intro, ...(gc ? [gc] : []), sug, mine, how, more)
+    let addCands = () => {}
 
     // Optional candidate sites keep their existing evidence and action, under More options.
     let picks = [], live = true, closeFind = null
@@ -46,14 +54,14 @@ export default {
       picks = c
       const sec = ui.section('Sites the map suggests')
       sec.append(Object.assign(ui.h('p', 'dim'), { textContent: 'Ranked from ridges and hollows in the 1 m HiRISE terrain. A guide; the crew decides.' }),
-        ui.button(`+ Add ${c.length} candidate sites`, addCands))
+        ui.button(`+ Add ${c.length} candidate sites`, () => addCands()))
       more.querySelector('.f-details-body').prepend(sec)
-      function addCands() {
+      addCands = () => {
         const have = new Set(app.stops().filter((s) => s.included).map((s) => `${s.cell}`))
         for (const p of c) if (!have.has(`${p.cell}`)) { app.addStop(p.cell); have.add(`${p.cell}`) }
       }
       // "How the map finds boxwork" (find.js), right after the science goal; hidden by ?off=find or a missing file.
-      findButton(ui, app, c, addCands).then((f) => { if (live && f) { gc.after(f.el); closeFind = f.close } })
+      findButton(ui, app, c, () => addCands()).then((f) => { if (live && f) { gc.after(f.el); closeFind = f.close } })
     })
 
     const go = ui.button('Plan the route', () => ui.go('analyse'), true)

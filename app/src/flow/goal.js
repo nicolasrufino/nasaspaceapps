@@ -35,3 +35,36 @@ export function goalCard(ui) {
 // Sites from S5's boxwork finder (candidates.json: [{ id, name, cell, score, why, curiosity_visited }]), or [] when absent.
 export const loadCandidates = () => fetch(`${import.meta.env.BASE_URL}${new URLSearchParams(location.search).get('world') ?? 'gale'}/candidates.json`)
   .then((r) => (r.ok ? r.json() : [])).then((c) => (Array.isArray(c) ? c.filter((s) => Array.isArray(s.cell)) : [])).catch(() => [])
+
+// Stage 1 "Science goals" (?off=goals returns the old stage 1): pick ONE goal, then Proceed adds its stops.
+export const goalsOn = (search = location.search) => !(new URLSearchParams(search).get('off') ?? '').split(',').includes('goals')
+const GW = 'https://www.jpl.nasa.gov/news/nasas-curiosity-mars-rover-starts-unpacking-boxwork-formations/'
+const GOALS = [
+  { id: 'water', name: 'Groundwater', line: 'Where did water last on Mount Sharp?',
+    more: 'Signals: hydrated minerals from orbit (MRO CRISM, 18 m pixels) and Curiosity’s neutron detector DAN (relative hydrogen along the rover’s path). JPL: water was still underground as Mars dried.', link: GW },
+  { id: 'boxwork', name: 'Investigate boxwork', line: 'The ridge-and-hollow pattern, a spiderweb from orbit.',
+    more: 'Low ridges 1 to 2 m tall with sandy hollows between. Curiosity drilled clay in a ridge and carbonate in a hollow; why nodules sit where they do is still open.', link: NASA },
+]
+export function goalsSection(ui, onProceed) {
+  const sec = ui.section('Science goals')
+  sec.classList.add('f-goals')
+  let pick = null
+  const note = ui.h('p', 'dim')
+  const go = ui.button('Proceed', () => onProceed(pick, note))
+  go.disabled = true
+  const cards = GOALS.map((g) => {
+    const card = ui.h('div', 'f-goal-card'), head = ui.h('label'), r = ui.h('input'), t = ui.h('b'), line = ui.h('small')
+    Object.assign(r, { type: 'radio', name: 'science-goal', value: g.id })
+    r.onchange = () => { pick = g.id; go.disabled = false; note.textContent = '' }
+    t.textContent = g.name; line.textContent = g.line
+    head.append(r, t, line)
+    const d = ui.h('details'), s = ui.h('summary'), p = ui.h('p', 'dim'), a = ui.h('a')
+    s.textContent = '+'; s.setAttribute('aria-label', `More about ${g.name}`)
+    Object.assign(a, { href: g.link, target: '_blank', rel: 'noopener', textContent: 'NASA ↗' })
+    p.append(`${g.more} `, a); d.append(s, p)
+    card.append(head, d)
+    return card
+  })
+  sec.append(...cards, go, note)
+  return sec
+}
