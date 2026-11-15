@@ -29,3 +29,7 @@ scenario, the updated energy model and walk-scale crossings. Two scout
 passes, 630.5 kJ final walking energy, 446.5 kJ minimum spare margin at 1.3x
 cost. This supersedes the earlier 600 kJ scenario. The external Claude
 Slides artifact still needs the same source changes synchronized.
+
+1 km refresh (2026-11-15): runtime route flights now use the SkyFall scenario
+limit. Regeneration retains the same walking energy, margins, two passes and
+14 total flight legs on this fixed route; the existing extra flights are unchanged.

@@ -31,6 +31,10 @@ These are scenario assumptions, not measured Mars EVA endurance. The separate
 `route.json` is not substituted for the route actually selected by the app.
 
 The primary replay follows `main.js`'s first scout pass at fixed 60 fps.
+Runtime route legs use the 1,000 m SkyFall limit imported from `FLIGHT_M`;
+the stored extra flights are appended unchanged. Two route legs are still
+needed for this 1.3 km walk, so the total flight count and walking metrics
+remain unchanged from the 700 m replay.
 Checks at 30 fps, 120 fps and fixed spatial intervals expose frame sampling
 effects. The spatial variant includes endpoints and is labelled separately.
 The repeated-scout audit preserves accumulated observations, uses the new route
