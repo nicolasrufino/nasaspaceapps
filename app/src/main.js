@@ -21,6 +21,7 @@ import { explainFlight, flightText } from './scout-why.js'
 import { initFlow } from './flow/flow.js'
 import { initHud, nextStop, bearingDeg } from './hud.js'
 import { initEyeWalk, ribbon } from './eye-walk.js'
+import { initDemo } from './demo.js'
 
 const $ = (id) => document.getElementById(id)
 const params = new URLSearchParams(location.search)
@@ -29,7 +30,8 @@ const params = new URLSearchParams(location.search)
 const DEMO_FLAGS = 'drone_scout,why_flight,why_route,layers_extra,pov_images,science_stop,step_mode,detail,hazards,contours'
 const worldName = params.get('world') ?? 'gale'
 // Vesta Scout is the guided mission (flow/); ?vision (and the test world) keeps the map screen, which is Vesta Vision.
-const flowMode = !params.has('vision') && !params.has('world') && !params.has('flags')
+const demoMode = params.has('demo') // the Demo tab (demo.js): the map screen with Plan, Walk and Demo, the helmet read-outs and the walking motion
+const flowMode = !demoMode && !params.has('vision') && !params.has('world') && !params.has('flags')
 const listeners = {}
 const emit = (evt, data) => (listeners[evt] ?? []).forEach((fn) => fn(data))
 let objective = 'easiest' // or 'shortest' (flow stage 1)
@@ -69,7 +71,8 @@ const scanned = new Uint8Array(W * H) // cells the helicopter has seen
 const rockSeen = (i) => scanned[i] && layers.rocks_fine?.[i]
 const cellPos = ([x, y], lift = 0) => new THREE.Vector3(x * cs, layers.height[y * W + x] + lift, y * cs)
 document.title = flowMode ? 'Vesta Scout' : 'Vesta Vision'
-if (!flowMode) document.body.classList.add('vision') // Vision: no Walk tab, no walk bar, no why-this-route (CSS in scout/index.html)
+if (demoMode) document.body.classList.add('demo') // the Scout look for every card (CSS in scout/index.html)
+if (!flowMode && !demoMode) document.body.classList.add('vision') // Vision: no Walk tab, no walk bar, no why-this-route (CSS in scout/index.html)
 // Title in four levels (styled in scout/index.html): product, site, the energy scenario, then the grid's size.
 const el = (tag, cls, text) => Object.assign(document.createElement(tag), { className: cls, textContent: text })
 $('title').replaceChildren(el('span', 't-brand', flowMode ? 'Vesta Scout' : 'Vesta Vision'), el('span', 't-site', meta.site?.name ?? meta.name),
@@ -119,7 +122,7 @@ const baseMarker = icon('#ffffff', { ring: '#111111', label: 'H' })
 scene.add(baseMarker)
 const pins = new THREE.Group() // science stops, rebuilt when the plan changes
 scene.add(pins)
-const walker = makeAstronaut({ stride: flags.has('stride') || params.has('stride') }) // flag stride: legs and arms swing as it walks
+const walker = makeAstronaut({ stride: flags.has('stride') || params.has('stride') || demoMode }) // flag stride: legs and arms swing as it walks
 scene.add(walker)
 const walkerIcon = icon(flowMode ? '#e3dfd3' : '#35e0ff')
 scene.add(walkerIcon)
@@ -202,7 +205,7 @@ const guide = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMate
 guide.visible = false
 scene.add(guide)
 const eyeStops = () => route.stops.map((id) => allStops().find((s) => s.id === id)).map((s) => ({ id: s.id, name: s.name ?? s.id, x: s.cell[0] * cs, z: s.cell[1] * cs }))
-const hud = flags.has('hud') || params.has('hud') ? initHud() : null
+const hud = flags.has('hud') || params.has('hud') || demoMode ? initHud(demoMode ? { accent: '#f3f2ef' } : undefined) : null
 const lookDir = new THREE.Vector3()
 const hudState = () => {
   camera.getWorldDirection(lookDir)
@@ -846,10 +849,10 @@ function land() {
 // --- Walk (block E2): along the planned route, energy and oxygen drain, ring, point of no return. ---
 let walk, k
 // Block E6 (flags science_stop, step_mode): stop checklist, markers, warnings, walk log; real steps. Off: null.
-const field = flowMode ? null : (flags.has('science_stop') || flags.has('step_mode')) // the mission's walk preview has no checklists to stop it
+const field = flowMode || demoMode ? null : (flags.has('science_stop') || flags.has('step_mode')) // the mission's walk preview has no checklists to stop it
   ? initStops({ world, checklist: flags.has('science_stop'), flags, photos, scene, pin, cellPos, span, getWalk: () => walk, panel: $('walk'), map })
   : null
-const steps = flowMode ? null : flags.has('step_mode')
+const steps = flowMode || demoMode ? null : flags.has('step_mode')
   ? initSteps({ panel: $('walk'), cs, segment: () => (k < route.cells.length - 1 ? [route.cells[k], route.cells[k + 1]] : null), blocked: () => !!field?.blocking(), step })
   : null
 function reset() {
@@ -1044,4 +1047,10 @@ const app = {
   },
 }
 if (flowMode) initFlow(app)
+else if (demoMode) { // one mission played through with captions, on the real hooks above
+  initDemo(app, { setLayer: (n) => { if (n !== IMAGERY || imageryRGB) setLayer(n); render() },
+    contours: (on) => { if ($('contours')) $('contours').checked = on; revealShared.uContour.value = on && view.mode === 'map' ? 1 : 0 },
+    counts: { blocked: crossings?.crossings.length ?? 0, reviewed: reviewedRocks?.points.length ?? 0 },
+    validation: await optionalJSON('validation.json', null) })
+}
 window.vesta = { app, camera, controls, walker, tiles: () => tiles, groundAt, setView, view } // for checks from the console and tests
