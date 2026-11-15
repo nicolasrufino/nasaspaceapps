@@ -33,6 +33,9 @@ while (!(await page.getByRole('button', { name: 'Skip to the end of the flights'
   await page.waitForTimeout(400)
 }
 await page.getByRole('button', { name: 'Skip to the end of the flights' }).click()
+// Newer flows wait on the flight report for a click; older ones go on to the debrief by themselves.
+const review = page.getByRole('button', { name: 'Review the walk' })
+await Promise.race([review.click({ timeout: 90000 }), page.getByText('Without the scout', { exact: true }).waitFor({ timeout: 90000 })]).catch(() => {})
 await page.getByText('Without the scout', { exact: true }).waitFor({ timeout: 90000 })
 const map = page.locator('#f-main .f-map')
 await page.waitForFunction(() => window.vesta?.app.imagery(), null, { timeout: 60000 }) // HiRISE picture loaded
