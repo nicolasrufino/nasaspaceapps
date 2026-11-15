@@ -12,7 +12,7 @@ import { hazardRGB, blockedSegments, reviewedMask, legendHTML, COLORS as HAZARD 
 import { beliefMap } from './belief.js'
 import { terrainMaterial, setImageryUVs, loadImagery, imageryCells } from './terrain.js'
 import { detailTiles } from './tiles.js'
-import { makeAstronaut, makeHabitat, makeHelicopter, icon, makeSky, mapFurniture, STRIDE_M } from './figures.js'
+import { makeAstronaut, makeHabitat, makeHelicopter, icon, makeSky, makeRichSky, RICH_HAZE, mapFurniture, STRIDE_M } from './figures.js'
 import { stretches, describe, lowestMargin, shortestAlternative } from './why.js'
 import { initStops } from './stops.js'
 import { initSteps } from './steps.js'
@@ -105,11 +105,13 @@ const renderer = new THREE.WebGLRenderer({ canvas: $('scene'), antialias: true }
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
 const scene = new THREE.Scene()
 scene.background = new THREE.Color(0xc9a27e) // dusty Mars sky
-scene.add(makeSky())
+const richSky = flags.has('sky') || params.has('sky') // flag sky: dust band, Sun with its bluish glow, matching haze
+if (!richSky) scene.add(makeSky())
 scene.add(terrain)
 scene.add(new THREE.HemisphereLight(0xffe8d0, 0x402015, 1.2))
 const sun = new THREE.DirectionalLight(0xffffff, 2)
 sun.position.set(-1, 0.6, -0.4) // low sun so slopes read
+if (richSky) scene.add(makeRichSky(sun.position)) // the Sun in the sky is where the light comes from
 scene.add(sun)
 
 const span = Math.max(W, H) * cs
@@ -253,7 +255,7 @@ function setView(mode) {
   controls.enabled = mode !== 'eye'
   walker.visible = mode !== 'eye'
   walkerIcon.visible = mode === 'map'
-  scene.fog = mode === 'map' ? null : new THREE.Fog(0xd6b48e, 120, 2600) // dusty haze with distance
+  scene.fog = mode === 'map' ? null : richSky ? new THREE.Fog(RICH_HAZE, 60, 1900) : new THREE.Fog(0xd6b48e, 120, 2600) // dusty haze with distance
   camera.near = mode === 'eye' ? 0.1 : 0.3
   camera.fov = mode === 'eye' ? 70 : 50
   camera.updateProjectionMatrix()

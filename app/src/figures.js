@@ -144,6 +144,37 @@ export function icon(color, { ring = '#ffffff', size = 0.03, label = '' } = {}) 
 }
 
 // Sky dome: pale dusty horizon to a darker butterscotch overhead (Mars skies are brightest near the horizon).
+// The richer sky (flag sky): what Mars rover cameras show near midday. A pale butterscotch band of dust at the
+// horizon, darkening to brown overhead; a small Sun (about two thirds of its size from Earth) with a cool, bluish
+// glow round it, because Mars dust scatters blue light forwards; faint streaks so the dome is not a flat gradient.
+// Colours are estimates by eye from Curiosity Mastcam sky images, not a radiative model. sun: unit vector to the Sun.
+export function makeRichSky(sun) {
+  return new THREE.Mesh(new THREE.SphereGeometry(9000, 48, 24), new THREE.ShaderMaterial({
+    side: THREE.BackSide, depthWrite: false, fog: false, uniforms: { uSun: { value: sun.clone().normalize() } },
+    vertexShader: 'varying vec3 vDir; void main(){ vDir = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+    fragmentShader: `varying vec3 vDir; uniform vec3 uSun;
+      float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+      float noise(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f);
+        return mix(mix(hash(i), hash(i + vec2(1, 0)), f.x), mix(hash(i + vec2(0, 1)), hash(i + vec2(1, 1)), f.x), f.y); }
+      void main(){
+        vec3 d = normalize(vDir); float h = d.y;
+        vec3 hor = vec3(0.91, 0.79, 0.63), mid = vec3(0.74, 0.57, 0.42), zen = vec3(0.40, 0.29, 0.22);
+        vec3 col = mix(hor, mid, smoothstep(0.0, 0.16, h));
+        col = mix(col, zen, smoothstep(0.12, 0.95, h));
+        float az = atan(d.z, d.x);                                   // long, thin dust streaks, strongest low down
+        float streak = noise(vec2(az * 6.0, h * 38.0)) * 0.6 + noise(vec2(az * 17.0, h * 90.0)) * 0.4;
+        col *= 1.0 + (streak - 0.5) * 0.10 * smoothstep(0.6, 0.02, h);
+        float c = max(dot(d, uSun), 0.0);
+        col = mix(col, vec3(0.62, 0.74, 0.93), pow(c, 60.0) * 0.75); // bluish aureole close to the Sun
+        col += vec3(0.95, 0.86, 0.74) * pow(c, 8.0) * 0.14;          // wide bright haze toward the Sun
+        col = mix(col, vec3(1.0, 0.98, 0.94), smoothstep(0.999965, 0.999985, c)); // the disc, about 0.35 degrees across
+        col = mix(hor * 0.96, col, smoothstep(-0.06, 0.01, h));      // below the horizon: the haze colour
+        col += (hash(gl_FragCoord.xy) - 0.5) / 255.0;                // dither, so the gradient does not band
+        gl_FragColor = vec4(col, 1.0); }`,
+  }))
+}
+export const RICH_HAZE = 0xe6c8a0 // the horizon colour above, for the distance haze
+
 export function makeSky() {
   return new THREE.Mesh(new THREE.SphereGeometry(9000, 24, 12), new THREE.ShaderMaterial({
     side: THREE.BackSide, depthWrite: false, fog: false,
