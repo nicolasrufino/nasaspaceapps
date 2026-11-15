@@ -12,9 +12,9 @@
     "nevado_sajama": 75.8
   },
   "rover_cells": {
-    "inside": 81,
-    "outside": 30,
-    "auc_inside_vs_outside": 0.589
+    "inside": 67,
+    "outside": 23,
+    "auc_inside_vs_outside": 0.851
   },
   "chemistry_wt_pct": {
     "SiO2": {

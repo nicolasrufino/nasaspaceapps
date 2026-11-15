@@ -8,12 +8,12 @@ We built the safe half of the mission: can the crew get there and back? We did n
 
 | When | What |
 |---|---|
-| 10:00–12:15 | Build: three tracks plus the pitch |
+| 10:00–12:15 | Build: issues #166–#171, Nicolas and Jules |
 | 12:15–12:45 | Stop. Release `dev` → `main`, check the live link |
 | by 1:00 PM | Submit |
 | 1:30 PM | Hard close |
 
-- Global judges read only the project page. It is not written yet; the pitch person owns it first.
+- Global judges read only the project page; local judges try the demo link and see the pitch. The page and deck are refreshed together at 12:15 (#172).
 - Every new feature starts behind a flag that is off. Bare `/scout/` must work after every merge.
 - At 12:15, what is not merged and checked ships off and becomes one "next" sentence in the pitch.
 
@@ -40,39 +40,81 @@ The page never mentions helicopters. Tie the scout to its wording about robots t
 - **No check exists for science targets**, because the app never chooses any.
 - **Not from our site:** the classifier's photos (all of Curiosity's path), Perseverance and Ingenuity sets (Jezero), an earlier rock patch about 5 km north.
 
+## What "not from our site" means
+
+Our map is one 2 × 2 km box. Some of our evidence was made somewhere else, so it cannot prove anything about that box:
+
+- **The ground-photo classifier** learned from photos taken along Curiosity's whole route, not in our box. Its 93% means "it names ground types in Curiosity photos", not "it is right about our map".
+- **The Perseverance and Ingenuity pictures** are from Jezero, another crater about 3,700 km away (our arithmetic from the two sites' coordinates). The 48% there shows the classifier does not carry over to a new place.
+- **An early rock check** used an image patch about 5 km north of our box. Those rocks are not in our map. The 23 reviewed rocks now in the map are inside it.
+
+**Effect on us:** nothing breaks in the demo, because none of these drive the route. It only limits what we may say: never quote them as proof about our site.
+
 ## The design: coarse to fine, for science too
 
-Aim (pick a goal) → Find (orbit, 2D: score the ridge-and-hollow pattern) → Check (helicopter, 3D: ridge height, reach, hazards) → Visit (crew and rover measure; Curiosity's numbers are the baseline) → Keep (walk log into the map).
+Aim (pick a goal) → Find (orbit, 2D: score the ridge-and-hollow pattern) → Check (helicopter, 3D) → **Visit (the crew measures what cannot be measured from the air)** → Keep (walk log into the map).
 
-Helicopter payload: camera, stereo pairs, laser altimeter (all flown on Ingenuity); radar is proposed (SkyFall). Spectral is proposed only. We found no helicopter thermal camera. Atmospheric, radiation and chemical instruments stay on a rover or at the habitat (3 to 6 kg each against a 2 to 5 kg helicopter payload). So a rover is needed as the tool carrier; we do not simulate it today.
+### The scout's payload is NASA SkyFall's (corrected 10:20)
 
-## Tracks
+NASA has published what a small Mars helicopter will carry ([SkyFall Mission Information Package, Sept 2026](https://science.nasa.gov/wp-content/uploads/2026/09/skyfall-mission-information-package-final.pdf), section IV). We adopt it instead of inventing a payload. Three identical helicopters; 1–2 km per flight sol (about 2.5 min), then a sol to recharge and downlink 100–400 Mbit to an orbiter; launch Nov–Dec 2028, arrival about Sept 2030.
 
-Order of value: **B, then C, then A.** One branch, one flag, new files only where possible.
+| Instrument | Data kind | NASA's words |
+|---|---|---|
+| Two 13 MP colour cameras | optical, topographic | "cm-scale orthophotos and digital elevation maps" |
+| Two near-infrared cameras | spectral | "some information on mineralogy or chemistry" (bands to be decided) |
+| Ground-penetrating radar | geophysical | "approximately 3–5 m of subsurface penetration" |
+| Air temperature sensors; wind from flight data | atmospheric | wind "to within ~5 m/s" |
+| Dosimeter | radiation | "a three-dimensional map of incident radiation" |
+| Two navigation cameras | hazards | textured ground "indicative of rocks" |
 
-### Pitch (one person, all morning; suggested: Galsan)
-1. Project page from `docs/PITCH.md` and this plan. 2. 30-second video on the live link. 3. Slides `objectives`, `data`, `loop`, `robot` for what is merged. 4. Submit by 1:00 PM.
-**Done when:** submitted, and every number has a link from the page's source list.
+- **Six of the eight data kinds fly.** Not on a helicopter: contact chemistry and ground thermal imaging. So the crew's job at the stop is chemistry, close-ups and samples.
+- **No bigger helicopter is needed.** If we wanted a heavier instrument, the reference is JPL's Mars Chopper concept: up to 5 kg of science, about 20 times Ingenuity's mass. We found no published cost for SkyFall or Chopper; Ingenuity was about $85 million.
+- **The team's comparison PDF (Ingenuity vs SkyFall) agrees with NASA's document** on three helicopters, 1–2 km, 2.5 min and the two-sol rhythm. Its 2.7 kg mass and 1.4 m rotor come from a presentation we have not opened: keep them out of the pitch until someone does. Its point about range is right and applies to us: a 1 km flight that must come back reaches under 500 m. Our simulation does not model the return; SkyFall lands at the far end.
+- **This replaces the earlier table** that said weather and radiation cannot fly, and the "six helicopters" figure (a 2025 AeroVironment concept; NASA's 2026 plan is three).
 
-### Track B, Visit: Curiosity's measurements at every stop (suggested: Luca; flag `stop_science`)
-1. `data/pipeline/stop_science.py` → `data/worlds/gale/stop_science.json`: per stop, the nearest ChemCam/APXS point (oxides, sol, metres away), nearest DAN reading, REMS temperature range for that sol.
-2. `app/src/flow/stop-science.js` shows it on the stage 4 stop card, with instrument and sol.
-3. A static "who carries what" table: crew, rover, helicopter.
-**Done when:** each stop shows a chemistry number with its distance, and `app/src` reads the chemistry, neutron and weather files. **Cut line:** chemistry only.
+### How the pieces fit, and what each can get wrong
 
-### Track C, Aim and check: a science goal in the flow (suggested: Nicolas; flag `science_goal`)
-1. Stage 1 opens with a goal card: "Boxwork: did groundwater last here?" and three things to check (ridge against hollow; fractures on ridge tops; where the nodules sit), each with its NASA link.
-2. "Suggested by the science team" becomes "Curiosity's five stops"; a second button offers `candidates.json` when it exists.
-3. Scout stage: a "What the helicopter carries" card.
-4. Detections: one science row per stop inside the strip (landform class, largest step from the 1 m layers).
-**Done when:** the goal shows before any stop and a flight reports science, not only rocks. **Cut line:** drop step 4.
+| Piece | Kind | Feeds | Known limit |
+|---|---|---|---|
+| Walking energy (Pandolf) | formula | every cost below | the 0.68 Mars gravity factor and suit effort are estimates; at +30% cost the plan still keeps 446.5 kJ spare |
+| Way home (`cost_to_go`) | shortest-path search, done ahead | the ring, the buzz | only as good as the hazard layer |
+| Stop order (Held-Karp) | exact search | the route | exact up to 12 stops |
+| Hazards | terrain rule + 23 reviewed rocks | walls after a flight | positive rocks only; not complete; rocks under about 1 m are invisible from orbit |
+| Flight choice | rule: next unseen stretch | which strip is revealed | value-of-information version failed its test and stays off |
+| Boxwork finder | rule on ridge/hollow shares | candidate sites (S5) | 0.851 on 90 rover cells; untested away from the rover's path |
+| Rock-chance model | logistic regression, off | nothing yet | 0.729 on a development check, not independent |
+| Ground-photo classifier | trained model, off | nothing yet | 93.1% Curiosity, 48.2% Perseverance |
 
-### Track A, Find: candidate sites from orbit, with a check (suggested: Jules; files only)
-1. Start from `data/pipeline/science_probe.py`. 2. Improve the score on the 1 m terrain (ridges at right angles, 10–20 m apart, 1–2 m tall). 3. Write `data/worlds/gale/candidates.json`: top 5–8 reachable sites that fit the budget, at least three Curiosity never visited. 4. Write the check numbers to `ml/exports/science_probe.json`.
-**Format:** `[{"id", "name", "cell": [x, y], "score": 0-1, "why", "curiosity_visited": false}]`.
-**Done when:** numbers are in the JSON, whatever they are. Target: four boxwork stops in the top 10%, inside-against-outside 0.75 or more. **Cut line 11:45:** ship with the label "first guide, a person decides". Do not tune until it passes.
+No probability shown in the app is calibrated. Say "score", not "chance".
 
-Not in this plan: a rover simulation, new 3D sensors, training a new model, changing route maths.
+## The work: issues (two people, no one waits)
+
+Nicolas edits `stage-plan.js`, `stage-debrief.js` and new files in `app/src/flow/`. Jules edits `stage-scout.js`, `data/pipeline/`, `ml/`. Nobody edits `main.js`. The one shared input, `stop_science.json`, is already merged.
+
+| Issue | What | Owner | Order |
+|---|---|---|---|
+| [#166](https://github.com/nicolasrufino/nasaspaceapps/issues/166) S1 | Start from a science goal (stage 1) | Nicolas | 1st, short |
+| [#167](https://github.com/nicolasrufino/nasaspaceapps/issues/167) S2 | At the stop: measure, compare, decide | Nicolas | 2nd, the main piece |
+| [#168](https://github.com/nicolasrufino/nasaspaceapps/issues/168) S3 | Science log and what one stay can do | Nicolas | 3rd, after S2 step 1 |
+| [#169](https://github.com/nicolasrufino/nasaspaceapps/issues/169) S4 | The scout carries SkyFall's payload; what each flight recorded | Jules | 1st |
+| [#170](https://github.com/nicolasrufino/nasaspaceapps/issues/170) S5 | Find boxwork from orbit: `candidates.json` and its check | Jules | 2nd |
+| [#171](https://github.com/nicolasrufino/nasaspaceapps/issues/171) S6 | Science-yield numbers; fix neutron positions (200 m off) | Jules | 3rd |
+| [#172](https://github.com/nicolasrufino/nasaspaceapps/issues/172) S7 | Pitch and project page refresh | both | 12:15 |
+
+### The Visit step (S2), in one view
+
+At each stop the walk pauses. The stop has 30 minutes (2.5 h of stop time ÷ 5 stops; a planning assumption).
+
+| Task | Who | Min | Shows |
+|---|---|---|---|
+| Look around | crew | 3 | rover photo; ridge or hollow |
+| Close-up of the feature | crew | 4 | which check of the goal it serves |
+| Read the rock's chemistry | crew, contact instrument | 8 | Curiosity's real ChemCam reading at that spot |
+| Water in the ground | rover, neutron detector | 5 | Curiosity's DAN reading for that sol |
+| Weather and radiation | suit, automatic | 0 | REMS range; dose for the stop |
+| Take a sample | crew | 8 | samples carried +1 |
+
+After the ridge stop (Nevado Sajama) and the hollow stop (Valle de la Luna), a card compares the two readings (MgO 10.2 against 7.3 in our file). Readings are Curiosity's real measurements standing in for the crew's.
 
 ## First numbers (`python data/pipeline/science_probe.py` → `ml/exports/science_probe.json`)
 
@@ -81,8 +123,8 @@ Boxwork limits are NASA's: entered sol 4534, left about sol 4845.
 | Check | Result | Reading |
 |---|---|---|
 | Our ChemCam/APXS points against the published trend (boxwork: more Si, less Mg and S) | SiO₂ 43.6 vs 41.8; MgO 8.1 vs 10.9; SO₃ 10.7 vs 14.1; Al₂O₃ 8.3 vs 8.5 | 3 of 4 match; aluminium does not show the published rise |
-| Percentile of Curiosity's stops on a ridge-and-hollow score (8 m cells) | Overlook 86, Valle de la Luna 83, Nevado Sajama 76, Ridge top 70, Altadena 0 | Fair. Altadena is at the edge of the unit |
-| Score inside against outside the boxwork along the rover's path | 0.589 (81 vs 30 cells) | Weak: not a detector yet |
+| Percentile of Curiosity's stops on the ridge-and-hollow score | Overlook 86, Valle de la Luna 83, Nevado Sajama 76, Ridge top 70, Altadena 0 | Fair. Altadena is at the edge of the unit |
+| Score inside against outside the boxwork along the rover's path | **0.851** (67 vs 23 cells) | Good on this small test. **Corrected:** the first run gave 0.589 because it took positions from `neutron_points.json`, which is about 200 m off (#171) |
 
 **Rule:** a number comes from a script in the repo and the file it writes, or from a page someone opened today with the link beside it. Search-result-only numbers stay out.
 
@@ -92,7 +134,7 @@ Boxwork limits are NASA's: entered sol 4534, left about sol 4845.
 |---|---|---|
 | One walk takes a scouting sol and a walk sol | 2 sols | `docs/OPERATIONS.md` |
 | First crewed stay | 30 sols | [National Academies 2025](https://www.nationalacademies.org/news/search-for-life-should-be-top-science-priority-for-first-human-landing-on-mars-says-new-report), [NASA](https://ntrs.nasa.gov/citations/20220001816) |
-| Scouted walks in that stay | at most 15 | our arithmetic |
+| Scouted walks in that stay | at most 15, so at most 75 stops | our arithmetic (#171 writes it to a file) |
 | Flights per walk | 3 flights, 2.22 km | `ml/exports/pitch_metrics.json`; Ingenuity: 72 flights, 17.0 km ([NASA](https://science.nasa.gov/mission/mars-2020-perseverance/ingenuity-mars-helicopter/)) |
 | Curiosity between our first and last stop | 154 sols (4564 to 4718) | `targets.json`; the rover drilled for weeks at each stop, so say it fairly |
 | Helicopter against rover programme | about $85 M vs $2.53 B | [JPL](https://www.jpl.nasa.gov/news/press_kits/ingenuity/landing/quick_facts/), [Planetary Society](https://www.planetary.org/space-policy/cost-of-msl-curiosity) |
