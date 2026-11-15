@@ -9,9 +9,14 @@ test('opt-in VOI runs in a worker, stops below its value threshold, and leaves t
   await page.waitForFunction(() => document.body.classList.contains('vision'))
   await page.evaluate(() => document.body.classList.remove('vision'))
   await expect(page.locator('#route')).toContainText('621 kJ')
-  await page.getByRole('button', { name: 'Fly the route', exact: true }).click()
-  await expect(page.locator('#scoutStatus')).toContainText('Comparing possible flights')
-  await expect(page.getByLabel('Include Altadena drill site in the walk')).toBeDisabled()
+  // Read the stop boxes in the click's own JS turn: a fast VOI can land (and re-enable them) before a polled check runs.
+  const during = await page.evaluate(() => {
+    document.getElementById('scout').click()
+    const box = document.querySelector('input[aria-label="Include Altadena drill site in the walk"]')
+    return { status: document.getElementById('scoutStatus').textContent, disabled: box.disabled }
+  })
+  expect(during.status).toContain('Comparing possible flights')
+  expect(during.disabled).toBe(true)
   await expect(page.locator('#scoutStatus')).toContainText('No strip clears', { timeout: 60000 })
   await expect(page.locator('#scoutStatus')).toContainText('0 of 3 flights used')
   await expect(page.locator('#scoutStatus')).toContainText('Unscouted ground remains')
