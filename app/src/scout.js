@@ -1,8 +1,9 @@
 // Helicopter scout (block E4). The flight is simulated; what it reveals is the world's rocks_fine layer
 // (synthetic now; on real sites, rocks detected on full-resolution HiRISE images by Person 1).
-// Ingenuity-class limits: about 700 m per flight (docs/PLAN.md, Scout).
+// SkyFall scenario: 1 km per flight, the low end of its design expectation.
+// This is not an Ingenuity flight record (docs/OPERATIONS.md).
 
-export const FLIGHT_M = 700
+export const FLIGHT_M = 1000
 export const SWATH_M = 15 // ponytail: radius the camera sees from scouting height; tune with the real camera footprint
 
 // Split the planned route into flights of at most FLIGHT_M metres; each lands where the next takes off.

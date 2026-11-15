@@ -48,7 +48,7 @@ Five minutes, the organizers' seven parts. One argument runs through it: **there
 
 **4. Demo (1:45–3:00)**
 - Habitat screen, the fixed Gale boxwork scenario with five default science stops. Orbit-only map and a first route.
-- Deploy the scout helicopter. It flies Ingenuity-sized legs along the route, then where it is least sure. Where it flies, the map sharpens: real full-resolution HiRISE terrain and detected rocks. A hidden rock field appears.
+- Deploy the scout helicopter. It flies route legs of up to 1 km (our SkyFall scenario), then where it is least sure. Where it flies, the map sharpens: real full-resolution HiRISE terrain and detected rocks. A hidden rock field appears.
 - The first re-plan crosses zero of the 6 newly discovered hazard cells on the original route: 1274.7 to 1311.4 m, 621.4 to 629.7 kJ (+1.33% effort). Two unobserved stored hazards remain on the new route. Repeat "Fly the new route": after two passes, the final 1311.4 m route is fully scanned and crosses zero stored hazard cells. This takes 14 simulated flight legs and 9.43 km of helicopter travel; helicopter energy is excluded. Unmapped real hazards can remain.
 - A judge carries the phone (the suit display). Real steps move the astronaut; the ring of "can still get home" shrinks. At a stop, the science checklist runs. Past the point of no return, it buzzes.
 - Export the map for mission control. A live CAPCOM/Foundry reply is deferred, not a demo step.
@@ -60,6 +60,7 @@ Speaker detail: the nominal final route costs 630.5 kJ and its minimum spare
 margin is 635.6 kJ. R3 contains 23 visually accepted rock proposals and two
 uncertain ones excluded. The 6 avoided cells are DTM-derived hazards, not 6
 of these accepted rocks. Proposal acceptance is not detector precision/recall.
+The 1 km runtime flight limit leaves the measured results unchanged on this route.
 The 14 flight legs are a simulation workload, not proof of a feasible campaign:
 the proposed flight-count, recharge and daylight constraints in
 `docs/DECISION-BRIEFS.md` §7–8 are not enforced in this replay.

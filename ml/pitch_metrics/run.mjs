@@ -5,6 +5,7 @@ import { dirname, resolve, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { parseLayer } from '../../app/src/world.js'
 import { calculate } from './metrics.mjs'
+import { FLIGHT_M } from '../../app/src/scout.js'
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
 const sha = (value) => createHash('sha256').update(value).digest('hex')
@@ -67,7 +68,9 @@ export function buildReport(root = ROOT) {
       energy_scenario_details: world.meta.scenarios?.[world.meta.default_scenario] ?? null,
       target_ids: targets.map((t) => t.id), energy_budget_j: world.meta.energy_budget_j,
       reserve_j: world.meta.energy_budget_j * world.meta.reserve_fraction,
-      cell_size_m: world.meta.cell_size_m, scout_replay_fps: 60 },
+      cell_size_m: world.meta.cell_size_m, scout_replay_fps: 60,
+      route_flight_limit_m: FLIGHT_M,
+      extra_flights: 'Existing scout_plan.json flights are appended unchanged on each pass.' },
     definitions: {
       hazard: 'Binary 8 m hazard cells, not a count of individual rocks. Unique cells and repeated visits are separate.',
       margin: 'energy left - cheapest known-hazard return cost - fixed reserve. Extra 20% means >=20% of INITIAL budget after that reserve.',
@@ -148,7 +151,7 @@ The cycles total ${r.total_flights} simulated flight legs and ${(r.total_flight_
   return renderFirstPassPitch(report)
     .replace('## Before and after the first scout pass',
       `Energy scenario: **${report.scenario.energy_scenario ?? 'world default'}**. ${report.scenario.energy_scenario_details?.name ?? ''}. ` +
-      'The world budget already deducts planned time at science stops. It is a scenario estimate, not measured astronaut endurance.\n\n## Before and after the first scout pass')
+      `The world budget already deducts planned time at science stops. It is a scenario estimate, not measured astronaut endurance.\n\nRuntime route flights are limited to **${report.scenario.route_flight_limit_m} m** (SkyFall scenario). The existing extra flights from scout_plan.json are appended unchanged on each pass; this replay does not enforce the proposed campaign flight count, recharge or daylight constraints.\n\n## Before and after the first scout pass`)
     .replace('## Energy sensitivity\n', section + '## Energy sensitivity after the first pass\n')
     .replace(/## Suggested proof line\n[\s\S]*$/, proof)
 }

@@ -4,7 +4,7 @@ import { routeFlights, scanAt, pointAlong, FLIGHT_M, SWATH_M } from './scout.js'
 
 const meta = { width: 100, height: 100, cell_size_m: 5 }
 
-test('flights cover the whole route, each within the Ingenuity-class limit, landing where the next takes off', () => {
+test('flights cover the whole route within the configured limit, landing where the next takes off', () => {
   const route = Array.from({ length: 300 }, (_, k) => [10 + (k % 80), 10 + Math.floor(k / 80)])
   const flights = routeFlights(meta, route)
   assert.ok(flights.length > 1)

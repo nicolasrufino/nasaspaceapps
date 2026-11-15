@@ -78,7 +78,7 @@ Code: `app/src/plan.js`.
 
 Orbit images can't see rocks smaller than about a metre. A small helicopter (Ingenuity-class, like NASA JPL's on Mars) flies first. **The flight is simulated; the data it reveals is the world's own rock layer.**
 
-- **Flight limit:** at most **700 m per flight** (about Ingenuity's longest flight, about 3 minutes).
+- **Runtime route-flight limit:** at most **1,000 m per flight**, the selected low end of SkyFall's 1–2 km design expectation (`docs/OPERATIONS.md`). This is a scenario assumption, not an Ingenuity record. The stored extra flights in `scout_plan.json` retain their legacy distances.
 - **What it sees:** everything within **15 m** of its path, a 30 m wide strip (`SWATH_M`, a knob to tune with a real camera footprint).
 - **Order of flights before a walk:** first along the **planned route**, then the team's extra flights (`scout_plan.json`): **anomalies** (places where the data disagrees), then the **least certain** areas.
 - **What changes when it lands:** rocks it saw become walls, the way home switches to the scouted version for every cell it saw, and the route re-plans. The old route stays on screen as red dashes.

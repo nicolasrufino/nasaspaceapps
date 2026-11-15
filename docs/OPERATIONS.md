@@ -71,7 +71,7 @@ Computed from the latitude and the Sun's seasonal swing of ±25°; to be checked
 - Ingenuity's best whole-flight average was 4.2 m/s (704 m in 169.5 s) and its top speed 10 m/s ([NASA, Flight 62](https://science.nasa.gov/blog/flight-62-preview-by-the-numbers)). So **700 m is what has flown**. SkyFall's 1–2 km is NASA's design expectation; 2 km is faster than any Ingenuity flight.
 - **Cadence:** helicopters fly every other sol and walks happen every other sol, so each helicopter flies once per walk: 3 helicopters = 3 flights.
 - **Time:** 3 × 2.5 min = 7.5 min of flying, far inside the 9:30 AM–1 PM window.
-- **In the app:** `FLIGHT_M` is still 700 m until Jules's #99 merges (his pitch numbers are built from it); the Gale result below is the same at 700 m and 1 km.
+- **In the app:** `FLIGHT_M` is 1,000 m, the selected SkyFall scenario limit. R5 was regenerated in the same change; the Gale result below is the same at 700 m and 1 km. The stored extra flights are unchanged.
 - **Reach:** every Gale stop is within 354 m of the habitat. A flight that must return to the dock needs at least 708 m. That is just over Ingenuity's 700 m, but well inside SkyFall's 1 km.
 
 **Test on the Gale world** (HiRISE terrain, the 20° limit, walk-scale crossings, and 1,143 hazard cells including Jules's 23 reviewed rocks). Fly the next unseen stretch of the route, re-plan around what was found, repeat:
