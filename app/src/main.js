@@ -227,9 +227,10 @@ setView('map')
 let lastFrame = performance.now()
 let lastTiles = 0
 renderer.setAnimationLoop((now) => {
-  const dt = Math.min((now - lastFrame) / 1000, 0.1)
+  const elapsed = Math.max(0, (now - lastFrame) / 1000)
+  const dt = Math.min(elapsed, 0.1) // smooth camera/character motion, not the flight clock
   lastFrame = now
-  if (flight) tickFlight(dt)
+  if (flight) tickFlight(elapsed) // spatial scanning retains every crossed sample, even on a slow frame
   walker.position.lerp(walkerGoal, 1 - Math.exp(-dt * 6))
   walker.position.y = groundAt(walker.position.x, walker.position.z)
   if (walkerGoal.distanceToSquared(walker.position) > 0.01) walker.rotation.y = Math.atan2(-(walkerGoal.x - walker.position.x), -(walkerGoal.z - walker.position.z))

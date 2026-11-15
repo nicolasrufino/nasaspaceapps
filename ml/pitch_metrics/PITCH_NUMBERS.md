@@ -35,6 +35,7 @@ The browser and replay scan every 2 m plus both endpoints, regardless of animati
 
 | Replay | Hazard cells discovered | Stored hazards on final route | Walking energy (kJ) |
 |---|---:|---:|---:|
+| 2fps | 44 | 0 | 630.5 |
 | 30fps | 44 | 0 | 630.5 |
 | 60fps | 44 | 0 | 630.5 |
 | 120fps | 44 | 0 | 630.5 |

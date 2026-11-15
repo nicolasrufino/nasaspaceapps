@@ -22,7 +22,7 @@ export function simulateScout(world, targets, mode = '60fps', previouslyScanned 
   const priorHazards = count(scanned.map((v, i) => v && layers.rocks_fine[i]))
   const state = createScout(world, targets, { scanned })
   const fps = Number(mode.replace('fps', ''))
-  if (mode !== 'spatial2m' && ![30, 60, 120].includes(fps)) throw new Error('Unsupported fixed frame rate')
+  if (mode !== 'spatial2m' && ![2, 30, 60, 120].includes(fps)) throw new Error('Unsupported fixed frame rate')
   for (let f; (f = launchScoutFlight(world, state));) {
     if (mode === 'spatial2m') scanFlight(meta, scanned, f)
     else {
@@ -30,7 +30,7 @@ export function simulateScout(world, targets, mode = '60fps', previouslyScanned 
       let along = 0
       do {
         scanFlight(meta, scanned, f, along)
-        along = Math.min(f.metres, along + (f.metres / FLIGHT_ANIMATION_S) * Math.min(1 / fps, .1))
+        along = Math.min(f.metres, along + (f.metres / FLIGHT_ANIMATION_S) / fps)
       } while (along < f.metres)
       scanFlight(meta, scanned, f, f.metres)
     }
@@ -187,7 +187,7 @@ export function calculate(world, targets, reviewed) {
   const updated = measureRoute(world, after, scout.blocked, reviewed, scout.displayedReturn, home)
   const trace = routeProfile(world, after.cells, home)
   const sensitivity = energySensitivity(world, after, scout.displayedReturn, home)
-  const sampling = ['30fps', '60fps', '120fps', 'spatial2m'].map((mode) => {
+  const sampling = ['2fps', '30fps', '60fps', '120fps', 'spatial2m'].map((mode) => {
     const sample = mode === '60fps' ? scout : simulateScout(world, targets, mode)
     const route = sample.route
     return { mode, scanned_cells: sample.scanned_cells, discovered_hazard_cells: sample.discovered_hazard_cells,

@@ -48,7 +48,7 @@
     "energy_error": "Uniform 0.7/1.0/1.3 multiplier on BOTH spent walking energy and remaining return cost; initial budget/reserve and the nominal scouted route stay fixed.",
     "ring": "Cells whose return fits remaining energy minus reserve, as displayed by the app. Area is grid cells x cell area, not a circular radius or a complete outbound-and-return reachability claim.",
     "margin_audit": "Directed reverse shortest paths recomputed using only discovered hazards; app hybrid return lookup reported separately.",
-    "scout": "Shipped three-flight campaign with a re-plan after every flight. Spatial scans every 2 m plus endpoints; 30/60/120 fps must agree."
+    "scout": "Shipped three-flight campaign with a re-plan after every flight. Spatial scans every 2 m plus endpoints; 2/30/60/120 fps must agree."
   },
   "source_hash_convention": "SHA256: raw binary; canonical sorted-key JSON; LF-normalized JS/MJS source",
   "source_sha256": {
@@ -67,10 +67,10 @@
     "app/src/walk.js": "85e9e1ae0cc771d6974c25b60ef30d90d9918631933a2a0b5146a7cb8ee7800f",
     "app/src/scout.js": "ecb479e7ddf92e6d7408c56ae8233e03ab8f77d92f5f420ec9981eb714c47e6e",
     "app/src/why.js": "ddfd6ff73ffe5898e3a81915ec15903712e6e7ddf453db7c092db8b2c7928f6c",
-    "app/src/main.js": "a11b1d9b687d8c005b1de819833276e27cc9290970fc97f19a4e8af2697d7b23",
+    "app/src/main.js": "31cf3c6e6332f2bf7a27b17715b66abdca1254cfe7b5e4accf833adc41e339c3",
     "app/src/world.js": "614e878361ea5d4d2845041e3f7514f0690cb1738d4795465a957b565f064801",
-    "ml/pitch_metrics/metrics.mjs": "b4fadfd238559e6f6d508fc997b84a1c702df295489bd0b36ff21c756bee681f",
-    "ml/pitch_metrics/run.mjs": "0b4c5c879168bd01077feb531bf883faa4d88bf112f6f06d9d063ab5ac564941",
+    "ml/pitch_metrics/metrics.mjs": "e22ac2d1dd97639a8095182164c0bde199c772488b7467af04e5071326e942e7",
+    "ml/pitch_metrics/run.mjs": "089922e8637a0a55d564593c9460b097d158081af51f00f2e71b0244533d344c",
     "data/worlds/gale/passable.u8": "aa094aa98b2251b249129ef3fc318abe4cf956cadad062b7495146dc283d1137"
   },
   "results": {
@@ -1347,6 +1347,60 @@
       "reviewed_clearance_cells_seen": 0
     },
     "sampling_sensitivity": [
+      {
+        "mode": "2fps",
+        "scanned_cells": 573,
+        "discovered_hazard_cells": 44,
+        "reviewed_clearance_cells_seen": 0,
+        "before_crossings": {
+          "unique_cells": 6,
+          "cell_visits": 8,
+          "cells": [
+            [
+              119,
+              145
+            ],
+            [
+              119,
+              146
+            ],
+            [
+              117,
+              159
+            ],
+            [
+              113,
+              170
+            ],
+            [
+              105,
+              173
+            ],
+            [
+              113,
+              182
+            ]
+          ]
+        },
+        "after_crossings": {
+          "unique_cells": 0,
+          "cell_visits": 0,
+          "cells": []
+        },
+        "after_all_layer_crossings": {
+          "unique_cells": 0,
+          "cell_visits": 0,
+          "cells": []
+        },
+        "after_energy_j": 630469.897989,
+        "stops": [
+          "ridge_top",
+          "overlook",
+          "nevado_sajama",
+          "valle_de_la_luna",
+          "altadena"
+        ]
+      },
       {
         "mode": "30fps",
         "scanned_cells": 573,
