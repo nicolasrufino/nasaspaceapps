@@ -9,6 +9,7 @@ import { bestAreas } from './best-areas.js'
 import { beliefMap } from './belief.js'
 import { terrainMaterial, setImageryUVs, loadImagery, imageryCells } from './terrain.js'
 import { detailTiles } from './tiles.js'
+import { makeAstronaut, makeHabitat, makeHelicopter, icon, makeSky, mapFurniture } from './figures.js'
 import { stretches, describe, lowestMargin, shortestAlternative } from './why.js'
 import { initStops } from './stops.js'
 import { initSteps } from './steps.js'
@@ -67,13 +68,21 @@ geo.computeVertexNormals()
 const colors = new THREE.BufferAttribute(new Uint8Array(W * H * 3), 3, true)
 geo.setAttribute('color', colors)
 setImageryUVs(geo, meta)
-const terrainMat = terrainMaterial()
+// The tint texture carries, per cell, what the vertex colours carry on the 8 m mesh (ring dimming, found rocks, the
+// layer) for the detail tiles, and in its alpha whether the helicopter has flown there (the discover look, ticket A3).
+const tint = new THREE.DataTexture(new Uint8Array(W * H * 4).fill(255), W, H, THREE.RGBAFormat)
+tint.magFilter = THREE.LinearFilter
+const mutedLook = flags.has('drone_scout') && !!layers.rocks_fine && !!meta.detail_tiles?.url // unflown ground is muted
+const revealShared = { uTint: { value: tint }, uCells: { value: new THREE.Vector2(cs, W) }, uMuted: { value: mutedLook ? 1 : 0 },
+  uHeli: { value: new THREE.Vector3(0, 0, 0) } } // uHeli: x, z of the helicopter and the scan ring's radius (0 = off)
+const terrainMat = terrainMaterial(revealShared)
 const terrain = new THREE.Mesh(geo, terrainMat)
 
 const renderer = new THREE.WebGLRenderer({ canvas: $('scene'), antialias: true })
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
 const scene = new THREE.Scene()
 scene.background = new THREE.Color(0xc9a27e) // dusty Mars sky
+scene.add(makeSky())
 scene.add(terrain)
 scene.add(new THREE.HemisphereLight(0xffe8d0, 0x402015, 1.2))
 const sun = new THREE.DirectionalLight(0xffffff, 2)
@@ -82,13 +91,19 @@ scene.add(sun)
 
 const span = Math.max(W, H) * cs
 const pin = (color) => new THREE.Mesh(new THREE.ConeGeometry(span / 120, span / 40, 12), new THREE.MeshBasicMaterial({ color }))
-const baseMarker = pin(0xffffff)
-baseMarker.position.copy(cellPos(meta.base_cell, span / 80))
+// Real sizes (ticket F5): a 9 m habitat next to the base cell, a 1.8 m astronaut; fixed-size icons keep them findable.
+const habitat = makeHabitat()
+habitat.position.copy(cellPos([meta.base_cell[0] - 2, meta.base_cell[1] - 1])) // 16 m west, 8 m north of the start
+scene.add(habitat)
+const baseMarker = icon('#ffffff', { ring: '#111111', label: 'H' })
 scene.add(baseMarker)
 const pins = new THREE.Group() // science stops, rebuilt when the plan changes
 scene.add(pins)
-const walker = new THREE.Mesh(new THREE.CapsuleGeometry(span / 200, span / 60, 4, 12), new THREE.MeshBasicMaterial({ color: 0x35e0ff }))
+const walker = makeAstronaut()
 scene.add(walker)
+const walkerIcon = icon('#35e0ff')
+scene.add(walkerIcon)
+const walkerGoal = cellPos(meta.base_cell) // where the walk logic says the astronaut is; the figure glides there
 const altLine = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineDashedMaterial({ color: 0xd0d0d0, dashSize: span / 120, gapSize: span / 120 }))
 altLine.visible = false // E5: the shortest-distance route the planner rejected
 scene.add(altLine)
@@ -98,11 +113,8 @@ scene.add(beforeLine)
 const routeLine = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.8 }))
 scene.add(routeLine)
 
-// 1 m detail tiles (ticket F7, flag detail). The tint texture carries what the vertex colours carry on the 8 m mesh
-// (ring dimming, found rocks, the layer), so tiles and mesh always agree.
-const tint = new THREE.DataTexture(new Uint8Array(W * H * 4).fill(255), W, H, THREE.RGBAFormat)
-tint.magFilter = THREE.LinearFilter
-const tileShared = { uTint: { value: tint }, uOverlay: terrainMat.userData.uniforms.uOverlay, uCells: { value: new THREE.Vector2(cs, W) } }
+// 1 m detail tiles (ticket F7, flag detail).
+const tileShared = { ...revealShared, uOverlay: terrainMat.userData.uniforms.uOverlay }
 let tiles = null
 // Ground height at app (x, z): the 1 m surface where a tile is loaded, else the 8 m cell.
 const groundAt = (x, z) => tiles?.heightAt(x, z) ?? layers.height[Math.round(z / cs) * W + Math.round(x / cs)]
@@ -120,11 +132,15 @@ function drawRouteLine() {
   routeLine.geometry = new THREE.BufferGeometry().setFromPoints(pts)
 }
 
-const camera = new THREE.PerspectiveCamera(50, 1, span / 1000, span * 10)
+const camera = new THREE.PerspectiveCamera(50, 1, 0.3, span * 10)
 const center = new THREE.Vector3(((W - 1) * cs) / 2, 0, ((H - 1) * cs) / 2)
-camera.position.set(center.x, span * 0.6, center.z + span * 0.8)
+const home = cellPos(meta.base_cell)
+camera.position.set(home.x - 260, home.y + 230, home.z + 380) // start over the base, close enough to read the ground
 const controls = new OrbitControls(camera, $('scene'))
-controls.target.copy(center)
+controls.target.copy(home)
+controls.minDistance = 4
+controls.maxPolarAngle = Math.PI * 0.495 // not below the ground
+const furniture = mapFurniture()
 controls.enableDamping = true
 
 function resize() {
@@ -134,17 +150,97 @@ function resize() {
 }
 addEventListener('resize', resize)
 resize()
+// --- Views (ticket A4, Vesta Vision v0): Map (free orbit), Follow (behind the astronaut), Eye (1.7 m, first person). ---
+const EYE_M = 1.7
+const view = { mode: 'map', yaw: 0, pitch: -0.05, drag: null }
+const viewBtn = Object.assign(document.createElement('button'), { id: 'viewBtn', type: 'button' })
+viewBtn.style.cssText = 'position:fixed;left:max(12px,env(safe-area-inset-left));bottom:max(64px,calc(env(safe-area-inset-bottom) + 64px));z-index:6;min-height:44px;padding:0 14px;border-radius:10px;border:1px solid #fff5;background:#141a22e6;color:#fff;font:600 14px system-ui,sans-serif'
+const visionNote = Object.assign(document.createElement('div'), { hidden: true, textContent: 'Vesta Vision · real NASA HiRISE terrain and imagery (features of about 3 m and up) · drag to look' })
+visionNote.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:max(70px,calc(env(safe-area-inset-bottom) + 70px));z-index:5;max-width:min(92vw,520px);padding:6px 10px;border-radius:8px;background:#141a22cc;color:#fff;font:500 12px system-ui,sans-serif;text-align:center;pointer-events:none'
+// In the Vision views the big panel is hidden (no HUD); a small bar keeps the walk controls.
+const visionBar = Object.assign(document.createElement('div'), { hidden: true })
+visionBar.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:max(14px,env(safe-area-inset-bottom));z-index:6;display:flex;gap:8px'
+for (const [text, id] of [['Walk / pause', 'play'], ['Step', 'step'], ['Back to start', 'reset']]) {
+  const b = Object.assign(document.createElement('button'), { type: 'button', textContent: text, onclick: () => $(id).click() })
+  b.style.cssText = 'min-height:44px;padding:0 14px;border-radius:10px;border:1px solid #fff5;background:#141a22e6;color:#fff;font:600 14px system-ui,sans-serif'
+  visionBar.append(b)
+}
+document.body.append(viewBtn, visionNote, visionBar)
+const heading = () => { // where the astronaut is going: along the route from where they stand
+  const k = route?.cells.findIndex(([x, y]) => x === walk.cell[0] && y === walk.cell[1]) ?? -1
+  const next = route?.cells[k + 1] ?? route?.cells[1]
+  return next ? Math.atan2(-(next[0] - walk.cell[0]), -(next[1] - walk.cell[1])) : 0
+}
+function setView(mode) {
+  view.mode = mode
+  viewBtn.textContent = { map: 'View: Map', follow: 'View: Follow', eye: 'View: Eye level' }[mode]
+  visionNote.hidden = visionBar.hidden = mode === 'map'
+  document.querySelectorAll('.panel').forEach((el) => (el.style.display = mode === 'map' ? '' : 'none'))
+  furniture.el.style.display = mode === 'map' ? 'flex' : 'none'
+  controls.enabled = mode !== 'eye'
+  walker.visible = mode !== 'eye'
+  walkerIcon.visible = mode === 'map'
+  scene.fog = mode === 'map' ? null : new THREE.Fog(0xd6b48e, 120, 2600) // dusty haze with distance
+  camera.near = mode === 'eye' ? 0.1 : 0.3
+  camera.fov = mode === 'eye' ? 70 : 50
+  camera.updateProjectionMatrix()
+  const head = walker.position.clone().setY(walker.position.y + EYE_M)
+  if (mode === 'follow') {
+    const h = heading()
+    controls.target.copy(head)
+    camera.position.set(head.x + Math.sin(h) * 14, head.y + 6, head.z + Math.cos(h) * 14) // 14 m behind, 6 m up
+  } else if (mode === 'eye') {
+    view.yaw = heading()
+    view.pitch = -0.05
+  } else if (camera.position.distanceTo(controls.target) < 60) {
+    camera.position.set(head.x - 90, head.y + 80, head.z + 130) // back out to a map view near the astronaut
+    controls.target.copy(walker.position)
+  }
+}
+viewBtn.onclick = () => setView({ map: 'follow', follow: 'eye', eye: 'map' }[view.mode])
+const canvasEl = $('scene')
+canvasEl.addEventListener('pointerdown', (e) => { if (view.mode === 'eye') view.drag = [e.clientX, e.clientY] })
+addEventListener('pointerup', () => (view.drag = null))
+addEventListener('pointermove', (e) => {
+  if (view.mode !== 'eye' || !view.drag) return
+  view.yaw += (e.clientX - view.drag[0]) * 0.005
+  view.pitch = Math.max(-1.2, Math.min(1.2, view.pitch + (e.clientY - view.drag[1]) * 0.005))
+  view.drag = [e.clientX, e.clientY]
+})
+const lastHead = new THREE.Vector3()
+function tickView(dt) {
+  const head = walker.position.clone().setY(walker.position.y + EYE_M)
+  if (view.mode === 'follow') {
+    camera.position.add(head.clone().sub(lastHead)) // ride along; the user's own orbiting is kept
+    controls.target.copy(head)
+  } else if (view.mode === 'eye') {
+    camera.position.copy(head)
+    camera.rotation.set(view.pitch, view.yaw, 0, 'YXZ')
+  } else if (flight) {
+    controls.target.lerp(new THREE.Vector3(heli.position.x, heli.position.y - ALT, heli.position.z), 1 - Math.exp(-dt * 2)) // watch the scan
+  }
+  lastHead.copy(head)
+}
+setView('map')
+
 let lastFrame = performance.now()
 let lastTiles = 0
 renderer.setAnimationLoop((now) => {
   const dt = Math.min((now - lastFrame) / 1000, 0.1)
   lastFrame = now
   if (flight) tickFlight(dt)
+  walker.position.lerp(walkerGoal, 1 - Math.exp(-dt * 6))
+  walker.position.y = groundAt(walker.position.x, walker.position.z)
+  if (walkerGoal.distanceToSquared(walker.position) > 0.01) walker.rotation.y = Math.atan2(-(walkerGoal.x - walker.position.x), -(walkerGoal.z - walker.position.z))
+  walkerIcon.position.set(walker.position.x, walker.position.y + 3, walker.position.z)
+  baseMarker.position.set(habitat.position.x, habitat.position.y + 12, habitat.position.z)
+  tickView(dt)
+  furniture.update(camera, controls, innerHeight)
   if (tiles && now - lastTiles > 500) {
     lastTiles = now
-    tiles.update([[controls.target.x, controls.target.z], [walker.position.x, walker.position.z]])
+    tiles.update([[controls.target.x, controls.target.z], [walker.position.x, walker.position.z], ...(flight ? [[heli.position.x, heli.position.z]] : [])])
   }
-  controls.update()
+  if (view.mode !== 'eye') controls.update()
   renderer.render(scene, camera)
 })
 
@@ -269,10 +365,9 @@ function drawStops() {
   pins.clear()
   for (const s of allStops()) {
     const on = included.has(s.id)
-    const p = pin(!on ? 0x8a8a8a : route.dropped.includes(s.id) ? 0xff5a3d : s.custom ? 0xff9f1c : 0xffd23f)
-    p.rotation.x = Math.PI // pointing down at the spot
-    p.position.copy(cellPos(s.cell, span / 80))
-    p.scale.setScalar(s.id === selected ? 1.8 : 1)
+    const p = icon(!on ? '#8a8a8a' : route.dropped.includes(s.id) ? '#ff5a3d' : s.custom ? '#ff9f1c' : '#ffd23f',
+      { label: String(allStops().indexOf(s) + 1), size: s.id === selected ? 0.042 : 0.03 })
+    p.position.copy(cellPos(s.cell, 3))
     pins.add(p)
   }
   const usable = meta.energy_budget_j * (1 - meta.reserve_fraction)
@@ -400,27 +495,23 @@ function paintMinimap(inside) {
 }
 
 // --- Helicopter scout (block E4, flag drone_scout): flies the planned route, reveals rocks, re-plans. ---
-const heliSize = span / 150
-const ALT = span / 25 // flying height above the ground, for the view only
+const ALT = 10 // flying height above the ground, metres (knob; docs/DECISION-BRIEFS.md §4)
 function makeHeli() {
-  const g = new THREE.Group()
-  g.add(new THREE.Mesh(new THREE.SphereGeometry(heliSize, 16, 12), new THREE.MeshStandardMaterial({ color: 0xeeeeee })))
-  const rotor = new THREE.Mesh(new THREE.BoxGeometry(heliSize * 6, heliSize / 6, heliSize / 2), new THREE.MeshBasicMaterial({ color: 0x222222 }))
-  rotor.position.y = heliSize * 1.3
-  g.add(rotor)
+  const g = makeHelicopter()
   const beam = new THREE.Mesh(new THREE.ConeGeometry(15, ALT, 24, 1, true), // 15 m = SWATH_M
-    new THREE.MeshBasicMaterial({ color: 0x35e0ff, transparent: true, opacity: 0.18, side: THREE.DoubleSide, depthWrite: false }))
+    new THREE.MeshBasicMaterial({ color: 0x35e0ff, transparent: true, opacity: 0.14, side: THREE.DoubleSide, depthWrite: false }))
   beam.position.y = -ALT / 2
   g.add(beam)
   g.visible = false
-  g.userData.rotor = rotor
   scene.add(g)
   return g
 }
 const heli = makeHeli()
-const rotor = heli.userData.rotor
+const heliIcon = icon('#ffffff', { ring: '#35e0ff', label: '✈' })
+heliIcon.visible = false
+scene.add(heliIcon)
 function placeHeli(h, [x, y]) {
-  h.position.set(x * cs, layers.height[Math.round(y) * W + Math.round(x)] + ALT, y * cs)
+  h.position.set(x * cs, groundAt(x * cs, y * cs) + ALT, y * cs)
 }
 const dotPos = new Float32Array(W * H * 3)
 const dotCol = new Float32Array(W * H * 3)
@@ -440,8 +531,9 @@ function reveal(fresh) {
     const rock = layers.rocks_fine[i]
     rocks += rock
     if (layers.cost_to_go_scouted) ctg[i] = layers.cost_to_go_scouted[i]
+    if (!rock) continue // clear ground shows by turning to full colour (the discover look); only rocks get a dot
     dotPos.set([(i % W) * cs, layers.height[i] + 0.5, Math.floor(i / W) * cs], dots * 3)
-    dotCol.set(rock ? [1, 0.2, 0.15] : [0.55, 0.95, 1], dots * 3)
+    dotCol.set([1, 0.2, 0.15], dots * 3)
     dots++
   }
   if (fresh.length) {
@@ -458,14 +550,14 @@ $('scout').onclick = () => {
     ...scoutPlan.map((f) => ({ waypoints: f.waypoints, metres: f.metres, kind: f.kind === 'uncertain' ? 'least certain' : f.kind ?? 'extra' }))]
   if (!flights.length) return
   const metres = flights.reduce((m, f) => m + f.metres, 0)
-  flight = { flights, k: 0, along: 0, speed: metres / 9, found: 0, before: route } // the whole scout plays in ~9 s
+  flight = { flights, k: 0, along: 0, speed: metres / 30, found: 0, before: route } // the whole scout plays in ~30 s, slow enough to watch the ground appear
   pause()
   $('scout').disabled = true
-  heli.visible = scanDots.visible = true
+  heli.visible = heliIcon.visible = scanDots.visible = true
 }
 
 function tickFlight(dt) {
-  rotor.rotation.y += dt * 40
+  heli.userData.rotors.forEach((r, k) => (r.rotation.y += dt * (k ? -40 : 40)))
   const f = flight.flights[flight.k]
   flight.along += flight.speed * dt
   const p = pointAlong(meta, f.waypoints, flight.along)
@@ -476,6 +568,8 @@ function tickFlight(dt) {
     return
   }
   placeHeli(heli, p)
+  heliIcon.position.copy(heli.position)
+  revealShared.uHeli.value.set(heli.position.x, heli.position.z, 4 + ((performance.now() / 60) % 16)) // scan ring pulses out to 20 m
   const fresh = scanAt(meta, scanned, p[0], p[1])
   flight.found += reveal(fresh)
   if (fresh.length) render()
@@ -486,7 +580,8 @@ function tickFlight(dt) {
 function land() {
   const { before, found } = flight
   flight = null
-  heli.visible = scanDots.visible = false
+  heli.visible = heliIcon.visible = scanDots.visible = false
+  revealShared.uHeli.value.z = 0
   $('scout').disabled = false
   $('scout').textContent = 'Fly the new route'
   blocked = Uint8Array.from(scanned, (v, i) => v && layers.rocks_fine[i])
@@ -542,17 +637,24 @@ function pause() {
   $('play').textContent = 'Walk'
 }
 
+// Ground the crew already knows first-hand: within 60 m of the habitat. Drawn in full colour from the start.
+const nearHome = Uint8Array.from({ length: W * H }, (_, i) => Math.hypot((i % W) - meta.base_cell[0], Math.floor(i / W) - meta.base_cell[1]) * cs <= 60)
+
 function render() {
   const inside = ringMask(ctg, ringLimit(meta, walk))
+  for (let dy = -3; dy <= 3; dy++) for (let dx = -3; dx <= 3; dx++) { // the astronaut sees the ground around them first-hand
+    const x = walk.cell[0] + dx, y = walk.cell[1] + dy
+    if (x >= 0 && y >= 0 && x < W && y < H && dx * dx + dy * dy <= 9) nearHome[y * W + x] = 1
+  }
   const vertexBase = layerName === IMAGERY ? WHITE : layerColors // the image itself carries the colour in the Imagery view
   for (let i = 0; i < W * H; i++) {
     const f = inside[i] ? 1 : 0.45
     if (rockSeen(i)) colors.array.set([200, 35, 35], i * 3)
     else for (let c = 0; c < 3; c++) colors.array[i * 3 + c] = vertexBase[i * 3 + c] * f
-    tint.image.data.set([colors.array[i * 3], colors.array[i * 3 + 1], colors.array[i * 3 + 2], 255], i * 4)
+    tint.image.data.set([colors.array[i * 3], colors.array[i * 3 + 1], colors.array[i * 3 + 2], scanned[i] || nearHome[i] ? 255 : 0], i * 4)
   }
   colors.needsUpdate = tint.needsUpdate = true
-  walker.position.copy(cellPos(walk.cell, span / 100))
+  walkerGoal.copy(cellPos(walk.cell))
   paintMinimap(inside)
 
   const s = appState(world, walk)
@@ -613,4 +715,4 @@ if (flags.has('detail')) {
     if (route) drawRouteLine()
   }, { maxTiles: Math.min(innerWidth, innerHeight) < 600 ? 4 : 9 }).then((t) => (tiles = t)).catch(() => {})
 }
-window.vesta = { camera, controls, walker, tiles: () => tiles, groundAt } // for checks from the console and tests
+window.vesta = { camera, controls, walker, tiles: () => tiles, groundAt, setView, view } // for checks from the console and tests

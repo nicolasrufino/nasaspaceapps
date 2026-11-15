@@ -3,6 +3,7 @@
 // (NASA/JPL-Caltech/University of Arizona), cut into 256 m tiles by data/pipeline/make_tiles.py and hosted on Azure Blob
 // (world.json `detail_tiles`). Visual only: routes, energy and the ring stay on the 8 m grid (docs/CONTRACTS.md).
 import * as THREE from 'three'
+import { REVEAL_GLSL, REVEAL_UNIFORMS } from './terrain.js'
 
 const SKIRT_M = 6 // ponytail: edges drop 6 m so no gap shows against the 8 m mesh; proper LOD stitching if it ever matters
 export const MAX_HOLES = 9
@@ -53,14 +54,15 @@ function tileMaterial(map, shared) {
   mat.onBeforeCompile = (shader) => {
     Object.assign(shader.uniforms, shared)
     shader.vertexShader = shader.vertexShader
-      .replace('#include <common>', '#include <common>\nuniform vec2 uCells;\nvarying vec2 vTintUv;')
-      .replace('#include <begin_vertex>', '#include <begin_vertex>\nvTintUv = (position.xz / uCells.x + 0.5) / uCells.y;')
+      .replace('#include <common>', '#include <common>\nuniform vec2 uCells;\nvarying vec2 vTintUv;\nvarying vec2 vXZ;')
+      .replace('#include <begin_vertex>', '#include <begin_vertex>\nvTintUv = (position.xz / uCells.x + 0.5) / uCells.y;\nvXZ = position.xz;')
     shader.fragmentShader = shader.fragmentShader
-      .replace('#include <common>', '#include <common>\nuniform sampler2D uTint;\nuniform float uOverlay;\nvarying vec2 vTintUv;')
+      .replace('#include <common>', `#include <common>\nuniform float uOverlay;\nvarying vec2 vTintUv;\nvarying vec2 vXZ;\n${REVEAL_UNIFORMS}`)
       .replace('#include <color_fragment>', `
         vec3 vc = pow(texture2D(uTint, vTintUv).rgb, vec3(2.2));
         float lum = dot(diffuseColor.rgb, vec3(0.299, 0.587, 0.114));
-        diffuseColor.rgb = mix(diffuseColor.rgb * vc, vc * (0.35 + 2.2 * lum), uOverlay);`)
+        diffuseColor.rgb = mix(diffuseColor.rgb * vc, vc * (0.35 + 2.2 * lum), uOverlay);
+        vec2 xz = vXZ; vec2 tintUv = vTintUv;${REVEAL_GLSL}`)
   }
   return mat
 }
