@@ -133,7 +133,7 @@ def build(n, cell, base, energy_budget_j, blocked=None, h=None, cls=None, passab
 
 
 def synthetic_rocks(n, base, seed=7):
-    """Fine-scale rock fields orbit misses and a scout drone would reveal (1 = rock field)."""
+    """Fine-scale rock fields orbit misses and a scout helicopter would reveal (1 = rock field)."""
     rnd = random.Random(seed + 2)
     rocks = array.array('B', [0]) * (n * n)
     for _ in range(14):
@@ -206,8 +206,8 @@ def write(out, n, cell, base, budget, h, slope, cls, cost_per_m, ctg, site=None)
         targets, route, rocks, stops = site['targets'], site['route'], site['rocks'], site['stops']
     else:
         targets, route = synthetic_targets(n, ctg, base)
-        rocks, stops = synthetic_rocks(n, base), []  # what the scout drone reveals: hidden rock fields
-    # the way home once the drone has revealed the rocks
+        rocks, stops = synthetic_rocks(n, base), []  # what the scout helicopter reveals: hidden rock fields
+    # the way home once the helicopter has revealed the rocks
     ctg_scouted = build(n, cell, base, budget, blocked=rocks, h=h, cls=cls, passable=(site or {}).get('passable'))[-1]
     with open(os.path.join(out, 'rocks_fine.u8'), 'wb') as f:
         rocks.tofile(f)

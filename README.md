@@ -9,7 +9,7 @@ NASA Space Apps 2026 (Chicago), challenge *Interplanetary Survival Guide: Martia
 There is no map of Mars detailed enough for one walk, and Earth is 4 to 22 minutes away. So we build the map in five stages, coarse to fine, each telling the next where to look:
 
 1. **Orbit:** NASA's layers for one 2 × 2 km slice of Mount Sharp, Gale crater.
-2. **Scout:** a drone flies the route strip, then anomalies, then uncertain spots, and reveals the rocks and sand orbit can't see.
+2. **Scout:** a NASA JPL-style helicopter (Ingenuity, SkyFall) flies the route strip, then anomalies, then uncertain spots, and reveals the rocks and sand orbit can't see.
 3. **Plan and pack:** the safe, efficient route to the science stops, the margin home and the packing list.
 4. **Walk and add:** a tablet minimap and a helmet HUD keep the way home known; every step adds to the map.
 5. **Next walk:** starts from a better map.
@@ -21,7 +21,7 @@ One three.js web app shows it three ways: the habitat display, the tablet the cr
 | Lane | Who | Focus | Brief |
 |---|---|---|---|
 | Person 1 | **Jules** | Machine learning: rock detection, ground classifier, CAPCOM agent on Azure | `docs/roles/person-1-ml.md` |
-| Person 2 | **Nicolas** | App and 3D: views, walk, drone scout, stops | `docs/roles/person-2-engine.md` |
+| Person 2 | **Nicolas** | App and 3D: views, walk, helicopter scout, stops | `docs/roles/person-2-engine.md` |
 | Person 3 | **Galsan** (lead) | Data, systems and integration: real Gale slice, all data layers, Azure deploy, merges | `docs/roles/person-3-data-systems.md` |
 | Person X | Open | Story, HUD design, pitch, project page | `docs/roles/person-x.md` |
 
@@ -45,8 +45,8 @@ Background: `docs/PLAN.md` (the whole plan), `docs/DATA.md` (each NASA resource 
 ## Local awards we aim for
 
 1. **Best Use of Science** (main target): eight types of NASA data, every claim tested.
-2. **Best Use of Technology** (requires Microsoft Azure): hosted on Azure Static Web Apps; CAPCOM agent on Microsoft Foundry.
-3. **Art & Technology**: 3D terrain, the drone's scan sweep, the helmet HUD.
+2. **Best Use of Technology** (requires Microsoft Azure): hosted on Azure Static Web Apps. The CAPCOM agent runs offline for now; connecting it to Microsoft Foundry is next.
+3. **Art & Technology**: 3D terrain, the helicopter's scan sweep, the helmet HUD.
 
 ## Quick start
 
@@ -62,7 +62,7 @@ Everyone builds against `data/worlds/synthetic/` from the first minute; the real
 |---|---|---|
 | `data/` | Galsan | Pipeline and world files |
 | `ml/` | Jules | Rock detection, ground classifier, buddy rover; ONNX exports |
-| `agent/` | Jules | CAPCOM agent (Microsoft Foundry) |
+| `agent/` | Jules | CAPCOM agent (offline service; Microsoft Foundry next) |
 | `app/` | Nicolas | The three.js web app |
 | `docs/` | Everyone (Galsan merges) | Product, build plan, contracts, role briefs, pitch |
 

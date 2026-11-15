@@ -14,12 +14,12 @@
 
   <figure class="shot">
     <div class="phone"><div class="hud">
-      <div class="hud-top"><span>Scout · drone flight 1</span><span class="ok">Route re-planned</span><span>Pack 14 kg</span></div>
-      <canvas data-scene="scout" width="320" height="300" aria-label="Drone path revealing rock fields along the route"></canvas>
+      <div class="hud-top"><span>Scout · helicopter flight 1</span><span class="ok">Route re-planned</span><span>Pack 14 kg</span></div>
+      <canvas data-scene="scout" width="320" height="300" aria-label="Helicopter path revealing rock fields along the route"></canvas>
       <div class="chips2"><span class="chip">2 rock fields found · +120 m detour</span><span class="chip cy">Orbit missed both</span></div>
       <ol class="stops"><li>Oxygen and water: 4 h + 1 h reserve</li><li>Core sampler, 6 sample bags (stops A, B)</li><li>Rock hammer, hand lens, sample marker flags</li><li class="amber-t">Drill kit 9 kg → rover carries it</li></ol>
     </div></div>
-    <figcaption><strong>Scout and pack (habitat display).</strong> Before the walk, a drone flies the route and finds what orbit cannot see; the route re-plans. The packing list comes from the route: air and water with the reserve, the sampling kit for each target, and anything too heavy goes on the rover.<br><em>Why:</em> Ingenuity scouted routes for Perseverance across 72 flights, and one flight saved about two months of driving; NASA's statement asks how carrying equipment and supplies affects a suited astronaut.</figcaption>
+    <figcaption><strong>Scout and pack (habitat display).</strong> Before the walk, a helicopter flies the route and finds what orbit cannot see; the route re-plans. The packing list comes from the route: air and water with the reserve, the sampling kit for each target, and anything too heavy goes on the rover.<br><em>Why:</em> Ingenuity scouted routes for Perseverance across 72 flights, and one flight saved about two months of driving; NASA's statement asks how carrying equipment and supplies affects a suited astronaut.</figcaption>
   </figure>
 
   <figure class="shot">
@@ -111,7 +111,7 @@
     (opt.stops || []).forEach(function (s) { dot(s[0], s[1], 6, s[2]); });
     (opt.shelters || []).forEach(function (s) { square(s[0], '#ffbe3c', s[1]); });
     if (opt.buddy) dot(opt.buddy, '#38dcff', 6, 'Buddy');
-    if (opt.drone) dot(opt.drone, '#ffd27a', 6, 'Drone');
+    if (opt.helicopter) dot(opt.helicopter, '#ffd27a', 6, 'Helicopter');
     if (opt.me) dot(opt.me, opt.meColor || '#7CFF8A', 7, 'You');
   }
   var scenes = {
@@ -119,7 +119,7 @@
     noreturn: { ring: 45, route: route, me: route[8], meColor: '#ff5a5a', buddy: [41, 23] },
     buddy: { crop: [14, 14, 36], ring: null, route: route.slice(0, 6), routeColor: 'rgba(56,220,255,0.9)', dash: true, me: route[5], buddy: [29, 27] },
     plan: { ring: null, route: route.slice(0, 7), stops: [[[30, 40], '#7CFF8A', 'A'], [[37, 23], '#7CFF8A', 'B'], [[58, 10], '#ff5a5a', 'C']] },
-    scout: { ring: null, rocks: true, seen: function (x, y) { return route.some(function (p) { return Math.abs(p[0] - x) <= 6 && Math.abs(p[1] - y) <= 6; }); }, route: route, routeColor: 'rgba(56,220,255,0.9)', dash: true, drone: [43, 21] },
+    scout: { ring: null, rocks: true, seen: function (x, y) { return route.some(function (p) { return Math.abs(p[0] - x) <= 6 && Math.abs(p[1] - y) <= 6; }); }, route: route, routeColor: 'rgba(56,220,255,0.9)', dash: true, helicopter: [43, 21] },
     storm: { ring: null, shelter: 60, me: route[5], buddy: [24, 28], shelters: [[[24, 28], 'Rover'], [[40, 30], 'Crater wall']] }
   };
   document.querySelectorAll('canvas[data-scene]').forEach(function (cv) {

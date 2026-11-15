@@ -184,7 +184,7 @@ a.bg-lane:hover{filter:brightness(1.15);text-decoration:none}.bg-lane.p1{backgro
     <p class="lbl2">Our solution: a map that builds itself, walk by walk</p>
     <ol class="loop">
       <li><b>1 Orbit</b><span>NASA's maps of the whole site: where the science is, where not to go, where to look closer</span></li>
-      <li><b>2 Scout</b><span>A drone flies the route first and finds the rocks and sand orbit can't see</span></li>
+      <li><b>2 Scout</b><span>A NASA JPL-style helicopter flies the route first and finds the rocks and sand orbit can't see</span></li>
       <li><b>3 Plan and pack</b><span>Safe, efficient route, margin home, packing list, decided before leaving</span></li>
       <li><b>4 Walk and add</b><span>The suit display keeps the way home known; every step adds detail to the map</span></li>
       <li><b>5 Next walk</b><span>The next crew starts from a better map and goes further</span></li>
@@ -227,7 +227,7 @@ a.bg-lane:hover{filter:brightness(1.15);text-decoration:none}.bg-lane.p1{backgro
 <p><strong>Martian Map turns NASA's Mars data into a science walk you can plan, preview and come home from, and makes the map better with every walk.</strong></p>
 <p>What it is, concretely: <strong>one app, three views of the same map.</strong></p>
 <ul>
-<li><strong>The habitat display</strong> (the night before): pick a science goal, see the layers, send the scout drone, approve the route and the packing list.</li>
+<li><strong>The habitat display</strong> (the sol before): pick a science goal, see the layers, send the scout helicopter (it flies in daylight), approve the route and the packing list.</li>
 <li><strong>The tablet the crew carries</strong> (during the walk): a minimap like in a video game: where you are, where to go, the path, and the layers that matter (ground, minerals, chemistry, radiation). A science checklist at each stop.</li>
 <li><strong>The helmet HUD</strong> (during the walk): only what matters right now: how far you can still go and get home, heading, the next stop, alerts.</li>
 </ul>
@@ -235,7 +235,7 @@ a.bg-lane:hover{filter:brightness(1.15);text-decoration:none}.bg-lane.p1{backgro
 <p>Who uses it: a two-person crew on Mars, before, during and after a walk. Where we build it: one 2 km × 2 km slice of lower Mount Sharp in Gale crater (see <code>docs/DATA.md</code>).</p>
 <h3 id="4-the-idea-in-one-line-coarse-to-fine">4. The idea in one line: coarse to fine</h3>
 <p><strong>Each stage sees more detail than the one before, covers less ground, and costs more. So each stage tells the next one where to look.</strong></p>
-<p>Orbit sees everything, coarsely, for free. The drone sees fine detail, but only along a few hundred metres per flight. The crew sees everything up close, but their walk time is the most precious thing on the mission. Martian Map spends each one where it matters most.</p>
+<p>Orbit sees everything, coarsely, for free. The helicopter sees fine detail, but only along a few hundred metres per flight. The crew sees everything up close, but their walk time is the most precious thing on the mission. Martian Map spends each one where it matters most.</p>
 <div class="tbl"><table>
 <thead>
 <tr>
@@ -253,7 +253,7 @@ a.bg-lane:hover{filter:brightness(1.15);text-decoration:none}.bg-lane.p1{backgro
 <td>Nothing: NASA already collected it</td>
 </tr>
 <tr>
-<td>2. Scout drone</td>
+<td>2. Scout helicopter</td>
 <td>Centimetres</td>
 <td>One route corridor</td>
 <td>A few 3-minute flights</td>
@@ -287,22 +287,22 @@ a.bg-lane:hover{filter:brightness(1.15);text-decoration:none}.bg-lane.p1{backgro
 <ul>
 <li><strong>Where to go:</strong> minerals and geology point to the science (the boxwork ridges, places where water once flowed).</li>
 <li><strong>Where not to go:</strong> slopes too steep for a suit, sand fields, high-radiation exposure.</li>
-<li><strong>Where to look closer:</strong> it narrows 4 km² down to a few corridors, so the drone flies only where it matters.</li>
+<li><strong>Where to look closer:</strong> it narrows 4 km² down to a few corridors, so the helicopter flies only where it matters.</li>
 </ul></li>
 <li><strong>Its limit, and why we don't stop here:</strong> orbit cannot see the small things that stop a person on foot (rocks under about 1 m, soft sand, short steep steps). The JETT3 test showed that plans built on orbit-scale maps break on contact.</li>
 <li><strong>Objectives it meets:</strong> R1 (several missions in one view), R2 (science goal to targets), R3 (several data types), R5 (one site, not a region).</li>
 <li><strong>In our demo:</strong> the "orbit view" is a coarse version of the slice, about the detail most of Mars has.</li>
 </ul>
-<h4 id="stage-2-scout-a-drone-looks-before-people-walk">Stage 2: Scout. A drone looks before people walk</h4>
+<h4 id="stage-2-scout-a-helicopter-looks-before-people-walk">Stage 2: Scout. A helicopter looks before people walk</h4>
 <ul>
-<li><strong>What happens:</strong> a small helicopter flies the planned route first. It covers the route corridor first, then anomalies (places where the layers disagree, such as firm-looking ground that the thermal data says is loose sand, a slope near the 25° limit, or an unusual mineral signal near a target), then the cells it is least sure about. Every cell it flies over updates every layer of the map. Where it flies, the map gains full detail: exact terrain and every rock. The route re-plans around what it found.</li>
+<li><strong>What happens:</strong> in daylight on the sol before the walk, a small scout helicopter flies the planned route first: the kind NASA JPL flew on Mars (Ingenuity) and is now having AeroVironment build for crew scouting (SkyFall, launch late 2028). It covers the route corridor first, then anomalies (places where the layers disagree, such as firm-looking ground that the thermal data says is loose sand, a slope near the 25° limit, or an unusual mineral signal near a target), then the cells it is least sure about. It avoids smooth sand, where camera navigation fails (what ended Ingenuity). Where it flies, the map gains centimetre detail: the terrain and the hazards below orbit's limit (rocks under about 1.5 m, half-metre drops). The route re-plans around what it found.</li>
 <li><strong>Why a scout at all:</strong> walk time is the scarcest resource. Finding a blocked path halfway through a walk costs oxygen, energy and maybe the walk. Finding it from the habitat costs a 3-minute flight.</li>
-<li><strong>Why a drone and not a rover:</strong> an Ingenuity-class drone covers about 700 m in 3 minutes. A rover on autonomous driving averages about 110 m an hour.</li>
-<li><strong>Why we believe it works:</strong> Ingenuity flew 72 times on Mars and scouted routes for Perseverance; one flight ruled out a target and saved the rover team about two months of driving. JPL's 2025 Skyfall concept proposes helicopters to scout landing sites for people.</li>
+<li><strong>Why a helicopter and not a rover:</strong> an Ingenuity-class helicopter covers about 700 m in 3 minutes. A rover on autonomous driving averages about 110 m an hour.</li>
+<li><strong>Why we believe it works:</strong> Ingenuity flew 72 times on Mars as "an aerial scout" for Perseverance's drivers; its Flight 12 images confirmed the rover's route into South Séítah was drivable. NASA's SkyFall (three helicopters, contracted, launch late 2028) will scout exploration zones for crews, and MoonFall's four hopping drones will survey Artemis sites before astronauts arrive. Every link, every limit and our answers: <code>docs/RESEARCH.md</code> §14.</li>
 <li><strong>What it makes easier:</strong> surprises move from the walk to the planning table.</li>
 <li><strong>Objectives it meets:</strong> R4 (route around obstacles), C6 (robots supporting the crew).</li>
 <li><strong>How it sees in 3D:</strong> the same idea as a bat's echolocation, but with light instead of sound, because Mars' thin air loses high-pitched sound within metres. The main sensor is cameras: overlapping photos turned into 3D, already done with Ingenuity's images at 5 cm detail. A laser adds exact height; radar could later show what is underneath. Details in <code>docs/RESEARCH.md</code> §13.</li>
-<li><strong>In our demo:</strong> the flight is simulated; what it reveals is real NASA data, the full-resolution images and elevation of the same slice, labelled "simulated drone view, real HiRISE data". As it flies, a scan sweep shows rays hitting the terrain and dots building up before the full detail fades in.</li>
+<li><strong>In our demo:</strong> the flight is simulated; what it reveals is real NASA data, the full-resolution images and elevation of the same slice, labelled "simulated helicopter view, real HiRISE data". As it flies, a scan sweep shows rays hitting the terrain and dots building up before the full detail fades in.</li>
 </ul>
 <h4 id="stage-3-plan-and-pack-decide-before-you-leave">Stage 3: Plan and pack. Decide before you leave</h4>
 <ul>
@@ -359,7 +359,7 @@ a.bg-lane:hover{filter:brightness(1.15);text-decoration:none}.bg-lane.p1{backgro
 <tr>
 <td><strong>R4</strong> Safety: obstacles, loads, space weather</td>
 <td>Orbit-only maps miss small hazards; plans broke in the 2022 test; voice guidance fails with delay</td>
-<td>Scout drone before the walk; energy and oxygen per step; point-of-no-return alert; storm warnings</td>
+<td>Scout helicopter before the walk; energy and oxygen per step; point-of-no-return alert; storm warnings</td>
 <td>Hazards are found before the walk, and the margin home is known at every step, on the crew's side of the delay</td>
 </tr>
 <tr>
@@ -371,7 +371,7 @@ a.bg-lane:hover{filter:brightness(1.15);text-decoration:none}.bg-lane.p1{backgro
 <tr>
 <td><strong>C5, C6</strong> Rover views; robots and pairs</td>
 <td>Rover photos sit in a separate gallery</td>
-<td>Rover photos at each stop; a drone that scouts; a buddy rover that carries</td>
+<td>Rover photos at each stop; a helicopter that scouts; a buddy rover that carries</td>
 <td>The robots do the jobs that save crew time and strength</td>
 </tr>
 </tbody>
@@ -379,8 +379,8 @@ a.bg-lane:hover{filter:brightness(1.15);text-decoration:none}.bg-lane.p1{backgro
 <p>The short version: <strong>every tool that exists today does one stage. Martian Map connects all five, so each stage makes the next one better, and it runs with the crew, not on Earth.</strong> (The option-by-option comparison is in <code>docs/PLAN.md</code>, section 0.)</p>
 <h3 id="7-what-is-real-and-what-is-simulated">7. What is real and what is simulated</h3>
 <ul>
-<li><strong>Real:</strong> every data layer (NASA orbiters and Curiosity), the full-detail view the drone reveals, the walking-energy model, the route and safety maths, the classifier's training labels.</li>
-<li><strong>Simulated:</strong> the drone's flight, the astronaut (a judge walking with a phone), and the delay to mission control.</li>
+<li><strong>Real:</strong> every data layer (NASA orbiters and Curiosity), the full-detail view the helicopter reveals, the walking-energy model, the route and safety maths, the classifier's training labels.</li>
+<li><strong>Simulated:</strong> the helicopter's flight, the astronaut (a judge walking with a phone), and the delay to mission control.</li>
 <li><strong>Not claimed:</strong> that a phone is the suit display (it stands in for one), or numbers we haven't measured. Every number in the pitch comes from our code.</li>
 </ul>
 <h3 id="sources">Sources</h3>
@@ -400,12 +400,12 @@ a.bg-lane:hover{filter:brightness(1.15);text-decoration:none}.bg-lane.p1{backgro
     <p>Four lanes, one per person. Each box is one block of work. Arrows point from a block to the blocks that need it first. Click a box to see what goes inside, what it needs and what it unlocks. <span class="bg-key">Orange: needed first. Blue: unlocked by it.</span></p>
 <div class="bg-wrap"><div class="bg" id="bg">
 <svg class="bg-svg" aria-hidden="true"></svg>
-<div class="bg-h"></div><div class="bg-h">M0 · Sat 9:00–12:30</div><div class="bg-h">M1 · 12:30–16:00</div><div class="bg-h">M2 · 16:00–21:00</div><div class="bg-h">Overnight · to Sun 7:00</div><div class="bg-h">Freeze · Sun 8:00 → submit</div><a class="bg-lane p1" href="#overview-roles" title="What this person focuses on">Jules · P1 · ML</a><div class="bg-cell p1"><div class="blk p1" data-id="R1" tabindex="0" role="button"><span class="bid">R1</span> Rock detector v0<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/31" target="_blank" rel="noopener">#31</a></span></div><div class="blk p1" data-id="R2" tabindex="0" role="button"><span class="bid">R2</span> Placeholder models<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/5" target="_blank" rel="noopener">#5</a></span></div></div><div class="bg-cell p1"><div class="blk p1" data-id="R3" tabindex="0" role="button"><span class="bid">R3</span> Rocks for our slice<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/31" target="_blank" rel="noopener">#31</a></span></div></div><div class="bg-cell p1"><div class="blk p1" data-id="R4" tabindex="0" role="button"><span class="bid">R4</span> Ground classifier<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/6" target="_blank" rel="noopener">#6</a></span></div></div><div class="bg-cell p1"><div class="blk p1" data-id="R5" tabindex="0" role="button"><span class="bid">R5</span> Numbers for the pitch<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/15" target="_blank" rel="noopener">#15</a></span></div><div class="blk p1" data-id="R7" tabindex="0" role="button"><span class="bid">R7</span> CAPCOM agent on Azure<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/42" target="_blank" rel="noopener">#42</a></span></div><div class="blk p1" data-id="R6" tabindex="0" role="button"><span class="bid">R6</span> Buddy rover RL (stretch)<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/4" target="_blank" rel="noopener">#4</a>, <a href="https://github.com/nicolasrufino/nasaspaceapps/issues/7" target="_blank" rel="noopener">#7</a></span></div></div><div class="bg-cell p1"><div class="blk p1" data-id="F1" tabindex="0" role="button"><span class="bid">F1</span> Numbers into the slides<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/45" target="_blank" rel="noopener">#45</a></span></div></div><a class="bg-lane p2" href="#overview-roles" title="What this person focuses on">Nicolas · P2 · App</a><div class="bg-cell p2"><div class="blk p2" data-id="E1" tabindex="0" role="button"><span class="bid">E1</span> App, 3D view and minimap<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/8" target="_blank" rel="noopener">#8</a>, <a href="https://github.com/nicolasrufino/nasaspaceapps/issues/9" target="_blank" rel="noopener">#9</a></span></div></div><div class="bg-cell p2"><div class="blk p2" data-id="E2" tabindex="0" role="button"><span class="bid">E2</span> Walking core<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/10" target="_blank" rel="noopener">#10</a></span></div><div class="blk p2" data-id="E3" tabindex="0" role="button"><span class="bid">E3</span> Plan mode<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/21" target="_blank" rel="noopener">#21</a></span></div></div><div class="bg-cell p2"><div class="blk p2" data-id="E4" tabindex="0" role="button"><span class="bid">E4</span> Drone scout<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/25" target="_blank" rel="noopener">#25</a></span></div><div class="blk p2" data-id="E5" tabindex="0" role="button"><span class="bid">E5</span> Why this route<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/33" target="_blank" rel="noopener">#33</a></span></div><div class="blk p2" data-id="E6" tabindex="0" role="button"><span class="bid">E6</span> Stops and step mode<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/22" target="_blank" rel="noopener">#22</a>, <a href="https://github.com/nicolasrufino/nasaspaceapps/issues/11" target="_blank" rel="noopener">#11</a></span></div></div><div class="bg-cell p2"><div class="blk p2" data-id="E7" tabindex="0" role="button"><span class="bid">E7</span> Buddy rover and override<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/12" target="_blank" rel="noopener">#12</a></span></div><div class="blk p2" data-id="E8" tabindex="0" role="button"><span class="bid">E8</span> Export the map<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/34" target="_blank" rel="noopener">#34</a></span></div></div><div class="bg-cell p2"><div class="blk p2" data-id="F2" tabindex="0" role="button"><span class="bid">F2</span> Fixes only<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/46" target="_blank" rel="noopener">#46</a></span></div></div><a class="bg-lane p3" href="#overview-roles" title="What this person focuses on">Galsan · P3 · Data (lead)</a><div class="bg-cell p3"><div class="blk p3" data-id="D1" tabindex="0" role="button"><span class="bid">D1</span> Pick and cut the slice<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/13" target="_blank" rel="noopener">#13</a></span></div></div><div class="bg-cell p3"><div class="blk p3" data-id="D2" tabindex="0" role="button"><span class="bid">D2</span> Real world files<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/13" target="_blank" rel="noopener">#13</a></span></div></div><div class="bg-cell p3"><div class="blk p3" data-id="D3" tabindex="0" role="button"><span class="bid">D3</span> Targets, stops, first route<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/20" target="_blank" rel="noopener">#20</a></span></div><div class="blk p3" data-id="D4" tabindex="0" role="button"><span class="bid">D4</span> Scout plan<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/32" target="_blank" rel="noopener">#32</a></span></div><div class="blk p3" data-id="D5" tabindex="0" role="button"><span class="bid">D5</span> Deploy on Azure<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/14" target="_blank" rel="noopener">#14</a></span></div></div><div class="bg-cell p3"><div class="blk p3" data-id="D6" tabindex="0" role="button"><span class="bid">D6</span> All eight data types<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/40" target="_blank" rel="noopener">#40</a></span></div><div class="blk p3" data-id="D7" tabindex="0" role="button"><span class="bid">D7</span> The map grows<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/27" target="_blank" rel="noopener">#27</a></span></div></div><div class="bg-cell p3"><div class="blk p3" data-id="F3" tabindex="0" role="button"><span class="bid">F3</span> Final deploy<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/47" target="_blank" rel="noopener">#47</a></span></div></div><a class="bg-lane px" href="#overview-roles" title="What this person focuses on">Person X · Story (open)</a><div class="bg-cell px"></div><div class="bg-cell px"></div><div class="bg-cell px"><div class="blk px" data-id="X1" tabindex="0" role="button"><span class="bid">X1</span> Helmet HUD view<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/41" target="_blank" rel="noopener">#41</a></span></div><div class="blk px" data-id="X2" tabindex="0" role="button"><span class="bid">X2</span> Packing list<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/26" target="_blank" rel="noopener">#26</a></span></div><div class="blk px" data-id="X3" tabindex="0" role="button"><span class="bid">X3</span> Test the pitch<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/16" target="_blank" rel="noopener">#16</a></span></div></div><div class="bg-cell px"><div class="blk px" data-id="X4" tabindex="0" role="button"><span class="bid">X4</span> Before/after and project page<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/17" target="_blank" rel="noopener">#17</a></span></div></div><div class="bg-cell px"><div class="blk px" data-id="F4" tabindex="0" role="button"><span class="bid">F4</span> Video and submit<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/48" target="_blank" rel="noopener">#48</a></span></div></div>
+<div class="bg-h"></div><div class="bg-h">M0 · Sat 9:00–12:30</div><div class="bg-h">M1 · 12:30–16:00</div><div class="bg-h">M2 · 16:00–21:00</div><div class="bg-h">Overnight · to Sun 7:00</div><div class="bg-h">Freeze · Sun 8:00 → submit</div><a class="bg-lane p1" href="#overview-roles" title="What this person focuses on">Jules · P1 · ML</a><div class="bg-cell p1"><div class="blk p1" data-id="R1" tabindex="0" role="button"><span class="bid">R1</span> Rock detector v0<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/31" target="_blank" rel="noopener">#31</a></span></div><div class="blk p1" data-id="R2" tabindex="0" role="button"><span class="bid">R2</span> Placeholder models<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/5" target="_blank" rel="noopener">#5</a></span></div></div><div class="bg-cell p1"><div class="blk p1" data-id="R3" tabindex="0" role="button"><span class="bid">R3</span> Rocks for our slice<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/31" target="_blank" rel="noopener">#31</a></span></div></div><div class="bg-cell p1"><div class="blk p1" data-id="R4" tabindex="0" role="button"><span class="bid">R4</span> Ground classifier<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/6" target="_blank" rel="noopener">#6</a></span></div></div><div class="bg-cell p1"><div class="blk p1" data-id="R5" tabindex="0" role="button"><span class="bid">R5</span> Numbers for the pitch<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/15" target="_blank" rel="noopener">#15</a></span></div><div class="blk p1" data-id="R7" tabindex="0" role="button"><span class="bid">R7</span> CAPCOM agent on Azure<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/42" target="_blank" rel="noopener">#42</a></span></div><div class="blk p1" data-id="R6" tabindex="0" role="button"><span class="bid">R6</span> Buddy rover RL (stretch)<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/4" target="_blank" rel="noopener">#4</a>, <a href="https://github.com/nicolasrufino/nasaspaceapps/issues/7" target="_blank" rel="noopener">#7</a></span></div></div><div class="bg-cell p1"><div class="blk p1" data-id="F1" tabindex="0" role="button"><span class="bid">F1</span> Numbers into the slides<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/45" target="_blank" rel="noopener">#45</a></span></div></div><a class="bg-lane p2" href="#overview-roles" title="What this person focuses on">Nicolas · P2 · App</a><div class="bg-cell p2"><div class="blk p2" data-id="E1" tabindex="0" role="button"><span class="bid">E1</span> App, 3D view and minimap<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/8" target="_blank" rel="noopener">#8</a>, <a href="https://github.com/nicolasrufino/nasaspaceapps/issues/9" target="_blank" rel="noopener">#9</a></span></div></div><div class="bg-cell p2"><div class="blk p2" data-id="E2" tabindex="0" role="button"><span class="bid">E2</span> Walking core<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/10" target="_blank" rel="noopener">#10</a></span></div><div class="blk p2" data-id="E3" tabindex="0" role="button"><span class="bid">E3</span> Plan mode<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/21" target="_blank" rel="noopener">#21</a></span></div></div><div class="bg-cell p2"><div class="blk p2" data-id="E4" tabindex="0" role="button"><span class="bid">E4</span> Helicopter scout<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/25" target="_blank" rel="noopener">#25</a></span></div><div class="blk p2" data-id="E5" tabindex="0" role="button"><span class="bid">E5</span> Why this route<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/33" target="_blank" rel="noopener">#33</a></span></div><div class="blk p2" data-id="E6" tabindex="0" role="button"><span class="bid">E6</span> Stops and step mode<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/22" target="_blank" rel="noopener">#22</a>, <a href="https://github.com/nicolasrufino/nasaspaceapps/issues/11" target="_blank" rel="noopener">#11</a></span></div></div><div class="bg-cell p2"><div class="blk p2" data-id="E7" tabindex="0" role="button"><span class="bid">E7</span> Buddy rover and override<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/12" target="_blank" rel="noopener">#12</a></span></div><div class="blk p2" data-id="E8" tabindex="0" role="button"><span class="bid">E8</span> Export the map<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/34" target="_blank" rel="noopener">#34</a></span></div></div><div class="bg-cell p2"><div class="blk p2" data-id="F2" tabindex="0" role="button"><span class="bid">F2</span> Fixes only<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/46" target="_blank" rel="noopener">#46</a></span></div></div><a class="bg-lane p3" href="#overview-roles" title="What this person focuses on">Galsan · P3 · Data (lead)</a><div class="bg-cell p3"><div class="blk p3" data-id="D1" tabindex="0" role="button"><span class="bid">D1</span> Pick and cut the slice<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/13" target="_blank" rel="noopener">#13</a></span></div></div><div class="bg-cell p3"><div class="blk p3" data-id="D2" tabindex="0" role="button"><span class="bid">D2</span> Real world files<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/13" target="_blank" rel="noopener">#13</a></span></div></div><div class="bg-cell p3"><div class="blk p3" data-id="D3" tabindex="0" role="button"><span class="bid">D3</span> Targets, stops, first route<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/20" target="_blank" rel="noopener">#20</a></span></div><div class="blk p3" data-id="D4" tabindex="0" role="button"><span class="bid">D4</span> Scout plan<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/32" target="_blank" rel="noopener">#32</a></span></div><div class="blk p3" data-id="D5" tabindex="0" role="button"><span class="bid">D5</span> Deploy on Azure<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/14" target="_blank" rel="noopener">#14</a></span></div></div><div class="bg-cell p3"><div class="blk p3" data-id="D6" tabindex="0" role="button"><span class="bid">D6</span> All eight data types<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/40" target="_blank" rel="noopener">#40</a></span></div><div class="blk p3" data-id="D7" tabindex="0" role="button"><span class="bid">D7</span> The map grows<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/27" target="_blank" rel="noopener">#27</a></span></div></div><div class="bg-cell p3"><div class="blk p3" data-id="F3" tabindex="0" role="button"><span class="bid">F3</span> Final deploy<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/47" target="_blank" rel="noopener">#47</a></span></div></div><a class="bg-lane px" href="#overview-roles" title="What this person focuses on">Person X · Story (open)</a><div class="bg-cell px"></div><div class="bg-cell px"></div><div class="bg-cell px"><div class="blk px" data-id="X1" tabindex="0" role="button"><span class="bid">X1</span> Helmet HUD view<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/41" target="_blank" rel="noopener">#41</a></span></div><div class="blk px" data-id="X2" tabindex="0" role="button"><span class="bid">X2</span> Packing list<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/26" target="_blank" rel="noopener">#26</a></span></div><div class="blk px" data-id="X3" tabindex="0" role="button"><span class="bid">X3</span> Test the pitch<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/16" target="_blank" rel="noopener">#16</a></span></div></div><div class="bg-cell px"><div class="blk px" data-id="X4" tabindex="0" role="button"><span class="bid">X4</span> Before/after and project page<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/17" target="_blank" rel="noopener">#17</a></span></div></div><div class="bg-cell px"><div class="blk px" data-id="F4" tabindex="0" role="button"><span class="bid">F4</span> Video and submit<span class="biss"><a href="https://github.com/nicolasrufino/nasaspaceapps/issues/48" target="_blank" rel="noopener">#48</a></span></div></div>
 </div></div>
 <div class="bg-detail" id="bg-detail" aria-live="polite"><p class="muted">Click a block to see what goes inside it, what it needs first, and what it unlocks.</p></div>
 <script>
 (function(){
-  var B={"R1": {"title": "Rock detector v0", "who": "Jules \u00b7 P1 \u00b7 ML", "when": "M0 \u00b7 Sat 9:00\u201312:30", "what": "Find rocks from their shadows on one downloaded 25 cm USGS tile of Gale; hand-check 50 rocks", "needs": [], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/31\" target=\"_blank\" rel=\"noopener\">#31</a>"}, "R2": {"title": "Placeholder models", "who": "Jules \u00b7 P1 \u00b7 ML", "when": "M0 \u00b7 Sat 9:00\u201312:30", "what": "Shape-correct `terrain_cls.onnx` and `buddy_policy.onnx` and the check script, so the app can load models now", "needs": [], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/5\" target=\"_blank\" rel=\"noopener\">#5</a>"}, "R3": {"title": "Rocks for our slice", "who": "Jules \u00b7 P1 \u00b7 ML", "when": "M1 \u00b7 12:30\u201316:00", "what": "Run the detector on the real slice and write `rocks_fine.u8`; report agreement with the hand-checked rocks", "needs": ["R1", "D1"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/31\" target=\"_blank\" rel=\"noopener\">#31</a>"}, "R4": {"title": "Ground classifier", "who": "Jules \u00b7 P1 \u00b7 ML", "when": "M2 \u00b7 16:00\u201321:00", "what": "Soil, bedrock, sand, big rock from AI4Mars labels; tested on Perseverance photos; exported to ONNX", "needs": ["R2"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/6\" target=\"_blank\" rel=\"noopener\">#6</a>"}, "R5": {"title": "Numbers for the pitch", "who": "Jules \u00b7 P1 \u00b7 ML", "when": "Overnight \u00b7 to Sun 7:00", "what": "Rocks avoided by the scouted route versus orbit only; margin home along the route; ring change if energy is off by \u00b130%", "needs": ["R3", "D4"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/15\" target=\"_blank\" rel=\"noopener\">#15</a>"}, "R7": {"title": "CAPCOM agent on Azure", "who": "Jules \u00b7 P1 \u00b7 ML", "when": "Overnight \u00b7 to Sun 7:00", "what": "Microsoft Foundry agent playing mission control, answering through a 20-second delay; tools read the app state. Needed for Best Use of Technology", "needs": ["E2"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/42\" target=\"_blank\" rel=\"noopener\">#42</a>"}, "R6": {"title": "Buddy rover RL (stretch)", "who": "Jules \u00b7 P1 \u00b7 ML", "when": "Overnight \u00b7 to Sun 7:00", "what": "Grid environment and a PPO &quot;lead&quot; policy, compared with the scripted rover", "needs": ["R2", "D2"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/4\" target=\"_blank\" rel=\"noopener\">#4</a>, <a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/7\" target=\"_blank\" rel=\"noopener\">#7</a>"}, "E1": {"title": "App, 3D view and minimap", "who": "Nicolas \u00b7 P2 \u00b7 App", "when": "M0 \u00b7 Sat 9:00\u201312:30", "what": "three.js app that loads the world files; 3D terrain from the height grid; flat minimap coloured by layer", "needs": [], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/8\" target=\"_blank\" rel=\"noopener\">#8</a>, <a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/9\" target=\"_blank\" rel=\"noopener\">#9</a>"}, "E2": {"title": "Walking core", "who": "Nicolas \u00b7 P2 \u00b7 App", "when": "M1 \u00b7 12:30\u201316:00", "what": "Move along the route; energy and oxygen drain; walk-back ring from the cost home; point-of-no-return buzz; works on a phone", "needs": ["E1"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/10\" target=\"_blank\" rel=\"noopener\">#10</a>"}, "E3": {"title": "Plan mode", "who": "Nicolas \u00b7 P2 \u00b7 App", "when": "M1 \u00b7 12:30\u201316:00", "what": "Layer toggles, targets, the route and stop previews on the habitat screen", "needs": ["E1"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/21\" target=\"_blank\" rel=\"noopener\">#21</a>"}, "E4": {"title": "Drone scout", "who": "Nicolas \u00b7 P2 \u00b7 App", "when": "M2 \u00b7 16:00\u201321:00", "what": "Flight along the scout plan; scan sweep (rays hit the terrain, dots build up); reveal full detail and rocks; re-plan", "needs": ["E3", "D4"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/25\" target=\"_blank\" rel=\"noopener\">#25</a>"}, "E5": {"title": "Why this route", "who": "Nicolas \u00b7 P2 \u00b7 App", "when": "M2 \u00b7 16:00\u201321:00", "what": "Panel: cost per stretch, the rejected alternative, slope, rocks, sand, margin home", "needs": ["E4"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/33\" target=\"_blank\" rel=\"noopener\">#33</a>"}, "E6": {"title": "Stops and step mode", "who": "Nicolas \u00b7 P2 \u00b7 App", "when": "M2 \u00b7 16:00\u201321:00", "what": "Science checklist and sample card at each stop; real steps and heading move the astronaut; writes the walk log", "needs": ["E2"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/22\" target=\"_blank\" rel=\"noopener\">#22</a>, <a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/11\" target=\"_blank\" rel=\"noopener\">#11</a>"}, "E7": {"title": "Buddy rover and override", "who": "Nicolas \u00b7 P2 \u00b7 App", "when": "Overnight \u00b7 to Sun 7:00", "what": "Scripted lead, heel and return along the breadcrumb path; override ladder", "needs": ["E2"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/12\" target=\"_blank\" rel=\"noopener\">#12</a>"}, "E8": {"title": "Export the map", "who": "Nicolas \u00b7 P2 \u00b7 App", "when": "Overnight \u00b7 to Sun 7:00", "what": "Map package and GeoJSON for mission control, &quot;arriving&quot; after the delay", "needs": ["E4"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/34\" target=\"_blank\" rel=\"noopener\">#34</a>"}, "D1": {"title": "Pick and cut the slice", "who": "Galsan \u00b7 P3 \u00b7 Data (lead)", "when": "M0 \u00b7 Sat 9:00\u201312:30", "what": "Choose the 2 \u00d7 2 km box in Mars Trek (boxwork, sand, a slope over 15\u00b0, a hidden rock field); cut the USGS 1 m terrain and 25 cm images; make the 8 m orbit view", "needs": [], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/13\" target=\"_blank\" rel=\"noopener\">#13</a>"}, "D2": {"title": "Real world files", "who": "Galsan \u00b7 P3 \u00b7 Data (lead)", "when": "M1 \u00b7 12:30\u201316:00", "what": "Run the pipeline on the slice: slope, walking cost, cost home from every square; add sand (THEMIS) and science (CRISM, local geologic map)", "needs": ["D1"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/13\" target=\"_blank\" rel=\"noopener\">#13</a>"}, "D3": {"title": "Targets, stops, first route", "who": "Galsan \u00b7 P3 \u00b7 Data (lead)", "when": "M2 \u00b7 16:00\u201321:00", "what": "Boxwork targets; Curiosity photos at each stop; the rough route on the orbit view", "needs": ["D2"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/20\" target=\"_blank\" rel=\"noopener\">#20</a>"}, "D4": {"title": "Scout plan", "who": "Galsan \u00b7 P3 \u00b7 Data (lead)", "when": "M2 \u00b7 16:00\u201321:00", "what": "`scout_plan.json`: route strip first, then anomalies, then the least certain squares", "needs": ["D3"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/32\" target=\"_blank\" rel=\"noopener\">#32</a>"}, "D5": {"title": "Deploy on Azure", "who": "Galsan \u00b7 P3 \u00b7 Data (lead)", "when": "M2 \u00b7 16:00\u201321:00", "what": "A public link on Azure Static Web Apps that a stranger&#x27;s phone can open; Azure makes us eligible for Best Use of Technology", "needs": ["E2"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/14\" target=\"_blank\" rel=\"noopener\">#14</a>"}, "D6": {"title": "All eight data types", "who": "Galsan \u00b7 P3 \u00b7 Data (lead)", "when": "Overnight \u00b7 to Sun 7:00", "what": "Radiation (RAD) and weather (REMS) for the slice; chemical (ChemCam, APXS) and geophysical (DAN) as points along Curiosity&#x27;s path", "needs": ["D2"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/40\" target=\"_blank\" rel=\"noopener\">#40</a>"}, "D7": {"title": "The map grows", "who": "Galsan \u00b7 P3 \u00b7 Data (lead)", "when": "Overnight \u00b7 to Sun 7:00", "what": "Merge walk logs (photos, ground type, real effort, markers) back into the site files", "needs": ["E6"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/27\" target=\"_blank\" rel=\"noopener\">#27</a>"}, "X1": {"title": "Helmet HUD view", "who": "Person X \u00b7 Story (open)", "when": "M2 \u00b7 16:00\u201321:00", "what": "The walk as a heads-up display: ring, heading, next stop, alerts only; same state as the tablet minimap", "needs": ["E2"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/41\" target=\"_blank\" rel=\"noopener\">#41</a>"}, "X2": {"title": "Packing list", "who": "Person X \u00b7 Story (open)", "when": "M2 \u00b7 16:00\u201321:00", "what": "What to bring and its weight from the route; heavy items go to the rover", "needs": ["D3"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/26\" target=\"_blank\" rel=\"noopener\">#26</a>"}, "X3": {"title": "Test the pitch", "who": "Person X \u00b7 Story (open)", "when": "M2 \u00b7 16:00\u201321:00", "what": "Three mentors or judges, three questions each; log the answers", "needs": [], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/16\" target=\"_blank\" rel=\"noopener\">#16</a>"}, "X4": {"title": "Before/after and project page", "who": "Person X \u00b7 Story (open)", "when": "Overnight \u00b7 to Sun 7:00", "what": "Today&#x27;s tools versus Martian Map as a screen; the project page with every dataset, the numbers and the limits", "needs": ["R5"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/17\" target=\"_blank\" rel=\"noopener\">#17</a>"}, "F1": {"title": "Numbers into the slides", "who": "Jules \u00b7 P1 \u00b7 ML", "when": "Freeze \u00b7 Sun 8:00 \u2192 submit", "what": "Final numbers on the proof slide", "needs": ["R5"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/45\" target=\"_blank\" rel=\"noopener\">#45</a>"}, "F2": {"title": "Fixes only", "who": "Nicolas \u00b7 P2 \u00b7 App", "when": "Freeze \u00b7 Sun 8:00 \u2192 submit", "what": "Switch off anything unstable; rehearse the demo walk", "needs": ["E4", "E6"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/46\" target=\"_blank\" rel=\"noopener\">#46</a>"}, "F3": {"title": "Final deploy", "who": "Galsan \u00b7 P3 \u00b7 Data (lead)", "when": "Freeze \u00b7 Sun 8:00 \u2192 submit", "what": "Last deploy; check the link on three phones", "needs": ["D5"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/47\" target=\"_blank\" rel=\"noopener\">#47</a>"}, "F4": {"title": "Video and submit", "who": "Person X \u00b7 Story (open)", "when": "Freeze \u00b7 Sun 8:00 \u2192 submit", "what": "30-second video; submit the project page", "needs": ["X4"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/48\" target=\"_blank\" rel=\"noopener\">#48</a>"}}, bg=document.getElementById('bg'), svg=bg.querySelector('svg'), det=document.getElementById('bg-detail'), sel=null;
+  var B={"R1": {"title": "Rock detector v0", "who": "Jules \u00b7 P1 \u00b7 ML", "when": "M0 \u00b7 Sat 9:00\u201312:30", "what": "Find rocks from their shadows on one downloaded 25 cm USGS tile of Gale; hand-check 50 rocks", "needs": [], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/31\" target=\"_blank\" rel=\"noopener\">#31</a>"}, "R2": {"title": "Placeholder models", "who": "Jules \u00b7 P1 \u00b7 ML", "when": "M0 \u00b7 Sat 9:00\u201312:30", "what": "Shape-correct `terrain_cls.onnx` and `buddy_policy.onnx` and the check script, so the app can load models now", "needs": [], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/5\" target=\"_blank\" rel=\"noopener\">#5</a>"}, "R3": {"title": "Rocks for our slice", "who": "Jules \u00b7 P1 \u00b7 ML", "when": "M1 \u00b7 12:30\u201316:00", "what": "Run the detector on the real slice and write `rocks_fine.u8`; report agreement with the hand-checked rocks", "needs": ["R1", "D1"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/31\" target=\"_blank\" rel=\"noopener\">#31</a>"}, "R4": {"title": "Ground classifier", "who": "Jules \u00b7 P1 \u00b7 ML", "when": "M2 \u00b7 16:00\u201321:00", "what": "Soil, bedrock, sand, big rock from AI4Mars labels; tested on Perseverance photos; exported to ONNX", "needs": ["R2"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/6\" target=\"_blank\" rel=\"noopener\">#6</a>"}, "R5": {"title": "Numbers for the pitch", "who": "Jules \u00b7 P1 \u00b7 ML", "when": "Overnight \u00b7 to Sun 7:00", "what": "Rocks avoided by the scouted route versus orbit only; margin home along the route; ring change if energy is off by \u00b130%", "needs": ["R3", "D4"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/15\" target=\"_blank\" rel=\"noopener\">#15</a>"}, "R7": {"title": "CAPCOM agent on Azure", "who": "Jules \u00b7 P1 \u00b7 ML", "when": "Overnight \u00b7 to Sun 7:00", "what": "Microsoft Foundry agent playing mission control, answering through a 20-second delay; tools read the app state. Needed for Best Use of Technology", "needs": ["E2"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/42\" target=\"_blank\" rel=\"noopener\">#42</a>"}, "R6": {"title": "Buddy rover RL (stretch)", "who": "Jules \u00b7 P1 \u00b7 ML", "when": "Overnight \u00b7 to Sun 7:00", "what": "Grid environment and a PPO &quot;lead&quot; policy, compared with the scripted rover", "needs": ["R2", "D2"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/4\" target=\"_blank\" rel=\"noopener\">#4</a>, <a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/7\" target=\"_blank\" rel=\"noopener\">#7</a>"}, "E1": {"title": "App, 3D view and minimap", "who": "Nicolas \u00b7 P2 \u00b7 App", "when": "M0 \u00b7 Sat 9:00\u201312:30", "what": "three.js app that loads the world files; 3D terrain from the height grid; flat minimap coloured by layer", "needs": [], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/8\" target=\"_blank\" rel=\"noopener\">#8</a>, <a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/9\" target=\"_blank\" rel=\"noopener\">#9</a>"}, "E2": {"title": "Walking core", "who": "Nicolas \u00b7 P2 \u00b7 App", "when": "M1 \u00b7 12:30\u201316:00", "what": "Move along the route; energy and oxygen drain; walk-back ring from the cost home; point-of-no-return buzz; works on a phone", "needs": ["E1"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/10\" target=\"_blank\" rel=\"noopener\">#10</a>"}, "E3": {"title": "Plan mode", "who": "Nicolas \u00b7 P2 \u00b7 App", "when": "M1 \u00b7 12:30\u201316:00", "what": "Layer toggles, targets, the route and stop previews on the habitat screen", "needs": ["E1"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/21\" target=\"_blank\" rel=\"noopener\">#21</a>"}, "E4": {"title": "Helicopter scout", "who": "Nicolas \u00b7 P2 \u00b7 App", "when": "M2 \u00b7 16:00\u201321:00", "what": "Flight along the scout plan; scan sweep (rays hit the terrain, dots build up); reveal full detail and rocks; re-plan", "needs": ["E3", "D4"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/25\" target=\"_blank\" rel=\"noopener\">#25</a>"}, "E5": {"title": "Why this route", "who": "Nicolas \u00b7 P2 \u00b7 App", "when": "M2 \u00b7 16:00\u201321:00", "what": "Panel: cost per stretch, the rejected alternative, slope, rocks, sand, margin home", "needs": ["E4"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/33\" target=\"_blank\" rel=\"noopener\">#33</a>"}, "E6": {"title": "Stops and step mode", "who": "Nicolas \u00b7 P2 \u00b7 App", "when": "M2 \u00b7 16:00\u201321:00", "what": "Science checklist and sample card at each stop; real steps and heading move the astronaut; writes the walk log", "needs": ["E2"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/22\" target=\"_blank\" rel=\"noopener\">#22</a>, <a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/11\" target=\"_blank\" rel=\"noopener\">#11</a>"}, "E7": {"title": "Buddy rover and override", "who": "Nicolas \u00b7 P2 \u00b7 App", "when": "Overnight \u00b7 to Sun 7:00", "what": "Scripted lead, heel and return along the breadcrumb path; override ladder", "needs": ["E2"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/12\" target=\"_blank\" rel=\"noopener\">#12</a>"}, "E8": {"title": "Export the map", "who": "Nicolas \u00b7 P2 \u00b7 App", "when": "Overnight \u00b7 to Sun 7:00", "what": "Map package and GeoJSON for mission control, &quot;arriving&quot; after the delay", "needs": ["E4"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/34\" target=\"_blank\" rel=\"noopener\">#34</a>"}, "D1": {"title": "Pick and cut the slice", "who": "Galsan \u00b7 P3 \u00b7 Data (lead)", "when": "M0 \u00b7 Sat 9:00\u201312:30", "what": "Choose the 2 \u00d7 2 km box in Mars Trek (boxwork, sand, a slope over 15\u00b0, a hidden rock field); cut the USGS 1 m terrain and 25 cm images; make the 8 m orbit view", "needs": [], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/13\" target=\"_blank\" rel=\"noopener\">#13</a>"}, "D2": {"title": "Real world files", "who": "Galsan \u00b7 P3 \u00b7 Data (lead)", "when": "M1 \u00b7 12:30\u201316:00", "what": "Run the pipeline on the slice: slope, walking cost, cost home from every square; add sand (THEMIS) and science (CRISM, local geologic map)", "needs": ["D1"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/13\" target=\"_blank\" rel=\"noopener\">#13</a>"}, "D3": {"title": "Targets, stops, first route", "who": "Galsan \u00b7 P3 \u00b7 Data (lead)", "when": "M2 \u00b7 16:00\u201321:00", "what": "Boxwork targets; Curiosity photos at each stop; the rough route on the orbit view", "needs": ["D2"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/20\" target=\"_blank\" rel=\"noopener\">#20</a>"}, "D4": {"title": "Scout plan", "who": "Galsan \u00b7 P3 \u00b7 Data (lead)", "when": "M2 \u00b7 16:00\u201321:00", "what": "`scout_plan.json`: route strip first, then anomalies, then the least certain squares", "needs": ["D3"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/32\" target=\"_blank\" rel=\"noopener\">#32</a>"}, "D5": {"title": "Deploy on Azure", "who": "Galsan \u00b7 P3 \u00b7 Data (lead)", "when": "M2 \u00b7 16:00\u201321:00", "what": "A public link on Azure Static Web Apps that a stranger&#x27;s phone can open; Azure makes us eligible for Best Use of Technology", "needs": ["E2"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/14\" target=\"_blank\" rel=\"noopener\">#14</a>"}, "D6": {"title": "All eight data types", "who": "Galsan \u00b7 P3 \u00b7 Data (lead)", "when": "Overnight \u00b7 to Sun 7:00", "what": "Radiation (RAD) and weather (REMS) for the slice; chemical (ChemCam, APXS) and geophysical (DAN) as points along Curiosity&#x27;s path", "needs": ["D2"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/40\" target=\"_blank\" rel=\"noopener\">#40</a>"}, "D7": {"title": "The map grows", "who": "Galsan \u00b7 P3 \u00b7 Data (lead)", "when": "Overnight \u00b7 to Sun 7:00", "what": "Merge walk logs (photos, ground type, real effort, markers) back into the site files", "needs": ["E6"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/27\" target=\"_blank\" rel=\"noopener\">#27</a>"}, "X1": {"title": "Helmet HUD view", "who": "Person X \u00b7 Story (open)", "when": "M2 \u00b7 16:00\u201321:00", "what": "The walk as a heads-up display: ring, heading, next stop, alerts only; same state as the tablet minimap", "needs": ["E2"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/41\" target=\"_blank\" rel=\"noopener\">#41</a>"}, "X2": {"title": "Packing list", "who": "Person X \u00b7 Story (open)", "when": "M2 \u00b7 16:00\u201321:00", "what": "What to bring and its weight from the route; heavy items go to the rover", "needs": ["D3"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/26\" target=\"_blank\" rel=\"noopener\">#26</a>"}, "X3": {"title": "Test the pitch", "who": "Person X \u00b7 Story (open)", "when": "M2 \u00b7 16:00\u201321:00", "what": "Three mentors or judges, three questions each; log the answers", "needs": [], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/16\" target=\"_blank\" rel=\"noopener\">#16</a>"}, "X4": {"title": "Before/after and project page", "who": "Person X \u00b7 Story (open)", "when": "Overnight \u00b7 to Sun 7:00", "what": "Today&#x27;s tools versus Martian Map as a screen; the project page with every dataset, the numbers and the limits", "needs": ["R5"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/17\" target=\"_blank\" rel=\"noopener\">#17</a>"}, "F1": {"title": "Numbers into the slides", "who": "Jules \u00b7 P1 \u00b7 ML", "when": "Freeze \u00b7 Sun 8:00 \u2192 submit", "what": "Final numbers on the proof slide", "needs": ["R5"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/45\" target=\"_blank\" rel=\"noopener\">#45</a>"}, "F2": {"title": "Fixes only", "who": "Nicolas \u00b7 P2 \u00b7 App", "when": "Freeze \u00b7 Sun 8:00 \u2192 submit", "what": "Switch off anything unstable; rehearse the demo walk", "needs": ["E4", "E6"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/46\" target=\"_blank\" rel=\"noopener\">#46</a>"}, "F3": {"title": "Final deploy", "who": "Galsan \u00b7 P3 \u00b7 Data (lead)", "when": "Freeze \u00b7 Sun 8:00 \u2192 submit", "what": "Last deploy; check the link on three phones", "needs": ["D5"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/47\" target=\"_blank\" rel=\"noopener\">#47</a>"}, "F4": {"title": "Video and submit", "who": "Person X \u00b7 Story (open)", "when": "Freeze \u00b7 Sun 8:00 \u2192 submit", "what": "30-second video; submit the project page", "needs": ["X4"], "issue": "<a href=\"https://github.com/nicolasrufino/nasaspaceapps/issues/48\" target=\"_blank\" rel=\"noopener\">#48</a>"}}, bg=document.getElementById('bg'), svg=bg.querySelector('svg'), det=document.getElementById('bg-detail'), sel=null;
   var deps={}; Object.keys(B).forEach(function(k){B[k].needs.forEach(function(n){(deps[n]=deps[n]||[]).push(k);});});
   function box(id){return bg.querySelector('[data-id="'+id+'"]');}
   function draw(){
@@ -511,7 +511,7 @@ a.bg-lane:hover{filter:brightness(1.15);text-decoration:none}.bg-lane.p1{backgro
 <tr>
 <td>M2 Demo-able</td>
 <td>16:00–21:00</td>
-<td>Plan mode, drone scout, stops, packing list, HUD; deployed link</td>
+<td>Plan mode, helicopter scout, stops, packing list, HUD; deployed link</td>
 </tr>
 <tr>
 <td>Overnight</td>
@@ -631,7 +631,7 @@ a.bg-lane:hover{filter:brightness(1.15);text-decoration:none}.bg-lane.p1{backgro
 </tr>
 <tr>
 <td>E4</td>
-<td>Drone scout</td>
+<td>Helicopter scout</td>
 <td>P2</td>
 <td>M2</td>
 <td>Flight along the scout plan; scan sweep (rays hit the terrain, dots build up); reveal full detail and rocks; re-plan</td>
@@ -872,14 +872,14 @@ a.bg-lane:hover{filter:brightness(1.15);text-decoration:none}.bg-lane.p1{backgro
 </ul></li>
 <li><strong>Two resolutions of the same box:</strong>
 <ul>
-<li>A coarse "orbit view" of about 8 m per cell (256 × 256 cells): the map before the drone flies.</li>
-<li>The full 1 m terrain and 25 cm images: what the drone "reveals".</li>
+<li>A coarse "orbit view" of about 8 m per cell (256 × 256 cells): the map before the helicopter flies.</li>
+<li>The full 1 m terrain and 25 cm images: what the helicopter "reveals".</li>
 </ul></li>
 <li><strong>What the box must contain</strong> (Person 3 picks it in Mars Trek):
 <ul>
 <li>boxwork ridges (the science);</li>
 <li>at least one sand patch and one slope over 15° (the hazards);</li>
-<li>a rock field that is hard to see at 8 m (the drone's moment).</li>
+<li>a rock field that is hard to see at 8 m (the helicopter's moment).</li>
 </ul></li>
 </ul>
 <h3 id="the-five-resources-nasa-listed-for-this-challenge">The five resources NASA listed for this challenge</h3>
@@ -944,12 +944,12 @@ a.bg-lane:hover{filter:brightness(1.15);text-decoration:none}.bg-lane.p1{backgro
 <tr>
 <td><strong>Gale merged terrain model, 1 m</strong></td>
 <td><a href="https://astrogeology.usgs.gov/search/map/mars_msl_gale_merged_dem_1m" target="_blank" rel="noopener">USGS Astrogeology</a> (built from HiRISE)</td>
-<td>Slopes for walking cost and the slope limit; the "drone reveal" terrain</td>
+<td>Slopes for walking cost and the slope limit; the "helicopter reveal" terrain</td>
 </tr>
 <tr>
 <td><strong>Gale merged image mosaic, 25 cm</strong></td>
 <td><a href="https://astrogeology.usgs.gov/search/map/mars_msl_gale_merged_orthophoto_mosaic_25cm" target="_blank" rel="noopener">USGS Astrogeology</a> (HiRISE)</td>
-<td>The "drone reveal" image; rock detection from shadows</td>
+<td>The "helicopter reveal" image; rock detection from shadows</td>
 </tr>
 <tr>
 <td><strong>Detailed geologic map of lower Mount Sharp</strong></td>
@@ -988,13 +988,21 @@ a.bg-lane:hover{filter:brightness(1.15);text-decoration:none}.bg-lane.p1{backgro
 </tr>
 </tbody>
 </table></div>
+<h3 id="the-box-we-chose-d1-done">The box we chose (D1, done)</h3>
+<ul>
+<li><strong>Centre</strong> −4.800° N, 137.383° E; <strong>2048 × 2048 m</strong> (lat −4.8173..−4.7827, lon 137.3657..137.4003), equirectangular Mars sphere (r = 3,396,190 m), same grid as the USGS mosaics. Full georeferencing in <code>data/raw/gale/slice.json</code> (made by <code>data/pipeline/cut_slice.py</code>).</li>
+<li><strong>Why here:</strong> it holds Curiosity's 2025 boxwork route (sols ~4480–4900: the Altadena, Valle de la Luna and Nevado Sajama drill sites, the ramp and the overlook), buttes with slopes over 25°, dark sand in the hollows, and blocky ground that only shows at 1 m.</li>
+<li><strong>Files:</strong> USGS 1 m DEM (<a href="https://planetarymaps.usgs.gov/mosaic/Mars/MSL/MSL_Gale_DEM_Mosaic_1m_v3.tif" target="_blank" rel="noopener">MSL_Gale_DEM_Mosaic_1m_v3.tif</a>) and 25 cm HiRISE colour (<a href="https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/Mars/MSL/MSL_Gale_HiRISE-LRGB_78quads_sharp_cog.tif" target="_blank" rel="noopener">MSL_Gale_HiRISE-LRGB_78quads_sharp_cog.tif</a>); the lossless greyscale 25 cm mosaic also works (<code>--ortho gray</code>, ~1.5 GB read). Only the box is read; nothing large goes in Git.</li>
+<li><strong>Rebuild:</strong> <code>pip install -r data/pipeline/requirements-gdal.txt</code>, then <code>python3 data/pipeline/cut_slice.py --lat -4.800 --lon 137.383 --ortho color</code> , <code>python3 data/pipeline/make_gale.py</code>, <code>python3 data/pipeline/add_d6_layers.py</code>, <code>python3 data/pipeline/terrain_1m.py</code> and <code>python3 data/pipeline/scout_plan.py data/worlds/gale</code> → <code>data/worlds/gale/</code> (open the app with <code>?world=gale</code>; add <code>&amp;flags=drone_scout</code> for the helicopter).</li>
+<li><strong>Note:</strong> the 256 m rock-review test patch at −4.720°, 137.375° E is about 5 km north of this box, outside it.</li>
+</ul>
 <h3 id="how-the-data-flows">How the data flows</h3>
 <ol type="1">
 <li><strong>Mars Trek:</strong> choose the box.</li>
-<li><strong>USGS 1 m terrain and 25 cm images:</strong> cut the box. Make an 8 m "orbit view" and keep the full resolution for the drone.</li>
+<li><strong>USGS 1 m terrain and 25 cm images:</strong> cut the box. Make an 8 m "orbit view" and keep the full resolution for the helicopter.</li>
 <li><strong>Layers:</strong> THEMIS (sand), CRISM and the local geologic map (science), slope (from terrain), rocks (from image shadows).</li>
 <li><strong>Targets:</strong> the boxwork ridges and the regions named on Curiosity's route map.</li>
-<li><strong>Route:</strong> plan on the orbit view, then re-plan after the drone reveals detail.</li>
+<li><strong>Route:</strong> plan on the orbit view, then re-plan after the helicopter reveals detail.</li>
 <li><strong>Stops:</strong> Curiosity raw images near each target.</li>
 <li><strong>Safety:</strong> RAD dose, REMS weather, DONKI storms.</li>
 <li><strong>Ground truth:</strong> the classifier, trained on AI4Mars and tested on Perseverance images.</li>
@@ -1012,8 +1020,8 @@ a.bg-lane:hover{filter:brightness(1.15);text-decoration:none}.bg-lane.p1{backgro
 <li><strong>Our answer:</strong> <strong>Martian Map turns NASA's Mars data into a science walk you can plan, preview and come home from, and makes the map better with every walk.</strong></li>
 <li><strong>Where and why:</strong> the boxwork ridges on Mount Sharp, Gale crater. NASA's challenge names them; Curiosity studied them in 2025; and Curiosity measured the radiation, weather and ground there, so one site gives us every layer. <em>(Alternative: Jezero, with Perseverance's images. The team decides.)</em></li>
 <li><strong>The real problem:</strong> there is no map at the scale of one walk. Orbit sees the region; it misses the rock field, the soft sand and the slope that decide whether a suited astronaut can get through.</li>
-<li><strong>Our solution: a map that builds itself, walk by walk.</strong> (1) Start from NASA's orbital layers. (2) A scout drone flies the route first and maps what orbit can't see. (3) Martian Map plans the best path and the packing list: what to bring, what is heavy, what the rover carries. (4) The crew walks for a science purpose (signs of past water and life), and the map grows as they go: photos, ground type, how hard each stretch was, markers they drop. (5) The next crew starts with a better map.</li>
-<li><strong>The demo:</strong> pick "boxwork" → the layers light up the targets → the scout drone flies the route and reveals a rock field orbit missed → the route re-plans and the packing list appears → a judge walks the hallway with the phone as the suit display → the ring shrinks with every step → at a stop the phone runs the science checklist and adds to the map → past the point of no return it buzzes.</li>
+<li><strong>Our solution: a map that builds itself, walk by walk.</strong> (1) Start from NASA's orbital layers. (2) A NASA JPL-style scout helicopter flies the route first and maps what orbit can't see. (3) Martian Map plans the best path and the packing list: what to bring, what is heavy, what the rover carries. (4) The crew walks for a science purpose (signs of past water and life), and the map grows as they go: photos, ground type, how hard each stretch was, markers they drop. (5) The next crew starts with a better map.</li>
+<li><strong>The demo:</strong> pick "boxwork" → the layers light up the targets → the scout helicopter flies the route and reveals a rock field orbit missed → the route re-plans and the packing list appears → a judge walks the hallway with the phone as the suit display → the ring shrinks with every step → at a stop the phone runs the science checklist and adds to the map → past the point of no return it buzzes.</li>
 </ul>
 <p><strong>Local awards:</strong> Best Use of Science is our main target, then Best Use of Technology (requires Azure: hosting plus the CAPCOM agent), then Art &amp; Technology. See <code>docs/PITCH.md</code>, Local awards.</p>
 <h3 id="best">Why this is the best solution</h3>
@@ -1063,7 +1071,7 @@ a.bg-lane:hover{filter:brightness(1.15);text-decoration:none}.bg-lane.p1{backgro
 <td>No</td>
 </tr>
 <tr>
-<td><strong>Martian Map: orbit + scout drone + plan on the device + a map that grows</strong></td>
+<td><strong>Martian Map: orbit + scout helicopter + plan on the device + a map that grows</strong></td>
 <td><strong>Yes</strong></td>
 <td><strong>Yes</strong></td>
 <td><strong>Yes, every step</strong></td>
@@ -1095,8 +1103,8 @@ a.bg-lane:hover{filter:brightness(1.15);text-decoration:none}.bg-lane.p1{backgro
 <ol type="1">
 <li><strong>Start</strong> at a random spot inside the Gale site, on the habitat screen. Goal: boxwork.</li>
 <li><strong>Orbit only:</strong> the map shows coarse layers and a first route.</li>
-<li><strong>Deploy the scout</strong> (a 10-second animation). The drone flies Ingenuity-class legs (about 700 m and 3 minutes each). It covers the route corridor first, then anomalies (places where the layers disagree, such as firm-looking ground that the thermal data says is loose sand, a slope near the 25° limit, or an unusual mineral signal near a target), then the cells it is least sure about.</li>
-<li><strong>Reveal:</strong> a scan sweep shows rays hitting the ground and dots building up (how a lidar or a bat "sees"); then, where it flies, the map switches to full-resolution HiRISE terrain and detected rocks, labelled "simulated drone view, real HiRISE data". A hidden rock field appears.</li>
+<li><strong>Deploy the scout</strong> (a 10-second animation). The helicopter flies Ingenuity-class legs (about 700 m and 3 minutes each). It covers the route corridor first, then anomalies (places where the layers disagree, such as firm-looking ground that the thermal data says is loose sand, a slope near the 25° limit, or an unusual mineral signal near a target), then the cells it is least sure about.</li>
+<li><strong>Reveal:</strong> a scan sweep shows rays hitting the ground and dots building up (how a lidar or a bat "sees"); then, where it flies, the map switches to full-resolution HiRISE terrain and detected rocks, labelled "simulated helicopter view, real HiRISE data". A hidden rock field appears.</li>
 <li><strong>Re-plan and explain:</strong> the new route avoids it. The "why this route" panel shows the extra distance, the effort, the slope limit, the rocks avoided and the margin home everywhere. The packing list updates.</li>
 <li><strong>Walk:</strong> a judge carries the phone; real steps move the astronaut; the ring shrinks; at a stop, the science checklist runs.</li>
 <li><strong>Share:</strong> export the map package; it "arrives" at mission control 11 minutes later.</li>
@@ -1201,8 +1209,8 @@ a.bg-lane:hover{filter:brightness(1.15);text-decoration:none}.bg-lane.p1{backgro
 </tr>
 <tr>
 <td><strong>2. Scout</strong></td>
-<td>A drone flies the planned route first. It covers the route corridor first, then anomalies (places where the layers disagree, such as firm-looking ground that the thermal data says is loose sand, a slope near the 25° limit, or an unusual mineral signal near a target), then the cells it is least sure about, within Ingenuity-class limits (about 700 m and 3 minutes per flight). Where it flies, the map gains full-resolution terrain and detected rocks; the route re-plans</td>
-<td>Scout drone (simulated flight in our app; the data it reveals is real full-resolution HiRISE)</td>
+<td>A helicopter flies the planned route first. It covers the route corridor first, then anomalies (places where the layers disagree, such as firm-looking ground that the thermal data says is loose sand, a slope near the 25° limit, or an unusual mineral signal near a target), then the cells it is least sure about, within Ingenuity-class limits (about 700 m and 3 minutes per flight). Where it flies, the map gains full-resolution terrain and detected rocks; the route re-plans</td>
+<td>Scout helicopter (simulated flight in our app; the data it reveals is real full-resolution HiRISE)</td>
 <td>Ingenuity scouted routes for Perseverance in 72 flights (2021–2024); one flight ruled out a target and saved about two months of driving. JPL and AeroVironment's Skyfall concept (2025) proposes six helicopters to scout human landing sites</td>
 </tr>
 <tr>
@@ -1241,7 +1249,7 @@ a.bg-lane:hover{filter:brightness(1.15);text-decoration:none}.bg-lane.p1{backgro
 <tr>
 <td><strong>1. Plan</strong></td>
 <td>Habitat display</td>
-<td>Pick a science goal. Layers highlight candidate targets. The scout drone flies the route and the map updates. Martian Map plans a safe, efficient route, estimates time, energy, oxygen and radiation, shows rover photos of every stop, and builds the packing list. The crew approves or edits.</td>
+<td>Pick a science goal. Layers highlight candidate targets. The scout helicopter flies the route and the map updates. Martian Map plans a safe, efficient route, estimates time, energy, oxygen and radiation, shows rover photos of every stop, and builds the packing list. The crew approves or edits.</td>
 </tr>
 <tr>
 <td><strong>2. Walk</strong></td>
@@ -1325,8 +1333,8 @@ a.bg-lane:hover{filter:brightness(1.15);text-decoration:none}.bg-lane.p1{backgro
 </tr>
 <tr>
 <td>C6, R4</td>
-<td>Scout drone maps the route before the walk; the route re-plans</td>
-<td>Simulated flight over the site; a fine-scale hazard layer only the drone can see; path search re-runs</td>
+<td>Scout helicopter maps the route before the walk; the route re-plans</td>
+<td>Simulated flight over the site; a fine-scale hazard layer only the helicopter can see; path search re-runs</td>
 <td>Ingenuity precedent; HiRISE as the starting map</td>
 </tr>
 <tr>
@@ -1450,7 +1458,7 @@ a.bg-lane:hover{filter:brightness(1.15);text-decoration:none}.bg-lane.p1{backgro
 </ul>
 <h2 id="robots">7. Robots and pairs</h2>
 <ul>
-<li><strong>The scout drone</strong> flies before the crew does, the job Ingenuity proved for Perseverance. It maps the route at centimetre scale and finds what orbit can't (rock fields, drop-offs, soft sand). In our app the flight is simulated over the real site, revealing a hidden fine-scale hazard layer; the route re-plans when it lands.</li>
+<li><strong>The scout helicopter</strong> flies before the crew does, the job Ingenuity proved for Perseverance. It maps the route at centimetre scale and finds what orbit can't (rock fields, drop-offs, soft sand). In our app the flight is simulated over the real site, revealing a hidden fine-scale hazard layer; the route re-plans when it lands.</li>
 <li><strong>The buddy rover</strong> leads by default (crews in NASA's 2022 desert test preferred it), scouts the route, carries tools and samples, relays comms behind ridges, and can bring an astronaut home. It is specified like NASA's new Lunar Terrain Vehicle (km/h, with or without crew), because today's Mars rovers are 20–30 times slower than a walking astronaut.</li>
 <li><strong>Two astronauts</strong> walk together, in sight of each other, as NASA's EVA rules require. The map shows both and the ring follows the more tired one.</li>
 <li><strong>Override ladder:</strong> E-STOP, hold, come to me, return to base along the path it came. On lost link it stops, then retreats.</li>
@@ -1550,7 +1558,7 @@ flowchart LR
 <p><strong>Who builds what, block by block, with prerequisites: <code>docs/BUILD.md</code></strong> (drawn as a four-lane graph on the team page).</p>
 <p>The base must always work; every feature sits behind a flag and can be turned off.</p>
 <p><strong>Foundation:</strong> site map with three layers → route around obstacles → walk along it → walk-back ring and buzz → runs on one phone.</p>
-<p><strong>Features (flags):</strong> <code>drone_scout</code>, <code>why_route</code>, <code>export</code>, <code>packing_list</code>, <code>map_grows</code>, <code>layers_extra</code> (thermal, spectral, radiation), <code>pov_images</code>, <code>science_stop</code>, <code>step_mode</code>, <code>buddy_scripted</code>, <code>buddy_rl</code>, <code>override</code>, <code>rideback_ring</code>, <code>storm</code>, <code>classifier</code>, <code>capcom</code>, <code>debrief</code>, <code>before_after</code>.</p>
+<p><strong>Features (flags):</strong> <code>drone_scout</code> (the helicopter scout), <code>why_route</code>, <code>export</code>, <code>packing_list</code>, <code>map_grows</code>, <code>layers_extra</code> (thermal, spectral, radiation), <code>pov_images</code>, <code>science_stop</code>, <code>step_mode</code>, <code>buddy_scripted</code>, <code>buddy_rl</code>, <code>override</code>, <code>rideback_ring</code>, <code>storm</code>, <code>classifier</code>, <code>capcom</code>, <code>debrief</code>, <code>before_after</code>.</p>
 <div class="tbl"><table>
 <thead>
 <tr>
@@ -1573,7 +1581,7 @@ flowchart LR
 <tr>
 <td>M2 Demo-able</td>
 <td>Sat 21:00</td>
-<td>Science targets, rover photos at stops, drone scout re-plan, packing list, step mode, scripted buddy, classifier v1; deployed</td>
+<td>Science targets, rover photos at stops, helicopter scout re-plan, packing list, step mode, scripted buddy, classifier v1; deployed</td>
 </tr>
 <tr>
 <td>Overnight</td>
@@ -1620,7 +1628,7 @@ flowchart LR
 <tr>
 <td>Small hazards</td>
 <td>Invisible from orbit until you reach them</td>
-<td>A scout drone finds them first; the route re-plans</td>
+<td>A scout helicopter finds them first; the route re-plans</td>
 </tr>
 <tr>
 <td>What to bring</td>
@@ -1717,7 +1725,7 @@ flowchart LR
 </thead>
 <tbody>
 <tr>
-<td>A drone can map Mars terrain with sound, like a bat</td>
+<td>A helicopter can map Mars terrain with sound, like a bat</td>
 <td><strong>Not on Mars.</strong> Air about 1% of Earth's; high pitches lost within about 8 m; two speeds of sound (<a href="https://doi.org/10.1038/s41586-022-04679-0" target="_blank" rel="noopener">Nature 2022</a>, <a href="https://www.dlr.de/en/latest/news/2022/02/20220401_the-sound-of-mars" target="_blank" rel="noopener">DLR</a>). Light (lidar) and cameras work instead; Ingenuity's images already produced a 5 cm terrain model (<a href="https://www.jpl.nasa.gov/site/research/media/posters/2023/SP23018p.pdf" target="_blank" rel="noopener">JPL</a>)</td>
 </tr>
 <tr>
@@ -1725,7 +1733,7 @@ flowchart LR
 <td><strong>Correct.</strong> 72 flights; longest about 705 m; longest 169.5 s; up to 24 m high (<a href="https://www.space.com/mars-helicopter-ingenuity-longest-flight-december-2023" target="_blank" rel="noopener">Space.com</a>, <a href="https://www.planetary.org/space-missions/ingenuity" target="_blank" rel="noopener">Planetary Society</a>)</td>
 </tr>
 <tr>
-<td>A drone can find hazards orbit misses</td>
+<td>A helicopter can find hazards orbit misses</td>
 <td><strong>Correct in practice.</strong> Ingenuity's images helped plan Perseverance's routes (<a href="https://www.universetoday.com/152365/thanks-to-ingenuitys-pictures-perseverance-knows-where-to-drive-to-next" target="_blank" rel="noopener">Universe Today</a>)</td>
 </tr>
 <tr>
@@ -1737,7 +1745,7 @@ flowchart LR
 <td><strong>Not with real data.</strong> HiRISE images and terrain models cover only a small fraction of Mars, so a random spot usually has no hyperlocal data</td>
 </tr>
 <tr>
-<td>We can rebuild 3D from the drone's simulated camera</td>
+<td>We can rebuild 3D from the helicopter's simulated camera</td>
 <td><strong>Circular.</strong> Rebuilding 3D from images our own engine rendered proves nothing about Mars</td>
 </tr>
 </tbody>
@@ -1758,7 +1766,7 @@ flowchart LR
 </thead>
 <tbody>
 <tr>
-<td>Drone scout demo in the game: deploy, explore, reveal, re-plan</td>
+<td>Helicopter scout demo in the game: deploy, explore, reveal, re-plan</td>
 <td>3</td>
 <td>3</td>
 <td>2</td>
@@ -1766,6 +1774,16 @@ flowchart LR
 <td>3</td>
 <td class="score">13</td>
 <td><strong class="keep">Keep.</strong> It is the solution in action. Label the flight as simulated</td>
+</tr>
+<tr>
+<td>Whole-area helicopter survey (SkyFall-style fleet) before choosing stops: strips over the slice, reachable area first; shows flights and sols per fleet size; a "best areas" layer (round trip fits the budget, not too steep, no rocks seen, scouted, science value)</td>
+<td>3</td>
+<td>3</td>
+<td>2</td>
+<td>2</td>
+<td>3</td>
+<td class="score">13</td>
+<td><strong class="keep">Keep</strong>, behind <code>drone_scout</code>. Turns "explore the area" into a hardware answer (how many helicopters, how many sols). Label the flight simulated and the flights-per-sol rate an estimate</td>
 </tr>
 <tr>
 <td>Drop the player anywhere on Mars at random</td>
@@ -1788,7 +1806,7 @@ flowchart LR
 <td><strong class="keep">Keep.</strong> Same idea, real data everywhere</td>
 </tr>
 <tr>
-<td>Start inside the spaceship and walk to the drone</td>
+<td>Start inside the spaceship and walk to the helicopter</td>
 <td>2</td>
 <td>2</td>
 <td>1</td>
@@ -1798,7 +1816,7 @@ flowchart LR
 <td><strong class="simp">Simplify</strong> to a 10-second deploy animation from the habitat screen. No walkable interior</td>
 </tr>
 <tr>
-<td>How the drone picks where to fly: cover the route corridor first, then anomalies, then the most uncertain cells, within Ingenuity-class limits (about 700 m and 3 minutes per flight)</td>
+<td>How the helicopter picks where to fly: cover the route corridor first, then anomalies, then the most uncertain cells, within Ingenuity-class limits (about 700 m and 3 minutes per flight)</td>
 <td>3</td>
 <td>3</td>
 <td>3</td>
@@ -1808,14 +1826,14 @@ flowchart LR
 <td><strong class="keep">Keep.</strong> Explainable autonomy, about 100 lines of code, testable</td>
 </tr>
 <tr>
-<td>3D reconstruction from simulated drone images</td>
+<td>3D reconstruction from simulated helicopter images</td>
 <td>2</td>
 <td>2</td>
 <td>0</td>
 <td>1</td>
 <td>2</td>
 <td class="score">7</td>
-<td><strong class="cut">Cut.</strong> Instead the drone reveals <em>real</em> higher-resolution NASA data: full HiRISE terrain and images stand in for what a drone would see, labelled as such</td>
+<td><strong class="cut">Cut.</strong> Instead the helicopter reveals <em>real</em> higher-resolution NASA data: full HiRISE terrain and images stand in for what a helicopter would see, labelled as such</td>
 </tr>
 <tr>
 <td>Map the terrain with sound, the way bats echolocate</td>
@@ -1828,14 +1846,14 @@ flowchart LR
 <td><strong class="cut">Cut as a sensor.</strong> Mars' thin air loses high-pitched sound within about 8 m, and the rotors drown the echo. <strong class="keep">Keep the idea:</strong> same principle with light (lidar) or plain cameras. See <code>RESEARCH.md</code> §13</td>
 </tr>
 <tr>
-<td>Lidar-style scan sweep as the drone flies: rays hit the real terrain, dots build up, full detail fades in</td>
+<td>Lidar-style scan sweep as the helicopter flies: rays hit the real terrain, dots build up, full detail fades in</td>
 <td>2</td>
 <td>3</td>
 <td>3</td>
 <td>3</td>
 <td>3</td>
 <td class="score">14</td>
-<td><strong class="keep">Keep.</strong> Explains how the drone sees in one glance. Label it "simulated scan, real NASA terrain"</td>
+<td><strong class="keep">Keep.</strong> Explains how the helicopter sees in one glance. Label it "simulated scan, real NASA terrain"</td>
 </tr>
 <tr>
 <td>Our own photogrammetry from real Ingenuity images</td>
@@ -1855,17 +1873,17 @@ flowchart LR
 <td>2</td>
 <td>3</td>
 <td class="score">8</td>
-<td><strong class="cut">Cut for now.</strong> No walk-scale radar data for our slice. Mention it as next step (Skyfall proposes it)</td>
+<td><strong class="cut">Cut for now.</strong> No walk-scale radar data for our slice. Mention it as next step (NASA's SkyFall helicopters will carry it, 2028)</td>
 </tr>
 <tr>
-<td>The drone also flies to anomalies: hazard anomalies (layers disagree: image looks firm but thermal says sand; slope near the limit) and science anomalies (unusual mineral signal near a target)</td>
+<td>The helicopter also flies to anomalies: hazard anomalies (layers disagree: image looks firm but thermal says sand; slope near the limit) and science anomalies (unusual mineral signal near a target)</td>
 <td>3</td>
 <td>3</td>
 <td>3</td>
 <td>3</td>
 <td>3</td>
 <td class="score">15</td>
-<td><strong class="keep">Keep.</strong> One extra term in the drone's priority score, computed from layers we already have. It makes the scout find both danger and science</td>
+<td><strong class="keep">Keep.</strong> One extra term in the helicopter's priority score, computed from layers we already have. It makes the scout find both danger and science</td>
 </tr>
 <tr>
 <td>3D used as a visual aid; all route maths on the 2D grid with a height per cell</td>
@@ -2073,7 +2091,7 @@ flowchart LR
 <ol type="1">
 <li><strong>The stack is web (three.js).</strong> The same app is the game, the habitat display, the suit display and the public viewer.</li>
 <li><strong>Person 1's first job is rock detection on real HiRISE images.</strong> The terrain classifier comes second; the RL rover is a stretch goal.</li>
-<li><strong>The drone reveals real data, not a fake reconstruction.</strong> Before the scout flies, the map shows coarse orbital data. After, it shows full-resolution HiRISE terrain and detected rocks, and the route re-plans.</li>
+<li><strong>The helicopter reveals real data, not a fake reconstruction.</strong> Before the scout flies, the map shows coarse orbital data. After, it shows full-resolution HiRISE terrain and detected rocks, and the route re-plans.</li>
 <li><strong>The demo starts at a random spot inside the prepared site</strong>, with a 10-second deploy, not a spaceship level.</li>
 <li><strong>Every route comes with its reasons</strong>, and the map can be exported for others.</li>
 </ol>
@@ -2102,12 +2120,12 @@ flowchart LR
 
   <figure class="shot">
     <div class="phone"><div class="hud">
-      <div class="hud-top"><span>Scout · drone flight 1</span><span class="ok">Route re-planned</span><span>Pack 14 kg</span></div>
-      <canvas data-scene="scout" width="320" height="300" aria-label="Drone path revealing rock fields along the route"></canvas>
+      <div class="hud-top"><span>Scout · helicopter flight 1</span><span class="ok">Route re-planned</span><span>Pack 14 kg</span></div>
+      <canvas data-scene="scout" width="320" height="300" aria-label="Helicopter path revealing rock fields along the route"></canvas>
       <div class="chips2"><span class="chip">2 rock fields found · +120 m detour</span><span class="chip cy">Orbit missed both</span></div>
       <ol class="stops"><li>Oxygen and water: 4 h + 1 h reserve</li><li>Core sampler, 6 sample bags (stops A, B)</li><li>Rock hammer, hand lens, sample marker flags</li><li class="amber-t">Drill kit 9 kg → rover carries it</li></ol>
     </div></div>
-    <figcaption><strong>Scout and pack (habitat display).</strong> Before the walk, a drone flies the route and finds what orbit cannot see; the route re-plans. The packing list comes from the route: air and water with the reserve, the sampling kit for each target, and anything too heavy goes on the rover.<br><em>Why:</em> Ingenuity scouted routes for Perseverance across 72 flights, and one flight saved about two months of driving; NASA's statement asks how carrying equipment and supplies affects a suited astronaut.</figcaption>
+    <figcaption><strong>Scout and pack (habitat display).</strong> Before the walk, a helicopter flies the route and finds what orbit cannot see; the route re-plans. The packing list comes from the route: air and water with the reserve, the sampling kit for each target, and anything too heavy goes on the rover.<br><em>Why:</em> Ingenuity scouted routes for Perseverance across 72 flights, and one flight saved about two months of driving; NASA's statement asks how carrying equipment and supplies affects a suited astronaut.</figcaption>
   </figure>
 
   <figure class="shot">
@@ -2199,7 +2217,7 @@ flowchart LR
     (opt.stops || []).forEach(function (s) { dot(s[0], s[1], 6, s[2]); });
     (opt.shelters || []).forEach(function (s) { square(s[0], '#ffbe3c', s[1]); });
     if (opt.buddy) dot(opt.buddy, '#38dcff', 6, 'Buddy');
-    if (opt.drone) dot(opt.drone, '#ffd27a', 6, 'Drone');
+    if (opt.helicopter) dot(opt.helicopter, '#ffd27a', 6, 'Helicopter');
     if (opt.me) dot(opt.me, opt.meColor || '#7CFF8A', 7, 'You');
   }
   var scenes = {
@@ -2207,7 +2225,7 @@ flowchart LR
     noreturn: { ring: 45, route: route, me: route[8], meColor: '#ff5a5a', buddy: [41, 23] },
     buddy: { crop: [14, 14, 36], ring: null, route: route.slice(0, 6), routeColor: 'rgba(56,220,255,0.9)', dash: true, me: route[5], buddy: [29, 27] },
     plan: { ring: null, route: route.slice(0, 7), stops: [[[30, 40], '#7CFF8A', 'A'], [[37, 23], '#7CFF8A', 'B'], [[58, 10], '#ff5a5a', 'C']] },
-    scout: { ring: null, rocks: true, seen: function (x, y) { return route.some(function (p) { return Math.abs(p[0] - x) <= 6 && Math.abs(p[1] - y) <= 6; }); }, route: route, routeColor: 'rgba(56,220,255,0.9)', dash: true, drone: [43, 21] },
+    scout: { ring: null, rocks: true, seen: function (x, y) { return route.some(function (p) { return Math.abs(p[0] - x) <= 6 && Math.abs(p[1] - y) <= 6; }); }, route: route, routeColor: 'rgba(56,220,255,0.9)', dash: true, helicopter: [43, 21] },
     storm: { ring: null, shelter: 60, me: route[5], buddy: [24, 28], shelters: [[[24, 28], 'Rover'], [[40, 30], 'Crater wall']] }
   };
   document.querySelectorAll('canvas[data-scene]').forEach(function (cv) {
@@ -2229,11 +2247,19 @@ flowchart LR
 
   <div class="col">
     <h2 id="pitch">The pitch (draft 3)</h2>
-
-<p>Five minutes, the organizers' seven parts. One argument runs through it: <strong>there is no map at the scale of one walk; every option today fails on its own; ours combines pieces NASA has already proven, and we show it working.</strong> Numbers marked <em>(to measure)</em> come from our own runs before Sunday.</p>
+<h2 id="the-pitch-draft-4-measured-f1-update-sat-nov-14">The pitch (draft 4, measured F1 update, Sat Nov 14)</h2>
+<p>Five minutes, the organizers' seven parts. One argument runs through it: <strong>there is no map at the scale of one walk; we combine NASA data, local planning and simulated scouting, and measure the result.</strong> The proof numbers below come from repository runs, not field trials.</p>
+<h3 id="current-evidence-and-scope">Current evidence and scope</h3>
+<ul>
+<li>R5 scenario: the fixed Gale world, five default science stops, 600 kJ budget, 120 kJ reserve, 60 fps replay. <a href="../ml/pitch_metrics/PITCH_NUMBERS.md">Measured route numbers</a> and <a href="../ml/exports/pitch_metrics.json">machine-readable evidence</a>.</li>
+<li>R4: AI4Mars <strong>Curiosity ground photographs in Gale</strong>, not Ingenuity. Original test 148/159 (93.1%); additional expert sample 275/302 (91.1%) for the published model. Neither sample contains big-rock patches. The new regularized head's 278/302 does not pass the promotion gates; v1 stays published. <a href="../ml/terrain_classifier/README.md#gale-follow-up-keep-v1-after-a-small-head-training-experiment">Experiment and limitations</a>.</li>
+<li>A future scout at approximately <strong>five metres above ground</strong> is a scenario assumption, not training-image provenance or aerial validation. Exact overlap between the training photos and Luca's target slice is not established. <a href="../ml/terrain_classifier/PROVENANCE.md">Provenance and scope</a>.</li>
+<li>The map's 3D terrain and slopes come from orbital terrain products. The ground classifier does not reconstruct 3D and did not generate the R5 route layers.</li>
+<li>R7 CAPCOM/Foundry is deferred by the user. Azure Static Web Apps hosting is deployed; a live Foundry agent is not part of this pitch.</li>
+</ul>
 <h3 id="the-argument-in-one-breath">The argument in one breath</h3>
 <blockquote>
-<p>There is no map at the scale of one Mars walk. Orbit misses the rocks, mission control is 20 minutes away, rovers are too slow to scout ahead, and walking in blind breaks the plan. Martian Map makes the map: orbit gives the base, a scout drone flies the route first, the device plans the path and the packing list, and every walk makes the map better. Each piece is already proven at NASA. We put them in the crew's hands.</p>
+<p>There is no map at the scale of one Mars walk. Orbit misses the rocks, mission control is 20 minutes away, rovers are too slow to scout ahead, and walking in blind breaks the plan. Martian Map makes the map: orbit gives the base, a NASA JPL-style scout helicopter flies the route first, the device plans the path and the packing list, and every walk makes the map better. Each piece is already proven at NASA. We put them in the crew's hands.</p>
 </blockquote>
 <h3 id="the-script">The script</h3>
 <p><strong>1. Hook (0:00–0:30)</strong></p>
@@ -2249,27 +2275,28 @@ flowchart LR
 <p><strong>Martian Map turns NASA's Mars data into a science walk you can plan, preview and come home from, and makes the map better with every walk.</strong></p>
 </blockquote>
 <blockquote>
-<p>We build the map in five stages, coarse to fine; each one tells the next where to look. <strong>Orbit</strong> first: it's the only data covering the whole site before anyone lands, and NASA already collected it. It shows where the science is and where not to go. But it can't see a knee-high rock or soft sand, so a <strong>scout drone</strong> flies the route first, the way Ingenuity scouted for Perseverance. Then we <strong>plan and pack</strong> before leaving, because Earth is up to 22 minutes away. On the <strong>walk</strong>, the suit display keeps the way home known, and every step adds detail. The <strong>next walk</strong> starts from a better map. For each of NASA's five objectives, today's tools do one stage; we connect all five.</p>
+<p>We build the map in five stages, coarse to fine; each one tells the next where to look. <strong>Orbit</strong> first: it's the only data covering the whole site before anyone lands, and NASA already collected it. It shows where the science is and where not to go. But it can't see a knee-high rock or soft sand, so a <strong>scout helicopter</strong>, the kind NASA JPL flew on Mars (Ingenuity) and is now building for crews (SkyFall), flies the route first, the way Ingenuity scouted for Perseverance. Then we <strong>plan and pack</strong> before leaving, because Earth is up to 22 minutes away. On the <strong>walk</strong>, the suit display keeps the way home known, and every step adds detail. The <strong>next walk</strong> starts from a better map. For each of NASA's five objectives, today's tools do one stage; we connect all five.</p>
 </blockquote>
 <p><strong>4. Demo (1:45–3:00)</strong></p>
 <ul>
-<li>Habitat screen, a random spot inside Gale crater, goal "boxwork". Orbit-only map and a first route.</li>
-<li>Deploy the scout drone. It flies Ingenuity-sized legs along the route, then where it is least sure. Where it flies, the map sharpens: real full-resolution HiRISE terrain and detected rocks. A hidden rock field appears.</li>
-<li>The route re-plans. "Why this route": +120 m, less effort, avoids the rock field, never steeper than the limit, home reachable everywhere <em>(numbers to measure)</em>. The packing list moves the drill to the rover.</li>
+<li>Habitat screen, the fixed Gale boxwork scenario with five default science stops. Orbit-only map and a first route.</li>
+<li>Deploy the scout helicopter. It flies Ingenuity-sized legs along the route, then where it is least sure. Where it flies, the map sharpens: real full-resolution HiRISE terrain and detected rocks. A hidden rock field appears.</li>
+<li>The first re-plan crosses zero of the 12 newly discovered hazard cells on the original route: 1238.8 to 1247.4 m, 329.6 to 334.1 kJ (+1.36% effort). Six unobserved stored hazards remain on the new route. Repeat "Fly the new route": after three passes, the final 1243.5 m route is fully scanned and crosses zero stored hazard cells. This takes 21 simulated flight legs and 14.05 km of helicopter travel; helicopter energy is excluded. Unmapped real hazards can remain.</li>
 <li>A judge carries the phone (the suit display). Real steps move the astronaut; the ring of "can still get home" shrinks. At a stop, the science checklist runs. Past the point of no return, it buzzes.</li>
-<li>Export the map: mission control gets it 11 minutes later.</li>
+<li>Export the map for mission control. A live CAPCOM/Foundry reply is deferred, not a demo step.</li>
 </ul>
 <p><strong>5. Space data inside, and proof (3:00–3:40)</strong></p>
 <blockquote>
-<p>NASA asked for at least three data types; we use all eight it lists. Optical and terrain from HiRISE, THEMIS for loose sand, CRISM and the geologic map for science targets, Curiosity's radiation and weather measured in this crater, and its chemistry and subsurface readings along its path. And every piece is already proven at NASA. Shadow-based rock detection on HiRISE chose or checked the Phoenix, Gale, Jezero and InSight landing sites. Ingenuity scouted Perseverance's routes. Perseverance plans its own safe path. Walkback limits keep crews safe today. What's new is putting them together for the person on foot.</p>
+<p>Optical and terrain from HiRISE, thermal context from THEMIS, CRISM and the geologic map for science targets, Curiosity's radiation and weather in this crater, and chemistry and subsurface readings along its path. In our fixed Gale simulation, the first re-plan removes 12 discovered hazard cells from the route for 1.36% more walking energy. Three scout passes cover the final route. Even with walking costs raised 30%, it keeps 44.8 kJ beyond the cost home and the reserve. Separately, our ground-photo classifier gets 275 of 302 additional expert-labelled Curiosity crops right. These are measured prototype results, not a certification of safe terrain.</p>
 </blockquote>
+<p>Speaker detail: the nominal final route costs 334.7 kJ and its minimum spare margin is 145.3 kJ. R3 contains 23 visually accepted rock proposals and two uncertain ones excluded. The 12 avoided cells are DTM-derived hazards, not 12 of these accepted rocks. Proposal acceptance is not detector precision/recall.</p>
 <p><strong>6. Impact: why it wins, who wins, how much (3:40–4:20)</strong></p>
 <blockquote>
 <p>Side by side: orbit alone misses hazards; voice guidance fails with delay; rovers are too slow; walking blind breaks plans. Only the combination works, and it runs on the crew's side of the delay. NASA ranks surface mobility #2 of its 32 technology gaps and asks by name for "in-situ decision support tools" for Mars walks. It funds the rover (up to $4.6B) and the suit (up to $3.1B); nobody funds the map between them.</p>
 </blockquote>
 <p><strong>7. Team + next (4:20–5:00)</strong></p>
 <blockquote>
-<p>Jules built the vision models and the Azure mission-control agent; Nicolas built the app and the 3D map; Galsan built the data pipeline from NASA's missions. <em>(Adjust to what each person actually shipped.)</em> Next: real drone imagery from an analog field test, the same engine for the first crewed Moon landing in 2028, and people on Earth who walk far from help. The first people on Mars will get one chance at each walk. This is the map they should carry.</p>
+<p>Jules built the rock-detection work, ground classifier and measured route tests; Nicolas built the app and the 3D map; Galsan built the data pipeline from NASA's missions. <em>(Confirm team credits before presenting.)</em> Next: real drone imagery from an analog field test, then Moon walks and people on Earth who walk far from help. The first people on Mars will get one chance at each walk. This is the map they should carry.</p>
 </blockquote>
 <h3 id="slides-in-order">Slides (in order)</h3>
 <ol type="1">
@@ -2281,7 +2308,7 @@ flowchart LR
 <li>NASA's objectives, one by one: today's tools versus ours</li>
 <li>Live demo</li>
 <li>All eight NASA data types, each with a job</li>
-<li>Proof: every piece is already proven at NASA</li>
+<li>Measured Gale proof: known hazards, scout coverage, margin home, ground classifier</li>
 <li>Why this beats every option on its own (comparison table)</li>
 <li>Impact and money</li>
 <li>Team + next</li>
@@ -2311,9 +2338,9 @@ flowchart LR
 <tr>
 <td><strong>Best Use of Technology</strong></td>
 <td>The most innovative use of technology. <strong>Must use Microsoft Azure</strong></td>
-<td>Good, <strong>only if Azure is real</strong></td>
-<td>App hosted on Azure Static Web Apps (#14); CAPCOM agent on Microsoft Foundry answering through the delay (#42); vision models running in the browser; the drone's scan sweep</td>
-<td><strong>Second target.</strong> #14 and #42 are now required, not optional</td>
+<td>Azure hosting is real</td>
+<td>App hosted on Azure Static Web Apps (#14), three.js map and simulated scout; ONNX model exports are separate evidence</td>
+<td><strong>Second target.</strong> CAPCOM/Foundry (#42) is deferred; do not claim it is deployed</td>
 </tr>
 <tr>
 <td><strong>Art &amp; Technology</strong></td>
@@ -2334,8 +2361,8 @@ flowchart LR
 <p><strong>One line per award, if asked:</strong></p>
 <ul>
 <li><em>Science:</em> "Every claim on screen is a measurement from a NASA instrument or a number our code tested."</li>
-<li><em>Technology:</em> "The map runs on Azure, and mission control is an AI agent on Microsoft Foundry that answers 20 minutes late, so the crew's device has to decide."</li>
-<li><em>Art &amp; Technology:</em> "A drone that sees like a bat, but with light, and a helmet display you can read while walking."</li>
+<li><em>Technology:</em> "Azure Static Web Apps hosts the map. Planning and the simulated scout run locally in the browser."</li>
+<li><em>Art &amp; Technology:</em> "A helicopter that sees like a bat, but with light, and a helmet display you can read while walking."</li>
 </ul>
 <h3 id="questions-judges-are-likely-to-ask">Questions judges are likely to ask</h3>
 <div class="tbl"><table>
@@ -2351,16 +2378,60 @@ flowchart LR
 <td>They are built for regional views and for rover teams on Earth. We layer the same data for one crew on one walk, with the science, hazards and the way home together, and it works with no link to Earth.</td>
 </tr>
 <tr>
-<td>Is the drone real?</td>
-<td>The flight is simulated; the data it reveals is real full-resolution HiRISE. Ingenuity proved the scouting job on Mars; JPL's Skyfall concept proposes scout helicopters for human landing sites.</td>
+<td>Is the helicopter real?</td>
+<td>The flight is simulated and labelled. Ingenuity proved a helicopter can scout on Mars (72 flights, up to 704 m each); NASA's SkyFall helicopters are contracted to scout exploration zones for crews (launch late 2028). In the demo, full-resolution HiRISE stands in for what its cameras would see.</td>
+</tr>
+<tr>
+<td>What does a helicopter see that HiRISE doesn't?</td>
+<td>HiRISE reliably sees rocks of about 1.5 m and up, with terrain points a metre apart. Ingenuity's images were about 4 cm per pixel and showed a half-metre crater peak HiRISE missed. A walker trips on what's in between. (<code>docs/RESEARCH.md</code> §14)</td>
+</tr>
+<tr>
+<td>Can it fly at night or over sand?</td>
+<td>No, and we plan for both: it flies in daylight on the sol before, and the scout plan avoids smooth sand, which is what ended Ingenuity. Without the helicopter the route falls back to orbit data, with less margin.</td>
 </tr>
 <tr>
 <td>How do you detect rocks?</td>
-<td>From their shadows in HiRISE images, the method NASA used to check landing sites. We report agreement with hand-checked rocks <em>(to measure)</em>.</td>
+<td>Shadow-based proposals in HiRISE: 23 visually accepted, two uncertain and excluded. Acceptance is not precision/recall. Separate reference-mosaic correspondence matched 0/31 accepted locations; do not hide that limitation.</td>
 </tr>
 <tr>
 <td>How accurate is the energy model?</td>
-<td>A published walking model with a simple Mars-gravity correction; we show how the ring moves if it is off by ±30% <em>(to measure)</em>. The upgrade path is NASA's field-calibrated model.</td>
+<td>This is a sensitivity test, not field calibration. At ±30% walking cost, departure ring area changes +26.1% / −21.2% after the first scout pass. The final route's minimum spare margin is 245.7 / 145.3 / 44.8 kJ at 0.7× / 1× / 1.3×, after home and reserve. Helicopter energy is excluded.</td>
+</tr>
+<tr>
+<td>Was the classifier trained on Ingenuity views at five metres?</td>
+<td>No. It uses AI4Mars Curiosity ground photos in Gale. Five metres is a proposed future scouting altitude. Ground-view accuracy does not establish aerial performance or exact-site coverage.</td>
+</tr>
+<tr>
+<td>Did the retraining improve it?</td>
+<td>The selected new head gets 278/302 versus the current 275/302 on an additional expert sample. The gain's grouped 95% interval includes zero, and the older test falls by one correct crop. We keep the published model and report the experiment; no 95% reliability claim.</td>
+</tr>
+<tr>
+<td>Does MobileNet produce slopes or the 3D map?</td>
+<td>No. It predicts a majority terrain category for a crop. The current map and slopes use orbital terrain products; pixel segmentation and reconstruction are separate tasks.</td>
+</tr>
+<tr>
+<td>Does the detector find real rocks or image artefacts?</td>
+<td>Every rock in the map was checked by eye on HiRISE: 23 accepted, two uncertain and left out. That is acceptance, not precision or recall, and we don't claim recall. Rocks under about 1.5 m are below what orbit can see; that is the helicopter's job.</td>
+</tr>
+<tr>
+<td>Can humans check or correct the ML?</td>
+<td>Yes, twice. The rock layer itself is human-reviewed. And on the walk the crew logs what they find at each stop; the next world merges those observations in (block D7, <code>merge_walk.py</code>), so the next walk starts from a better map. It is the citizen-science idea, people checking machine labels, applied to one crew.</td>
+</tr>
+<tr>
+<td>Which numbers are measured and which are assumed?</td>
+<td><code>app/HOW-IT-WORKS.md</code> lists every input to the energy and oxygen model, where it comes from, and where it is known to be too low (Mars-gravity scaling may understate walking energy by about 1.8×; suits add more). Nobody has walked on Mars, so the first walks calibrate it.</td>
+</tr>
+<tr>
+<td>What failure rate does the oxygen margin tolerate?</td>
+<td>We don't claim a probability we can't measure. We follow NASA's rule instead: an untouched reserve (120 kJ here), and we show the route still keeps 44.8 kJ spare if walking costs 30% more.</td>
+</tr>
+<tr>
+<td>What are the uncertainties on your data layers?</td>
+<td>Each layer lists its source and resolution in <code>world.json</code> (HiRISE terrain points about 1 m apart, height precise to tens of centimetres; CRISM minerals about 18 m per pixel). Where layers disagree is exactly where the helicopter flies first.</td>
+</tr>
+<tr>
+<td>What runs on Azure?</td>
+<td>Azure Static Web Apps hosts the app. Planning, the walk and the simulated scout run in the browser, so the walk works with no connection. The mission-control (CAPCOM) agent exists as an offline service with the light delay built in; connecting it to Microsoft Foundry is the next step, and we don't present it as live.</td>
 </tr>
 <tr>
 <td>Astronauts don't use phones.</td>
@@ -2378,7 +2449,7 @@ flowchart LR
 <li>"After hearing this once, what does it do?" (tests the one sentence)</li>
 <li>"Which part convinced you it works?" (tells us which proof to lead with)</li>
 <li>"What would make you doubt the route?" (tells us which number to show)</li>
-<li>For Best Use of Technology: "Is hosting plus a Foundry agent enough Azure, or do you expect more?"</li>
+<li>For Best Use of Technology: "Does our deployed Azure hosting satisfy your criteria? Foundry is deferred."</li>
 </ol>
 <p>Write the answers in <code>docs/pitch-notes.md</code> and change this draft.</p>
 
@@ -2496,7 +2567,7 @@ flowchart LR
 </tr>
 </tbody>
 </table></div>
-<p><strong>Most needed overall:</strong> Person 2. The demo lives in the app, and the drone scout block waits on two other blocks, so it is the tightest lane. Person 3 comes next: real data unlocks targets, the scout plan and the pitch numbers.</p>
+<p><strong>Most needed overall:</strong> Person 2. The demo lives in the app, and the helicopter scout block waits on two other blocks, so it is the tightest lane. Person 3 comes next: real data unlocks targets, the scout plan and the pitch numbers.</p>
 <h4 id="person-1--jules--machine-learning">Person 1 · Jules · Machine learning</h4>
 <ul>
 <li><strong>Primary focus:</strong> turning NASA images into hazard data: rocks from their shadows, ground type from photos, and the numbers that prove it works.</li>
@@ -2507,7 +2578,7 @@ flowchart LR
 </ul>
 <h4 id="person-2--nicolas--app-and-3d">Person 2 · Nicolas · App and 3D</h4>
 <ul>
-<li><strong>Primary focus:</strong> the thing people see and hold: the 3D view, minimap, plan mode, walk, drone scout and stops.</li>
+<li><strong>Primary focus:</strong> the thing people see and hold: the 3D view, minimap, plan mode, walk, helicopter scout and stops.</li>
 <li><strong>Leans toward:</strong> JavaScript, three.js, UI, phones and touch, fast iteration.</li>
 <li><strong>Needs to know a little about:</strong> what each world file means, what the ring is computing, and the flags system.</li>
 <li><strong>Good fit if you:</strong> are the strongest web or game developer, and like shipping something visible every hour.</li>
@@ -2515,7 +2586,7 @@ flowchart LR
 </ul>
 <h4 id="person-3--galsan--data-systems-and-integration-lead">Person 3 · Galsan · Data, systems and integration (lead)</h4>
 <ul>
-<li><strong>Primary focus:</strong> the foundation everyone builds on: the real Gale slice, all eight data types, the cost and way-home maths, the drone's flight plan, deployment, and keeping the pieces fitting together.</li>
+<li><strong>Primary focus:</strong> the foundation everyone builds on: the real Gale slice, all eight data types, the cost and way-home maths, the helicopter's flight plan, deployment, and keeping the pieces fitting together.</li>
 <li><strong>Leans toward:</strong> system design, Python scripts, GIS data (elevation models, images, coordinates), reading NASA papers, Git discipline.</li>
 <li><strong>Needs to know a little about:</strong> how the app and models read the files, and what the pitch claims, so every claim has data behind it.</li>
 <li><strong>Good fit if you:</strong> think in systems, are careful, and can say no to scope creep. This person runs the orchestrator and merges.</li>
@@ -2665,7 +2736,7 @@ flowchart LR
 <td>#21</td>
 </tr>
 <tr>
-<td>E4 Drone scout</td>
+<td>E4 Helicopter scout</td>
 <td>M2</td>
 <td>Fly the scout plan; scan sweep (three.js Raycaster onto a hidden full-detail mesh, dots build up); fade in full detail and rocks; switch to <code>cost_to_go_scouted</code>; re-plan</td>
 <td>E3, D4</td>
@@ -2721,11 +2792,11 @@ flowchart LR
 <li>Don't do route maths in 3D: the 3D view is only for showing the ground.</li>
 </ul>
 <h3 id="agent-brief-paste-into-your-coding-agent">Agent brief (paste into your coding agent)</h3>
-<div class="brief"><button type="button" class="copy">Copy agent brief</button><div class="brief-text"><p>You are helping Nicolas (Person 2, app and 3D) on Martian Map, a NASA Space Apps project. Read <code>AGENTS.md</code>, <code>docs/PRODUCT.md</code>, <code>docs/BUILD.md</code> (lane P2) and <code>docs/CONTRACTS.md</code> first. Work only inside <code>app/</code>, a three.js web app. Load <code>data/worlds/&lt;name&gt;/world.json</code> and the binary layers (float32 and uint8, little-endian, row-major, row 0 north). Build the P2 blocks in order: 3D terrain from the height grid plus a flat minimap; the walk with energy and oxygen drain, the walk-back ring (<code>cost_to_go &lt;= energy_left - reserve</code>) and the point-of-no-return buzz; plan mode with layer toggles, targets, route and stop photos; the drone scout with a scan sweep that reveals <code>rocks_fine.u8</code> and switches to <code>cost_to_go_scouted</code>; the why-this-route panel; stops and step mode with walk logs (contract §3). Every feature behind a flag; the app works with every flag off. Never pathfind on the phone. One issue per session; small, working commits.</p></div></div>
+<div class="brief"><button type="button" class="copy">Copy agent brief</button><div class="brief-text"><p>You are helping Nicolas (Person 2, app and 3D) on Martian Map, a NASA Space Apps project. Read <code>AGENTS.md</code>, <code>docs/PRODUCT.md</code>, <code>docs/BUILD.md</code> (lane P2) and <code>docs/CONTRACTS.md</code> first. Work only inside <code>app/</code>, a three.js web app. Load <code>data/worlds/&lt;name&gt;/world.json</code> and the binary layers (float32 and uint8, little-endian, row-major, row 0 north). Build the P2 blocks in order: 3D terrain from the height grid plus a flat minimap; the walk with energy and oxygen drain, the walk-back ring (<code>cost_to_go &lt;= energy_left - reserve</code>) and the point-of-no-return buzz; plan mode with layer toggles, targets, route and stop photos; the helicopter scout with a scan sweep that reveals <code>rocks_fine.u8</code> and switches to <code>cost_to_go_scouted</code>; the why-this-route panel; stops and step mode with walk logs (contract §3). Every feature behind a flag; the app works with every flag off. Never pathfind on the phone. One issue per session; small, working commits.</p></div></div>
 </article>
 <article class="role p3" id="p3"><h2 id="person-3-data-systems-and-integration-galsan-lead">Person 3: Data, systems and integration (Galsan, lead)</h2>
 <p><strong>Who:</strong> Galsan (GitHub <code>Galsan2005</code>). Lane P3 in <code>docs/BUILD.md</code>. Runs the Codex orchestrator and the merges.</p>
-<p><strong>Mission:</strong> the foundation everyone builds on, and keeping the pieces fitting together: the real Gale slice in world files, all eight data types, the walking-cost and way-home maths, the drone's flight plan, the Azure deployment, and the team's merge discipline.</p>
+<p><strong>Mission:</strong> the foundation everyone builds on, and keeping the pieces fitting together: the real Gale slice in world files, all eight data types, the walking-cost and way-home maths, the helicopter's flight plan, the Azure deployment, and the team's merge discipline.</p>
 <p><strong>Owns:</strong> <code>data/</code>, <code>docs/</code>, the repo settings and deployment. <strong>Writes:</strong> world files (contract §1), <code>scout_plan.json</code>.</p>
 <h3 id="your-blocks-in-order">Your blocks, in order</h3>
 <div class="tbl"><table>
@@ -2806,9 +2877,9 @@ flowchart LR
 </ul>
 <h3 id="integration-rules-you-enforce">Integration rules you enforce</h3>
 <ul>
-<li>PRs into <code>main</code> only; each PR names its block, milestone and flag.</li>
+<li>PRs into <code>dev</code>; each PR names its block, milestone and flag. <code>main</code> moves only by a release PR <code>dev</code> -&gt; <code>main</code> at a milestone.</li>
 <li>Contract changes need every owner's approval.</li>
-<li>At each milestone, <code>main</code> must run. A late feature ships with its flag off.</li>
+<li><code>dev</code> must always run; at each milestone, <code>main</code> must run. A late feature ships with its flag off.</li>
 <li>Run the orchestrator's "status" about once an hour (<code>docs/CODEX.md</code> §3).</li>
 </ul>
 <h3 id="agent-brief-paste-into-your-coding-agent">Agent brief (paste into your coding agent)</h3>
@@ -2978,9 +3049,11 @@ flowchart LR
     <h2 id="repo">GitHub repo</h2>
     <p>The repo is set up with the foundation already working: <code>python3 data/pipeline/make_world.py</code> builds the shared world files in under a second, standard library only. Layout:</p>
     <pre><code>.codex/config.toml
+.github/CODEOWNERS
 .github/ISSUE_TEMPLATE/task.md
 .github/pull_request_template.md
 .github/workflows/ci.yml
+.github/workflows/deploy.yml
 .gitignore
 .pytest_cache/.gitignore
 .pytest_cache/CACHEDIR.TAG
@@ -2996,10 +3069,77 @@ CLAUDE.md
 README.md
 agent/AGENTS.md
 agent/README.md
+agent/__init__.py
+agent/requirements.txt
+agent/service.py
+agent/test_service.py
 app/AGENTS.md
+app/HOW-IT-WORKS.md
 app/README.md
+app/index.html
+app/package-lock.json
+app/package.json
+app/src/best-areas.js
+app/src/best-areas.test.js
+app/src/log.js
+app/src/main.js
+app/src/plan.js
+app/src/plan.test.js
+app/src/scout.js
+app/src/scout.test.js
+app/src/steps.js
+app/src/steps.test.js
+app/src/stops.js
+app/src/stops.test.js
+app/src/walk-notes.js
+app/src/walk-notes.test.js
+app/src/walk.js
+app/src/walk.test.js
+app/src/why.js
+app/src/why.test.js
+app/src/world.js
+app/src/world.test.js
+app/staticwebapp.config.json
+app/vite.config.js
 data/AGENTS.md
+data/pipeline/add_d6_layers.py
+data/pipeline/check_world.py
+data/pipeline/cut_slice.py
+data/pipeline/make_gale.py
 data/pipeline/make_world.py
+data/pipeline/merge_walk.py
+data/pipeline/requirements-gdal.txt
+data/pipeline/scout_plan.py
+data/pipeline/terrain_1m.py
+data/worlds/gale/chem_points.json
+data/worlds/gale/chokepoint.f32
+data/worlds/gale/cost_per_m.f32
+data/worlds/gale/cost_to_go.f32
+data/worlds/gale/cost_to_go_scouted.f32
+data/worlds/gale/crevice.f32
+data/worlds/gale/dose_rate.f32
+data/worlds/gale/dropoff.f32
+data/worlds/gale/fine_steep.u8
+data/worlds/gale/height.f32
+data/worlds/gale/landform.u8
+data/worlds/gale/neutron_points.json
+data/worlds/gale/open_dirs.u8
+data/worlds/gale/optical.png
+data/worlds/gale/passable.u8
+data/worlds/gale/reach.u8
+data/worlds/gale/rocks_fine.u8
+data/worlds/gale/route.json
+data/worlds/gale/science.u8
+data/worlds/gale/scout_plan.json
+data/worlds/gale/slope.f32
+data/worlds/gale/stops.json
+data/worlds/gale/targets.json
+data/worlds/gale/terrain.u8
+data/worlds/gale/terrain_class.u8
+data/worlds/gale/thermal_inertia.f32
+data/worlds/gale/unsure.f32
+data/worlds/gale/weather.json
+data/worlds/gale/world.json
 docs/BUILD.md
 docs/CODEX.md
 docs/CONTRACTS.md
@@ -3009,6 +3149,7 @@ docs/PITCH.md
 docs/PLAN.md
 docs/PRODUCT.md
 docs/RESEARCH.md
+docs/map-grows.md
 docs/pitch-notes.md
 docs/roles/README.md
 docs/roles/person-1-ml.md
@@ -3022,15 +3163,104 @@ docs/team-page/screens.html
 docs/team-page/shell.html
 docs/team-page/sync_issues.py
 docs/team-page/world64.json
+ml/.gitignore
 ml/AGENTS.md
 ml/README.md
+ml/__init__.py
 ml/buddy_rover/.gitkeep
+ml/check_exports.py
+ml/export_placeholders.py
 ml/exports/.gitkeep
+ml/exports/buddy_policy.json
+ml/exports/buddy_policy.onnx
+ml/exports/pitch_metrics.json
+ml/exports/rocks.json
+ml/exports/terrain_cls.json
+ml/exports/terrain_cls.onnx
+ml/pitch_metrics/PITCH_NUMBERS.md
+ml/pitch_metrics/README.md
+ml/pitch_metrics/metrics.mjs
+ml/pitch_metrics/metrics.test.mjs
+ml/pitch_metrics/run.mjs
+ml/pitch_metrics/test_pitch_metrics.py
+ml/requirements-ci.txt
 ml/requirements.txt
+ml/rock_review/.gitattributes
+ml/rock_review/CI_STATUS.md
+ml/rock_review/FINAL_SITE.md
+ml/rock_review/HANDOFF.md
+ml/rock_review/R3.md
+ml/rock_review/README.md
+ml/rock_review/REGISTRATION.md
+ml/rock_review/ROSCO.md
+ml/rock_review/ROSCO_LICENSE.txt
+ml/rock_review/__init__.py
+ml/rock_review/baseline_metrics.json
+ml/rock_review/candidates_reviewed.json
+ml/rock_review/candidates_unreviewed.json
+ml/rock_review/evaluate_final_site.py
+ml/rock_review/evaluate_rosco.py
+ml/rock_review/final_site.py
+ml/rock_review/final_site_baseline_metrics.json
+ml/rock_review/final_site_candidates.json
+ml/rock_review/final_site_review.json
+ml/rock_review/prepare_review.py
+ml/rock_review/r3_alignment.json
+ml/rock_review/r3_alignment.py
+ml/rock_review/r3_candidates.json
+ml/rock_review/r3_decisions.json
+ml/rock_review/r3_hazards.py
+ml/rock_review/r3_review.py
+ml/rock_review/r3_world_reference.json
+ml/rock_review/register_observation.py
+ml/rock_review/registered_candidates.json
+ml/rock_review/registration_metrics.json
+ml/rock_review/requirements-site.txt
+ml/rock_review/rosco_confidence_decisions.json
+ml/rock_review/rosco_confidence_metrics.json
+ml/rock_review/rosco_confidence_review.json
+ml/rock_review/rosco_native.py
+ml/rock_review/rosco_shapes_metrics.json
+ml/rock_review/rosco_upstream_metrics.json
+ml/rock_review/shadow_baseline.py
+ml/rock_review/shadow_review.json
+ml/rock_review/single_observation.py
+ml/rock_review/single_observation_source.json
+ml/rock_review/source.json
+ml/rock_review/test_final_evaluation.py
+ml/rock_review/test_final_site.py
+ml/rock_review/test_r3_hazards.py
+ml/rock_review/test_registration.py
+ml/rock_review/test_review.py
+ml/rock_review/test_rosco.py
+ml/rock_review/test_shadow_baseline.py
 ml/terrain_classifier/.gitkeep
+ml/terrain_classifier/PROVENANCE.md
+ml/terrain_classifier/README.md
+ml/terrain_classifier/__init__.py
+ml/terrain_classifier/dataset.py
+ml/terrain_classifier/fresh_gale.py
+ml/terrain_classifier/gale_experiment.py
+ml/terrain_classifier/gale_experiment_v2.json
+ml/terrain_classifier/gale_fresh_manifest_v2.json
+ml/terrain_classifier/gale_protocol.py
+ml/terrain_classifier/subset_manifest.json
+ml/terrain_classifier/test_dataset.py
+ml/terrain_classifier/test_gale_protocol.py
+ml/terrain_classifier/train.py
+ml/test_placeholders.py
 requirements.txt
+scripts/check-hygiene.sh
 scripts/protect-main.sh
+tests/test_agent_offline.py
+tests/test_eight_data_types.py
 tests/test_make_world.py
+tests/test_merge_walk.py
+tests/test_ml_agent_hygiene.py
+tests/test_ml_exports.py
+tests/test_scout_plan.py
+tests/test_terrain_1m.py
+tests/test_worlds.py
 </code></pre>
     <h3>Rules for coding agents (AGENTS.md)</h3>
 
@@ -3048,12 +3278,14 @@ tests/test_make_world.py
 <li><strong>Small, working commits.</strong> Each commit leaves the project runnable. Say which milestone (M0–M3) and which flag a PR touches.</li>
 <li><strong>No invented numbers.</strong> Accuracy, energy and validation numbers come from code in this repo, written to a file. Mark anything else as an estimate.</li>
 <li><strong>No secrets in the repo.</strong> Keys go in environment variables or <code>.env</code> (ignored by git).</li>
-<li><strong>Phone first.</strong> Test on a phone over HTTPS. No pathfinding on the phone; the walk-back ring is a lookup in <code>cost_to_go</code>.</li>
+<li><strong>Phone first.</strong> Build for a phone and check it on one over HTTPS when you can (not a merge gate, see rule 13). No pathfinding on the phone; the walk-back ring is a lookup in <code>cost_to_go</code>.</li>
 <li><strong>Cite NASA data by name</strong> in code comments and in the project page (Mars Trek, USGS Gale terrain and images, HiRISE, THEMIS, CRISM, Curiosity RAD, REMS, ChemCam, APXS, DAN, Perseverance raw images, AI4Mars). See <code>docs/DATA.md</code>.</li>
 <li><strong>Do not read data files.</strong> Binary world layers (<code>*.f32</code>, <code>*.u8</code>), datasets, model weights and logs waste tokens. Use <code>world.json</code> and the scripts' printed summaries.</li>
 <li><strong>Model and effort per job:</strong> see <code>docs/CODEX.md</code> §6.</li>
 <li><strong>Grade new ideas first.</strong> Before building a feature that is not in <code>docs/PLAN.md</code>, add it to <code>docs/CRITIQUE.md</code> and score it. 8 or less: do not build it.</li>
 <li><strong>Respect the build order.</strong> Don't start a block until the blocks under its <strong>Needs</strong> are done, except by building against the synthetic world. When you finish a block, say in the PR which blocks it unlocks.</li>
+<li><strong>Test, then merge as you go.</strong> Once CI is green and you have tested the change yourself (unit tests, build, run it in a browser, the feature works, no console errors), squash-merge your own PR without waiting for a human. Rebase any PR stacked on it onto <code>dev</code> and keep going. Say in the PR what you tested and that a real-phone check is still to do. Contract changes (rule 2) still need every owner's approval.</li>
+<li><strong><code>dev</code> to test, <code>main</code> to submit.</strong> Open every PR into <code>dev</code>: it gets a preview URL, and once merged it shows on the team's dev test URL. <code>main</code> is the official build we submit; it moves only by a release PR from <code>dev</code> at a milestone, after the dev URL works on a phone.</li>
 </ol>
 
     <h3>How we merge</h3>
@@ -3130,17 +3362,17 @@ tests/test_make_world.py
 <tr>
 <td><code>rocks_fine.u8</code></td>
 <td>uint8</td>
-<td>Fine-scale hazards (1 = rock field or drop-off) that orbit misses and the <strong>scout drone reveals</strong>. Hidden in the app until the drone has flown over that cell. Synthetic now. For real sites: rock density from shadow-based rock detection on full-resolution HiRISE images (Person 1), the method NASA used to check landing sites.</td>
+<td>Fine-scale hazards (1 = rock field or drop-off) that orbit misses and the <strong>scout helicopter reveals</strong>. Hidden in the app until the helicopter has flown over that cell. Synthetic now. For real sites: rock density from shadow-based rock detection on full-resolution HiRISE images (Person 1), the method NASA used to check landing sites.</td>
 </tr>
 <tr>
 <td><code>scout_plan.json</code></td>
 <td>JSON</td>
-<td>The drone's flights, computed by the pipeline: <code>[{"flight": 1, "waypoints": [[x, y], ...], "seconds", "metres", "cells_revealed"}]</code>. Each flight is at most about 700 m and 180 s (Ingenuity-class). It covers the route corridor first, then the least certain cells.</td>
+<td>The helicopter's flights, computed by the pipeline: <code>[{"flight": 1, "waypoints": [[x, y], ...], "seconds", "metres", "cells_revealed"}]</code>. Each flight is at most about 700 m and 180 s (Ingenuity-class). It covers the route corridor first, then the least certain cells.</td>
 </tr>
 <tr>
 <td><code>cost_to_go_scouted.f32</code></td>
 <td>float32</td>
-<td><code>cost_to_go</code> recomputed with <code>rocks_fine</code> cells impassable: the way home once the drone has scouted.</td>
+<td><code>cost_to_go</code> recomputed with <code>rocks_fine</code> cells impassable: the way home once the helicopter has scouted.</td>
 </tr>
 <tr>
 <td><code>targets.json</code></td>
@@ -3157,9 +3389,34 @@ tests/test_make_world.py
 <td>JSON</td>
 <td>The planned route: <code>{"cells": [[x, y], ...], "stops": ["target id", ...], "energy_j", "minutes", "dose_ugy"}</code>, computed by the pipeline.</td>
 </tr>
+<tr>
+<td><code>passable.u8</code></td>
+<td>uint8</td>
+<td><strong>Crossings at walk scale.</strong> Bit k set = you can step from this cell to neighbour k, order (-1,-1) (0,-1) (1,-1) (-1,0) (1,0) (-1,1) (0,1) (1,1) (as <code>app/src/plan.js</code> <code>NB</code>). Checked along the 1 m terrain between cell centres: ledges over the suited step limit (<code>knobs.step_max_m</code>, 0.3 m, NASA ICES-2025-294) and slopes over <code>max_slope_deg</code> (up, down or across) for at least <code>knobs.steep_run_m</code>. <em>Optional.</em></td>
+</tr>
+<tr>
+<td><code>terrain.u8</code>, <code>fine_steep.u8</code>, <code>dropoff.f32</code>, <code>crevice.f32</code>, <code>landform.u8</code>, <code>open_dirs.u8</code>, <code>reach.u8</code>, <code>chokepoint.f32</code>, <code>unsure.f32</code></td>
+<td>grids</td>
+<td><strong>Terrain views</strong> from the 1 m terrain: hillshade; % steeper than the limit at 2 m scale; largest 1 m height jump (m); deepest narrow trough (m); 0 flat / 1 slope / 2 ridge / 3 hollow; passable neighbours (0-8); reachable from base (0/1); how many reachable cells' way from base passes here (log scale 0-1); share of marginal crossings (0-1). Made by <code>data/pipeline/terrain_1m.py</code>. <em>Optional.</em></td>
+</tr>
+<tr>
+<td><code>chem_points.json</code></td>
+<td>JSON list</td>
+<td>Chemistry along Curiosity's path, as points (not a full map): <code>{"id", "instrument": "ChemCam" or "APXS", "target", "sol", "cell": [x, y], "oxides_wt_pct": {...}, "source"}</code>. <em>Optional.</em></td>
+</tr>
+<tr>
+<td><code>neutron_points.json</code></td>
+<td>JSON list</td>
+<td>DAN passive neutrons per sol, as points: <code>{"sol", "cell", "hours", "thermal_cps", "epithermal_cps", "thermal_epithermal_ratio", "source"}</code>. Higher ratio suggests more hydrogen (relative). <em>Optional.</em></td>
+</tr>
+<tr>
+<td><code>weather.json</code></td>
+<td>JSON</td>
+<td>Curiosity REMS daily weather: <code>{"source", "sols": [{"sol", "earth_date", "ls", "min_temp_c", "max_temp_c", "pressure_pa", "ground_min_c", "ground_max_c", "opacity", "uv"}]}</code>. <em>Optional.</em></td>
+</tr>
 </tbody>
 </table></div>
-<p>Optional layers may be missing in a world; the app hides that layer's toggle. <code>world.json</code> lists which layers exist under <code>"layers"</code> and each layer's mission, instrument and date under <code>"sources"</code>.</p>
+<p>Optional layers may be missing in a world; the app hides that layer's toggle. <code>world.json</code> lists which layers exist under <code>"layers"</code> and each layer's mission, instrument and date under <code>"sources"</code>. Real sites may add <code>"data_types"</code>: which layer or file carries each of NASA's eight data types (optical, topographic, thermal, spectral, radiation, atmospheric, chemical, geophysical).</p>
 <p><strong>The way home is always known:</strong> from any cell, step to the neighbour with the lowest <code>cost_to_go</code> until you reach base. No search is needed on the phone.</p>
 <p>Index of cell (x, y): <code>y * width + x</code>. World position of a cell centre: <code>x * cell_size_m</code>, <code>y * cell_size_m</code>.</p>
 <p><strong>The walk-back ring</strong> is every cell where <code>cost_to_go[cell] &lt;= energy_left - reserve</code>, with <code>reserve = reserve_fraction * energy_budget_j</code>. The app only looks this up. No pathfinding runs on the phone.</p>
@@ -3276,7 +3533,7 @@ tests/test_make_world.py
 <ul>
 <li><strong>Orbit cannot see everything:</strong> the Moon's best camera (LROC, about 0.5 m per pixel) reliably shows boulders of about 1 m and larger; Mars' HiRISE resolves 25–32 cm per pixel. (<a href="https://ntrs.nasa.gov/api/citations/20170001954/downloads/20170001954.pdf" target="_blank" rel="noopener">NTRS</a>)</li>
 <li><strong>Plans break on contact:</strong> in NASA's JETT3 field test (2022), maps matched what Artemis will have (1 m images, 1.5 m elevation). EVA 1 hit slopes over 16° and impassable drop-offs and ended short; EVAs 3 and 4 were replanned and shortened. Crews were told the planned path was a guide, not mandatory. (<a href="https://ntrs.nasa.gov/api/citations/20230010686/downloads/EHP-20021_JETT3_Test_Report_Baseline_20230010686.pdf" target="_blank" rel="noopener">NTRS JETT3</a>)</li>
-<li><strong>Scouting first:</strong> NASA Ames' "robotic recon" drives a rover over planned routes before the EVA to check hazards and rank targets; K10 rovers drove 45 km, mostly autonomously, at Haughton Crater in 2008. (<a href="https://ewh.ieee.org/conf/icra/2008/workshops/PlanetaryRovers/03Fong/icra08-prw-fong-1.pdf" target="_blank" rel="noopener">CMU/Ames</a>)</li>
+<li><strong>Scouting first:</strong> NASA Ames' "robotic recon" drives a rover over planned routes before the EVA to check hazards and rank targets; K10 rovers drove 45 km, mostly autonomously, at Haughton Crater in 2008. (<a href="https://ewh.ieee.org/conf/icra/2008/workshops/PlanetaryRovers/03Fong/icra08-prw-fong-1.pdf" target="_blank" rel="noopener">CMU/Ames</a>) At Black Point Lava Flow, a remotely driven rover scouted routes, the routes were revised, then two-person crews drove them (<a href="https://ri.cmu.edu/publications/assessment-of-robotic-recon-for-human-exploration-of-the-moon" target="_blank" rel="noopener">Fong, Bualat et al.</a>).</li>
 </ul>
 <h3 id="4-it-is-slow">4. It is slow</h3>
 <div class="tbl"><table>
@@ -3333,7 +3590,7 @@ tests/test_make_world.py
 <ul>
 <li><strong>Lunar Terrain Vehicle (May 26, 2026):</strong> NASA picked Astrolab (about $219M) and Lunar Outpost (about $220M, Pegasus, with GM, Goodyear and Leidos) from a contract worth up to $4.6B. Both drive <strong>with or without crew</strong>, up to 10 km/h, 20° slopes, 200 km range; on the Moon by 2028. Blue Origin delivers them ($188M). <a href="https://spacepolicyonline.com/news/nasa-awards-initial-moon-base-rover-and-lander-contracts/" target="_blank" rel="noopener">spacepolicyonline</a></li>
 <li><strong>JPL CADRE:</strong> three small rovers that share maps and positions; flying on IM-3 (no earlier than Q1 2027). <a href="https://www.nasa.gov/cooperative-autonomous-distributed-robotic-exploration-cadre" target="_blank" rel="noopener">NASA</a></li>
-<li><strong>MoonFall:</strong> 3–4 hopping drones to scout the south pole, including slopes rovers cannot reach (Firefly, $75M delivery). <a href="https://www.space.com/astronomy/moon/nasa-wants-to-use-a-fleet-of-moonfall-drones-to-scout-the-lunar-south-pole-we-believe-we-can-do-it" target="_blank" rel="noopener">Space.com</a></li>
+<li><strong>MoonFall:</strong> four JPL drones that hop on rocket thrust (no rotors) to survey Artemis landing sites at the south pole before astronauts arrive, including slopes rovers cannot reach; Firefly's $75M subcontract delivers them, no earlier than 2028. <a href="https://www.space.com/astronomy/moon/nasa-wants-to-use-a-fleet-of-moonfall-drones-to-scout-the-lunar-south-pole-we-believe-we-can-do-it" target="_blank" rel="noopener">Space.com</a></li>
 <li><strong>ARCHES (Mount Etna, 2022, DLR/ESA):</strong> robots in roles: a "scientist" rover, an "assistant" rover that also relays WiFi, and a "scout" drone; an astronaut drove a rover 23 km away with haptic feedback. Surface Avatar (2023–2025) had ISS astronauts command mixed teams including a humanoid and Spot. <a href="https://www.dlr.de/en/rm/latest/news/2022/robotics-team-practises-lunar-exploration-on-mount-etna" target="_blank" rel="noopener">DLR</a>, <a href="https://www.dlr.de/en/rm/latest/news/2025/surface-avatar-successful-completed" target="_blank" rel="noopener">DLR 2025</a></li>
 <li><strong>Legged robots:</strong> ETH's three ANYmal robots won the ESA-ESRIC Space Resources Challenge; JPL's NeBula-Spot is being developed to map caves on the Moon and Mars, without GPS. <a href="https://www.sciencedaily.com/releases/2023/07/230712165135.htm" target="_blank" rel="noopener">ScienceDaily</a>, <a href="https://www.jpl.nasa.gov/robotics-at-jpl/nebula-spot" target="_blank" rel="noopener">JPL</a></li>
 <li><strong>Follow-me astronaut assistants:</strong> Maryland's BioBot (NIAC) followed an astronaut and handled a suit umbilical, now on hold; a 2025 NASA report studies a rover that trails an astronaut closely. <a href="https://phys.org/news/2024-07-robotic-rover-astronauts-moonwalks.html" target="_blank" rel="noopener">phys.org</a>, <a href="https://ntrs.nasa.gov/citations/20250006905" target="_blank" rel="noopener">NTRS</a></li>
@@ -3530,7 +3787,7 @@ tests/test_make_world.py
 <li><strong>Expect replans:</strong> routes are guides; the ring recomputes the instant the crew deviates; optional "get-ahead" stops when margin allows.</li>
 <li><strong>Learn the real pace:</strong> update speed and energy from measured steps; first-EVA predictions will be wrong, so the debrief closes the loop.</li>
 </ol>
-<h3 id="13-how-a-scout-drone-sees-in-3d">13. How a scout drone sees in 3D</h3>
+<h3 id="13-how-a-scout-helicopter-sees-in-3d">13. How a scout helicopter sees in 3D</h3>
 <h4 id="echolocation-how-bats-do-it">Echolocation: how bats do it</h4>
 <p>A bat makes a short, very high-pitched call (roughly 20 to 120 kHz, above human hearing) and listens for the echo.</p>
 <ul>
@@ -3544,18 +3801,18 @@ tests/test_make_world.py
 <li><strong>The air is too thin.</strong> Mars' air is about 1% as dense as Earth's, so sounds are about 20 dB quieter. (<a href="https://doi.org/10.1038/s41586-022-04679-0" target="_blank" rel="noopener">Nature 2022</a>)</li>
 <li><strong>High pitches die within metres.</strong> Carbon dioxide absorbs high frequencies. A sound that carries about 65 m on Earth is lost after about 8 m on Mars, and high pitches are gone at that distance. (<a href="https://www.dlr.de/en/latest/news/2022/02/20220401_the-sound-of-mars" target="_blank" rel="noopener">DLR</a>) Bat-style ultrasound is the worst case.</li>
 <li><strong>There are two speeds of sound.</strong> Sound travels about 240 m/s, and about 10 m/s faster above roughly 400 Hz, which blurs the timing that echolocation depends on. (<a href="https://doi.org/10.1038/s41586-022-04679-0" target="_blank" rel="noopener">Nature 2022</a>)</li>
-<li><strong>The drone drowns its own echo.</strong> Ingenuity's rotors spin about 2,400 rpm, right next to any microphone.</li>
+<li><strong>The helicopter drowns its own echo.</strong> Ingenuity's rotors spin about 2,400 rpm, right next to any microphone.</li>
 </ul>
-<p><strong>Verdict:</strong> echolocation by sound cannot map terrain from a Mars drone. The <em>idea</em> is exactly right, though. We only change what the drone sends out.</p>
+<p><strong>Verdict:</strong> echolocation by sound cannot map terrain from a Mars helicopter. The <em>idea</em> is exactly right, though. We only change what the helicopter sends out.</p>
 <h4 id="the-same-idea-with-light-lidar">The same idea with light: lidar</h4>
-<p>Send laser pulses instead of sound and time the echo. Light needs no air, so this works on Mars, and it works in shadow because the drone brings its own light.</p>
+<p>Send laser pulses instead of sound and time the echo. Light needs no air, so this works on Mars, and it works in shadow because the helicopter brings its own light.</p>
 <ul>
 <li><strong>Caves on Earth are mapped this way.</strong> In DARPA's Subterranean Challenge (2018–2021), robots mapped caves, tunnels and buildings with no GPS, and almost every team built its maps around lidar. NASA JPL's team CoSTAR won the Urban round in 2020. (<a href="https://arxiv.org/pdf/2103.11470v3" target="_blank" rel="noopener">arXiv survey</a>, <a href="https://www.nasa.gov/?p=71706" target="_blank" rel="noopener">NASA</a>) The method is called SLAM: build the map and track your own position in it at the same time.</li>
 <li><strong>Ingenuity already flew one beam of it.</strong> A Garmin LIDAR-Lite v3 laser rangefinder pointed down and measured height 50 times a second. It was chosen because it was very light. (<a href="https://www.garmin.com/en-US/blog/general/garmin-on-mars/" target="_blank" rel="noopener">Garmin</a>)</li>
 <li><strong>Its limit:</strong> a full scanning lidar is heavier and uses more power, and weight is the hardest limit on a Mars helicopter.</li>
 </ul>
 <h4 id="the-same-idea-with-radio-radar">The same idea with radio: radar</h4>
-<p>Radio echoes pass through the ground. Ground-penetrating radar shows what is underneath: buried ice, hollows, and how deep loose sand goes. JPL and AeroVironment's Skyfall concept proposes helicopters that send back high-resolution images and ground-penetrating radar data to scout landing sites for people. (<a href="https://www.space.com/astronomy/mars/nasas-skyfall-helicopters-will-show-us-parts-of-mars-weve-never-seen-before-scientists-say" target="_blank" rel="noopener">Space.com</a>) It answers "is it solid underneath?", not "where are the rocks?"</p>
+<p>Radio echoes pass through the ground. Ground-penetrating radar shows what is underneath: buried ice, hollows, and how deep loose sand goes. NASA's SkyFall mission (three helicopters, announced March 2026, launch late 2028) will carry cameras and ground-penetrating radar to scout exploration zones for crews and map ice. (<a href="https://www.space.com/astronomy/mars/nasas-skyfall-helicopters-will-show-us-parts-of-mars-weve-never-seen-before-scientists-say" target="_blank" rel="noopener">Space.com</a>) It answers "is it solid underneath?", not "where are the rocks?"</p>
 <h4 id="no-echo-at-all-cameras-photogrammetry">No echo at all: cameras (photogrammetry)</h4>
 <p>Take overlapping photos from different positions. Software matches the same points across photos and works out their 3D positions. This is called structure from motion, and it is how most drone maps on Earth are made.</p>
 <ul>
@@ -3601,7 +3858,7 @@ tests/test_make_world.py
 <td>Radio</td>
 <td><strong>Yes</strong></td>
 <td>Under the surface: ice, hollows, sand depth</td>
-<td>On rovers (Perseverance's RIMFAX); proposed for helicopters (Skyfall)</td>
+<td>On rovers (Perseverance's RIMFAX); planned on NASA's SkyFall helicopters (2028)</td>
 </tr>
 </tbody>
 </table></div>
@@ -3609,11 +3866,170 @@ tests/test_make_world.py
 <h4 id="how-our-demo-shows-it">How our demo shows it</h4>
 <p>We do not build a sensor. We show what the sensor does, honestly:</p>
 <ol type="1">
-<li>As the drone flies, it casts a fan of rays down onto the terrain, like a lidar sweep: "a bat, but with light".</li>
+<li>As the helicopter flies, it casts a fan of rays down onto the terrain, like a lidar sweep: "a bat, but with light".</li>
 <li>Where a ray hits the real 1 m terrain of our slice, a dot appears. The dots build up into a point cloud.</li>
 <li>Once a stretch is covered, the full-detail terrain and image fade in, the rocks appear, and the route re-plans.</li>
 </ol>
-<p><strong>Labelled:</strong> "simulated scan, real NASA terrain". The flight and the sweep are simulated; the terrain they reveal is the real USGS/HiRISE data. In three.js this is a raycaster against a hidden full-detail mesh, about 50 lines behind the <code>drone_scout</code> flag.</p>
+<p><strong>Labelled:</strong> "simulated scan, real NASA terrain". The flight and the sweep are simulated; the terrain they reveal is the real USGS/HiRISE data. In three.js this is a raycaster against a hidden full-detail mesh, about 50 lines behind the <code>helicopter_scout</code> flag.</p>
+<h3 id="14-can-the-scout-helicopter-actually-work">14. Can the scout helicopter actually work?</h3>
+<p>Checked Nov 14, 2026, because the whole pitch leans on it.</p>
+<p><strong>Verdict: yes, as long as we claim the right job.</strong> The helicopter's job is the hazards <em>smaller than orbit can see</em>: rocks under about 1.5 m, half-metre drops, the inside of a small crater. It flies in daylight on the sol before the walk. It is <strong>not</strong> "orbit is blurry". HiRISE already gives NASA slopes and big boulders, and a NASA judge will know that.</p>
+<h4 id="the-gap-a-helicopter-fills">The gap a helicopter fills</h4>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th></th>
+<th>HiRISE (orbit, best on Mars)</th>
+<th>Ingenuity-class helicopter</th>
+<th>What a walker needs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Rocks</strong></td>
+<td>Automated shadow counts find rocks of <strong>1.5 m and up</strong> (about 1.2 m at best). Smaller ones are extrapolated from a model curve, not seen (<a href="https://marsoweb.nas.nasa.gov/landingsites/msl/workshops/4th_workshop/talks/Golombek_Rocks_4th_Wkshp.pdf" target="_blank" rel="noopener">Golombek, MSL workshop</a>)</td>
+<td>Navcam <strong>3.6 cm per pixel</strong> at 10 m up; colour camera 0.5 cm per pixel (<a href="https://www.hou.usra.edu/meetings/lpsc2025/pdf/2685.pdf" target="_blank" rel="noopener">Maki et al., LPSC 2025</a>)</td>
+<td>Knee-high rocks and loose blocks. NASA publishes no step-height limit for suited walkers, so don't quote one</td>
+</tr>
+<tr>
+<td><strong>Height</strong></td>
+<td>Terrain points every 1–2 m, precise to tens of centimetres (<a href="https://www.uahirise.org/dtm/about.php" target="_blank" rel="noopener">HiRISE</a>). Features under 3–5 pixels are averaged away (<a href="https://marsoweb.nas.nasa.gov/landingsites/msl/workshops/4th_workshop/talks/3_Kirk_Slopes.pdf" target="_blank" rel="noopener">Kirk, USGS</a>)</td>
+<td>Flight 12: 5 cm terrain from about 200 images, matching HiRISE (<a href="https://www.jpl.nasa.gov/site/research/media/posters/2023/SP23018p.pdf" target="_blank" rel="noopener">JPL</a>). Full mission: 3.8 cm per pixel, internal height precision 3–6 cm (absolute position about 0.5 m). It shows a <strong>0.5 m crater peak that HiRISE misses</strong> (<a href="https://www.hou.usra.edu/meetings/lpsc2025/pdf/1302.pdf" target="_blank" rel="noopener">Zubarev et al., LPSC 2025</a>)</td>
+<td>Half-metre steps and drops; suits are rated for slopes up to 20°. Walking-pace planning "does not account for slope or obstacles (e.g., boulders)" (<a href="https://www.nasa.gov/wp-content/uploads/2017/02/eva-exp-0042_xeva_system_con_ops_rev_b_final_dtd_10192020_ref_doc.pdf" target="_blank" rel="noopener">NASA xEVA ConOps</a>)</td>
+</tr>
+<tr>
+<td><strong>Field tests</strong></td>
+<td>JETT3 planned on orbit-resolution maps (1 m images, 1.5 m elevation); controllers found it hard to match them to what crews saw (Conclusion 1.34) (<a href="https://ntrs.nasa.gov/citations/20230010686" target="_blank" rel="noopener">NTRS</a>)</td>
+<td>BASALT's aerial images at 15 cm per pixel were "not always of sufficient resolution" and the crews asked for high-resolution precursor imagery (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6442241/" target="_blank" rel="noopener">PMC</a>)</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Say on stage:</strong> "HiRISE is the right tool for picking a route by slope. But it only reliably sees rocks bigger than about 1.5 m, and its terrain points are a metre apart. A walking astronaut trips on what's smaller than that. Ingenuity's images, at about 4 cm per pixel, showed a half-metre crater peak HiRISE missed. Our scout fills that last metre, right before the walk."</p>
+<h4 id="every-link-in-the-chain-and-how-proven-it-is">Every link in the chain, and how proven it is</h4>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Link</th>
+<th>Status</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fly on Mars</td>
+<td><strong>Done on Mars</strong></td>
+<td>Ingenuity: 72 flights, 17.0 km, 128.8 minutes in the air, Apr 2021 to Jan 2024, against 5 planned test flights (<a href="https://science.nasa.gov/mission/mars-2020-perseverance/ingenuity-mars-helicopter/" target="_blank" rel="noopener">NASA</a>). Longest flight 704 m in 161 s (Flight 25) (<a href="https://www.jpl.nasa.gov/news/nasas-ingenuity-mars-helicopter-captures-video-of-record-flight" target="_blank" rel="noopener">JPL</a>)</td>
+</tr>
+<tr>
+<td>Scout for a ground team</td>
+<td><strong>Done on Mars</strong></td>
+<td>NASA called it "an aerial scout" for Perseverance's drivers. Flight 12's colour images confirmed the planned route into South Séítah was drivable. JPL's robotic ops chief engineer: "not all rover hazards can be identified" from orbit (<a href="https://science.nasa.gov/blogs/driving-farther-and-faster-with-autonomous-navigation-and-helicopter-scouting" target="_blank" rel="noopener">NASA</a>)</td>
+</tr>
+<tr>
+<td>Photos into centimetre 3D</td>
+<td><strong>Done on Mars data</strong></td>
+<td>Flight 12 and full-mission terrain models (table above)</td>
+</tr>
+<tr>
+<td>Re-plan around hazards</td>
+<td><strong>Done daily on Mars</strong></td>
+<td>Perseverance's AutoNav; our way home is a standard cheapest-path calculation</td>
+</tr>
+<tr>
+<td>Scout for crews</td>
+<td><strong>Contracted, not flown</strong></td>
+<td><strong>SkyFall:</strong> NASA announced it on Mar 24, 2026: three helicopters with cameras and ground-penetrating radar, launching late 2028 on SR-1 Freedom, to scout human exploration zones and map ice (<a href="https://www.jpl.nasa.gov/missions/skyfall/" target="_blank" rel="noopener">JPL</a>). AeroVironment won the build contract on Aug 27, 2026. FY27 funding is not settled, so say "contracted", not "funded". <strong>MoonFall:</strong> four JPL drones that hop on rocket thrust to survey Artemis landing sites before astronauts arrive; Firefly has a $75M subcontract to deliver them, no earlier than 2028 (<a href="https://www.jpl.nasa.gov/missions/moonfall/" target="_blank" rel="noopener">JPL</a>, <a href="https://satnews.com/2026/05/27/firefly-aerospace-wins-75-million-nasa-jpl-moonfall-subcontract-to-deliver-drones-to-the-moons-south-pole/" target="_blank" rel="noopener">SatNews</a>)</td>
+</tr>
+<tr>
+<td>A tool that computes the walk back</td>
+<td><strong>Asked for by NASA</strong></td>
+<td>JETT3 Conclusion 1.33: planning aids "were useful in assisting the EVA Task team in calculating walk back times", and the report recommends real-time tools (<a href="https://ntrs.nasa.gov/citations/20230010686" target="_blank" rel="noopener">NTRS</a>)</td>
+</tr>
+<tr>
+<td>Bigger scouts</td>
+<td><strong>Design studies</strong></td>
+<td>Mars Science Helicopter: 31 kg, 5 kg payload, 10 minutes of hover or 5 km of range (<a href="https://ntrs.nasa.gov/citations/20205008552" target="_blank" rel="noopener">NTRS</a>). AeroVironment's LPSC 2025 poster: a 6 kg craft that could hover over an EVA crew and stream video (<a href="https://www.universetoday.com/articles/exploring-mars-with-next-generation-helicopters" target="_blank" rel="noopener">Universe Today</a>)</td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="the-real-limits-and-what-we-do-about-each">The real limits, and what we do about each</h4>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Limit</th>
+<th>What happened to Ingenuity</th>
+<th>Our answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>No night flying</strong></td>
+<td>It navigated by camera. In winter the battery browned out and reset it every night (<a href="https://science.nasa.gov/missions/mars-2020-perseverance/ingenuity-helicopter/ingenuity-adapts-for-mars-winter-operations/" target="_blank" rel="noopener">NASA</a>)</td>
+<td>Fly in daylight on the sol before; the crew plans that evening</td>
+</tr>
+<tr>
+<td><strong>Featureless ground</strong></td>
+<td>Flight 72 ended the mission: over bland sand ripples the navigation "had too little information", it landed hard and broke its blades (<a href="https://www.jpl.nasa.gov/news/nasa-performs-first-aircraft-accident-investigation-on-another-world/" target="_blank" rel="noopener">JPL</a>)</td>
+<td>The scout plan does not fly over smooth sand; it routes over textured ground</td>
+</tr>
+<tr>
+<td><strong>Lost link</strong></td>
+<td>After Flight 52 a hill blocked the relay for 63 days (<a href="https://newatlas.com/space/nasa-contacts-ingenuity-mars-helicopter-after-two-month-silence" target="_blank" rel="noopener">New Atlas</a>)</td>
+<td>Base station on high ground; the helicopter stores images until the link returns</td>
+</tr>
+<tr>
+<td><strong>Short flights</strong></td>
+<td>Battery rated for 187 s of hard flying; longest real flight about 169 s (<a href="https://www.nasa.gov/wp-content/uploads/2024/01/battery-system-design-testing-and-operation-for-the-mars-perseverance-rover-and-ingenuity-helicopter.pdf" target="_blank" rel="noopener">NASA battery paper</a>)</td>
+<td>Our cap is 180 s and 700 m per flight, inside what flew. The plan flies the most important ground first</td>
+</tr>
+<tr>
+<td><strong>Dust and winter</strong></td>
+<td>Dust cut its solar charging</td>
+<td>No-scout fallback: the route and ring fall back to orbit-only data, with less margin</td>
+</tr>
+<tr>
+<td><strong>Can't see under a crust</strong></td>
+<td>Spirit sank at Troy through a thin crust into soft sand (<a href="https://www.usgs.gov/publications/spirit-mars-rover-mission-overview-and-selected-results-northern-home-plate-winter" target="_blank" rel="noopener">USGS</a>)</td>
+<td>No camera sees this. Thermal inertia flags loose ground; never claim the helicopter detects it</td>
+</tr>
+<tr>
+<td><strong>Crew workload</strong></td>
+<td>Remote driving with delay raised workload in LTV tests (NTRS 20240011392)</td>
+<td>The flight is pre-planned and autonomous; the crew only reviews the re-plan</td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="what-this-means-for-our-build-proposal-needs-p1-and-p3-to-agree-because-it-changes-a-contract">What this means for our build (proposal: needs P1 and P3 to agree, because it changes a contract)</h4>
+<p>Our current design has one weak spot. The "before" map is an 8 m version of the slice, and the "after" is HiRISE. HiRISE is also from orbit, so a judge can say "you already had that". Proposed fix:</p>
+<ol type="1">
+<li><strong>Before = everything HiRISE knows.</strong> Slopes from the 1 m terrain and rocks of 1.5 m and up go into <code>cost_to_go</code> before the helicopter flies. The 8 m grid stays, because it keeps the app fast on a phone, not because orbit is blurry.</li>
+<li><strong><code>rocks_fine</code> = hazards below HiRISE's limit.</strong>
+<ul>
+<li>Along the corridor: rocks of 0.5–1.5 m modelled from the HiRISE rock abundance with the size-frequency model NASA used for landing sites (Golombek), labelled "modelled".</li>
+<li>At Curiosity's real boxwork stops: the actual ground. The rover's positions through sol 4865 come from the <a href="https://planetarydata.jpl.nasa.gov/img/data/msl/msl_places/data_localizations/localized_pos.csv" target="_blank" rel="noopener">localized positions CSV</a> (341 KB). Its top-down Navcam mosaics (vertical "VRT" projection) for sols 4534–4843 are in the <a href="https://planetarydata.jpl.nasa.gov/img/data/msl/MSLMOS_1XXX/DATA/" target="_blank" rel="noopener">MSL mosaic archive</a>. They are PDS <code>.IMG</code> files; GDAL converts them. Test sol 4600 first to check alignment.</li>
+</ul></li>
+<li><strong>The scout plan skips smooth sand.</strong></li>
+<li><strong>Labels:</strong> "simulated flight · HiRISE (orbit) and Curiosity Navcam (ground) are real · small rocks modelled from HiRISE rock abundance".</li>
+<li><strong>R5 measures the gap:</strong> hazards below orbit's limit that the scouted route avoids. No published study has measured what a pre-EVA scout saves, so this is a first estimate. Label it as simulated.</li>
+</ol>
+<p><strong>Not worth it:</strong> moving to Jezero for real Ingenuity data. No Ingenuity terrain model is downloadable, only raw images, and we would lose the boxwork and Curiosity's instruments.</p>
+<h4 id="industry-check">Industry check</h4>
+<ul>
+<li><strong>SpaceX:</strong> we found no public work on scouting or drones. Starship did not go to Mars in 2026; in February 2026 Musk said the focus is now the Moon. One useful fact: SpaceX's Paul Wooster said four candidate landing sites that looked fine in medium-resolution orbit images were "too rough" in HiRISE. Resolution decides where you can go (<a href="https://www.space.com/36142-spacex-studying-mars-landing-sites.html" target="_blank" rel="noopener">Space.com</a>).</li>
+<li><strong>Startups:</strong> we found no YC or other startup doing Mars scouting or walk-scale maps. Cosmic Robotics (YC S26) builds construction robots for the Moon and Mars (<a href="https://www.ycombinator.com/companies/cosmic-robotics" target="_blank" rel="noopener">YC</a>).</li>
+<li><strong>NASA's Moon to Mars architecture (2024, 2025)</strong> does not call for aerial scouting before EVAs. Pitch this as taking MoonFall and SkyFall down to the scale of one walk, not as current NASA plan.</li>
+</ul>
+<h4 id="dont-say">Don't say</h4>
+<ul>
+<li>"Ingenuity changed Perseverance's route" or "saved two months of driving". Say "confirmed the route was drivable."</li>
+<li>"Orbit can't see rocks" or "HiRISE can't see slopes". Say "small hazards at walking scale."</li>
+<li>"3–6 cm accuracy" without "internal precision".</li>
+<li>"The helicopter detects soft sand."</li>
+<li>"SkyFall is funded", "SkyFall flies on Starship", or "six helicopters" (that was the 2025 company concept).</li>
+<li>"NASA plans scout drones for Artemis." MoonFall hops on rockets; nothing flies with rotors on the Moon.</li>
+<li>Any firm SpaceX Mars date.</li>
+</ul>
 
   </div>
 </main>

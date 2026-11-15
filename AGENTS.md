@@ -2,7 +2,7 @@
 
 Read `docs/PRODUCT.md` (what we build), `docs/BUILD.md` (who builds what, and what each block needs first), `docs/CONTRACTS.md` and your person's brief in `docs/roles/` before writing code. Work on one block at a time; its GitHub issue says what it needs, what it unlocks and when it is done. Each folder (`ml/`, `app/`, `data/`, `agent/`) has its own `AGENTS.md` with its environment and check commands. Codex workflow: `docs/CODEX.md` (one task per git worktree).
 
-**Where things live (read these, in this order):** `docs/PRODUCT.md`, `docs/BUILD.md`, your brief in `docs/roles/`, `docs/CONTRACTS.md`. The pitch is `docs/PITCH.md` and its slides are in `docs/deck/`.
+**Where things live (read these, in this order):** `docs/PRODUCT.md`, `docs/BUILD.md`, your brief in `docs/roles/`, `docs/CONTRACTS.md`. The pitch is `docs/PITCH.md` and its slides are in `docs/deck/`. What is decided, open and missing: `docs/DECISIONS.md`.
 - **Team page:** https://claude.ai/artifact/FxZ2AS4JSxE6d1RMbfXq6N, generated from these docs by `docs/team-page/build.py`. Don't edit or read `docs/team-page/plan.html`; read the docs it is built from.
 - **Pitch deck:** https://claude.ai/artifact/XiHnUGPaJkCCpBeHoWck41, source in `docs/deck/`.
 - claude.ai links need a sign-in. Agents that can't open them (Codex) use the repo files; they hold the same content.
@@ -21,3 +21,4 @@ Read `docs/PRODUCT.md` (what we build), `docs/BUILD.md` (who builds what, and wh
 12. **Respect the build order.** Don't start a block until the blocks under its **Needs** are done, except by building against the synthetic world. When you finish a block, say in the PR which blocks it unlocks.
 13. **Test, then merge as you go.** Once CI is green and you have tested the change yourself (unit tests, build, run it in a browser, the feature works, no console errors), squash-merge your own PR without waiting for a human. Rebase any PR stacked on it onto `dev` and keep going. Say in the PR what you tested and that a real-phone check is still to do. Contract changes (rule 2) still need every owner's approval.
 14. **`dev` to test, `main` to submit.** Open every PR into `dev`: it gets a preview URL, and once merged it shows on the team's dev test URL. `main` is the official build we submit; it moves only by a release PR from `dev` at a milestone, after the dev URL works on a phone.
+15. **Write decisions down.** Any PR that settles a choice (a number, a direction, a removal) adds a dated row to `docs/DECISIONS.md` and updates its Open and Missing lists.

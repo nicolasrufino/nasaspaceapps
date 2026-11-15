@@ -48,7 +48,7 @@ Code: `stepCostIdx` in `app/src/walk.js`, `pandolf_watts` in `data/pipeline/make
 
 ## 2. Walls: where you can't walk
 
-- **Slope over 25°** (`max_slope_deg`): a suited astronaut can't climb it, so the cell is a wall.
+- **Slope over the limit** (`max_slope_deg`): a suited astronaut can't climb it, so the cell is a wall. Today's world files use **25°**. The team decided on **20°**, the Artemis xEVA suit limit; it takes effect when the world files are rebuilt. The app reads the number from `world.json`, so it follows without a code change. On Gale, 20° turns 15.5% → 24.2% of cells into walls (`app/scripts/slope-check.json`).
 - **Rocks the helicopter has seen** (`rocks_fine`): walls once known. Before scouting nobody knows they are there, which is the point of the scout.
 
 ## 3. The way home from everywhere (cost to go)
@@ -98,7 +98,7 @@ Orbit images can't see rocks smaller than about a metre. A small helicopter (Ing
 A score from 0 (don't go) to 1 (go) for every cell, from what is known right now:
 
 ```
-score = 0                    if slope > 25°, or a rock was seen there,
+score = 0                    if slope > the limit, or a rock was seen there,
                              or the round trip doesn't fit the usable energy
 score = (1 − round trip ÷ usable energy) × (1 if scouted, ½ if not) × science weight
 round trip = energy from base to the cell + cost to go back
@@ -112,7 +112,7 @@ Brighter green = more energy to spare after going there and back. The map bright
 The panel decides nothing; it measures the route the planner chose and the ones it beat (flag `why_route`).
 
 - **Each stretch** (base → stop → … → base): distance, energy (the Pandolf cost of every step), walking time, steepest slope and share of sand.
-- **Steepest ground** on the whole route, against the 25° limit.
+- **Steepest ground** on the whole route, against the slope limit.
 - **Tightest moment:** the least energy to spare at any point, after the cost of getting home and the reserve: `energy left − reserve − cost to go`.
 - **The rejected alternative:** the **shortest-distance** route through the same stops in the same order (what a person would draw), drawn as grey dashes. The panel says what it would cost and why: more sand, more climbing, steeper ground.
 - **After a scout:** how many rock cells the old route crossed and what avoiding them costs.

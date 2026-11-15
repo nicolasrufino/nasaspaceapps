@@ -220,11 +220,13 @@ def download(destination):
     print(f"Saved {len(records)} verified source pairs to {destination}", flush=True)
 
 
-def load_patches(destination):
+def iter_patches(destination, splits=None):
+    """Stream verified crops; skip unrequested splits before opening any source."""
     root = Path(destination)
     manifest = json.loads((root / "manifest.json").read_text())
-    patches = {split: [] for split in ("train", "test", "perseverance")}
     for item in manifest["records"]:
+        if splits is not None and item["split"] not in splits:
+            continue
         for role in ("image", "label"):
             path = root / item[role]["local_path"]
             if hashlib.sha256(path.read_bytes()).hexdigest() != item[role]["sha256"]:
@@ -246,7 +248,14 @@ def load_patches(destination):
                     continue
                 tile = image.crop((x, y, x+256, y+256)).resize((128, 128), Image.Resampling.BILINEAR)
                 pixels = np.asarray(tile, dtype=np.float32).transpose(2, 0, 1) / 255
-                patches[item["split"]].append((pixels, label, item["image"]["archive_path"], x, y))
+                yield item["split"], (pixels, label, item["image"]["archive_path"], x, y)
+
+
+def load_patches(destination):
+    patches = {split: [] for split in ("train", "test", "perseverance")}
+    manifest = json.loads((Path(destination) / "manifest.json").read_text())
+    for split, row in iter_patches(destination):
+        patches.setdefault(split, []).append(row)
     return patches, manifest
 
 

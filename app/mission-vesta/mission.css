@@ -1,0 +1,260 @@
+@font-face {
+  font-family: "Rethink Sans";
+  src: url("./assets/rethink-sans.woff2") format("woff2");
+  font-weight: 400 500;
+  font-display: swap;
+}
+
+/* Title font: Michroma (SIL Open Font License, Google Fonts), subset to the title's letters. */
+@font-face { font-family: "Michroma"; src: url("./assets/michroma.woff2") format("woff2"); font-display: swap; }
+
+:root {
+  color-scheme: light;
+  --paper: #f3f2ef;
+  --ink: #191919;
+  --body: #484644;
+  --white: #f4f3f0;
+  --muted: #c6c3c1;
+  --rule: #ceccc7;
+  --gutter: clamp(1.625rem, 7.8vw, 7rem);
+  font: 400 1rem/1.4 "Rethink Sans", system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--paper);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+body, h1, h2, p { margin: 0; }
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  min-height: clamp(39rem, 58vw, 47rem);
+  overflow: hidden;
+  padding: 5.1875rem 1rem 4rem;
+  background: #000;
+  color: var(--white);
+  text-align: center;
+}
+
+.mars {
+  position: absolute;
+  z-index: -1;
+  inset: clamp(21.5625rem, 28.5vw, 24.4375rem) auto auto 50%;
+  width: clamp(35rem, 75.7vw, 68.125rem);
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+}
+
+.mars img, .mars-control, .mars canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.mars-control {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  clip-path: circle(50%);
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.mars-control:active { cursor: grabbing; }
+.mars canvas { display: block; }
+.mars:focus-within { filter: drop-shadow(0 -2px 0 var(--white)); }
+
+.welcome h1 {
+  font: 400 1em "Michroma", system-ui, sans-serif;
+  font-size: clamp(2.75rem, 8.6vw, 7.75rem);
+  line-height: 1;
+  letter-spacing: .06em;
+  text-indent: .06em;
+}
+
+/* "MISSION:" in the title font, about a third of VESTA's size. */
+.welcome h1 span {
+  display: block;
+  margin-bottom: .55em;
+  font-size: .32em;
+  letter-spacing: .32em;
+  text-indent: .32em;
+  color: var(--muted);
+}
+
+.welcome p {
+  margin: 1.125rem auto 0;
+  max-width: 30rem;
+  font-size: 1.125rem;
+  color: var(--muted);
+}
+
+.welcome a {
+  display: inline-block;
+  min-height: 44px;
+  margin-top: .625rem;
+  padding-block: .6875rem;
+  color: inherit;
+  font-weight: 500;
+  text-underline-offset: .65em;
+  text-decoration-color: var(--muted);
+}
+
+.welcome a span { margin-left: .3em; }
+.welcome a:hover { text-decoration-thickness: 2px; }
+.welcome a:focus-visible { outline: 2px solid var(--white); outline-offset: 4px; }
+
+.products {
+  max-width: 100rem;
+  margin-inline: auto;
+  padding: 3.4375rem var(--gutter) 3.625rem;
+}
+
+.product {
+  display: grid;
+  grid-template-columns: minmax(11rem, 2fr) minmax(0, 3.4fr);
+  gap: clamp(1.25rem, 3vw, 2.75rem);
+  align-items: center;
+  border-bottom: 1px solid var(--rule);
+  padding-block: 1.5625rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.products h2 {
+  display: flex;
+  align-items: center;
+  gap: .5em;
+  font-size: clamp(1.75rem, 3.2vw, 2.625rem);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -.02em;
+}
+
+.products p {
+  max-width: 35rem;
+  color: var(--body);
+  font-size: 1.125rem;
+}
+
+.icon {
+  flex: none;
+  width: 1.5em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  overflow: visible;
+}
+
+.icon path, .icon rect, .icon ellipse { transition: transform .35s ease; transform-box: fill-box; transform-origin: center; }
+.go {
+  display: block;
+  margin-top: .5rem;
+  color: var(--ink);
+  font-weight: 500;
+  opacity: 0;
+  transform: translateX(-.4rem);
+  transition: opacity .2s, transform .2s;
+}
+
+.product:hover .go, .product:focus-visible .go { opacity: 1; transform: none; }
+.heli { position: relative; z-index: 1; }
+
+.tag {
+  margin-left: .25rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: .2em .7em;
+  color: var(--body);
+  font-size: .8rem;
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.later h2 { flex-wrap: wrap; }
+.product:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+.product:hover .layers .l1, .product:focus-visible .layers .l1 { transform: translateY(5px); }
+.product:hover .layers .l3, .product:focus-visible .layers .l3 { transform: translateY(-5px); }
+
+@media (hover: none) { .go { opacity: 1; transform: none; } }
+
+/* ---- Why ---- */
+.why {
+  max-width: 100rem;
+  margin-inline: auto;
+  padding: clamp(3rem, 7vw, 5.5rem) var(--gutter) 1rem;
+}
+
+.eyebrow {
+  color: var(--body);
+  font-size: .875rem;
+  font-weight: 500;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+.why h2 {
+  max-width: 22ch;
+  margin-top: .75rem;
+  font-size: clamp(1.9rem, 4.2vw, 3.5rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -.02em;
+}
+
+.reasons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.25rem, 3vw, 2.75rem);
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+
+.reasons div { border-top: 1px solid var(--rule); padding-top: 1rem; }
+.reasons p { color: var(--body); font-size: 1.0625rem; }
+.reasons .stat { color: var(--ink); font-size: clamp(1.6rem, 2.6vw, 2.25rem); font-weight: 500; margin-bottom: .35rem; }
+
+.answer {
+  max-width: 40rem;
+  margin-top: clamp(2rem, 4vw, 3rem);
+  font-size: 1.25rem;
+}
+
+@media (max-width: 680px) {
+  .hero { min-height: 39.0625rem; padding-top: 5.125rem; }
+  .mars { top: 21.5625rem; }
+  .welcome h1 { font-size: clamp(2.5rem, 13vw, 4.5rem); }
+  .welcome p { max-width: 17rem; font-size: 1rem; }
+  .welcome a { font-size: .9375rem; }
+  .products { padding-top: 2.125rem; padding-bottom: 2.75rem; }
+  .product { grid-template-columns: 1fr; gap: .5rem; padding-block: 1.25rem 1.4375rem; }
+  .reasons { grid-template-columns: 1fr; }
+  .products p { font-size: 1rem; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  /* Rotors blur in and out, out of step, while hovering or flying. */
+  .scout:hover .rotor, .fly .rotor { animation: spin .18s linear infinite alternate; }
+  .scout:hover .rotor.b, .fly .rotor.b { animation-delay: -.09s; }
+  @keyframes spin { to { transform: scaleX(.15); } }
+
+  /* Lift off, swoop out over the description, bank round, fly back and land. */
+  .fly .heli { animation: fly 3.4s ease-in-out; }
+  @keyframes fly {
+    0% { transform: none; }
+    12% { transform: translate(0, -16px); }
+    42% { transform: translate(min(52vw, 620px), -30px) rotate(10deg); }
+    56% { transform: translate(min(60vw, 720px), -8px) rotate(-4deg) scaleX(-1); }
+    78% { transform: translate(min(26vw, 300px), -36px) rotate(8deg) scaleX(-1); }
+    92% { transform: translate(0, -14px) scaleX(-1); }
+    100% { transform: none; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .icon path, .icon rect, .icon ellipse, .go { transition: none; }
+}
