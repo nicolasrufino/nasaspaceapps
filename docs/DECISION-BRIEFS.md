@@ -117,7 +117,7 @@ The app keeps height as a knob either way, so nothing waits on this.
 
 ## 6. Stop rule: when do we stop flying?
 
-**Status: open (rewritten 2026-11-15 after Nicolas's question).**
+**Status: accepted by Nicolas, 2026-11-15** (rewritten after his question: follow what the challenge asks).
 
 **First, the words:**
 - A **strip** is the piece of ground one flight photographs: a path of up to 700 m, about 30 m wide.
@@ -139,48 +139,93 @@ The app keeps height as a knob either way, so nothing waits on this.
 - *Is the order safety, science, effort right?* It is the challenge's order (R4 "safety first"). The weights between them are a team choice; the default is strict priority.
 ---
 
-## 7. Flight budget: **6 flights per walk** (3 helicopters × 2 flights, in the sol before the walk)
+## 7. Flight budget: the evidence first
 
-**Recommendation:** count the budget in flights (that is what the planner spends), derived from sols (that is how operations work). Fly in the sol before the walk, so the plan is made that evening.
+**Status: open. Nicolas asked for every number with its source before deciding.** Correction: an earlier version said flights were "capped at about 10 Wh / 90 s". That came from a secondary source and is **wrong**. NASA says the cap was motor temperature, at 130–170 s (below).
 
-**Evidence.**
-- **Battery:** Ingenuity's six cells hold about 38.8 Wh at 0 °C, 44.4 Wh new at 25 °C ([NASA/JPL battery paper](https://www.nasa.gov/wp-content/uploads/2024/01/battery-system-design-testing-and-operation-for-the-mars-perseverance-rover-and-ingenuity-helicopter.pdf)). Flights were capped at about 10 Wh / 90 s, to protect the motors from overheating (secondary source). So battery capacity is not the limit; motor heat and the time window are.
-- **Window:** Ingenuity flew between about 09:30 and 12:30 local time depending on season. Not too early (cold), not late afternoon (risk of draining the battery before the Sun could recharge it); never at night (it needs its camera) ([NASA, "When should Ingenuity fly?"](https://science.nasa.gov/blog/when-should-ingenuity-fly/); [Seitah flight 24](https://science.nasa.gov/missions/mars-2020-perseverance/ingenuity-helicopter/balancing-risks-in-the-seitah-region-flight-24/)).
-- **Habitat charging** removes the late-afternoon battery worry and the overnight heating drain (about 60% of Ingenuity's energy went to keeping warm, secondary source). Two flights per helicopter in a midday window, with charging and motor cool-down between them, is conservative.
+| Question | What is known | Source | Confidence |
+|---|---|---|---|
+| How long is one flight? | Longest 169.5 s (flight 12). In summer only **130 s instead of 170 s**, because "maximum flight time was often capped by the maximum temperature of its actuators". Flying earlier and with slower rotors gave 150–160 s | [NASA, Flight 24](https://science.nasa.gov/missions/mars-2020-perseverance/ingenuity-helicopter/balancing-risks-in-the-seitah-region-flight-24/); [Digital Trends citing NASA's log](https://digitaltrends.com/space/nasa-ingenuity-mars-helicopter-flight-milestone) | Measured on Mars |
+| How far? | Longest 704 m; 72 flights, 17.0 km, 128.8 min in the air in total | `docs/RESEARCH.md` §14 (NASA) | Measured on Mars |
+| Battery | Six cells; about **38.8 Wh at 0 °C**, 44.4 Wh new at 25 °C; rated for 187 s of hard flying | [NASA/JPL battery paper](https://www.nasa.gov/wp-content/uploads/2024/01/battery-system-design-testing-and-operation-for-the-mars-perseverance-rover-and-ingenuity-helicopter.pdf) | NASA paper |
+| Power in flight | "Many hundreds of watts" | [NASA, "When should Ingenuity fly?"](https://science.nasa.gov/blog/when-should-ingenuity-fly/) | NASA, no exact figure |
+| Time of day | Never at night (it navigates by camera). Not too early: it "comes out of the cold Martian night without much energy in its battery". Not too late: a long late flight could drain the battery before the Sun recharges it. Flown at about **12:30 PM** in spring, **10:00 AM** in summer, 9:30 AM considered | Same NASA blog; Flight 24 | NASA |
+| Wind | "The biggest risk is at takeoff and landing"; flights are timed with a wind forecast. 3.5–6 m/s measured during the first flights | NASA blog; [Ingenuity wind profiling](https://arxiv.org/pdf/2410.19132) | NASA / paper |
+| Recharge | Ingenuity charged from its own solar panel, so it flew at most once per sol in practice | NASA blog | NASA |
+| Recharge from a habitat | Ingenuity's exact cell model is not confirmed. A typical high-power 18650 cell charges fully in **2.5 h at 23 °C** (Sony VTC4 datasheet). Li-ion cells must be warm to charge, so the dock must be heated | [Sony VTC4 datasheet](https://files.batteryjunction.com/frontend/files/Sony_VTC4.pdf) | **Estimate** |
+| Sending images home | Ingenuity's radio: 250 kbit/s on air, about **80 kbit/s actual** after a flight. One 13 MP colour image of a few MB would take several minutes; a strip of dozens of images would take hours | [JPL telecom paper (EME 2024)](https://ok2kkw.com/eme/Trenton/papers/N5BF-Mars_Helicopter_Telecom_EME2024.pdf) | Measured; image size is an estimate |
+| SkyFall | Three helicopters, cameras, ground-penetrating radar. **No published range, battery, recharge time or flights per sol** | [JPL SkyFall](https://www.jpl.nasa.gov/missions/skyfall/) | NASA |
+| Bigger concept | Mars Science Helicopter: about 30 kg, roughly 10–12 km per flight; solar recharge over one sol (single source) | [JPL poster](https://www.jpl.nasa.gov/site/research/media/posters/2021/R21015p.pdf); [IEEE Spectrum](https://spectrum.ieee.org/the-next-mars-helicopter) | Concept |
 
-**Holes checked.**
-- *SkyFall's battery and motors are unpublished.* Flights per sol stays a labelled knob; the benchmark reports quality at 3, 6 and 9 flights so the conclusion does not hang on one number.
-- *Winds:* MEDA measured 3.5–6 m/s during Ingenuity's first flights; wind limits can cancel a sol. The budget is a maximum, not a promise.
-
----
-
-## 8. Walking window: **the whole walk, including the walk back, while the Sun is at least 15° up; at most 8 h**
-
-**Evidence.**
-- **Shadows hide hazards.** A 0.3 m rock casts a 1.1 m shadow at 15° Sun, and 3.4 m at 5°. NASA's Artemis lighting work reports glare and deep shadows at sun angles of about 2–9° that complicate obstacle avoidance and make slopes look steeper ([NASA lighting brief](https://www.nasa.gov/wp-content/uploads/2023/03/artemis-lighting-considerations-overview-technical-brief-ochmo.pdf); [IEEE lighting study](https://ntrs.nasa.gov/api/citations/20240011393/downloads/Lighiting%20Study%20IEEE%20Paper%20FINAL-1.pdf)).
-- **At Gale (4.8° S) the Sun climbs about 14–15° per hour near the horizon**, so 15° is roughly 1 hour after sunrise and before sunset. To be computed exactly with the Mars24 algorithm (Allison & McEwen 2000).
-- **Cold:** REMS at our site: air from about −77 °C at night to −24 °C by day; ground from −88 °C to −5 °C (`data/worlds/gale/weather.json`, daily summaries). After sunset the margin goes fast.
-- **8 h:** NASA suit studies model EVAs of 2, 4, 6 and 8 hours ([ICES Mars PLSS 2026](https://ntrs.nasa.gov/api/citations/20260005204/downloads/ICES_Mars_PLSS_Presentation_2026_1.pdf)), and the xEMU is sized for 8 h. Daylight at Gale is about 12 h, so the window (about 10 h of Sun above 15°) is longer than the suit allows. The suit is the tighter limit; the Sun matters for late starts.
-
-**Holes checked.**
-- *Dust storms dim the light:* REMS reports opacity; a "no walk" flag when opacity is not "Sunny" is an easy rule to add.
-- *Why not just "1 hour before sunset"?* Sun elevation is what makes shadows. The hour changes with season; the angle does not.
+**What follows from the evidence (not decided):**
+- **Flights per helicopter per sol is set by three things:** the flying window, the recharge time, and motor cooling. The battery size per flight is not the limit.
+- **Window:** Ingenuity's documented flights ran from about 9:30 AM to 12:30 PM. With habitat charging, the late-afternoon battery worry goes away, but no published data says afternoon winds are safe, so the window stays 9:30 AM–about 1:00 PM.
+- **Recharge:** about 2.5 h (estimate). Then 9:30 AM, then about 12:15 PM: **2 flights per helicopter fit; 3 do not** unless charging is faster.
+- **Images must come off by dock or cable, not by Ingenuity's radio.** At 80 kbit/s a strip's images would take hours. This is a design requirement for our habitat, said as an assumption.
+- **Hence a range, not a number:** 3 to 6 flights per walk (3 helicopters × 1–2 waves). The benchmark reports results at 3, 6 and 9 so the conclusion does not depend on the exact number.
 
 ---
 
-## 9. Demo look: **coarse everywhere, real detail where the helicopter flew**
+## 8. A scouting sol and a walk sol, hour by hour
 
-**Recommendation:**
-- **v1 (now):** the orbit map is shown muted as "not confirmed". Flown strips switch to full colour with the rocks found and the blocked crossings (Luca's `passable.u8`).
-- **v2:** real 1 m HiRISE heights appear along flown strips, exported by Luca's `terrain_1m.py` per strip. One strip of 700 m × 30 m is about 21,000 heights, about 84 KB.
+**Status: proposed timeline for Nicolas to confirm.** Times are **Mars local solar time at Gale**, in AM/PM. A Mars hour is 1 h 1.6 min of Earth time; a sol is 24 h 40 min. NASA plans crews on a 24 h 40 min "workday" ([NASA HEOMD-415](https://ntrs.nasa.gov/api/citations/20220000589/downloads/MarsSAC21SurfaceOps_2022-Jan_Version%201%20FINAL_update.pdf) §4.1).
 
-**Why:**
-- It shows what we **know**, and grows only where we learned something. That is the product's thesis made visible.
-- It matches Galsan's "map grows" work.
-- It is cheap on a phone: a colour update in v1, a small mesh patch in v2.
+**Sun at Gale (4.8° S), computed from the latitude and the Sun's seasonal swing (±25°):**
+- **Sunrise:** 5:51–6:09 AM. **Sunset:** 5:51–6:09 PM.
+- **Sun at least 15° up (the walking window, brief §8):** from about **7:00–7:15 AM** to about **4:45–5:05 PM**.
+- To be checked against the Mars24 algorithm when the sun model is built.
 
-**Holes checked.**
-- *Is the "detail" real?* Our world has 8 m heights. The 1 m DTM is real NASA orbit data, standing in for what helicopter stereo would give (finer still), and we say so on screen. We do not invent detail.
+**Why the helicopter cannot go at 5 AM:** it is dark until about 6 AM, and Ingenuity cannot fly without light because it navigates with its camera. Right after sunrise the Sun is low, so shadows are long and hide the rocks we are looking for. The earliest sensible launch is after the Sun is well up: Ingenuity's earliest documented slot was 9:30 AM.
+
+**NASA's crew day** (HEOMD-415 §4.1): at least 8.5 h sleep; 1.5 h morning routine; 1 h midday meal; 2 h evening; exercise 2.5 h on non-walk sols and 1 h on walk sols; **8.5 h of work**. And: **"at least one non-EVA sol between EVAs wherever possible."** The scouting sol is that non-EVA sol.
+
+### Sol 1: scouting sol (no walk)
+
+| Time | What happens | Who |
+|---|---|---|
+| 5:30 AM | Wake; morning routine until 7:00 | Crew |
+| ~6:00 AM | Sunrise. Helicopters wait, charged and warm in the habitat dock | — |
+| 7:00–9:30 AM | Crew picks tomorrow's science stops on the 2D map. The planner proposes flights, each with its reason. Crew approves. Wind check | Crew + app |
+| **9:30 AM** | **Wave 1:** 3 helicopters, one strip each; about 2–3 min in the air per flight | Helicopters |
+| ~9:45 AM | All docked. Images download over cable; recharge starts (about 2.5 h) | Dock |
+| 9:45–11:30 AM | Processing: 3D terrain from the images, rock and ground detection, belief map updated, routes re-planned. Planner decides whether wave 2 is worth flying (stop rule) | App |
+| 11:30 AM–12:30 PM | Midday meal | Crew |
+| **~12:15–12:30 PM** | **Wave 2,** only if worth it | Helicopters |
+| 12:45–2:30 PM | Processing wave 2; final route plus alternatives | App |
+| 2:30–4:00 PM | **Crew review:** route, why each flight flew, the walk-back ring, times at each stop, what was not scouted | Crew |
+| 4:00–7:00 PM | Packing list, suit checkout, exercise | Crew |
+| 7:00–9:00 PM | Evening meal, personal time; sleep at 9:00 PM | Crew |
+
+### Sol 2: walk sol
+
+| Time | What happens |
+|---|---|
+| 5:30 AM | Wake; morning routine |
+| 7:00 AM | Into the suits through the suitport (NASA's goal: pre-walk prep under 30 minutes, [NTRS](https://ntrs.nasa.gov/citations/20120011640)) |
+| **~7:15 AM** | **Walk starts** once the Sun is 15° up |
+| Walk | Up to about 6.5–8 h outside. NASA's example sol splits it, for example 2.5 h, a midday meal back inside, then 4 h (HEOMD-415 §5.2). The suit is sized for 8 h |
+| **By ~3:15 PM** | Back at the habitat, at the latest 8 h after leaving. Hard limit: before the Sun drops under 15° (about 4:45 PM) |
+| Afternoon | Debrief; the walk log is merged into the map ("map grows"); exercise 1 h |
+
+### Could the walk happen the same sol as the flights?
+
+- **With both waves:** the plan is ready about 2:30 PM. Suit-up takes it to about 3:00 PM, and the walker must be back by about 4:45 PM. That leaves under 2 hours: **not realistic**.
+- **With one wave only:** the plan could be ready about 11:30 AM, leaving about 5 h of walking. Possible for a short walk, but it skips the second look and squeezes the crew review.
+- **Recommendation:** scout on the non-walk sol, walk the next morning. This matches NASA's rest-sol rule, and `docs/PRODUCT.md` already says the habitat display is used "the sol before".
+
+**How the app shows it:** a two-sol timeline strip in plan mode (Sol 1 flights and processing, Sol 2 walk window). The current time and the sun's height are drawn on it. The walk's last safe turn-back time is marked, from the walk-back ring and the 15° limit.
+
+---
+
+## 9. Demo look
+
+**Status: accepted by Nicolas, 2026-11-15, with his design.**
+- **Unexplored ground:** flat, muted grey, like darkness around the base. Only the habitat (a well-designed spaceship model) stands out.
+- **The helicopter reveals as it flies:** a scanning sweep, like sonar. `docs/RESEARCH.md` §13 already describes it honestly as a laser-like fan of rays, "a bat, but with light", over real NASA terrain.
+- **Where it has flown:** full colour, with the rocks found and the steps that can't be crossed. Later, real 1 m HiRISE heights along each strip (about 84 KB per flight).
+- **Why:** it shows what we **know**, and grows only where we learned something.
+- **Honesty:** the 8 m map is real NASA orbit data; the "detail" is the 1 m HiRISE DTM standing in for helicopter stereo. The screen says so.
+
 
 ---
 

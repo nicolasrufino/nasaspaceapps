@@ -6,6 +6,9 @@ One place for what the team decided, why, and what is still open. **Add a line h
 
 | Date | Decision | Why | Who | Where it lives |
 |---|---|---|---|---|
+| 2026-11-15 | **Stop rule follows the challenge:** keep flying while a flight could make the walk safer, reach more science, or make it easier (in that order); stop when no flight would change the plan, or at the budget | NASA asks for a safe walk first, with new science, at one-walk scale | Nicolas | Brief §6 |
+| 2026-11-15 | **Demo look:** unexplored ground is flat muted grey around a well-designed habitat (spaceship) model; the helicopter reveals ground with a sonar-like scanning sweep; flown ground shows in full colour | Shows only what we know; the map grows where we learned | Nicolas | Brief §9 |
+| 2026-11-15 | **Always check a choice against what the challenge asks** (`docs/PRODUCT.md` §1) | The stop rule first drafted on energy alone did not match the challenge | Nicolas | This file |
 | 2026-11-15 | **Two products on the site: Vesta Scout = the map app we are building now; Vesta Vision = later**, a Google Earth for Mars built from orbit data plus what scouts and models learn | Scout simulates the discovery; Vision needs the trained models first. Scout UI redesign is planned for later | Nicolas | `app/mission-vesta/` |
 | 2026-11-15 | **Mission VESTA site title font is Michroma** (tagline and product names stay Rethink Sans) | Picked from five previewed fonts; wide and technical, closest to NASA lettering | Nicolas | `app/mission-vesta/` |
 | 2026-11-15 | **PR #94 approved by P2** (routes on crossings, gravity factor 0.68, sand 2.4×). Merge after Jules's R3 re-export, with the 20° rebuild in the same PR | Measured values; the old model under-counted energy by about 1.8× and let routes cross ledges. Tested on the branch: 31 app tests, build, Gale in the browser with no console errors | Nicolas | PR #94 review; `docs/DECISION-BRIEFS.md` §1 |
@@ -39,12 +42,15 @@ Recommendations with evidence and the holes checked: `docs/DECISION-BRIEFS.md` (
 | **Rebuild world files at 20°** [1] | With #94 (one R3 re-export, recommended) or as its own PR | Luca or Galsan; Jules's R3 hashes change too | The 20° decision taking effect |
 | **How high the helicopter flies** [4] | Low (about 2–4 m, matches the rover images the model learns from; dusty) / about 10 m (safe; needs the model adapted to the air view). Deciding test: run the rover-trained model on labelled Ingenuity images | Nicolas | Helicopter-view model, flight planner |
 | **Labels for sensing** | Start with the reviewed ROSCO rocks / also project Curiosity's labelled images onto Gale cells | Jules, Nicolas | Belief-map training |
-| **Stop rule: when to stop flying** [6] | Keep flying while a flight could still make the walk safer, reach more science, or make it easier; stop when none would change the plan, or at the budget | Nicolas | Value-of-information planner |
-| **Flight budget per campaign** [7] | A number of flights / a number of sols; flights per helicopter per sol | Team | Flight planner |
-| **Walking window before sunset** [8] | How long before sunset a walk must end | Team | Sun model, plan mode |
-| **Demo look** [9] | 3D view starts coarse and fills in where flown | Nicolas | Re-plan loop screen |
+| **Flight budget per campaign** [7] | Evidence gathered (brief §7): 1–2 flights per helicopter per sol, so 3–6 per walk; depends on habitat recharge time (estimate 2.5 h) and the 9:30 AM–1 PM window | Nicolas, after reading the evidence | Flight planner |
+| **Scouting sol and walk sol timeline** [8] | Proposed: scout on the non-walk sol (flights 9:30 AM and ~12:15 PM), walk next morning about 7:15 AM to 3:15 PM, Sun at least 15° up | Nicolas | Sun model, plan-mode timeline |
+| **Helicopter science sensors** | What else besides cameras: radiation, chemistry, radar; what is real, what needs training | Nicolas (research in progress) | Helicopter spec, layers |
 
 ## Missing: not built or not available yet
+
+- **Habitat (spaceship) 3D model** and the muted-grey unexplored look with a scanning reveal (brief §9).
+- **Plan-mode timeline strip** (scouting sol, walk sol, Sun height, last safe turn-back time; brief §8).
+- **Helicopter docking for images:** Ingenuity's radio (about 80 kbit/s) is too slow for a strip of images; we assume a dock or cable at the habitat (brief §7).
 
 - **Belief map with probabilities** (today the world has a yes/no rock mask), plus ROSCO run over the whole slice with rock sizes and "looked, found nothing" cells.
 - **Ground truth at a walker's scale:** Curiosity's labelled images placed on Gale cells; labelled helicopter images (Ingenuity's colour images).
