@@ -30,6 +30,8 @@ A world is a folder in `data/worlds/<name>/`, produced by `data/pipeline/make_wo
 | `neutron_points.json` | JSON list | DAN passive neutrons per sol, as points: `{"sol", "cell", "hours", "thermal_cps", "epithermal_cps", "thermal_epithermal_ratio", "source"}`. Higher ratio suggests more hydrogen (relative). *Optional.* |
 | `weather.json` | JSON | Curiosity REMS daily weather: `{"source", "sols": [{"sol", "earth_date", "ls", "min_temp_c", "max_temp_c", "pressure_pa", "ground_min_c", "ground_max_c", "opacity", "uv"}]}`. *Optional.* |
 
+**Detail tiles (optional):** `world.json` may hold `"detail_tiles": {"url": ".../tiles.json"}`, hosted outside Git (Azure Blob Storage). The manifest describes 256 m tiles of the 1 m HiRISE terrain (`h/{ty}_{tx}.u16`, 257 × 257, uint16 centimetres above `height_base_m`, same datum as `height.f32`, edges shared with the next tile) and the 25 cm HiRISE image (`img/{ty}_{tx}.jpg`). App position = box metres + `app_offset_m` (−cell_size_m/2). Made by `data/pipeline/make_tiles.py`, uploaded by `upload_tiles.sh`. For the 3D view only; route maths stays on the world grid.
+
 Optional layers may be missing in a world; the app hides that layer's toggle. `world.json` lists which layers exist under `"layers"` and each layer's mission, instrument and date under `"sources"`. Real sites may add `"data_types"`: which layer or file carries each of NASA's eight data types (optical, topographic, thermal, spectral, radiation, atmospheric, chemical, geophysical).
 
 **The way home is always known:** from any cell, step to the neighbour with the lowest `cost_to_go` until you reach base. No search is needed on the phone.
