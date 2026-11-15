@@ -3,7 +3,9 @@ import { defineConfig } from '@playwright/test'
 export default defineConfig({
   testDir: './e2e',
   timeout: 120000,
-  workers: 1,
+  fullyParallel: true, // tests share only the read-only preview server
+  workers: 2,
+  reporter: 'list', // per-test durations in CI logs
   retries: 0,
   use: {
     channel: 'chromium',

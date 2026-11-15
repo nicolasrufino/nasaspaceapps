@@ -36,22 +36,54 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v5
-      - if: hashFiles('app/package-lock.json') != ''
-        uses: actions/setup-node@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 24
           cache: npm
           cache-dependency-path: app/package-lock.json
-      - if: hashFiles('app/package-lock.json') != ''
-        working-directory: app
+      - working-directory: app
         run: |
           npm ci
           npm run lint --if-present
           npm run typecheck --if-present
           npm test --if-present
           npm run build --if-present
-          npx playwright install --with-deps chromium
-          npm run test:browser
+
+  # Browser tests on a software renderer are CPU-bound: one runner per shard, all 9 tests still run.
+  app-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - id: pw
+        working-directory: app
+        run: |
+          npm ci
+          echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+      - id: pw-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}-chromium
+      - if: steps.pw-cache.outputs.cache-hit != 'true'
+        working-directory: app
+        run: npx playwright install --with-deps chromium
+      - if: steps.pw-cache.outputs.cache-hit == 'true'
+        working-directory: app
+        run: npx playwright install-deps chromium
+      - working-directory: app
+        run: |
+          npm run build
+          npx playwright test --shard=${{ matrix.shard }}/3
 
   # P3: world files are the contract every lane reads. Pipeline must run, every world must validate.
   data:
@@ -93,7 +125,7 @@ jobs:
   # Required status check. Rename it = update the ruleset too.
   ci:
     if: always()
-    needs: [hygiene, app, data, ml-agent]
+    needs: [hygiene, app, app-browser, data, ml-agent]
     runs-on: ubuntu-latest
     steps:
       - if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
