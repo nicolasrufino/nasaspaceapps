@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
-import { tally, stopSteps, TASKS, STOP_MIN } from './stop-science.js'
+import { tally, stopSteps, goalChecks, TASKS, STOP_MIN } from './stop-science.js'
 
 const data = JSON.parse(readFileSync(new URL('../../../data/worlds/gale/stop_science.json', import.meta.url)))
 
@@ -25,4 +25,11 @@ test('stop steps follow the walking order along the route', () => {
   const cells = [[0, 0], [1, 0], [2, 0], [1, 0], [0, 0]]
   const stops = [{ id: 'a', cell: [1, 0] }, { id: 'b', cell: [2, 0] }]
   assert.deepEqual(stopSteps(cells, ['b', 'a'], stops).map((s) => [s.id, s.k]), [['b', 2], ['a', 3]])
+})
+
+test('goal checks: ridge/hollow needs chemistry at both, nodules stay open', () => {
+  const row = (target_id, tasks_done) => ({ target_id, tasks_done, minutes: 0, dose_ugy: 0 })
+  assert.deepEqual(goalChecks([]).map((g) => g.answered), [false, false, false])
+  assert.deepEqual(goalChecks([row('nevado_sajama', ['chem'])]).map((g) => g.answered), [false, false, false])
+  assert.deepEqual(goalChecks([row('nevado_sajama', ['chem']), row('valle_de_la_luna', ['chem']), row('overlook', ['closeup'])]).map((g) => g.answered), [true, true, false])
 })

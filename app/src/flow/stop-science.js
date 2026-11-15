@@ -21,8 +21,21 @@ export const TASKS = [
 const SUB = { SiO2: 'SiO₂', TiO2: 'TiO₂', Al2O3: 'Al₂O₃', FeOT: 'FeO (total)', MgO: 'MgO', CaO: 'CaO', Na2O: 'Na₂O', K2O: 'K₂O', MnO: 'MnO' }
 export const oxide = (k) => SUB[k] ?? k
 
+// The goal's three checks (issue #166) and what in the log answers each. Nodules stay open: NASA "can't quite explain
+// yet why the nodules appear where they do", and a walk does not change that.
+export function goalChecks(log) {
+  const did = (id, task) => log.some((e) => e.target_id === id && e.tasks_done.includes(task))
+  const closeAt = (kinds) => log.some((e) => kinds.includes(SERVES[e.target_id]) && e.tasks_done.includes('closeup'))
+  return [
+    { title: 'Ridge against hollow: is the rock different?', answered: did(RIDGE, 'chem') && did(HOLLOW, 'chem'), how: 'chemistry read on both sides' },
+    { title: 'Fractures: are the dark lines fractures?', answered: closeAt(['ridge', 'pattern']), how: 'close-up on a ridge or the boxwork pattern' },
+    { title: 'Nodules: why do they appear where they do?', answered: false, how: 'still open for NASA too' },
+  ]
+}
+
 export const enabled = () => !(new URLSearchParams(location.search).get('off') ?? '').split(',').includes('stop_science')
-export const load = () => fetch(`${import.meta.env.BASE_URL}gale/stop_science.json`).then((r) => (r.ok ? r.json() : null)).catch(() => null)
+const json = (f) => fetch(`${import.meta.env.BASE_URL}gale/${f}`).then((r) => (r.ok ? r.json() : null)).catch(() => null)
+export const load = () => json('stop_science.json')
 
 // Minutes and dose of one stop's log entry: dose = dose_ugy_per_hour × minutes ÷ 60.
 export function tally(done, rec) {
@@ -66,6 +79,8 @@ export function createStopScience(ui, app, data) {
   const recOf = (id) => data.stops.find((s) => s.target_id === id)
   const el = ui.h('div', 'f-sec')
   const log = (app.scienceLog = [])
+  let yieldData = null // S6's numbers (ml/pitch_metrics/science_yield.py, world-side copy); the lines hide without it
+  json('science_yield.json').then((y) => (yieldData = y))
   let samples = 0, lastK = 0, steps = [], seen = new Set(), comparedShown = false
   const txt = (tag, text, cls = '') => Object.assign(ui.h(tag, cls), { textContent: text })
 
@@ -155,6 +170,30 @@ export function createStopScience(ui, app, data) {
     el.scrollIntoView?.({ block: 'start', behavior: 'smooth' })
   }
 
+  // The Science log, shown when the walk is back at the habitat: per stop, then the goal's three checks.
+  function finish() {
+    if (el.querySelector('.ss-log')) return
+    const sec = ui.section('Science log', true)
+    sec.classList.add('ss-log')
+    const dose = +log.reduce((a, e) => a + e.dose_ugy, 0).toFixed(2)
+    sec.append(ui.stats([['stops worked', log.filter((e) => e.tasks_done.length).length], ['samples carried', samples, 'stop'], ['µGy at the stops', dose]]).el)
+    const list = ui.h('div', 'f-list')
+    for (const e of log) {
+      const stop = app.stops().find((s) => s.id === e.target_id), c = recOf(e.target_id)?.chem
+      const chem = e.tasks_done.includes('chem') && c ? ` · SiO₂ ${c.oxides_wt_pct.SiO2}, MgO ${c.oxides_wt_pct.MgO}, CaO ${c.oxides_wt_pct.CaO} wt% (${c.instrument}, sol ${c.sol})` : ''
+      const tasks = TASKS.filter((t) => e.tasks_done.includes(t.id)).map((t) => t.title.toLowerCase()).join(', ') || 'nothing done'
+      list.append(ui.item({ title: stop?.name ?? e.target_id, sub: `${e.minutes} min · ${e.dose_ugy} µGy · ${e.tasks_done.includes('sample') ? '1 sample' : 'no sample'} · ${tasks}${chem}` }))
+    }
+    const goals = ui.section('The goal: did groundwater last here?')
+    for (const g of goalChecks(log)) goals.append(ui.item({ title: `${g.answered ? '✓ Answered' : '○ Still open'}: ${g.title}`, sub: g.how }))
+    sec.append(list, txt('p', 'Dose at the stops: RAD mean × sky view at each stop (an estimate) × minutes there.', 'dim'))
+    const y = yieldData
+    // S6's walking dose is for its planned five-stop route; show it only when this walk is that route.
+    if (y?.dose?.walk_dose_ugy != null && y.walk?.stop_ids?.join() === app.route().stops.join()) sec.append(txt('p', `Walking dose ${y.dose.walk_dose_ugy} µGy (${y.dose.walk_hours} h at ${y.dose.mean_dose_rate_ugy_per_h} µGy/h, an estimate): ${+(dose + y.dose.walk_dose_ugy).toFixed(2)} µGy for the whole walk.`))
+    if (y?.walk && y?.stay) sec.append(txt('p', `One walk: ${y.walk.stops} stops, ${y.walk.measurements_per_walk} measurements. A ${y.stay.stay_sols}-sol stay: at most ${y.stay.walks_max} walks, ${y.stay.stops_max} stops, ${y.stay.measurements_max} measurements (our arithmetic, ${y.stay.sols_per_walk} sols per walk).`, 'dim'))
+    el.replaceChildren(sec, goals, ...[...el.children].filter((c) => c.classList.contains('ss-card')))
+  }
+
   // Called by the preview on every tick with the walker's step. Returns true when it stopped the walk at a stop.
   // Only a walk that moves forward a little opens a stop; a jump along the height strip does not.
   function at(k, onDone) {
@@ -170,5 +209,5 @@ export function createStopScience(ui, app, data) {
   }
 
   reset()
-  return { el, at, reset, log, samples: () => samples }
+  return { el, at, reset, finish, log, samples: () => samples }
 }

@@ -234,6 +234,8 @@ In the walk preview the walker pauses at each stop and the rail lists what the c
 - **Dose at a stop** = dose rate × minutes at the stop ÷ 60. The dose rate (µGy per hour) is Curiosity RAD's mean × the sky view at that spot, an estimate.
 - **Ridge against hollow:** once both Nevado Sajama (ridge) and Valle de la Luna (hollow) have had their chemistry read, a card shows the two readings side by side.
 - The log the crew builds is `app.scienceLog`: `[{ target_id, tasks_done, minutes, dose_ugy }]`.
+- **Science log** (#168), when the walk is back at the habitat: per stop the tasks done, minutes, dose, sample and the chemistry read; samples carried; dose at the stops = the sum of the stop doses (walking dose is not included: the walk's dose rate along the route is S6's number). The goal's three checks: ridge against hollow is answered when chemistry was read at both Nevado Sajama and Valle de la Luna; fractures when a close-up was taken at a ridge or pattern stop (Nevado Sajama, Overlook, Ridge top); nodules stay open, as they are for NASA.
+- **Walking dose and what one stay can do** come from S6's `science_yield.json` (`ml/pitch_metrics/science_yield.py`, copy in `data/worlds/gale/`): walking dose = mean dose rate along the route × walking time, shown only when the walk is S6's planned five-stop route; one walk = 5 stops × 6 tasks = 30 measurements; a 30-sol stay = at most 15 walks (2 sols each), 75 stops, 450 measurements (our arithmetic). Hidden when the file is absent.
 
 ## 14. What is real and what is simulated
 
