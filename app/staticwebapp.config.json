@@ -11,8 +11,20 @@
   },
   "routes": [
     {
+      "route": "/mission-vesta",
+      "redirect": "/",
+      "statusCode": 301
+    },
+    {
+      "route": "/mission-vesta/",
+      "redirect": "/",
+      "statusCode": 301
+    },
+    {
       "route": "/assets/*",
-      "headers": { "Cache-Control": "public, max-age=31536000, immutable" }
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
     }
   ]
 }
