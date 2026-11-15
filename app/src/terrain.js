@@ -97,10 +97,12 @@ export async function loadImagery(meta, renderer, onUpdate) {
   })
   const done = () => { texture.needsUpdate = true; onUpdate?.(canvas) }
 
-  if (meta.detail_tiles.overview) {
-    image(meta.detail_tiles.overview).then((im) => { ctx.drawImage(im, 0, 0, SIZE, SIZE); done() }).catch(() => {})
+  const overview = meta.detail_tiles.overview && await image(meta.detail_tiles.overview).catch(() => null)
+  if (overview) { // one download instead of 64
+    ctx.drawImage(overview, 0, 0, SIZE, SIZE)
+    setTimeout(done) // after the caller has the texture
     return { texture, canvas }
-  }
+  } // overview missing or not uploaded yet: stitch the tiles as before
   const manifest = await fetch(url).then((r) => r.json())
   const root = url.slice(0, url.lastIndexOf('/') + 1)
   const n = manifest.tiles, px = SIZE / n
