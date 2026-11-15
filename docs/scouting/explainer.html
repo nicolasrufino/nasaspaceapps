@@ -1,0 +1,957 @@
+<title>Martian Map Scouting</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+/* Layout: one reading column; the loop diagram and the simulator break out to full column width; panels stack on phones. */
+:root {
+  --bg: #f5f7fa; --surface: #ffffff; --sunk: #eef1f5; --fg: #14171c; --muted: #5a6372; --line: #dce1e8;
+  --accent: #1076c2; --accent-soft: #e3effa; --alarm: #d9434a; --ok: #2b8a57; --warn: #a96d12;
+  --terrain-lo: #a8714b; --terrain-hi: #e3b58b; --rock: #3a2a22; --wall: #5b4a42; --risk: #d9434a;
+  --display: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --body: "Inter", system-ui, -apple-system, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0b0d11; --surface: #14171d; --sunk: #1b1f27; --fg: #eceff4; --muted: #9aa3b3; --line: #2a303a;
+  --accent: #4aa0e6; --accent-soft: #15283a; --alarm: #ff6b70; --ok: #4fc58c; --warn: #e3a645;
+  --terrain-lo: #5e3c27; --terrain-hi: #a9744c; --rock: #1a120e; --wall: #2e2520; --risk: #ff6b70; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0b0d11; --surface: #14171d; --sunk: #1b1f27; --fg: #eceff4; --muted: #9aa3b3; --line: #2a303a;
+  --accent: #4aa0e6; --accent-soft: #15283a; --alarm: #ff6b70; --ok: #4fc58c; --warn: #e3a645;
+  --terrain-lo: #5e3c27; --terrain-hi: #a9744c; --rock: #1a120e; --wall: #2e2520; --risk: #ff6b70; color-scheme: dark }
+
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 15px/1.6 var(--body); }
+.wrap { max-width: 1080px; margin: 0 auto; padding-block: 40px 80px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 56px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.15 }
+h1 { font-size: clamp(32px, 6vw, 52px); letter-spacing: -0.02em }
+h2 { font-size: 26px; letter-spacing: -0.01em }
+h3 { font-size: 17px }
+p { margin: 0; max-width: 68ch }
+a { color: var(--accent) }
+code, .mono { font-family: var(--mono); font-size: 0.86em }
+.eyebrow { font: 600 12px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted) }
+.lead { font-size: 18px; color: var(--fg) }
+.muted { color: var(--muted) }
+section { display: grid; gap: 18px; min-width: 0 }
+.sechead { display: grid; gap: 8px }
+button { font: 500 14px var(--body); color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 7px 12px; cursor: pointer }
+button:hover:not(:disabled) { border-color: var(--accent) }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+button:disabled { opacity: 0.5; cursor: default }
+button.primary { background: var(--accent); border-color: var(--accent); color: #fff }
+
+/* status chips */
+.chip { display: inline-flex; align-items: center; gap: 6px; font: 600 11px/1 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; padding: 4px 7px; border-radius: 5px; border: 1px solid currentColor; white-space: nowrap }
+.chip::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor }
+.chip.built { color: var(--ok) } .chip.review { color: var(--warn) } .chip.proposed { color: var(--accent) }
+.chip.later, .chip.known { color: var(--muted) } .chip.decided { color: var(--fg) }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center }
+
+/* hero */
+header { display: grid; gap: 18px }
+.thesis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 10px; overflow: hidden }
+.thesis > div { background: var(--surface); padding: 16px; display: grid; gap: 6px; min-width: 0 }
+.thesis b { font-family: var(--display); font-size: 16px }
+
+/* loop diagram */
+.loop { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 22px; position: relative }
+.loop li { position: relative; min-width: 0 }
+.loop li:not(:last-child)::after { content: "→"; position: absolute; right: -18px; top: 50%; transform: translateY(-50%); color: var(--muted); font-family: var(--mono) }
+.stage { width: 100%; text-align: left; display: grid; gap: 6px; padding: 14px; border-radius: 10px; height: 100% }
+.stage .n { font: 600 12px var(--mono); color: var(--muted) }
+.stage b { font-family: var(--display); font-size: 16px }
+.stage span.d { font-size: 13px; color: var(--muted); line-height: 1.4 }
+.stage[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft) }
+.loopback { display: flex; align-items: center; gap: 10px; font: 13px var(--mono); color: var(--muted); border: 1px dashed var(--line); border-top: 0; border-radius: 0 0 10px 10px; padding: 10px 14px; margin-top: -8px }
+.inputs { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 13px }
+.inputs .tag { border: 1px solid var(--line); background: var(--sunk); border-radius: 6px; padding: 3px 8px; font-family: var(--mono); font-size: 12px }
+.detail { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: grid; gap: 14px }
+.detail .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px }
+.detail .cols > div { display: grid; gap: 6px; align-content: start; min-width: 0 }
+.detail ul { margin: 0; padding-left: 18px; display: grid; gap: 4px }
+
+/* simulator */
+.sim { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 18px; align-items: start }
+.board { display: grid; gap: 10px; min-width: 0 }
+.canvaswrap { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 8px }
+canvas { display: block; width: 100%; border-radius: 6px; touch-action: manipulation }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--surface) }
+.seg button { border: 0; border-radius: 0; padding: 6px 10px; font-size: 13px }
+.seg button + button { border-left: 1px solid var(--line) }
+.seg button[aria-pressed="true"] { background: var(--accent); color: #fff }
+.ctrlrow { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center }
+.ctrlrow label.l { font: 600 11px var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted) }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 14px; min-width: 0 }
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 12px }
+.stat { display: grid; gap: 2px }
+.stat .k { font: 600 10.5px var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted) }
+.stat .v { font: 600 18px var(--mono); font-variant-numeric: tabular-nums }
+.why { font-size: 13.5px; background: var(--sunk); border-radius: 8px; padding: 10px 12px; line-height: 1.5 }
+.log { margin: 0; padding-left: 20px; font-size: 13px; display: grid; gap: 4px; max-height: 170px; overflow: auto }
+.knob { display: grid; gap: 4px; font-size: 13px }
+.knob input { width: 100% }
+.keyrow { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; color: var(--muted) }
+.keyrow i { display: inline-block; width: 14px; height: 10px; border-radius: 2px; vertical-align: -1px; margin-right: 5px }
+.note { font-size: 13px; color: var(--muted); max-width: none }
+.tour { background: var(--surface); border: 1px solid var(--accent); border-radius: 10px; padding: 16px 18px; display: grid; gap: 10px; min-height: 196px; align-content: start }
+.tour h3 { font-size: 21px }
+.tour p { font-size: 15.5px; min-height: 4.8em }
+.tourtop { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap }
+.dots { display: flex; gap: 5px; flex-wrap: wrap }
+.dots button { width: 22px; height: 8px; padding: 0; border-radius: 4px; background: var(--sunk); border: 0 }
+.dots button[aria-current="step"] { background: var(--accent) }
+.dots button.done { background: var(--line) }
+canvas { cursor: pointer }
+.explore { border: 1px solid var(--line); border-radius: 10px; background: var(--surface); padding: 12px 14px }
+.explore[open] { display: grid; gap: 12px }
+.explore summary { cursor: pointer; font-weight: 500; font-size: 14px }
+.explore .knob { max-width: 420px }
+.bench { display: grid; gap: 10px }
+.barrow { display: grid; grid-template-columns: 130px minmax(0, 1fr) 150px; gap: 10px; align-items: center; font-size: 13px }
+.bar { height: 14px; background: var(--sunk); border-radius: 4px; overflow: hidden }
+.bar > div { height: 100%; background: var(--accent); border-radius: 4px }
+.barrow.ours .bar > div { background: var(--ok) }
+.barrow .num { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--muted); font-size: 12px }
+
+/* models, numbers, limits */
+.summary { display: flex; flex-wrap: wrap; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 10px; overflow: hidden }
+.summary > div { flex: 1 1 140px; background: var(--surface); padding: 14px 16px; display: grid; gap: 2px }
+.summary .v { font: 700 28px var(--display) }
+.models { display: grid; grid-template-columns: 1fr 1fr; gap: 14px }
+.model { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 10px; align-content: start; min-width: 0 }
+.model .top { display: flex; justify-content: space-between; gap: 10px; align-items: start }
+.model dl { margin: 0; display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 4px 10px; font-size: 13.5px }
+.model dt { font: 600 11px/1.9 var(--mono); text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted) }
+.model dd { margin: 0 }
+.notml { background: var(--sunk); border-radius: 10px; padding: 16px; display: grid; gap: 8px; font-size: 14px }
+.notml ul { margin: 0; padding-left: 18px; display: grid; gap: 4px }
+.numbers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px }
+.num { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 6px; align-content: start; min-width: 0 }
+.num .big { font: 700 30px var(--display); font-variant-numeric: tabular-nums }
+.num .src { font: 12px var(--mono); color: var(--muted); overflow-wrap: anywhere }
+.filters { display: flex; flex-wrap: wrap; gap: 6px }
+.filters button[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg) }
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface) }
+table { border-collapse: collapse; width: 100%; font-size: 14px; min-width: 640px }
+th, td { text-align: left; vertical-align: top; padding: 11px 14px; border-bottom: 1px solid var(--line) }
+th { font: 600 11px var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); background: var(--sunk) }
+tr:last-child td { border-bottom: 0 }
+td.area { font: 12px var(--mono); color: var(--muted); white-space: nowrap }
+.sources { columns: 2; column-gap: 32px; font-size: 13.5px; padding-left: 18px; margin: 0 }
+.sources li { break-inside: avoid; margin-bottom: 6px }
+
+@media (max-width: 900px) {
+  .loop { grid-template-columns: 1fr; gap: 10px }
+  .loop li:not(:last-child)::after { content: "↓"; right: auto; left: 22px; top: auto; bottom: -15px; transform: none }
+  .loopback { border-top: 1px dashed var(--line); border-radius: 10px; margin-top: 0 }
+  .sim { grid-template-columns: 1fr }
+  .models, .numbers, .detail .cols, .thesis { grid-template-columns: 1fr }
+  .sources { columns: 1 }
+  .barrow { grid-template-columns: 100px minmax(0, 1fr); }
+  .barrow .num { grid-column: 1 / -1 }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important } }
+</style>
+
+<div class="wrap">
+
+<header>
+  <span class="eyebrow">Martian Map · scouting system · NASA Space Apps 2026</span>
+  <h1>Where to send the helicopter, and when to stop</h1>
+  <p class="lead">Orbit maps miss what stops a walker: rock fields, soft sand, short ledges. Helicopter flights can check the ground, but they are scarce. Martian Map flies only where the answer could change the walking route, and stops when one more flight would not change the plan enough to pay for itself.</p>
+  <div class="thesis">
+    <div><span class="eyebrow">The goal</span><b>Best route per flight spent</b><span class="muted">Not the best route possible. That would need every cell scouted.</span></div>
+    <div><span class="eyebrow">The theory</span><b>Canadian Traveller Problem with remote sensing</b><span class="muted">Known roads may be blocked; you can pay to check one first (Bnaya, Felner &amp; Shimony, 2009).</span></div>
+    <div><span class="eyebrow">Who decides</span><b>An algorithm, not a neural network</b><span class="muted">Machine learning only improves what the algorithm believes about the ground.</span></div>
+  </div>
+  <div class="legend"><span class="muted" style="font-size:13px">Status on the team's <code>dev</code> branch, 14 Nov 2026:</span>
+    <span class="chip built">Built</span><span class="chip review">In review</span><span class="chip proposed">Proposed</span><span class="chip later">Later</span><span class="chip decided">Decided</span></div>
+</header>
+
+<section id="loop">
+  <div class="sechead">
+    <span class="eyebrow">1 · The core algorithm</span>
+    <h2>Five steps, repeated after every flight</h2>
+    <p class="muted">Tap a step to see what it does, what goes in and out, and what is built. "Show it" opens that view in the simulator below.</p>
+  </div>
+  <div class="inputs"><span class="muted">Feeds step 1:</span>
+    <span class="tag">HiRISE 25 cm image</span><span class="tag">HiRISE 1 m DTM</span><span class="tag">8 m slope + relief</span><span class="tag">THEMIS thermal inertia</span><span class="tag">ROSCO rocks</span><span class="tag">trained models</span></div>
+  <ol class="loop" id="stages"></ol>
+  <div class="loopback">↺ after each flight: what the helicopter saw becomes fact, and new training labels, then back to step 1</div>
+  <div class="detail" id="stageDetail" aria-live="polite"></div>
+</section>
+
+<section id="sim">
+  <div class="sechead">
+    <span class="eyebrow">2 · Visualizer</span>
+    <h2>Watch it choose flights</h2>
+    <p class="muted">A toy world of 30 × 20 cells, 8 m each, with the habitat on the left and one target on the right. Hidden rocks come in 2 × 2-cell patches whose chance follows a roughness the orbit map can see. Press <b>Next</b> (or tap the map) to walk through the five steps one at a time, or <b>Play</b> to let it run. Everything is computed live in your browser.</p>
+  </div>
+  <div class="sim">
+    <div class="board">
+      <div class="tour" id="tour">
+        <div class="tourtop"><span class="eyebrow" id="tourStep"></span><div class="dots" id="tourDots" role="group" aria-label="Tour steps"></div></div>
+        <h3 id="tourTitle"></h3>
+        <p id="tourText" aria-live="polite"></p>
+        <div class="ctrlrow"><button id="tPrev">← Back</button><button id="tNext" class="primary">Next →</button><button id="tPlay">▶ Play</button><span class="muted" style="font-size:12px">or tap the map</span></div>
+      </div>
+      <div class="canvaswrap" id="cwrap"><canvas id="cv" aria-label="Toy scouting map"></canvas></div>
+      <div class="keyrow" id="key"></div>
+      <details class="explore" id="explore">
+      <summary>Explore on your own: change the view, who picks flights, the sensing model and the budget</summary>
+      <div class="ctrlrow">
+        <label class="l">View</label>
+        <div class="seg" id="layerSeg" role="group" aria-label="Map view">
+          <button data-v="orbit" aria-pressed="false">Orbit map</button><button data-v="belief" aria-pressed="true">What we believe</button><button data-v="truth" aria-pressed="false">Hidden truth</button>
+        </div>
+        <label style="font-size:13px"><input type="checkbox" id="showRoutes" checked> Candidate routes</label>
+        <label style="font-size:13px"><input type="checkbox" id="showStrips" checked> Flight values</label>
+      </div>
+      <div class="ctrlrow">
+        <button id="bNext" class="primary">Fly next flight</button>
+        <button id="bAuto">Fly until it stops</button>
+        <button id="bWalk">Walk it</button>
+        <button id="bReset">Clear flights</button>
+        <button id="bNew">New world</button>
+        <span class="mono muted" id="seedLabel" style="font-size:12px"></span>
+      </div>
+      <div class="ctrlrow">
+        <label class="l">Who picks flights</label>
+        <div class="seg" id="stratSeg" role="group" aria-label="Flight strategy">
+          <button data-v="voi" aria-pressed="true">Ours: value of information</button><button data-v="route" aria-pressed="false">Planned route only</button><button data-v="line" aria-pressed="false">Straight line</button><button data-v="none" aria-pressed="false">No flights</button>
+        </div>
+      </div>
+      <div class="ctrlrow">
+        <label class="l">Sensing model</label>
+        <div class="seg" id="senseSeg" role="group" aria-label="Sensing model quality">
+          <button data-v="good" aria-pressed="true">Well trained</button><button data-v="weak" aria-pressed="false">Weak</button><button data-v="none" aria-pressed="false">None</button>
+        </div>
+      </div>
+      <div class="knob"><label for="kBudget">Flight budget: <b id="kBudgetV">5</b> flights</label><input type="range" id="kBudget" min="1" max="10" value="5"></div>
+      <div class="knob"><label for="kLambda">Stop when a flight saves under <b id="kLambdaV">1.0</b> kJ</label><input type="range" id="kLambda" min="0" max="6" step="0.5" value="1"></div>
+      </details>
+    </div>
+    <aside class="panel">
+      <div class="stats">
+        <div class="stat"><span class="k">Flights</span><span class="v" id="sFlights">0</span></div>
+        <div class="stat"><span class="k">Helicopter</span><span class="v" id="sHeli">0 m</span></div>
+        <div class="stat"><span class="k">Expected walk</span><span class="v" id="sExp">–</span></div>
+        <div class="stat"><span class="k">Best next flight</span><span class="v" id="sBest">–</span></div>
+        <div class="stat"><span class="k">Walked</span><span class="v" id="sWalk">–</span></div>
+        <div class="stat"><span class="k">Knowing all</span><span class="v" id="sOracle">–</span></div>
+      </div>
+      <div class="why" id="why"></div>
+      <div style="display:grid;gap:6px"><span class="eyebrow">Flights so far</span><ol class="log" id="log"></ol></div>
+    </aside>
+  </div>
+  <p class="note">Energy is in toy kilojoules. A flat 8 m cell costs 1.5 kJ, close to our Pandolf walking model on bedrock (184 J/m × 8 m). "Expected walk" averages 14 possible worlds drawn from the belief map. A walker sees 1 cell around itself and re-plans when it meets rocks, so a blocked route costs the walk back. With the well-trained model, the belief equals the true chances: the best that training could ever reach.</p>
+  <div class="panel bench">
+    <div class="ctrlrow" style="justify-content:space-between">
+      <div style="display:grid;gap:4px"><h3>Benchmark: 10 toy worlds, same flight budget</h3><span class="muted" style="font-size:13px">Extra walking energy over a walker who knew everything. Lower is better. Toy worlds, not Gale numbers.</span></div>
+      <button id="bBench">Run benchmark</button>
+    </div>
+    <div id="benchOut"><p class="note">Not run yet. It takes about a second.</p></div>
+    <p class="note"><b>What to look for:</b> with a well-trained sensing model, ours gets closest to "knowing everything" with fewer flights. With <b>no</b> sensing model it has nothing to weigh, stops early and loses to flying the planned route. The decision is only as good as the prediction behind it, which is why the belief map is the first thing we train.</p>
+  </div>
+</section>
+
+<section id="models">
+  <div class="sechead">
+    <span class="eyebrow">3 · What we train</span>
+    <h2>One model trained today, three planned for scouting</h2>
+    <p class="muted">Each model is graded on data it never saw before it is used. A model that does not beat the simpler rule is not shipped.</p>
+  </div>
+  <div class="summary">
+    <div><span class="v">1</span><span class="muted">trained today (ground photos)</span></div>
+    <div><span class="v">3</span><span class="muted">planned for scouting</span></div>
+    <div><span class="v">1</span><span class="muted">optional (Moon pre-training)</span></div>
+    <div><span class="v">1</span><span class="muted">later (learned policy)</span></div>
+    <div><span class="v">0</span><span class="muted">models that make the decision</span></div>
+  </div>
+  <div class="models" id="modelList"></div>
+  <div class="notml">
+    <b>Not machine learning, on purpose</b>
+    <ul>
+      <li><b>ROSCO</b>, NASA/JPL's rock detector: finds rocks by their shadows at a known sun angle. Already run on one Gale image; 23 rocks accepted by Jules.</li>
+      <li><b>Rock-size law</b> (Golombek and colleagues): counts of big rocks predict how many small ones there are. Used for every Mars landing site.</li>
+      <li><b>Walking planner</b>: least-energy route (Dijkstra) and best stop order (Held-Karp). About 0.1 s on the 256 × 256 Gale grid in a browser.</li>
+      <li><b>Value-of-information planner</b>: the decision itself. Explainable in kilojoules: "this strip could save 4 kJ; nothing else is worth more."</li>
+    </ul>
+  </div>
+</section>
+
+<section id="numbers">
+  <div class="sechead">
+    <span class="eyebrow">4 · Measured so far</span>
+    <h2>What the data says today</h2>
+    <p class="muted">Every number comes from code in the repo, written to a file.</p>
+  </div>
+  <div class="numbers">
+    <div class="num"><span class="big">0.60</span><span>AUC: coarse orbit features (8 m slope, 8 m relief, THEMIS) predicting the old rock layer. 0.5 is guessing. Flying the riskiest 20% would catch 35% of the rocks.</span><span class="src">app/scripts/sensing-check.json</span></div>
+    <div class="num"><span class="big">0.83</span><span>AUC: 8 m slope alone on Jules's 22 human-reviewed rock cells. Real rocks sit on steep ground. The old rule assumed gentle ground and scores 0.52 on them.</span><span class="src">same file · only 22 rocks, one image: a lead</span></div>
+    <div class="num"><span class="big">93% → 48%</span><span>Ground-photo classifier: accuracy on Curiosity's test images, then on Perseverance's. Same height, different rover: the model does not carry over.</span><span class="src">ml/terrain_classifier/README.md</span></div>
+    <div class="num"><span class="big">21 legs</span><span>Scouting only along the planned Gale route took 3 rounds, 21 flight legs and 14.05 km to reach zero hazard crossings. Walking energy rose from 329.6 to 334.7 kJ.</span><span class="src">ml/pitch_metrics (PR #92)</span></div>
+    <div class="num"><span class="big">35%</span><span>Share of cells that look walkable at 8 m but hide a stretch steeper than 25° at 2 m scale. 82% of crossings between cells are passable.</span><span class="src">Luca, PR #93 (in review)</span></div>
+    <div class="num"><span class="big">332 → 617 kJ</span><span>Gale five-stop tour once walking energy uses measured Mars gravity (about 0.68 of Earth) and measured sand (2.4×).</span><span class="src">Luca, PR #94 (in review)</span></div>
+  </div>
+</section>
+
+<section id="heli">
+  <div class="sechead">
+    <span class="eyebrow">5 · The helicopter</span>
+    <h2>Adapted from SkyFall, recharged at the habitat</h2>
+    <p class="muted">JPL's SkyFall is the proof that scouting helicopters are planned. It does not publish range, battery or recharge time, so we fill those gaps from flown and studied craft, and label every gap-filling number as an estimate.</p>
+  </div>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Craft</th><th>Status</th><th>What we take from it</th></tr></thead>
+    <tbody>
+      <tr><td><b>SkyFall</b> (JPL)</td><td>Launch 2028</td><td>Three helicopters, mid-air deployment, 13 MP colour and near-IR cameras, ground-penetrating radar. <b>Fleet size and sensors.</b></td></tr>
+      <tr><td><b>Ingenuity</b></td><td>Flew 72 times, 2021–2024</td><td>Longest flight 704 m, up to about 170 s. Flew around midday. Crashed over featureless sand. <b>700 m per flight (knob), daylight only, no-fly over smooth sand.</b></td></tr>
+      <tr><td><b>Mars Science Helicopter</b></td><td>NASA concept</td><td>About 30 kg, about 5 kg payload, roughly 10–12 km per flight; recharge over one sol (single source). <b>Where range could go.</b></td></tr>
+      <tr><td><b>Dragonfly</b> (Titan)</td><td>Launch 2028</td><td>Recharges its battery between flights from a nuclear generator of about 100 W. <b>Recharging from a base, not the Sun.</b></td></tr>
+      <tr><td><b>Fission Surface Power</b></td><td>NASA project, early 2030s</td><td>40 kW, designed to carry over to Mars. <b>The power a crewed base could have. Our recharge assumption, not a NASA plan.</b></td></tr>
+    </tbody>
+  </table></div>
+  <div class="detail">
+    <h3>How low should it fly?</h3>
+    <div class="cols">
+      <div><b>The idea: about 2 m, looking at a slant</b>
+        <ul><li>Curiosity's navigation cameras sit 1.94–1.99 m above the wheels, so a rover-trained model would see a familiar view.</li>
+        <li>A helicopter never pays to back out of a dead end: it lifts over. That asymmetry is what makes scouting cheap.</li></ul></div>
+      <div><b>Why we propose above about 6 m, camera tilted</b>
+        <ul><li>Ingenuity's rotor lifted dust below 3 m on take-off, from 2.3–3.6 m on landing, and at times at 5.1–5.7 m in flight (Lemmon et al., 2022).</li>
+        <li>Gale's boxwork ridges reach 1.7 m inside a cell (90th percentile), leaving about 0.3 m at 2 m.</li>
+        <li>Same height did not help rover-to-rover (93% → 48%). Match the slant, not the height, and test on Ingenuity's public colour images first.</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="limits">
+  <div class="sechead">
+    <span class="eyebrow">6 · Limits we know about</span>
+    <h2>What could go wrong, and what we do about it</h2>
+  </div>
+  <div class="filters" id="limitFilters"></div>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Area</th><th>Limit</th><th>How we handle it</th><th>Status</th></tr></thead>
+    <tbody id="limitRows"></tbody>
+  </table></div>
+</section>
+
+<section id="sources">
+  <div class="sechead"><span class="eyebrow">7 · Sources</span><h2>Where the facts come from</h2></div>
+  <ul class="sources">
+    <li><a href="https://ijcai.org/Abstract/09/080" target="_blank" rel="noopener">Bnaya, Felner &amp; Shimony, Canadian Traveller Problem with Remote Sensing (IJCAI 2009)</a></li>
+    <li><a href="https://arxiv.org/pdf/1401.3462v1.pdf" target="_blank" rel="noopener">Singh, Krause et al., informative path planning (JAIR 2009)</a></li>
+    <li><a href="https://journals.sagepub.com/doi/full/10.1177/1729881421999587" target="_blank" rel="noopener">Folsom et al. 2021, helicopter scouting for a Mars rover</a></li>
+    <li><a href="https://www.jpl.nasa.gov/missions/skyfall/" target="_blank" rel="noopener">JPL SkyFall</a></li>
+    <li><a href="https://www.avinc.com/solution/ingenuity-mars-helicopter/" target="_blank" rel="noopener">Ingenuity (AeroVironment)</a></li>
+    <li><a href="https://spectrum.ieee.org/the-next-mars-helicopter" target="_blank" rel="noopener">Mars Science Helicopter (IEEE Spectrum)</a></li>
+    <li><a href="https://www.jpl.nasa.gov/site/research/media/posters/2021/R21015p.pdf" target="_blank" rel="noopener">Mars Science Helicopter (JPL poster)</a></li>
+    <li><a href="https://rps.jpl.nasa.gov/internal_resources/854/Dragonfly%20line%20art.pdf" target="_blank" rel="noopener">Dragonfly power system (NASA RPS)</a></li>
+    <li><a href="https://www.universetoday.com/articles/nasa-is-building-a-nuclear-reactor-to-power-lunar-and-martian-exploration" target="_blank" rel="noopener">Fission Surface Power, 40 kW (Universe Today)</a></li>
+    <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10078181" target="_blank" rel="noopener">Lemmon et al. 2022, dust lifted by Ingenuity's rotor</a></li>
+    <li><a href="https://an.rsl.wustl.edu/help/Content/About%20the%20mission/MSL/Instruments/MSL%20Navcam.htm" target="_blank" rel="noopener">Curiosity Navcam height (WUSTL)</a></li>
+    <li><a href="https://nasa-jpl.github.io/SPOC" target="_blank" rel="noopener">SPOC terrain classifier (NASA JPL)</a></li>
+    <li><a href="https://experts.arizona.edu/en/publications/size-frequency-distributions-of-rocks-on-the-northern-plains-of-m-2/" target="_blank" rel="noopener">Golombek et al., rock size from HiRISE</a></li>
+    <li><a href="https://eos.org/editor-highlights/nearly-94-million-boulders-mapped-on-the-moon-using-deep-learning" target="_blank" rel="noopener">94 million lunar boulders (Aussel et al. 2025)</a></li>
+    <li><a href="https://www.frontiersin.org/articles/10.3389/frsen.2021.640034/pdf" target="_blank" rel="noopener">RMaM-2020 Moon + Mars labels (Bickel et al. 2021)</a></li>
+    <li><a href="https://catalog.data.gov/dataset/ai4mars-a-dataset-for-terrain-aware-autonomous-driving-on-mars" target="_blank" rel="noopener">AI4Mars dataset</a></li>
+    <li><a href="https://github.com/nasa-jpl/ROSCO" target="_blank" rel="noopener">NASA/JPL ROSCO rock detector</a></li>
+  </ul>
+</section>
+</div>
+
+<script>
+// ---------- content ----------
+const STAGES = [
+  { n: '1', name: 'Sense', d: 'Chance each cell is blocked', show: 'belief',
+    what: 'Predict, for every cell, the chance it is blocked and its expected walking cost, from the orbit map. Cells the helicopter has seen become certain. Rocks come in patches, so later steps sample whole possible worlds instead of judging cells one by one.',
+    inout: ['In: HiRISE image and DTM, slope, THEMIS, ROSCO rocks, trained models', 'Out: belief map (chance blocked) and uncertainty'],
+    built: [['built', 'A yes/no hidden-rock layer, now with 23 reviewed rocks (R3)'], ['review', 'Crossings and an "unsure" layer from the 1 m DTM (Luca, #93)'], ['proposed', 'Calibrated chances instead of yes/no; wall-to-wall ROSCO']] },
+  { n: '2', name: 'Candidate routes', d: 'Several ways to each place', show: 'routes',
+    what: 'Find the K cheapest different routes on expected cost: plan the best, then make its cells costlier and plan again. Each route gets an expected cost and a risk. A flight only matters if it can change which route we pick.',
+    inout: ['In: belief map, base, places to visit', 'Out: K routes with expected cost and risk'],
+    built: [['built', 'Least-energy planner and best stop order (E4)'], ['built', '"Why this route": the shortest-distance alternative it beat (E5)'], ['proposed', 'K routes on expected cost']] },
+  { n: '3', name: 'Value of information', d: 'What a flight could save', show: 'strips',
+    what: 'For each strip the helicopter could fly: draw many possible worlds from the belief map; in each, compare the walk planned now with the walk planned after seeing that strip. The average saving is the strip\'s value. Strips over ground we are sure about, or over routes we would never take, are worth nothing.',
+    inout: ['In: belief map, candidate routes, possible strips', 'Out: value of each strip in kJ'],
+    built: [['proposed', 'Sampling-based value of information'], ['proposed', 'Stop rule: stop when the best strip saves less than a flight is worth']] },
+  { n: '4', name: 'Plan flights', d: 'Strips into real flights', show: 'best',
+    what: 'Pick the best value per kilometre flown. Each flight leaves the habitat, flies the strip and returns within the battery range. It flies in the midday window, avoids smooth sand, and is spread across the fleet of three and over sols.',
+    inout: ['In: strip values, helicopter limits, sun and time', 'Out: flights for the next sol, each with its reason'],
+    built: [['built', 'Flights along the route corridor, plus anomaly and least-certain flights (D4)'], ['proposed', 'Flights chosen by value, daylight window, no-fly cells']] },
+  { n: '5', name: 'Fly, confirm, re-plan', d: 'Guesses become facts', show: 'fly',
+    what: 'The helicopter\'s camera turns predictions into facts along the strip. The belief map, routes and values are recomputed, and the next flight is planned: plan with what you know, repair when you learn more (the idea behind D* Lite). Every confirmed cell is also a new training label, so the map gets better with use.',
+    inout: ['In: what the helicopter saw', 'Out: updated map, new labels, next decision'],
+    built: [['built', 'Reveal and re-plan after a flight (drone_scout flag)'], ['proposed', '"Why this flight" with its value in kJ']] },
+];
+const MODELS = [
+  { name: 'Ground-photo classifier', status: 'built', label: 'Trained', learns: 'Sand, soil, bedrock or big rock from a ground-level photo', input: 'Rover Navcam image patches (AI4Mars)', labels: 'AI4Mars labels on Curiosity images; only 9 big-rock patches in training', nums: '93.1% on Curiosity test (159 patches); 48.2% on Perseverance (197)', role: 'Starting point for the helicopter-view model' },
+  { name: 'Belief map', status: 'proposed', label: 'Planned · first', learns: 'Chance a cell is blocked, from orbit', input: 'HiRISE 25 cm patches, 1 m and 8 m terrain, THEMIS, ROSCO counts', labels: 'Reviewed ROSCO rocks, Curiosity\'s drive, every helicopter flight. Not the old rule layer.', nums: 'Starts as rules plus the rock-size law, calibrated so "10%" means 10%', role: 'Step 1 of the loop: the only input the decision needs' },
+  { name: 'Ground type from orbit', status: 'proposed', label: 'Planned', learns: 'Sand, soil or bedrock from the orbit image', input: 'HiRISE 25 cm patches', labels: 'AI4Mars labels placed on the map at Curiosity\'s logged positions in our slice', nums: 'NASA\'s SPOC does this at more than 90%, but is not released', role: 'Sand costs 2.1–2.7× to walk: a cost, not a wall' },
+  { name: 'Helicopter-view classifier', status: 'proposed', label: 'Planned', learns: 'Ground type from the helicopter\'s slanted camera', input: 'Helicopter colour images', labels: 'A few hundred labelled patches from Ingenuity\'s public colour images', nums: 'Must beat the rover model on held-out helicopter images', role: 'Turns a flight into confirmed cells' },
+  { name: 'Moon-pretrained rock detector', status: 'later', label: 'Optional', learns: 'Rocks from orbit by their shadows', input: 'Pre-train: LRO NAC images; fine-tune: HiRISE', labels: '94 million lunar boulders; RMaM-2020 Moon + Mars labels; Jules\'s reviewed rocks', nums: 'Kept only if it beats ROSCO plus the rock-size law on held-out Mars rocks', role: 'The Moon has no sand or dust, and its mapped boulders are 4.5 m and up' },
+  { name: 'Learned scouting policy', status: 'later', label: 'Later', learns: 'Which flight to choose, by reinforcement learning', input: 'Generated worlds where the hidden truth is known', labels: 'None needed: it learns by trying in simulation', nums: 'Only if it beats the value-of-information planner on the benchmark', role: 'And only if its choices can still be explained to the crew' },
+];
+const LIMITS = [
+  ['Data', 'No ground truth at a walker\'s scale. On Mars it exists only where rovers drove and Ingenuity flew.', 'Reviewed ROSCO rocks, Curiosity\'s drive in our slice, and every flight adds labels. Everything else is marked as an estimate.', 'proposed'],
+  ['Data', 'The old hidden-rock layer is a rule on orbit data, and real rocks contradict it.', 'Never train on it. R3 keeps reviewed rocks apart; ROSCO over the whole slice is next.', 'proposed'],
+  ['Data', 'Rocks under about 1.5 m are invisible from orbit, and those are what trip a walker.', 'Predict them from big-rock counts with the rock-size law used for landing sites.', 'proposed'],
+  ['Data', '8 m cells average away ledges and short steep steps.', 'Passability per crossing from the 1 m DTM, with NASA\'s 0.3 m suited step limit.', 'review'],
+  ['Data', 'Only 23 reviewed rocks, from one image, picked from a detector\'s proposals.', 'Treat the 0.83 result as a lead; widen with wall-to-wall detection.', 'known'],
+  ['Models', 'The ground-photo model drops from 93% to 48% on another rover.', 'Fine-tune on helicopter images; test on Ingenuity\'s images before building on it.', 'proposed'],
+  ['Models', 'Few big-rock labels (9 in training).', 'Rocks come from ROSCO and the rock-size law; Moon pre-training as an option.', 'proposed'],
+  ['Models', 'Moon data has no sand, no dust, and only big boulders.', 'Use it for pre-training the rock part only; always test on Mars.', 'decided'],
+  ['Helicopter', 'SkyFall publishes no range, battery, recharge time or flights per sol.', 'Knobs, labelled as estimates. 700 m per flight from Ingenuity, the only flown number.', 'decided'],
+  ['Helicopter', 'Rotor dust below about 3–6 m blinds a low camera.', 'Fly above about 6 m with a tilted camera.', 'proposed'],
+  ['Helicopter', 'Daylight only; featureless sand broke Ingenuity\'s navigation.', 'Midday flight windows from the sun model; no-fly over smooth sand.', 'proposed'],
+  ['Helicopter', 'Recharging at the habitat is our assumption.', 'Say so in the app and the pitch.', 'decided'],
+  ['Energy', 'Walking energy is too low: Mars gravity scaled at 0.38 instead of the measured 0.68; sand 1.46× instead of 2.1–2.7×.', 'Measured values in pipeline and app (Gale tour 332 → 617 kJ).', 'review'],
+  ['Algorithm', 'The perfect scouting policy is proven intractable.', 'A heuristic: value of information by sampling, with a stop rule.', 'proposed'],
+  ['Algorithm', 'The greedy 63% guarantee does not strictly hold for value of information.', 'Prove it on a benchmark against "knowing everything".', 'proposed'],
+  ['Algorithm', 'Our synthetic world places rocks at random, so nothing could predict them.', 'Generated worlds where hidden rocks follow orbit features.', 'proposed'],
+  ['Algorithm', 'Exact stop ordering is limited to 12 stops.', 'A greedy order beyond 12.', 'built'],
+  ['Algorithm', 'Compute on Mars is limited.', 'Runs on the habitat or ship computer; the planner takes about 0.1 s on Gale; sampling should take seconds (to measure).', 'known'],
+  ['App', 'Not yet tried on a real phone over HTTPS.', 'Phone testing at the end of the build.', 'known'],
+];
+const CHIP = { built: 'Built', review: 'In review', proposed: 'Proposed', later: 'Later', known: 'Known', decided: 'Decided' }
+const chip = (s, t) => `<span class="chip ${s}">${t || CHIP[s]}</span>`
+
+// ---------- loop diagram ----------
+const stagesEl = document.getElementById('stages'), detailEl = document.getElementById('stageDetail')
+stagesEl.innerHTML = STAGES.map((s, k) => `<li><button class="stage" data-k="${k}" aria-pressed="false"><span class="n">${s.n}</span><b>${s.name}</b><span class="d">${s.d}</span></button></li>`).join('')
+function pickStage(k) {
+  stagesEl.querySelectorAll('.stage').forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.k === k)))
+  const s = STAGES[k]
+  detailEl.innerHTML = `<div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center"><h3>${s.n} · ${s.name}</h3><button data-show="${s.show}">Show it in the simulator ↓</button></div>
+    <p>${s.what}</p>
+    <div class="cols"><div><span class="eyebrow">In and out</span><ul>${s.inout.map((x) => `<li>${x}</li>`).join('')}</ul></div>
+    <div><span class="eyebrow">Built so far</span><ul style="list-style:none;padding:0">${s.built.map(([st, t]) => `<li style="display:flex;gap:8px;align-items:baseline">${chip(st)}<span>${t}</span></li>`).join('')}</ul></div></div>`
+}
+stagesEl.addEventListener('click', (e) => { const b = e.target.closest('.stage'); if (b) pickStage(+b.dataset.k) })
+detailEl.addEventListener('click', (e) => { const b = e.target.closest('[data-show]'); if (b) showInSim(b.dataset.show) })
+pickStage(2)
+
+// ---------- models + limits ----------
+document.getElementById('modelList').innerHTML = MODELS.map((m, k) => `<article class="model"><div class="top"><h3>${m.name}</h3>${chip(m.status, m.label)}</div>
+  <dl><dt>Learns</dt><dd>${m.learns}</dd><dt>From</dt><dd>${m.input}</dd><dt>Labels</dt><dd>${m.labels}</dd><dt>Numbers</dt><dd>${m.nums}</dd><dt>Why</dt><dd>${m.role}</dd></dl></article>`).join('')
+const areas = ['All', ...new Set(LIMITS.map((l) => l[0]))]
+const filtersEl = document.getElementById('limitFilters'), rowsEl = document.getElementById('limitRows')
+filtersEl.innerHTML = areas.map((a) => `<button data-a="${a}" aria-pressed="${a === 'All'}">${a}</button>`).join('')
+function renderLimits(a) {
+  filtersEl.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.a === a)))
+  rowsEl.innerHTML = LIMITS.filter((l) => a === 'All' || l[0] === a).map(([ar, l, h, s]) => `<tr><td class="area">${ar}</td><td>${l}</td><td>${h}</td><td>${chip(s)}</td></tr>`).join('')
+}
+filtersEl.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) renderLimits(b.dataset.a) })
+renderLimits('All')
+
+// ---------- simulator: toy world ----------
+const W = 30, H = 20, N = W * H, BW = 15, NB = 150, CELL_M = 8, RISK = 10, SAMPLES = 14, SEG = 6, MAX_FLIGHT_M = 700
+const blockOf = (i) => (((i / W) | 0) >> 1) * BW + ((i % W) >> 1)
+const NBJ = [], NBD = []
+for (let i = 0; i < N; i++) {
+  const x = i % W, y = (i / W) | 0, js = [], ds = []
+  for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+    if (!dx && !dy) continue
+    const xx = x + dx, yy = y + dy
+    if (xx < 0 || yy < 0 || xx >= W || yy >= H) continue
+    js.push(yy * W + xx); ds.push(dx && dy ? Math.SQRT2 : 1)
+  }
+  NBJ.push(js); NBD.push(ds)
+}
+function mulberry32(a) { return function () { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296 } }
+function field(R, n) {
+  const w = []
+  for (let k = 0; k < n; k++) { const a = R() * 6.283, f = 0.12 + R() * 0.3; w.push([Math.cos(a) * f, Math.sin(a) * f, R() * 6.283, 0.5 + R()]) }
+  return (x, y) => w.reduce((s, [a, b, p, m]) => s + m * Math.sin(a * x + b * y + p), 0)
+}
+class Heap {
+  k = []; v = []
+  get size() { return this.k.length }
+  push(key, val) { let i = this.k.length; this.k.push(key); this.v.push(val); while (i > 0) { const p = (i - 1) >> 1; if (this.k[p] <= key) break; this.k[i] = this.k[p]; this.v[i] = this.v[p]; i = p } this.k[i] = key; this.v[i] = val }
+  pop() { const tk = this.k[0], tv = this.v[0], key = this.k.pop(), val = this.v.pop(), n = this.k.length
+    if (n) { let i = 0; for (;;) { let c = 2 * i + 1; if (c >= n) break; if (c + 1 < n && this.k[c + 1] < this.k[c]) c++; if (this.k[c] >= key) break; this.k[i] = this.k[c]; this.v[i] = this.v[c]; i = c } this.k[i] = key; this.v[i] = val }
+    return [tk, tv] }
+}
+const stepCost = (w, i, j, d) => { const dh = w.h[j] - w.h[i]; return d * 1.5 + 0.9 * Math.abs(dh) + 1.6 * Math.max(0, dh) }
+
+function dijkstra(w, from, to, blk, risk, mult) {
+  const dist = new Float64Array(N).fill(Infinity), prev = new Int32Array(N).fill(-1), heap = new Heap()
+  dist[from] = 0; heap.push(0, from)
+  while (heap.size) {
+    const [d, i] = heap.pop()
+    if (d > dist[i]) continue
+    if (i === to) break
+    const js = NBJ[i], ds = NBD[i]
+    for (let k = 0; k < js.length; k++) {
+      const j = js[k]
+      if (w.wall[j] || blk[j]) continue
+      let c = stepCost(w, i, j, ds[k])
+      if (risk) c += ds[k] * risk[j]
+      if (mult) c *= mult[j]
+      const nd = d + c
+      if (nd < dist[j]) { dist[j] = nd; prev[j] = i; heap.push(nd, j) }
+    }
+  }
+  if (dist[to] === Infinity) return null
+  const path = []
+  for (let i = to; i >= 0; i = prev[i]) path.unshift(i)
+  return path
+}
+const blockedCells = (kB) => { const a = new Uint8Array(N); for (let i = 0; i < N; i++) a[i] = kB[blockOf(i)] === 1; return a }
+const riskCells = (kB, pb) => { const a = new Float32Array(N); for (let i = 0; i < N; i++) { const b = blockOf(i); a[i] = kB[b] === -1 ? pb[b] * RISK : 0 } return a }
+const pathCost = (w, p) => { let c = 0; for (let k = 1; k < p.length; k++) c += stepCost(w, p[k - 1], p[k], (p[k] % W !== p[k - 1] % W) && (((p[k] / W) | 0) !== ((p[k - 1] / W) | 0)) ? Math.SQRT2 : 1); return c }
+
+function makeWorld(seed) {
+  for (let tries = 0; ; tries++) {
+    const R = mulberry32(seed * 7919 + tries * 104729)
+    const hf = field(R, 6), rf = field(R, 5)
+    const h = new Float32Array(N), r = new Float32Array(N)
+    for (let i = 0; i < N; i++) { const x = i % W, y = (i / W) | 0; h[i] = hf(x, y) * 1.1; r[i] = rf(x * 1.3, y * 1.3) }
+    let lo = Infinity, hi = -Infinity
+    for (const v of r) { lo = Math.min(lo, v); hi = Math.max(hi, v) }
+    for (let i = 0; i < N; i++) r[i] = (r[i] - lo) / (hi - lo)
+    const sl = new Float32Array(N)
+    for (let i = 0; i < N; i++) for (const j of NBJ[i]) sl[i] = Math.max(sl[i], Math.abs(h[j] - h[i]))
+    const thr = [...sl].sort((a, b) => a - b)[Math.floor(N * 0.93)]
+    const wall = new Uint8Array(N)
+    for (let i = 0; i < N; i++) wall[i] = sl[i] > thr
+    const S = (2 + Math.floor(R() * (H - 4))) * W + 1, T = (2 + Math.floor(R() * (H - 4))) * W + (W - 2)
+    const near = new Set()
+    for (const c of [S, T]) { near.add(c); for (const j of NBJ[c]) { near.add(j); for (const k of NBJ[j]) near.add(k) } }
+    near.forEach((c) => (wall[c] = 0))
+    const pTrue = new Float32Array(NB), truth = new Uint8Array(NB)
+    for (let b = 0; b < NB; b++) {
+      const bx = (b % BW) * 2, by = ((b / BW) | 0) * 2
+      const rb = (r[by * W + bx] + r[by * W + bx + 1] + r[(by + 1) * W + bx] + r[(by + 1) * W + bx + 1]) / 4
+      pTrue[b] = 0.03 + 0.62 / (1 + Math.exp(-(rb - 0.58) * 13))
+    }
+    const safe = new Set([...near].map(blockOf))
+    safe.forEach((b) => (pTrue[b] = 0))
+    for (let b = 0; b < NB; b++) truth[b] = R() < pTrue[b]
+    const w = { seed, h, r, wall, S, T, pTrue, truth }
+    const oracle = dijkstra(w, S, T, blockedCells(Int8Array.from(truth)), null, null)
+    if (oracle && tries < 50) { w.oracle = oracle; w.oracleCost = pathCost(w, oracle); w.safe = safe; return w }
+  }
+}
+function beliefFor(w, model) {
+  const pb = new Float32Array(NB), R = mulberry32(w.seed * 31 + 7)
+  let base = 0, n = 0
+  for (let b = 0; b < NB; b++) if (!w.safe.has(b)) { base += w.pTrue[b]; n++ }
+  base /= n
+  for (let b = 0; b < NB; b++) {
+    if (w.safe.has(b)) { pb[b] = 0; continue }
+    if (model === 'good') pb[b] = w.pTrue[b]
+    else if (model === 'none') pb[b] = base
+    else { const noise = (R() + R() + R() - 1.5) * 0.28; pb[b] = Math.min(0.9, Math.max(0.01, base + 0.4 * (w.pTrue[b] - base) + noise * 0.5)) }
+  }
+  return pb
+}
+
+// A walker with 1-cell sight follows the plan and re-plans when rocks appear on it (it pays for the walk back).
+function execWalk(w, truthB, kB0, pb) {
+  const kB = Int8Array.from(kB0)
+  let pos = w.S, cost = 0, surprises = 0
+  const trail = [pos]
+  const reveal = (c) => { const out = []; for (const j of [c, ...NBJ[c]]) { const b = blockOf(j); if (kB[b] === -1) { kB[b] = truthB[b]; if (truthB[b]) out.push(b) } } return out }
+  reveal(pos)
+  for (let guard = 0; guard < 80 && pos !== w.T; guard++) {
+    const path = dijkstra(w, pos, w.T, blockedCells(kB), riskCells(kB, pb), null)
+    if (!path) return { cost: Infinity, surprises, trail }
+    let replan = false
+    for (let k = 1; k < path.length; k++) {
+      const c = path[k]
+      const d = (c % W !== pos % W) && (((c / W) | 0) !== ((pos / W) | 0)) ? Math.SQRT2 : 1
+      cost += stepCost(w, pos, c, d); pos = c; trail.push(c)
+      const nb = reveal(pos)
+      if (nb.length) { const s = new Set(nb); for (let m = k + 1; m < path.length; m++) if (s.has(blockOf(path[m]))) { replan = true; break } }
+      if (replan) { surprises++; break }
+    }
+    if (!replan) break
+  }
+  return { cost: pos === w.T ? cost : Infinity, surprises, trail }
+}
+function sampleWorlds(kB, pb, seed, m) {
+  const R = mulberry32(seed), out = []
+  for (let s = 0; s < m; s++) { const t = new Uint8Array(NB); for (let b = 0; b < NB; b++) t[b] = kB[b] === -1 ? (R() < pb[b] ? 1 : 0) : kB[b]; out.push(t) }
+  return out
+}
+function kRoutes(w, kB, pb, K = 3) {
+  const blk = blockedCells(kB), risk = riskCells(kB, pb), mult = new Float32Array(N).fill(1), out = [], seen = new Set()
+  for (let k = 0; k < K; k++) {
+    const p = dijkstra(w, w.S, w.T, blk, risk, mult)
+    if (!p) break
+    const key = p.join(',')
+    if (!seen.has(key)) { seen.add(key); out.push(p) }
+    p.forEach((c) => (mult[c] *= 1.9))
+  }
+  return out
+}
+const cxy = (c) => [c % W, (c / W) | 0]
+const cdist = (a, b) => { const [ax, ay] = cxy(a), [bx, by] = cxy(b); return Math.hypot(ax - bx, ay - by) }
+function stripFrom(w, seg, kB, tag) {
+  const blocks = new Set()
+  seg.forEach((c) => [c, ...NBJ[c]].forEach((j) => blocks.add(blockOf(j))))
+  const unknown = [...blocks].filter((b) => kB[b] === -1)
+  if (!unknown.length) return null
+  let len = 0
+  for (let k = 1; k < seg.length; k++) len += cdist(seg[k - 1], seg[k])
+  const metres = (cdist(w.S, seg[0]) + len + cdist(seg.at(-1), w.S)) * CELL_M
+  if (metres > MAX_FLIGHT_M) return null
+  return { seg, blocks: unknown, metres, tag, value: 0 }
+}
+function chunks(path) { const out = []; for (let a = 1; a < path.length - 1; a += SEG - 1) out.push(path.slice(a, Math.min(path.length, a + SEG))); return out }
+function scan(w, kB, pb, m = SAMPLES, withStrips = true) {
+  const samples = sampleWorlds(kB, pb, w.seed * 13 + flightsCount(kB) * 101 + 5, m)
+  const now = samples.map((t) => execWalk(w, t, kB, pb).cost)
+  const valid = now.map((c, s) => (isFinite(c) ? s : -1)).filter((s) => s >= 0)
+  const expected = valid.reduce((a, s) => a + now[s], 0) / Math.max(1, valid.length)
+  const routes = kRoutes(w, kB, pb)
+  if (!withStrips) return { expected, routes, strips: [] }
+  const strips = [], keys = new Set()
+  routes.forEach((r, ri) => chunks(r).forEach((seg) => {
+    const s = stripFrom(w, seg, kB, String.fromCharCode(65 + ri))
+    if (!s) return
+    const key = s.blocks.slice().sort((a, b) => a - b).join(',')
+    if (keys.has(key)) return
+    keys.add(key); strips.push(s)
+  }))
+  for (const s of strips) {
+    let gain = 0
+    for (const v of valid) {
+      const k2 = Int8Array.from(kB)
+      s.blocks.forEach((b) => (k2[b] = samples[v][b]))
+      const after = execWalk(w, samples[v], k2, pb).cost
+      if (isFinite(after)) gain += now[v] - after
+    }
+    s.value = Math.max(0, gain / Math.max(1, valid.length))
+  }
+  strips.sort((a, b) => b.value - a.value)
+  return { expected, routes, strips }
+}
+function flightsCount(kB) { let n = 0; for (let b = 0; b < NB; b++) n += kB[b] !== -1; return n }
+function bresenham(a, b) {
+  let [x0, y0] = cxy(a); const [x1, y1] = cxy(b), out = []
+  const dx = Math.abs(x1 - x0), dy = -Math.abs(y1 - y0), sx = x0 < x1 ? 1 : -1, sy = y0 < y1 ? 1 : -1
+  let err = dx + dy
+  for (;;) { out.push(y0 * W + x0); if (x0 === x1 && y0 === y1) break; const e2 = 2 * err; if (e2 >= dy) { err += dy; x0 += sx } if (e2 <= dx) { err += dx; y0 += sy } }
+  return out
+}
+function initialKnown(w) { const kB = new Int8Array(NB).fill(-1); w.safe.forEach((b) => (kB[b] = 0)); return kB }
+
+// Choose the next flight for a strategy, or say why it stops.
+function choose(strategy, w, kB, pb, sc, flights, budget, lambda) {
+  if (strategy === 'none') return { stop: 'No flights in this strategy.' }
+  if (flights >= budget) return { stop: `Flight budget used (${budget}).` }
+  if (strategy === 'voi') {
+    const ok = sc.strips.filter((s) => s.value >= lambda)
+    if (!ok.length) return { stop: sc.strips.length ? `Best flight saves ${sc.strips[0].value.toFixed(1)} kJ, under the ${lambda.toFixed(1)} kJ a flight must save. Stop.` : 'Nothing left worth checking on the candidate routes. Stop.' }
+    ok.sort((a, b) => b.value / b.metres - a.value / a.metres)
+    return { strip: ok[0] }
+  }
+  const line = strategy === 'route' ? dijkstra(w, w.S, w.T, blockedCells(kB), riskCells(kB, pb), null) : bresenham(w.S, w.T)
+  for (const seg of chunks(line)) { const s = stripFrom(w, seg, kB, strategy === 'route' ? 'R' : 'L'); if (s) { s.value = sc.strips.find((x) => x.blocks.join() === s.blocks.join())?.value ?? null; return { strip: s } } }
+  return { stop: strategy === 'route' ? 'The whole planned route has been seen. Stop.' : 'The whole straight line has been seen. Stop.' }
+}
+
+// ---------- simulator: UI state ----------
+const st = { seed: 3, layer: 'belief', strategy: 'voi', sense: 'good', budget: 5, lambda: 1, routesOn: true, stripsOn: true, planOn: true, highlight: true, busy: false }
+let world, pb, kB, sc, flown, heliM, walk, heliDot, pending
+const $ = (id) => document.getElementById(id)
+function newWorld() { world = makeWorld(st.seed); $('seedLabel').textContent = `world #${st.seed}`; resetFlights() }
+function resetFlights() { pb = beliefFor(world, st.sense); kB = initialKnown(world); flown = []; heliM = 0; walk = null; $('log').innerHTML = ''; refresh() }
+function refresh(msg) {
+  sc = scan(world, kB, pb)
+  pending = choose(st.strategy, world, kB, pb, sc, flown.length, st.budget, st.lambda)
+  $('sFlights').textContent = `${flown.length} / ${st.budget}`
+  $('sHeli').textContent = `${Math.round(heliM)} m`
+  $('sExp').textContent = `${sc.expected.toFixed(1)} kJ`
+  $('sBest').textContent = sc.strips.length ? `${sc.strips[0].value.toFixed(1)} kJ` : '–'
+  $('sWalk').textContent = walk ? `${walk.cost.toFixed(1)} kJ` : '–'
+  $('sOracle').textContent = walk ? `${world.oracleCost.toFixed(1)} kJ` : '–'
+  if (msg) $('why').innerHTML = msg
+  else if (pending.stop) $('why').innerHTML = `<b>Stop.</b> ${pending.stop.replace(/ Stop\.$/, '')}`
+  else $('why').innerHTML = whyText(pending.strip)
+  draw()
+}
+function whyText(s) {
+  const names = { voi: 'Ours', route: 'Planned route only', line: 'Straight line' }
+  const v = s.value == null ? 'not on a candidate route, so worth about 0 kJ' : `could save <b>${s.value.toFixed(1)} kJ</b> of walking on average over ${SAMPLES} possible worlds`
+  const next = st.strategy === 'voi' && sc.strips[1] ? ` Next best: ${sc.strips[1].value.toFixed(1)} kJ.` : ''
+  return `<b>Next flight (${names[st.strategy]}):</b> the highlighted strip ${v}. It checks ${s.blocks.length} unknown patches in a ${Math.round(s.metres)} m round trip from the habitat (limit ${MAX_FLIGHT_M} m).${next}`
+}
+async function flyOne(fast) {
+  if (!pending || pending.stop) { refresh(); return false }
+  const s = pending.strip
+  if (!fast) await animateHeli(s)
+  let found = 0
+  s.blocks.forEach((b) => { kB[b] = world.truth[b]; found += world.truth[b] })
+  flown.push(s); heliM += s.metres; walk = null
+  const li = document.createElement('li')
+  li.textContent = `${Math.round(s.metres)} m flight, ${s.value == null ? 'value ~0' : `value ${s.value.toFixed(1)} kJ`}: ${s.blocks.length} patches checked, ${found} with rocks.`
+  $('log').append(li)
+  refresh()
+  return { strip: s, found }
+}
+function animateHeli(s) {
+  return new Promise((done) => {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return done()
+    const pts = [world.S, ...s.seg, world.S].map(cxy)
+    const lens = pts.slice(1).map((p, k) => Math.hypot(p[0] - pts[k][0], p[1] - pts[k][1])), total = lens.reduce((a, b) => a + b, 0)
+    const t0 = performance.now(), dur = 900
+    const tick = (t) => {
+      let u = Math.min(1, (t - t0) / dur) * total, k = 0
+      while (k < lens.length - 1 && u > lens[k]) { u -= lens[k]; k++ }
+      const f = lens[k] ? Math.min(1, u / lens[k]) : 1
+      heliDot = [pts[k][0] + (pts[k + 1][0] - pts[k][0]) * f, pts[k][1] + (pts[k + 1][1] - pts[k][1]) * f]
+      draw()
+      if (t - t0 < dur) requestAnimationFrame(tick)
+      else { heliDot = null; done() }
+    }
+    requestAnimationFrame(tick)
+  })
+}
+async function guard(fn) { if (st.busy) return; stopPlay(); st.planOn = st.highlight = true; st.busy = true; setBusy(true); try { await fn() } finally { st.busy = false; setBusy(false) } }
+function setBusy(b) { ['bNext', 'bAuto', 'bWalk', 'bReset', 'bNew', 'bBench', 'tPrev', 'tNext'].forEach((id) => ($(id).disabled = b)); if (!b) syncTourButtons() }
+$('bNext').onclick = () => guard(() => flyOne())
+$('bAuto').onclick = () => guard(async () => { for (let k = 0; k < 12; k++) if (!(await flyOne())) break })
+$('bWalk').onclick = () => guard(async () => {
+  walk = execWalk(world, world.truth, kB, pb)
+  refresh(`<b>Walked:</b> ${walk.cost.toFixed(1)} kJ, ${((walk.cost / world.oracleCost - 1) * 100).toFixed(0)}% more than a walker who knew everything (${world.oracleCost.toFixed(1)} kJ). Hit rocks and re-planned ${walk.surprises} time${walk.surprises === 1 ? '' : 's'}. ${flown.length} flight${flown.length === 1 ? '' : 's'}, ${Math.round(heliM)} m flown.`)
+})
+$('bReset').onclick = () => guard(async () => resetFlights())
+$('bNew').onclick = () => guard(async () => { st.seed++; newWorld() }).then(() => goTo(0))
+function seg(id, key, after) {
+  $(id).addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b || st.busy) return
+    st[key] = b.dataset.v
+    $(id).querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)))
+    after()
+  })
+}
+seg('layerSeg', 'layer', () => draw())
+seg('stratSeg', 'strategy', () => resetFlights())
+seg('senseSeg', 'sense', () => resetFlights())
+$('showRoutes').onchange = (e) => { st.routesOn = e.target.checked; draw() }
+$('showStrips').onchange = (e) => { st.stripsOn = e.target.checked; draw() }
+$('kBudget').oninput = (e) => { st.budget = +e.target.value; $('kBudgetV').textContent = st.budget; if (!st.busy) refresh() }
+$('kLambda').oninput = (e) => { st.lambda = +e.target.value; $('kLambdaV').textContent = st.lambda.toFixed(1); if (!st.busy) refresh() }
+function setSeg(id, v) { $(id).querySelector(`[data-v="${v}"]`)?.click() }
+function showInSim(what) {
+  if (what === 'belief') setSeg('layerSeg', 'belief')
+  if (what === 'routes') { $('showRoutes').checked = true; st.routesOn = true; setSeg('layerSeg', 'belief') }
+  if (what === 'strips' || what === 'best') { $('showStrips').checked = true; st.stripsOn = true; setSeg('stratSeg', 'voi') }
+  draw()
+  $('sim').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
+  if (what === 'fly') setTimeout(() => $('bNext').click(), 400)
+}
+
+// ---------- drawing ----------
+const cv = $('cv'), ctx = cv.getContext('2d')
+const hex = (s) => { s = s.trim().replace('#', ''); if (s.length === 3) s = [...s].map((c) => c + c).join(''); const n = parseInt(s, 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255] }
+const mix = (a, b, t) => `rgb(${a.map((v, k) => Math.round(v + (b[k] - v) * t)).join(',')})`
+function tokens() { const cs = getComputedStyle(document.documentElement); const g = (n) => cs.getPropertyValue(n).trim(); return { surface: g('--surface'), sunk: g('--sunk'), fg: g('--fg'), muted: g('--muted'), line: g('--line'), accent: g('--accent'), alarm: g('--alarm'), ok: g('--ok'), lo: g('--terrain-lo'), hi: g('--terrain-hi'), rock: g('--rock'), wall: g('--wall'), risk: g('--risk') } }
+function draw() {
+  if (!world) return
+  const T = tokens(), dpr = window.devicePixelRatio || 1
+  const cssW = cv.parentElement.clientWidth - 16, px = cssW / W, cssH = px * H
+  cv.style.height = cssH + 'px'
+  if (cv.width !== Math.round(cssW * dpr) || cv.height !== Math.round(cssH * dpr)) { cv.width = Math.round(cssW * dpr); cv.height = Math.round(cssH * dpr) }
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+  ctx.clearRect(0, 0, cssW, cssH)
+  const lo = hex(T.lo), hi = hex(T.hi), surf = hex(T.surface), risk = hex(T.risk), sunk = hex(T.sunk), acc = hex(T.accent)
+  for (let i = 0; i < N; i++) {
+    const x = i % W, y = (i / W) | 0, b = blockOf(i)
+    const shade = Math.max(0, Math.min(1, 0.55 + (world.h[i] - (world.h[i - 1] ?? world.h[i])) * 0.9 + world.h[i] * 0.06))
+    let col
+    if (st.layer === 'belief') col = kB[b] === -1 ? mix(surf, risk, Math.min(1, pb[b] / 0.65)) : mix(sunk, acc, 0.12)
+    else col = mix(lo.map((v, k) => v + (hi[k] - v) * shade), lo, world.r[i] * 0.45)
+    ctx.fillStyle = col
+    ctx.fillRect(x * px, y * px, px + 0.5, px + 0.5)
+    if (world.wall[i]) {
+      ctx.fillStyle = T.wall; ctx.fillRect(x * px, y * px, px + 0.5, px + 0.5)
+      ctx.strokeStyle = T.muted; ctx.lineWidth = 1; ctx.beginPath()
+      for (let k = 0.25; k < 1; k += 0.5) { ctx.moveTo(x * px, (y + k) * px); ctx.lineTo((x + k) * px, y * px); ctx.moveTo((x + k) * px, (y + 1) * px); ctx.lineTo((x + 1) * px, (y + k) * px) }
+      ctx.stroke()
+    }
+  }
+  // rocks: known everywhere; all of them in the truth view
+  for (let b = 0; b < NB; b++) {
+    const show = kB[b] === 1 || (st.layer === 'truth' && world.truth[b])
+    if (!show) continue
+    const bx = (b % BW) * 2, by = ((b / BW) | 0) * 2
+    for (let k = 0; k < 4; k++) {
+      const i = (by + (k >> 1)) * W + bx + (k & 1)
+      if (world.wall[i]) continue
+      const cx = (bx + (k & 1) + 0.5) * px, cy = (by + (k >> 1) + 0.5) * px
+      ctx.fillStyle = T.rock
+      ctx.beginPath(); ctx.arc(cx - px * 0.15, cy - px * 0.1, px * 0.22, 0, 7); ctx.arc(cx + px * 0.2, cy + px * 0.15, px * 0.17, 0, 7); ctx.fill()
+    }
+    if (kB[b] !== 1) { ctx.strokeStyle = T.alarm; ctx.setLineDash([2, 2]); ctx.lineWidth = 1; ctx.strokeRect(bx * px + 1, by * px + 1, 2 * px - 2, 2 * px - 2); ctx.setLineDash([]) }
+  }
+  const line = (cells, color, width, dash = []) => { if (!cells?.length) return; ctx.strokeStyle = color; ctx.lineWidth = width; ctx.setLineDash(dash); ctx.lineJoin = 'round'; ctx.beginPath(); cells.forEach((c, k) => { const [x, y] = cxy(c); k ? ctx.lineTo((x + 0.5) * px, (y + 0.5) * px) : ctx.moveTo((x + 0.5) * px, (y + 0.5) * px) }); ctx.stroke(); ctx.setLineDash([]) }
+  flown.forEach((s) => { ctx.fillStyle = mix(acc, surf, 0.75).replace('rgb', 'rgba').replace(')', ',0.35)'); s.blocks.forEach((b) => ctx.fillRect((b % BW) * 2 * px, ((b / BW) | 0) * 2 * px, 2 * px, 2 * px)) })
+  if (st.routesOn) sc.routes.slice(1).forEach((r) => line(r, T.muted, 1.5, [4, 4]))
+  if (st.stripsOn && sc.strips.length) {
+    ctx.font = `600 ${Math.max(9, px * 0.42)}px JetBrains Mono, monospace`
+    const boxes = []
+    sc.strips.slice(0, 6).forEach((s) => {
+      const [x, y] = cxy(s.seg[Math.floor(s.seg.length / 2)])
+      const t = `${s.value.toFixed(1)}`, th = Math.max(13, px * 0.62)
+      const tw = ctx.measureText(t).width + 6, bx = Math.min(cssW - tw - 2, Math.max(2, (x + 0.5) * px - tw / 2)), by = Math.max(2, (y - 0.9) * px)
+      if (boxes.some(([a, b, c, d]) => bx < a + c + 2 && a < bx + tw + 2 && by < b + d + 2 && b < by + th + 2)) return
+      boxes.push([bx, by, tw, th])
+      ctx.fillStyle = T.surface; ctx.fillRect(bx, by, tw, th)
+      ctx.strokeStyle = T.line; ctx.lineWidth = 1; ctx.strokeRect(bx + 0.5, by + 0.5, tw - 1, th - 1)
+      ctx.fillStyle = T.fg; ctx.fillText(t, bx + 3, by + th * 0.75)
+    })
+  }
+  if (pending?.strip && st.highlight) {
+    const s = pending.strip
+    line(s.seg, T.accent, Math.max(6, px * 1.9), [])
+    ctx.globalAlpha = 0.35; line(s.seg, T.surface, Math.max(3, px * 1.2)); ctx.globalAlpha = 1
+  }
+  if (sc.routes[0] && st.planOn) line(sc.routes[0], T.accent, 2.5)
+  if (walk) { line(world.oracle, T.ok, 2, [5, 4]); line(walk.trail, T.alarm, 2.5) }
+  const mark = (c, color, shape) => { const [x, y] = cxy(c), cx = (x + 0.5) * px, cy = (y + 0.5) * px, r = px * 0.55; ctx.fillStyle = color; ctx.strokeStyle = T.surface; ctx.lineWidth = 2; ctx.beginPath(); if (shape === 'sq') ctx.rect(cx - r, cy - r, 2 * r, 2 * r); else { ctx.moveTo(cx, cy - r * 1.2); ctx.lineTo(cx + r * 1.2, cy); ctx.lineTo(cx, cy + r * 1.2); ctx.lineTo(cx - r * 1.2, cy) } ctx.closePath(); ctx.fill(); ctx.stroke() }
+  mark(world.S, T.fg, 'sq'); mark(world.T, T.accent, 'dia')
+  if (heliDot) { ctx.fillStyle = T.fg; ctx.beginPath(); ctx.arc((heliDot[0] + 0.5) * px, (heliDot[1] + 0.5) * px, px * 0.45, 0, 7); ctx.fill(); ctx.strokeStyle = T.surface; ctx.lineWidth = 2; ctx.stroke() }
+  drawKey(T)
+}
+function drawKey(T) {
+  const items = [[T.fg, 'Habitat (base)'], [T.accent, 'Target · planned route'], [T.rock, 'Rocks found'], [T.wall, 'Too steep (seen from orbit)']]
+  if (st.layer === 'belief') items.push([T.risk, 'Redder = more likely blocked'])
+  if (st.layer === 'truth') items.push([T.alarm, 'Dashed: rocks not found yet'])
+  if (st.routesOn) items.push([T.muted, 'Dashed grey: other candidate routes'])
+  if (st.stripsOn) items.push([T.surface, 'Numbers: kJ a flight there could save'])
+  if (walk) items.push([T.alarm, 'Red: the walk'], [T.ok, 'Green dashed: knowing everything'])
+  $('key').innerHTML = items.map(([c, t]) => `<span><i style="background:${c};border:1px solid var(--line)"></i>${t}</span>`).join('')
+}
+new ResizeObserver(() => draw()).observe($('cwrap'))
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', draw)
+new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+
+// ---------- benchmark ----------
+$('bBench').onclick = () => guard(async () => {
+  const out = $('benchOut'), names = { voi: 'Ours', route: 'Planned route only', line: 'Straight line', none: 'No flights' }
+  const res = { voi: [], route: [], line: [], none: [] }
+  const seeds = Array.from({ length: 10 }, (_, k) => 101 + k)
+  for (const [k, seed] of seeds.entries()) {
+    out.innerHTML = `<p class="note">Running world ${k + 1} of ${seeds.length}…</p>`
+    await new Promise((r) => setTimeout(r, 0))
+    const w = makeWorld(seed), b = beliefFor(w, st.sense)
+    for (const strat of Object.keys(res)) res[strat].push(simulate(w, strat, b, st.budget, st.lambda, 10))
+  }
+  const avg = (a, f) => a.reduce((s, x) => s + f(x), 0) / a.length
+  const rows = Object.entries(res).map(([k, a]) => ({ k, extra: avg(a, (x) => x.extra), surp: avg(a, (x) => x.surprises), fl: avg(a, (x) => x.flights), km: avg(a, (x) => x.metres) / 1000 }))
+  const max = Math.max(...rows.map((r) => r.extra), 0.01)
+  out.innerHTML = rows.map((r) => `<div class="barrow ${r.k === 'voi' ? 'ours' : ''}"><span>${names[r.k]}</span><div class="bar"><div style="width:${(r.extra / max) * 100}%"></div></div><span class="num">+${(r.extra * 100).toFixed(1)}% · ${r.fl.toFixed(1)} flights · ${r.km.toFixed(2)} km · ${r.surp.toFixed(1)} re-plans</span></div>`).join('') +
+    `<p class="note">Sensing model: ${st.sense === 'good' ? 'well trained' : st.sense}. Budget ${st.budget} flights; ours also stops early when a flight saves under ${st.lambda.toFixed(1)} kJ. Switch the sensing model above and run again to see what training is worth.</p>`
+})
+
+// Run one strategy on a world without drawing: flights until it stops, then the walk.
+function simulate(w, strat, b, budget, lambda, m) {
+  const known = initialKnown(w); let flights = 0, metres = 0
+  for (let f = 0; f < budget + 1; f++) {
+    const s = scan(w, known, b, m, strat === 'voi')
+    const c = choose(strat, w, known, b, s, flights, budget, lambda)
+    if (c.stop) break
+    c.strip.blocks.forEach((x) => (known[x] = w.truth[x])); flights++; metres += c.strip.metres
+  }
+  const wk = execWalk(w, w.truth, known, b)
+  return { extra: wk.cost / w.oracleCost - 1, surprises: wk.surprises, flights, metres }
+}
+
+// ---------- guided tour: one idea per click ----------
+const tour = { i: 0, playing: false, info: {} }
+const V = (layer, routes, strips, plan, hl) => ({ layer, routes, strips, plan, hl })
+const pct = (x) => `${x >= 0 ? '+' : ''}${(x * 100).toFixed(0)}%`
+const flownText = (r) => r ? `The helicopter flew it: ${r.found} of ${r.strip.blocks.length} patches had rocks (now shown as dark stones); the rest are confirmed clear (tinted blue). Facts replace the prediction there, the route is re-planned, and every value is recomputed. Each confirmed patch is also a new training label.` : `Nothing was worth flying: ${pending.stop}`
+const TOUR = [
+  { t: 'The problem', v: V('orbit', 0, 0, 0, 0),
+    text: () => 'The white square is the habitat; the blue diamond is where the astronaut wants to go. From orbit we see the terrain and where it is too steep to walk (hatched). We cannot see the rocks lying on the ground. A walker who runs into them has to turn around, and that costs energy and oxygen.' },
+  { t: 'Step 1 · Sense: predict what might be blocked', v: V('belief', 0, 0, 0, 0),
+    text: () => 'Each 16 m patch gets a chance of hiding rocks, predicted from the roughness the orbit map can see. Redder means more likely blocked. This prediction is what the machine-learning models are for; every later step builds on it.' },
+  { t: 'Step 2 · Candidate routes', v: V('belief', 1, 0, 1, 0),
+    text: () => `Next, several ways to the target. Blue is the cheapest once the risk of rocks is counted; dashed grey are the alternatives. Right now the walk would cost about <b>${sc.expected.toFixed(1)} kJ</b>, averaged over ${SAMPLES} possible worlds.` },
+  { t: 'Step 3 · Value of information', v: V('belief', 1, 1, 1, 0),
+    text: () => sc.strips.length ? `For each strip the helicopter could fly along these routes, we replay the ${SAMPLES} possible worlds twice: walking without seeing the strip, and after seeing it. The number on a strip is the energy it saves on average, in kJ. The best is worth <b>${sc.strips[0].value.toFixed(1)} kJ</b>. Ground we are already sure of, or a route we would never take, is worth about 0.` : 'Every strip on the candidate routes is already known, so no flight could change the walk.' },
+  { t: 'Step 4 · Plan the flight', v: V('belief', 1, 1, 1, 1),
+    text: () => pending.strip ? `The best value per metre flown wins: the highlighted strip. It ${pending.strip.value == null ? '' : `could save <b>${pending.strip.value.toFixed(1)} kJ</b> and `}checks ${pending.strip.blocks.length} unknown patches on a ${Math.round(pending.strip.metres)} m round trip from the habitat, inside the ${MAX_FLIGHT_M} m battery limit.` : `Nothing is worth a flight. ${pending.stop}` },
+  { t: 'Step 5 · Fly and confirm', v: V('belief', 1, 0, 1, 0), enter: async (fast) => { tour.info.f1 = await flyOne(fast) },
+    text: () => flownText(tour.info.f1) },
+  { t: 'Back to step 1, knowing more', v: V('belief', 1, 1, 1, 1), enter: async (fast) => { tour.info.f2 = await flyOne(fast) },
+    text: () => tour.info.f2 ? `Same loop again with the new facts. Flight 2 ${tour.info.f2.strip.value == null ? '' : `was worth ${tour.info.f2.strip.value.toFixed(1)} kJ and `}found rocks in ${tour.info.f2.found} of ${tour.info.f2.strip.blocks.length} patches. The highlighted strip is the next candidate.` : `The loop already stopped. ${pending.stop}` },
+  { t: 'Stop when a flight no longer pays', v: V('belief', 1, 0, 1, 0), enter: async (fast) => { for (let k = 0; k < 12; k++) if (!(await flyOne(fast))) break },
+    text: () => `It keeps flying until the best flight would save less than ${st.lambda.toFixed(1)} kJ, or the budget of ${st.budget} flights is used. Here: ${pending.stop || ''} In total <b>${flown.length} flight${flown.length === 1 ? '' : 's'}, ${Math.round(heliM)} m</b>. More flights would cost more than they could save.` },
+  { t: 'The walk', v: V('belief', 0, 0, 0, 0), enter: async () => { walk = execWalk(world, world.truth, kB, pb); refresh() },
+    text: () => `Now the astronaut walks. Red is the path actually walked: they see one cell around them and re-plan when rocks appear (${walk.surprises} time${walk.surprises === 1 ? '' : 's'} here). Green dashed is the route of someone who knew everything. Walked <b>${walk.cost.toFixed(1)} kJ</b> against ${world.oracleCost.toFixed(1)} kJ: ${pct(walk.cost / world.oracleCost - 1)}.` },
+  { t: 'What was really there', v: V('truth', 0, 0, 0, 0),
+    text: () => { let n = 0; for (let b = 0; b < NB; b++) n += world.truth[b] && kB[b] === -1; return `The hidden truth. ${n} rock patches (dashed red outline) were never checked from the air. ${walk.surprises ? 'The walker ran into some of them and had to re-plan: that is the cost of not knowing.' : 'None of them was on the way, so flying over them would have been wasted flights.'}` } },
+  { t: 'Compared on this same world', v: V('truth', 0, 0, 0, 0),
+    enter: async () => { tour.info.cmp = ['route', 'line', 'none'].map((s) => [s, simulate(world, s, pb, st.budget, st.lambda, SAMPLES)]) },
+    text: () => { const names = { route: 'Fly the planned route only', line: 'Fly the straight line', none: 'No flights' }
+      return `<b>Ours:</b> ${flown.length} flights, ${Math.round(heliM)} m, walk ${pct(walk.cost / world.oracleCost - 1)} over knowing everything.<br>` +
+        tour.info.cmp.map(([s, r]) => `<b>${names[s]}:</b> ${r.flights} flights, ${Math.round(r.metres)} m, walk ${pct(r.extra)}.`).join('<br>') +
+        '<br><span class="muted">One world can go either way; the benchmark below averages ten. Open "Explore on your own" to try other worlds and settings.</span>' } },
+]
+function applyView(v) {
+  Object.assign(st, { layer: v.layer, routesOn: !!v.routes, stripsOn: !!v.strips, planOn: !!v.plan, highlight: !!v.hl })
+  $('layerSeg').querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.v === st.layer)))
+  $('showRoutes').checked = st.routesOn; $('showStrips').checked = st.stripsOn
+  draw()
+}
+function renderTour() {
+  const s = TOUR[tour.i]
+  $('tourStep').textContent = `${tour.i + 1} / ${TOUR.length}`
+  $('tourTitle').textContent = s.t
+  $('tourText').innerHTML = s.text()
+  $('tourDots').querySelectorAll('button').forEach((b, j) => { b.classList.toggle('done', j < tour.i); j === tour.i ? b.setAttribute('aria-current', 'step') : b.removeAttribute('aria-current') })
+  syncTourButtons()
+}
+function syncTourButtons() { if (st.busy) return; $('tPrev').disabled = tour.i === 0; $('tNext').disabled = tour.i === TOUR.length - 1 }
+async function goTo(k) {
+  if (st.busy) return
+  k = Math.max(0, Math.min(TOUR.length - 1, k))
+  const animate = k === tour.i + 1
+  st.busy = true; setBusy(true)
+  try {
+    st.strategy = 'voi'
+    $('stratSeg').querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.v === 'voi')))
+    resetFlights(); tour.info = {}
+    for (let j = 0; j <= k; j++) {
+      if (j === k) applyView(TOUR[k].v)
+      if (TOUR[j].enter) await TOUR[j].enter(!(animate && j === k))
+    }
+    tour.i = k
+    applyView(TOUR[k].v)
+  } finally { st.busy = false; setBusy(false) }
+  renderTour()
+}
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
+function stopPlay() { tour.playing = false; $('tPlay').textContent = '▶ Play' }
+async function play() {
+  tour.playing = true; $('tPlay').textContent = '❚❚ Pause'
+  if (tour.i === TOUR.length - 1) await goTo(0)
+  while (tour.playing && tour.i < TOUR.length - 1) { await sleep(7000); if (!tour.playing) break; await goTo(tour.i + 1) }
+  stopPlay()
+}
+$('tourDots').innerHTML = TOUR.map((s, j) => `<button aria-label="Step ${j + 1}: ${s.t}" title="${s.t}"></button>`).join('')
+$('tourDots').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { stopPlay(); goTo([...$('tourDots').children].indexOf(b)) } })
+$('tNext').onclick = () => { stopPlay(); goTo(tour.i + 1) }
+$('tPrev').onclick = () => { stopPlay(); goTo(tour.i - 1) }
+$('tPlay').onclick = () => (tour.playing ? stopPlay() : play())
+cv.addEventListener('click', () => { if (!st.busy) { stopPlay(); goTo(tour.i + 1) } })
+document.addEventListener('keydown', (e) => {
+  if (e.target.closest('input, select, textarea') || e.metaKey || e.ctrlKey) return
+  if (e.key === 'ArrowRight') { stopPlay(); goTo(tour.i + 1) }
+  if (e.key === 'ArrowLeft') { stopPlay(); goTo(tour.i - 1) }
+})
+
+newWorld()
+goTo(0)
+</script>
