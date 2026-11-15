@@ -11,12 +11,7 @@
   },
   "routes": [
     {
-      "route": "/mission-vesta",
-      "redirect": "/",
-      "statusCode": 301
-    },
-    {
-      "route": "/mission-vesta/",
+      "route": "/mission-vesta*",
       "redirect": "/",
       "statusCode": 301
     },
