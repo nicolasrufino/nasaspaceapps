@@ -48,7 +48,7 @@ Each option on its own fails at least one need. Ours combines the parts that wor
 
 1. Open **bare `/scout/`**, Gale, with the five default science stops. Initial walking energy is about **621 kJ**. Inspect HiRISE imagery, true-scale terrain and the Hazards legend.
 2. Click **Fly the route** once. Each flight animates for ten seconds and covers at most 1 km; landing triggers a re-plan before the next flight starts.
-3. After the three flights, show **44 found hazard cells**, **fully scouted**, and about **630 kJ**. The stored layer's route crossings fall from **8 to 0**; the five stops stay the same. Flight distances are 1,000 m, 1,000 m and 215.4 m. A fourth flight is disabled.
+3. After the three flights, show **44 found hazard cells**, **fully scouted**, and about **630 kJ**. The stored layer's route crossings fall from **6 to 0**; the five stops stay the same. Flight distances are 1,000 m, 1,000 m and 215.4 m. A fourth flight is disabled.
 4. Switch to **Walk**, press **Step**, and explain the margin home. Use real phone sensing only after the actual device has passed the release rehearsal.
 5. Explain the bounds: stored grid hazards, a simulated sensor footprint, and an assumed walking-energy model. Transit, helicopter return-to-base, recharge, daylight and flight energy are not modelled. These results do not certify safety on Mars.
 

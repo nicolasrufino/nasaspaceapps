@@ -17,6 +17,6 @@ Open the output in a browser. Arrow keys or Space advance; **N** shows speaker n
 
 The original [Claude Slides artifact](https://claude.ai/artifact/XiHnUGPaJkCCpBeHoWck41) requires an owner session to synchronize these sources. This PR updates repository sources and provides the portable presentation; it does **not** claim to have published that private artifact.
 
-Numerical evidence: [pitch_metrics.json](../../ml/exports/pitch_metrics.json) and [PITCH_NUMBERS.md](../../ml/pitch_metrics/PITCH_NUMBERS.md). Three flights cover 2.22 km of corridor; the same five-stop route changes from 621.4 to 630.5 kJ (+1.46%). The stored hazard-layer crossings change from 8 to 0. Grid cells are not individual rocks; transit, recharge, daylight and helicopter energy are excluded. No aerial classifier accuracy or physical-phone validation is claimed.
+Numerical evidence: [pitch_metrics.json](../../ml/exports/pitch_metrics.json) and [PITCH_NUMBERS.md](../../ml/pitch_metrics/PITCH_NUMBERS.md). Three flights cover 2.22 km of corridor; the same five-stop route changes from 621.4 to 630.5 kJ (+1.46%). The stored hazard-layer crossings change from 6 distinct cells to 0. Grid cells are not individual rocks; transit, recharge, daylight and helicopter energy are excluded. No aerial classifier accuracy or physical-phone validation is claimed.
 
 Keep slide claims in sync with the live `/scout/` build and R5. Rebuild the HTML after edits. Review every rendered slide for overflow and image loading before using it on stage. Official release and physical-phone checks remain F11 #131.

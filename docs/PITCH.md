@@ -28,9 +28,9 @@ The map uses HiRISE imagery and USGS terrain, with slope, crossing, rock, energy
 
 **8–9. NASA sources and measured proof (3:00–3:45)**
 
-> HiRISE and the USGS terrain model provide the map. THEMIS and CRISM add orbital context; Curiosity supplies the science stops and photographs. In this fixed simulation, the initial route crosses eight distinct cells from the stored hazard layer. After three flights, the final route crosses zero, with the same five stops. Walking energy increases from 621.4 to 630.5 kJ, or 1.46 percent. Even if walking costs are 30 percent higher, the model retains 446.5 kJ beyond the return cost and reserve.
+> HiRISE and the USGS terrain model provide the map. THEMIS and CRISM add orbital context; Curiosity supplies the science stops and photographs. In this fixed simulation, the initial route crosses six distinct cells from the stored hazard layer. After three flights, the final route crosses zero, with the same five stops. Walking energy increases from 621.4 to 630.5 kJ, or 1.46 percent. Even if walking costs are 30 percent higher, the model retains 446.5 kJ beyond the return cost and reserve.
 
-Speaker detail: flights are **1,000 m + 1,000 m + 215.4 m**, or **2.22 km** of scanned corridor. The route changes from **1,274.7 m to 1,311.4 m**. Nominal minimum spare margin: **635.6 kJ**. The 44 found cells are across all scanned strips; six of the original route's eight hazard cells were actually observed, while the other two were bypassed without observation. The initial route crosses zero reviewed-rock-clearance cells: do not call the eight cells eight hand-checked rocks. Fully scanned means covered by this simulation's sensor footprint, not verified safe on Mars.
+Speaker detail: flights are **1,000 m + 1,000 m + 215.4 m**, or **2.22 km** of scanned corridor. The route changes from **1,274.7 m to 1,311.4 m**. Nominal minimum spare margin: **635.6 kJ**. The 44 found cells are across all scanned strips; the original route makes eight visits to six distinct hazard cells, and all six are eventually observed. The initial route crosses zero reviewed-rock-clearance cells: do not call these six cells six hand-checked rocks. Fully scanned means covered by this simulation's sensor footprint, not verified safe on Mars.
 
 **10–11. Why the comparison matters (3:45–4:25)**
 
