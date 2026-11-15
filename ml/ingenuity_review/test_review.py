@@ -1,7 +1,12 @@
+import base64
 import json
+import re
+from io import BytesIO
 
 import pytest
+from PIL import Image
 
+from ml.ingenuity_review.build_review import build
 from ml.ingenuity_review.evaluate import score, validate_review
 from ml.ingenuity_review.prepare import parse_label, select_frames, sha
 
@@ -47,3 +52,47 @@ def test_pose_is_preserved_and_never_treated_as_altitude(indirect):
     assert parsed["pose"]["flight"] == 3
     assert parsed["pose"]["origin_offset_m"][2] == -5.2
     assert parsed["height_agl_m"] is None
+
+
+@pytest.mark.parametrize("marker", [
+    {"review_mode": "assisted"}, {"independent_human_test": False},
+    {"suggestion_model_sha256": "a"*64},
+    {"annotations": [{"id": "a", "label": "soil", "suggestion": "soil"}]},
+])
+def test_assisted_labels_cannot_be_scored_as_an_independent_test(marker):
+    raw = json.dumps({"records": [{"id": "a"}]}).encode()
+    review = {"manifest_sha256": sha(raw), "reviewer": "human",
+              "annotations": [{"id": "a", "label": "soil"}], **marker}
+    with pytest.raises(ValueError, match="Assisted"):
+        validate_review(raw, review)
+
+
+def test_standalone_page_embeds_verified_pixels_without_confirming_suggestions(tmp_path):
+    source = Image.new("RGB", (128, 128), (35, 40, 45))
+    source.save(tmp_path/"one.png")
+    manifest = json.dumps({"records": [{"id": "a", "file": "one.png", "pixel_sha256": sha(source.tobytes())}]}).encode()
+    (tmp_path/"manifest.json").write_bytes(manifest)
+    predictions = tmp_path/"predictions"
+    predictions.mkdir()
+    (predictions/"metrics.json").write_text(json.dumps({"manifest_sha256": sha(manifest), "model_sha256": "a"*64}))
+    (predictions/"predictions.json").write_text(json.dumps([{"id": "a", "prediction": "soil"}]))
+    output = tmp_path/"review.html"
+    build(tmp_path, output, predictions)
+    data = json.loads(re.search(r"const pack=(.*?);</script>", output.read_text(encoding="utf-8")).group(1))
+    assert data["review_mode"] == "assisted"
+    row = data["records"][0]
+    assert row["suggestion"] == "soil" and "label" not in row
+    embedded = Image.open(BytesIO(base64.b64decode(row["image"].split(",", 1)[1])))
+    assert embedded.tobytes() == source.tobytes()
+    source.putpixel((0, 0), (255, 255, 255))
+    source.save(tmp_path/"one.png")
+    with pytest.raises(ValueError, match="frozen pixels"):
+        build(tmp_path, output, predictions)
+
+
+def test_standalone_builder_rejects_suggestions_for_another_manifest(tmp_path):
+    (tmp_path/"manifest.json").write_text(json.dumps({"records": [{"id": "a"}]}))
+    (tmp_path/"metrics.json").write_text(json.dumps({"manifest_sha256": "wrong", "model_sha256": "a"*64}))
+    (tmp_path/"predictions.json").write_text(json.dumps([{"id": "a", "prediction": "soil"}]))
+    with pytest.raises(ValueError, match="provenance"):
+        build(tmp_path, tmp_path/"review.html", tmp_path)
