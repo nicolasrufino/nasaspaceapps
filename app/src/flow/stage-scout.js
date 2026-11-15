@@ -6,6 +6,7 @@
 // NASA MRO HiRISE detections, see models.js), not from a live classifier.
 import { flightSeconds, batteryLeft, FLIGHT_POWER_W, BATTERY_WH } from './heli-energy.js'
 import { MODELS } from './models.js'
+import { scoutPayloadEnabled, summarizePayloadFlight, latestWeather, SKYFALL_SOURCE, CAMERA_FOOTPRINT_M } from './scout-payload.js'
 
 const SCOUT = '#35e0ff', HAZARD = '#ff5a3d'
 const NORMAL_S = 40, FAST_S = 20, SKIP_S = 1.5 // screen seconds per flight
@@ -19,6 +20,13 @@ const CSS = `
 .sc-legend { display: grid; gap: 4px; margin: 10px 0; font-size: 12px; color: var(--mute); }
 .sc-legend span { display: flex; gap: 8px; align-items: center; }
 .sc-legend i { flex: none; width: 14px; height: 8px; border-radius: 2px; }
+.sc-payload summary, .sc-record summary { cursor: pointer; font-weight: 600; }
+.sc-payload a { color: var(--scout); }
+.sc-payload ul { padding-left: 18px; margin: 10px 0; }
+.sc-payload li { margin: 8px 0; font-size: 12px; }
+.sc-payload li small { display: block; color: var(--mute); }
+.sc-record { padding: 8px 0; border-top: 1px solid var(--panel2); }
+.sc-record .f-stats { margin: 10px 0; }
 `
 
 export default {
@@ -26,6 +34,7 @@ export default {
     ui.scene(true)
     const { map } = ui
     const { cs, W } = app
+    const payloadOn = scoutPayloadEnabled(location.search)
     const offs = [], timers = new Set()
     const later = (fn, ms) => { const t = setTimeout(() => { timers.delete(t); fn() }, ms); timers.add(t) }
     const style = ui.h('style', '', CSS)
@@ -55,9 +64,79 @@ export default {
     const scanSec = ui.section('Scan')
     const totals = ui.stats([['m² of ground scanned', '0', 'scout'], ['rock cells found', '0', 'hazard'], ['on the route', '0', 'hazard']])
     const stripM = Math.round(2 * (app.scout.swathM ?? 15))
-    const legend = ui.h('div', 'sc-legend', `<span><i style="background:${SCOUT}"></i>the ${stripM} m strip the camera sees</span><span><i style="background:${HAZARD}"></i>rocks too big to step over (over 0.3 m)</span>`)
+    const stripLabel = payloadOn ? `about ${stripM} m, our estimate` : `the ${stripM} m strip the camera sees`
+    const legend = ui.h('div', 'sc-legend', `<span><i style="background:${SCOUT}"></i>${stripLabel}</span><span><i style="background:${HAZARD}"></i>rocks too big to step over (over 0.3 m)</span>`)
     scanSec.append(totals.el, legend, ui.model(MODELS.scan))
     ui.body.append(flightSec, heliSec, detSec, scanSec)
+
+    // Payload and landing reports are opt-in. The engine and its event contract
+    // stay unchanged; all measurements below read the existing world layers.
+    let recordedSec = null, records = null, activeFlight = null
+    const weatherAbort = new AbortController()
+    if (payloadOn) {
+      const payload = ui.section('What the scout carries')
+      payload.classList.add('sc-payload')
+      const details = ui.h('details', '', '<summary>SkyFall reference · instruments and limits</summary>')
+      details.append(ui.h('p', 'dim', 'Simulated observations from stored data. No live sensor is modelled.'))
+      const list = ui.h('ul')
+      const instruments = [
+        ['Two 13 MP colour cameras', 'Optical + topographic · Simulated: NASA HiRISE / USGS imagery (25 cm) and terrain (1 m) stand in for airborne mapping.'],
+        ['Two near-infrared cameras', 'Spectral · Simulated: CRISM orbit data (about 18 m), not helicopter mineral measurements.'],
+        ['Ground-penetrating radar', 'Geophysical · Not simulated. NASA expects roughly 3–5 m penetration in low-loss ground.'],
+        ['Air temperature + wind from flight', 'Atmospheric · Simulated temperature context: loading Curiosity REMS ground weather. Wind is not simulated.'],
+        ['Dosimeter', 'Radiation · Simulated: mean stored RAD-based dose rate in the strip; not a measured 3D radiation map.'],
+        ['Two navigation cameras', 'Hazards · Simulated: stored terrain-rule and reviewed HiRISE rock cells; not live camera detection.'],
+      ]
+      let weatherText
+      for (const [name, description] of instruments) {
+        const item = ui.h('li'), title = ui.h('b'), descriptionEl = ui.h('small')
+        title.textContent = name; descriptionEl.textContent = description
+        item.append(title, descriptionEl); list.append(item)
+        if (name.startsWith('Air temperature')) weatherText = descriptionEl
+      }
+      details.append(list,
+        ui.h('p', 'dim', 'Contact chemistry and ground thermal imaging are not carried. The crew adds contact measurements at the stop.'),
+        ui.h('p', 'dim', `Strip: about ${stripM} m, our estimate. At our assumed 10 m height, NASA’s 106° camera field of view gives about ${CAMERA_FOOTPRINT_M.toFixed(1)} m on flat ground. NASA specifies no flight height here.`),
+        ui.h('a', '', 'NASA SkyFall mission package · sections II and IV'))
+      const source = details.querySelector('a')
+      source.href = SKYFALL_SOURCE; source.target = '_blank'; source.rel = 'noopener noreferrer'
+      payload.append(details)
+      ui.body.prepend(payload)
+      recordedSec = ui.section('This flight recorded')
+      recordedSec.hidden = true
+      records = ui.h('div', 'sc-records')
+      recordedSec.append(ui.h('p', 'dim', 'Simulated · stored layers over each flight’s full strip. Overlap counts once per flight; these are not newly discovered cells.'), records)
+      payload.after(recordedSec)
+      const weatherFile = app.meta.files?.weather
+      const noWeather = () => { weatherText.textContent = 'Atmospheric · Not simulated: REMS temperature context unavailable. Wind is not simulated.' }
+      if (weatherFile) {
+        fetch(`${import.meta.env.BASE_URL}${encodeURIComponent(app.meta.name)}/${weatherFile}`, { signal: weatherAbort.signal })
+          .then((r) => r.ok ? r.json() : null).then((data) => {
+            if (weatherAbort.signal.aborted) return
+            const sol = latestWeather(data)
+            if (!sol) { noWeather(); return }
+            weatherText.textContent = `Atmospheric · Simulated context: Curiosity REMS sol ${sol.sol}, ${sol.min_temp_c} to ${sol.max_temp_c} °C (latest stored daily air range). Historical ground data, not this flight’s weather. Wind is not simulated.`
+          }).catch(() => { if (!weatherAbort.signal.aborted) noWeather() })
+      } else noWeather()
+    }
+
+    function recordFlight(n) {
+      if (!payloadOn || !activeFlight || activeFlight.n !== n) return
+      const s = summarizePayloadFlight(app.world, activeFlight)
+      const percent = (v) => v == null ? 'Unavailable' : `${(100 * v).toFixed(1)}%`
+      const report = ui.h('details', 'sc-record')
+      report.open = true
+      report.append(ui.h('summary', '', `Flight ${n} · ${num(s.metres)} m`), ui.stats([
+        ['m strip length', num(s.metres)], ['m² grid footprint', num(s.area_m2)],
+        ['ridge cells', percent(s.ridge_share)], ['hollow cells', percent(s.hollow_share)],
+        ['µGy/h mean dose rate', s.mean_dose_rate_ugy_h == null ? 'Unavailable' : s.mean_dose_rate_ugy_h.toFixed(2)],
+        ['rock cells in strip', s.rock_cells == null ? 'Unavailable' : num(s.rock_cells)],
+      ]).el, ui.h('p', 'dim', `${num(s.cells)} unique ${cs} m grid cells. Landform: ${num(s.landform_samples)} valid cells; dose rate: ${num(s.dose_samples)}; hazards: ${num(s.rock_samples)}. Landforms come from USGS/HiRISE terrain; radiation from the Curiosity RAD-based layer. Dose rate is not accumulated flight dose.`))
+      for (const previous of records.children) previous.open = false
+      records.prepend(report)
+      recordedSec.hidden = false
+      activeFlight = null
+    }
 
     // Foot: speed.
     let speed = NORMAL_S, skipped = false
@@ -93,7 +172,7 @@ export default {
     map.paintScouted()
 
     // Live state: written by the events, drawn by the two timers below (never on every frame).
-    let tick = null, flying = false, started = false, dirty = false, mapDirty = false, findsDirty = true
+    let tick = null, flying = false, started = false, dirty = false, mapDirty = false, findsDirty = true, campaignLanded = false
     let seenCells = 0, rockCells = 0, onRouteCells = 0, hot = null
     const finds = [] // { n, flight, along, cells, onRoute, cell, result }
     let cur = null, lastRockAlong = -Infinity, lastRockFlight = 0
@@ -101,6 +180,7 @@ export default {
     offs.push(app.on('flight:start', (e) => {
       started = flying = true
       tick = { ...e, along: 0 }
+      if (payloadOn) activeFlight = e
       flightTitle.textContent = `Flight ${e.n} of ${e.of}`
       cur = null
       dirty = true
@@ -123,6 +203,7 @@ export default {
       findsDirty = mapDirty = true
     }))
     offs.push(app.on('flight:end', ({ n, summary }) => {
+      recordFlight(n)
       const s = summary ?? {}
       flying = false
       cur = null
@@ -139,7 +220,10 @@ export default {
     offs.push(app.on('landed', () => {
       flying = false
       dirty = mapDirty = true
-      later(() => ui.go('debrief'), 1500)
+      if (payloadOn) {
+        campaignLanded = true
+        ui.foot.replaceChildren(ui.button('Review the walk', () => ui.go('debrief'), true))
+      } else later(() => ui.go('debrief'), 1500)
     }))
 
     function drawFindDots() {
@@ -176,7 +260,7 @@ export default {
       if (!tick) return
       const along = Math.min(tick.along, tick.metres)
       dist.set(tick.metres ? along / tick.metres : 0)
-      distText.textContent = `${Math.round(along)} m of ${Math.round(tick.metres)} m`
+      distText.textContent = campaignLanded ? 'All flights landed. Review the recordings above.' : `${Math.round(along)} m of ${Math.round(tick.metres)} m`
       const left = batteryLeft(along)
       heli.set(0, Math.round(left * 100)); heli.set(1, Math.round(flightSeconds(along)))
       batt.set(left)
@@ -201,6 +285,7 @@ export default {
     }, 5000)
 
     return () => {
+      weatherAbort.abort()
       for (const off of offs) off()
       for (const t of timers) clearTimeout(t)
       clearInterval(text); clearInterval(paint)
