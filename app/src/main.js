@@ -6,6 +6,8 @@ import { planTour, MAX_STOPS } from './plan.js'
 import { routeFlights, scanAt, pointAlong } from './scout.js'
 import { bestAreas } from './best-areas.js'
 import { stretches, describe, lowestMargin, shortestAlternative } from './why.js'
+import { initStops } from './stops.js'
+import { initSteps } from './steps.js'
 
 const $ = (id) => document.getElementById(id)
 const params = new URLSearchParams(location.search)
@@ -329,6 +331,7 @@ function paintMinimap(inside) {
   ctx.fillRect(meta.base_cell[0] - 1, meta.base_cell[1] - 1, 3, 3)
   ctx.fillStyle = '#35e0ff'
   ctx.fillRect(walk.cell[0] - 1, walk.cell[1] - 1, 3, 3)
+  field?.paint(ctx)
 }
 
 // --- Helicopter scout (block E4, flag drone_scout): flies the planned route, reveals rocks, re-plans. ---
@@ -439,18 +442,27 @@ function land() {
 
 // --- Walk (block E2): along the planned route, energy and oxygen drain, ring, point of no return. ---
 let walk, k, timer
+// Block E6 (flags science_stop, step_mode): stop checklist, markers, warnings, walk log; real steps. Off: null.
+const field = flags.has('science_stop') || flags.has('step_mode')
+  ? initStops({ world, checklist: flags.has('science_stop'), flags, photos, scene, pin, cellPos, span, getWalk: () => walk, panel: $('walk'), map })
+  : null
+const steps = flags.has('step_mode')
+  ? initSteps({ panel: $('walk'), cs, segment: () => (k < route.cells.length - 1 ? [route.cells[k], route.cells[k + 1]] : null), blocked: () => !!field?.blocking(), step })
+  : null
 function reset() {
   pause()
   walk = startWalk(meta)
   k = 0
+  field?.reset(route, allStops())
   document.body.classList.remove('danger')
   drawStops()
   render()
 }
 
 function step() {
-  if (k >= route.cells.length - 1 || walk.energy_left_j <= 0) return pause()
+  if (k >= route.cells.length - 1 || walk.energy_left_j <= 0 || field?.blocking()) return pause()
   if (stepTo(world, walk, route.cells[++k])) buzz()
+  if (field?.arrive(k)) pause()
   render()
 }
 
@@ -477,8 +489,10 @@ function render() {
   paintMinimap(inside)
 
   const s = appState(world, walk)
+  if (steps?.live) s.mode = 'step'
   window.appState = s // contract §3: what CAPCOM and the walk log read
   const margin = ringLimit(meta, walk) - s.cost_to_go_j
+  field?.onRender(s, margin)
   $('energy').value = Math.max(walk.energy_left_j, 0) / meta.energy_budget_j
   $('stats').textContent = [
     `Energy ${kj(walk.energy_left_j)} of ${kj(meta.energy_budget_j)}`,

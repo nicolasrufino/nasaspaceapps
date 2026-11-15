@@ -125,8 +125,40 @@ The panel decides nothing; it measures the route the planner chose and the ones 
 
 Code: `app/src/why.js`.
 
-## 10. What is real and what is simulated
+## 10. At the stops, step mode and the walk log
+
+**At each stop** (flag `science_stop`) the walk pauses and a card shows the stop's name, goal, why it matters, sources and, with `pov_images`, Curiosity's photo of it. The crew works a short checklist, the way Perseverance works a target: **look** (photograph the site), **get close** (inspect a rock), **decide** (is it worth it?), then **take a sample** or **move on**. The walk carries on only once the checklist is finished or skipped. A sample saves a context card: the cell, what every map layer says there, the photo and the time.
+
+**Warnings** in the walk panel, most urgent first:
+- energy left below the reserve → "Oxygen below the reserve: head home now"
+- `energy left − reserve − cost to go < 0` → past the point of no return
+- that margin under 10% of the energy budget → "Turn back soon"
+
+**Markers:** "Mark here" drops a waypoint at the astronaut; tapping the minimap on the Walk tab drops one there (pink pins).
+
+**Step mode** (flag `step_mode`): the phone counts real steps and each one moves the astronaut **0.7 m along the planned route**. When the metres walked add up to the next cell's distance (8 m on Gale), the astronaut moves one cell and pays that cell's walking energy as usual. The step-counting rule:
+
+```
+a = size of the phone's acceleration, gravity included (m/s²)
+average = 0.9 × average + 0.1 × a          (follows gravity and how the phone is held)
+a step  = a goes more than 1.2 m/s² above the average,
+          at least 0.3 s after the last step,
+          and a has dipped below the average since then
+```
+
+The compass (iOS: `webkitCompassHeading`; Android: absolute orientation) says which way the route goes next: "route 30° to your right". It guides; it doesn't steer, so a straight hallway still walks the whole route. The 0.7 m stride and the 1.2 m/s² threshold are knobs in `app/src/steps.js`, to tune on a real phone. Steps taken while a stop's checklist is open don't move you. On a laptop there are no sensor readings, so the Walk and Step buttons stay.
+
+**The walk log** (either flag on; contract §3): one JSON object per line, kept in the browser's local storage, downloaded with "Download walk log" as a `.jsonl` file. The first line names the world, the start time, the planned stops and the flags; then the app state once per tick (time, position, energy, reserve, cost to go, inside the ring, ground type, `mode` = `route` or `step`), plus map entries `{cell, kind, value, time}`:
+- `photo` at a stop's "look" step (the rover photo stands in for the astronaut's own for now)
+- `sample` with the context card
+- `marker` for each waypoint dropped
+
+`time` is walk time in seconds, the same clock as the app state. A new plan or Reset starts a new log. Block D7 (the map grows) merges these entries into the site files for the next walk.
+
+Code: `app/src/stops.js`, `app/src/steps.js`, `app/src/log.js`.
+
+## 11. What is real and what is simulated
 
 - **Real:** terrain, slope and images (NASA MRO HiRISE via USGS), the Curiosity stops and their photos, the walking-energy formula, all the route and safety maths.
 - **Estimates, marked:** ground type on Gale (from image brightness and roughness until the classifier lands), rock layer on Gale (until shadow-based rock detection lands), the energy budget size, and the walking-energy factors above.
-- **Simulated:** the helicopter flights, the astronaut (a phone stands in for the suit display).
+- **Simulated:** the helicopter flights, the astronaut (a phone stands in for the suit display), the photo at a stop (Curiosity's photo stands in for the astronaut's).
