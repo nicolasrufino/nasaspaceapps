@@ -12,9 +12,11 @@ import { initSteps } from './steps.js'
 
 const $ = (id) => document.getElementById(id)
 const params = new URLSearchParams(location.search)
-const worldName = params.get('world') ?? 'synthetic'
-// Feature flags (docs/PLAN.md §10), all off by default: ?flags=layers_extra,pov_images
-const flags = new Set((params.get('flags') ?? '').split(',').filter(Boolean))
+// The bare link is the judges' link: the Gale demo with the demo features on.
+// ?world=synthetic loads the test world; ?flags= (empty) switches every feature off (docs/PLAN.md §10).
+const DEMO_FLAGS = 'drone_scout,why_route,layers_extra,pov_images,science_stop,step_mode'
+const worldName = params.get('world') ?? 'gale'
+const flags = new Set((params.get('flags') ?? DEMO_FLAGS).split(',').filter(Boolean))
 const base = `${import.meta.env.BASE_URL}${worldName}`
 const optionalJSON = (file, fallback) => fetch(`${base}/${file}`).then((r) => (r.ok ? r.json() : fallback)).catch(() => fallback)
 
