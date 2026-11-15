@@ -62,6 +62,15 @@ TARGETS = [
          'why': 'Ridge-top bedrock drilled Nov 2025 (45th hole), the "high" of the pair, to compare with Valle de la Luna.',
          'sources': ['https://science.nasa.gov/solar-system/curiosity-blog-sols-4716-4722-drilling-success-at-nevado-sajama']},
 ]
+# Energy budget (see energy_budget_note in world.json). 1200 BTU/hr: NASA sizing average for future planetary
+# EVAs (ICES-2026-127, Mars spacesuit mass requirements) and the advanced suit's 8 h design point.
+SUIT_RATE_J_PER_H = 1200 * 1055.06
+RESERVE_HOURS = 1.5   # contract section 1: 1 h emergency return + ~30 min dust removal and getting inside
+STOP_HOURS = 0.5      # estimate: science time per stop (look, get close, decide, sample)
+STOPS_PLANNED = 5
+SCENARIOS = {'ideal': ('Fresh EVA: 8 h of suit', 8.0),
+             'worst': ('Late in the EVA: 5 h of suit left after 3 h of station work', 5.0)}
+DEFAULT_SCENARIO = 'worst'
 CAMS = ['NAV_LEFT_B', 'NAV_RIGHT_B', 'MAST_LEFT', 'MAST_RIGHT', 'FHAZ_LEFT_B']
 
 
@@ -191,9 +200,15 @@ def main():
         prev = goal
     metres = sum(cell * math.hypot(b[0] - a_[0], b[1] - a_[1]) for a_, b in itertools.pairwise(cells))
     minutes = metres / KNOBS['speed_mps'] / 60
-    reserve = 0.2
-    # Knob, not a measurement: the budget is sized so the full Curiosity tour uses about 80% of the usable energy.
-    budget = float(math.ceil(energy / (1 - reserve) / 0.8 / 1e5) * 1e5)
+    # Energy budget from NASA suit figures, as two scenarios (ideal and worst case); the default is the cautious one.
+    scenarios = {}
+    for sid, (name, hours_left) in SCENARIOS.items():
+        walk_h = hours_left - STOPS_PLANNED * STOP_HOURS
+        b = walk_h * SUIT_RATE_J_PER_H
+        scenarios[sid] = {'name': name, 'suit_hours_left': hours_left, 'stop_hours': STOPS_PLANNED * STOP_HOURS,
+                          'energy_budget_j': round(b), 'reserve_fraction': round(RESERVE_HOURS * SUIT_RATE_J_PER_H / b, 4)}
+    budget = float(scenarios[DEFAULT_SCENARIO]['energy_budget_j'])
+    reserve = scenarios[DEFAULT_SCENARIO]['reserve_fraction']
     route = {'cells': [list(map(int, c)) for c in cells], 'stops': [t['id'] for t in order],
              'energy_j': round(energy), 'minutes': round(minutes, 1), 'dose_ugy': None,
              'note': 'least-energy legs between Curiosity campaign stops (pipeline, D3)'}
@@ -225,7 +240,12 @@ def main():
                                                                                   meta_slice['centre']['lat']],
                  'bbox_deg': meta_slice['bbox_deg'], 'projection': meta_slice['projection']['proj4']},
         'height_offset_m': round(hmin, 2),
-        'energy_budget_note': 'knob: sized so the five-stop Curiosity tour uses ~80% of usable energy',
+        'energy_budget_note': ('Walking energy = (suit hours left - time at stops) x 1200 BTU/hr (NASA planetary suit sizing '
+                               'rate, ICES-2026-127; xEMU/AEMU 8 h at 1200 BTU/hr). Reserve = 1.5 h at that rate (1 h '
+                               'emergency return + 30 min dust and ingress). Stops: 5 x 30 min (estimate). Scenario '
+                               f'{DEFAULT_SCENARIO!r} is the default; the app can switch with ?scenario=.'),
+        'scenarios': scenarios, 'default_scenario': DEFAULT_SCENARIO,
+        'reserve_fraction': reserve,
         'sources': {
             'height': {'mission': 'MRO', 'instrument': 'HiRISE stereo (USGS MSL Gale merged DEM 1 m)', 'date': date},
             'slope': {'mission': 'MRO', 'instrument': 'HiRISE stereo (from the 8 m height)', 'date': date},
@@ -265,7 +285,11 @@ def main():
     print(f'wrote {os.path.abspath(a.out)}: {n}x{n} at {cell:g} m, base {base}, {reach} cells can get home')
     print(f'classes {counts}; hidden rock cells {int(rocks.sum())}')
     print(f'route: {len(order)} stops {route["stops"]}, {metres:.0f} m, {minutes:.0f} min, {energy / 1e3:.0f} kJ; '
-          f'budget knob {budget / 1e3:.0f} kJ; stops with photos {len(stops)}')
+          f'stops with photos {len(stops)}')
+    for sid, sc in scenarios.items():
+        usable = sc['energy_budget_j'] * (1 - sc['reserve_fraction'])
+        print(f"scenario {sid}: budget {sc['energy_budget_j'] / 1e6:.2f} MJ, reserve {sc['reserve_fraction'] * 100:.0f}%, "
+              f"usable {usable / 1e6:.2f} MJ; tour uses {energy / usable * 100:.0f}%")
 
 
 if __name__ == '__main__':

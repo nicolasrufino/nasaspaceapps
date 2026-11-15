@@ -44,6 +44,8 @@ Index of cell (x, y): `y * width + x`. World position of a cell centre: `x * cel
 
 **Reserve:** `reserve_fraction` stands for NASA's 1-hour emergency return plus about 30 minutes of dust removal and getting back inside.
 
+**Energy scenarios (optional):** a world may list `"scenarios": {id: {"name", "energy_budget_j", "reserve_fraction", ...}}` and `"default_scenario"`; `energy_budget_j` and `reserve_fraction` at the top level equal the default. The app switches with `?scenario=<id>`. Gale: walking energy = (suit hours left − time at stops) × 1200 BTU/hr (NASA planetary suit sizing rate), reserve = 1.5 h at that rate; `ideal` = 8 h of suit, `worst` (default) = 5 h left after 3 h of station work.
+
 **Energy model:** Pandolf (1977) metabolic rate with a terrain factor per class (`knobs.eta`, one per class id), times `knobs.gravity_energy_factor` (0.68: measured walking oxygen use at 0.38 g relative to Earth, an estimate to verify; replaces plain 0.38 gravity scaling). Sand's factor is set so flat sand costs `knobs.sand_cost_ratio` (2.4, Lejeune et al. 1998: 2.1-2.7x) times flat bedrock. The app reads these knobs; worlds without them use the old values. It is a simple first version, marked in the code. The planned upgrade is NASA JSC's field-modified model (Kim et al. 2024).
 
 ## 2. Models (owner: Person 1)

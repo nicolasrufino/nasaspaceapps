@@ -11,8 +11,8 @@
     161
   ],
   "gravity_mps2": 3.71,
-  "energy_budget_j": 1000000.0,
-  "reserve_fraction": 0.2,
+  "energy_budget_j": 3165180.0,
+  "reserve_fraction": 0.6,
   "kj_per_l_o2": 20.1,
   "classes": {
     "0": "unknown",
@@ -166,7 +166,24 @@
     "projection": "+proj=eqc +lat_ts=0 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +R=3396190 +units=m +no_defs=True"
   },
   "height_offset_m": -3919.4,
-  "energy_budget_note": "knob: sized so the five-stop Curiosity tour uses ~80% of usable energy",
+  "energy_budget_note": "Walking energy = (suit hours left - time at stops) x 1200 BTU/hr (NASA planetary suit sizing rate, ICES-2026-127; xEMU/AEMU 8 h at 1200 BTU/hr). Reserve = 1.5 h at that rate (1 h emergency return + 30 min dust and ingress). Stops: 5 x 30 min (estimate). Scenario 'worst' is the default; the app can switch with ?scenario=.",
+  "scenarios": {
+    "ideal": {
+      "name": "Fresh EVA: 8 h of suit",
+      "suit_hours_left": 8.0,
+      "stop_hours": 2.5,
+      "energy_budget_j": 6963396,
+      "reserve_fraction": 0.2727
+    },
+    "worst": {
+      "name": "Late in the EVA: 5 h of suit left after 3 h of station work",
+      "suit_hours_left": 5.0,
+      "stop_hours": 2.5,
+      "energy_budget_j": 3165180,
+      "reserve_fraction": 0.6
+    }
+  },
+  "default_scenario": "worst",
   "data_types": {
     "optical": "optical",
     "topographic": "height",
