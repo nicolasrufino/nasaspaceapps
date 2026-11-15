@@ -77,4 +77,43 @@ This model was trained on **rover ground photographs**. It must not replace
 Luca's orbital HiRISE `terrain_class.u8` without a separate domain evaluation.
 No navigation-safety claim, calibrated confidence or phone performance result
 is established. The model is suitable for experimental integration and further
-evaluation; Perseverance adaptation and stronger big-rock coverage remain work.
+evaluation; stronger big-rock coverage remains work. Perseverance adaptation is
+outside the current scope, while its historical transfer measurement is retained.
+
+## Gale follow-up: keep v1 after a small head-training experiment
+
+The [v2 experiment report](gale_experiment_v2.json) records three head variants
+compared on 231 validation patches from acquisition bins excluded from fitting.
+The feature extractor stays frozen. A more regularized linear head wins by the
+predeclared tie-break over a 64-unit hidden head; it is then refitted on all 1,136
+original training patches. Neither test set nor Perseverance chooses the head.
+
+A new deterministic sample of 80 expert Curiosity image/label pairs excludes
+all original training and test clock bins. It supplies **302 usable patches from
+51 images and 23 bins**: 191 soil, 29 bedrock, 82 sand, zero big rock.
+
+| Evaluation | Published v1 | Experimental regularized head |
+|---|---:|---:|
+| Fresh expert sample | 275/302 (91.06%) | 278/302 (92.05%) |
+| Original test, now a regression set | 148/159 (93.08%) | 147/159 (92.45%) |
+
+The fresh gain is 0.993 percentage points; its paired acquisition-bin bootstrap
+95% interval is **−0.570 to +2.535 points**. The predeclared promotion gates fail:
+the gain is below one point and its interval includes zero. **The published ONNX
+and original metrics remain unchanged.** Do not select another model against this
+now-observed fresh sample. The validation set also has zero big-rock examples.
+
+Reproduce the one-shot experiment, using fresh output directories:
+
+```sh
+python -m ml.terrain_classifier.fresh_gale ml/data/ai4mars-subset-v1 ml/data/gale-fresh-v2
+python -m ml.terrain_classifier.gale_experiment ml/data/ai4mars-subset-v1 ml/data/gale-fresh-v2 ml/runs/gale-head-v2 ml/exports/terrain_cls.onnx
+```
+
+The committed fresh manifest contains source identifiers and checksums, not image
+data. Experiment weights and per-patch predictions stay under ignored `ml/runs/`.
+Both heads were evaluated through ONNX Runtime; candidate outputs were also
+checked against PyTorch on every evaluated crop.
+
+See [PROVENANCE.md](PROVENANCE.md) for the ground-photo source, the distinction
+between Gale and Luca's exact slice, and the hypothetical five-metre scout flight.
