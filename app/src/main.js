@@ -30,6 +30,11 @@ const photos = await optionalJSON('stops.json', []) // rover photos per stop (co
 const scoutPlan = await optionalJSON('scout_plan.json', []) // pipeline's extra helicopter flights (D4), when it exists
 let flight = null // helicopter in the air: { flights, k, along, speed, found, before }
 const { meta, layers } = world
+// Energy scenario (world.json "scenarios", made by the pipeline from NASA suit figures): ?scenario=ideal or worst.
+// Without the parameter the world's default applies; worlds without scenarios keep their single budget.
+const scenarioId = params.get('scenario') ?? meta.default_scenario
+const scenario = meta.scenarios?.[scenarioId]
+if (scenario) Object.assign(meta, { energy_budget_j: scenario.energy_budget_j, reserve_fraction: scenario.reserve_fraction })
 const { width: W, height: H, cell_size_m: cs } = meta
 const walkNotesUrl = `${base}/walk.jsonl`
 const walkNotes = flags.has('map_grows')
@@ -42,7 +47,7 @@ const ctg = layers.cost_to_go
 const scanned = new Uint8Array(W * H) // cells the helicopter has seen
 const rockSeen = (i) => scanned[i] && layers.rocks_fine?.[i]
 const cellPos = ([x, y], lift = 0) => new THREE.Vector3(x * cs, layers.height[y * W + x] + lift, y * cs)
-$('title').textContent = `${meta.name} · ${W}×${H} cells · ${cs} m`
+$('title').textContent = `${meta.name} · ${W}×${H} cells · ${cs} m${scenario ? ` · ${scenario.name}` : ''}`
 
 // --- 3D view: visual only, no route maths here (docs/CRITIQUE.md). ---
 // One vertex per cell; cell (x, y) sits at (x*cs, height, y*cs), so +z is south and north is -z.
