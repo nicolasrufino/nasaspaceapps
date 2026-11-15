@@ -8,6 +8,7 @@ import { routeFlights, scanAt, pointAlong } from './scout.js'
 import { bestAreas } from './best-areas.js'
 import { beliefMap } from './belief.js'
 import { terrainMaterial, setImageryUVs, loadImagery, imageryCells } from './terrain.js'
+import { detailTiles } from './tiles.js'
 import { stretches, describe, lowestMargin, shortestAlternative } from './why.js'
 import { initStops } from './stops.js'
 import { initSteps } from './steps.js'
@@ -17,7 +18,7 @@ const $ = (id) => document.getElementById(id)
 const params = new URLSearchParams(location.search)
 // The bare link is the judges' link: the Gale demo with the demo features on.
 // ?world=synthetic loads the test world; ?flags= (empty) switches every feature off (docs/PLAN.md §10).
-const DEMO_FLAGS = 'drone_scout,why_route,layers_extra,pov_images,science_stop,step_mode'
+const DEMO_FLAGS = 'drone_scout,why_route,layers_extra,pov_images,science_stop,step_mode,detail'
 const worldName = params.get('world') ?? 'gale'
 const flags = new Set((params.get('flags') ?? DEMO_FLAGS).split(',').filter(Boolean))
 if (flags.has('classifier')) initTerrainClassifier($('walk'))
@@ -97,6 +98,28 @@ scene.add(beforeLine)
 const routeLine = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.8 }))
 scene.add(routeLine)
 
+// 1 m detail tiles (ticket F7, flag detail). The tint texture carries what the vertex colours carry on the 8 m mesh
+// (ring dimming, found rocks, the layer), so tiles and mesh always agree.
+const tint = new THREE.DataTexture(new Uint8Array(W * H * 4).fill(255), W, H, THREE.RGBAFormat)
+tint.magFilter = THREE.LinearFilter
+const tileShared = { uTint: { value: tint }, uOverlay: terrainMat.userData.uniforms.uOverlay, uCells: { value: new THREE.Vector2(cs, W) } }
+let tiles = null
+// Ground height at app (x, z): the 1 m surface where a tile is loaded, else the 8 m cell.
+const groundAt = (x, z) => tiles?.heightAt(x, z) ?? layers.height[Math.round(z / cs) * W + Math.round(x / cs)]
+function drawRouteLine() {
+  const pts = []
+  route.cells.forEach(([x, y], k) => {
+    const [px, py] = route.cells[k - 1] ?? [x, y]
+    const steps = k ? Math.ceil((cs * Math.hypot(x - px, y - py)) / 2) : 1 // a point every 2 m, so the line hugs the 1 m surface
+    for (let j = 1; j <= steps; j++) {
+      const ax = (px + ((x - px) * j) / steps) * cs, az = (py + ((y - py) * j) / steps) * cs
+      pts.push(new THREE.Vector3(ax, groundAt(ax, az) + 1, az))
+    }
+  })
+  routeLine.geometry.dispose()
+  routeLine.geometry = new THREE.BufferGeometry().setFromPoints(pts)
+}
+
 const camera = new THREE.PerspectiveCamera(50, 1, span / 1000, span * 10)
 const center = new THREE.Vector3(((W - 1) * cs) / 2, 0, ((H - 1) * cs) / 2)
 camera.position.set(center.x, span * 0.6, center.z + span * 0.8)
@@ -112,10 +135,15 @@ function resize() {
 addEventListener('resize', resize)
 resize()
 let lastFrame = performance.now()
+let lastTiles = 0
 renderer.setAnimationLoop((now) => {
   const dt = Math.min((now - lastFrame) / 1000, 0.1)
   lastFrame = now
   if (flight) tickFlight(dt)
+  if (tiles && now - lastTiles > 500) {
+    lastTiles = now
+    tiles.update([[controls.target.x, controls.target.z], [walker.position.x, walker.position.z]])
+  }
   controls.update()
   renderer.render(scene, camera)
 })
@@ -184,7 +212,7 @@ function replan(keepBefore = false) {
   route = planTour(world, allStops().filter((s) => included.has(s.id)), blocked)
   refreshLayer()
   routeLine.geometry.dispose()
-  routeLine.geometry = new THREE.BufferGeometry().setFromPoints(route.cells.map((c) => cellPos(c, 1)))
+  drawRouteLine()
   if (flags.has('why_route')) explain()
   reset() // a new plan starts a new walk; reset also draws the stops
 }
@@ -521,8 +549,9 @@ function render() {
     const f = inside[i] ? 1 : 0.45
     if (rockSeen(i)) colors.array.set([200, 35, 35], i * 3)
     else for (let c = 0; c < 3; c++) colors.array[i * 3 + c] = vertexBase[i * 3 + c] * f
+    tint.image.data.set([colors.array[i * 3], colors.array[i * 3 + 1], colors.array[i * 3 + 2], 255], i * 4)
   }
-  colors.needsUpdate = true
+  colors.needsUpdate = tint.needsUpdate = true
   walker.position.copy(cellPos(walk.cell, span / 100))
   paintMinimap(inside)
 
@@ -574,3 +603,14 @@ loadImagery(meta, renderer, (canvas) => {
   setLayer(IMAGERY)
   render()
 }).catch(() => {}) // no network or no tiles: the class colours stay
+
+// 1 m detail near what you look at and near the astronaut (ticket F7); fewer tiles on small screens to save memory.
+if (flags.has('detail')) {
+  detailTiles(meta, scene, renderer, tileShared, () => {
+    const holes = tiles.holes(), u = terrainMat.userData.uniforms
+    holes.forEach((h, k) => u.uHoles.value[k].set(...h))
+    u.uHoleCount.value = holes.length
+    if (route) drawRouteLine()
+  }, { maxTiles: Math.min(innerWidth, innerHeight) < 600 ? 4 : 9 }).then((t) => (tiles = t)).catch(() => {})
+}
+window.vesta = { camera, controls, walker, tiles: () => tiles, groundAt } // for checks from the console and tests

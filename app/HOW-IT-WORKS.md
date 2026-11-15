@@ -186,6 +186,10 @@ z = bias + w1 × (slope ÷ slope limit, standardised) + w2 × (8 m relief, stand
 
 The default view shows **real HiRISE colour imagery** on the terrain (NASA Mars Reconnaissance Orbiter; USGS MSL Gale 25 cm mosaic; credit NASA/JPL-Caltech/University of Arizona). The app draws it at 1 m per pixel over the whole 2 × 2 km. It is for looking only: routes, energy and the walk-back ring never read the picture. In the other views, the layer's colour is laid over the picture's light and dark, so ridges still show through. Ground outside the walk-back ring is dimmed.
 
+### Detail near you (flag `detail`, on in the demo)
+
+Around what you look at and around the astronaut (within about 330 m), the app swaps in **1 m terrain** (USGS MSL Gale merged HiRISE DEM) with the **25 cm HiRISE image** on it, in 256 m tiles: at most 9 at once on a large screen, 4 on a phone. Everywhere else stays at 8 m. The route line follows the 1 m surface where it is loaded. HiRISE resolves features of about 3–4 m and up; rocks under about 1 m are not in this data. Like the picture, the detail is for looking only: routes and energy still use the 8 m grid and the walk-scale crossings.
+
 ## 14. What is real and what is simulated
 
 - **Real:** terrain, slope and images (NASA MRO HiRISE via USGS), the Curiosity stops and their photos, the walking-energy formula, all the route and safety maths.
