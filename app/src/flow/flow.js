@@ -31,8 +31,9 @@ export function initFlow(app) {
     body: q('body'), foot: q('foot'), strip: q('strip'), bl: q('bl'), br: q('br'), bottom: q('bottom'), main,
     map, // the shared 2D map. In console stages it already fills the main area; in scene stages put map.el in ui.br and call map.size('mini').
     h,
+    // In a scene the 3D picture is shifted so its centre sits in the area the rail leaves free.
     // console (false, default): the 2D map fills the main area, no 3D. scene (true): the main area is clear and the 3D view shows.
-    scene(on) { main.classList.toggle('scene', on); on ? (innerWidth > 760 ? app.viewShift(q('rail').offsetWidth / 2) : app.viewShift(0, innerHeight * 0.22)) : app.viewShift(0); // centre the 3D picture in the area the rail leaves free if (on) map.el.remove(); else { map.size('fill'); main.prepend(map.el) } },
+    scene(on) { main.classList.toggle('scene', on); on ? (innerWidth > 760 ? app.viewShift(q('rail').offsetWidth / 2) : app.viewShift(0, innerHeight * 0.22)) : app.viewShift(0); if (on) map.el.remove(); else { map.size('fill'); main.prepend(map.el) } },
     // A titled block in the rail. big = a heading instead of a small label. Returns the element; append to it.
     section(title, big = false) { return h('div', 'f-sec', title ? `<${big ? 'h2' : 'h3'}>${title}</${big ? 'h2' : 'h3'}>` : '') },
     // A list row: item({ n, title, sub, onRemove, onClick, onHover }). n = the number in the amber dot (omit for none).
