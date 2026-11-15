@@ -192,7 +192,7 @@ Around what you look at and around the astronaut (within about 330 m), the app s
 
 ### True scale (ticket F5)
 
-Heights are drawn 1:1, with no exaggeration: the slice really climbs about 526 m. The astronaut is 1.8 m tall, the helicopter has a 1.2 m rotor (Ingenuity's) and flies 10 m up, and the habitat is about 9 m across with a 2 m hatch. Because real-size things vanish from far away, each also has a small round icon that keeps its size on screen. The scale bar (bottom left) is computed from the camera distance, and the arrow points north.
+Heights are drawn 1:1, with no exaggeration: the slice really climbs about 526 m. The astronaut is 1.8 m tall, the helicopter has a 1.2 m rotor (Ingenuity's) and flies 10 m up, and the habitat is about 9 m across with a 2 m hatch. Because real-size things vanish from far away, each also has a small round icon that keeps its size on screen. The scale bar (bottom left) is computed from the camera distance, and the arrow points north. The three are NASA models from NASA 3D Resources: the Z-2 planetary suit, Ingenuity (NASA/JPL-Caltech) and the Habitat Demonstration Unit, scaled to these sizes (`app/src/models/README.md`). Three helicopters park beside the habitat, as in NASA's SkyFall concept; one flies at a time. Take-off and landing (over the first and last 20 m of a flight) and the camera easing in to 14 m are drawn only: the scan itself always assumes 10 m.
 
 ### What has been explored (the discover look, ticket A3)
 

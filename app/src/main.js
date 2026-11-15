@@ -220,7 +220,12 @@ function tickView(dt) {
     camera.position.copy(head)
     camera.rotation.set(view.pitch, view.yaw, 0, 'YXZ')
   } else if (flight) {
-    controls.target.lerp(new THREE.Vector3(heli.position.x, heli.position.y - ALT, heli.position.z), 1 - Math.exp(-dt * 2)) // watch the scan
+    controls.target.lerp(heli.position, 1 - Math.exp(-dt * 3)) // watch the helicopter
+    if (flight.zoom > 0) { // ease in close at take-off (a 1.2 m helicopter is invisible from far); then the user's zoom is theirs
+      flight.zoom -= dt
+      const off = camera.position.clone().sub(controls.target)
+      camera.position.copy(controls.target).add(off.setLength(THREE.MathUtils.lerp(off.length(), CHASE_M, 1 - Math.exp(-dt * 2.5))))
+    }
   }
   lastHead.copy(head)
 }
@@ -554,16 +559,35 @@ function makeHeli() {
     new THREE.MeshBasicMaterial({ color: 0x35e0ff, transparent: true, opacity: 0.14, side: THREE.DoubleSide, depthWrite: false }))
   beam.position.y = -ALT / 2
   g.add(beam)
-  g.visible = false
+  g.userData.beam = beam
   scene.add(g)
   return g
 }
 const heli = makeHeli()
+const CHASE_M = 14 // camera distance while it follows a flight
+// Three helicopters, as in NASA's SkyFall concept; parked beside the habitat between flights. One flies at a time.
+const padAt = (k) => { const x = habitat.position.x + 11 + k * 3, z = habitat.position.z + 5 - k * 2.5; return new THREE.Vector3(x, groundAt(x, z), z) }
+const parked = [1, 2].map((k) => { const h = makeHelicopter(); h.position.copy(padAt(k)); scene.add(h); return h })
+function parkHeli() {
+  heli.position.copy(padAt(0))
+  heli.rotation.set(0, 0, 0)
+  heli.userData.beam.visible = false
+  heli.visible = true
+}
+parkHeli()
+setInterval(() => { // keep the parked ones on the ground as the 1 m tiles load under them
+  for (const h of flight ? parked : [heli, ...parked]) h.position.y = groundAt(h.position.x, h.position.z)
+}, 500)
 const heliIcon = icon('#ffffff', { ring: '#35e0ff', label: '✈' })
 heliIcon.visible = false
 scene.add(heliIcon)
-function placeHeli(h, [x, y]) {
-  h.position.set(x * cs, groundAt(x * cs, y * cs) + ALT, y * cs)
+function placeHeli(h, [x, y], alt = ALT) {
+  const to = new THREE.Vector3(x * cs, groundAt(x * cs, y * cs) + alt, y * cs)
+  const dx = to.x - h.position.x, dz = to.z - h.position.z
+  if (dx * dx + dz * dz > 1e-4) h.rotation.set(0.12, Math.atan2(dx, dz), 0, 'YXZ') // nose along the track, tilted forward a little
+  h.position.copy(to)
+  h.userData.beam.scale.y = alt / ALT // the scan cone always reaches the ground
+  h.userData.beam.position.y = -alt / 2
 }
 const dotPos = new Float32Array(W * H * 3)
 const dotCol = new Float32Array(W * H * 3)
@@ -614,7 +638,8 @@ async function startNextFlight() {
   if (flight.flights.length >= flight.maxFlights) return false
   let next
   if (selectVoi) {
-    heli.visible = heliIcon.visible = scanDots.visible = false
+    heliIcon.visible = scanDots.visible = false
+    parkHeli()
     revealShared.uHeli.value.z = 0
     $('scoutStatus').textContent = 'Comparing possible flights… experimental, uncalibrated belief model.'
     try {
@@ -628,19 +653,23 @@ async function startNextFlight() {
   } else next = launchScoutFlight(world, flight)
   if (next) {
     flight.along = 0
-    heli.visible = heliIcon.visible = scanDots.visible = true
+    flight.zoom = 3 // seconds of easing the camera in
+    flight.camOff ??= camera.position.clone().sub(controls.target) // put back after the last landing
+    heli.userData.beam.visible = heli.visible = heliIcon.visible = scanDots.visible = true
   }
   return !!next
 }
 
 function tickFlight(dt) {
-  heli.userData.rotors.forEach((r, k) => (r.rotation.y += dt * (k ? -40 : 40)))
+  heli.userData.spin(dt)
   const f = flight.active
   flight.along = Math.min(f.metres, flight.along + (f.metres / FLIGHT_ANIMATION_S) * dt) // slow enough to see the discovery
   const fresh = scanFlight(meta, scanned, f, flight.along)
   flight.found += reveal(fresh)
-  placeHeli(heli, pointAlong(meta, f.waypoints, flight.along) ?? f.waypoints.at(-1))
+  const climb = Math.min(1, flight.along / 20, (f.metres - flight.along) / 20) // take off and land over 20 m (drawn only; the scan is unchanged)
+  placeHeli(heli, pointAlong(meta, f.waypoints, flight.along) ?? f.waypoints.at(-1), Math.max(0.3, ALT * climb))
   heliIcon.position.copy(heli.position)
+  heliIcon.visible = camera.position.distanceTo(heli.position) > 60 // close up, show the helicopter itself, not its map icon
   revealShared.uHeli.value.set(heli.position.x, heli.position.z, 4 + ((performance.now() / 60) % 16))
   if (fresh.length) render()
   $('scoutStatus').textContent = `Flight ${flightsUsed + 1} of ${MAX_FLIGHTS} (${f.kind}) · ${flight.found} rock cells found · ` +
@@ -663,9 +692,11 @@ function tickFlight(dt) {
 }
 
 function land() {
-  const { before, found, voiNote, flights } = flight
+  const { before, found, voiNote, flights, camOff } = flight
   flight = null
-  heli.visible = heliIcon.visible = scanDots.visible = false
+  heliIcon.visible = scanDots.visible = false
+  parkHeli()
+  if (camOff && view.mode === 'map') { controls.target.copy(cellPos(meta.base_cell)); camera.position.copy(controls.target).add(camOff) }
   revealShared.uHeli.value.z = 0
   $('scout').disabled = flightsUsed >= MAX_FLIGHTS
   $('scout').textContent = flightsUsed >= MAX_FLIGHTS ? '3 flights used' : 'Scout remaining route'
