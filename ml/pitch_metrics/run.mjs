@@ -5,7 +5,7 @@ import { dirname, resolve, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { parseLayer } from '../../app/src/world.js'
 import { calculate } from './metrics.mjs'
-import { FLIGHT_M } from '../../app/src/scout.js'
+import { FLIGHT_M, MAX_FLIGHTS, SCAN_STEP_M } from '../../app/src/scout.js'
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
 const sha = (value) => createHash('sha256').update(value).digest('hex')
@@ -38,8 +38,7 @@ export function loadInputs(root = ROOT) {
   assert.equal(sha(reviewed), rocks.files['rocks_verified.u8'].sha256)
   assert.ok(reviewed.every((v, i) => !v || layers.rocks_fine[i]))
   const targets = readJSON(resolve(folder, 'targets.json'))
-  const flights = readJSON(resolve(folder, 'scout_plan.json'))
-  return { world: { meta, layers }, targets, flights, reviewed, rocks }
+  return { world: { meta, layers }, targets, reviewed, rocks }
 }
 
 function checkedAccuracy(metrics, matrix) {
@@ -52,10 +51,10 @@ function checkedAccuracy(metrics, matrix) {
 }
 
 export function buildReport(root = ROOT) {
-  const { world, targets, flights, reviewed, rocks } = loadInputs(root)
+  const { world, targets, reviewed, rocks } = loadInputs(root)
   const terrain = readJSON(resolve(root, 'ml/exports/terrain_cls.json'))
   const buddy = readJSON(resolve(root, 'ml/exports/buddy_policy.json'))
-  const files = ['data/worlds/gale/world.json', 'data/worlds/gale/targets.json', 'data/worlds/gale/scout_plan.json',
+  const files = ['data/worlds/gale/world.json', 'data/worlds/gale/targets.json',
     ...['height.f32', 'slope.f32', 'terrain_class.u8', 'rocks_fine.u8', 'cost_to_go.f32', 'cost_to_go_scouted.f32']
       .map((p) => `data/worlds/gale/${p}`),
     'ml/exports/rocks.json', 'ml/exports/terrain_cls.json', 'ml/exports/buddy_policy.json',
@@ -63,14 +62,15 @@ export function buildReport(root = ROOT) {
     'ml/pitch_metrics/metrics.mjs', 'ml/pitch_metrics/run.mjs']
   if (world.meta.files.passable) files.push(`data/worlds/gale/${world.meta.files.passable}`)
   const report = { schema_version: 1, block: 'R5', site: world.meta.site,
-    scenario: { name: 'Gale default five science stops, first scout pass, no custom stops',
+    scenario: { name: 'Gale default five science stops, three-flight campaign, no custom stops',
       energy_scenario: world.meta.default_scenario ?? null,
       energy_scenario_details: world.meta.scenarios?.[world.meta.default_scenario] ?? null,
       target_ids: targets.map((t) => t.id), energy_budget_j: world.meta.energy_budget_j,
       reserve_j: world.meta.energy_budget_j * world.meta.reserve_fraction,
       cell_size_m: world.meta.cell_size_m, scout_replay_fps: 60,
       route_flight_limit_m: FLIGHT_M,
-      extra_flights: 'Existing scout_plan.json flights are appended unchanged on each pass.' },
+      max_flights: MAX_FLIGHTS, scan_step_m: SCAN_STEP_M,
+      extra_flights: 'None. Each flight selects the next unseen stretch of the replanned route.' },
     definitions: {
       hazard: 'Binary 8 m hazard cells, not a count of individual rocks. Unique cells and repeated visits are separate.',
       margin: 'energy left - cheapest known-hazard return cost - fixed reserve. Extra 20% means >=20% of INITIAL budget after that reserve.',
@@ -78,10 +78,10 @@ export function buildReport(root = ROOT) {
       energy_error: 'Uniform 0.7/1.0/1.3 multiplier on BOTH spent walking energy and remaining return cost; initial budget/reserve and the nominal scouted route stay fixed.',
       ring: 'Cells whose return fits remaining energy minus reserve, as displayed by the app. Area is grid cells x cell area, not a circular radius or a complete outbound-and-return reachability claim.',
       margin_audit: 'Directed reverse shortest paths recomputed using only discovered hazards; app hybrid return lookup reported separately.',
-      scout: '60 fps replay of shipped tickFlight sampling. 30/120 fps and 4 m spatial sampling measure frame dependence; live counts can vary.' },
+      scout: 'Shipped three-flight campaign with a re-plan after every flight. Spatial scans every 2 m plus endpoints; 2/30/60/120 fps must agree.' },
     source_hash_convention: 'SHA256: raw binary; canonical sorted-key JSON; LF-normalized JS/MJS source',
     source_sha256: Object.fromEntries(files.map((p) => [p, fileHash(resolve(root, p))])),
-    results: calculate(world, targets, flights, reviewed),
+    results: calculate(world, targets, reviewed),
     vision_evidence: {
       rocks: { method: 'NASA/JPL ROSCO + human positive review; no new network trained for R3',
         review_counts: rocks.review_counts, review_complete: rocks.review_complete,
@@ -108,52 +108,54 @@ export function buildReport(root = ROOT) {
     ? Math.round(value * 1e6) / 1e6 : value))
 }
 
-function renderFirstPassPitch(report) {
-  const r = report.results, v = report.vision_evidence
-  const pct = (value) => (100 * value).toFixed(1)
-  const kj = (value) => (value / 1000).toFixed(1)
-  const nominal = r.energy_sensitivity.find((s) => s.energy_cost_multiplier === 1)
-  const rows = r.energy_sensitivity.map((s) => `| ${s.energy_cost_multiplier.toFixed(1)}x | ${s.ring_snapshots[0].app_ring.cells.toLocaleString('en-US')} | ${s.ring_snapshots[0].app_ring.change_percent_vs_nominal.toFixed(1)}% | ${kj(s.margin.minimum_margin_after_reserve_j)} | ${pct(s.margin.fraction_distance_with_extra_20pct_margin)}% |`).join('\n')
-  return `# R5: measured pitch numbers\n\nGenerated by \`node ml/pitch_metrics/run.mjs\`; source hashes and full profiles are in [pitch_metrics.json](../exports/pitch_metrics.json). These are simulated results on the fixed Gale demo, not field validation.\n\n## Before and after the first scout pass\n\n- Same default ${report.scenario.target_ids.length} science stops; ${kj(report.scenario.energy_budget_j)} kJ budget, ${kj(report.scenario.reserve_j)} kJ reserved.\n- The orbit-only route crosses **${r.orbit_only.discovered_hazards.unique_cells} distinct hazard cells** discovered by the scout; the new route crosses **${r.after_scout.discovered_hazards.unique_cells}**. Repeated cell visits: ${r.orbit_only.discovered_hazards.cell_visits} to ${r.after_scout.discovered_hazards.cell_visits}. These are cells, not individual rocks.\n- Walking energy: **${kj(r.orbit_only.energy_j)} → ${kj(r.after_scout.energy_j)} kJ**, a ${r.delta.energy_percent.toFixed(2)}% change. Distance: ${r.orbit_only.metres.toFixed(1)} → ${r.after_scout.metres.toFixed(1)} m. Avoidance costs effort in this scenario.\n- The initial route crosses **${r.orbit_only.reviewed_rock_clearance.unique_cells}** cells from the human-reviewed rock additions. Keep this separate from the DTM-derived hazard benefit.\n- The new route crosses ${r.after_scout.all_layer_hazards.unique_cells} cells in the full stored hazard layer, including undiscovered cells.\n- At nominal energy cost, **${pct(nominal.margin.fraction_distance_with_extra_20pct_margin)}% of the traverse distance** retains an extra 20% of initial energy after the cost home AND the reserve. Minimum spare margin: ${kj(nominal.margin.minimum_margin_after_reserve_j)} kJ.\n\n## Energy sensitivity\n\nThe route, initial budget and reserve stay fixed. Scale both energy already spent and the remaining trip home. The ring area below is at departure; the JSON also includes 25/50/75/100% route snapshots.\n\n| Walking-energy multiplier | Departure ring cells | Area change | Minimum extra margin (kJ) | Distance with extra 20% margin |\n|---|---:|---:|---:|---:|\n${rows}\n\nThe app's hybrid return lookup differs from a recomputed known-hazard return field by at most ${r.app_return_lookup_audit.maximum_underestimate_j_on_route.toFixed(2)} J of understatement and ${r.app_return_lookup_audit.maximum_overestimate_j_on_route.toFixed(2)} J of overstatement on this route. This audit does not certify unobserved ground.\n\n## Frame sampling matters\n\n| Scout sampling | Hazard cells discovered | Initial route: distinct discovered hazards | New route: distinct discovered hazards |\n|---|---:|---:|---:|\n${r.sampling_sensitivity.map((s) => `| ${s.mode} | ${s.discovered_hazard_cells} | ${s.before_crossings.unique_cells} | ${s.after_crossings.unique_cells} |`).join('\n')}\n\nThe primary replay uses a fixed 60 fps. Live animation counts can vary with frame timing. The 4 m row is a spatial audit including flight endpoints, not an exact UI replay.\n\n## Vision evidence to quote with its limits\n\n- R3: ${v.rocks.accepted_points} human-accepted ROSCO proposals, ${v.rocks.review_counts.uncertain} uncertain and excluded, ${v.rocks.clearance_cells} padded cells. Proposal acceptance is not detector precision or recall. Separate G-mosaic correspondence: ${v.rocks.mosaic_reference_matches}/${v.rocks.mosaic_review_counts.accepted} accepted reference locations matched.\n- R4: MobileNetV3-Small with frozen pretrained features and a trained final classifier; ${v.terrain.train_patches} training patches. Curiosity held-out subset: **${pct(v.terrain.curiosity.accuracy)}% (${v.terrain.curiosity.correct}/${v.terrain.curiosity.samples})**. Perseverance transfer: **${pct(v.terrain.perseverance.accuracy)}% (${v.terrain.perseverance.correct}/${v.terrain.perseverance.samples})**. No Curiosity test support for big rocks. This classifier did not produce the orbital terrain used in these route calculations.\n- Buddy policy remains an untrained interface placeholder; no learned-navigation result is claimed.\n\n## Suggested proof line\n\n“On our fixed Gale simulation, scouting changes a route that crosses ${r.orbit_only.discovered_hazards.unique_cells} discovered hazard cells into one that crosses ${r.after_scout.discovered_hazards.unique_cells}, while visiting the same science stops. Walking costs ${kj(r.orbit_only.energy_j)} to ${kj(r.after_scout.energy_j)} kJ. We also publish the return margin under a 30% energy-cost error.”\n\nUse this only with the fixed-scenario qualification. The hazard benefit here must not be presented as ${r.orbit_only.discovered_hazards.unique_cells} individually validated rocks avoided. R5 supplies evidence for F1/X4; the actual slides are a separate block.\n`
-}
-
 export function renderPitch(report) {
-  const r = report.results.repeated_scout
-  const pct = (v) => (v * 100).toFixed(1)
+  const r = report.results, c = r.repeated_scout
   const kj = (v) => (v / 1000).toFixed(1)
-  const rows = r.energy_sensitivity.map((s) =>
-    `| ${s.energy_cost_multiplier.toFixed(1)}x | ${kj(s.margin.minimum_margin_after_reserve_j)} | ${pct(s.margin.fraction_distance_with_extra_20pct_margin)}% | ${pct(s.margin.fraction_distance_return_and_reserve_feasible)}% |`).join('\n')
-  const section = `## Re-scouting the changed route
+  return `# R5: measured pitch numbers
 
-The first pass leaves ${report.results.after_scout.all_layer_hazards.unique_cells} stored hazard cells on the replanned route. Repeating the app's existing "Fly the new route" operation gives:
+Generated by \`node ml/pitch_metrics/run.mjs\`; full evidence and source hashes: [pitch_metrics.json](../exports/pitch_metrics.json).
 
-| Pass | Newly discovered hazard cells | Hazards still on the new route in the full layer | Whole new route scanned? |
-|---|---:|---:|---|
-${r.passes.map((p) => `| ${p.pass} | ${p.newly_discovered_hazard_cells} | ${p.new_route_all_layer_hazard_cells} | ${p.new_route_fully_scanned ? 'yes' : 'no'} |`).join('\n')}
+## Three flights, re-planning after each
 
-Convergence: **${r.converged ? 'yes' : 'no'}**, after ${r.passes.length} passes. This is ${r.total_flights} simulated flight legs and ${(r.total_flight_metres / 1000).toFixed(2)} km of flight, including repeated extra flights; it is not one short flight. The drone flight is simulated and its energy is not charged to the astronaut's walking budget.
+Fixed Gale simulation, default **${report.scenario.energy_scenario}** energy scenario, ${c.final_route.stops.length} science stops. Budget ${kj(report.scenario.energy_budget_j)} kJ, reserve ${kj(report.scenario.reserve_j)} kJ. The budget already deducts estimated science-stop time.
 
-The final route visits ${r.final_route.stops.length} stops, costs **${kj(r.final_route.energy_j)} kJ** and is ${r.final_route.metres.toFixed(1)} m long. It crosses ${r.final_route.all_layer_hazards.unique_cells} cells of the stored hazard layer. Unmapped real-world hazards can still exist.
+- **${c.total_flights} flights**, each at most ${report.scenario.route_flight_limit_m} m; total ${(c.total_flight_metres / 1000).toFixed(3)} km of simulated corridor flight.
+- **${r.orbit_only.all_layer_hazards.unique_cells} → ${c.final_route.all_layer_hazards.unique_cells} distinct stored hazard cells** crossed; final route fully scanned: ${c.converged ? 'yes' : 'no'}.
+- Walking energy **${kj(r.orbit_only.energy_j)} → ${kj(c.final_route.energy_j)} kJ** (${r.delta.energy_percent.toFixed(2)}% change); distance ${r.orbit_only.metres.toFixed(1)} → ${c.final_route.metres.toFixed(1)} m.
+- Re-plan after each landing; select the next unseen stretch of the changed route. No pre-computed extra flights.
 
-| Walking-energy multiplier | Final-route minimum extra margin (kJ) | Distance with extra 20% margin | Distance with return + reserve feasible |
+| Flight | Corridor (m) | New hazard cells found | Stored hazards still on route | Route energy (kJ) | Whole new route scanned? |
+|---|---:|---:|---:|---:|---|
+${c.passes.map((p) => `| ${p.pass} | ${p.flight_metres.toFixed(1)} | ${p.newly_discovered_hazard_cells} | ${p.new_route_all_layer_hazard_cells} | ${kj(p.route_energy_j)} | ${p.new_route_fully_scanned ? 'yes' : 'no'} |`).join('\n')}
+
+## Return margin and energy sensitivity
+
+Scale both spent walking energy and the way home; keep the initial budget, reserve and route fixed. This is a chosen stress test, not a measured confidence interval.
+
+| Walking-cost multiplier | Minimum spare margin after home + reserve (kJ) | Distance retaining extra 20% of initial budget | Distance retaining home + reserve |
 |---|---:|---:|---:|
-${rows}
+${c.energy_sensitivity.map((v) => `| ${v.energy_cost_multiplier.toFixed(1)}x | ${kj(v.margin.minimum_margin_after_reserve_j)} | ${(100 * v.margin.fraction_distance_with_extra_20pct_margin).toFixed(1)}% | ${(100 * v.margin.fraction_distance_return_and_reserve_feasible).toFixed(1)}% |`).join('\n')}
 
-Energy figures before convergence are conditional calculations on a route that still crosses unobserved stored hazards; do not call that first route fully cleared.
+The app's per-cell return lookup is audited independently using directed homebound crossings; maximum understatement ${r.app_return_lookup_audit.maximum_underestimate_j_on_route.toFixed(2)} J, overstatement ${r.app_return_lookup_audit.maximum_overestimate_j_on_route.toFixed(2)} J on this route. Full ring-area snapshots remain in the JSON.
 
+## Frame-rate check
+
+The browser and replay scan every ${report.scenario.scan_step_m} m plus both endpoints, regardless of animation timing.
+
+| Replay | Hazard cells discovered | Stored hazards on final route | Walking energy (kJ) |
+|---|---:|---:|---:|
+${r.sampling_sensitivity.map((v) => `| ${v.mode} | ${v.discovered_hazard_cells} | ${v.after_all_layer_crossings.unique_cells} | ${kj(v.after_energy_j)} |`).join('\n')}
+
+## Limits and provenance
+
+These are simulated flights on NASA-derived terrain. Repositioning from the habitat, flight energy, recharge and daylight operations are not modelled. Zero stored hazard cells is not proof of a hazard-free Mars surface. Cells are not individual rocks; the route's ${r.orbit_only.reviewed_rock_clearance.unique_cells} reviewed-rock-clearance cells are reported separately from DTM estimates.
+
+R3: ${report.vision_evidence.rocks.accepted_points} human-accepted ROSCO proposals, ${report.vision_evidence.rocks.review_counts.uncertain} uncertain and excluded; no detector precision/recall claim. The rover-photo classifier did not produce this route's terrain: Curiosity ${report.vision_evidence.terrain.curiosity.correct}/${report.vision_evidence.terrain.curiosity.samples}; Perseverance transfer ${report.vision_evidence.terrain.perseverance.correct}/${report.vision_evidence.terrain.perseverance.samples}, with no big-rock support in the Curiosity test. Buddy remains an untrained placeholder and is cut from the submission.
+
+## Suggested proof line
+
+“On our fixed Gale simulation, ${c.total_flights} flights with a re-plan after each produce a fully scanned route through ${c.final_route.stops.length} science stops, crossing ${c.final_route.all_layer_hazards.unique_cells} stored hazard cells instead of ${r.orbit_only.all_layer_hazards.unique_cells}. Walking energy changes from ${kj(r.orbit_only.energy_j)} to ${kj(c.final_route.energy_j)} kJ. Even at 30% higher walking cost, the route retains the return budget and reserve.”
 `
-  const proof = `## Suggested proof line
-
-“On our fixed Gale simulation, ${r.passes.length} scout/replan cycles produce a fully scanned route visiting the same ${r.final_route.stops.length} science stops and crossing ${r.final_route.all_layer_hazards.unique_cells} cells of the stored hazard layer. Simulated walking energy changes from ${kj(report.results.orbit_only.energy_j)} to ${kj(r.final_route.energy_j)} kJ. Even at 30% higher walking cost, the entire route retains the return budget and reserve.”
-
-The cycles total ${r.total_flights} simulated flight legs and ${(r.total_flight_metres / 1000).toFixed(2)} km of flight; drone energy is excluded. These grid hazards come from a mixed terrain layer, not a count of individually validated rocks. This is a fixed-scenario simulation, not a field safety result. R5 supplies evidence for F1/X4; the actual slides are a separate block.
-`
-  return renderFirstPassPitch(report)
-    .replace('## Before and after the first scout pass',
-      `Energy scenario: **${report.scenario.energy_scenario ?? 'world default'}**. ${report.scenario.energy_scenario_details?.name ?? ''}. ` +
-      `The world budget already deducts planned time at science stops. It is a scenario estimate, not measured astronaut endurance.\n\nRuntime route flights are limited to **${report.scenario.route_flight_limit_m} m** (SkyFall scenario). The existing extra flights from scout_plan.json are appended unchanged on each pass; this replay does not enforce the proposed campaign flight count, recharge or daylight constraints.\n\n## Before and after the first scout pass`)
-    .replace('## Energy sensitivity\n', section + '## Energy sensitivity after the first pass\n')
-    .replace(/## Suggested proof line\n[\s\S]*$/, proof)
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

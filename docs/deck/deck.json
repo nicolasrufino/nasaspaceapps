@@ -1,1 +1,73 @@
-{"v": 5, "createdOnFiles": {"v": 1, "at": "2026-11-14T18:10:00Z"}, "lists": "css", "format": {"v": 1, "shared": ["project/deck.css"]}, "title": "Martian Map Pitch", "order": ["cover", "getting-home", "mars-delay", "one-sentence", "loop", "objectives", "demo", "data", "proof", "why-best", "impact", "next", "robot", "resources"], "sections": {"s1": {"description": "Hook and problem: there is no map at the scale of one walk, and on Mars help is minutes away.", "start": "cover"}, "s2": {"description": "The solution: how we make the map, and the live demo.", "start": "one-sentence"}, "s3": {"description": "The NASA data inside, proof that each piece works, why it beats every alternative, and who wins.", "start": "data"}, "s4": {"description": "Team and what comes next.", "start": "next"}}, "cover": "cover", "faces": {"switzer": {"family": "Switzer", "src": "project/ds/mapier/fonts/Switzer-Variable.woff2"}, "google-sans-flex": {"family": "Google Sans Flex", "src": "project/ds/mapier/fonts/GoogleSansFlex-Variable.woff2"}, "jetbrains-mono": {"family": "JetBrains Mono", "href": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"}}, "designSystems": [{"title": "Mapier Design System", "namespace": "mapier", "artifact": "https://claude.ai/artifact/VtpcptqLpT2oyXwqyWFxhb", "version": "1792890338-ac96", "copiedAt": "2026-11-14T18:30:00Z"}]}
+{
+  "v": 5,
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-11-14T18:10:00Z"
+  },
+  "lists": "css",
+  "format": {
+    "v": 1,
+    "shared": [
+      "project/deck.css"
+    ]
+  },
+  "title": "Mission VESTA: Vesta Scout",
+  "order": [
+    "cover",
+    "getting-home",
+    "mars-delay",
+    "one-sentence",
+    "loop",
+    "objectives",
+    "demo",
+    "data",
+    "proof",
+    "why-best",
+    "impact",
+    "next",
+    "robot",
+    "resources"
+  ],
+  "sections": {
+    "s1": {
+      "description": "One science walk, its hazards and return budget.",
+      "start": "cover"
+    },
+    "s2": {
+      "description": "The solution: how we make the map, and the live demo.",
+      "start": "one-sentence"
+    },
+    "s3": {
+      "description": "NASA source context and the fixed Gale before/after proof.",
+      "start": "data"
+    },
+    "s4": {
+      "description": "Team and what comes next.",
+      "start": "next"
+    }
+  },
+  "cover": "cover",
+  "faces": {
+    "switzer": {
+      "family": "Switzer",
+      "src": "project/ds/mapier/fonts/Switzer-Variable.woff2"
+    },
+    "google-sans-flex": {
+      "family": "Google Sans Flex",
+      "src": "project/ds/mapier/fonts/GoogleSansFlex-Variable.woff2"
+    },
+    "jetbrains-mono": {
+      "family": "JetBrains Mono",
+      "href": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
+    }
+  },
+  "designSystems": [
+    {
+      "title": "Mapier Design System",
+      "namespace": "mapier",
+      "artifact": "https://claude.ai/artifact/VtpcptqLpT2oyXwqyWFxhb",
+      "version": "1792890338-ac96",
+      "copiedAt": "2026-11-14T18:30:00Z"
+    }
+  ]
+}
