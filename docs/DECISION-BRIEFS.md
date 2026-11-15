@@ -66,6 +66,7 @@ Written 2026-11-15.
 **What the research says.**
 - **Height matters more than camera tilt.** A drone segmentation study measured accuracy changing by **3–25% with flight height**, but only **0.5% with camera angle** ([ASCE 2021](https://ascelibrary.com/doi/10.1061/9780784483893.109)).
 - **Ground-trained models degrade as the drone climbs.** In a ground-to-aerial study, a model trained on ground-view labels lost about **46% of its accuracy** going from the lowest to the highest flight level. Training on unlabelled flying images as well (self-distillation) cut the loss to about 21% ([Progressive Self-Distillation, 2022](https://arxiv.org/pdf/2208.13404)). [FlyAwareV2](https://arxiv.org/pdf/2510.13243) reports the same pattern: the bigger the altitude difference, the bigger the drop.
+- **SkyFall carries two colour cameras: one pointing straight down, one pointing at the horizon** (same 13 MP sensor, 143° × 106° field of view; mission package §IV). The horizon camera gives a slanted, rover-like view at any height, and the downward one is for maps.
 - **Our own data agrees:** Jules's model scored 93% on Curiosity but 48% on Perseverance, both at about 2 m. Even a different camera at the same height breaks it.
 - **No labelled helicopter terrain dataset exists for Mars** (AI4Mars is rover images only). Ingenuity's images are public but unlabelled.
 
@@ -141,7 +142,7 @@ The app keeps height as a knob either way, so nothing waits on this.
 
 ## 7. Flight budget: the evidence first
 
-**Status: open. Nicolas asked for every number with its source before deciding.** Correction: an earlier version said flights were "capped at about 10 Wh / 90 s". That came from a secondary source and is **wrong**. NASA says the cap was motor temperature, at 130–170 s (below).
+**Status: open. Nicolas asked for every number with its source before deciding.** Updated 2026-11-15 with NASA's SkyFall mission package ([SkyFall Mission Information Package, NASA, Sept 2026](https://science.nasa.gov/wp-content/uploads/2026/09/skyfall-mission-information-package-final.pdf)), which **does** publish SkyFall's flight cadence. Earlier docs said it did not. Second correction: an earlier version said flights were "capped at about 10 Wh / 90 s". That came from a secondary source and is **wrong**. NASA says the cap was motor temperature, at 130–170 s (below).
 
 | Question | What is known | Source | Confidence |
 |---|---|---|---|
@@ -154,16 +155,15 @@ The app keeps height as a knob either way, so nothing waits on this.
 | Recharge | Ingenuity charged from its own solar panel, so it flew at most once per sol in practice | NASA blog | NASA |
 | Recharge from a habitat | Ingenuity's exact cell model is not confirmed. A typical high-power 18650 cell charges fully in **2.5 h at 23 °C** (Sony VTC4 datasheet). Li-ion cells must be warm to charge, so the dock must be heated | [Sony VTC4 datasheet](https://files.batteryjunction.com/frontend/files/Sony_VTC4.pdf) | **Estimate** |
 | Sending images home | Ingenuity's radio: 250 kbit/s on air, about **80 kbit/s actual** after a flight. One 13 MP colour image of a few MB would take several minutes; a strip of dozens of images would take hours | [JPL telecom paper (EME 2024)](https://ok2kkw.com/eme/Trenton/papers/N5BF-Mars_Helicopter_Telecom_EME2024.pdf) | Measured; image size is an estimate |
-| SkyFall | Three helicopters, cameras, ground-penetrating radar. **No published range, battery, recharge time or flights per sol** | [JPL SkyFall](https://www.jpl.nasa.gov/missions/skyfall/) | NASA |
+| **SkyFall's own cadence** | Each helicopter flies **about 1–2 km per flight sol, about 2.5 min in the air, then one non-flight sol to recharge the battery and downlink 100–400 Mbit**. At least 50 km, up to 300 km per helicopter over a 6-month mission (goal: one Earth year). Battery capacity is not given | [SkyFall Mission Information Package, NASA, Sept 2026](https://science.nasa.gov/wp-content/uploads/2026/09/skyfall-mission-information-package-final.pdf) §II–III | **NASA, primary** |
 | Bigger concept | Mars Science Helicopter: about 30 kg, roughly 10–12 km per flight; solar recharge over one sol (single source) | [JPL poster](https://www.jpl.nasa.gov/site/research/media/posters/2021/R21015p.pdf); [IEEE Spectrum](https://spectrum.ieee.org/the-next-mars-helicopter) | Concept |
 
 **What follows from the evidence (not decided):**
-- **Flights per helicopter per sol is set by three things:** the flying window, the recharge time, and motor cooling. The battery size per flight is not the limit.
-- **Window:** Ingenuity's documented flights ran from about 9:30 AM to 12:30 PM. With habitat charging, the late-afternoon battery worry goes away, but no published data says afternoon winds are safe, so the window stays 9:30 AM–about 1:00 PM.
-- **Recharge:** about 2.5 h (estimate). Then 9:30 AM, then about 12:15 PM: **2 flights per helicopter fit; 3 do not** unless charging is faster.
-- **Images must come off by dock or cable, not by Ingenuity's radio.** At 80 kbit/s a strip's images would take hours. This is a design requirement for our habitat, said as an assumption.
-- **Hence a range, not a number:** 3 to 6 flights per walk (3 helicopters × 1–2 waves). The benchmark reports results at 3, 6 and 9 so the conclusion does not depend on the exact number.
-
+- **SkyFall as published (solar only):** each helicopter flies every other sol. With all three resting the sol before, the scouting sol gives **3 flights of 1–2 km each**. That is 3–6 km of ground, and the Gale tour route is about 1.3 km. This baseline needs no assumption from us.
+- **This lines up with NASA's crew rule.** Crews keep a non-walk sol between walks; helicopters keep a non-flight sol between flights. Helicopters fly on the crew's rest sol and recharge on the walk sol.
+- **With habitat charging (our assumption):** a second wave around 12:15 PM becomes possible (recharge about 2.5 h, estimate), so **up to 6 flights**. It needs a warm dock that charges and pulls the images off by cable.
+- **Per-flight distance:** SkyFall says 1–2 km per flight sol; the app uses 700 m (Ingenuity's longest flight). **New decision:** switch the knob to SkyFall's figure.
+- **Recommendation for Nicolas:** plan on **3 flights per walk** (published), show 6 as the "habitat charging" upgrade, and report the benchmark at 3 and 6.
 ---
 
 ## 8. A scouting sol and a walk sol, hour by hour
@@ -186,11 +186,11 @@ The app keeps height as a knob either way, so nothing waits on this.
 | 5:30 AM | Wake; morning routine until 7:00 | Crew |
 | ~6:00 AM | Sunrise. Helicopters wait, charged and warm in the habitat dock | — |
 | 7:00–9:30 AM | Crew picks tomorrow's science stops on the 2D map. The planner proposes flights, each with its reason. Crew approves. Wind check | Crew + app |
-| **9:30 AM** | **Wave 1:** 3 helicopters, one strip each; about 2–3 min in the air per flight | Helicopters |
+| **9:30 AM** | **Wave 1:** 3 helicopters, one strip each; about 2.5 min and 1–2 km per flight (SkyFall's published figures) | Helicopters |
 | ~9:45 AM | All docked. Images download over cable; recharge starts (about 2.5 h) | Dock |
 | 9:45–11:30 AM | Processing: 3D terrain from the images, rock and ground detection, belief map updated, routes re-planned. Planner decides whether wave 2 is worth flying (stop rule) | App |
 | 11:30 AM–12:30 PM | Midday meal | Crew |
-| **~12:15–12:30 PM** | **Wave 2,** only if worth it | Helicopters |
+| **~12:15–12:30 PM** | **Wave 2,** only if worth it **and** only with habitat charging (our assumption; SkyFall on solar flies once per two sols) | Helicopters |
 | 12:45–2:30 PM | Processing wave 2; final route plus alternatives | App |
 | 2:30–4:00 PM | **Crew review:** route, why each flight flew, the walk-back ring, times at each stop, what was not scouted | Crew |
 | 4:00–7:00 PM | Packing list, suit checkout, exercise | Crew |
@@ -225,6 +225,37 @@ The app keeps height as a knob either way, so nothing waits on this.
 - **Where it has flown:** full colour, with the rocks found and the steps that can't be crossed. Later, real 1 m HiRISE heights along each strip (about 84 KB per flight).
 - **Why:** it shows what we **know**, and grows only where we learned something.
 - **Honesty:** the 8 m map is real NASA orbit data; the "detail" is the 1 m HiRISE DTM standing in for helicopter stereo. The screen says so.
+
+
+---
+
+## 10. What the helicopter senses besides pictures
+
+**Status: open. Research for Nicolas.**
+
+**What our app does today (checked in the code):** the simulated flight only reveals the hidden rock layer (`rocks_fine`) inside a 15 m swath (`app/src/scout.js`, `reveal()` in `app/src/main.js`). Radiation (`dose_rate`), chemistry (ChemCam/APXS points), hydrogen (DAN) and minerals (CRISM) come from orbit and from Curiosity, **not** from the helicopter.
+
+**What SkyFall actually carries** ([SkyFall Mission Information Package, Sept 2026](https://science.nasa.gov/wp-content/uploads/2026/09/skyfall-mission-information-package-final.pdf) §IV), and what each would give us:
+
+| Sensor (on SkyFall) | What it measures | How accurate | Needs a trained model? | Has a drone done it? |
+|---|---|---|---|---|
+| **2 colour cameras**, 13 MP, one straight down, one at the horizon; over 200 images per flight | 3D terrain and rocks: "cm-scale orthophotos and digital elevation maps" from stereo | Ingenuity images gave 3–6 cm height error from 10 m up (`docs/RESEARCH.md` §13). Navcam-only maps: several cm to tens of cm | **No** for 3D (structure from motion). **Yes** for "sand or rock" labels (brief §4) | Yes, on Mars (Ingenuity) |
+| **2 near-IR cameras**, filters "TBD, targeting mineral-relevant wavelengths" | "Some information on mineralogy or chemistry", e.g. water-bearing minerals | A few broad bands, not a spectrometer. Earth drone hyperspectral reaches 73–87% for mineral maps, with lab-checked samples ([Frontiers 2022](https://doi.org/10.3389/feart.2022.871529); [DOAJ](https://doaj.org/article/4bf1f06de187448fab335cf07d1c48f4)) | Band ratios need only calibration; a mineral classifier needs labelled ground truth | Yes on Earth; planned on Mars |
+| **Ground-penetrating radar**, 500–2500 MHz | Layers and buried ice, **3–5 m deep**; also how deep loose sand is (the trap that stopped Spirit) | 10 cm range resolution in air. Earth drone GPR needed calibration against hand-measured depths, error up to 10% ([Vergnano 2022](https://doi.org/10.3390/rs14071763)). Drone GPR sees less deep than ground GPR ([review](https://doi.org/10.3390/rs14143245)) | **No:** classical processing plus calibration; ML optional | Yes on Earth; planned on Mars |
+| **Dosimeter** (single chip, 14 µrad per count) | Radiation dose, "while airborne and on the ground", "over minutes to hours", for "a three-dimensional map" | Our arithmetic: Mars surface dose about 0.21 mGy/day ([RAD](https://www.swri.org/press-release/swri-scientists-publish-first-radiation-measurements-surface-mars)) is about **1 count per minute**. A 2.5 min flight gives 2–3 counts, too few to mean anything. Measuring a site to ±5% takes about 400 counts, **about 6.5 hours sitting still** | **No:** calibration only | Yes on Earth (Fukushima drones, 1–5 m up; [Martin 2016](https://research-information.bris.ac.uk/ws/files/48818707/Martin_et_al_2015.pdf)) |
+| **Air temperature** (thermocouples) + **wind** (from how the helicopter drifts) | Weather in the lowest air | Wind to about ±5 m/s (TBC). Ingenuity-derived winds matched MEDA's direction ([Jackson 2024](https://arxiv.org/abs/2410.19132)) | No: physics model | Yes, on Mars (Ingenuity) |
+
+**What SkyFall does not carry, and why it matters for us:**
+- **No chemistry by laser or contact** (like ChemCam, APXS). LIBS works at 1.3–7 m on ChemCam, which is about 10 kg. A version small enough for a Mars helicopter is being built (MicroLIBS, at most 1.5 kg, CNES with IRAP and LANL, first laser firing September 2025; [CNES](https://cnes.fr/en/news/microlibs-small-french-instrument-big-ambitions-exploring-mars)). Its working distance is not confirmed in what we found, so we do not claim one.
+- **No gamma or neutron spectrometer** (like Odyssey GRS or DAN): too heavy and too slow to count. Dragonfly measures this only after landing ([DraGNS](https://civspace.jhuapl.edu/destinations/instruments/dragns)).
+- **No magnetometer**, though concepts propose one at about 20 g ([arXiv 2010.06630](https://arxiv.org/pdf/2010.06630); [JPL MSH payload poster](https://www.jpl.nasa.gov/site/research/media/posters/2021/R19011p.pdf)).
+
+**What this means for Martian Map (proposal):**
+1. **Keep the helicopter's main job: 3D terrain and hazards from its cameras.** That is proven on Mars, and only the hazard labels need training.
+2. **Radiation comes from the helicopters while they rest, not while they fly.** SkyFall sits on the ground every other sol. A helicopter resting near a ridge or butte for hours can check our `dose_rate` estimate (RAD mean × sky-view factor). On Mars a butte blocking 19% of the sky cut the dose measured by Curiosity's RAD by 4% ([Ehresmann et al. 2021, JGR Planets](https://doi.org/10.1029/2021JE006851)).
+3. **Sand depth from radar is the biggest safety add**, because orbit cannot tell firm ground from soft sand. We have no radar data for Gale, so in the demo it is a labelled "SkyFall would add this" layer, never invented numbers.
+4. **Near-IR gives a hint of hydrated minerals** for science stops (R2 science goal), not a measurement. Chemistry stays with Curiosity's real ChemCam and APXS data.
+5. **The sonar-like reveal** (brief §9) shows the cameras' 3D scan; radar could show as a second, slower "ping" underneath.
 
 
 ---
