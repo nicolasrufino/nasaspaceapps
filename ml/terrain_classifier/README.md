@@ -10,6 +10,12 @@ ImageNet normalization is embedded in the graph. No app flag is enabled.
 All reported predictions were run through the exported ONNX in ONNX Runtime.
 The adjacent export JSON contains the confusion matrices and exact settings.
 
+The published model remains v1 after two follow-ups. The latest
+[expanded-data experiment](EXPANDED.md) used 4,609 training patches and partial
+feature fine-tuning. It improved historical expert scores and challenge big-rock
+recall, but lost accuracy on a new general test, so it was not promoted. Its full
+comparison is reported separately rather than replacing the original measurements.
+
 | Evaluation | Patches | Accuracy | Balanced accuracy, supported classes |
 |---|---:|---:|---:|
 | Curiosity expert min3 test subset | 159 | 0.9308176101 | 0.9265873016 |
