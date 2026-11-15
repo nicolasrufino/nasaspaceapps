@@ -126,6 +126,7 @@ export function mapFurniture() {
   el.style.cssText = 'position:fixed;right:max(12px,env(safe-area-inset-right));bottom:calc(min(38vmin, 260px) + 44px);z-index:5;display:flex;gap:10px;align-items:flex-end;font:600 11px system-ui,sans-serif;color:#fff;text-shadow:0 1px 3px #000;pointer-events:none'
   el.innerHTML = `<div id="north" style="width:26px;height:26px;display:grid;place-items:center;transition:transform .1s"><svg width="22" height="26" viewBox="0 0 22 26"><path d="M11 1 L19 22 L11 17 L3 22 Z" fill="#fff" stroke="#000" stroke-opacity=".5"/><text x="11" y="15" text-anchor="middle" font-size="8" font-weight="700" fill="#000">N</text></svg></div>
     <div><div id="barLabel"></div><div id="bar" style="height:6px;border:2px solid #fff;border-top:0;box-shadow:0 1px 3px #0008"></div><div style="font-weight:500;opacity:.85">Vertical scale 1:1</div></div>`
+  el.id = 'furniture'
   document.body.append(el)
   const bar = el.querySelector('#bar'), label = el.querySelector('#barLabel'), north = el.querySelector('#north')
   return {

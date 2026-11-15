@@ -6,7 +6,7 @@ import { startWalk, stepTo, ringMask, ringLimit, appState, oxygenL } from './wal
 import { planTour, MAX_STOPS } from './plan.js'
 import { mountFlightLog } from './scout-why.js'
 import { createVoiSelector } from './scout-voi-client.js'
-import { createScout, launchScoutFlight, completeScoutFlight, scanFlight, pointAlong, MAX_FLIGHTS, FLIGHT_ANIMATION_S } from './scout.js'
+import { createScout, launchScoutFlight, completeScoutFlight, scanFlight, pointAlong, MAX_FLIGHTS, FLIGHT_ANIMATION_S, SWATH_M, FLIGHT_M } from './scout.js'
 import { hazardRGB, blockedSegments, reviewedMask, legendHTML, COLORS as HAZARD } from './hazards.js'
 import { beliefMap } from './belief.js'
 import { terrainMaterial, setImageryUVs, loadImagery, imageryCells } from './terrain.js'
@@ -16,6 +16,8 @@ import { stretches, describe, lowestMargin, shortestAlternative } from './why.js
 import { initStops } from './stops.js'
 import { initSteps } from './steps.js'
 import { initTerrainClassifier } from './terrain-classifier.js'
+import { explainFlight, flightText } from './scout-why.js'
+import { initFlow } from './flow/flow.js'
 
 const $ = (id) => document.getElementById(id)
 const params = new URLSearchParams(location.search)
@@ -23,6 +25,12 @@ const params = new URLSearchParams(location.search)
 // ?world=synthetic loads the test world; ?flags= (empty) switches every feature off (docs/PLAN.md §10).
 const DEMO_FLAGS = 'drone_scout,why_flight,why_route,layers_extra,pov_images,science_stop,step_mode,detail,hazards,contours'
 const worldName = params.get('world') ?? 'gale'
+// Vesta Scout is the guided mission (flow/); ?vision (and the test world) keeps the map screen, which is Vesta Vision.
+const flowMode = !params.has('vision') && !params.has('world') && !params.has('flags')
+const listeners = {}
+const emit = (evt, data) => (listeners[evt] ?? []).forEach((fn) => fn(data))
+let objective = 'easiest' // or 'shortest' (flow stage 1)
+let flightSeconds = null // flow: seconds a flight takes on screen; null = scout.js default
 const flags = new Set((params.get('flags') ?? DEMO_FLAGS).split(',').filter(Boolean))
 if (flags.has('classifier')) initTerrainClassifier($('walk'))
 const base = `${import.meta.env.BASE_URL}${worldName}`
@@ -57,7 +65,8 @@ const ctg = layers.cost_to_go
 const scanned = new Uint8Array(W * H) // cells the helicopter has seen
 const rockSeen = (i) => scanned[i] && layers.rocks_fine?.[i]
 const cellPos = ([x, y], lift = 0) => new THREE.Vector3(x * cs, layers.height[y * W + x] + lift, y * cs)
-$('title').textContent = `Vesta Scout · ${meta.name} · ${W}×${H} cells · ${cs} m${scenario ? ` · ${scenario.name}` : ''}`
+document.title = flowMode ? 'Vesta Scout' : 'Vesta Vision'
+$('title').textContent = `${flowMode ? 'Vesta Scout' : 'Vesta Vision'} · ${meta.name} · ${W}×${H} cells · ${cs} m${scenario ? ` · ${scenario.name}` : ''}`
 
 // --- 3D view: visual only, no route maths here (docs/CRITIQUE.md). ---
 // One vertex per cell; cell (x, y) sits at (x*cs, height, y*cs), so +z is south and north is -z.
@@ -158,10 +167,10 @@ const EYE_M = 1.7
 const view = { mode: 'map', yaw: 0, pitch: -0.05, drag: null }
 const viewBtn = Object.assign(document.createElement('button'), { id: 'viewBtn', type: 'button' })
 viewBtn.style.cssText = 'position:fixed;right:max(12px,env(safe-area-inset-right));bottom:calc(min(38vmin, 260px) + 96px);z-index:6;min-height:44px;padding:0 14px;border-radius:10px;border:1px solid #fff5;background:#141a22e6;color:#fff;font:600 14px system-ui,sans-serif'
-const visionNote = Object.assign(document.createElement('div'), { hidden: true, textContent: 'Vesta Vision · real NASA HiRISE terrain and imagery (features of about 3 m and up) · drag to look' })
+const visionNote = Object.assign(document.createElement('div'), { hidden: true, id: 'visionNote', textContent: 'Vesta Vision · real NASA HiRISE terrain and imagery (features of about 3 m and up) · drag to look' })
 visionNote.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:max(70px,calc(env(safe-area-inset-bottom) + 70px));z-index:5;max-width:min(92vw,520px);padding:6px 10px;border-radius:8px;background:#141a22cc;color:#fff;font:500 12px system-ui,sans-serif;text-align:center;pointer-events:none'
 // In the Vision views the big panel is hidden (no HUD); a small bar keeps the walk controls.
-const visionBar = Object.assign(document.createElement('div'), { hidden: true })
+const visionBar = Object.assign(document.createElement('div'), { hidden: true, id: 'visionBar' })
 visionBar.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:max(14px,env(safe-area-inset-bottom));z-index:6;display:flex;gap:8px'
 for (const [text, id] of [['Walk / pause', 'play'], ['Step', 'step'], ['Back to start', 'reset']]) {
   const b = Object.assign(document.createElement('button'), { type: 'button', textContent: text, onclick: () => $(id).click() })
@@ -235,7 +244,7 @@ setView('map')
 // Any tap, scroll or key skips it; off for reduced motion and for automated tests (their clicks must not race it).
 const INTRO_HOLD_S = 1.2, INTRO_FLY_S = 4
 let intro = null
-if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !navigator.webdriver) {
+if (!flowMode && !matchMedia('(prefers-reduced-motion: reduce)').matches && !navigator.webdriver) {
   const mid = new THREE.Vector3((W * cs) / 2, home.y, (H * cs) / 2)
   const label = document.createElement('div')
   label.textContent = 'Gale crater, lower Mount Sharp · NASA MRO HiRISE'
@@ -285,6 +294,7 @@ const shownLayers = meta.layers.filter((n) => layers[n] && n !== 'rocks_fine' &&
 const IMAGERY = 'imagery' // HiRISE colour draped on the terrain (ticket F2); the default view when the world has it
 const HAZARDS = 'hazards' // slope, blocked steps and rocks with a legend (ticket F6, flag hazards)
 const WHITE = new Uint8Array(W * H * 3).fill(255)
+let imageryCanvas = null // the whole-slice picture, for the flow's 2D map
 let imageryRGB = null // one colour per cell, for the minimap
 let layerName = 'terrain_class'
 let layerColors = layerRGB(layerName, layers[layerName])
@@ -386,11 +396,17 @@ function replan(keepBefore = false, planned = null) {
   if (!keepBefore) scoutBefore = null
   if (!keepBefore) $('scoutStatus').textContent = ''
   route = planned ?? planTour(world, allStops().filter((s) => included.has(s.id)), blocked)
+  if (!planned && objective === 'shortest' && route.stops.length) { // same stops in the same order, by least distance; energy re-measured
+    const cells = shortestAlternative(world, route.stops.map((id) => allStops().find((s) => s.id === id).cell), blocked)
+    const d = describe(world, cells, blocked)
+    route = { ...route, cells, energy_j: d.energy_j, minutes: d.minutes }
+  }
   refreshLayer()
   routeLine.geometry.dispose()
   drawRouteLine()
   if (flags.has('why_route')) explain()
   reset() // a new plan starts a new walk; reset also draws the stops
+  emit('plan', route)
 }
 
 // --- Why this route (block E5, flag why_route): numbers for each stretch, the tightest moment,
@@ -678,7 +694,9 @@ async function startNextFlight() {
   } else next = launchScoutFlight(world, flight)
   if (next) {
     flight.along = 0
+    emit('flight:start', { n: flightsUsed + 1, of: MAX_FLIGHTS, metres: next.metres, waypoints: next.waypoints, kind: next.kind })
     flight.zoom = 3 // seconds of easing the camera in
+    camera.clearViewOffset()
     flight.camOff ??= camera.position.clone().sub(controls.target) // put back after the last landing
     heli.userData.beam.visible = heli.visible = heliIcon.visible = scanDots.visible = true
   }
@@ -688,7 +706,7 @@ async function startNextFlight() {
 function tickFlight(dt) {
   heli.userData.spin(dt)
   const f = flight.active
-  flight.along = Math.min(f.metres, flight.along + (f.metres / FLIGHT_ANIMATION_S) * dt) // slow enough to see the discovery
+  flight.along = Math.min(f.metres, flight.along + (f.metres / (flightSeconds ?? FLIGHT_ANIMATION_S)) * dt) // slow enough to see the discovery
   const fresh = scanFlight(meta, scanned, f, flight.along)
   flight.found += reveal(fresh)
   const climb = Math.min(1, flight.along / 20, (f.metres - flight.along) / 20) // take off and land over 20 m (drawn only; the scan is unchanged)
@@ -699,11 +717,13 @@ function tickFlight(dt) {
   if (fresh.length) render()
   $('scoutStatus').textContent = `Flight ${flightsUsed + 1} of ${MAX_FLIGHTS} (${f.kind}) · ${flight.found} rock cells found · ` +
     `simulated helicopter flight, rocks from ${sourceLabel(meta, 'rocks_fine') || meta.sources?.all || 'rocks_fine'}`
+  emit('flight:tick', { n: flightsUsed + 1, of: MAX_FLIGHTS, along: flight.along, metres: f.metres, found: flight.found, x: heli.position.x, z: heli.position.z })
   if (flight.along < f.metres) return
 
   const completed = completeScoutFlight(world, flight)
   flightsUsed++
   logFlight?.(completed, flight.targets, flightsUsed)
+  { const summary = explainFlight(world, completed, flight.targets); emit('flight:end', { n: flightsUsed, of: MAX_FLIGHTS, summary, text: flightText(summary, flightsUsed) }) }
   blocked = flight.blocked
   const before = flight.before
   const crossed = new Set(before.cells.filter(([x, y]) => blocked[y * W + x]).map(([x, y]) => y * W + x)).size
@@ -732,6 +752,7 @@ function land() {
     (fullyScanned ? 'The final route is fully scouted.' : 'Unscouted ground remains on this route.') +
     ' Simulated corridor flights; repositioning, recharge and helicopter energy excluded.' +
     (voiNote ? ` ${voiNote}` : '')
+  emit('landed', { before, after: route, found, crossed: scoutBefore?.crossed ?? 0, flightsUsed, flightsLeft: MAX_FLIGHTS - flightsUsed, fullyScanned })
 }
 
 // --- Walk (block E2): along the planned route, energy and oxygen drain, ring, point of no return. ---
@@ -832,6 +853,8 @@ replan()
 // Real imagery (ticket F2): drape HiRISE on the terrain and make it the default view; it sharpens as tiles arrive.
 loadImagery(meta, renderer, (canvas) => {
   imageryRGB = imageryCells(canvas, W, H)
+  imageryCanvas = canvas
+  emit('imagery', canvas)
   if (layerName === IMAGERY) { layerColors = imageryRGB; render() }
 }).then((imagery) => {
   if (!imagery) return
@@ -851,4 +874,49 @@ if (flags.has('detail')) {
     if (route) drawRouteLine()
   }, { maxTiles: Math.min(innerWidth, innerHeight) < 600 ? 4 : 9 }).then((t) => (tiles = t)).catch(() => {})
 }
-window.vesta = { camera, controls, walker, tiles: () => tiles, groundAt, setView, view } // for checks from the console and tests
+// --- The guided mission (docs/UX-PLAN.md): flow/ draws the stages; this object is all it may touch. ---
+const app = {
+  world, meta, W, H, cs, MAX_FLIGHTS,
+  usableJ: meta.energy_budget_j * (1 - meta.reserve_fraction),
+  on(evt, fn) { (listeners[evt] ??= []).push(fn); return () => listeners[evt].splice(listeners[evt].indexOf(fn), 1) },
+  stops: () => allStops().map((s) => ({ ...s, included: included.has(s.id), dropped: route.dropped.includes(s.id), photo: photos.find((p) => p.target_id === s.id) })),
+  toggleStop(id) { if (flight) return; included.has(id) ? included.delete(id) : included.add(id); replan() },
+  addStop(cell) { if (flight) return; const id = `C${++customCount}`; custom.push({ id, name: `Your stop ${customCount}`, cell, custom: true, why: 'Picked on the map.' }); included.add(id); replan() },
+  route: () => route, // { cells, stops, dropped, energy_j, minutes }
+  describe: (cells) => describe(world, cells, blocked), // { metres, energy_j, minutes, steepest_deg, sand_share, climb_m, ... }
+  objective: () => objective,
+  setObjective(o) { if (flight) return; objective = o; replan() },
+  scanned, // Uint8Array(W*H): 1 where a helicopter has looked
+  rockSeen: (i) => !!rockSeen(i),
+  blocked: () => blocked,
+  belief: () => beliefMap(world, scanned, blocked), // Float32Array(W*H) chance of a hidden rock; experimental
+  imagery: () => imageryCanvas, // 2048 px canvas of the slice, north up, or null until loaded ('imagery' event)
+  scout: {
+    start: () => $('scout').click(),
+    flying: () => !!flight, used: () => flightsUsed, left: () => MAX_FLIGHTS - flightsUsed,
+    before: () => scoutBefore, // { cells, energy_j, crossed } of the route before the last scout, or null
+    seconds(v) { flightSeconds = v }, // how long one flight takes on screen
+    // A dry run for stage 2: the first flight the scout would fly now ({ waypoints: [[x, y], ...] cells, metres, kind }) or null. Nothing is flown.
+    preview() {
+      const dry = createScout(world, allStops().filter((s) => included.has(s.id)), { scanned: Uint8Array.from(scanned), maxFlights: MAX_FLIGHTS - flightsUsed })
+      return launchScoutFlight(world, dry)
+    },
+    swathM: SWATH_M, flightM: FLIGHT_M,
+  },
+  walk: { play, pause, reset, state: () => ({ k, of: route.cells.length - 1, energy_left_j: walk.energy_left_j }) },
+  // Cameras: 'habitat' (third person beside the astronaut and the habitat), 'walker' (behind the astronaut), 'map'.
+  camera(mode) {
+    camera.clearViewOffset()
+    if (mode === 'walker') return setView('follow')
+    setView('map')
+    if (mode === 'habitat') { // low, beside the astronaut, the habitat behind; the subject sits lower right so the centre is free for the 2D map
+      const b = cellPos(meta.base_cell), hab = habitat.position
+      controls.target.set((b.x + hab.x) / 2, groundAt(b.x, b.z) + 2.4, (b.z + hab.z) / 2)
+      const cx = b.x + 12, cz = b.z + 20
+      camera.position.set(cx, Math.max(groundAt(cx, cz) + 2, groundAt(b.x, b.z) + 4.5), cz)
+      if (innerWidth > 760) camera.setViewOffset(innerWidth, innerHeight, -innerWidth * 0.3, -innerHeight * 0.18, innerWidth, innerHeight)
+    }
+  },
+}
+if (flowMode) initFlow(app)
+window.vesta = { app, camera, controls, walker, tiles: () => tiles, groundAt, setView, view } // for checks from the console and tests
