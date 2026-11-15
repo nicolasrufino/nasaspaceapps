@@ -10,7 +10,7 @@ export default ({ mode }) => ({
   server: { host: mode === 'phone' },
   build: {
     chunkSizeWarningLimit: 1000,
-    // Two pages: the app at / and the Mission VESTA site at /mission-vesta/.
-    rollupOptions: { input: { app: 'index.html', vesta: 'mission-vesta/index.html' } },
+    // Two pages: the Mission VESTA home page at / and the map app (Vesta Scout) at /scout/.
+    rollupOptions: { input: { home: 'index.html', scout: 'scout/index.html' } },
   }, // three.js alone is ~550 kB (140 kB gzipped)
 })

@@ -6,6 +6,7 @@ One place for what the team decided, why, and what is still open. **Add a line h
 
 | Date | Decision | Why | Who | Where it lives |
 |---|---|---|---|---|
+| 2026-11-15 | **The Mission VESTA page is the home page; the map app moved to `/scout/`** (nasa.nicolasrufino.com/scout/). Old `/?world=…` and `/?flags=…` links forward there; `/mission-vesta/` redirects home | The custom domain should open on the design; the app is Vesta Scout | Nicolas | `app/index.html`, `app/scout/index.html` |
 | 2026-11-15 | **Stop rule follows the challenge:** keep flying while a flight could make the walk safer, reach more science, or make it easier (in that order); stop when no flight would change the plan, or at the budget | NASA asks for a safe walk first, with new science, at one-walk scale | Nicolas | Brief §6 |
 | 2026-11-15 | **Demo look:** unexplored ground is flat muted grey around a well-designed habitat (spaceship) model; the helicopter reveals ground with a sonar-like scanning sweep; flown ground shows in full colour | Shows only what we know; the map grows where we learned | Nicolas | Brief §9 |
 | 2026-11-15 | **Always check a choice against what the challenge asks** (`docs/PRODUCT.md` §1) | The stop rule first drafted on energy alone did not match the challenge | Nicolas | This file |
