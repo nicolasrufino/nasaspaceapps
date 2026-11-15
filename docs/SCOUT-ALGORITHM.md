@@ -138,7 +138,7 @@ A route is blocked if any cell on it is. Rock fields come in patches, so neighbo
 Steps 2 and 3 are ML work in `ml/` (Jules); step 1 is a pipeline layer. None of them is built yet.
 
 **Plan for sensing:**
-1. **Now (rules):** a belief map from orbit features, calibrated so that "10% chance" really means about 10%, with an uncertainty layer. Can be done in the hackathon.
+1. **Now (rules):** a belief map from orbit features, calibrated so that "10% chance" really means about 10%. **Built 2026-11-15** (`app/src/belief.js`, flag `belief`; see `app/HOW-IT-WORKS.md` §12).
 2. **With Jules (ML):** a small image model on 25 cm HiRISE patches, trained on reviewed ROSCO rocks and, if feasible, Curiosity's labelled ground. Graded by the same held-out check.
 3. **Benchmark honestly:** generated worlds where hidden rocks *depend on* the orbit features in a known way. Today's synthetic rocks are random, so there nothing can be predicted, and only the "flying confirms" half can be tested.
 

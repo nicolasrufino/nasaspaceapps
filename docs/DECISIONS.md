@@ -6,6 +6,7 @@ One place for what the team decided, why, and what is still open. **Add a line h
 
 | Date | Decision | Why | Who | Where it lives |
 |---|---|---|---|---|
+| 2026-11-15 | **Belief map v1 built on Jules's current rock layer** (R3), not waiting for the whole-slice ROSCO run: chance of hidden rocks from 8 m slope and relief, fitted by script; refit when the new export lands | Nothing waits on his run; the swap is one command. The 1 m layers were dropped because they echo the estimate (Luca's `unsure`: 0.757 on the estimate, 0.441 on real rocks) | Nicolas | `app/src/belief.js`, `app/scripts/belief-fit.mjs`, flag `belief` |
 | 2026-11-15 | **3 helicopter flights per walk** (each of the 3 flies once on the scouting sol); up to 6 only with habitat charging, labelled as our assumption | SkyFall flies every other sol (NASA mission package) and crews walk every other sol (HEOMD-415). Tested on Gale: 3 flights leave 0 hidden hazards on the final route and match "knowing every rock" (630.5 kJ); no flights leave 8 | Nicolas | `docs/OPERATIONS.md`; `app/scripts/flight-budget-check.json` |
 | 2026-11-15 | **1 km per flight** (`FLIGHT_M`), the low end of SkyFall's 1–2 km | 2 km in 2.5 min needs 13 m/s, above Ingenuity's 10 m/s record; 700 m is what Ingenuity flew. Gale result is the same at 700 m | Nicolas (his "go with the recommendation", refined by the test) | `FLIGHT_M = 1000` in `app/src/scout.js`; R5 regenerated in the same change after #99. The fixed-route walking figures and 14 total flight legs are unchanged; extra pipeline flights retain their existing lengths |
 | 2026-11-15 | **Scouting sol, then walk sol:** helicopters fly at 9:30 AM on the crew's rest sol; the walk runs about 7:15 AM–3:15 PM next sol, Sun at least 15° up | NASA's rest-sol rule, daylight flying, shadows; same-sol leaves under 2 h of walking | Nicolas | `docs/OPERATIONS.md` |
@@ -60,7 +61,7 @@ Recommendations with evidence and the holes checked: `docs/DECISION-BRIEFS.md` (
 - **Helicopter docking for images:** Ingenuity's radio (about 80 kbit/s) is too slow for a strip of images; we assume a dock or cable at the habitat (brief §7).
 - **Classifier observations on the map:** browser ground-photo inference is implemented, but photo-to-cell registration, reviewed observations and a validated rule for updating layers/route costs are still missing. A relative model score is not a safety probability.
 
-- **Belief map with probabilities** (today the world has a yes/no rock mask), plus ROSCO run over the whole slice with rock sizes and "looked, found nothing" cells.
+- **Belief map:** v1 built (flag `belief`, scored 0.729 on real reviewed rocks). Missing: ROSCO over the whole slice with rock sizes and "looked, found nothing" cells, then a refit.
 - **Ground truth at a walker's scale:** Curiosity's labelled images placed on Gale cells; labelled helicopter images (Ingenuity's colour images).
 - **The scouting planner in the app:** K candidate routes, value of information, flight planner with the daylight window and no-fly cells, the re-plan loop and "why this flight". It exists only in the toy simulator so far.
 - **Sun and shadow model** (Mars24 algorithm) for flight windows and walking windows.
