@@ -5,7 +5,7 @@ import { loadWorld, layerRGB, sourceLabel } from './world.js'
 import { startWalk, stepTo, ringMask, ringLimit, appState, oxygenL } from './walk.js'
 import { planTour, MAX_STOPS } from './plan.js'
 import { routeFlights, scanAt, pointAlong } from './scout.js'
-import { bestAreas } from './best-areas.js'
+import { hazardRGB, blockedSegments, reviewedMask, legendHTML, COLORS as HAZARD } from './hazards.js'
 import { beliefMap } from './belief.js'
 import { terrainMaterial, setImageryUVs, loadImagery, imageryCells } from './terrain.js'
 import { detailTiles } from './tiles.js'
@@ -19,7 +19,7 @@ const $ = (id) => document.getElementById(id)
 const params = new URLSearchParams(location.search)
 // The bare link is the judges' link: the Gale demo with the demo features on.
 // ?world=synthetic loads the test world; ?flags= (empty) switches every feature off (docs/PLAN.md §10).
-const DEMO_FLAGS = 'drone_scout,why_route,layers_extra,pov_images,science_stop,step_mode,detail'
+const DEMO_FLAGS = 'drone_scout,why_route,layers_extra,pov_images,science_stop,step_mode,detail,hazards'
 const worldName = params.get('world') ?? 'gale'
 const flags = new Set((params.get('flags') ?? DEMO_FLAGS).split(',').filter(Boolean))
 if (flags.has('classifier')) initTerrainClassifier($('walk'))
@@ -154,7 +154,7 @@ resize()
 const EYE_M = 1.7
 const view = { mode: 'map', yaw: 0, pitch: -0.05, drag: null }
 const viewBtn = Object.assign(document.createElement('button'), { id: 'viewBtn', type: 'button' })
-viewBtn.style.cssText = 'position:fixed;left:max(12px,env(safe-area-inset-left));bottom:max(64px,calc(env(safe-area-inset-bottom) + 64px));z-index:6;min-height:44px;padding:0 14px;border-radius:10px;border:1px solid #fff5;background:#141a22e6;color:#fff;font:600 14px system-ui,sans-serif'
+viewBtn.style.cssText = 'position:fixed;right:max(12px,env(safe-area-inset-right));bottom:calc(min(38vmin, 260px) + 96px);z-index:6;min-height:44px;padding:0 14px;border-radius:10px;border:1px solid #fff5;background:#141a22e6;color:#fff;font:600 14px system-ui,sans-serif'
 const visionNote = Object.assign(document.createElement('div'), { hidden: true, textContent: 'Vesta Vision · real NASA HiRISE terrain and imagery (features of about 3 m and up) · drag to look' })
 visionNote.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:max(70px,calc(env(safe-area-inset-bottom) + 70px));z-index:5;max-width:min(92vw,520px);padding:6px 10px;border-radius:8px;background:#141a22cc;color:#fff;font:500 12px system-ui,sans-serif;text-align:center;pointer-events:none'
 // In the Vision views the big panel is hidden (no HUD); a small bar keeps the walk controls.
@@ -249,45 +249,87 @@ renderer.setAnimationLoop((now) => {
 const EXTRA = ['thermal_inertia', 'science', 'dose_rate'] // THEMIS, CRISM, Curiosity RAD: flag layers_extra
 const shownLayers = meta.layers.filter((n) => layers[n] && n !== 'rocks_fine' && (!EXTRA.includes(n) || flags.has('layers_extra')))
 const IMAGERY = 'imagery' // HiRISE colour draped on the terrain (ticket F2); the default view when the world has it
+const HAZARDS = 'hazards' // slope, blocked steps and rocks with a legend (ticket F6, flag hazards)
 const WHITE = new Uint8Array(W * H * 3).fill(255)
 let imageryRGB = null // one colour per cell, for the minimap
 let layerName = 'terrain_class'
 let layerColors = layerRGB(layerName, layers[layerName])
-// Colours for a layer; "best areas" is computed from what is known now (best-areas.js), not read from a file.
-const colorsFor = (name) => name === IMAGERY ? (imageryRGB ?? WHITE) : layerRGB(name, name === 'best_areas' ? bestAreas(world, ctg, scanned, blocked)
-  : name === 'belief' ? beliefMap(world, scanned, blocked) : layers[name])
+// Hazards: blocked steps (walls across crossings, crossings_blocked.json) and reviewed-rock pins (reviewed_rocks.json).
+const hazardData = flags.has(HAZARDS)
+  ? await Promise.all([optionalJSON('crossings_blocked.json', null), optionalJSON('reviewed_rocks.json', null)])
+  : [null, null]
+const [crossings, reviewedRocks] = hazardData
+const reviewed = reviewedRocks ? reviewedMask(reviewedRocks.points, W, H) : null
+const hazardLayer = new THREE.Group()
+hazardLayer.visible = false
+scene.add(hazardLayer)
+if (crossings) {
+  const heightAt = (x, z) => layers.height[Math.min(H - 1, Math.max(0, Math.round(z / cs))) * W + Math.min(W - 1, Math.max(0, Math.round(x / cs)))]
+  const g = new THREE.BufferGeometry()
+  g.setAttribute('position', new THREE.BufferAttribute(blockedSegments(crossings.crossings, heightAt), 3))
+  hazardLayer.add(new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: HAZARD.blocked })))
+}
+for (const r of reviewedRocks?.points ?? []) {
+  const p = pin(HAZARD.reviewed)
+  p.scale.setScalar(0.6)
+  const h = layers.height[Math.round(r.z / cs) * W + Math.round(r.x / cs)]
+  p.position.set(r.x, h + span / 150, r.z)
+  p.rotation.x = Math.PI // point down at the rock
+  p.userData.label = `reviewed rock ${r.id}`
+  hazardLayer.add(p)
+}
+// Colours for a view; Hazards and belief are computed from what is known now, not read from a file.
+const colorsFor = (name) => name === IMAGERY ? (imageryRGB ?? WHITE)
+  : name === HAZARDS ? hazardRGB(world, scanned, reviewed)
+    : layerRGB(name, name === 'belief' ? beliefMap(world, scanned, blocked) : layers[name])
 function refreshLayer() {
-  if (layerName === 'best_areas' || layerName === 'belief') layerColors = colorsFor(layerName)
+  if (layerName === HAZARDS || layerName === 'belief') layerColors = colorsFor(layerName)
 }
 function setLayer(name) {
   layerName = name
   layerColors = colorsFor(name)
   terrainMat.userData.uniforms.uOverlay.value = name === IMAGERY ? 0 : 1
+  hazardLayer.visible = name === HAZARDS
+  $('legend').hidden = name !== HAZARDS
   document.querySelectorAll('#layers input').forEach((el) => (el.checked = el.value === name))
 }
+$('legend').innerHTML = legendHTML(meta, { blocked: crossings?.crossings.length ?? 0, reviewed: reviewedRocks?.points.length ?? 0 })
 $('sources').textContent = meta.sources?.all ?? '' // applies to every layer without its own source
-const BEST = 'best_areas'
 const BELIEF = flags.has('belief') ? ['belief'] : [] // chance of hidden rocks (belief map v1, flag belief)
-const layerSource = (name) => name === BEST
-  ? 'Computed: round trip from base fits the usable energy, slope within the limit, no rocks seen; unscouted ground counts half'
-  : name === 'belief'
-    ? 'Predicted chance of hidden rocks from 8 m slope and relief (HiRISE terrain); scouted cells show what was found. Estimate'
-    : name === IMAGERY
-      ? 'MRO · HiRISE colour (USGS MSL Gale LRGB 25 cm mosaic) · NASA/JPL-Caltech/University of Arizona'
+// Five named views (ticket F6); every other layer stays reachable under "Advanced".
+const VIEWS = [
+  [IMAGERY, 'Imagery', !!meta.detail_tiles?.url],
+  [HAZARDS, 'Hazards', flags.has(HAZARDS) && !!layers.slope],
+  ['cost_to_go', 'Energy home', !!layers.cost_to_go],
+  ['science', 'Science', shownLayers.includes('science')],
+  ['dose_rate', 'Radiation', shownLayers.includes('dose_rate')],
+].filter(([, , on]) => on)
+const named = new Set(VIEWS.map(([n]) => n))
+const advanced = [...shownLayers.filter((n) => !named.has(n)), ...BELIEF]
+const layerSource = (name) => name === 'belief'
+  ? 'Predicted chance of hidden rocks from 8 m slope and relief (HiRISE terrain); scouted cells show what was found. Estimate'
+  : name === IMAGERY
+    ? 'MRO · HiRISE colour (USGS MSL Gale LRGB 25 cm mosaic) · NASA/JPL-Caltech/University of Arizona'
+    : name === HAZARDS
+      ? 'Slope and steps from the USGS MSL Gale DEM (MRO HiRISE); rocks: ROSCO reviewed, others estimated'
       : sourceLabel(meta, name)
-$('layers').append(...[...(meta.detail_tiles?.url ? [IMAGERY] : []), ...shownLayers, BEST, ...BELIEF].map((name) => {
+function viewRadio(name, title) {
   const label = document.createElement('label')
   label.innerHTML = `<input type="radio" name="layer"><span><b></b><small></small></span>`
   label.querySelector('input').checked = name === layerName
   label.querySelector('input').value = name
-  label.querySelector('b').textContent = name.replaceAll('_', ' ')
+  label.querySelector('b').textContent = title
   label.querySelector('small').textContent = layerSource(name)
   label.querySelector('input').onchange = () => {
     setLayer(name)
     render()
   }
   return label
-}))
+}
+const more = document.createElement('details')
+more.innerHTML = '<summary>Advanced</summary>'
+more.append(...advanced.map((n) => viewRadio(n, n.replaceAll('_', ' '))))
+$('layers').append(...VIEWS.map(([n, title]) => viewRadio(n, title)), ...(advanced.length ? [more] : []))
 
 const kj = (j) => `${Math.round(Math.max(j, 0) / 1000)} kJ`
 
