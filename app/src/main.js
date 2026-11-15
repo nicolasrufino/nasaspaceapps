@@ -57,7 +57,7 @@ const ctg = layers.cost_to_go
 const scanned = new Uint8Array(W * H) // cells the helicopter has seen
 const rockSeen = (i) => scanned[i] && layers.rocks_fine?.[i]
 const cellPos = ([x, y], lift = 0) => new THREE.Vector3(x * cs, layers.height[y * W + x] + lift, y * cs)
-$('title').textContent = `${meta.name} · ${W}×${H} cells · ${cs} m${scenario ? ` · ${scenario.name}` : ''}`
+$('title').textContent = `Vesta Scout · ${meta.name} · ${W}×${H} cells · ${cs} m${scenario ? ` · ${scenario.name}` : ''}`
 
 // --- 3D view: visual only, no route maths here (docs/CRITIQUE.md). ---
 // One vertex per cell; cell (x, y) sits at (x*cs, height, y*cs), so +z is south and north is -z.
@@ -93,7 +93,7 @@ sun.position.set(-1, 0.6, -0.4) // low sun so slopes read
 scene.add(sun)
 
 const span = Math.max(W, H) * cs
-const pin = (color) => new THREE.Mesh(new THREE.ConeGeometry(span / 120, span / 40, 12), new THREE.MeshBasicMaterial({ color }))
+const pin = () => icon('#ff3bd4', { size: 0.022 }) // the astronaut's "Mark here" marks (stops.js): fixed-size dots, like every other marker
 // Real sizes (ticket F5): a 9 m habitat next to the base cell, a 1.8 m astronaut; fixed-size icons keep them findable.
 const habitat = makeHabitat()
 habitat.position.copy(cellPos([meta.base_cell[0] - 2, meta.base_cell[1] - 1])) // 16 m west, 8 m north of the start
@@ -274,11 +274,8 @@ if (crossings) {
   hazardLayer.add(new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: HAZARD.blocked })))
 }
 for (const r of reviewedRocks?.points ?? []) {
-  const p = pin(HAZARD.reviewed)
-  p.scale.setScalar(0.6)
-  const h = layers.height[Math.round(r.z / cs) * W + Math.round(r.x / cs)]
-  p.position.set(r.x, h + span / 150, r.z)
-  p.rotation.x = Math.PI // point down at the rock
+  const p = icon('#ffffff', { ring: '#c0392b', size: 0.016 }) // a fixed-size dot: a 30 m cone broke the true scale (F5)
+  p.position.set(r.x, groundAt(r.x, r.z) + 0.5, r.z)
   p.userData.label = `reviewed rock ${r.id}`
   hazardLayer.add(p)
 }

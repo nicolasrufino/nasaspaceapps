@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Martian Map</title>
+    <title>Vesta Scout</title>
     <link rel="icon" href="data:," />
     <style>
       html, body { margin: 0; height: 100%; overflow: hidden; background: #1a0f0a; color: #f3e6d8; font: 14px system-ui, sans-serif; }
@@ -55,6 +55,17 @@
       #alarm { position: fixed; inset: 0; pointer-events: none; box-shadow: inset 0 0 0 6px #e02020, inset 0 0 80px #e0202088; display: none; }
       body.danger #alarm { display: block; }
       body.danger #hud { background: #8a0d0dd9; }
+      /* Phones (ticket F8): view picker as chips without the source lines (they stay in the legend and on wide screens), 44 px buttons. */
+      @media (max-width: 600px) {
+        #hud { max-height: 44vh; }
+        #layers { display: flex; flex-wrap: wrap; gap: 6px; }
+        #layers small { display: none; }
+        #layers > label { align-items: center; background: #fff2; border-radius: 16px; padding: 6px 10px; }
+        #layers > label:has(:checked) { background: #35e0ff; color: #111; }
+        #layers > label input[type=radio] { position: absolute; opacity: 0; pointer-events: none; }
+        #layers details { flex-basis: 100%; }
+        button { min-height: 44px; }
+      }
     </style>
   </head>
   <body>
@@ -67,6 +78,13 @@
         <button role="tab" data-tab="walk" aria-selected="false">Walk</button>
       </div>
       <section id="plan">
+        <div id="scoutBox" hidden>
+          <h2>Scout</h2>
+          <div class="row">
+            <button id="scout">Fly the route</button>
+          </div>
+          <p id="scoutStatus" class="src" aria-live="polite"></p>
+        </div>
         <h2>Map layer</h2>
         <div id="layers" role="radiogroup" aria-label="Map layer"></div>
         <small id="sources" class="src"></small>
@@ -79,13 +97,6 @@
           <h2>Why this route</h2>
           <table id="whyTable" class="src"></table>
           <ul id="whyNotes" class="src"></ul>
-        </div>
-        <div id="scoutBox" hidden>
-          <h2>Scout</h2>
-          <div class="row">
-            <button id="scout">Fly the route</button>
-          </div>
-          <p id="scoutStatus" class="src" aria-live="polite"></p>
         </div>
         <div id="detail" aria-live="polite"></div>
       </section>
