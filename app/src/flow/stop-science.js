@@ -60,7 +60,7 @@ export function stopSteps(cells, order, stops) {
 
 const CSS = `
 .ss-task { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-top: 1px solid var(--panel2); }
-.ss-task button { all: unset; cursor: pointer; flex: none; width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--mute); display: grid; place-items: center; font-weight: 700; font-size: 13px; }
+.ss-task button { all: unset; box-sizing: border-box; cursor: pointer; flex: none; width: 44px; height: 44px; border-radius: 8px; border: 2px solid var(--mute); display: grid; place-items: center; font-weight: 700; font-size: 16px; }
 .ss-task button[aria-pressed=true] { background: var(--stop); border-color: var(--stop); color: var(--ink); }
 .ss-task .t { flex: 1; min-width: 0; } .ss-task .t small { display: block; color: var(--mute); font-size: 12px; }
 .ss-task .t .r { display: block; margin-top: 4px; font-size: 13px; } .ss-task .t .r:empty { display: none; }
@@ -197,12 +197,15 @@ export function createStopScience(ui, app, data) {
     }
     const goals = ui.section('The goal: did groundwater last here?')
     for (const g of goalChecks(log)) goals.append(ui.item({ title: `${g.answered ? '✓ Answered' : '○ Still open'}: ${g.title}`, sub: g.how }))
-    sec.append(list, txt('p', 'Dose at the stops: RAD mean × sky view at each stop (an estimate) × minutes there.', 'dim'))
+    sec.append(ui.details('Stop-by-stop results', list))
+    const reference = ui.details('Reference scenario & dose assumptions', txt('p', 'Dose at the stops: RAD mean × sky view at each stop (an estimate) × minutes there.', 'dim'))
+    const referenceBody = reference.querySelector('.f-details-body')
+    sec.append(reference)
     const y = yieldData
     // S6 describes a fixed reference route. Even identical stops can produce a different path;
     // never add its walking dose to this walk's stop dose or present its capacity as tasks done.
-    if (y?.walk && y?.stay) sec.append(txt('p', `Reference scenario: ${y.walk.stops} stops × ${y.walk.visit_tasks_per_stop} tasks = ${y.walk.measurements_per_walk} tasks per walk, with all tasks completed. A ${y.stay.stay_sols}-sol stay: at most ${y.stay.walks_max} walks, ${y.stay.stops_max} stops, ${y.stay.measurements_max} tasks (our arithmetic, ${y.stay.sols_per_walk} sols per walk). These are planning assumptions, not the result of this walk.`, 'dim'))
-    if (y?.dose?.walk_dose_ugy != null && y.walk?.route_m != null) sec.append(txt('p', `Reference route (${y.walk.route_m} m): walking dose ${y.dose.walk_dose_ugy} µGy (${y.dose.walk_hours} h at ${y.dose.mean_dose_rate_ugy_per_h} µGy/h, an estimate). Walking only; stops excluded. This is not the dose of your chosen route.`, 'dim'))
+    if (y?.walk && y?.stay) referenceBody.append(txt('p', `Reference scenario: ${y.walk.stops} stops × ${y.walk.visit_tasks_per_stop} tasks = ${y.walk.measurements_per_walk} tasks per walk, with all tasks completed. A ${y.stay.stay_sols}-sol stay: at most ${y.stay.walks_max} walks, ${y.stay.stops_max} stops, ${y.stay.measurements_max} tasks (our arithmetic, ${y.stay.sols_per_walk} sols per walk). These are planning assumptions, not the result of this walk.`, 'dim'))
+    if (y?.dose?.walk_dose_ugy != null && y.walk?.route_m != null) referenceBody.append(txt('p', `Reference route (${y.walk.route_m} m): walking dose ${y.dose.walk_dose_ugy} µGy (${y.dose.walk_hours} h at ${y.dose.mean_dose_rate_ugy_per_h} µGy/h, an estimate). Walking only; stops excluded. This is not the dose of your chosen route.`, 'dim'))
     el.replaceChildren(sec, goals, ...[...el.children].filter((c) => c.classList.contains('ss-card')))
   }
 

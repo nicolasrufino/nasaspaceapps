@@ -14,7 +14,7 @@ const NS = 'http://www.w3.org/2000/svg'
 const svgEl = (tag, attrs = {}) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); return e }
 
 const CSS = `
-.d-route { cursor: pointer; border-radius: 10px; padding: 10px 12px; margin: 0 -12px; border: 1px solid transparent; }
+.d-route { cursor: pointer; border-radius: 10px; padding: 14px 12px; background: var(--panel2); border: 1px solid transparent; }
 .d-route.hot { background: var(--panel2); }
 .d-route.pin { border-color: var(--mute); }
 .d-route h3 i { display: inline-block; width: 18px; height: 0; margin-right: 8px; vertical-align: middle; border-top: 3px solid #fff; }
@@ -23,6 +23,10 @@ const CSS = `
 .d-strip .lab { display: flex; justify-content: space-between; gap: 12px; font-size: 11px; color: var(--mute); white-space: nowrap; }
 .d-strip .lab b { color: var(--paper); font-weight: 600; overflow: hidden; text-overflow: ellipsis; }
 .d-strip svg { flex: 1; min-height: 0; width: 100%; display: block; cursor: ew-resize; touch-action: none; border-radius: 4px; }
+@media (max-width: 760px) {
+  .d-strip .lab { flex-wrap: wrap; gap: 2px 8px; white-space: normal; }
+  .d-strip .lab b { order: 3; flex-basis: 100%; }
+}
 `
 
 export default {
@@ -100,9 +104,9 @@ export default {
       map.clear('walker')
       drawMap(false)
 
-      const headline = !before ? 'Route from orbit'
-        : crossedOld > 0 ? 'The scout changed the route'
-        : 'No detected rocks on the original route'
+      const headline = !before ? 'Review your route'
+        : crossedOld > 0 ? 'A clearer way home'
+        : 'Your route, checked'
       const head = ui.section(headline, true)
       if (!before) head.append(p('No scouting yet: this is the route as seen from orbit.', 'dim'))
       else if (crossedOld > 0) head.append(p(`The route planned from orbit crossed ${crossedOld} rock ${crossedOld === 1 ? 'cell' : 'cells'} the scout found.`, 'dim'))
@@ -122,16 +126,12 @@ export default {
       const sum = ui.section('')
       sum.append(p(before ? `The scouted route ${cost} and uses ${pct}% of the walking budget.` : `The route uses ${pct}% of the walking budget.`))
 
-      const ml = ui.section('At each stop')
-      ml.append(ui.model(MODELS.groundClassifier))
-
-      setBody(head, ...blocks, sum, ml)
-
-      const row = ui.h('div', 'f-row')
-      if (app.scout.left() > 0) row.append(againBtn)
-      row.append(stopsBtn)
+      const options = ui.details('More actions & model details', visionBtn)
+      if (app.scout.left() > 0) options.querySelector('.f-details-body').append(againBtn)
+      options.querySelector('.f-details-body').append(ui.model(MODELS.groundClassifier))
+      setBody(head, ...blocks, sum, options)
       previewBtn.disabled = route.cells.length < 2
-      ui.foot.replaceChildren(previewBtn, row, visionBtn)
+      ui.foot.replaceChildren(previewBtn, stopsBtn)
     }
 
     // ---------- Preview ----------
@@ -166,8 +166,8 @@ export default {
       want = true
 
       // Rail
-      const head = ui.section('Walking the scouted route', true)
-      const note = p('The walk plays by itself. Drag along the height strip to jump.', 'dim')
+      const head = ui.section('Walk preview', true)
+      const note = p('Plays automatically. Drag the height strip to jump.', 'dim')
       head.append(note)
       const nums = ui.section('')
       const stats = ui.stats([[`metres of ${totalM}`, '0'], ['kJ left', '0', 'scout'], ['% of the way', '0']])
@@ -190,14 +190,14 @@ export default {
       const restartBtn = ui.button('Restart', () => { app.walk.reset(); app.walk.play(); want = true; tick() })
       const backBtn = ui.button('Back to the comparison', stopPreview)
       const r1 = ui.h('div', 'f-row'), r2 = ui.h('div', 'f-row')
-      r1.append(playBtn, stepBtn)
-      r2.append(speedBtn, restartBtn)
+      r1.append(playBtn)
+      r2.append(stepBtn, speedBtn, restartBtn)
       ui.foot.replaceChildren(r1, r2, backBtn)
 
       // Bottom strip: the height profile, which is also the scrubber.
       const strip = ui.h('div', 'd-strip', '<div class="lab"><span>Height along the route</span><b></b><span></span></div>')
       const [, msg, right] = strip.firstChild.children
-      right.textContent = `${totalM} m · ${prof.climb} m between lowest and highest`
+      right.textContent = `${totalM} m · ${prof.climb} m elevation range`
       const svg = svgEl('svg', { viewBox: '0 0 1000 100', preserveAspectRatio: 'none', role: 'slider', 'aria-label': 'Position along the route', tabindex: 0 })
       const clip = svgEl('clipPath', { id: 'd-clip' }), clipRect = svgEl('rect', { x: 0, y: 0, width: 0, height: 100 })
       clip.append(clipRect)
@@ -260,7 +260,7 @@ export default {
       const text = done ? 'Arrived back at the habitat.' : spent ? 'Out of walking energy before the habitat.'
         : visiting ? 'Paused at a science stop. Complete tasks below or carry on walking.' : ''
       live.msg.textContent = text
-      live.note.textContent = text || 'The walk plays by itself. Drag along the height strip to jump.'
+      live.note.textContent = text || 'Plays automatically. Drag the height strip to jump.'
       live.playBtn.textContent = done || spent ? 'Restart' : visiting ? 'Carry on walking' : want || app.walk.playing() ? 'Pause' : 'Play'
     }
 

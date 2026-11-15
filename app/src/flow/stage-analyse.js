@@ -13,9 +13,9 @@ const LAYERS = ['fa-straight', 'fa-band', 'fa-centre', 'fa-route'] // map.line l
 const CSS = `
 .fa-wrap { display: flex; flex-direction: column; gap: 14px; }
 .fa-count { font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--mute); }
-.fa-prog { display: flex; gap: 4px; margin-top: 8px; }
-.fa-prog button { all: unset; flex: 1; height: 6px; padding: 8px 0; background: var(--panel2); background-clip: content-box; border-radius: 3px; cursor: pointer; }
-.fa-prog button.done { background-color: var(--mute); } .fa-prog button.now { background-color: var(--paper); }
+.fa-prog { display: flex; gap: 6px; margin-top: 8px; }
+.fa-prog button { all: unset; flex: 1; min-height: 44px; display: grid; place-items: center; background: var(--panel2); border-radius: 8px; cursor: pointer; color: var(--mute); font-weight: 700; }
+.fa-prog button.done { color: var(--paper); } .fa-prog button.now { background-color: var(--paper); color: var(--ink); }
 .fa-prog button:focus-visible { outline: 2px solid var(--scout); outline-offset: -4px; }
 .fa-text p { font-size: 15px; line-height: 1.45; }
 .fa-fade { transition: opacity .5s; }
@@ -85,30 +85,30 @@ export default {
 
     // ---- The steps: title (six words at most), two sentences, what Next is called. ----
     const STEPS = [
-      { title: 'The straight line', next: 'from picture to terrain',
-        text: () => [`The simplest plan joins the stops with straight lines. ${steep.m > 0
-          ? `Here ${span(RED, metres(steep.m))} of it crosses ground ${span(RED, `steeper than ${limit}°`)}, the suit’s limit.`
-          : `Here it happens to stay walkable, but it ignores how much energy each step costs.`}`] },
-      { title: 'From a picture to terrain', next: 'the best route',
-        text: () => ['Orbit also gives height (HiRISE stereo). Height gives slope, and slope and ground type give the energy of every step.'],
+      { title: 'A straight line is not enough', next: 'Terrain',
+        text: () => [steep.m > 0
+          ? `Straight lines cross ${span(RED, metres(steep.m))} above the ${span(RED, `${limit}° suit limit`)}. The route needs to go around.`
+          : 'These straight lines stay walkable, but ignore the energy each step costs.'] },
+      { title: 'Read the terrain', next: 'Your route',
+        text: () => ['HiRISE height data reveals the slopes. Slope and ground type determine walking energy.'],
         small: () => `${span(GREEN, 'Walkable')} · ${span(AMBER, 'near the limit')} · ${span(RED, 'too steep')}` },
-      { title: 'The best route orbit can give', next: 'what orbit cannot see',
-        text: () => [`${app.objective() === 'shortest' ? `The shortest ${span('#fff', 'route')} through your stops that stays walkable.` : `The least-energy ${span('#fff', 'route')} bends around steep ground and sand.`} As far as orbit can tell.`] },
-      { title: 'What orbit cannot see', next: 'where to send the helicopter',
+      { title: 'Your route from orbit', next: 'Hidden hazards',
+        text: () => [app.objective() === 'shortest' ? 'The shortest walkable route through your stops, based on orbit data.' : 'The least-energy route avoids steep ground and sand, based on orbit data.'] },
+      { title: 'Check the unknowns', next: 'Flight plan',
         text: () => [`Orbit sees rocks down to about 1.5 m. ${span('#fff', metres(unseen.m))} of this route has never been seen up close.`],
         small: () => `${span(AMBER, 'Amber')}: where smaller rocks are more likely to hide. An experimental estimate.`,
         models: [MODELS.rockChance, MODELS.rockReview] },
-      { title: 'Where to send the helicopter',
+      { title: 'Ready to scout',
         text: () => [getFlight()
           ? `Up to ${left} ${left === 1 ? 'flight' : 'flights'} of ${km(app.scout.flightM)}, each seeing a ${span(CYAN, `${Math.round(2 * app.scout.swathM)} m strip`)}. After each landing the route is planned again with what was found.`
           : `No flight is planned from here: ${left <= 0 ? 'the helicopter has no flights left' : 'there is no unseen route ground in reach'}. The route stands as orbit gave it.`],
-        small: () => 'Planning with unknown blockages is known as the Canadian Traveller Problem.' },
+        detail: () => 'Planning with unknown blockages is known as the Canadian Traveller Problem.' },
     ]
 
     // ---- Rail and foot: built once, filled by show(). ----
     const wrap = ui.h('div', 'fa-wrap')
     const head = ui.h('div'), count = ui.h('div', 'fa-count'), prog = ui.h('div', 'fa-prog')
-    const segs = STEPS.map((s, k) => { const b = ui.h('button'); b.type = 'button'; b.title = s.title; b.setAttribute('aria-label', `Step ${k + 1}: ${s.title}`); b.onclick = () => show(k); prog.append(b); return b })
+    const segs = STEPS.map((s, k) => { const b = ui.h('button'); b.type = 'button'; b.textContent = k + 1; b.title = s.title; b.setAttribute('aria-label', `Step ${k + 1}: ${s.title}`); b.onclick = () => show(k); prog.append(b); return b })
     head.append(count, prog)
     const body = ui.h('div', 'fa-wrap')
     wrap.append(head, body)
@@ -228,13 +228,15 @@ export default {
 
       // Rail.
       const st = STEPS[s]
-      count.textContent = `${s + 1} of ${STEPS.length}`
+      count.textContent = `Route check ${s + 1} / ${STEPS.length}`
       segs.forEach((b, n) => { b.className = n === s ? 'now' : n < s ? 'done' : ''; n === s ? b.setAttribute('aria-current', 'step') : b.removeAttribute('aria-current') })
       const sec = ui.section(st.title, true)
       sec.classList.add('fa-text')
       for (const t of st.text()) sec.append(ui.h('p', '', t))
       if (st.small) sec.append(ui.h('p', 'dim', st.small()))
-      body.replaceChildren(sec, ...(st.models ?? []).map((m) => ui.model(m)))
+      const details = (st.models ?? []).map((m) => ui.model(m))
+      if (st.detail) details.push(ui.h('p', 'dim', st.detail()))
+      body.replaceChildren(sec, ...(details.length ? [ui.details('Method & limits', ...details)] : []))
 
       // Foot: Back and the primary button, always in the same place.
       const last = s === STEPS.length - 1
