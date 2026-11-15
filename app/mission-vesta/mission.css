@@ -105,83 +105,6 @@ body, h1, h2, p { margin: 0; }
 .welcome a:hover { text-decoration-thickness: 2px; }
 .welcome a:focus-visible { outline: 2px solid var(--white); outline-offset: 4px; }
 
-.products {
-  max-width: 100rem;
-  margin-inline: auto;
-  padding: 3.4375rem var(--gutter) 3.625rem;
-}
-
-.product {
-  display: grid;
-  grid-template-columns: minmax(11rem, 2fr) minmax(0, 3.4fr);
-  gap: clamp(1.25rem, 3vw, 2.75rem);
-  align-items: center;
-  border-bottom: 1px solid var(--rule);
-  padding-block: 1.5625rem;
-  color: inherit;
-  text-decoration: none;
-}
-
-.products h2 {
-  display: flex;
-  align-items: center;
-  gap: .5em;
-  font-size: clamp(1.75rem, 3.2vw, 2.625rem);
-  font-weight: 500;
-  line-height: 1.2;
-  letter-spacing: -.02em;
-}
-
-.products p {
-  max-width: 35rem;
-  color: var(--body);
-  font-size: 1.125rem;
-}
-
-.icon {
-  flex: none;
-  width: 1.5em;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linejoin: round;
-  overflow: visible;
-}
-
-.icon path, .icon rect, .icon ellipse { transition: transform .35s ease; transform-box: fill-box; transform-origin: center; }
-.go {
-  display: block;
-  margin-top: .5rem;
-  color: var(--ink);
-  font-weight: 500;
-  opacity: 0;
-  transform: translateX(-.4rem);
-  transition: opacity .2s, transform .2s;
-}
-
-.product:hover .go, .product:focus-visible .go { opacity: 1; transform: none; }
-.heli { position: relative; z-index: 1; }
-
-.tag {
-  margin-left: .25rem;
-  border: 1px solid var(--rule);
-  border-radius: 999px;
-  padding: .2em .7em;
-  color: var(--body);
-  font-size: .8rem;
-  font-weight: 500;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.later h2 { flex-wrap: wrap; }
-.product:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
-.product:hover .layers .l1, .product:focus-visible .layers .l1 { transform: translateY(5px); }
-.product:hover .layers .l3, .product:focus-visible .layers .l3 { transform: translateY(-5px); }
-
-@media (hover: none) { .go { opacity: 1; transform: none; } }
-
 /* ---- Why ---- */
 .why {
   max-width: 100rem;
@@ -223,38 +146,116 @@ body, h1, h2, p { margin: 0; }
   font-size: 1.25rem;
 }
 
+/* ---- Products: Scout and Vision, each a large real view of the app with its toggle and method ---- */
+.product {
+  display: grid;
+  grid-template-columns: minmax(17rem, 1fr) minmax(0, 2.4fr);
+  grid-template-areas: "copy view" "method view";
+  grid-template-rows: auto 1fr;
+  column-gap: clamp(2rem, 4vw, 4.5rem);
+  row-gap: 1.5rem;
+  padding: clamp(4rem, 8vw, 7rem) var(--gutter);
+  background: #000;
+  color: var(--white);
+}
+.product + .product { padding-top: 0; }
+#vision { grid-template-columns: minmax(0, 2.4fr) minmax(17rem, 1fr); grid-template-areas: "view copy" "view method"; }
+
+.copy { grid-area: copy; align-self: end; }
+.product .eyebrow { color: var(--muted); display: flex; align-items: center; gap: .75rem; }
+.product h2 {
+  margin-top: .75rem;
+  font-size: clamp(2rem, 3.6vw, 3.25rem);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -.02em;
+}
+.copy > p { margin-top: 1rem; color: var(--muted); font-size: 1.0625rem; max-width: 30rem; }
+
+.toggle { display: flex; flex-wrap: wrap; gap: 0 1.5rem; margin-top: 1.75rem; border-bottom: 1px solid #3a3836; }
+.toggle button {
+  min-height: 44px;
+  margin-bottom: -1px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  padding: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+.toggle button:hover { color: var(--white); }
+.toggle button[aria-pressed="true"] { color: var(--white); border-bottom-color: var(--white); }
+.toggle button:focus-visible, .go:focus-visible, .method summary:focus-visible { outline: 2px solid var(--white); outline-offset: 3px; }
+
+.captions { min-height: 4.5em; margin-top: 1rem; color: var(--muted); }
+.captions b { color: var(--white); font-weight: 500; }
+
+.go {
+  display: inline-block;
+  min-height: 44px;
+  margin-top: 1.25rem;
+  padding-block: .6875rem;
+  color: var(--white);
+  font-weight: 500;
+  text-underline-offset: .5em;
+  text-decoration-color: var(--muted);
+}
+.go:hover { text-decoration-thickness: 2px; }
+
+.view { grid-area: view; margin: 0; display: grid; }
+.view img {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 16 / 11;
+  object-fit: cover;
+  display: block;
+  opacity: 0;
+  transition: opacity .18s ease;
+}
+.view img.on { opacity: 1; }
+.view figcaption { grid-area: 2 / 1; margin-top: .75rem; color: #8f8b88; font-size: .8125rem; }
+
+.method { grid-area: method; align-self: start; border-top: 1px solid #3a3836; }
+.method summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; color: var(--white); font-weight: 500; }
+.method dl { margin: .25rem 0 0; color: var(--muted); font-size: .9375rem; }
+.method dt { margin-top: .9rem; color: var(--white); font-weight: 500; }
+.method dd { margin: .2rem 0 0; }
+
+.tag {
+  border: 1px solid #3a3836;
+  border-radius: 999px;
+  padding: .15em .7em;
+  font-size: .75rem;
+  letter-spacing: .08em;
+}
+
+footer { padding: 2rem var(--gutter) 3rem; background: #000; color: #8f8b88; font-size: .8125rem; border-top: 1px solid #1f1d1c; }
+
 @media (max-width: 680px) {
   .hero { min-height: 39.0625rem; padding-top: 5.125rem; }
   .mars { top: 21.5625rem; }
   .welcome h1 { font-size: clamp(2.5rem, 13vw, 4.5rem); }
   .welcome p { max-width: 17rem; font-size: 1rem; }
   .welcome a { font-size: .9375rem; }
-  .products { padding-top: 2.125rem; padding-bottom: 2.75rem; }
-  .product { grid-template-columns: 1fr; gap: .5rem; padding-block: 1.25rem 1.4375rem; }
   .reasons { grid-template-columns: 1fr; }
-  .products p { font-size: 1rem; }
+  /* One column: intro, toggle right above the picture so a tap shows its change, then the numbers. */
+  .product, #vision { display: flex; flex-direction: column; gap: 0; }
+  .copy { display: contents; }
+  .toggle { order: 1; margin-top: 1.5rem; }
+  .view { order: 2; margin-top: .75rem; }
+  .captions, .go { order: 3; }
+  .method { order: 4; margin-top: 1rem; }
+  .product + .product { padding-top: 2rem; }
+  .view img { aspect-ratio: 4 / 3; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
   html { scroll-behavior: smooth; }
-  /* Rotors blur in and out, out of step, while hovering or flying. */
-  .scout:hover .rotor, .fly .rotor { animation: spin .18s linear infinite alternate; }
-  .scout:hover .rotor.b, .fly .rotor.b { animation-delay: -.09s; }
-  @keyframes spin { to { transform: scaleX(.15); } }
-
-  /* Lift off, swoop out over the description, bank round, fly back and land. */
-  .fly .heli { animation: fly 3.4s ease-in-out; }
-  @keyframes fly {
-    0% { transform: none; }
-    12% { transform: translate(0, -16px); }
-    42% { transform: translate(min(52vw, 620px), -30px) rotate(10deg); }
-    56% { transform: translate(min(60vw, 720px), -8px) rotate(-4deg) scaleX(-1); }
-    78% { transform: translate(min(26vw, 300px), -36px) rotate(8deg) scaleX(-1); }
-    92% { transform: translate(0, -14px) scaleX(-1); }
-    100% { transform: none; }
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .icon path, .icon rect, .icon ellipse, .go { transition: none; }
+  .view img { transition: none; }
 }

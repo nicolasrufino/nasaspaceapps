@@ -1,0 +1,26 @@
+{
+  "captured": "2026-11-15",
+  "scout": {
+    "stops": [
+      "Altadena drill site",
+      "Top of the ramp: main boxwork",
+      "Scenic overlook (360 panorama)"
+    ],
+    "orbit": {
+      "metres": 908,
+      "kj": 435,
+      "rock_cells": 2
+    },
+    "scouted": {
+      "metres": 931,
+      "kj": 442,
+      "rock_cells": 0
+    },
+    "budget_pct": 35
+  },
+  "vision_sources": {
+    "Imagery": "MRO · HiRISE colour (USGS MSL Gale LRGB 25 cm mosaic) · NASA/JPL-Caltech/University of Arizona",
+    "Hazards": "Slope and steps from the USGS MSL Gale DEM (MRO HiRISE); rocks: ROSCO reviewed, others estimated",
+    "Energy home": "Pandolf walking model (gravity factor and sand from #83) over walk-scale crossings (passable.u8)"
+  }
+}

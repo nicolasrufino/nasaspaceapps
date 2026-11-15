@@ -17,14 +17,22 @@ export function createMap2D(app) {
   const layers = {} // named SVG groups, drawn in the order they are first used
   const group = (name) => layers[name] ??= svg.appendChild(el('g', { 'data-layer': name }))
 
+  let optical = null
   function drawBase() {
-    const img = app.imagery()
+    const img = app.imagery() ?? optical
     base.width = base.height = 1024
     const c = base.getContext('2d')
     if (img) c.drawImage(img, 0, 0, 1024, 1024)
     else { c.fillStyle = '#6b4a3a'; c.fillRect(0, 0, 1024, 1024) }
   }
   drawBase()
+  if (app.orbitalImageUrl) {
+    // world.json's north-up NASA HiRISE optical layer is aligned to the same grid.
+    // Show it until the higher-resolution image arrives, or keep it if tiles fail.
+    const image = new Image()
+    image.onload = () => { optical = image; drawBase() }
+    image.src = app.orbitalImageUrl
+  }
   app.on('imagery', drawBase)
 
   const api = {

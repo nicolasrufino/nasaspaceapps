@@ -38,12 +38,12 @@ export function initFlow(app) {
     section(title, big = false) { return h('div', 'f-sec', title ? `<${big ? 'h2' : 'h3'}>${title}</${big ? 'h2' : 'h3'}>` : '') },
     // A list row: item({ n, title, sub, onRemove, onClick, onHover }). n = the number in the amber dot (omit for none).
     item({ n, title, sub, onRemove, onClick, onHover }) {
-      const e = h('div', 'f-item', `${n != null ? '<span class="n"></span>' : ''}<span class="t"></span>`)
+      const e = h(onClick ? 'button' : 'div', 'f-item', `${n != null ? '<span class="n"></span>' : ''}<span class="t"></span>`)
       if (n != null) e.firstChild.textContent = n
       const t = e.querySelector('.t'); t.textContent = title
       if (sub) { const s = h('small'); s.textContent = sub; t.append(s) }
       if (onRemove) { const x = h('button', 'x', '×'); x.type = 'button'; x.setAttribute('aria-label', `Remove ${title}`); x.onclick = (ev) => { ev.stopPropagation(); onRemove() }; e.append(x) }
-      if (onClick) { e.style.cursor = 'pointer'; e.onclick = onClick }
+      if (onClick) { e.type = 'button'; e.onclick = onClick }
       if (onHover) { e.onmouseenter = () => onHover(true); e.onmouseleave = () => onHover(false) }
       return e
     },

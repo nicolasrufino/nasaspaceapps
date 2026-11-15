@@ -50,49 +50,113 @@
         then walk with the way home always in view.</p>
     </section>
 
-    <section class="products" id="products" aria-label="Mission products">
-      <a class="product scout" href="./scout/">
-        <h2>
-          <!-- Ingenuity-style: solar panel, two stacked rotors, body, four legs -->
-          <svg class="icon heli" viewBox="0 0 64 48" aria-hidden="true">
-            <rect x="25" y="1" width="14" height="3"/>
-            <path d="M32 4V24"/>
-            <ellipse class="rotor" cx="32" cy="10" rx="27" ry="2"/>
-            <ellipse class="rotor b" cx="32" cy="16" rx="27" ry="2"/>
-            <rect x="25" y="24" width="14" height="10" rx="1"/>
-            <path d="M26 34 15 46M38 34 49 46M29 34 25 46M35 34 39 46"/>
-          </svg>
-          Vesta Scout
-        </h2>
-        <p>A guided mission: plan a science walk from the habitat, send a simulated scout helicopter, like NASA’s
-          Ingenuity, to find the hazards orbit can’t see, then choose the walk it made safe.
-          <span class="go">Open Vesta Scout <span aria-hidden="true">→</span></span></p>
-      </a>
-      <a class="product later" href="./scout/?vision">
-        <h2>
-          <svg class="icon layers" viewBox="0 0 64 48" aria-hidden="true">
-            <path class="l1" d="M8 34 32 44 56 34 32 24Z"/>
-            <path class="l2" d="M8 24 32 34 56 24 32 14Z"/>
-            <path class="l3" d="M8 14 32 24 56 14 32 4Z"/>
-          </svg>
-          Vesta Vision
-          <span class="tag">Early version</span>
-        </h2>
-        <p>Explore the site like a map: NASA’s 1 m terrain and HiRISE imagery, hazard, energy and science layers, and
-          a walk at eye height. Later: the whole planet, sharpened by everything our scouts and models learn.
-          <span class="go">Open Vesta Vision <span aria-hidden="true">→</span></span></p>
-      </a>
+    <!-- Pictures and numbers: one real run of the app, captured by scripts/capture-home.mjs (see assets/captures.json).
+         Map imagery: NASA MRO HiRISE colour, USGS MSL Gale LRGB 25 cm mosaic (NASA/JPL-Caltech/University of Arizona).
+         Terrain: USGS MSL Gale DEM from MRO HiRISE stereo. -->
+    <section class="product" id="scout" aria-labelledby="scout-title">
+      <div class="copy">
+        <p class="eyebrow">Vesta Scout</p>
+        <h2 id="scout-title">Look before you walk.</h2>
+        <p>Pick science stops from the habitat. A simulated scout helicopter, like NASA’s Ingenuity, flies the route
+          first and finds the rocks orbit can’t see. Then the walk is planned around them.</p>
+        <div class="toggle" role="group" aria-label="Show the route">
+          <button type="button" aria-pressed="true" data-show="before">From orbit</button>
+          <button type="button" aria-pressed="false" data-show="after">After scouting</button>
+        </div>
+        <div class="captions" aria-live="polite">
+          <p class="caption" data-for="before">Planned from orbit: <b>908 m</b>, <b>435 kJ</b>.
+          It crosses <b>2 rock cells</b> the scout later found.</p>
+        <p class="caption" data-for="after" hidden>Planned after scouting: <b>931 m</b>,
+          <b>442 kJ</b>, no rock crossed. 23 m and 7 kJ more, 35% of the walking budget.</p>
+        </div>
+        <a class="go" href="./scout/">Open Vesta Scout <span aria-hidden="true">→</span></a>
+      </div>
+      <figure class="view">
+        <img src="./mission-vesta/assets/scout-before.jpg" class="on" data-for="before" width="1770" height="1216" loading="lazy"
+          alt="HiRISE map of lower Mount Sharp: the route planned from orbit, dashed red, runs through two rocks the scout found.">
+        <img src="./mission-vesta/assets/scout-after.jpg" data-for="after" width="1770" height="1216" loading="lazy"
+          alt="The same map: the scouted route, white, bends around those rocks.">
+        <figcaption>Habitat (H) and three stops, lower Mount Sharp, Gale crater. Red dashes: the route from orbit.
+          White: after scouting. Red squares: rocks the scout found. NASA MRO HiRISE.</figcaption>
+      </figure>
+      <details class="method">
+        <summary>Read the method</summary>
+        <dl>
+          <dt>Route</dt>
+          <dd>Least-energy path over 8 m cells of the HiRISE terrain. Each step costs energy from the Pandolf walking
+            equation, scaled to Mars gravity (0.68, an estimate). Slopes over 20° are walls.</dd>
+          <dt>Scout</dt>
+          <dd>The flight is simulated. The rocks it “finds” come from the stored rock layer: a roughness estimate from the
+            terrain, plus rocks the ROSCO detector proposed on a HiRISE image and a person confirmed (23 of 25). Coverage
+            is not complete, so we claim no hit rate.</dd>
+          <dt>Walking back</dt>
+          <dd>Before the walk, the energy to get home is worked out for every cell. On the walk the phone only looks it up,
+            and warns at the point of no return.</dd>
+        </dl>
+      </details>
     </section>
+
+    <section class="product" id="vision" aria-labelledby="vision-title">
+      <div class="copy">
+        <p class="eyebrow">Vesta Vision <span class="tag">Early version</span></p>
+        <h2 id="vision-title">Read the ground.</h2>
+        <p>The site as a 3D map: NASA’s 1 m terrain with HiRISE colour, and the layers behind every route.</p>
+        <div class="toggle" role="group" aria-label="Map layer">
+          <button type="button" aria-pressed="true" data-show="imagery">Imagery</button>
+          <button type="button" aria-pressed="false" data-show="hazards">Hazards</button>
+          <button type="button" aria-pressed="false" data-show="energy">Energy home</button>
+        </div>
+        <div class="captions" aria-live="polite">
+          <p class="caption" data-for="imagery">What orbit sees: HiRISE colour at 25 cm, draped on the
+          HiRISE stereo terrain.</p>
+        <p class="caption" data-for="hazards" hidden>Green is walkable, amber is near the 20° limit,
+          red is too steep. Red lines: steps too high to climb in the 1 m terrain. White pins: rocks a person confirmed.</p>
+        <p class="caption" data-for="energy" hidden>The energy it takes to walk back to the habitat
+          from every cell. Dark is cheap, pale costs more.</p>
+        </div>
+        <a class="go" href="./scout/?vision">Open Vesta Vision <span aria-hidden="true">→</span></a>
+      </div>
+      <figure class="view">
+        <img src="./mission-vesta/assets/vision-imagery.jpg" class="on" data-for="imagery" width="1600" height="1100" loading="lazy"
+          alt="3D view of lower Mount Sharp in HiRISE colour, with the habitat, five stops and a route.">
+        <img src="./mission-vesta/assets/vision-hazards.jpg" data-for="hazards" width="1600" height="1100" loading="lazy"
+          alt="The same view coloured by slope: green flats, dark steep ridges, red ticks on high steps.">
+        <img src="./mission-vesta/assets/vision-energy.jpg" data-for="energy" width="1600" height="1100" loading="lazy"
+          alt="The same view coloured by energy to walk home: dark near the habitat, paler further away.">
+        <figcaption>Lower Mount Sharp, 2 × 2 km. NASA MRO HiRISE colour and stereo terrain (USGS MSL Gale mosaic and DEM).</figcaption>
+      </figure>
+      <details class="method">
+        <summary>Read the method</summary>
+        <dl>
+          <dt>Terrain</dt>
+          <dd>USGS’s 1 m Gale terrain model from HiRISE stereo, averaged to 8 m cells for planning. Slope and steps come
+            from it.</dd>
+          <dt>Ground at each stop</dt>
+          <dd>A ground classifier (MobileNetV3-small, trained on NASA/JPL AI4Mars labels) runs in the browser. 93% on 159
+            held-out Curiosity patches, but 48% on 197 Perseverance patches: it does not transfer to a new rover yet.</dd>
+          <dt>Energy home</dt>
+          <dd>Dijkstra’s shortest path, run once from the habitat over the Pandolf step cost. Red cells have no way back.</dd>
+        </dl>
+      </details>
+    </section>
+
+    <footer>
+      <p>NASA Space Apps 2026. Data: NASA MRO HiRISE (NASA/JPL-Caltech/University of Arizona), USGS MSL Gale mosaic and
+        terrain model, NASA/JPL ROSCO and AI4Mars, Viking Orbiter Mars globe (NASA/JPL-Caltech).</p>
+    </footer>
   </main>
   <script type="module" src="./mission-vesta/mars.js"></script>
   <script type="module">
-    // The helicopter flies a loop over the Scout row and lands back: once when the row comes into view, then on hover.
-    const scout = document.querySelector('.scout')
-    const fly = () => scout.classList.add('fly')
-    scout.querySelector('.heli').addEventListener('animationend', (e) => e.animationName === 'fly' && scout.classList.remove('fly'))
-    scout.addEventListener('pointerenter', fly)
-    scout.addEventListener('focus', fly)
-    new IntersectionObserver(([e], o) => { if (e.isIntersecting) { fly(); o.disconnect() } }, { threshold: 0.6 }).observe(scout)
+    // Each toggle shows one picture and its caption; no colour-only state (aria-pressed and underline).
+    for (const sec of document.querySelectorAll('.product')) {
+      const view = sec.querySelector('.view')
+      sec.querySelector('.toggle').addEventListener('click', (e) => {
+        const b = e.target.closest('button'); if (!b) return
+        for (const im of view.querySelectorAll('img')) im.classList.toggle('on', im.dataset.for === b.dataset.show)
+        for (const x of sec.querySelectorAll('.toggle button')) x.setAttribute('aria-pressed', x === b)
+        for (const c of sec.querySelectorAll('.caption')) c.hidden = c.dataset.for !== b.dataset.show
+      })
+    }
   </script>
 </body>
 </html>

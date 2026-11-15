@@ -257,7 +257,7 @@ export default {
     const onResize = () => { clearTimeout(resizeT); resizeT = setTimeout(() => show(step, false), 150) }
     addEventListener('resize', onResize)
 
-    map.caption('How the route is found', 'NASA MRO HiRISE colour and stereo terrain · USGS MSL Gale mosaic')
+    map.caption('How the route is found', 'NASA MRO HiRISE imagery and stereo terrain · USGS MSL Gale mosaic')
     map.fit([base, ...all.filter((s) => s.included).map((s) => s.cell), ...cells], 16)
     show(0)
 

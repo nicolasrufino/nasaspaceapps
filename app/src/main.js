@@ -902,6 +902,7 @@ const app = {
   blocked: () => blocked,
   belief: () => beliefMap(world, scanned, blocked), // Float32Array(W*H) chance of a hidden rock; experimental
   imagery: () => imageryCanvas, // 2048 px canvas of the slice, north up, or null until loaded ('imagery' event)
+  orbitalImageUrl: meta.files.optical ? `${base}/${meta.files.optical}` : null,
   scout: {
     start: () => $('scout').click(),
     flying: () => !!flight, used: () => flightsUsed, left: () => MAX_FLIGHTS - flightsUsed,
