@@ -29,5 +29,10 @@ The next missing evidence is reviewed negatives and missed-rock sampling, not
 another claim that running the detector alone validates the belief map.
 
 The R4 baseline stays published. No new trained model is promoted by this audit.
+Nicolas's #118 belief-map prototype remains behind its default-off `belief`
+flag. Its fitting script uses the existing proxy mask and selects features on
+a reviewed-positive/unreviewed-negative diagnostic with training overlap. The
+reported AUC is not an independent human test or calibrated blocked probability;
+`app/scripts/belief-fit.json` now records those limits and overlap counts.
 See [ingenuity_review/README.md](ingenuity_review/README.md) for the height-test
 protocol and the human/geometry gates still open.

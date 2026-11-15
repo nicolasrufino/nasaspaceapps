@@ -1,8 +1,9 @@
 // Fit the belief map's weights (app/src/belief.js) and score them honestly.
 // Labels: the current hidden-rock layer rocks_fine (Jules's R3 version: HiRISE DTM estimate + 23 reviewed rocks).
-// Fit on the west half, score on the east half, and separately on Jules's 22 human-reviewed rock cells
-// (ml/exports/rocks.json), the only labels not made from orbit data. Writes app/src/belief-weights.js and
-// app/scripts/belief-fit.json. Rerun when rocks_fine changes (for example, the whole-slice ROSCO export).
+// Fit on the west half and compare with the east mask. The reviewed-positive diagnostic uses unreviewed
+// mask-zero cells as negatives and includes some fitted positives; it is used to select features below.
+// It is neither an independent test nor probability calibration. Full-slice coverage alone supplies no
+// new negative truth. Writes app/src/belief-weights.js and app/scripts/belief-fit.json.
 // Run: node app/scripts/belief-fit.mjs
 import { readFileSync, writeFileSync } from 'node:fs'
 import { createHash } from 'node:crypto'
@@ -73,9 +74,18 @@ const candidates = [
   ['slope_ratio', 'relief_8m'],
   ['unsure'],
 ].map(fit)
-// Choose by the independent labels (reviewed rocks), not by the layer the model was fitted on.
+// Development selection only: these positives/negative proxies are not an untouched test set.
 const best = candidates.reduce((a, b) => (b.auc_vs_reviewed_rocks > a.auc_vs_reviewed_rocks ? b : a))
 const out = { labels: `rocks_fine.u8 sha256:${rocksHash} (R3: DTM estimate + 23 reviewed rocks)`, reviewed_rock_cells: reviewed.size,
+  validation: {
+    status: 'development_model_selection_diagnostic', calibrated_probability: false, independent_human_test: false,
+    reviewed_positive_cells_evaluated: walkable.filter((i) => reviewed.has(i)).length,
+    reviewed_positive_cells_in_training: west.filter((i) => reviewed.has(i)).length,
+    negative_proxy_cells_evaluated: reviewedIdx.filter((i) => !reviewed.has(i)).length,
+    negative_labels: 'Unreviewed zero cells in the existing mask; not human-confirmed empty ground',
+    model_selected_on_this_diagnostic: true,
+    calibration: 'Matching the mean proxy-label rate does not establish probability calibration',
+  },
   chosen: best.weights.features, candidates }
 writeFileSync(new URL('belief-fit.json', import.meta.url), JSON.stringify(out, null, 1) + '\n')
 writeFileSync(new URL('../src/belief-weights.js', import.meta.url),
