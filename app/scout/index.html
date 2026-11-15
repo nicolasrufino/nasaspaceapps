@@ -97,7 +97,8 @@
       #hud button:focus-visible, #layers label:has(:focus-visible) { outline: 2px solid #35e0ff; outline-offset: 2px; }
       #hud [role=tab]:focus:not(:focus-visible) { outline: none; }
       #hud #scout, #hud #play { border-radius: 999px; padding: 0 18px; min-height: 40px; box-shadow: 0 4px 14px #35e0ff40; }
-      #hud #scout::before { content: "\25B2"; font-size: 10px; margin-right: 8px; display: inline-block; transform: rotate(90deg); }
+      #hud #scout::before { content: ""; display: inline-block; margin-right: 8px; border-left: 8px solid currentColor;
+        border-top: 5px solid transparent; border-bottom: 5px solid transparent; } /* drawn, not text: the button's name stays "Fly the route" */
       #hud h2 { margin-top: 2px; padding-left: 4px; }
       @media (min-width: 601px) {
         #hud { max-height: min(78vh, 760px); }
