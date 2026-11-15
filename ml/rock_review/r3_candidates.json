@@ -1,0 +1,1119 @@
+{
+  "source_pixel_sha256": "a1b7b945e5eacfd094f57a0206bc093280c0662fd4378a8a8ec907817beb8b36",
+  "native_detection_file_sha256": "2f22db82beabbba0d56a1c85dab171a4972ca03be6b426ea892cc68ae29f4930",
+  "registration_file_sha256": "3325264b48d86e186af4279833e02c75f5300dc9fc398115b03d99dffbd6fc97",
+  "registered_candidates_sha256": "5458984f184d49ce4289259cb99d0468d82971f5afd0aaee00e753849ac8f5b1",
+  "previous_review_candidates_sha256": "c145726b5a9f9723b9ae01fdd21b83b2a2355f4501e2eaa6671232a6195deb3e",
+  "selection": "All 25 frozen confidence-only candidates, same native-coordinate hash order as H01-H06",
+  "annotations": [
+    {
+      "id": "H01",
+      "detection_id": "HRC00019",
+      "status": "unreviewed",
+      "source_crop": [
+        1951,
+        5138,
+        64,
+        64
+      ],
+      "rock_point_px": [
+        1982.5999755859375,
+        5169.89990234375
+      ],
+      "shadow_centroid_px": [
+        1986.5,
+        5170.7998046875
+      ],
+      "model_width_m": 2.5673073947580414,
+      "model_height_m": 1.0977453107139432,
+      "registered": {
+        "candidate_id": "HRC00019",
+        "native_pixel": [
+          1982.5999755859375,
+          5169.89990234375
+        ],
+        "nominal_world_projected_m": [
+          8142812.585977304,
+          -284802.65036860836
+        ],
+        "registered_world_projected_m": [
+          8142779.718980436,
+          -284770.2090330996
+        ],
+        "visual_status": "accepted",
+        "world_cell": [
+          58,
+          159
+        ],
+        "extrapolated": false,
+        "near_cell_boundary": false,
+        "boundary_distance_m": 3.209033099557473
+      }
+    },
+    {
+      "id": "H02",
+      "detection_id": "HRC00024",
+      "status": "unreviewed",
+      "source_crop": [
+        2856,
+        6868,
+        64,
+        64
+      ],
+      "rock_point_px": [
+        2887.60009765625,
+        6899.7998046875
+      ],
+      "shadow_centroid_px": [
+        2890.5,
+        6900.39990234375
+      ],
+      "model_width_m": 2.486367728381828,
+      "model_height_m": 0.5716369365252816,
+      "registered": {
+        "candidate_id": "HRC00024",
+        "native_pixel": [
+          2887.60009765625,
+          6899.7998046875
+        ],
+        "nominal_world_projected_m": [
+          8143041.493720454,
+          -285240.20553889335
+        ],
+        "registered_world_projected_m": [
+          8143010.911700107,
+          -285205.7678482054
+        ],
+        "visual_status": "uncertain",
+        "world_cell": [
+          87,
+          213
+        ],
+        "extrapolated": false,
+        "near_cell_boundary": true,
+        "boundary_distance_m": 1.2321517946106724
+      }
+    },
+    {
+      "id": "H03",
+      "detection_id": "HRC00015",
+      "status": "unreviewed",
+      "source_crop": [
+        1813,
+        5077,
+        64,
+        64
+      ],
+      "rock_point_px": [
+        1844.699951171875,
+        5109.10009765625
+      ],
+      "shadow_centroid_px": [
+        1846.699951171875,
+        5109.5
+      ],
+      "model_width_m": 1.5302670750454914,
+      "model_height_m": 0.6247536528894799,
+      "registered": {
+        "candidate_id": "HRC00015",
+        "native_pixel": [
+          1844.699951171875,
+          5109.10009765625
+        ],
+        "nominal_world_projected_m": [
+          8142777.706000385,
+          -284787.27186673245
+        ],
+        "registered_world_projected_m": [
+          8142744.762189345,
+          -284755.03851560544
+        ],
+        "visual_status": "accepted",
+        "world_cell": [
+          54,
+          157
+        ],
+        "extrapolated": false,
+        "near_cell_boundary": true,
+        "boundary_distance_m": 1.7621893461670197
+      }
+    },
+    {
+      "id": "H04",
+      "detection_id": "HRC00001",
+      "status": "unreviewed",
+      "source_crop": [
+        7924,
+        584,
+        64,
+        64
+      ],
+      "rock_point_px": [
+        7955.89990234375,
+        616.5
+      ],
+      "shadow_centroid_px": [
+        7957.7998046875,
+        616.9000244140625
+      ],
+      "model_width_m": 1.02692298202514,
+      "model_height_m": 0.5564607490797416,
+      "registered": {
+        "candidate_id": "HRC00001",
+        "native_pixel": [
+          7955.89990234375,
+          616.5
+        ],
+        "nominal_world_projected_m": [
+          8144323.452740794,
+          -283650.92842969956
+        ],
+        "registered_world_projected_m": [
+          8144284.29606489,
+          -283612.88773141237
+        ],
+        "visual_status": "accepted",
+        "world_cell": [
+          246,
+          14
+        ],
+        "extrapolated": true,
+        "near_cell_boundary": false,
+        "boundary_distance_m": 2.1122685876349863
+      }
+    },
+    {
+      "id": "H05",
+      "detection_id": "HRC00018",
+      "status": "unreviewed",
+      "source_crop": [
+        2138,
+        5116,
+        64,
+        64
+      ],
+      "rock_point_px": [
+        2170.0,
+        5148.10009765625
+      ],
+      "shadow_centroid_px": [
+        2173.89990234375,
+        5149.0
+      ],
+      "model_width_m": 2.046257930632318,
+      "model_height_m": 1.1812144019692217,
+      "registered": {
+        "candidate_id": "HRC00018",
+        "native_pixel": [
+          2170.0,
+          5148.10009765625
+        ],
+        "nominal_world_projected_m": [
+          8142859.986320805,
+          -284797.13639797963
+        ],
+        "registered_world_projected_m": [
+          8142827.083980734,
+          -284764.4619626274
+        ],
+        "visual_status": "accepted",
+        "world_cell": [
+          64,
+          158
+        ],
+        "extrapolated": false,
+        "near_cell_boundary": false,
+        "boundary_distance_m": 2.538037372565441
+      }
+    },
+    {
+      "id": "H06",
+      "detection_id": "HRC00008",
+      "status": "unreviewed",
+      "source_crop": [
+        1808,
+        4835,
+        64,
+        64
+      ],
+      "rock_point_px": [
+        1840.0999755859375,
+        4867.10009765625
+      ],
+      "shadow_centroid_px": [
+        1844.0,
+        4868.0
+      ],
+      "model_width_m": 1.9071426981337765,
+      "model_height_m": 1.2419191517513817,
+      "registered": {
+        "candidate_id": "HRC00008",
+        "native_pixel": [
+          1840.0999755859375,
+          4867.10009765625
+        ],
+        "nominal_world_projected_m": [
+          8142776.542497747,
+          -284726.06118566036
+        ],
+        "registered_world_projected_m": [
+          8142743.275016995,
+          -284693.94862177665
+        ],
+        "visual_status": "accepted",
+        "world_cell": [
+          54,
+          149
+        ],
+        "extrapolated": false,
+        "near_cell_boundary": true,
+        "boundary_distance_m": 0.27501699640384913
+      }
+    },
+    {
+      "id": "H07",
+      "detection_id": "HRC00009",
+      "status": "unreviewed",
+      "source_crop": [
+        1912,
+        4863,
+        64,
+        64
+      ],
+      "rock_point_px": [
+        1943.699951171875,
+        4895.2998046875
+      ],
+      "shadow_centroid_px": [
+        1947.5999755859375,
+        4896.10009765625
+      ],
+      "model_width_m": 3.343823223626963,
+      "model_height_m": 1.0850984275378517,
+      "registered": {
+        "candidate_id": "HRC00009",
+        "native_pixel": [
+          1943.699951171875,
+          4895.2998046875
+        ],
+        "nominal_world_projected_m": [
+          8142802.746733551,
+          -284733.19392645964
+        ],
+        "registered_world_projected_m": [
+          8142769.513574456,
+          -284700.93340213224
+        ],
+        "visual_status": "unreviewed",
+        "world_cell": [
+          57,
+          150
+        ],
+        "extrapolated": false,
+        "near_cell_boundary": false,
+        "boundary_distance_m": 2.0665978677725434
+      }
+    },
+    {
+      "id": "H08",
+      "detection_id": "HRC00022",
+      "status": "unreviewed",
+      "source_crop": [
+        5234,
+        5711,
+        64,
+        64
+      ],
+      "rock_point_px": [
+        5266.2001953125,
+        5743.0
+      ],
+      "shadow_centroid_px": [
+        5268.10009765625,
+        5743.39990234375
+      ],
+      "model_width_m": 1.5530312959089931,
+      "model_height_m": 0.4679328985235458,
+      "registered": {
+        "candidate_id": "HRC00022",
+        "native_pixel": [
+          5266.2001953125,
+          5743.0
+        ],
+        "nominal_world_projected_m": [
+          8143643.128976552,
+          -284947.60841530265
+        ],
+        "registered_world_projected_m": [
+          8143610.920688469,
+          -284910.62961905455
+        ],
+        "visual_status": "unreviewed",
+        "world_cell": [
+          162,
+          176
+        ],
+        "extrapolated": false,
+        "near_cell_boundary": true,
+        "boundary_distance_m": 0.3703809454182192
+      }
+    },
+    {
+      "id": "H09",
+      "detection_id": "HRC00010",
+      "status": "unreviewed",
+      "source_crop": [
+        1861,
+        4864,
+        64,
+        64
+      ],
+      "rock_point_px": [
+        1893.300048828125,
+        4896.2001953125
+      ],
+      "shadow_centroid_px": [
+        1896.300048828125,
+        4896.89990234375
+      ],
+      "model_width_m": 1.7300870573261933,
+      "model_height_m": 0.9485126199183749,
+      "registered": {
+        "candidate_id": "HRC00010",
+        "native_pixel": [
+          1893.300048828125,
+          4896.2001953125
+        ],
+        "nominal_world_projected_m": [
+          8142789.998748641,
+          -284733.42166829185
+        ],
+        "registered_world_projected_m": [
+          8142756.768454491,
+          -284701.22618886345
+        ],
+        "visual_status": "unreviewed",
+        "world_cell": [
+          55,
+          150
+        ],
+        "extrapolated": false,
+        "near_cell_boundary": true,
+        "boundary_distance_m": 1.7738111365399618
+      }
+    },
+    {
+      "id": "H10",
+      "detection_id": "HRC00023",
+      "status": "unreviewed",
+      "source_crop": [
+        5477,
+        6248,
+        64,
+        64
+      ],
+      "rock_point_px": [
+        5508.60009765625,
+        6279.7998046875
+      ],
+      "shadow_centroid_px": [
+        5510.60009765625,
+        6280.2001953125
+      ],
+      "model_width_m": 0.8346910934672083,
+      "model_height_m": 0.30858277958335495,
+      "registered": {
+        "candidate_id": "HRC00023",
+        "native_pixel": [
+          5508.60009765625,
+          6279.7998046875
+        ],
+        "nominal_world_projected_m": [
+          8143704.440807601,
+          -285083.38478573353
+        ],
+        "registered_world_projected_m": [
+          8143672.942829184,
+          -285045.83642652835
+        ],
+        "visual_status": "unreviewed",
+        "world_cell": [
+          170,
+          193
+        ],
+        "extrapolated": false,
+        "near_cell_boundary": true,
+        "boundary_distance_m": 1.1635734716285242
+      }
+    },
+    {
+      "id": "H11",
+      "detection_id": "HRC00017",
+      "status": "unreviewed",
+      "source_crop": [
+        2016,
+        5085,
+        64,
+        64
+      ],
+      "rock_point_px": [
+        2048.0,
+        5117.10009765625
+      ],
+      "shadow_centroid_px": [
+        2050.0,
+        5117.5
+      ],
+      "model_width_m": 1.2014493185632749,
+      "model_height_m": 0.4603448048007758,
+      "registered": {
+        "candidate_id": "HRC00017",
+        "native_pixel": [
+          2048.0,
+          5117.10009765625
+        ],
+        "nominal_world_projected_m": [
+          8142829.1280435715,
+          -284789.29536032164
+        ],
+        "registered_world_projected_m": [
+          8142796.188240842,
+          -284756.7941165309
+        ],
+        "visual_status": "unreviewed",
+        "world_cell": [
+          60,
+          157
+        ],
+        "extrapolated": false,
+        "near_cell_boundary": false,
+        "boundary_distance_m": 2.205883469070841
+      }
+    },
+    {
+      "id": "H12",
+      "detection_id": "HRC00005",
+      "status": "unreviewed",
+      "source_crop": [
+        1226,
+        2766,
+        64,
+        64
+      ],
+      "rock_point_px": [
+        1258.0999755859375,
+        2798.0
+      ],
+      "shadow_centroid_px": [
+        1260.0999755859375,
+        2798.39990234375
+      ],
+      "model_width_m": 1.2748009515215266,
+      "model_height_m": 0.4856384505433425,
+      "registered": {
+        "candidate_id": "HRC00005",
+        "native_pixel": [
+          1258.0999755859375,
+          2798.0
+        ],
+        "nominal_world_projected_m": [
+          8142629.333339135,
+          -284202.7098377934
+        ],
+        "registered_world_projected_m": [
+          8142593.316357298,
+          -284172.3349614462
+        ],
+        "visual_status": "unreviewed",
+        "world_cell": [
+          35,
+          84
+        ],
+        "extrapolated": false,
+        "near_cell_boundary": false,
+        "boundary_distance_m": 2.3163572989469685
+      }
+    },
+    {
+      "id": "H13",
+      "detection_id": "HRC00004",
+      "status": "unreviewed",
+      "source_crop": [
+        1294,
+        2646,
+        64,
+        64
+      ],
+      "rock_point_px": [
+        1326.199951171875,
+        2678.10009765625
+      ],
+      "shadow_centroid_px": [
+        1330.0999755859375,
+        2678.89990234375
+      ],
+      "model_width_m": 3.877519570928778,
+      "model_height_m": 2.079139730402463,
+      "registered": {
+        "candidate_id": "HRC00004",
+        "native_pixel": [
+          1326.199951171875,
+          2678.10009765625
+        ],
+        "nominal_world_projected_m": [
+          8142646.558322138,
+          -284172.3827523267
+        ],
+        "registered_world_projected_m": [
+          8142610.378658578,
+          -284141.97629450425
+        ],
+        "visual_status": "unreviewed",
+        "world_cell": [
+          37,
+          80
+        ],
+        "extrapolated": false,
+        "near_cell_boundary": true,
+        "boundary_distance_m": 1.0237054957252667
+      }
+    },
+    {
+      "id": "H14",
+      "detection_id": "HRC00016",
+      "status": "unreviewed",
+      "source_crop": [
+        1830,
+        5085,
+        64,
+        64
+      ],
+      "rock_point_px": [
+        1862.0,
+        5116.7998046875
+      ],
+      "shadow_centroid_px": [
+        1868.800048828125,
+        5118.2998046875
+      ],
+      "model_width_m": 4.820973341089023,
+      "model_height_m": 1.94255380217337,
+      "registered": {
+        "candidate_id": "HRC00016",
+        "native_pixel": [
+          1862.0,
+          5116.7998046875
+        ],
+        "nominal_world_projected_m": [
+          8142782.081817623,
+          -284789.2194052095
+        ],
+        "registered_world_projected_m": [
+          8142749.147739746,
+          -284756.9599274691
+        ],
+        "visual_status": "unreviewed",
+        "world_cell": [
+          54,
+          157
+        ],
+        "extrapolated": false,
+        "near_cell_boundary": true,
+        "boundary_distance_m": 1.852260253067243
+      }
+    },
+    {
+      "id": "H15",
+      "detection_id": "HRC00003",
+      "status": "unreviewed",
+      "source_crop": [
+        3412,
+        2379,
+        64,
+        64
+      ],
+      "rock_point_px": [
+        3443.5,
+        2410.60009765625
+      ],
+      "shadow_centroid_px": [
+        3445.5,
+        2411.0
+      ],
+      "model_width_m": 0.8802197161086366,
+      "model_height_m": 0.24281922527167124,
+      "registered": {
+        "candidate_id": "HRC00003",
+        "native_pixel": [
+          3443.5,
+          2410.60009765625
+        ],
+        "nominal_world_projected_m": [
+          8143182.101206529,
+          -284104.72218543914
+        ],
+        "registered_world_projected_m": [
+          8143145.493858082,
+          -284071.6921553268
+        ],
+        "visual_status": "unreviewed",
+        "world_cell": [
+          104,
+          72
+        ],
+        "extrapolated": false,
+        "near_cell_boundary": true,
+        "boundary_distance_m": 0.692155326757188
+      }
+    },
+    {
+      "id": "H16",
+      "detection_id": "HRC00014",
+      "status": "unreviewed",
+      "source_crop": [
+        1868,
+        5057,
+        64,
+        64
+      ],
+      "rock_point_px": [
+        1900.199951171875,
+        5089.0
+      ],
+      "shadow_centroid_px": [
+        1903.0999755859375,
+        5089.7001953125
+      ],
+      "model_width_m": 3.45005665635536,
+      "model_height_m": 0.8422791871899783,
+      "registered": {
+        "candidate_id": "HRC00014",
+        "native_pixel": [
+          1900.199951171875,
+          5089.0
+        ],
+        "nominal_world_projected_m": [
+          8142791.743987161,
+          -284782.1878143888
+        ],
+        "registered_world_projected_m": [
+          8142758.771451973,
+          -284749.8919019566
+        ],
+        "visual_status": "unreviewed",
+        "world_cell": [
+          55,
+          156
+        ],
+        "extrapolated": false,
+        "near_cell_boundary": true,
+        "boundary_distance_m": 0.2285480253311789
+      }
+    },
+    {
+      "id": "H17",
+      "detection_id": "HRC00013",
+      "status": "unreviewed",
+      "source_crop": [
+        2112,
+        5033,
+        64,
+        64
+      ],
+      "rock_point_px": [
+        2143.60009765625,
+        5064.7998046875
+      ],
+      "shadow_centroid_px": [
+        2146.60009765625,
+        5065.39990234375
+      ],
+      "model_width_m": 2.870831626107308,
+      "model_height_m": 0.76639818965747,
+      "registered": {
+        "candidate_id": "HRC00013",
+        "native_pixel": [
+          2143.60009765625,
+          5064.7998046875
+        ],
+        "nominal_world_projected_m": [
+          8142853.308816661,
+          -284776.0666968799
+        ],
+        "registered_world_projected_m": [
+          8142820.2958817035,
+          -284743.46607637376
+        ],
+        "visual_status": "unreviewed",
+        "world_cell": [
+          63,
+          156
+        ],
+        "extrapolated": false,
+        "near_cell_boundary": true,
+        "boundary_distance_m": 0.46607637375723243
+      }
+    },
+    {
+      "id": "H18",
+      "detection_id": "HRC00020",
+      "status": "unreviewed",
+      "source_crop": [
+        1788,
+        5140,
+        64,
+        64
+      ],
+      "rock_point_px": [
+        1820.0,
+        5172.2001953125
+      ],
+      "shadow_centroid_px": [
+        1824.9000244140625,
+        5173.2998046875
+      ],
+      "model_width_m": 3.2628833160315165,
+      "model_height_m": 1.4442685589111481,
+      "registered": {
+        "candidate_id": "HRC00020",
+        "native_pixel": [
+          1820.0,
+          5172.2001953125
+        ],
+        "nominal_world_projected_m": [
+          8142771.458476279,
+          -284803.23219711776
+        ],
+        "registered_world_projected_m": [
+          8142738.599913344,
+          -284771.0009960306
+        ],
+        "visual_status": "unreviewed",
+        "world_cell": [
+          53,
+          159
+        ],
+        "extrapolated": false,
+        "near_cell_boundary": false,
+        "boundary_distance_m": 3.5999133442587663
+      }
+    },
+    {
+      "id": "H19",
+      "detection_id": "HRC00007",
+      "status": "unreviewed",
+      "source_crop": [
+        1825,
+        4572,
+        64,
+        64
+      ],
+      "rock_point_px": [
+        1857.199951171875,
+        4603.60009765625
+      ],
+      "shadow_centroid_px": [
+        1862.0,
+        4604.7001953125
+      ],
+      "model_width_m": 3.2679421657896466,
+      "model_height_m": 1.47209162953278,
+      "registered": {
+        "candidate_id": "HRC00007",
+        "native_pixel": [
+          1857.199951171875,
+          4603.60009765625
+        ],
+        "nominal_world_projected_m": [
+          8142780.867709119,
+          -284659.41236556746
+        ],
+        "registered_world_projected_m": [
+          8142747.247074638,
+          -284627.40259977995
+        ],
+        "visual_status": "unreviewed",
+        "world_cell": [
+          54,
+          141
+        ],
+        "extrapolated": false,
+        "near_cell_boundary": false,
+        "boundary_distance_m": 3.597400220038253
+      }
+    },
+    {
+      "id": "H20",
+      "detection_id": "HRC00011",
+      "status": "unreviewed",
+      "source_crop": [
+        2151,
+        4868,
+        64,
+        64
+      ],
+      "rock_point_px": [
+        2182.60009765625,
+        4900.5
+      ],
+      "shadow_centroid_px": [
+        2185.5,
+        4901.10009765625
+      ],
+      "model_width_m": 1.8186148777299849,
+      "model_height_m": 0.76639818965747,
+      "registered": {
+        "candidate_id": "HRC00011",
+        "native_pixel": [
+          2182.60009765625,
+          4900.5
+        ],
+        "nominal_world_projected_m": [
+          8142863.173347908,
+          -284734.5092466942
+        ],
+        "registered_world_projected_m": [
+          8142829.939278056,
+          -284701.9359116486
+        ],
+        "visual_status": "unreviewed",
+        "world_cell": [
+          64,
+          150
+        ],
+        "extrapolated": false,
+        "near_cell_boundary": true,
+        "boundary_distance_m": 1.0607219427089376
+      }
+    },
+    {
+      "id": "H21",
+      "detection_id": "HRC00021",
+      "status": "unreviewed",
+      "source_crop": [
+        2327,
+        5348,
+        64,
+        64
+      ],
+      "rock_point_px": [
+        2359.0,
+        5379.7998046875
+      ],
+      "shadow_centroid_px": [
+        2361.0,
+        5380.2001953125
+      ],
+      "model_width_m": 1.520149616748465,
+      "model_height_m": 0.584283759396565,
+      "registered": {
+        "candidate_id": "HRC00021",
+        "native_pixel": [
+          2359.0,
+          5379.7998046875
+        ],
+        "nominal_world_projected_m": [
+          8142907.7913568495,
+          -284855.7417569531
+        ],
+        "registered_world_projected_m": [
+          8142875.192829651,
+          -284822.7118759755
+        ],
+        "visual_status": "unreviewed",
+        "world_cell": [
+          70,
+          165
+        ],
+        "extrapolated": false,
+        "near_cell_boundary": true,
+        "boundary_distance_m": 0.2881240245023946
+      }
+    },
+    {
+      "id": "H22",
+      "detection_id": "HRC00012",
+      "status": "unreviewed",
+      "source_crop": [
+        2168,
+        5017,
+        64,
+        64
+      ],
+      "rock_point_px": [
+        2199.5,
+        5049.2001953125
+      ],
+      "shadow_centroid_px": [
+        2205.300048828125,
+        5050.5
+      ],
+      "model_width_m": 3.6119359891077862,
+      "model_height_m": 1.4619741712357532,
+      "registered": {
+        "candidate_id": "HRC00012",
+        "native_pixel": [
+          2199.5,
+          5049.2001953125
+        ],
+        "nominal_world_projected_m": [
+          8142867.447953415,
+          -284772.1209831845
+        ],
+        "registered_world_projected_m": [
+          8142834.4123032605,
+          -284739.45514672063
+        ],
+        "visual_status": "unreviewed",
+        "world_cell": [
+          65,
+          155
+        ],
+        "extrapolated": false,
+        "near_cell_boundary": false,
+        "boundary_distance_m": 3.4123032610966675
+      }
+    },
+    {
+      "id": "H23",
+      "detection_id": "HRC00002",
+      "status": "unreviewed",
+      "source_crop": [
+        1307,
+        2114,
+        64,
+        64
+      ],
+      "rock_point_px": [
+        1338.800048828125,
+        2146.39990234375
+      ],
+      "shadow_centroid_px": [
+        1339.800048828125,
+        2146.60009765625
+      ],
+      "model_width_m": 1.0243936777556915,
+      "model_height_m": 0.2504073340706433,
+      "registered": {
+        "candidate_id": "HRC00002",
+        "native_pixel": [
+          1338.800048828125,
+          2146.39990234375
+        ],
+        "nominal_world_projected_m": [
+          8142649.745349242,
+          -284037.8962602555
+        ],
+        "registered_world_projected_m": [
+          8142612.85380035,
+          -284007.7256878535
+        ],
+        "visual_status": "unreviewed",
+        "world_cell": [
+          37,
+          64
+        ],
+        "extrapolated": false,
+        "near_cell_boundary": true,
+        "boundary_distance_m": 0.7256878535386022
+      }
+    },
+    {
+      "id": "H24",
+      "detection_id": "HRC00025",
+      "status": "unreviewed",
+      "source_crop": [
+        5920,
+        8002,
+        64,
+        64
+      ],
+      "rock_point_px": [
+        5952.5,
+        8034.2998046875
+      ],
+      "shadow_centroid_px": [
+        5957.39990234375,
+        8035.2998046875
+      ],
+      "model_width_m": 2.3953106037085883,
+      "model_height_m": 1.014276219458665,
+      "registered": {
+        "candidate_id": "HRC00025",
+        "native_pixel": [
+          5952.5,
+          8034.2998046875
+        ],
+        "nominal_world_projected_m": [
+          8143816.719383429,
+          -285527.16222350596
+        ],
+        "registered_world_projected_m": [
+          8143787.554487263,
+          -285488.2048310819
+        ],
+        "visual_status": "unreviewed",
+        "world_cell": [
+          184,
+          249
+        ],
+        "extrapolated": true,
+        "near_cell_boundary": true,
+        "boundary_distance_m": 1.2048310819011476
+      }
+    },
+    {
+      "id": "H25",
+      "detection_id": "HRC00006",
+      "status": "unreviewed",
+      "source_crop": [
+        2253,
+        3169,
+        64,
+        64
+      ],
+      "rock_point_px": [
+        2285.10009765625,
+        3200.800048828125
+      ],
+      "shadow_centroid_px": [
+        2288.10009765625,
+        3201.39990234375
+      ],
+      "model_width_m": 2.1246681721294665,
+      "model_height_m": 0.7461632730634166,
+      "registered": {
+        "candidate_id": "HRC00006",
+        "native_pixel": [
+          2285.10009765625,
+          3200.800048828125
+        ],
+        "nominal_world_projected_m": [
+          8142889.099359519,
+          -284304.592752358
+        ],
+        "registered_world_projected_m": [
+          8142853.587537664,
+          -284272.6926502155
+        ],
+        "visual_status": "unreviewed",
+        "world_cell": [
+          67,
+          97
+        ],
+        "extrapolated": false,
+        "near_cell_boundary": true,
+        "boundary_distance_m": 1.4124623352505523
+      }
+    }
+  ],
+  "new_sheet_sha256": {
+    "H07_H09.png": "0f342dfc4f5d182da15f666e4aa0f2aa517bef34f528753419e46c756aa239ed",
+    "H10_H12.png": "3a7d7a5a8a1e28644d75824a198eb145dcfe748e735e9d7794251b732f87ec89",
+    "H13_H15.png": "b8c4bff15299ba586a6fed268e91e5259468f928776aaff8fbed67e070912e80",
+    "H16_H18.png": "8abe773c0462c15bf21e30258c6e3238a5fe27c47ab53550d46201bc7506530f",
+    "H19_H21.png": "0854638a846c1dbcd3b29e199bf7f27a4bff8156f1a566331577f11a62c91070",
+    "H22_H24.png": "63827e9c2f00427fb912099574883736988e8558f89584a40854c5b00046be74",
+    "H25_H25.png": "36450767d1d91b0ced5956e9041b6e6e38efdfcfffad163ab527b270eaf22b72"
+  }
+}
