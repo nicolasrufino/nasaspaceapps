@@ -8,7 +8,7 @@ We built the safe half of the mission: can the crew get there and back? We did n
 
 | When | What |
 |---|---|
-| 10:30–12:15 | Build: three tracks plus the pitch |
+| 10:00–12:15 | Build: three tracks plus the pitch |
 | 12:15–12:45 | Stop. Release `dev` → `main`, check the live link |
 | by 1:00 PM | Submit |
 | 1:30 PM | Hard close |
