@@ -23,3 +23,9 @@ Evidence: `ml/exports/pitch_metrics.json`,
 `ml/terrain_classifier/gale_experiment_v2.json`, and
 `ml/terrain_classifier/PROVENANCE.md`. Keep the initial 93.1% and additional
 91.1% Curiosity measurements distinct; neither is an aerial or big-rock score.
+
+PR #94 refresh: proof numbers and demo notes now use the `worst` EVA
+scenario, the updated energy model and walk-scale crossings. Two scout
+passes, 630.5 kJ final walking energy, 446.5 kJ minimum spare margin at 1.3x
+cost. This supersedes the earlier 600 kJ scenario. The external Claude
+Slides artifact still needs the same source changes synchronized.

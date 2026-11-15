@@ -60,8 +60,11 @@ export function buildReport(root = ROOT) {
     'ml/exports/rocks.json', 'ml/exports/terrain_cls.json', 'ml/exports/buddy_policy.json',
     'app/src/plan.js', 'app/src/walk.js', 'app/src/scout.js', 'app/src/why.js', 'app/src/main.js', 'app/src/world.js',
     'ml/pitch_metrics/metrics.mjs', 'ml/pitch_metrics/run.mjs']
+  if (world.meta.files.passable) files.push(`data/worlds/gale/${world.meta.files.passable}`)
   const report = { schema_version: 1, block: 'R5', site: world.meta.site,
     scenario: { name: 'Gale default five science stops, first scout pass, no custom stops',
+      energy_scenario: world.meta.default_scenario ?? null,
+      energy_scenario_details: world.meta.scenarios?.[world.meta.default_scenario] ?? null,
       target_ids: targets.map((t) => t.id), energy_budget_j: world.meta.energy_budget_j,
       reserve_j: world.meta.energy_budget_j * world.meta.reserve_fraction,
       cell_size_m: world.meta.cell_size_m, scout_replay_fps: 60 },
@@ -143,6 +146,9 @@ Energy figures before convergence are conditional calculations on a route that s
 The cycles total ${r.total_flights} simulated flight legs and ${(r.total_flight_metres / 1000).toFixed(2)} km of flight; drone energy is excluded. These grid hazards come from a mixed terrain layer, not a count of individually validated rocks. This is a fixed-scenario simulation, not a field safety result. R5 supplies evidence for F1/X4; the actual slides are a separate block.
 `
   return renderFirstPassPitch(report)
+    .replace('## Before and after the first scout pass',
+      `Energy scenario: **${report.scenario.energy_scenario ?? 'world default'}**. ${report.scenario.energy_scenario_details?.name ?? ''}. ` +
+      'The world budget already deducts planned time at science stops. It is a scenario estimate, not measured astronaut endurance.\n\n## Before and after the first scout pass')
     .replace('## Energy sensitivity\n', section + '## Energy sensitivity after the first pass\n')
     .replace(/## Suggested proof line\n[\s\S]*$/, proof)
 }

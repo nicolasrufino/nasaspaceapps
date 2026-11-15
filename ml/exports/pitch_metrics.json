@@ -17,6 +17,14 @@
   },
   "scenario": {
     "name": "Gale default five science stops, first scout pass, no custom stops",
+    "energy_scenario": "worst",
+    "energy_scenario_details": {
+      "name": "Late in the EVA: 5 h of suit left after 3 h of station work",
+      "suit_hours_left": 5,
+      "stop_hours": 2.5,
+      "energy_budget_j": 3165180,
+      "reserve_fraction": 0.6
+    },
     "target_ids": [
       "altadena",
       "ridge_top",
@@ -58,8 +66,9 @@
     "app/src/why.js": "ddfd6ff73ffe5898e3a81915ec15903712e6e7ddf453db7c092db8b2c7928f6c",
     "app/src/main.js": "a1bcb3c3a4539a4a5897abc3fa925262e99a2883f3b0dbcc478bde842d4d3b02",
     "app/src/world.js": "1800b24b31ee964e933d6e6bbf9cc1b73a370a027dbf531d0f6c0dbb47058898",
-    "ml/pitch_metrics/metrics.mjs": "4827c4fe0714b57920c711de604f92b022489b14efa25a286ada2bc858088760",
-    "ml/pitch_metrics/run.mjs": "20738facf68ca3f4b655cc1bf4b474a813c899101f8218cc768d805f0f2f6bbe"
+    "ml/pitch_metrics/metrics.mjs": "02a8254f7803a18ded563b0421d08f5541b44f4062c2976989936c7ff085d36d",
+    "ml/pitch_metrics/run.mjs": "4d323a83d029c272812803fd8c73fbdde53d9e276423eec5568df2236def8246",
+    "data/worlds/gale/passable.u8": "aa094aa98b2251b249129ef3fc318abe4cf956cadad062b7495146dc283d1137"
   },
   "results": {
     "orbit_only": {

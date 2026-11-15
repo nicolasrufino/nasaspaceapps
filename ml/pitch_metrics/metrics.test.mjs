@@ -40,6 +40,17 @@ test('energy uncertainty scales spent energy AND return cost without scaling res
   assert.throws(() => routeProfile(world, route, costs, 0), /Invalid/)
 })
 
+test('return audit follows homebound crossings, including one-way links', () => {
+  const world = fixture()
+  world.layers.passable = new Uint8Array(16)
+  world.layers.passable[1] = 1 << 3 // west from [1, 0] to base, no eastbound link
+  const home = knownReturnCosts(world, null)
+  assert.equal(home[1], stepCost(world.meta, world.layers.height, world.layers.terrain_class, [1, 0], [0, 0]))
+  assert.equal(home[2], Infinity)
+  assert.equal(costFrom(world, [0, 0]).dist[1], Infinity)
+  assert.equal(world.layers.passable[0], 0)
+})
+
 test('twenty-percent share is distance weighted with threshold interpolation', () => {
   const profile = [
     { distance_m: 0, margin_after_reserve_j: 30, cell: [0, 0] },
@@ -98,6 +109,9 @@ test('Gale report separates observed hazards, hidden hazards, model accuracy and
   const report = buildReport()
   const r = report.results
   const { world } = loadInputs()
+  assert.equal(report.scenario.energy_scenario, world.meta.default_scenario)
+  assert.equal(report.scenario.energy_budget_j, world.meta.scenarios[world.meta.default_scenario].energy_budget_j)
+  assert.ok(report.source_sha256['data/worlds/gale/passable.u8'])
   // Same selected stops: avoid claiming a lower cost by silently dropping science.
   assert.deepEqual(new Set(r.orbit_only.stops), new Set(r.after_scout.stops))
   assert.deepEqual(new Set(r.orbit_only.stops), new Set(r.repeated_scout.final_route.stops))

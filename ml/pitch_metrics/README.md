@@ -21,8 +21,12 @@ Binary hashes use the exact bytes, including the R3 layer and positive mask.
 
 ## Measured scenario and definitions
 
-The default Gale world, all five default science stops, 600 kJ initial walking
-energy and the world's 20% reserve. The current app's `planTour`, `stepCost`,
+The PR #94 Gale world rebuilt at 20°, all five default science stops, and its default `worst`
+energy scenario: 3,165.180 kJ initial walking energy and a 60% reserve
+(1,899.108 kJ). This assumes 5 h of suit time left after 3 h of station work,
+deducts 2.5 h for science stops, and reserves 1.5 h at the scenario sizing rate.
+These are scenario assumptions, not measured Mars EVA endurance. The separate
+`ideal` scenario is not the basis of these pitch results. The current app's `planTour`, `stepCost`,
 `routeFlights`, `pointAlong` and `scanAt` are reused directly. The old static
 `route.json` is not substituted for the route actually selected by the app.
 
@@ -44,7 +48,8 @@ Margin = energy left − cheapest return with discovered hazards − fixed reser
 “Extra 20% margin” means at least 20% of the **initial budget**, in addition to
 the reserve. The fraction of the traverse is weighted by distance, with linear
 interpolation between grid vertices; stopped science work is not counted.
-Return costs are independently recomputed with directed reverse shortest paths.
+Return costs are independently recomputed with directed reverse shortest paths,
+including reversed `passable.u8` crossings. That layer is pinned in the source manifest.
 The current app's hybrid cost lookup is also measured, not silently replaced.
 
 The ±30% stress test multiplies both energy already spent and the remaining
@@ -59,8 +64,12 @@ The first pass avoids the discovered obstacles but can route around them into
 unobserved cells. Its residual full-layer crossings are explicitly reported;
 do not describe that first replan as completely cleared. Repeated scouting
 quantifies the extra work with the app as it currently exists. Flight energy,
-battery recharge, communication delay, suit work at science stops, and actual
-human exertion are outside this walking-energy simulation.
+battery recharge, communication delay, and actual human exertion are outside
+this walking-energy simulation. The budget already deducts estimated time at
+science stops; the route profile does not simulate effort during those stops.
+The 14 simulated flight legs are not a feasible single-campaign claim: the
+proposed flight-count and daylight limits in `docs/DECISION-BRIEFS.md` §7–8
+are not enforced by this replay.
 
 The report also records the difference between the displayed per-cell hybrid
 return lookup and an exact return field for discovered hazards. A globally
