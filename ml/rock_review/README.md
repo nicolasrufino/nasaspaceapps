@@ -17,6 +17,8 @@ native detector on a single HiRISE acquisition covering this site, with verified
 observation-level solar geometry. The development run produces 25 candidates;
 Jules reviewed six: five accepted and one uncertain. It does not replace the world hazards
 or transfer the existing visual labels to a different image.
+The subsequent [registration step](REGISTRATION.md) corrects a roughly 49 m
+image offset and supplies candidate cells with boundary/extrapolation flags.
 
 This handoff makes the same starter review available to Jules, Luca and Nicolas. **Jules has visually accepted all 50 numbered circles in the first delivered image as corresponding to rocks.** Their positions lie on a real 256 × 256 m Gale crop. The proposals use bright-object morphology; this is **preparation for R1**, not the completed shadow-based detector, a trained model, a final hazard map or a measured accuracy result. Issue #31 remains open.
 
