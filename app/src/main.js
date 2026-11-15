@@ -4,6 +4,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { loadWorld, layerRGB, sourceLabel } from './world.js'
 import { startWalk, stepTo, ringMask, ringLimit, appState, oxygenL } from './walk.js'
 import { planTour, MAX_STOPS } from './plan.js'
+import { mountFlightLog } from './scout-why.js'
 import { createScout, launchScoutFlight, completeScoutFlight, scanFlight, pointAlong, MAX_FLIGHTS, FLIGHT_ANIMATION_S } from './scout.js'
 import { hazardRGB, blockedSegments, reviewedMask, legendHTML, COLORS as HAZARD } from './hazards.js'
 import { beliefMap } from './belief.js'
@@ -19,7 +20,7 @@ const $ = (id) => document.getElementById(id)
 const params = new URLSearchParams(location.search)
 // The bare link is the judges' link: the Gale demo with the demo features on.
 // ?world=synthetic loads the test world; ?flags= (empty) switches every feature off (docs/PLAN.md §10).
-const DEMO_FLAGS = 'drone_scout,why_route,layers_extra,pov_images,science_stop,step_mode,detail,hazards,contours'
+const DEMO_FLAGS = 'drone_scout,why_flight,why_route,layers_extra,pov_images,science_stop,step_mode,detail,hazards,contours'
 const worldName = params.get('world') ?? 'gale'
 const flags = new Set((params.get('flags') ?? DEMO_FLAGS).split(',').filter(Boolean))
 if (flags.has('classifier')) initTerrainClassifier($('walk'))
@@ -596,6 +597,7 @@ function reveal(fresh) {
   return rocks
 }
 
+const logFlight = flags.has('why_flight') ? mountFlightLog($('scoutBox'), world) : null
 if (flags.has('drone_scout') && layers.rocks_fine) $('scoutBox').hidden = false
 $('scout').onclick = () => {
   if (flight || flightsUsed >= MAX_FLIGHTS) return
@@ -629,8 +631,9 @@ function tickFlight(dt) {
     `simulated helicopter flight, rocks from ${sourceLabel(meta, 'rocks_fine') || meta.sources?.all || 'rocks_fine'}`
   if (flight.along < f.metres) return
 
-  completeScoutFlight(world, flight)
+  const completed = completeScoutFlight(world, flight)
   flightsUsed++
+  logFlight?.(completed, flight.targets, flightsUsed)
   blocked = flight.blocked
   const before = flight.before
   const crossed = new Set(before.cells.filter(([x, y]) => blocked[y * W + x]).map(([x, y]) => y * W + x)).size
