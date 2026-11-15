@@ -1,0 +1,1135 @@
+{
+  "record": "https://zenodo.org/api/records/15995036",
+  "archive": "ai4mars-dataset-merged-0.6.zip",
+  "archive_checksum": "md5:daf80a86021253292e6c425f97baa5c6",
+  "selection": {
+    "protocol": "gale-ground-head-v2",
+    "count": 80,
+    "source_manifest_sha256": "e0ef1652cf4e130b333a2828866c6f8524b521f6aad1e76115682b6a8c1c1a5f",
+    "image_ids": [
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_453781520EDR_F0320478NCAM00282M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_428295522EDR_F0100474NCAM00385M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_502512171EDR_F0511298NCAM00320M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_428304492EDR_F0100508NCAM05114M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLA_602657189EDR_F0732688NCAM00382M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLA_409037112EDR_F0051662NCAM05703M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_442600447EDR_F0250312NCAM00282M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_459291038EDR_F0391552NCAM00252M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_457153024EDR_F0380000NCAM00354M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_504390285EDR_F0520004NCAM00353M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_462743799EDR_F0410322NCAM00271M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_455641497EDR_F0340774NCAM00251M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_463814255EDR_F0420000NCAM00278M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_520359399EDR_F0550940NCAM07753M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_558365006EDR_F0660000NCAM00253M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_443663198EDR_F0251238NCAM00353M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_528892751EDR_F0581248NCAM00346M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_565366137EDR_F0670604NCAM00257M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_574078440EDR_F0681626NCAM00354M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_537938609EDR_F0601266NCAM07753M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLA_601421002EDR_F0731482CCAM05295M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_527820942EDR_F0580000NCAM00654M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_505898434EDR_F0521162NCAM12753M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_556756244EDR_F0651642NCAM00285M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_453780853EDR_F0320478NCAM00281M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_502516548EDR_F0511430NCAM00353M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_428304547EDR_F0100508NCAM05114M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLA_602651352EDR_F0732676NCAM00207M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLA_409036860EDR_F0051662NCAM00346M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_442600301EDR_F0250312NCAM00282M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_459278092EDR_F0391396NCAM00207M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_457152468EDR_F0380000NCAM00346M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_504391195EDR_F0520004NCAM07753M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_462744768EDR_F0410322NCAM00354M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_455642442EDR_F0340774NCAM00252M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_463803954EDR_F0411768NCAM00382M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_520358689EDR_F0550940NCAM00299M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_558364943EDR_F0660000NCAM00253M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_443659348EDR_F0251082NCAM00470M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_528892900EDR_F0581248NCAM00262M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_565373114EDR_F0670650NCAM12753M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_574072088EDR_F0681616NCAM00257M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_537932733EDR_F0600888NCAM00320M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLA_601414993EDR_F0731482NCAM00254M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_527821213EDR_F0580000NCAM07753M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_505898711EDR_F0521162NCAM12753M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_556764110EDR_F0651642NCAM07753M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_453777056EDR_F0320204NCAM00497M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_502517193EDR_F0511430NCAM09842M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_428304609EDR_F0100508NCAM05114M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLA_602664684EDR_F0732958NCAM00312M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLA_409036993EDR_F0051662NCAM05703M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_442600163EDR_F0250312NCAM00350M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_459291220EDR_F0391552NCAM00252M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_457153156EDR_F0380000NCAM00354M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_504391382EDR_F0520004NCAM07753M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_462744927EDR_F0410322NCAM00272M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_455642279EDR_F0340774NCAM00354M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_463814438EDR_F0420000NCAM00278M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_520358799EDR_F0550940NCAM00299M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_558363908EDR_F0660000NCAM00375M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_443668921EDR_F0251238NCAM00292M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_528875763EDR_F0581002NCAM00207M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_565373298EDR_F0670650NCAM12753M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_574078028EDR_F0681626NCAM00256M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_537938493EDR_F0601266NCAM00653M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLA_601414568EDR_F0731482NCAM00253M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_527821074EDR_F0580000NCAM07753M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_505898310EDR_F0521162NCAM12753M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_556756606EDR_F0651642NCAM00312M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_453781647EDR_F0320478NCAM00282M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_502515217EDR_F0511406NCAM00418M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLA_602664101EDR_F0732958NCAM00375M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLA_409036116EDR_F0051606NCAM00348M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_442600208EDR_F0250312NCAM00282M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_459290932EDR_F0391552NCAM00354M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_457153643EDR_F0380000NCAM00276M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_504390796EDR_F0520004NCAM00354M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_462744982EDR_F0410322NCAM00272M1.JPG",
+      "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_455642594EDR_F0340774NCAM00252M1.JPG"
+    ]
+  },
+  "split": "Expert Curiosity test; excludes all original train and test 100000-second clock bins",
+  "records": [
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_453781520EDR_F0320478NCAM00282M1.JPG",
+        "local_path": "test/image/NLB_453781520EDR_F0320478NCAM00282M1.JPG",
+        "sha256": "7c1ebcf1304886ff78ee02af3f44d52fd99dadec9749e1dcd12667696451460f"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_453781520EDR_F0320478NCAM00282M1_merged.png",
+        "local_path": "test/label/NLB_453781520EDR_F0320478NCAM00282M1_merged.png",
+        "sha256": "8abcec0fa7203d3322747ef11c63b3660235a459b25ff3a06243a9dfcc269851"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_428295522EDR_F0100474NCAM00385M1.JPG",
+        "local_path": "test/image/NLB_428295522EDR_F0100474NCAM00385M1.JPG",
+        "sha256": "d7efeee0f86d36f9b909eaacb028b41ef030fc952fcc871f4c01c7373e6b9ed1"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_428295522EDR_F0100474NCAM00385M1_merged.png",
+        "local_path": "test/label/NLB_428295522EDR_F0100474NCAM00385M1_merged.png",
+        "sha256": "1ce61f09c60b1ab9fe61f7c036399162b683734c5781a78923ba82f71420d0e1"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_502512171EDR_F0511298NCAM00320M1.JPG",
+        "local_path": "test/image/NLB_502512171EDR_F0511298NCAM00320M1.JPG",
+        "sha256": "557319953ee4a9ce70db10181f3350866d9653181d90df654622c001431632fb"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_502512171EDR_F0511298NCAM00320M1_merged.png",
+        "local_path": "test/label/NLB_502512171EDR_F0511298NCAM00320M1_merged.png",
+        "sha256": "757328d35792737ac66759415db21bbffbb8c27a568a250b5348caed2c9a077f"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_428304492EDR_F0100508NCAM05114M1.JPG",
+        "local_path": "test/image/NLB_428304492EDR_F0100508NCAM05114M1.JPG",
+        "sha256": "0bffc5dda8c5fb3873091747bed3b73d45877a9c188e57783dfd26b37e3d0a03"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_428304492EDR_F0100508NCAM05114M1_merged.png",
+        "local_path": "test/label/NLB_428304492EDR_F0100508NCAM05114M1_merged.png",
+        "sha256": "ca94408e76acba319b2a52aa78f91647bf9e66557e97ababfff43d00bc66a3cd"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLA_602657189EDR_F0732688NCAM00382M1.JPG",
+        "local_path": "test/image/NLA_602657189EDR_F0732688NCAM00382M1.JPG",
+        "sha256": "06923eec99dbdaab1bc8ecddf73287e4d7686b37185cd9c583e9feaa977f4b0f"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLA_602657189EDR_F0732688NCAM00382M1_merged.png",
+        "local_path": "test/label/NLA_602657189EDR_F0732688NCAM00382M1_merged.png",
+        "sha256": "482b5290f581d62cbd93aceb71b965e7f1534b5eb1efb6e5c43116e9ad2c7100"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLA_409037112EDR_F0051662NCAM05703M1.JPG",
+        "local_path": "test/image/NLA_409037112EDR_F0051662NCAM05703M1.JPG",
+        "sha256": "cf5d1c4f9ef2607a804dadd00a4046c960ba15b94bc32326f9fd7f6d53102a7c"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLA_409037112EDR_F0051662NCAM05703M1_merged.png",
+        "local_path": "test/label/NLA_409037112EDR_F0051662NCAM05703M1_merged.png",
+        "sha256": "5311ec4578671e4cef58a0d162e2a3631e6520e97e9b87b0a383d3ece2d3cff8"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_442600447EDR_F0250312NCAM00282M1.JPG",
+        "local_path": "test/image/NLB_442600447EDR_F0250312NCAM00282M1.JPG",
+        "sha256": "21fb2fa7f0b948ee646befa5fbd4cf82fb65c51c9f9487d4adc7f79baf45daa6"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_442600447EDR_F0250312NCAM00282M1_merged.png",
+        "local_path": "test/label/NLB_442600447EDR_F0250312NCAM00282M1_merged.png",
+        "sha256": "1c3494df661cea9cc2c7d9c91897b9f44541148988932763cbcf189b5bf8e149"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_459291038EDR_F0391552NCAM00252M1.JPG",
+        "local_path": "test/image/NLB_459291038EDR_F0391552NCAM00252M1.JPG",
+        "sha256": "887e2000ff1ed13f9e26452a4cd099fff112b22dc51776631dd5618d382af601"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_459291038EDR_F0391552NCAM00252M1_merged.png",
+        "local_path": "test/label/NLB_459291038EDR_F0391552NCAM00252M1_merged.png",
+        "sha256": "5ed11e3dfe2f8a33a3cdd51e872a3db1a2fbbdab553aeea946ef9273a9f3e3f3"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_457153024EDR_F0380000NCAM00354M1.JPG",
+        "local_path": "test/image/NLB_457153024EDR_F0380000NCAM00354M1.JPG",
+        "sha256": "9901b4852e87dd5010c663edba1ae61feaea4bda537e985cd88d47afb4c16239"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_457153024EDR_F0380000NCAM00354M1_merged.png",
+        "local_path": "test/label/NLB_457153024EDR_F0380000NCAM00354M1_merged.png",
+        "sha256": "176085ab5d09ca174fd5313a2577f8f1d8249e0d010a88fadfad1a96a32486b9"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_504390285EDR_F0520004NCAM00353M1.JPG",
+        "local_path": "test/image/NLB_504390285EDR_F0520004NCAM00353M1.JPG",
+        "sha256": "d7d241a4182ddc916279b34606e30920898c415a82cdb496417b4eea101bb2f6"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_504390285EDR_F0520004NCAM00353M1_merged.png",
+        "local_path": "test/label/NLB_504390285EDR_F0520004NCAM00353M1_merged.png",
+        "sha256": "5ed11e3dfe2f8a33a3cdd51e872a3db1a2fbbdab553aeea946ef9273a9f3e3f3"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_462743799EDR_F0410322NCAM00271M1.JPG",
+        "local_path": "test/image/NLB_462743799EDR_F0410322NCAM00271M1.JPG",
+        "sha256": "5babc39b25b710d2bf317c0e7582a2647b6e57e4e9b35e9e7af71fda06629eb5"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_462743799EDR_F0410322NCAM00271M1_merged.png",
+        "local_path": "test/label/NLB_462743799EDR_F0410322NCAM00271M1_merged.png",
+        "sha256": "c2ea8e3f82787ffdbf2278744a7d57413bbd7ce7cd2c620af8a0fa734b2cb1ec"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_455641497EDR_F0340774NCAM00251M1.JPG",
+        "local_path": "test/image/NLB_455641497EDR_F0340774NCAM00251M1.JPG",
+        "sha256": "2df25cc8606b6f3114fe49cda5cf9a855941e034131155f04bc7dfe888e09d82"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_455641497EDR_F0340774NCAM00251M1_merged.png",
+        "local_path": "test/label/NLB_455641497EDR_F0340774NCAM00251M1_merged.png",
+        "sha256": "0addbe956a59dc97485164d3185572827581266bb070107a63627cf15d96ee14"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_463814255EDR_F0420000NCAM00278M1.JPG",
+        "local_path": "test/image/NLB_463814255EDR_F0420000NCAM00278M1.JPG",
+        "sha256": "e87b40a331b7cbb3d2e8949f93467e1badb9c6c26af2b5a5f6c18333a5e82a30"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_463814255EDR_F0420000NCAM00278M1_merged.png",
+        "local_path": "test/label/NLB_463814255EDR_F0420000NCAM00278M1_merged.png",
+        "sha256": "ec006fdfdec16727e370bb843e65f3d7c44f2a0bed7b8952d122c8390def5afc"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_520359399EDR_F0550940NCAM07753M1.JPG",
+        "local_path": "test/image/NLB_520359399EDR_F0550940NCAM07753M1.JPG",
+        "sha256": "16c8a513f0ed8fe79ec19116dbcdd73ed21ae438b11719e663896af3f9a17a91"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_520359399EDR_F0550940NCAM07753M1_merged.png",
+        "local_path": "test/label/NLB_520359399EDR_F0550940NCAM07753M1_merged.png",
+        "sha256": "e112499e31937576dbb2a6965b1e130dab5704da9da81739eb205fdf15bc4df5"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_558365006EDR_F0660000NCAM00253M1.JPG",
+        "local_path": "test/image/NLB_558365006EDR_F0660000NCAM00253M1.JPG",
+        "sha256": "105b6989ac00315054725fd17881f0e3102f02d5928d95a362ba750fead7b245"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_558365006EDR_F0660000NCAM00253M1_merged.png",
+        "local_path": "test/label/NLB_558365006EDR_F0660000NCAM00253M1_merged.png",
+        "sha256": "cb6506fdc0034344e90b017b344ce5db3ae8c42c77adf9746603919df5bdd382"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_443663198EDR_F0251238NCAM00353M1.JPG",
+        "local_path": "test/image/NLB_443663198EDR_F0251238NCAM00353M1.JPG",
+        "sha256": "77214a875e944a11d725968d153f7fd7774f3fbc92ba9eb111fa161cdae11bc7"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_443663198EDR_F0251238NCAM00353M1_merged.png",
+        "local_path": "test/label/NLB_443663198EDR_F0251238NCAM00353M1_merged.png",
+        "sha256": "c4a5502db9614def6551216b58b1b16713f9cfc27b7e881635b26f376f670c2d"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_528892751EDR_F0581248NCAM00346M1.JPG",
+        "local_path": "test/image/NLB_528892751EDR_F0581248NCAM00346M1.JPG",
+        "sha256": "d49fa828fd3a9dff857e113f87961b7ece6526d42fda18e31bd464910ec0bf2f"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_528892751EDR_F0581248NCAM00346M1_merged.png",
+        "local_path": "test/label/NLB_528892751EDR_F0581248NCAM00346M1_merged.png",
+        "sha256": "82bad83c885497888d8a8bd67d446bb1639ca68b5a5cd50f5c3b61ea7cb8de93"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_565366137EDR_F0670604NCAM00257M1.JPG",
+        "local_path": "test/image/NLB_565366137EDR_F0670604NCAM00257M1.JPG",
+        "sha256": "152601b1ca48312760887147e40639364e0a6c7e8056d93050f7d1b444646b16"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_565366137EDR_F0670604NCAM00257M1_merged.png",
+        "local_path": "test/label/NLB_565366137EDR_F0670604NCAM00257M1_merged.png",
+        "sha256": "90c1e2d7ce8233a53e6d3d35856eb44ac9b18b78341a0579c6ed2b26bb660c18"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_574078440EDR_F0681626NCAM00354M1.JPG",
+        "local_path": "test/image/NLB_574078440EDR_F0681626NCAM00354M1.JPG",
+        "sha256": "9ea78ec716811829adac9a4f7d55e4026fe228eac95622439ca7b9af0d2f5d5e"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_574078440EDR_F0681626NCAM00354M1_merged.png",
+        "local_path": "test/label/NLB_574078440EDR_F0681626NCAM00354M1_merged.png",
+        "sha256": "f7678b097988745b033509208ca47ff01908ddcd5b5332cad8d91a799298e9cc"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_537938609EDR_F0601266NCAM07753M1.JPG",
+        "local_path": "test/image/NLB_537938609EDR_F0601266NCAM07753M1.JPG",
+        "sha256": "18fe9200050a0eeb9055cb271b9d97f0fdd3b77129efbe502643116f5efa2ec5"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_537938609EDR_F0601266NCAM07753M1_merged.png",
+        "local_path": "test/label/NLB_537938609EDR_F0601266NCAM07753M1_merged.png",
+        "sha256": "a5a7ec503d8e9fb01e12b00868f1947859faa4af42783a08cd9a2e77fe7e53a7"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLA_601421002EDR_F0731482CCAM05295M1.JPG",
+        "local_path": "test/image/NLA_601421002EDR_F0731482CCAM05295M1.JPG",
+        "sha256": "aef80a2ab2ce0f1abf48858dd6f71485cd04c015c6629d3778be991fd4247bd3"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLA_601421002EDR_F0731482CCAM05295M1_merged.png",
+        "local_path": "test/label/NLA_601421002EDR_F0731482CCAM05295M1_merged.png",
+        "sha256": "c80f9081eec92095786d361e872a1767f1357fd59274e05c812e68d33b65e19d"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_527820942EDR_F0580000NCAM00654M1.JPG",
+        "local_path": "test/image/NLB_527820942EDR_F0580000NCAM00654M1.JPG",
+        "sha256": "4cb2e1fc697ff1185fdc8ec1bbd61d5a09d843175ad9cbf573a271e040f063d3"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_527820942EDR_F0580000NCAM00654M1_merged.png",
+        "local_path": "test/label/NLB_527820942EDR_F0580000NCAM00654M1_merged.png",
+        "sha256": "b768039918e9762cb52a987da54aac045f20d050127bfca02c2eebd8d5ad0c9b"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_505898434EDR_F0521162NCAM12753M1.JPG",
+        "local_path": "test/image/NLB_505898434EDR_F0521162NCAM12753M1.JPG",
+        "sha256": "1d8ec5f7d9e2e8e8b2cde3c85cf1dd8fe07e527bf28989215a6eb5ee1333a7c2"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_505898434EDR_F0521162NCAM12753M1_merged.png",
+        "local_path": "test/label/NLB_505898434EDR_F0521162NCAM12753M1_merged.png",
+        "sha256": "462eb26b0e62969c39913e5218fb4b10e5811ad9a3f017a7a1c6a9bbc6458b93"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_556756244EDR_F0651642NCAM00285M1.JPG",
+        "local_path": "test/image/NLB_556756244EDR_F0651642NCAM00285M1.JPG",
+        "sha256": "253e1888c474f5a3e62ebcab5756b4b6986f688659dac454f7a0de97e1d8d832"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_556756244EDR_F0651642NCAM00285M1_merged.png",
+        "local_path": "test/label/NLB_556756244EDR_F0651642NCAM00285M1_merged.png",
+        "sha256": "99331defbde1390457fbb2ddb948e4725393dced7290ebd626f377563f63ca6c"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_453780853EDR_F0320478NCAM00281M1.JPG",
+        "local_path": "test/image/NLB_453780853EDR_F0320478NCAM00281M1.JPG",
+        "sha256": "14162aee30a0b3bb30b76dde76d7f694fa6b84868716bb8bae48cf1803a164b2"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_453780853EDR_F0320478NCAM00281M1_merged.png",
+        "local_path": "test/label/NLB_453780853EDR_F0320478NCAM00281M1_merged.png",
+        "sha256": "8d5675763f843fa11b321f54531590be7ee40defce389f88a7c40b3e221c46d7"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_502516548EDR_F0511430NCAM00353M1.JPG",
+        "local_path": "test/image/NLB_502516548EDR_F0511430NCAM00353M1.JPG",
+        "sha256": "a4d1ef6e06f81309c669cdc07c6b97299a10a6d6e311b4662eaf0bb2cd93dc19"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_502516548EDR_F0511430NCAM00353M1_merged.png",
+        "local_path": "test/label/NLB_502516548EDR_F0511430NCAM00353M1_merged.png",
+        "sha256": "f5a032a6399ae2aa5d32db043666f380228b38f8dd11166d2a1622597d750300"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_428304547EDR_F0100508NCAM05114M1.JPG",
+        "local_path": "test/image/NLB_428304547EDR_F0100508NCAM05114M1.JPG",
+        "sha256": "0d97dea26d5d1e303f92b5ca8c74e6007f24102130f347ffc25d394d1299aafe"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_428304547EDR_F0100508NCAM05114M1_merged.png",
+        "local_path": "test/label/NLB_428304547EDR_F0100508NCAM05114M1_merged.png",
+        "sha256": "5ed11e3dfe2f8a33a3cdd51e872a3db1a2fbbdab553aeea946ef9273a9f3e3f3"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLA_602651352EDR_F0732676NCAM00207M1.JPG",
+        "local_path": "test/image/NLA_602651352EDR_F0732676NCAM00207M1.JPG",
+        "sha256": "612fdad5c2be71ccdd414ce81190285856d2bd190c7d6839a2583ff162bdc8e0"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLA_602651352EDR_F0732676NCAM00207M1_merged.png",
+        "local_path": "test/label/NLA_602651352EDR_F0732676NCAM00207M1_merged.png",
+        "sha256": "f4671e3356815344b1db4ef1837097c8e07fb730c1310b5e4f43683fb05fe274"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLA_409036860EDR_F0051662NCAM00346M1.JPG",
+        "local_path": "test/image/NLA_409036860EDR_F0051662NCAM00346M1.JPG",
+        "sha256": "298c9f316552e77f609ffc34e3a29127ceedbc2bcc05ba7add0f410894f70edd"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLA_409036860EDR_F0051662NCAM00346M1_merged.png",
+        "local_path": "test/label/NLA_409036860EDR_F0051662NCAM00346M1_merged.png",
+        "sha256": "525b5a191cd0fb619b885a59146c4f7d562a11a1ad780a6424561ae78a143b3a"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_442600301EDR_F0250312NCAM00282M1.JPG",
+        "local_path": "test/image/NLB_442600301EDR_F0250312NCAM00282M1.JPG",
+        "sha256": "4de19e6ad6a15d2ca5669193f83d548ad2a93a362ee14a3a600b8965a7f4badf"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_442600301EDR_F0250312NCAM00282M1_merged.png",
+        "local_path": "test/label/NLB_442600301EDR_F0250312NCAM00282M1_merged.png",
+        "sha256": "f38e6b0d6850f3f6ea38ccc90a2fa91e43866f9ac61eac00cd938eb8703cf786"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_459278092EDR_F0391396NCAM00207M1.JPG",
+        "local_path": "test/image/NLB_459278092EDR_F0391396NCAM00207M1.JPG",
+        "sha256": "721ec450955d8e081f8f46b9bfda768fa10089020a8663f3fdff68797ee2a8f6"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_459278092EDR_F0391396NCAM00207M1_merged.png",
+        "local_path": "test/label/NLB_459278092EDR_F0391396NCAM00207M1_merged.png",
+        "sha256": "5ed11e3dfe2f8a33a3cdd51e872a3db1a2fbbdab553aeea946ef9273a9f3e3f3"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_457152468EDR_F0380000NCAM00346M1.JPG",
+        "local_path": "test/image/NLB_457152468EDR_F0380000NCAM00346M1.JPG",
+        "sha256": "cd6f44f30c8e911fc5fede792589771576bf7aa7eb55140f53f28516648d3254"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_457152468EDR_F0380000NCAM00346M1_merged.png",
+        "local_path": "test/label/NLB_457152468EDR_F0380000NCAM00346M1_merged.png",
+        "sha256": "68c63a90fe8b90c3d62eca84b07d59596d0ad92a3774128683daa65b265fe419"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_504391195EDR_F0520004NCAM07753M1.JPG",
+        "local_path": "test/image/NLB_504391195EDR_F0520004NCAM07753M1.JPG",
+        "sha256": "bead0d2200bad22d4c18689909f061d4805f949459469fa92f72eb9991a89e9f"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_504391195EDR_F0520004NCAM07753M1_merged.png",
+        "local_path": "test/label/NLB_504391195EDR_F0520004NCAM07753M1_merged.png",
+        "sha256": "3a4a71fb2e57a4295ab90d63de2d65f92c412e94e86cfb0e984f76fc60356bd9"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_462744768EDR_F0410322NCAM00354M1.JPG",
+        "local_path": "test/image/NLB_462744768EDR_F0410322NCAM00354M1.JPG",
+        "sha256": "73e86fa45a4ebe085928f523992ac66273b649969b58380621108f0f40f54169"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_462744768EDR_F0410322NCAM00354M1_merged.png",
+        "local_path": "test/label/NLB_462744768EDR_F0410322NCAM00354M1_merged.png",
+        "sha256": "5ed11e3dfe2f8a33a3cdd51e872a3db1a2fbbdab553aeea946ef9273a9f3e3f3"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_455642442EDR_F0340774NCAM00252M1.JPG",
+        "local_path": "test/image/NLB_455642442EDR_F0340774NCAM00252M1.JPG",
+        "sha256": "1203f5efe72bcee16edb6fd628f676b26c7cc85b2875b9ac8be63212456e13b1"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_455642442EDR_F0340774NCAM00252M1_merged.png",
+        "local_path": "test/label/NLB_455642442EDR_F0340774NCAM00252M1_merged.png",
+        "sha256": "9eb7b244e75214df000fc1208736c980f48ad3bc0b2cc9c5fc1c36cc42c167be"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_463803954EDR_F0411768NCAM00382M1.JPG",
+        "local_path": "test/image/NLB_463803954EDR_F0411768NCAM00382M1.JPG",
+        "sha256": "3313fcdd71c7537638b498d554f8c0eabef5f653c3d7fb3af28295a460a5d6fe"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_463803954EDR_F0411768NCAM00382M1_merged.png",
+        "local_path": "test/label/NLB_463803954EDR_F0411768NCAM00382M1_merged.png",
+        "sha256": "a8994bce830c3b9ba740678af7f786638cbe61e62a28d45a60d3450f631b5e82"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_520358689EDR_F0550940NCAM00299M1.JPG",
+        "local_path": "test/image/NLB_520358689EDR_F0550940NCAM00299M1.JPG",
+        "sha256": "8ec9431464404e55b74472c434bb4bdf7d6acd7e0c503498e1f151d5edf2e484"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_520358689EDR_F0550940NCAM00299M1_merged.png",
+        "local_path": "test/label/NLB_520358689EDR_F0550940NCAM00299M1_merged.png",
+        "sha256": "9521c5e18e86565b88533b68addca73d7b634922b9c4870a5acaeb5340dfa7b5"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_558364943EDR_F0660000NCAM00253M1.JPG",
+        "local_path": "test/image/NLB_558364943EDR_F0660000NCAM00253M1.JPG",
+        "sha256": "c98373d72898f8a5fe84dd4b8464dd6bfa8eb8eb67f2ecab089e354c2a7b1672"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_558364943EDR_F0660000NCAM00253M1_merged.png",
+        "local_path": "test/label/NLB_558364943EDR_F0660000NCAM00253M1_merged.png",
+        "sha256": "3c4ac2f8f58be83ebb0189d93dd83dee89ca83c2733754d5fb2abf613cbbc05f"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_443659348EDR_F0251082NCAM00470M1.JPG",
+        "local_path": "test/image/NLB_443659348EDR_F0251082NCAM00470M1.JPG",
+        "sha256": "4b480e426c987b1e0e66c4e6c092590a88f0f99a3fcf8a736195e7095601e584"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_443659348EDR_F0251082NCAM00470M1_merged.png",
+        "local_path": "test/label/NLB_443659348EDR_F0251082NCAM00470M1_merged.png",
+        "sha256": "5f80ee32c1afe3ff6d429dc96bf09fd7935adfee20cca07b5196d2cbd5561c58"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_528892900EDR_F0581248NCAM00262M1.JPG",
+        "local_path": "test/image/NLB_528892900EDR_F0581248NCAM00262M1.JPG",
+        "sha256": "5f30b437dd42649666d7b44e717a2dde19232fa864a26dff37a7c97ac9825d04"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_528892900EDR_F0581248NCAM00262M1_merged.png",
+        "local_path": "test/label/NLB_528892900EDR_F0581248NCAM00262M1_merged.png",
+        "sha256": "64ca57a252ac26fcb13078098413d660d0ad9454d07c9c82ca38b1df1a94c5e9"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_565373114EDR_F0670650NCAM12753M1.JPG",
+        "local_path": "test/image/NLB_565373114EDR_F0670650NCAM12753M1.JPG",
+        "sha256": "bd090cce41eae7d96b6b271ae5b4a3a5782678415caf260c6f1c9c1fb5898cee"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_565373114EDR_F0670650NCAM12753M1_merged.png",
+        "local_path": "test/label/NLB_565373114EDR_F0670650NCAM12753M1_merged.png",
+        "sha256": "99e7ad21d63a1b6bf6903623cbab92a7c0a8640a7ab9e2e3a6e1b8f57a367bbd"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_574072088EDR_F0681616NCAM00257M1.JPG",
+        "local_path": "test/image/NLB_574072088EDR_F0681616NCAM00257M1.JPG",
+        "sha256": "60cadc5f7835087fe280d893c3240217f3c56a473e836ebb68405804750b6cea"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_574072088EDR_F0681616NCAM00257M1_merged.png",
+        "local_path": "test/label/NLB_574072088EDR_F0681616NCAM00257M1_merged.png",
+        "sha256": "5ed11e3dfe2f8a33a3cdd51e872a3db1a2fbbdab553aeea946ef9273a9f3e3f3"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_537932733EDR_F0600888NCAM00320M1.JPG",
+        "local_path": "test/image/NLB_537932733EDR_F0600888NCAM00320M1.JPG",
+        "sha256": "95ce7e71bed2dfecbd313ee37c3db4dcfdd73c31307f846d630919da2dc23843"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_537932733EDR_F0600888NCAM00320M1_merged.png",
+        "local_path": "test/label/NLB_537932733EDR_F0600888NCAM00320M1_merged.png",
+        "sha256": "7a5b1bd62c75bc93a55792da9907218d4a72a30680853a15b01ac075905518af"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLA_601414993EDR_F0731482NCAM00254M1.JPG",
+        "local_path": "test/image/NLA_601414993EDR_F0731482NCAM00254M1.JPG",
+        "sha256": "ec012a556521d7542f1188a8844ee3f71126662634b04d42b6d1fbc66b7c1db9"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLA_601414993EDR_F0731482NCAM00254M1_merged.png",
+        "local_path": "test/label/NLA_601414993EDR_F0731482NCAM00254M1_merged.png",
+        "sha256": "11b5c206c1c7d5563c71bb5b29662ecdbe3cf95f25840276db8ca54a4294c09b"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_527821213EDR_F0580000NCAM07753M1.JPG",
+        "local_path": "test/image/NLB_527821213EDR_F0580000NCAM07753M1.JPG",
+        "sha256": "b1bbbaf86b1616ea010bea18f4e4be2da8c5bf3adeaf63c3966b4389bb6d70db"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_527821213EDR_F0580000NCAM07753M1_merged.png",
+        "local_path": "test/label/NLB_527821213EDR_F0580000NCAM07753M1_merged.png",
+        "sha256": "2f06660b7dba45533c2758535cafc7a0b0f7e79113b65c7bfed51ed1a73d44ee"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_505898711EDR_F0521162NCAM12753M1.JPG",
+        "local_path": "test/image/NLB_505898711EDR_F0521162NCAM12753M1.JPG",
+        "sha256": "c2de513d9204e4bc399040ee81302b6745de311c947a353ed35dce4e95ad7e4e"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_505898711EDR_F0521162NCAM12753M1_merged.png",
+        "local_path": "test/label/NLB_505898711EDR_F0521162NCAM12753M1_merged.png",
+        "sha256": "73580709646ee460985e02dc856e81fd1856d4558e58a51c7139169b73345c2f"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_556764110EDR_F0651642NCAM07753M1.JPG",
+        "local_path": "test/image/NLB_556764110EDR_F0651642NCAM07753M1.JPG",
+        "sha256": "33ca13653774ef67ffb13a641bb567ae407283f518a4bcd1c9b3afa0685d00c1"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_556764110EDR_F0651642NCAM07753M1_merged.png",
+        "local_path": "test/label/NLB_556764110EDR_F0651642NCAM07753M1_merged.png",
+        "sha256": "6b762c97c63a2458a40987fcfe8a07d8b396df93e303fda8d1a15e72cef47cc8"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_453777056EDR_F0320204NCAM00497M1.JPG",
+        "local_path": "test/image/NLB_453777056EDR_F0320204NCAM00497M1.JPG",
+        "sha256": "872335113a88005d625f03b991de463d9e0b525120408304a0d523637ff6efff"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_453777056EDR_F0320204NCAM00497M1_merged.png",
+        "local_path": "test/label/NLB_453777056EDR_F0320204NCAM00497M1_merged.png",
+        "sha256": "7162e9de45f3aa973f48f3297037ac5216f980c71af006e5f862f6b718447f9e"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_502517193EDR_F0511430NCAM09842M1.JPG",
+        "local_path": "test/image/NLB_502517193EDR_F0511430NCAM09842M1.JPG",
+        "sha256": "acf9a299462fe66bd04395cc3ab63cda86e07171b55ad78381c09b209b040978"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_502517193EDR_F0511430NCAM09842M1_merged.png",
+        "local_path": "test/label/NLB_502517193EDR_F0511430NCAM09842M1_merged.png",
+        "sha256": "c5eb7d3617481dc3728d9348d037879f114693ec7f878db0f69b3b42d38d4652"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_428304609EDR_F0100508NCAM05114M1.JPG",
+        "local_path": "test/image/NLB_428304609EDR_F0100508NCAM05114M1.JPG",
+        "sha256": "1ef4c02d7d629b51e2071bad979c0e78a639e0b54003fb6c435167009081bb92"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_428304609EDR_F0100508NCAM05114M1_merged.png",
+        "local_path": "test/label/NLB_428304609EDR_F0100508NCAM05114M1_merged.png",
+        "sha256": "ae39f2f1c0ef8b128887dc61429a89e58e97f4ed444a8426e559fbf102775000"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLA_602664684EDR_F0732958NCAM00312M1.JPG",
+        "local_path": "test/image/NLA_602664684EDR_F0732958NCAM00312M1.JPG",
+        "sha256": "0860bd4b1eec32510e3e166a33da8af48f7fa63e72069d9a792406b8bcc592ed"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLA_602664684EDR_F0732958NCAM00312M1_merged.png",
+        "local_path": "test/label/NLA_602664684EDR_F0732958NCAM00312M1_merged.png",
+        "sha256": "4072f535c826aea636df3dd3dc0fa5cdbece400cc4320db8fa65eca2457e2ce5"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLA_409036993EDR_F0051662NCAM05703M1.JPG",
+        "local_path": "test/image/NLA_409036993EDR_F0051662NCAM05703M1.JPG",
+        "sha256": "ad7353e287c8722b31ef47078e3ee367cb21192c36acd3aef0882ce8ce4e3641"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLA_409036993EDR_F0051662NCAM05703M1_merged.png",
+        "local_path": "test/label/NLA_409036993EDR_F0051662NCAM05703M1_merged.png",
+        "sha256": "7cf19bdbf614a601f2f6e76d63ab5ddc740d6de031d942aade85745152edc9f7"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_442600163EDR_F0250312NCAM00350M1.JPG",
+        "local_path": "test/image/NLB_442600163EDR_F0250312NCAM00350M1.JPG",
+        "sha256": "d04028d18886671114945fab7a4d14df0ae389f5e0976057bc2c98f19ed4fbc6"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_442600163EDR_F0250312NCAM00350M1_merged.png",
+        "local_path": "test/label/NLB_442600163EDR_F0250312NCAM00350M1_merged.png",
+        "sha256": "15d6ab681273d0206238876081f42462d390a00137b721f3a0d013fef420b99b"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_459291220EDR_F0391552NCAM00252M1.JPG",
+        "local_path": "test/image/NLB_459291220EDR_F0391552NCAM00252M1.JPG",
+        "sha256": "7bacd5fb6c3dd269067e98f43b16ca9e6cc9e5dc84a375273590954d1c742856"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_459291220EDR_F0391552NCAM00252M1_merged.png",
+        "local_path": "test/label/NLB_459291220EDR_F0391552NCAM00252M1_merged.png",
+        "sha256": "0b20b55c1510017dce0d18604a6f0f47603fab967d1d48faf73e8ab115509664"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_457153156EDR_F0380000NCAM00354M1.JPG",
+        "local_path": "test/image/NLB_457153156EDR_F0380000NCAM00354M1.JPG",
+        "sha256": "2caec8f1cee3bacf260722c1d6dab87dc999877162ad2eaf8433789924e84303"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_457153156EDR_F0380000NCAM00354M1_merged.png",
+        "local_path": "test/label/NLB_457153156EDR_F0380000NCAM00354M1_merged.png",
+        "sha256": "afbf9c6ac8fbe2a346dae8c1eadfa4af0217c8dfea9c7f33d15c127cff18a5de"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_504391382EDR_F0520004NCAM07753M1.JPG",
+        "local_path": "test/image/NLB_504391382EDR_F0520004NCAM07753M1.JPG",
+        "sha256": "af19df966ef511be736707436644a65be9d4aeee553460608a307ef7a2062a3c"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_504391382EDR_F0520004NCAM07753M1_merged.png",
+        "local_path": "test/label/NLB_504391382EDR_F0520004NCAM07753M1_merged.png",
+        "sha256": "59a658f2da5f41d949ccc6c2f9cad293e9d23dda877c4e7993696a7a372cfb7e"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_462744927EDR_F0410322NCAM00272M1.JPG",
+        "local_path": "test/image/NLB_462744927EDR_F0410322NCAM00272M1.JPG",
+        "sha256": "6fcc4d6c7b6b617b500b639af549a70415521338bd5b577719711e5d3eb22d58"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_462744927EDR_F0410322NCAM00272M1_merged.png",
+        "local_path": "test/label/NLB_462744927EDR_F0410322NCAM00272M1_merged.png",
+        "sha256": "5ed11e3dfe2f8a33a3cdd51e872a3db1a2fbbdab553aeea946ef9273a9f3e3f3"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_455642279EDR_F0340774NCAM00354M1.JPG",
+        "local_path": "test/image/NLB_455642279EDR_F0340774NCAM00354M1.JPG",
+        "sha256": "4bd4d0987da989139302cee3f1a6114c749d1e82a2f567b58b59a0e4e308c0ec"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_455642279EDR_F0340774NCAM00354M1_merged.png",
+        "local_path": "test/label/NLB_455642279EDR_F0340774NCAM00354M1_merged.png",
+        "sha256": "5ed11e3dfe2f8a33a3cdd51e872a3db1a2fbbdab553aeea946ef9273a9f3e3f3"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_463814438EDR_F0420000NCAM00278M1.JPG",
+        "local_path": "test/image/NLB_463814438EDR_F0420000NCAM00278M1.JPG",
+        "sha256": "3cef2e3df84b71a30c837dcf2017b6e6c3b83a479e53fb5079cb424105547da3"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_463814438EDR_F0420000NCAM00278M1_merged.png",
+        "local_path": "test/label/NLB_463814438EDR_F0420000NCAM00278M1_merged.png",
+        "sha256": "5ed11e3dfe2f8a33a3cdd51e872a3db1a2fbbdab553aeea946ef9273a9f3e3f3"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_520358799EDR_F0550940NCAM00299M1.JPG",
+        "local_path": "test/image/NLB_520358799EDR_F0550940NCAM00299M1.JPG",
+        "sha256": "b326171c85b10bdd8c93909ed1e66703e7ee06ae2c8ec13f7a97660d968c154d"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_520358799EDR_F0550940NCAM00299M1_merged.png",
+        "local_path": "test/label/NLB_520358799EDR_F0550940NCAM00299M1_merged.png",
+        "sha256": "a439954682f8f5c23e50f961d69c0932e385ae0cfbdca3215bc39c7ac1c667ae"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_558363908EDR_F0660000NCAM00375M1.JPG",
+        "local_path": "test/image/NLB_558363908EDR_F0660000NCAM00375M1.JPG",
+        "sha256": "049c8852a26892ebe2742eb642eae20682c70f95c17b989fda99e160e3d71e90"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_558363908EDR_F0660000NCAM00375M1_merged.png",
+        "local_path": "test/label/NLB_558363908EDR_F0660000NCAM00375M1_merged.png",
+        "sha256": "1e14f8f455b80d072faea9034662122f8e6c510c1b1fe605b636356274ea53b3"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_443668921EDR_F0251238NCAM00292M1.JPG",
+        "local_path": "test/image/NLB_443668921EDR_F0251238NCAM00292M1.JPG",
+        "sha256": "7dc3fe4726d5378f652d5ffec0bbd558c2c582e9e0e5fc7a629c40f6c27af3f3"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_443668921EDR_F0251238NCAM00292M1_merged.png",
+        "local_path": "test/label/NLB_443668921EDR_F0251238NCAM00292M1_merged.png",
+        "sha256": "422413d5c7dccec90895ccd721f9a697520d5f4a4fd8fdb14d0aa0eae0d2deb0"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_528875763EDR_F0581002NCAM00207M1.JPG",
+        "local_path": "test/image/NLB_528875763EDR_F0581002NCAM00207M1.JPG",
+        "sha256": "58340532627661062ea0a0bda12fd9c5b2d4ffc33faca7786d4350c9b042043e"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_528875763EDR_F0581002NCAM00207M1_merged.png",
+        "local_path": "test/label/NLB_528875763EDR_F0581002NCAM00207M1_merged.png",
+        "sha256": "19690b4195fdab7e626478c573c78a5fb934dc703c3824ce102398c829b1c788"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_565373298EDR_F0670650NCAM12753M1.JPG",
+        "local_path": "test/image/NLB_565373298EDR_F0670650NCAM12753M1.JPG",
+        "sha256": "2dbfb12f3e055c3c97c6d46861ad649b1176aca6fab3195a45eb793b411a2146"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_565373298EDR_F0670650NCAM12753M1_merged.png",
+        "local_path": "test/label/NLB_565373298EDR_F0670650NCAM12753M1_merged.png",
+        "sha256": "ab65f7415a31d6717448b217f7c4358192f506388f959b8371fbe0104feb6ade"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_574078028EDR_F0681626NCAM00256M1.JPG",
+        "local_path": "test/image/NLB_574078028EDR_F0681626NCAM00256M1.JPG",
+        "sha256": "c105feb31f5708b7e8c5db81ce7e8cbb9a2dd0d2bf2cf99eafbf318ba626125a"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_574078028EDR_F0681626NCAM00256M1_merged.png",
+        "local_path": "test/label/NLB_574078028EDR_F0681626NCAM00256M1_merged.png",
+        "sha256": "5ed11e3dfe2f8a33a3cdd51e872a3db1a2fbbdab553aeea946ef9273a9f3e3f3"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_537938493EDR_F0601266NCAM00653M1.JPG",
+        "local_path": "test/image/NLB_537938493EDR_F0601266NCAM00653M1.JPG",
+        "sha256": "665e8e83048e7050c69a6abcd22164999d245b7fc8977246389264c3976d4f03"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_537938493EDR_F0601266NCAM00653M1_merged.png",
+        "local_path": "test/label/NLB_537938493EDR_F0601266NCAM00653M1_merged.png",
+        "sha256": "861a3da83943d9f82a10c55e1ae021c7b5a5132eb93cfefbc727a31d000441e5"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLA_601414568EDR_F0731482NCAM00253M1.JPG",
+        "local_path": "test/image/NLA_601414568EDR_F0731482NCAM00253M1.JPG",
+        "sha256": "af108de3e4ad0c830b36f0bcf0cb6485e0b17547a7e924b80e5fc2560cb06ecb"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLA_601414568EDR_F0731482NCAM00253M1_merged.png",
+        "local_path": "test/label/NLA_601414568EDR_F0731482NCAM00253M1_merged.png",
+        "sha256": "e89a2db6e1cf295ffbb41d61b98bf2fa5a456e745ca70e373b93554341c8ac0d"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_527821074EDR_F0580000NCAM07753M1.JPG",
+        "local_path": "test/image/NLB_527821074EDR_F0580000NCAM07753M1.JPG",
+        "sha256": "ad6988403177127b25203d1982255f93ae7b6c9837b1f0ed8d8c1aa3f4a6a7f8"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_527821074EDR_F0580000NCAM07753M1_merged.png",
+        "local_path": "test/label/NLB_527821074EDR_F0580000NCAM07753M1_merged.png",
+        "sha256": "3851b43280a4c3959ca5d7dafa39155c556951552b19c4cd0ae08fe122ed1e1a"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_505898310EDR_F0521162NCAM12753M1.JPG",
+        "local_path": "test/image/NLB_505898310EDR_F0521162NCAM12753M1.JPG",
+        "sha256": "84d6182834a76eed9433b5c837ed99fdec5f4554186db78383aff8775257f48b"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_505898310EDR_F0521162NCAM12753M1_merged.png",
+        "local_path": "test/label/NLB_505898310EDR_F0521162NCAM12753M1_merged.png",
+        "sha256": "2cb78c8c9d71dd64f53e0ae20270151344867c5852927d5d5023d08bc9c8a51e"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_556756606EDR_F0651642NCAM00312M1.JPG",
+        "local_path": "test/image/NLB_556756606EDR_F0651642NCAM00312M1.JPG",
+        "sha256": "a2b03509aa595f5e474e7d332305bb133bf57dfd8d6b0dfffb2c04016223ed23"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_556756606EDR_F0651642NCAM00312M1_merged.png",
+        "local_path": "test/label/NLB_556756606EDR_F0651642NCAM00312M1_merged.png",
+        "sha256": "b650603b2ee59e4354176e2d288710dce1c1ccf62061648846cd1941561e6ef5"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_453781647EDR_F0320478NCAM00282M1.JPG",
+        "local_path": "test/image/NLB_453781647EDR_F0320478NCAM00282M1.JPG",
+        "sha256": "3504c9efaf758c597e42bd0104336b2c9b62b91130313e1a2c578399d796c337"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_453781647EDR_F0320478NCAM00282M1_merged.png",
+        "local_path": "test/label/NLB_453781647EDR_F0320478NCAM00282M1_merged.png",
+        "sha256": "5b4ab0b77ff628330961f9ea4b64c5e2d8cc907912dab63b0416a4a23345f6fc"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_502515217EDR_F0511406NCAM00418M1.JPG",
+        "local_path": "test/image/NLB_502515217EDR_F0511406NCAM00418M1.JPG",
+        "sha256": "a0b193cfbe8a57aaacc64d719b878d77e5d7ef19940fcca056db97e63d129d63"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_502515217EDR_F0511406NCAM00418M1_merged.png",
+        "local_path": "test/label/NLB_502515217EDR_F0511406NCAM00418M1_merged.png",
+        "sha256": "c7f06c074c6f618d72afd067b9016a923d3e353d5b8a498aad810088de409fc7"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLA_602664101EDR_F0732958NCAM00375M1.JPG",
+        "local_path": "test/image/NLA_602664101EDR_F0732958NCAM00375M1.JPG",
+        "sha256": "d9b7226bef5723fce548aad1a00e07f78168f28a9d4804757e79d10e38868b2d"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLA_602664101EDR_F0732958NCAM00375M1_merged.png",
+        "local_path": "test/label/NLA_602664101EDR_F0732958NCAM00375M1_merged.png",
+        "sha256": "0bebb6800cd9d036b547b84bf45f50bf88e0e415f3bcac40c37c7cbe579728d9"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLA_409036116EDR_F0051606NCAM00348M1.JPG",
+        "local_path": "test/image/NLA_409036116EDR_F0051606NCAM00348M1.JPG",
+        "sha256": "822c3989f3adbd8b3ca6b2c21f340cf344d089d5842fe78dc82d0e481c738864"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLA_409036116EDR_F0051606NCAM00348M1_merged.png",
+        "local_path": "test/label/NLA_409036116EDR_F0051606NCAM00348M1_merged.png",
+        "sha256": "78b3b3ea3ac363ddf1f939de26feea2c5e5de4c180030afe022567968d8b43c3"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_442600208EDR_F0250312NCAM00282M1.JPG",
+        "local_path": "test/image/NLB_442600208EDR_F0250312NCAM00282M1.JPG",
+        "sha256": "2aeab96c1479f2fb0d04aa85e4a195a0c5225c3c18de46d2c288bc0d5f0dfd88"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_442600208EDR_F0250312NCAM00282M1_merged.png",
+        "local_path": "test/label/NLB_442600208EDR_F0250312NCAM00282M1_merged.png",
+        "sha256": "11ce1c64754c4938476724da453c4d2c3bb50df7466df62702c50cfec4347ee7"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_459290932EDR_F0391552NCAM00354M1.JPG",
+        "local_path": "test/image/NLB_459290932EDR_F0391552NCAM00354M1.JPG",
+        "sha256": "d04eb657de0f763ac347f04bd0c3df305ca4b929f36251ddea33e59c940e5074"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_459290932EDR_F0391552NCAM00354M1_merged.png",
+        "local_path": "test/label/NLB_459290932EDR_F0391552NCAM00354M1_merged.png",
+        "sha256": "1d1b212913d22c117d9bbe898d6eee52ae724690d2f1ad18d2bae6bca5fa343f"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_457153643EDR_F0380000NCAM00276M1.JPG",
+        "local_path": "test/image/NLB_457153643EDR_F0380000NCAM00276M1.JPG",
+        "sha256": "db15478c5a500ab2207d56a25341c565b86702c67a7bac311dc7e75686fd2d7c"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_457153643EDR_F0380000NCAM00276M1_merged.png",
+        "local_path": "test/label/NLB_457153643EDR_F0380000NCAM00276M1_merged.png",
+        "sha256": "51a83fd006d7bc60c3ee53166bccc2447c9cb4c478b1fb818bfed19063c5cecc"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_504390796EDR_F0520004NCAM00354M1.JPG",
+        "local_path": "test/image/NLB_504390796EDR_F0520004NCAM00354M1.JPG",
+        "sha256": "554bb04a65f01e6c64097cd47c3f44d5593c5201b80d27ced1166678467f7bd0"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_504390796EDR_F0520004NCAM00354M1_merged.png",
+        "local_path": "test/label/NLB_504390796EDR_F0520004NCAM00354M1_merged.png",
+        "sha256": "aaf0010562fd4f072d202504dd12fd8586ab85bc1250f0bb42240f128ef9fce1"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_462744982EDR_F0410322NCAM00272M1.JPG",
+        "local_path": "test/image/NLB_462744982EDR_F0410322NCAM00272M1.JPG",
+        "sha256": "a4a4353cfc2003e44ba501e7b932a3c6f66082ca416bb0b0fc4c23f233b0d1f5"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_462744982EDR_F0410322NCAM00272M1_merged.png",
+        "local_path": "test/label/NLB_462744982EDR_F0410322NCAM00272M1_merged.png",
+        "sha256": "d0be454e48b730faff7ded4092e7bea580447485b51350f7329fc6612afea4e9"
+      }
+    },
+    {
+      "split": "test",
+      "image": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/images/edr/NLB_455642594EDR_F0340774NCAM00252M1.JPG",
+        "local_path": "test/image/NLB_455642594EDR_F0340774NCAM00252M1.JPG",
+        "sha256": "bd57c2b35dfc1bf5157d2313c72821242891c6cb8f67163846f3c4b2428929e8"
+      },
+      "label": {
+        "archive_path": "ai4mars-dataset-merged-0.6/msl/ncam/labels/test/masked-gold-min3-100agree/NLB_455642594EDR_F0340774NCAM00252M1_merged.png",
+        "local_path": "test/label/NLB_455642594EDR_F0340774NCAM00252M1_merged.png",
+        "sha256": "d49cf41725fc1731395a9ed81b6abb4a73b1ca41c697fbd836aa15176573e1cb"
+      }
+    }
+  ]
+}
