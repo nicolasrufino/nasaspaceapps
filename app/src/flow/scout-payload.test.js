@@ -2,9 +2,9 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { summarizePayloadFlight, scoutPayloadEnabled, latestWeather, CAMERA_FOOTPRINT_M } from './scout-payload.js'
 
-test('payload is off by default; its local switch keeps the guided flow URL', () => {
-  for (const search of ['', '?flags=', '?flags=scout_payload', '?scout_payload=0', '?scout_payload=false']) assert.equal(scoutPayloadEnabled(search), false)
-  assert.equal(scoutPayloadEnabled('?scout_payload=1'), true)
+test('payload is on by default; ?scout_payload=0 or ?off=scout_payload hides it', () => {
+  for (const search of ['', '?scout_payload=1', '?off=stop_science']) assert.equal(scoutPayloadEnabled(search), true)
+  for (const search of ['?scout_payload=0', '?scout_payload=false', '?off=scout_payload', '?off=science_goal,scout_payload']) assert.equal(scoutPayloadEnabled(search), false)
   assert.ok(Math.abs(CAMERA_FOOTPRINT_M - 26.5409) < 0.001)
 })
 

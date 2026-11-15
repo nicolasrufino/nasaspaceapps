@@ -2,7 +2,7 @@
 
 The phone game: three.js + Vite. Run commands: `app/AGENTS.md`. Reads `data/worlds/<name>/` and `ml/exports/*.onnx`. See `docs/roles/person-2-engine.md`.
 
-S4 (#169): `/scout/?scout_payload=1` enables the SkyFall payload card and a report after each landing.
+S4 (#169): the SkyFall payload card and a report after each landing show by default; `/scout/?scout_payload=0` hides them.
 Pick at least three stops, plan the route, then send the scout. Reports stay on screen after the last
 landing until **Review the walk**. Bare `/scout/` and `?scout_payload=0` keep the existing flow.
 This is a stage-local flag: do not add `flags=` or `world=` (those select the legacy Vision UI).
