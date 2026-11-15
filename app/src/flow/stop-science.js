@@ -81,13 +81,14 @@ export function createStopScience(ui, app, data) {
   const log = (app.scienceLog = [])
   let yieldData = null // S6's numbers (ml/pitch_metrics/science_yield.py, world-side copy); the lines hide without it
   json('science_yield.json').then((y) => (yieldData = y))
-  let samples = 0, lastK = 0, steps = [], seen = new Set(), comparedShown = false
+  let samples = 0, lastK = 0, steps = [], seen = new Set(), comparedShown = false, resume = null
   const txt = (tag, text, cls = '') => Object.assign(ui.h(tag, cls), { textContent: text })
 
   function reset() {
     steps = stopSteps(app.route().cells, app.route().stops, app.stops())
     log.length = 0
     samples = 0; lastK = 0; seen = new Set(); comparedShown = false
+    resume = null
     el.replaceChildren()
   }
 
@@ -133,6 +134,7 @@ export function createStopScience(ui, app, data) {
   }
 
   function open(entry, onDone) {
+    resume = onDone
     const { stop } = entry, rec = recOf(stop.id)
     const row = { target_id: stop.id, tasks_done: [], minutes: 0, dose_ugy: 0 }
     log.push(row)
@@ -163,11 +165,19 @@ export function createStopScience(ui, app, data) {
       r.append(box, body, txt('span', `${t.min} min`, 'm'))
       list.append(r)
     }
-    const go = ui.button('Carry on walking', () => { el.replaceChildren(...[...el.children].filter((c) => c.classList.contains('ss-card'))); onDone() }, true)
+    const go = ui.button('Carry on walking', proceed, true)
     sec.append(time, bar.el, warn, list, go)
     el.replaceChildren(sec, ...[...el.children].filter((c) => c.classList.contains('ss-card')))
     redraw()
     el.scrollIntoView?.({ block: 'start', behavior: 'smooth' })
+  }
+
+  function proceed() {
+    if (!resume) return
+    const onDone = resume
+    resume = null
+    el.replaceChildren(...[...el.children].filter((c) => c.classList.contains('ss-card')))
+    onDone()
   }
 
   // The Science log, shown when the walk is back at the habitat: per stop, then the goal's three checks.
@@ -211,5 +221,5 @@ export function createStopScience(ui, app, data) {
   }
 
   reset()
-  return { el, at, reset, finish, log, samples: () => samples }
+  return { el, at, reset, finish, log, samples: () => samples, active: () => resume !== null, proceed }
 }

@@ -177,6 +177,7 @@ export default {
 
       // Controls
       const playBtn = ui.button('Pause', () => {
+        if (sci?.active()) return sci.proceed()
         const s = app.walk.state()
         if (s.k >= s.of || s.energy_left_j <= 0) { app.walk.reset(); app.walk.play(); want = true }
         else if (want || app.walk.playing()) { app.walk.pause(); want = false }
@@ -225,8 +226,9 @@ export default {
       map.caption('The walk', '')
       let mk = drawMap(true)
 
-      live = { stats, bar, playBtn, msg, note, head2, clipRect, totalM, redraw: () => { mk = drawMap(true) }, k: () => mk }
-      sciData.then((d) => { if (!d || !live) return; sci = stopScience.createStopScience(ui, app, d); mine.push(sci.el); ui.body.append(sci.el) })
+      live = { stats, bar, playBtn, stepBtn, msg, note, head2, clipRect, totalM, redraw: () => { mk = drawMap(true) }, k: () => mk }
+      const session = live
+      sciData.then((d) => { if (!d || live !== session) return; sci = stopScience.createStopScience(ui, app, d); mine.push(sci.el); ui.body.append(sci.el) })
       tick()
       timer = setInterval(tick, 200)
     }
@@ -253,10 +255,13 @@ export default {
       const x = prof.X(k)
       live.head2.setAttribute('x1', x); live.head2.setAttribute('x2', x)
       live.clipRect.setAttribute('width', x)
-      const text = done ? 'Arrived back at the habitat.' : spent ? 'Out of walking energy before the habitat.' : ''
+      const visiting = sci?.active()
+      live.stepBtn.disabled = !!visiting
+      const text = done ? 'Arrived back at the habitat.' : spent ? 'Out of walking energy before the habitat.'
+        : visiting ? 'Paused at a science stop. Complete tasks below or carry on walking.' : ''
       live.msg.textContent = text
       live.note.textContent = text || 'The walk plays by itself. Drag along the height strip to jump.'
-      live.playBtn.textContent = done || spent ? 'Restart' : want || app.walk.playing() ? 'Pause' : 'Play'
+      live.playBtn.textContent = done || spent ? 'Restart' : visiting ? 'Carry on walking' : want || app.walk.playing() ? 'Pause' : 'Play'
     }
 
     function leavePreview() {
@@ -283,11 +288,13 @@ export default {
     const onResize = () => { if (mode === 'compare') drawMap(false) }
     addEventListener('resize', onResize)
     const off = app.on('plan', () => { if (mode === 'compare') compare() })
+    const offWalk = app.on('walk:step', tick) // visit every crossed stop, even when a slow frame advances several cells
     compare()
 
     return () => {
       removeEventListener('resize', onResize)
       off()
+      offWalk()
       leavePreview()
       mode = 'compare'
       for (const n of mine) n.remove()

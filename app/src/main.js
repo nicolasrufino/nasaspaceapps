@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { loadWorld, layerRGB, sourceLabel } from './world.js'
 import { startWalk, stepTo, ringMask, ringLimit, appState, oxygenL } from './walk.js'
+import { createPlaybackClock } from './playback.js'
 import { planTour, MAX_STOPS } from './plan.js'
 import { mountFlightLog } from './scout-why.js'
 import { createVoiSelector } from './scout-voi-client.js'
@@ -179,9 +180,9 @@ for (const [text, id] of [['Walk / pause', 'play'], ['Step', 'step'], ['Back to 
 }
 document.body.append(viewBtn, visionNote, visionBar)
 const heading = () => { // where the astronaut is going: along the route from where they stand
-  const k = route?.cells.findIndex(([x, y]) => x === walk.cell[0] && y === walk.cell[1]) ?? -1
-  const next = route?.cells[k + 1] ?? route?.cells[1]
-  return next ? Math.atan2(-(next[0] - walk.cell[0]), -(next[1] - walk.cell[1])) : 0
+  const from = route?.cells[k + 1] ? walk.cell : route?.cells[k - 1]
+  const next = route?.cells[k + 1] ?? walk.cell
+  return from && next ? Math.atan2(-(next[0] - from[0]), -(next[1] - from[1])) : 0
 }
 function setView(mode) {
   view.mode = mode
@@ -268,13 +269,21 @@ function tickIntro(dt) {
 let lastFrame = performance.now()
 let frameElapsed = 0
 let lastTiles = 0
+const walkClock = createPlaybackClock()
+let lastWalkFrame = lastFrame
+// Background tabs suspend rendering: resuming must not spend the whole hidden interval walking.
+document.addEventListener('visibilitychange', () => { lastWalkFrame = performance.now() })
 renderer.setAnimationLoop((now) => {
   const elapsed = Math.max(0, (now - lastFrame) / 1000)
   const dt = Math.min(elapsed, 0.1) // smooth camera/character motion, not the flight clock
   frameElapsed = Math.min(elapsed, 1)
   lastFrame = now
   if (flight?.active) tickFlight(elapsed) // spatial scanning retains every crossed sample, even on a slow frame
-  walker.position.lerp(walkerGoal, 1 - Math.exp(-dt * 6))
+  const walkElapsed = Math.max(0, now - lastWalkFrame)
+  lastWalkFrame = now
+  if (!document.hidden && walkClock.tick(walkElapsed, advanceWalk)) render()
+  // Exponential easing already handles a long frame; clamping its time made the figure lag behind the route.
+  walker.position.lerp(walkerGoal, 1 - Math.exp(-elapsed * 6))
   walker.position.y = groundAt(walker.position.x, walker.position.z)
   if (walkerGoal.distanceToSquared(walker.position) > 0.01) walker.rotation.y = Math.atan2(-(walkerGoal.x - walker.position.x), -(walkerGoal.z - walker.position.z))
   walkerIcon.position.set(walker.position.x, walker.position.y + 3, walker.position.z)
@@ -759,8 +768,7 @@ function land() {
 }
 
 // --- Walk (block E2): along the planned route, energy and oxygen drain, ring, point of no return. ---
-let walk, k, timer
-let walkMs = 120 // playback: milliseconds per 8 m step
+let walk, k
 // Block E6 (flags science_stop, step_mode): stop checklist, markers, warnings, walk log; real steps. Off: null.
 const field = flowMode ? null : (flags.has('science_stop') || flags.has('step_mode')) // the mission's walk preview has no checklists to stop it
   ? initStops({ world, checklist: flags.has('science_stop'), flags, photos, scene, pin, cellPos, span, getWalk: () => walk, panel: $('walk'), map })
@@ -769,6 +777,7 @@ const steps = flowMode ? null : flags.has('step_mode')
   ? initSteps({ panel: $('walk'), cs, segment: () => (k < route.cells.length - 1 ? [route.cells[k], route.cells[k + 1]] : null), blocked: () => !!field?.blocking(), step })
   : null
 function reset() {
+  walkClock.reset()
   pause()
   walk = startWalk(meta)
   k = 0
@@ -776,37 +785,64 @@ function reset() {
   document.body.classList.remove('danger')
   drawStops()
   render()
+  snapWalker()
+}
+
+// Called once per crossed cell, including on slow frames; render() is batched by the animation loop.
+function advanceWalk() {
+  if (flight || k >= route.cells.length - 1 || walk.energy_left_j <= 0 || field?.blocking()) { pause(); return false }
+  if (stepTo(world, walk, route.cells[++k])) buzz()
+  rememberGround()
+  if (field?.arrive(k)) pause()
+  emit('walk:step', { k }) // the guided Visit step can pause exactly here, before the next cell
+  if (k >= route.cells.length - 1 || walk.energy_left_j <= 0) pause()
+  return walkClock.playing
 }
 
 function step() {
   if (flight) return
-  if (k >= route.cells.length - 1 || walk.energy_left_j <= 0 || field?.blocking()) return pause()
-  if (stepTo(world, walk, route.cells[++k])) buzz()
-  if (field?.arrive(k)) pause()
+  advanceWalk()
   render()
 }
 
 function play() {
   if (flight) return
   unlockAudio()
-  timer ??= setInterval(step, walkMs)
+  if (!walkClock.playing) lastWalkFrame = performance.now()
+  walkClock.play()
   $('play').textContent = 'Pause'
 }
 function pause() {
-  clearInterval(timer)
-  timer = undefined
+  walkClock.pause()
   $('play').textContent = 'Walk'
+}
+
+// Reset/seek are jumps, not a flight across the intervening terrain. Keep the chase camera's offset.
+function snapWalker() {
+  const previous = walker.position.clone()
+  walker.position.copy(walkerGoal)
+  walker.position.y = groundAt(walker.position.x, walker.position.z)
+  walker.rotation.y = heading()
+  if (view.mode === 'follow') {
+    camera.position.add(walker.position.clone().sub(previous))
+    controls.target.copy(walker.position).y += EYE_M
+  }
+  lastHead.copy(walker.position).y += EYE_M
 }
 
 // Ground the crew already knows first-hand: within 60 m of the habitat. Drawn in full colour from the start.
 const nearHome = Uint8Array.from({ length: W * H }, (_, i) => Math.hypot((i % W) - meta.base_cell[0], Math.floor(i / W) - meta.base_cell[1]) * cs <= 60)
 
-function render() {
-  const inside = ringMask(ctg, ringLimit(meta, walk))
+function rememberGround() {
   for (let dy = -3; dy <= 3; dy++) for (let dx = -3; dx <= 3; dx++) { // the astronaut sees the ground around them first-hand
     const x = walk.cell[0] + dx, y = walk.cell[1] + dy
     if (x >= 0 && y >= 0 && x < W && y < H && dx * dx + dy * dy <= 9) nearHome[y * W + x] = 1
   }
+}
+
+function render() {
+  const inside = ringMask(ctg, ringLimit(meta, walk))
+  rememberGround()
   const vertexBase = layerName === IMAGERY ? WHITE : layerColors // the image itself carries the colour in the Imagery view
   for (let i = 0; i < W * H; i++) {
     const f = inside[i] ? 1 : 0.45
@@ -816,7 +852,7 @@ function render() {
   }
   colors.needsUpdate = tint.needsUpdate = true
   walkerGoal.copy(cellPos(walk.cell))
-  paintMinimap(inside)
+  if (!flowMode) paintMinimap(inside) // the guided mission draws its own map; this canvas is hidden
 
   const s = appState(world, walk)
   if (steps?.live) s.mode = 'step'
@@ -849,7 +885,7 @@ function buzz() {
   osc.stop(audio.currentTime + 0.4)
 }
 
-$('play').onclick = () => (timer ? pause() : play())
+$('play').onclick = () => (walkClock.playing ? pause() : play())
 $('step').onclick = () => (unlockAudio(), step())
 $('reset').onclick = reset
 replan()
@@ -915,9 +951,9 @@ const app = {
     },
     swathM: SWATH_M, flightM: FLIGHT_M,
   },
-  walk: { play, pause, reset, step, playing: () => !!timer,
-    speed(ms) { walkMs = ms; if (timer) { pause(); play() } }, // milliseconds per 8 m step (120 = normal)
-    seek(n) { const on = !!timer; reset(); while (k < Math.min(n, route.cells.length - 1)) stepTo(world, walk, route.cells[++k]); render(); if (on) play() }, // jump to step n
+  walk: { play, pause, reset, step, playing: () => walkClock.playing,
+    speed: (ms) => walkClock.speed(ms), // milliseconds per grid step (120 = normal)
+    seek(n) { const on = walkClock.playing; reset(); while (k < Math.min(n, route.cells.length - 1)) stepTo(world, walk, route.cells[++k]); render(); snapWalker(); if (on) play() }, // jump to step n
     state: () => ({ k, of: route.cells.length - 1, energy_left_j: walk.energy_left_j }) },
   // Cameras: 'habitat' (third person beside the astronaut and the habitat), 'walker' (behind the astronaut), 'map'.
   camera(mode) {
