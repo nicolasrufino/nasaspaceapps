@@ -212,7 +212,8 @@ def write(out, n, cell, base, budget, h, slope, cls, cost_per_m, ctg, site=None)
     with open(os.path.join(out, 'rocks_fine.u8'), 'wb') as f:
         rocks.tofile(f)
     with open(os.path.join(out, 'cost_to_go_scouted.f32'), 'wb') as f:
-        array.array('f', [min(v, big) for v in ctg_scouted]).tofile(f)
+        # rock cells are impassable, including as a start cell (CONTRACTS.md; same rule as ml/rock_review/r3_hazards.py)
+        array.array('f', [big if rocks[i] else min(v, big) for i, v in enumerate(ctg_scouted)]).tofile(f)
     meta['files'].update({'rocks_fine': 'rocks_fine.u8', 'cost_to_go_scouted': 'cost_to_go_scouted.f32'})
     meta['layers'] += ['rocks_fine']
     for name, data, code in (site or {}).get('extra_files', []):  # optional layers (THEMIS, science, ...)
