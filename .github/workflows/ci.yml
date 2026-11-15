@@ -71,6 +71,10 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v5
+      # R5 reuses the app's JS planner/scout/energy functions rather than a second implementation.
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'

@@ -1,0 +1,4818 @@
+{
+  "schema_version": 1,
+  "block": "R5",
+  "site": {
+    "name": "Gale crater, lower Mount Sharp boxwork",
+    "centre_lonlat": [
+      137.383,
+      -4.8
+    ],
+    "bbox_deg": {
+      "west": 137.365712,
+      "east": 137.400263,
+      "south": -4.817283,
+      "north": -4.782732
+    },
+    "projection": "+proj=eqc +lat_ts=0 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +R=3396190 +units=m +no_defs=True"
+  },
+  "scenario": {
+    "name": "Gale default five science stops, first scout pass, no custom stops",
+    "target_ids": [
+      "altadena",
+      "ridge_top",
+      "overlook",
+      "valle_de_la_luna",
+      "nevado_sajama"
+    ],
+    "energy_budget_j": 600000,
+    "reserve_j": 120000,
+    "cell_size_m": 8,
+    "scout_replay_fps": 60
+  },
+  "definitions": {
+    "hazard": "Binary 8 m hazard cells, not a count of individual rocks. Unique cells and repeated visits are separate.",
+    "margin": "energy left - cheapest known-hazard return cost - fixed reserve. Extra 20% means >=20% of INITIAL budget after that reserve.",
+    "traverse_share": "Distance weighted, linearly interpolated between grid vertices; no stop dwell time.",
+    "energy_error": "Uniform 0.7/1.0/1.3 multiplier on BOTH spent walking energy and remaining return cost; initial budget/reserve and the nominal scouted route stay fixed.",
+    "ring": "Cells whose return fits remaining energy minus reserve, as displayed by the app. Area is grid cells x cell area, not a circular radius or a complete outbound-and-return reachability claim.",
+    "margin_audit": "Directed reverse shortest paths recomputed using only discovered hazards; app hybrid return lookup reported separately.",
+    "scout": "60 fps replay of shipped tickFlight sampling. 30/120 fps and 4 m spatial sampling measure frame dependence; live counts can vary."
+  },
+  "source_hash_convention": "SHA256: raw binary; canonical sorted-key JSON; LF-normalized JS/MJS source",
+  "source_sha256": {
+    "data/worlds/gale/world.json": "6ce22a027d102198ba1587a98f243b7199e0c9dad113f8298d79a6ef7ec660bf",
+    "data/worlds/gale/targets.json": "1cde48014c29506e973b22e9bcc567d214e53a44ca57167f0ec6623cf50ba523",
+    "data/worlds/gale/scout_plan.json": "d4203961fdc54b0c3ec20ec9444303468dfad6874d21cf51451209824cb3d6ee",
+    "data/worlds/gale/height.f32": "975c3b0dfd31d40ee876a960462d83a5d135b835e5c074f5a7146d141979f9e4",
+    "data/worlds/gale/slope.f32": "33c178a91cc01bfb869f1bad1638fcb9bc30a21b375093ecc315ef5b6419dd68",
+    "data/worlds/gale/terrain_class.u8": "3fbc91da8e604766c770321667b0f8d2a6132a228a4fa5df336760dd00126d27",
+    "data/worlds/gale/rocks_fine.u8": "15ebe3865779117d9a66ebbdea678f33b11c91dbd9becf5b2119af2912e9fa3b",
+    "data/worlds/gale/cost_to_go.f32": "9d3859c4b017f27983e108f8e5c72f68c2832ce09df758aec787aa42ce4fe005",
+    "data/worlds/gale/cost_to_go_scouted.f32": "f6102d3031738882b7d84ef398dd80693f4291a018f2ac1cd47b589b2cbd7052",
+    "ml/exports/rocks.json": "d4f9a4bb901ff48c99a4f0f2b40759a18df9c30fcffb8be9ed65ddb189989517",
+    "ml/exports/terrain_cls.json": "ebde871cf04878ab8d8bed3779712424ba7f7e0b5a1f935971abd46fd6e1f3d0",
+    "ml/exports/buddy_policy.json": "ddc2696b80bc3cc7a17ae980bdbcb452385c677dbf52eec71fe1be0a5b463dfa",
+    "app/src/plan.js": "7d415605cd866f94d750bb2f3311b2377b5f2628cba291eb8f12f49d9ec652d6",
+    "app/src/walk.js": "61b69c9a5bd55b1cdaa9bab84f4e334d9c3e1e0f42ce98a6853eab50f3ad1a4d",
+    "app/src/scout.js": "37c910457719347f706e4c24c9a3e5ed09c31fdd6d60fb6f6486211f41535ee7",
+    "app/src/why.js": "ddfd6ff73ffe5898e3a81915ec15903712e6e7ddf453db7c092db8b2c7928f6c",
+    "app/src/main.js": "1f07c75b1d6db4e42821853e68fcbdb2a72216f93c787e8b8edc7078ff1a29f4",
+    "app/src/world.js": "1800b24b31ee964e933d6e6bbf9cc1b73a370a027dbf531d0f6c0dbb47058898",
+    "ml/pitch_metrics/metrics.mjs": "4827c4fe0714b57920c711de604f92b022489b14efa25a286ada2bc858088760",
+    "ml/pitch_metrics/run.mjs": "20738facf68ca3f4b655cc1bf4b474a813c899101f8218cc768d805f0f2f6bbe"
+  },
+  "results": {
+    "orbit_only": {
+      "stops": [
+        "ridge_top",
+        "altadena",
+        "valle_de_la_luna",
+        "nevado_sajama",
+        "overlook"
+      ],
+      "dropped": [],
+      "cells": [
+        [
+          105,
+          161
+        ],
+        [
+          105,
+          160
+        ],
+        [
+          104,
+          159
+        ],
+        [
+          103,
+          158
+        ],
+        [
+          104,
+          158
+        ],
+        [
+          105,
+          158
+        ],
+        [
+          106,
+          158
+        ],
+        [
+          107,
+          157
+        ],
+        [
+          108,
+          156
+        ],
+        [
+          109,
+          155
+        ],
+        [
+          109,
+          154
+        ],
+        [
+          110,
+          153
+        ],
+        [
+          111,
+          152
+        ],
+        [
+          112,
+          151
+        ],
+        [
+          113,
+          150
+        ],
+        [
+          114,
+          150
+        ],
+        [
+          115,
+          150
+        ],
+        [
+          116,
+          149
+        ],
+        [
+          117,
+          148
+        ],
+        [
+          118,
+          147
+        ],
+        [
+          119,
+          146
+        ],
+        [
+          120,
+          145
+        ],
+        [
+          121,
+          144
+        ],
+        [
+          122,
+          143
+        ],
+        [
+          123,
+          142
+        ],
+        [
+          123,
+          141
+        ],
+        [
+          124,
+          140
+        ],
+        [
+          125,
+          139
+        ],
+        [
+          125,
+          138
+        ],
+        [
+          126,
+          137
+        ],
+        [
+          127,
+          136
+        ],
+        [
+          127,
+          135
+        ],
+        [
+          128,
+          134
+        ],
+        [
+          128,
+          133
+        ],
+        [
+          128,
+          132
+        ],
+        [
+          128,
+          131
+        ],
+        [
+          129,
+          130
+        ],
+        [
+          130,
+          129
+        ],
+        [
+          130,
+          128
+        ],
+        [
+          131,
+          127
+        ],
+        [
+          132,
+          126
+        ],
+        [
+          132,
+          127
+        ],
+        [
+          132,
+          128
+        ],
+        [
+          132,
+          129
+        ],
+        [
+          132,
+          130
+        ],
+        [
+          132,
+          131
+        ],
+        [
+          132,
+          132
+        ],
+        [
+          131,
+          133
+        ],
+        [
+          130,
+          134
+        ],
+        [
+          130,
+          135
+        ],
+        [
+          130,
+          136
+        ],
+        [
+          130,
+          137
+        ],
+        [
+          130,
+          138
+        ],
+        [
+          130,
+          139
+        ],
+        [
+          130,
+          140
+        ],
+        [
+          130,
+          141
+        ],
+        [
+          130,
+          142
+        ],
+        [
+          130,
+          143
+        ],
+        [
+          130,
+          144
+        ],
+        [
+          130,
+          145
+        ],
+        [
+          130,
+          146
+        ],
+        [
+          130,
+          147
+        ],
+        [
+          129,
+          148
+        ],
+        [
+          128,
+          149
+        ],
+        [
+          127,
+          150
+        ],
+        [
+          126,
+          151
+        ],
+        [
+          126,
+          152
+        ],
+        [
+          126,
+          153
+        ],
+        [
+          126,
+          154
+        ],
+        [
+          126,
+          155
+        ],
+        [
+          126,
+          156
+        ],
+        [
+          125,
+          157
+        ],
+        [
+          124,
+          158
+        ],
+        [
+          123,
+          159
+        ],
+        [
+          123,
+          160
+        ],
+        [
+          122,
+          161
+        ],
+        [
+          122,
+          162
+        ],
+        [
+          122,
+          163
+        ],
+        [
+          121,
+          164
+        ],
+        [
+          120,
+          165
+        ],
+        [
+          120,
+          166
+        ],
+        [
+          119,
+          167
+        ],
+        [
+          118,
+          168
+        ],
+        [
+          117,
+          169
+        ],
+        [
+          116,
+          170
+        ],
+        [
+          116,
+          171
+        ],
+        [
+          116,
+          172
+        ],
+        [
+          116,
+          173
+        ],
+        [
+          116,
+          174
+        ],
+        [
+          116,
+          175
+        ],
+        [
+          116,
+          176
+        ],
+        [
+          116,
+          177
+        ],
+        [
+          116,
+          178
+        ],
+        [
+          116,
+          179
+        ],
+        [
+          115,
+          180
+        ],
+        [
+          115,
+          181
+        ],
+        [
+          115,
+          182
+        ],
+        [
+          114,
+          183
+        ],
+        [
+          114,
+          184
+        ],
+        [
+          113,
+          185
+        ],
+        [
+          113,
+          186
+        ],
+        [
+          113,
+          187
+        ],
+        [
+          112,
+          186
+        ],
+        [
+          112,
+          185
+        ],
+        [
+          111,
+          184
+        ],
+        [
+          111,
+          183
+        ],
+        [
+          110,
+          182
+        ],
+        [
+          109,
+          181
+        ],
+        [
+          108,
+          180
+        ],
+        [
+          107,
+          179
+        ],
+        [
+          107,
+          178
+        ],
+        [
+          106,
+          177
+        ],
+        [
+          106,
+          176
+        ],
+        [
+          106,
+          175
+        ],
+        [
+          106,
+          174
+        ],
+        [
+          105,
+          173
+        ],
+        [
+          105,
+          172
+        ],
+        [
+          104,
+          171
+        ],
+        [
+          104,
+          170
+        ],
+        [
+          103,
+          169
+        ],
+        [
+          102,
+          168
+        ],
+        [
+          101,
+          167
+        ],
+        [
+          100,
+          166
+        ],
+        [
+          100,
+          165
+        ],
+        [
+          100,
+          164
+        ],
+        [
+          100,
+          163
+        ],
+        [
+          101,
+          162
+        ],
+        [
+          102,
+          161
+        ],
+        [
+          103,
+          161
+        ],
+        [
+          104,
+          161
+        ],
+        [
+          105,
+          161
+        ]
+      ],
+      "metres": 1238.82251,
+      "energy_j": 329565.975914,
+      "minutes": 20.647042,
+      "steepest_deg": 17.102459,
+      "sand_share": 0.099237,
+      "rock_cells": 0,
+      "climb_m": 42.889893,
+      "all_layer_hazards": {
+        "unique_cells": 12,
+        "cell_visits": 12,
+        "cells": [
+          [
+            130,
+            141
+          ],
+          [
+            119,
+            146
+          ],
+          [
+            100,
+            166
+          ],
+          [
+            118,
+            168
+          ],
+          [
+            117,
+            169
+          ],
+          [
+            116,
+            170
+          ],
+          [
+            105,
+            173
+          ],
+          [
+            116,
+            174
+          ],
+          [
+            106,
+            177
+          ],
+          [
+            107,
+            179
+          ],
+          [
+            108,
+            180
+          ],
+          [
+            114,
+            183
+          ]
+        ]
+      },
+      "discovered_hazards": {
+        "unique_cells": 12,
+        "cell_visits": 12,
+        "cells": [
+          [
+            130,
+            141
+          ],
+          [
+            119,
+            146
+          ],
+          [
+            100,
+            166
+          ],
+          [
+            118,
+            168
+          ],
+          [
+            117,
+            169
+          ],
+          [
+            116,
+            170
+          ],
+          [
+            105,
+            173
+          ],
+          [
+            116,
+            174
+          ],
+          [
+            106,
+            177
+          ],
+          [
+            107,
+            179
+          ],
+          [
+            108,
+            180
+          ],
+          [
+            114,
+            183
+          ]
+        ]
+      },
+      "reviewed_rock_clearance": {
+        "unique_cells": 0,
+        "cell_visits": 0,
+        "cells": []
+      },
+      "nominal_margin_audited": {
+        "minimum_margin_after_reserve_j": 150434.024086,
+        "minimum_margin_fraction_of_initial_budget": 0.250723,
+        "minimum_at_cell": [
+          104,
+          161
+        ],
+        "minimum_at_distance_m": 1230.82251,
+        "distance_m": 1238.82251,
+        "distance_with_extra_20pct_margin_m": 1238.82251,
+        "fraction_distance_with_extra_20pct_margin": 1,
+        "fraction_distance_return_and_reserve_feasible": 1,
+        "final_energy_left_j": 270434.024086
+      },
+      "nominal_margin_app_lookup": {
+        "minimum_margin_after_reserve_j": 150434.024001,
+        "minimum_margin_fraction_of_initial_budget": 0.250723,
+        "minimum_at_cell": [
+          103,
+          161
+        ],
+        "minimum_at_distance_m": 1222.82251,
+        "distance_m": 1238.82251,
+        "distance_with_extra_20pct_margin_m": 1238.82251,
+        "fraction_distance_with_extra_20pct_margin": 1,
+        "fraction_distance_return_and_reserve_feasible": 1,
+        "final_energy_left_j": 270434.024086
+      }
+    },
+    "after_scout": {
+      "stops": [
+        "ridge_top",
+        "altadena",
+        "valle_de_la_luna",
+        "nevado_sajama",
+        "overlook"
+      ],
+      "dropped": [],
+      "cells": [
+        [
+          105,
+          161
+        ],
+        [
+          105,
+          160
+        ],
+        [
+          104,
+          159
+        ],
+        [
+          103,
+          158
+        ],
+        [
+          104,
+          158
+        ],
+        [
+          105,
+          158
+        ],
+        [
+          106,
+          158
+        ],
+        [
+          107,
+          157
+        ],
+        [
+          108,
+          156
+        ],
+        [
+          109,
+          155
+        ],
+        [
+          109,
+          154
+        ],
+        [
+          110,
+          153
+        ],
+        [
+          111,
+          152
+        ],
+        [
+          112,
+          151
+        ],
+        [
+          113,
+          150
+        ],
+        [
+          114,
+          149
+        ],
+        [
+          115,
+          148
+        ],
+        [
+          116,
+          147
+        ],
+        [
+          117,
+          146
+        ],
+        [
+          117,
+          145
+        ],
+        [
+          118,
+          144
+        ],
+        [
+          119,
+          143
+        ],
+        [
+          120,
+          142
+        ],
+        [
+          121,
+          142
+        ],
+        [
+          122,
+          141
+        ],
+        [
+          123,
+          140
+        ],
+        [
+          124,
+          139
+        ],
+        [
+          125,
+          138
+        ],
+        [
+          126,
+          137
+        ],
+        [
+          127,
+          136
+        ],
+        [
+          127,
+          135
+        ],
+        [
+          128,
+          134
+        ],
+        [
+          128,
+          133
+        ],
+        [
+          128,
+          132
+        ],
+        [
+          128,
+          131
+        ],
+        [
+          129,
+          130
+        ],
+        [
+          130,
+          129
+        ],
+        [
+          130,
+          128
+        ],
+        [
+          131,
+          127
+        ],
+        [
+          132,
+          126
+        ],
+        [
+          132,
+          127
+        ],
+        [
+          131,
+          128
+        ],
+        [
+          130,
+          129
+        ],
+        [
+          130,
+          130
+        ],
+        [
+          129,
+          131
+        ],
+        [
+          128,
+          132
+        ],
+        [
+          128,
+          133
+        ],
+        [
+          128,
+          134
+        ],
+        [
+          127,
+          135
+        ],
+        [
+          127,
+          136
+        ],
+        [
+          126,
+          137
+        ],
+        [
+          125,
+          138
+        ],
+        [
+          125,
+          139
+        ],
+        [
+          124,
+          140
+        ],
+        [
+          123,
+          141
+        ],
+        [
+          123,
+          142
+        ],
+        [
+          122,
+          143
+        ],
+        [
+          122,
+          144
+        ],
+        [
+          121,
+          145
+        ],
+        [
+          120,
+          146
+        ],
+        [
+          119,
+          147
+        ],
+        [
+          118,
+          148
+        ],
+        [
+          117,
+          149
+        ],
+        [
+          117,
+          150
+        ],
+        [
+          117,
+          151
+        ],
+        [
+          117,
+          152
+        ],
+        [
+          117,
+          153
+        ],
+        [
+          117,
+          154
+        ],
+        [
+          117,
+          155
+        ],
+        [
+          117,
+          156
+        ],
+        [
+          118,
+          157
+        ],
+        [
+          118,
+          158
+        ],
+        [
+          117,
+          159
+        ],
+        [
+          117,
+          160
+        ],
+        [
+          116,
+          161
+        ],
+        [
+          116,
+          162
+        ],
+        [
+          115,
+          163
+        ],
+        [
+          115,
+          164
+        ],
+        [
+          115,
+          165
+        ],
+        [
+          115,
+          166
+        ],
+        [
+          115,
+          167
+        ],
+        [
+          115,
+          168
+        ],
+        [
+          114,
+          169
+        ],
+        [
+          114,
+          170
+        ],
+        [
+          114,
+          171
+        ],
+        [
+          114,
+          172
+        ],
+        [
+          114,
+          173
+        ],
+        [
+          114,
+          174
+        ],
+        [
+          114,
+          175
+        ],
+        [
+          114,
+          176
+        ],
+        [
+          114,
+          177
+        ],
+        [
+          114,
+          178
+        ],
+        [
+          113,
+          179
+        ],
+        [
+          113,
+          180
+        ],
+        [
+          112,
+          181
+        ],
+        [
+          112,
+          182
+        ],
+        [
+          113,
+          183
+        ],
+        [
+          113,
+          184
+        ],
+        [
+          113,
+          185
+        ],
+        [
+          113,
+          186
+        ],
+        [
+          113,
+          187
+        ],
+        [
+          112,
+          186
+        ],
+        [
+          112,
+          185
+        ],
+        [
+          111,
+          184
+        ],
+        [
+          111,
+          183
+        ],
+        [
+          110,
+          182
+        ],
+        [
+          110,
+          181
+        ],
+        [
+          110,
+          180
+        ],
+        [
+          109,
+          179
+        ],
+        [
+          108,
+          178
+        ],
+        [
+          107,
+          177
+        ],
+        [
+          107,
+          176
+        ],
+        [
+          106,
+          175
+        ],
+        [
+          105,
+          174
+        ],
+        [
+          104,
+          173
+        ],
+        [
+          104,
+          172
+        ],
+        [
+          104,
+          171
+        ],
+        [
+          104,
+          170
+        ],
+        [
+          103,
+          169
+        ],
+        [
+          103,
+          168
+        ],
+        [
+          102,
+          167
+        ],
+        [
+          101,
+          166
+        ],
+        [
+          100,
+          165
+        ],
+        [
+          100,
+          164
+        ],
+        [
+          100,
+          163
+        ],
+        [
+          101,
+          162
+        ],
+        [
+          102,
+          161
+        ],
+        [
+          103,
+          161
+        ],
+        [
+          104,
+          161
+        ],
+        [
+          105,
+          161
+        ]
+      ],
+      "metres": 1247.391052,
+      "energy_j": 334056.946824,
+      "minutes": 20.789851,
+      "steepest_deg": 17.090889,
+      "sand_share": 0.092308,
+      "rock_cells": 0,
+      "climb_m": 44.349365,
+      "all_layer_hazards": {
+        "unique_cells": 6,
+        "cell_visits": 6,
+        "cells": [
+          [
+            118,
+            144
+          ],
+          [
+            117,
+            159
+          ],
+          [
+            116,
+            162
+          ],
+          [
+            115,
+            166
+          ],
+          [
+            115,
+            168
+          ],
+          [
+            114,
+            170
+          ]
+        ]
+      },
+      "discovered_hazards": {
+        "unique_cells": 0,
+        "cell_visits": 0,
+        "cells": []
+      },
+      "reviewed_rock_clearance": {
+        "unique_cells": 0,
+        "cell_visits": 0,
+        "cells": []
+      },
+      "nominal_margin_audited": {
+        "minimum_margin_after_reserve_j": 145943.053176,
+        "minimum_margin_fraction_of_initial_budget": 0.243238,
+        "minimum_at_cell": [
+          104,
+          161
+        ],
+        "minimum_at_distance_m": 1239.391052,
+        "distance_m": 1247.391052,
+        "distance_with_extra_20pct_margin_m": 1247.391052,
+        "fraction_distance_with_extra_20pct_margin": 1,
+        "fraction_distance_return_and_reserve_feasible": 1,
+        "final_energy_left_j": 265943.053176
+      },
+      "nominal_margin_app_lookup": {
+        "minimum_margin_after_reserve_j": 145943.053091,
+        "minimum_margin_fraction_of_initial_budget": 0.243238,
+        "minimum_at_cell": [
+          103,
+          161
+        ],
+        "minimum_at_distance_m": 1231.391052,
+        "distance_m": 1247.391052,
+        "distance_with_extra_20pct_margin_m": 1247.391052,
+        "fraction_distance_with_extra_20pct_margin": 1,
+        "fraction_distance_return_and_reserve_feasible": 1,
+        "final_energy_left_j": 265943.053176
+      }
+    },
+    "delta": {
+      "energy_j": 4490.97091,
+      "energy_percent": 1.362693,
+      "distance_m": 8.568542,
+      "known_hazard_cells_avoided": 12
+    },
+    "scout": {
+      "mode": "60fps",
+      "flights": 7,
+      "flight_metres": 4679.82251,
+      "scanned_cells": 1763,
+      "discovered_hazard_cells": 84,
+      "reviewed_clearance_cells_seen": 0
+    },
+    "sampling_sensitivity": [
+      {
+        "mode": "30fps",
+        "scanned_cells": 1696,
+        "discovered_hazard_cells": 79,
+        "reviewed_clearance_cells_seen": 0,
+        "before_crossings": {
+          "unique_cells": 12,
+          "cell_visits": 12,
+          "cells": [
+            [
+              130,
+              141
+            ],
+            [
+              119,
+              146
+            ],
+            [
+              100,
+              166
+            ],
+            [
+              118,
+              168
+            ],
+            [
+              117,
+              169
+            ],
+            [
+              116,
+              170
+            ],
+            [
+              105,
+              173
+            ],
+            [
+              116,
+              174
+            ],
+            [
+              106,
+              177
+            ],
+            [
+              107,
+              179
+            ],
+            [
+              108,
+              180
+            ],
+            [
+              114,
+              183
+            ]
+          ]
+        },
+        "after_crossings": {
+          "unique_cells": 0,
+          "cell_visits": 0,
+          "cells": []
+        },
+        "after_all_layer_crossings": {
+          "unique_cells": 6,
+          "cell_visits": 6,
+          "cells": [
+            [
+              118,
+              144
+            ],
+            [
+              117,
+              159
+            ],
+            [
+              116,
+              162
+            ],
+            [
+              115,
+              166
+            ],
+            [
+              115,
+              168
+            ],
+            [
+              114,
+              170
+            ]
+          ]
+        },
+        "after_energy_j": 334056.946824,
+        "stops": [
+          "ridge_top",
+          "altadena",
+          "valle_de_la_luna",
+          "nevado_sajama",
+          "overlook"
+        ]
+      },
+      {
+        "mode": "60fps",
+        "scanned_cells": 1763,
+        "discovered_hazard_cells": 84,
+        "reviewed_clearance_cells_seen": 0,
+        "before_crossings": {
+          "unique_cells": 12,
+          "cell_visits": 12,
+          "cells": [
+            [
+              130,
+              141
+            ],
+            [
+              119,
+              146
+            ],
+            [
+              100,
+              166
+            ],
+            [
+              118,
+              168
+            ],
+            [
+              117,
+              169
+            ],
+            [
+              116,
+              170
+            ],
+            [
+              105,
+              173
+            ],
+            [
+              116,
+              174
+            ],
+            [
+              106,
+              177
+            ],
+            [
+              107,
+              179
+            ],
+            [
+              108,
+              180
+            ],
+            [
+              114,
+              183
+            ]
+          ]
+        },
+        "after_crossings": {
+          "unique_cells": 0,
+          "cell_visits": 0,
+          "cells": []
+        },
+        "after_all_layer_crossings": {
+          "unique_cells": 6,
+          "cell_visits": 6,
+          "cells": [
+            [
+              118,
+              144
+            ],
+            [
+              117,
+              159
+            ],
+            [
+              116,
+              162
+            ],
+            [
+              115,
+              166
+            ],
+            [
+              115,
+              168
+            ],
+            [
+              114,
+              170
+            ]
+          ]
+        },
+        "after_energy_j": 334056.946824,
+        "stops": [
+          "ridge_top",
+          "altadena",
+          "valle_de_la_luna",
+          "nevado_sajama",
+          "overlook"
+        ]
+      },
+      {
+        "mode": "120fps",
+        "scanned_cells": 1766,
+        "discovered_hazard_cells": 85,
+        "reviewed_clearance_cells_seen": 0,
+        "before_crossings": {
+          "unique_cells": 12,
+          "cell_visits": 12,
+          "cells": [
+            [
+              130,
+              141
+            ],
+            [
+              119,
+              146
+            ],
+            [
+              100,
+              166
+            ],
+            [
+              118,
+              168
+            ],
+            [
+              117,
+              169
+            ],
+            [
+              116,
+              170
+            ],
+            [
+              105,
+              173
+            ],
+            [
+              116,
+              174
+            ],
+            [
+              106,
+              177
+            ],
+            [
+              107,
+              179
+            ],
+            [
+              108,
+              180
+            ],
+            [
+              114,
+              183
+            ]
+          ]
+        },
+        "after_crossings": {
+          "unique_cells": 0,
+          "cell_visits": 0,
+          "cells": []
+        },
+        "after_all_layer_crossings": {
+          "unique_cells": 6,
+          "cell_visits": 6,
+          "cells": [
+            [
+              118,
+              144
+            ],
+            [
+              117,
+              159
+            ],
+            [
+              116,
+              162
+            ],
+            [
+              115,
+              166
+            ],
+            [
+              115,
+              168
+            ],
+            [
+              114,
+              170
+            ]
+          ]
+        },
+        "after_energy_j": 334056.946824,
+        "stops": [
+          "ridge_top",
+          "altadena",
+          "valle_de_la_luna",
+          "nevado_sajama",
+          "overlook"
+        ]
+      },
+      {
+        "mode": "spatial4m",
+        "scanned_cells": 1766,
+        "discovered_hazard_cells": 85,
+        "reviewed_clearance_cells_seen": 0,
+        "before_crossings": {
+          "unique_cells": 12,
+          "cell_visits": 12,
+          "cells": [
+            [
+              130,
+              141
+            ],
+            [
+              119,
+              146
+            ],
+            [
+              100,
+              166
+            ],
+            [
+              118,
+              168
+            ],
+            [
+              117,
+              169
+            ],
+            [
+              116,
+              170
+            ],
+            [
+              105,
+              173
+            ],
+            [
+              116,
+              174
+            ],
+            [
+              106,
+              177
+            ],
+            [
+              107,
+              179
+            ],
+            [
+              108,
+              180
+            ],
+            [
+              114,
+              183
+            ]
+          ]
+        },
+        "after_crossings": {
+          "unique_cells": 0,
+          "cell_visits": 0,
+          "cells": []
+        },
+        "after_all_layer_crossings": {
+          "unique_cells": 6,
+          "cell_visits": 6,
+          "cells": [
+            [
+              118,
+              144
+            ],
+            [
+              117,
+              159
+            ],
+            [
+              116,
+              162
+            ],
+            [
+              115,
+              166
+            ],
+            [
+              115,
+              168
+            ],
+            [
+              114,
+              170
+            ]
+          ]
+        },
+        "after_energy_j": 334056.946824,
+        "stops": [
+          "ridge_top",
+          "altadena",
+          "valle_de_la_luna",
+          "nevado_sajama",
+          "overlook"
+        ]
+      }
+    ],
+    "energy_sensitivity": [
+      {
+        "energy_cost_multiplier": 0.7,
+        "margin": {
+          "minimum_margin_after_reserve_j": 246160.137223,
+          "minimum_margin_fraction_of_initial_budget": 0.410267,
+          "minimum_at_cell": [
+            102,
+            161
+          ],
+          "minimum_at_distance_m": 1223.391052,
+          "distance_m": 1247.391052,
+          "distance_with_extra_20pct_margin_m": 1247.391052,
+          "fraction_distance_with_extra_20pct_margin": 1,
+          "fraction_distance_return_and_reserve_feasible": 1,
+          "final_energy_left_j": 366160.137223
+        },
+        "app_margin": {
+          "minimum_margin_after_reserve_j": 246160.137164,
+          "minimum_margin_fraction_of_initial_budget": 0.410267,
+          "minimum_at_cell": [
+            103,
+            161
+          ],
+          "minimum_at_distance_m": 1231.391052,
+          "distance_m": 1247.391052,
+          "distance_with_extra_20pct_margin_m": 1247.391052,
+          "fraction_distance_with_extra_20pct_margin": 1,
+          "fraction_distance_return_and_reserve_feasible": 1,
+          "final_energy_left_j": 366160.137223
+        },
+        "ring_snapshots": [
+          {
+            "requested_route_fraction": 0,
+            "cell": [
+              105,
+              161
+            ],
+            "distance_m": 0,
+            "nominal_spent_j": 0,
+            "app_ring": {
+              "cells": 58890,
+              "area_m2": 3768960,
+              "gained_cells": 12200,
+              "lost_cells": 0,
+              "change_percent_vs_nominal": 26.129792
+            },
+            "known_hazards_ring_audit": {
+              "cells": 53982,
+              "area_m2": 3454848,
+              "gained_cells": 11324,
+              "lost_cells": 0,
+              "change_percent_vs_nominal": 26.546017
+            }
+          },
+          {
+            "requested_route_fraction": 0.25,
+            "cell": [
+              127,
+              135
+            ],
+            "distance_m": 312.901587,
+            "nominal_spent_j": 72513.257566,
+            "app_ring": {
+              "cells": 56629,
+              "area_m2": 3624256,
+              "gained_cells": 16869,
+              "lost_cells": 0,
+              "change_percent_vs_nominal": 42.427062
+            },
+            "known_hazards_ring_audit": {
+              "cells": 51859,
+              "area_m2": 3318976,
+              "gained_cells": 15401,
+              "lost_cells": 0,
+              "change_percent_vs_nominal": 42.243129
+            }
+          },
+          {
+            "requested_route_fraction": 0.5,
+            "cell": [
+              118,
+              148
+            ],
+            "distance_m": 623.862048,
+            "nominal_spent_j": 147875.238094,
+            "app_ring": {
+              "cells": 53297,
+              "area_m2": 3411008,
+              "gained_cells": 19797,
+              "lost_cells": 0,
+              "change_percent_vs_nominal": 59.095522
+            },
+            "known_hazards_ring_audit": {
+              "cells": 48853,
+              "area_m2": 3126592,
+              "gained_cells": 18027,
+              "lost_cells": 0,
+              "change_percent_vs_nominal": 58.479855
+            }
+          },
+          {
+            "requested_route_fraction": 0.75,
+            "cell": [
+              113,
+              184
+            ],
+            "distance_m": 941.685425,
+            "nominal_spent_j": 266887.05755,
+            "app_ring": {
+              "cells": 40592,
+              "area_m2": 2597888,
+              "gained_cells": 20207,
+              "lost_cells": 0,
+              "change_percent_vs_nominal": 99.126809
+            },
+            "known_hazards_ring_audit": {
+              "cells": 37211,
+              "area_m2": 2381504,
+              "gained_cells": 18084,
+              "lost_cells": 0,
+              "change_percent_vs_nominal": 94.546975
+            }
+          },
+          {
+            "requested_route_fraction": 1,
+            "cell": [
+              105,
+              161
+            ],
+            "distance_m": 1247.391052,
+            "nominal_spent_j": 334056.946824,
+            "app_ring": {
+              "cells": 35385,
+              "area_m2": 2264640,
+              "gained_cells": 23511,
+              "lost_cells": 0,
+              "change_percent_vs_nominal": 198.004042
+            },
+            "known_hazards_ring_audit": {
+              "cells": 32551,
+              "area_m2": 2083264,
+              "gained_cells": 21432,
+              "lost_cells": 0,
+              "change_percent_vs_nominal": 192.751147
+            }
+          }
+        ]
+      },
+      {
+        "energy_cost_multiplier": 1,
+        "margin": {
+          "minimum_margin_after_reserve_j": 145943.053176,
+          "minimum_margin_fraction_of_initial_budget": 0.243238,
+          "minimum_at_cell": [
+            104,
+            161
+          ],
+          "minimum_at_distance_m": 1239.391052,
+          "distance_m": 1247.391052,
+          "distance_with_extra_20pct_margin_m": 1247.391052,
+          "fraction_distance_with_extra_20pct_margin": 1,
+          "fraction_distance_return_and_reserve_feasible": 1,
+          "final_energy_left_j": 265943.053176
+        },
+        "app_margin": {
+          "minimum_margin_after_reserve_j": 145943.053091,
+          "minimum_margin_fraction_of_initial_budget": 0.243238,
+          "minimum_at_cell": [
+            103,
+            161
+          ],
+          "minimum_at_distance_m": 1231.391052,
+          "distance_m": 1247.391052,
+          "distance_with_extra_20pct_margin_m": 1247.391052,
+          "fraction_distance_with_extra_20pct_margin": 1,
+          "fraction_distance_return_and_reserve_feasible": 1,
+          "final_energy_left_j": 265943.053176
+        },
+        "ring_snapshots": [
+          {
+            "requested_route_fraction": 0,
+            "cell": [
+              105,
+              161
+            ],
+            "distance_m": 0,
+            "nominal_spent_j": 0,
+            "app_ring": {
+              "cells": 46690,
+              "area_m2": 2988160,
+              "gained_cells": 0,
+              "lost_cells": 0,
+              "change_percent_vs_nominal": 0
+            },
+            "known_hazards_ring_audit": {
+              "cells": 42658,
+              "area_m2": 2730112,
+              "gained_cells": 0,
+              "lost_cells": 0,
+              "change_percent_vs_nominal": 0
+            }
+          },
+          {
+            "requested_route_fraction": 0.25,
+            "cell": [
+              127,
+              135
+            ],
+            "distance_m": 312.901587,
+            "nominal_spent_j": 72513.257566,
+            "app_ring": {
+              "cells": 39760,
+              "area_m2": 2544640,
+              "gained_cells": 0,
+              "lost_cells": 0,
+              "change_percent_vs_nominal": 0
+            },
+            "known_hazards_ring_audit": {
+              "cells": 36458,
+              "area_m2": 2333312,
+              "gained_cells": 0,
+              "lost_cells": 0,
+              "change_percent_vs_nominal": 0
+            }
+          },
+          {
+            "requested_route_fraction": 0.5,
+            "cell": [
+              118,
+              148
+            ],
+            "distance_m": 623.862048,
+            "nominal_spent_j": 147875.238094,
+            "app_ring": {
+              "cells": 33500,
+              "area_m2": 2144000,
+              "gained_cells": 0,
+              "lost_cells": 0,
+              "change_percent_vs_nominal": 0
+            },
+            "known_hazards_ring_audit": {
+              "cells": 30826,
+              "area_m2": 1972864,
+              "gained_cells": 0,
+              "lost_cells": 0,
+              "change_percent_vs_nominal": 0
+            }
+          },
+          {
+            "requested_route_fraction": 0.75,
+            "cell": [
+              113,
+              184
+            ],
+            "distance_m": 941.685425,
+            "nominal_spent_j": 266887.05755,
+            "app_ring": {
+              "cells": 20385,
+              "area_m2": 1304640,
+              "gained_cells": 0,
+              "lost_cells": 0,
+              "change_percent_vs_nominal": 0
+            },
+            "known_hazards_ring_audit": {
+              "cells": 19127,
+              "area_m2": 1224128,
+              "gained_cells": 0,
+              "lost_cells": 0,
+              "change_percent_vs_nominal": 0
+            }
+          },
+          {
+            "requested_route_fraction": 1,
+            "cell": [
+              105,
+              161
+            ],
+            "distance_m": 1247.391052,
+            "nominal_spent_j": 334056.946824,
+            "app_ring": {
+              "cells": 11874,
+              "area_m2": 759936,
+              "gained_cells": 0,
+              "lost_cells": 0,
+              "change_percent_vs_nominal": 0
+            },
+            "known_hazards_ring_audit": {
+              "cells": 11119,
+              "area_m2": 711616,
+              "gained_cells": 0,
+              "lost_cells": 0,
+              "change_percent_vs_nominal": 0
+            }
+          }
+        ]
+      },
+      {
+        "energy_cost_multiplier": 1.3,
+        "margin": {
+          "minimum_margin_after_reserve_j": 45725.969129,
+          "minimum_margin_fraction_of_initial_budget": 0.07621,
+          "minimum_at_cell": [
+            105,
+            161
+          ],
+          "minimum_at_distance_m": 1247.391052,
+          "distance_m": 1247.391052,
+          "distance_with_extra_20pct_margin_m": 881.166801,
+          "fraction_distance_with_extra_20pct_margin": 0.706408,
+          "fraction_distance_return_and_reserve_feasible": 1,
+          "final_energy_left_j": 165725.969129
+        },
+        "app_margin": {
+          "minimum_margin_after_reserve_j": 45725.969019,
+          "minimum_margin_fraction_of_initial_budget": 0.07621,
+          "minimum_at_cell": [
+            103,
+            161
+          ],
+          "minimum_at_distance_m": 1231.391052,
+          "distance_m": 1247.391052,
+          "distance_with_extra_20pct_margin_m": 881.1668,
+          "fraction_distance_with_extra_20pct_margin": 0.706408,
+          "fraction_distance_return_and_reserve_feasible": 1,
+          "final_energy_left_j": 165725.969129
+        },
+        "ring_snapshots": [
+          {
+            "requested_route_fraction": 0,
+            "cell": [
+              105,
+              161
+            ],
+            "distance_m": 0,
+            "nominal_spent_j": 0,
+            "app_ring": {
+              "cells": 36774,
+              "area_m2": 2353536,
+              "gained_cells": 0,
+              "lost_cells": 9916,
+              "change_percent_vs_nominal": -21.237952
+            },
+            "known_hazards_ring_audit": {
+              "cells": 33831,
+              "area_m2": 2165184,
+              "gained_cells": 0,
+              "lost_cells": 8827,
+              "change_percent_vs_nominal": -20.692484
+            }
+          },
+          {
+            "requested_route_fraction": 0.25,
+            "cell": [
+              127,
+              135
+            ],
+            "distance_m": 312.901587,
+            "nominal_spent_j": 72513.257566,
+            "app_ring": {
+              "cells": 28771,
+              "area_m2": 1841344,
+              "gained_cells": 0,
+              "lost_cells": 10989,
+              "change_percent_vs_nominal": -27.63833
+            },
+            "known_hazards_ring_audit": {
+              "cells": 26484,
+              "area_m2": 1694976,
+              "gained_cells": 0,
+              "lost_cells": 9974,
+              "change_percent_vs_nominal": -27.357507
+            }
+          },
+          {
+            "requested_route_fraction": 0.5,
+            "cell": [
+              118,
+              148
+            ],
+            "distance_m": 623.862048,
+            "nominal_spent_j": 147875.238094,
+            "app_ring": {
+              "cells": 21201,
+              "area_m2": 1356864,
+              "gained_cells": 0,
+              "lost_cells": 12299,
+              "change_percent_vs_nominal": -36.713433
+            },
+            "known_hazards_ring_audit": {
+              "cells": 19841,
+              "area_m2": 1269824,
+              "gained_cells": 0,
+              "lost_cells": 10985,
+              "change_percent_vs_nominal": -35.635502
+            }
+          },
+          {
+            "requested_route_fraction": 0.75,
+            "cell": [
+              113,
+              184
+            ],
+            "distance_m": 941.685425,
+            "nominal_spent_j": 266887.05755,
+            "app_ring": {
+              "cells": 6680,
+              "area_m2": 427520,
+              "gained_cells": 0,
+              "lost_cells": 13705,
+              "change_percent_vs_nominal": -67.230807
+            },
+            "known_hazards_ring_audit": {
+              "cells": 6355,
+              "area_m2": 406720,
+              "gained_cells": 0,
+              "lost_cells": 12772,
+              "change_percent_vs_nominal": -66.774716
+            }
+          },
+          {
+            "requested_route_fraction": 1,
+            "cell": [
+              105,
+              161
+            ],
+            "distance_m": 1247.391052,
+            "nominal_spent_j": 334056.946824,
+            "app_ring": {
+              "cells": 912,
+              "area_m2": 58368,
+              "gained_cells": 0,
+              "lost_cells": 10962,
+              "change_percent_vs_nominal": -92.319353
+            },
+            "known_hazards_ring_audit": {
+              "cells": 890,
+              "area_m2": 56960,
+              "gained_cells": 0,
+              "lost_cells": 10229,
+              "change_percent_vs_nominal": -91.995683
+            }
+          }
+        ]
+      }
+    ],
+    "repeated_scout": {
+      "stop_condition": "All route vertices scanned and zero crossings in the stored hazard layer; at most 10 passes",
+      "converged": true,
+      "passes": [
+        {
+          "pass": 1,
+          "newly_discovered_hazard_cells": 84,
+          "total_discovered_hazard_cells": 84,
+          "previous_route_discovered_hazard_cells": 12,
+          "new_route_all_layer_hazard_cells": 6,
+          "new_route_fully_scanned": false,
+          "route_energy_j": 334056.946824,
+          "flights": 7,
+          "flight_metres": 4679.82251
+        },
+        {
+          "pass": 2,
+          "newly_discovered_hazard_cells": 10,
+          "total_discovered_hazard_cells": 94,
+          "previous_route_discovered_hazard_cells": 6,
+          "new_route_all_layer_hazard_cells": 0,
+          "new_route_fully_scanned": false,
+          "route_energy_j": 334746.283889,
+          "flights": 7,
+          "flight_metres": 4688.391052
+        },
+        {
+          "pass": 3,
+          "newly_discovered_hazard_cells": 1,
+          "total_discovered_hazard_cells": 95,
+          "previous_route_discovered_hazard_cells": 0,
+          "new_route_all_layer_hazard_cells": 0,
+          "new_route_fully_scanned": true,
+          "route_energy_j": 334746.283889,
+          "flights": 7,
+          "flight_metres": 4684.508801
+        }
+      ],
+      "total_flights": 21,
+      "total_flight_metres": 14052.722364,
+      "final_route": {
+        "stops": [
+          "ridge_top",
+          "altadena",
+          "valle_de_la_luna",
+          "nevado_sajama",
+          "overlook"
+        ],
+        "dropped": [],
+        "cells": [
+          [
+            105,
+            161
+          ],
+          [
+            105,
+            160
+          ],
+          [
+            104,
+            159
+          ],
+          [
+            103,
+            158
+          ],
+          [
+            104,
+            158
+          ],
+          [
+            105,
+            158
+          ],
+          [
+            106,
+            158
+          ],
+          [
+            107,
+            157
+          ],
+          [
+            108,
+            156
+          ],
+          [
+            109,
+            155
+          ],
+          [
+            109,
+            154
+          ],
+          [
+            110,
+            153
+          ],
+          [
+            111,
+            152
+          ],
+          [
+            112,
+            151
+          ],
+          [
+            113,
+            150
+          ],
+          [
+            114,
+            150
+          ],
+          [
+            115,
+            150
+          ],
+          [
+            116,
+            149
+          ],
+          [
+            117,
+            148
+          ],
+          [
+            118,
+            148
+          ],
+          [
+            119,
+            147
+          ],
+          [
+            120,
+            146
+          ],
+          [
+            121,
+            145
+          ],
+          [
+            121,
+            144
+          ],
+          [
+            122,
+            143
+          ],
+          [
+            123,
+            142
+          ],
+          [
+            123,
+            141
+          ],
+          [
+            124,
+            140
+          ],
+          [
+            125,
+            139
+          ],
+          [
+            125,
+            138
+          ],
+          [
+            126,
+            137
+          ],
+          [
+            127,
+            136
+          ],
+          [
+            127,
+            135
+          ],
+          [
+            128,
+            134
+          ],
+          [
+            128,
+            133
+          ],
+          [
+            128,
+            132
+          ],
+          [
+            128,
+            131
+          ],
+          [
+            129,
+            130
+          ],
+          [
+            130,
+            129
+          ],
+          [
+            130,
+            128
+          ],
+          [
+            131,
+            127
+          ],
+          [
+            132,
+            126
+          ],
+          [
+            132,
+            127
+          ],
+          [
+            132,
+            128
+          ],
+          [
+            132,
+            129
+          ],
+          [
+            132,
+            130
+          ],
+          [
+            132,
+            131
+          ],
+          [
+            132,
+            132
+          ],
+          [
+            131,
+            133
+          ],
+          [
+            130,
+            134
+          ],
+          [
+            130,
+            135
+          ],
+          [
+            130,
+            136
+          ],
+          [
+            130,
+            137
+          ],
+          [
+            130,
+            138
+          ],
+          [
+            129,
+            139
+          ],
+          [
+            129,
+            140
+          ],
+          [
+            129,
+            141
+          ],
+          [
+            129,
+            142
+          ],
+          [
+            129,
+            143
+          ],
+          [
+            128,
+            144
+          ],
+          [
+            127,
+            145
+          ],
+          [
+            127,
+            146
+          ],
+          [
+            127,
+            147
+          ],
+          [
+            126,
+            148
+          ],
+          [
+            126,
+            149
+          ],
+          [
+            126,
+            150
+          ],
+          [
+            126,
+            151
+          ],
+          [
+            126,
+            152
+          ],
+          [
+            126,
+            153
+          ],
+          [
+            126,
+            154
+          ],
+          [
+            126,
+            155
+          ],
+          [
+            126,
+            156
+          ],
+          [
+            125,
+            157
+          ],
+          [
+            124,
+            158
+          ],
+          [
+            123,
+            159
+          ],
+          [
+            123,
+            160
+          ],
+          [
+            122,
+            161
+          ],
+          [
+            122,
+            162
+          ],
+          [
+            122,
+            163
+          ],
+          [
+            121,
+            164
+          ],
+          [
+            120,
+            165
+          ],
+          [
+            120,
+            166
+          ],
+          [
+            119,
+            167
+          ],
+          [
+            119,
+            168
+          ],
+          [
+            118,
+            169
+          ],
+          [
+            117,
+            170
+          ],
+          [
+            117,
+            171
+          ],
+          [
+            117,
+            172
+          ],
+          [
+            117,
+            173
+          ],
+          [
+            117,
+            174
+          ],
+          [
+            117,
+            175
+          ],
+          [
+            117,
+            176
+          ],
+          [
+            116,
+            177
+          ],
+          [
+            116,
+            178
+          ],
+          [
+            116,
+            179
+          ],
+          [
+            115,
+            180
+          ],
+          [
+            115,
+            181
+          ],
+          [
+            115,
+            182
+          ],
+          [
+            115,
+            183
+          ],
+          [
+            114,
+            184
+          ],
+          [
+            113,
+            185
+          ],
+          [
+            113,
+            186
+          ],
+          [
+            113,
+            187
+          ],
+          [
+            112,
+            186
+          ],
+          [
+            112,
+            185
+          ],
+          [
+            111,
+            184
+          ],
+          [
+            111,
+            183
+          ],
+          [
+            110,
+            182
+          ],
+          [
+            110,
+            181
+          ],
+          [
+            110,
+            180
+          ],
+          [
+            109,
+            179
+          ],
+          [
+            108,
+            178
+          ],
+          [
+            107,
+            177
+          ],
+          [
+            107,
+            176
+          ],
+          [
+            106,
+            175
+          ],
+          [
+            105,
+            174
+          ],
+          [
+            104,
+            173
+          ],
+          [
+            104,
+            172
+          ],
+          [
+            104,
+            171
+          ],
+          [
+            104,
+            170
+          ],
+          [
+            103,
+            169
+          ],
+          [
+            103,
+            168
+          ],
+          [
+            102,
+            167
+          ],
+          [
+            101,
+            166
+          ],
+          [
+            100,
+            165
+          ],
+          [
+            100,
+            164
+          ],
+          [
+            100,
+            163
+          ],
+          [
+            101,
+            162
+          ],
+          [
+            102,
+            161
+          ],
+          [
+            103,
+            161
+          ],
+          [
+            104,
+            161
+          ],
+          [
+            105,
+            161
+          ]
+        ],
+        "metres": 1243.508801,
+        "energy_j": 334746.283889,
+        "minutes": 20.725147,
+        "steepest_deg": 19.856247,
+        "sand_share": 0.090909,
+        "rock_cells": 0,
+        "climb_m": 44.797607,
+        "all_layer_hazards": {
+          "unique_cells": 0,
+          "cell_visits": 0,
+          "cells": []
+        },
+        "discovered_hazards": {
+          "unique_cells": 0,
+          "cell_visits": 0,
+          "cells": []
+        },
+        "reviewed_rock_clearance": {
+          "unique_cells": 0,
+          "cell_visits": 0,
+          "cells": []
+        },
+        "nominal_margin_audited": {
+          "minimum_margin_after_reserve_j": 145253.716111,
+          "minimum_margin_fraction_of_initial_budget": 0.24209,
+          "minimum_at_cell": [
+            104,
+            161
+          ],
+          "minimum_at_distance_m": 1235.508801,
+          "distance_m": 1243.508801,
+          "distance_with_extra_20pct_margin_m": 1243.508801,
+          "fraction_distance_with_extra_20pct_margin": 1,
+          "fraction_distance_return_and_reserve_feasible": 1,
+          "final_energy_left_j": 265253.716111
+        },
+        "nominal_margin_app_lookup": {
+          "minimum_margin_after_reserve_j": 145253.716026,
+          "minimum_margin_fraction_of_initial_budget": 0.24209,
+          "minimum_at_cell": [
+            103,
+            161
+          ],
+          "minimum_at_distance_m": 1227.508801,
+          "distance_m": 1243.508801,
+          "distance_with_extra_20pct_margin_m": 1243.508801,
+          "fraction_distance_with_extra_20pct_margin": 1,
+          "fraction_distance_return_and_reserve_feasible": 1,
+          "final_energy_left_j": 265253.716111
+        }
+      },
+      "energy_sensitivity": [
+        {
+          "energy_cost_multiplier": 0.7,
+          "margin": {
+            "minimum_margin_after_reserve_j": 245677.601277,
+            "minimum_margin_fraction_of_initial_budget": 0.409463,
+            "minimum_at_cell": [
+              100,
+              163
+            ],
+            "minimum_at_distance_m": 1196.881384,
+            "distance_m": 1243.508801,
+            "distance_with_extra_20pct_margin_m": 1243.508801,
+            "fraction_distance_with_extra_20pct_margin": 1,
+            "fraction_distance_return_and_reserve_feasible": 1,
+            "final_energy_left_j": 365677.601277
+          },
+          "app_margin": {
+            "minimum_margin_after_reserve_j": 245677.601218,
+            "minimum_margin_fraction_of_initial_budget": 0.409463,
+            "minimum_at_cell": [
+              103,
+              161
+            ],
+            "minimum_at_distance_m": 1227.508801,
+            "distance_m": 1243.508801,
+            "distance_with_extra_20pct_margin_m": 1243.508801,
+            "fraction_distance_with_extra_20pct_margin": 1,
+            "fraction_distance_return_and_reserve_feasible": 1,
+            "final_energy_left_j": 365677.601277
+          },
+          "ring_snapshots": [
+            {
+              "requested_route_fraction": 0,
+              "cell": [
+                105,
+                161
+              ],
+              "distance_m": 0,
+              "nominal_spent_j": 0,
+              "app_ring": {
+                "cells": 58879,
+                "area_m2": 3768256,
+                "gained_cells": 12200,
+                "lost_cells": 0,
+                "change_percent_vs_nominal": 26.13595
+              },
+              "known_hazards_ring_audit": {
+                "cells": 53971,
+                "area_m2": 3454144,
+                "gained_cells": 11342,
+                "lost_cells": 0,
+                "change_percent_vs_nominal": 26.606301
+              }
+            },
+            {
+              "requested_route_fraction": 0.25,
+              "cell": [
+                127,
+                136
+              ],
+              "distance_m": 314.27417,
+              "nominal_spent_j": 71271.759004,
+              "app_ring": {
+                "cells": 56648,
+                "area_m2": 3625472,
+                "gained_cells": 16797,
+                "lost_cells": 0,
+                "change_percent_vs_nominal": 42.149507
+              },
+              "known_hazards_ring_audit": {
+                "cells": 51876,
+                "area_m2": 3320064,
+                "gained_cells": 15373,
+                "lost_cells": 0,
+                "change_percent_vs_nominal": 42.114347
+              }
+            },
+            {
+              "requested_route_fraction": 0.5,
+              "cell": [
+                126,
+                150
+              ],
+              "distance_m": 622.724963,
+              "nominal_spent_j": 144412.838036,
+              "app_ring": {
+                "cells": 53643,
+                "area_m2": 3433152,
+                "gained_cells": 19803,
+                "lost_cells": 0,
+                "change_percent_vs_nominal": 58.519504
+              },
+              "known_hazards_ring_audit": {
+                "cells": 49145,
+                "area_m2": 3145280,
+                "gained_cells": 18028,
+                "lost_cells": 0,
+                "change_percent_vs_nominal": 57.936176
+              }
+            },
+            {
+              "requested_route_fraction": 0.75,
+              "cell": [
+                114,
+                184
+              ],
+              "distance_m": 934.489465,
+              "nominal_spent_j": 267463.745256,
+              "app_ring": {
+                "cells": 40531,
+                "area_m2": 2593984,
+                "gained_cells": 20208,
+                "lost_cells": 0,
+                "change_percent_vs_nominal": 99.434139
+              },
+              "known_hazards_ring_audit": {
+                "cells": 37116,
+                "area_m2": 2375424,
+                "gained_cells": 18077,
+                "lost_cells": 0,
+                "change_percent_vs_nominal": 94.947214
+              }
+            },
+            {
+              "requested_route_fraction": 1,
+              "cell": [
+                105,
+                161
+              ],
+              "distance_m": 1243.508801,
+              "nominal_spent_j": 334746.283889,
+              "app_ring": {
+                "cells": 35318,
+                "area_m2": 2260352,
+                "gained_cells": 23542,
+                "lost_cells": 0,
+                "change_percent_vs_nominal": 199.915082
+              },
+              "known_hazards_ring_audit": {
+                "cells": 32465,
+                "area_m2": 2077760,
+                "gained_cells": 21481,
+                "lost_cells": 0,
+                "change_percent_vs_nominal": 195.566278
+              }
+            }
+          ]
+        },
+        {
+          "energy_cost_multiplier": 1,
+          "margin": {
+            "minimum_margin_after_reserve_j": 145253.716111,
+            "minimum_margin_fraction_of_initial_budget": 0.24209,
+            "minimum_at_cell": [
+              104,
+              161
+            ],
+            "minimum_at_distance_m": 1235.508801,
+            "distance_m": 1243.508801,
+            "distance_with_extra_20pct_margin_m": 1243.508801,
+            "fraction_distance_with_extra_20pct_margin": 1,
+            "fraction_distance_return_and_reserve_feasible": 1,
+            "final_energy_left_j": 265253.716111
+          },
+          "app_margin": {
+            "minimum_margin_after_reserve_j": 145253.716026,
+            "minimum_margin_fraction_of_initial_budget": 0.24209,
+            "minimum_at_cell": [
+              103,
+              161
+            ],
+            "minimum_at_distance_m": 1227.508801,
+            "distance_m": 1243.508801,
+            "distance_with_extra_20pct_margin_m": 1243.508801,
+            "fraction_distance_with_extra_20pct_margin": 1,
+            "fraction_distance_return_and_reserve_feasible": 1,
+            "final_energy_left_j": 265253.716111
+          },
+          "ring_snapshots": [
+            {
+              "requested_route_fraction": 0,
+              "cell": [
+                105,
+                161
+              ],
+              "distance_m": 0,
+              "nominal_spent_j": 0,
+              "app_ring": {
+                "cells": 46679,
+                "area_m2": 2987456,
+                "gained_cells": 0,
+                "lost_cells": 0,
+                "change_percent_vs_nominal": 0
+              },
+              "known_hazards_ring_audit": {
+                "cells": 42629,
+                "area_m2": 2728256,
+                "gained_cells": 0,
+                "lost_cells": 0,
+                "change_percent_vs_nominal": 0
+              }
+            },
+            {
+              "requested_route_fraction": 0.25,
+              "cell": [
+                127,
+                136
+              ],
+              "distance_m": 314.27417,
+              "nominal_spent_j": 71271.759004,
+              "app_ring": {
+                "cells": 39851,
+                "area_m2": 2550464,
+                "gained_cells": 0,
+                "lost_cells": 0,
+                "change_percent_vs_nominal": 0
+              },
+              "known_hazards_ring_audit": {
+                "cells": 36503,
+                "area_m2": 2336192,
+                "gained_cells": 0,
+                "lost_cells": 0,
+                "change_percent_vs_nominal": 0
+              }
+            },
+            {
+              "requested_route_fraction": 0.5,
+              "cell": [
+                126,
+                150
+              ],
+              "distance_m": 622.724963,
+              "nominal_spent_j": 144412.838036,
+              "app_ring": {
+                "cells": 33840,
+                "area_m2": 2165760,
+                "gained_cells": 0,
+                "lost_cells": 0,
+                "change_percent_vs_nominal": 0
+              },
+              "known_hazards_ring_audit": {
+                "cells": 31117,
+                "area_m2": 1991488,
+                "gained_cells": 0,
+                "lost_cells": 0,
+                "change_percent_vs_nominal": 0
+              }
+            },
+            {
+              "requested_route_fraction": 0.75,
+              "cell": [
+                114,
+                184
+              ],
+              "distance_m": 934.489465,
+              "nominal_spent_j": 267463.745256,
+              "app_ring": {
+                "cells": 20323,
+                "area_m2": 1300672,
+                "gained_cells": 0,
+                "lost_cells": 0,
+                "change_percent_vs_nominal": 0
+              },
+              "known_hazards_ring_audit": {
+                "cells": 19039,
+                "area_m2": 1218496,
+                "gained_cells": 0,
+                "lost_cells": 0,
+                "change_percent_vs_nominal": 0
+              }
+            },
+            {
+              "requested_route_fraction": 1,
+              "cell": [
+                105,
+                161
+              ],
+              "distance_m": 1243.508801,
+              "nominal_spent_j": 334746.283889,
+              "app_ring": {
+                "cells": 11776,
+                "area_m2": 753664,
+                "gained_cells": 0,
+                "lost_cells": 0,
+                "change_percent_vs_nominal": 0
+              },
+              "known_hazards_ring_audit": {
+                "cells": 10984,
+                "area_m2": 702976,
+                "gained_cells": 0,
+                "lost_cells": 0,
+                "change_percent_vs_nominal": 0
+              }
+            }
+          ]
+        },
+        {
+          "energy_cost_multiplier": 1.3,
+          "margin": {
+            "minimum_margin_after_reserve_j": 44829.830944,
+            "minimum_margin_fraction_of_initial_budget": 0.074716,
+            "minimum_at_cell": [
+              103,
+              161
+            ],
+            "minimum_at_distance_m": 1227.508801,
+            "distance_m": 1243.508801,
+            "distance_with_extra_20pct_margin_m": 880.01513,
+            "fraction_distance_with_extra_20pct_margin": 0.707687,
+            "fraction_distance_return_and_reserve_feasible": 1,
+            "final_energy_left_j": 164829.830944
+          },
+          "app_margin": {
+            "minimum_margin_after_reserve_j": 44829.830834,
+            "minimum_margin_fraction_of_initial_budget": 0.074716,
+            "minimum_at_cell": [
+              103,
+              161
+            ],
+            "minimum_at_distance_m": 1227.508801,
+            "distance_m": 1243.508801,
+            "distance_with_extra_20pct_margin_m": 880.015131,
+            "fraction_distance_with_extra_20pct_margin": 0.707687,
+            "fraction_distance_return_and_reserve_feasible": 1,
+            "final_energy_left_j": 164829.830944
+          },
+          "ring_snapshots": [
+            {
+              "requested_route_fraction": 0,
+              "cell": [
+                105,
+                161
+              ],
+              "distance_m": 0,
+              "nominal_spent_j": 0,
+              "app_ring": {
+                "cells": 36763,
+                "area_m2": 2352832,
+                "gained_cells": 0,
+                "lost_cells": 9916,
+                "change_percent_vs_nominal": -21.242957
+              },
+              "known_hazards_ring_audit": {
+                "cells": 33802,
+                "area_m2": 2163328,
+                "gained_cells": 0,
+                "lost_cells": 8827,
+                "change_percent_vs_nominal": -20.706561
+              }
+            },
+            {
+              "requested_route_fraction": 0.25,
+              "cell": [
+                127,
+                136
+              ],
+              "distance_m": 314.27417,
+              "nominal_spent_j": 71271.759004,
+              "app_ring": {
+                "cells": 28923,
+                "area_m2": 1851072,
+                "gained_cells": 0,
+                "lost_cells": 10928,
+                "change_percent_vs_nominal": -27.422147
+              },
+              "known_hazards_ring_audit": {
+                "cells": 26599,
+                "area_m2": 1702336,
+                "gained_cells": 0,
+                "lost_cells": 9904,
+                "change_percent_vs_nominal": -27.132017
+              }
+            },
+            {
+              "requested_route_fraction": 0.5,
+              "cell": [
+                126,
+                150
+              ],
+              "distance_m": 622.724963,
+              "nominal_spent_j": 144412.838036,
+              "app_ring": {
+                "cells": 21536,
+                "area_m2": 1378304,
+                "gained_cells": 0,
+                "lost_cells": 12304,
+                "change_percent_vs_nominal": -36.359338
+              },
+              "known_hazards_ring_audit": {
+                "cells": 20101,
+                "area_m2": 1286464,
+                "gained_cells": 0,
+                "lost_cells": 11016,
+                "change_percent_vs_nominal": -35.40187
+              }
+            },
+            {
+              "requested_route_fraction": 0.75,
+              "cell": [
+                114,
+                184
+              ],
+              "distance_m": 934.489465,
+              "nominal_spent_j": 267463.745256,
+              "app_ring": {
+                "cells": 6597,
+                "area_m2": 422208,
+                "gained_cells": 0,
+                "lost_cells": 13726,
+                "change_percent_vs_nominal": -67.539241
+              },
+              "known_hazards_ring_audit": {
+                "cells": 6236,
+                "area_m2": 399104,
+                "gained_cells": 0,
+                "lost_cells": 12803,
+                "change_percent_vs_nominal": -67.246179
+              }
+            },
+            {
+              "requested_route_fraction": 1,
+              "cell": [
+                105,
+                161
+              ],
+              "distance_m": 1243.508801,
+              "nominal_spent_j": 334746.283889,
+              "app_ring": {
+                "cells": 872,
+                "area_m2": 55808,
+                "gained_cells": 0,
+                "lost_cells": 10904,
+                "change_percent_vs_nominal": -92.595109
+              },
+              "known_hazards_ring_audit": {
+                "cells": 841,
+                "area_m2": 53824,
+                "gained_cells": 0,
+                "lost_cells": 10143,
+                "change_percent_vs_nominal": -92.343409
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "app_return_lookup_audit": {
+      "maximum_underestimate_j_on_route": 1900.271133,
+      "maximum_overestimate_j_on_route": 875.493316
+    },
+    "nominal_audited_profile": [
+      {
+        "cell": [
+          105,
+          161
+        ],
+        "distance_m": 0,
+        "nominal_spent_j": 0,
+        "energy_left_j": 600000,
+        "return_j": 0,
+        "margin_after_reserve_j": 480000
+      },
+      {
+        "cell": [
+          105,
+          160
+        ],
+        "distance_m": 8,
+        "nominal_spent_j": 2174.721921,
+        "energy_left_j": 597825.278079,
+        "return_j": 1537.097248,
+        "margin_after_reserve_j": 476288.180832
+      },
+      {
+        "cell": [
+          104,
+          159
+        ],
+        "distance_m": 19.313708,
+        "nominal_spent_j": 5081.161278,
+        "energy_left_j": 594918.838722,
+        "return_j": 3624.237736,
+        "margin_after_reserve_j": 471294.600986
+      },
+      {
+        "cell": [
+          103,
+          158
+        ],
+        "distance_m": 30.627417,
+        "nominal_spent_j": 7254.945052,
+        "energy_left_j": 592745.054948,
+        "return_j": 9643.402027,
+        "margin_after_reserve_j": 463101.652921
+      },
+      {
+        "cell": [
+          104,
+          158
+        ],
+        "distance_m": 38.627417,
+        "nominal_spent_j": 8792.0423,
+        "energy_left_j": 591207.9577,
+        "return_j": 8543.043726,
+        "margin_after_reserve_j": 462664.913974
+      },
+      {
+        "cell": [
+          105,
+          158
+        ],
+        "distance_m": 46.627417,
+        "nominal_spent_j": 10329.139547,
+        "energy_left_j": 589670.860453,
+        "return_j": 10607.325464,
+        "margin_after_reserve_j": 459063.534989
+      },
+      {
+        "cell": [
+          106,
+          158
+        ],
+        "distance_m": 54.627417,
+        "nominal_spent_j": 11866.236795,
+        "energy_left_j": 588133.763205,
+        "return_j": 13572.701157,
+        "margin_after_reserve_j": 454561.062048
+      },
+      {
+        "cell": [
+          107,
+          157
+        ],
+        "distance_m": 65.941125,
+        "nominal_spent_j": 14040.020569,
+        "energy_left_j": 585959.979431,
+        "return_j": 20169.12828,
+        "margin_after_reserve_j": 445790.851151
+      },
+      {
+        "cell": [
+          108,
+          156
+        ],
+        "distance_m": 77.254834,
+        "nominal_spent_j": 17080.237203,
+        "energy_left_j": 582919.762797,
+        "return_j": 23183.195095,
+        "margin_after_reserve_j": 439736.567702
+      },
+      {
+        "cell": [
+          109,
+          155
+        ],
+        "distance_m": 88.568542,
+        "nominal_spent_j": 19167.377692,
+        "energy_left_j": 580832.622308,
+        "return_j": 27615.958048,
+        "margin_after_reserve_j": 433216.66426
+      },
+      {
+        "cell": [
+          109,
+          154
+        ],
+        "distance_m": 96.568542,
+        "nominal_spent_j": 20716.472127,
+        "energy_left_j": 579283.527873,
+        "return_j": 29091.789241,
+        "margin_after_reserve_j": 430191.738631
+      },
+      {
+        "cell": [
+          110,
+          153
+        ],
+        "distance_m": 107.882251,
+        "nominal_spent_j": 23756.688761,
+        "energy_left_j": 576243.311239,
+        "return_j": 31446.490609,
+        "margin_after_reserve_j": 424796.82063
+      },
+      {
+        "cell": [
+          111,
+          152
+        ],
+        "distance_m": 119.195959,
+        "nominal_spent_j": 26796.905395,
+        "energy_left_j": 573203.094605,
+        "return_j": 35373.539373,
+        "margin_after_reserve_j": 417829.555232
+      },
+      {
+        "cell": [
+          112,
+          151
+        ],
+        "distance_m": 130.509668,
+        "nominal_spent_j": 29837.122029,
+        "energy_left_j": 570162.877971,
+        "return_j": 39038.569553,
+        "margin_after_reserve_j": 411124.308418
+      },
+      {
+        "cell": [
+          113,
+          150
+        ],
+        "distance_m": 141.823376,
+        "nominal_spent_j": 32877.338663,
+        "energy_left_j": 567122.661337,
+        "return_j": 41974.838188,
+        "margin_after_reserve_j": 405147.823149
+      },
+      {
+        "cell": [
+          114,
+          149
+        ],
+        "distance_m": 153.137085,
+        "nominal_spent_j": 35917.555297,
+        "energy_left_j": 564082.444703,
+        "return_j": 46790.882626,
+        "margin_after_reserve_j": 397291.562077
+      },
+      {
+        "cell": [
+          115,
+          148
+        ],
+        "distance_m": 164.450793,
+        "nominal_spent_j": 38091.339072,
+        "energy_left_j": 561908.660928,
+        "return_j": 50450.415912,
+        "margin_after_reserve_j": 391458.245016
+      },
+      {
+        "cell": [
+          116,
+          147
+        ],
+        "distance_m": 175.764502,
+        "nominal_spent_j": 40265.122846,
+        "energy_left_j": 559734.877154,
+        "return_j": 52357.408092,
+        "margin_after_reserve_j": 387377.469062
+      },
+      {
+        "cell": [
+          117,
+          146
+        ],
+        "distance_m": 187.07821,
+        "nominal_spent_j": 42438.906621,
+        "energy_left_j": 557561.093379,
+        "return_j": 56100.424044,
+        "margin_after_reserve_j": 381460.669336
+      },
+      {
+        "cell": [
+          117,
+          145
+        ],
+        "distance_m": 195.07821,
+        "nominal_spent_j": 44588.664419,
+        "energy_left_j": 555411.335581,
+        "return_j": 58863.633895,
+        "margin_after_reserve_j": 376547.701686
+      },
+      {
+        "cell": [
+          118,
+          144
+        ],
+        "distance_m": 206.391919,
+        "nominal_spent_j": 47898.645551,
+        "energy_left_j": 552101.354449,
+        "return_j": 61903.850529,
+        "margin_after_reserve_j": 370197.50392
+      },
+      {
+        "cell": [
+          119,
+          143
+        ],
+        "distance_m": 217.705627,
+        "nominal_spent_j": 50072.429325,
+        "energy_left_j": 549927.570675,
+        "return_j": 64438.15893,
+        "margin_after_reserve_j": 365489.411745
+      },
+      {
+        "cell": [
+          120,
+          142
+        ],
+        "distance_m": 229.019336,
+        "nominal_spent_j": 52246.213099,
+        "energy_left_j": 547753.786901,
+        "return_j": 67459.903946,
+        "margin_after_reserve_j": 360293.882955
+      },
+      {
+        "cell": [
+          121,
+          142
+        ],
+        "distance_m": 237.019336,
+        "nominal_spent_j": 54395.970898,
+        "energy_left_j": 545604.029102,
+        "return_j": 69158.381177,
+        "margin_after_reserve_j": 356445.647925
+      },
+      {
+        "cell": [
+          122,
+          141
+        ],
+        "distance_m": 248.333044,
+        "nominal_spent_j": 57385.083562,
+        "energy_left_j": 542614.916438,
+        "return_j": 72198.597811,
+        "margin_after_reserve_j": 350416.318627
+      },
+      {
+        "cell": [
+          123,
+          140
+        ],
+        "distance_m": 259.646753,
+        "nominal_spent_j": 60425.300196,
+        "energy_left_j": 539574.699804,
+        "return_j": 74678.069933,
+        "margin_after_reserve_j": 344896.629871
+      },
+      {
+        "cell": [
+          124,
+          139
+        ],
+        "distance_m": 270.960461,
+        "nominal_spent_j": 62599.08397,
+        "energy_left_j": 537400.91603,
+        "return_j": 77969.075472,
+        "margin_after_reserve_j": 339431.840558
+      },
+      {
+        "cell": [
+          125,
+          138
+        ],
+        "distance_m": 282.27417,
+        "nominal_spent_j": 66356.976435,
+        "energy_left_j": 533643.023565,
+        "return_j": 79679.767793,
+        "margin_after_reserve_j": 333963.255772
+      },
+      {
+        "cell": [
+          126,
+          137
+        ],
+        "distance_m": 293.587878,
+        "nominal_spent_j": 68530.76021,
+        "energy_left_j": 531469.23979,
+        "return_j": 82026.311073,
+        "margin_after_reserve_j": 329442.928717
+      },
+      {
+        "cell": [
+          127,
+          136
+        ],
+        "distance_m": 304.901587,
+        "nominal_spent_j": 70704.543984,
+        "energy_left_j": 529295.456016,
+        "return_j": 84791.796155,
+        "margin_after_reserve_j": 324503.659861
+      },
+      {
+        "cell": [
+          127,
+          135
+        ],
+        "distance_m": 312.901587,
+        "nominal_spent_j": 72513.257566,
+        "energy_left_j": 527486.742434,
+        "return_j": 86328.893403,
+        "margin_after_reserve_j": 321157.849032
+      },
+      {
+        "cell": [
+          128,
+          134
+        ],
+        "distance_m": 324.215295,
+        "nominal_spent_j": 74687.04134,
+        "energy_left_j": 525312.95866,
+        "return_j": 88553.065366,
+        "margin_after_reserve_j": 316759.893294
+      },
+      {
+        "cell": [
+          128,
+          133
+        ],
+        "distance_m": 332.215295,
+        "nominal_spent_j": 76224.138588,
+        "energy_left_j": 523775.861412,
+        "return_j": 90608.441131,
+        "margin_after_reserve_j": 313167.420281
+      },
+      {
+        "cell": [
+          128,
+          132
+        ],
+        "distance_m": 340.215295,
+        "nominal_spent_j": 77761.235836,
+        "energy_left_j": 522238.764164,
+        "return_j": 92229.038807,
+        "margin_after_reserve_j": 310009.725357
+      },
+      {
+        "cell": [
+          128,
+          131
+        ],
+        "distance_m": 348.215295,
+        "nominal_spent_j": 79298.333083,
+        "energy_left_j": 520701.666917,
+        "return_j": 94035.832839,
+        "margin_after_reserve_j": 306665.834078
+      },
+      {
+        "cell": [
+          129,
+          130
+        ],
+        "distance_m": 359.529004,
+        "nominal_spent_j": 81472.116858,
+        "energy_left_j": 518527.883142,
+        "return_j": 97468.841455,
+        "margin_after_reserve_j": 301059.041687
+      },
+      {
+        "cell": [
+          130,
+          129
+        ],
+        "distance_m": 370.842712,
+        "nominal_spent_j": 83645.900632,
+        "energy_left_j": 516354.099368,
+        "return_j": 100103.317245,
+        "margin_after_reserve_j": 296250.782123
+      },
+      {
+        "cell": [
+          130,
+          128
+        ],
+        "distance_m": 378.842712,
+        "nominal_spent_j": 85182.99788,
+        "energy_left_j": 514817.00212,
+        "return_j": 103019.611214,
+        "margin_after_reserve_j": 291797.390906
+      },
+      {
+        "cell": [
+          131,
+          127
+        ],
+        "distance_m": 390.156421,
+        "nominal_spent_j": 87356.781654,
+        "energy_left_j": 512643.218346,
+        "return_j": 105957.855802,
+        "margin_after_reserve_j": 286685.362544
+      },
+      {
+        "cell": [
+          132,
+          126
+        ],
+        "distance_m": 401.470129,
+        "nominal_spent_j": 89530.565429,
+        "energy_left_j": 510469.434571,
+        "return_j": 110206.193308,
+        "margin_after_reserve_j": 280263.241263
+      },
+      {
+        "cell": [
+          132,
+          127
+        ],
+        "distance_m": 409.470129,
+        "nominal_spent_j": 92479.011861,
+        "energy_left_j": 507520.988139,
+        "return_j": 107257.746876,
+        "margin_after_reserve_j": 280263.241263
+      },
+      {
+        "cell": [
+          131,
+          128
+        ],
+        "distance_m": 420.783838,
+        "nominal_spent_j": 95564.581916,
+        "energy_left_j": 504435.418084,
+        "return_j": 104172.176821,
+        "margin_after_reserve_j": 280263.241263
+      },
+      {
+        "cell": [
+          130,
+          129
+        ],
+        "distance_m": 432.097546,
+        "nominal_spent_j": 99633.441492,
+        "energy_left_j": 500366.558508,
+        "return_j": 100103.317245,
+        "margin_after_reserve_j": 280263.241263
+      },
+      {
+        "cell": [
+          130,
+          130
+        ],
+        "distance_m": 440.097546,
+        "nominal_spent_j": 101386.008234,
+        "energy_left_j": 498613.991766,
+        "return_j": 98350.750503,
+        "margin_after_reserve_j": 280263.241263
+      },
+      {
+        "cell": [
+          129,
+          131
+        ],
+        "distance_m": 451.411255,
+        "nominal_spent_j": 104350.646635,
+        "energy_left_j": 495649.353365,
+        "return_j": 95386.112102,
+        "margin_after_reserve_j": 280263.241263
+      },
+      {
+        "cell": [
+          128,
+          132
+        ],
+        "distance_m": 462.724963,
+        "nominal_spent_j": 107507.71993,
+        "energy_left_j": 492492.28007,
+        "return_j": 92229.038807,
+        "margin_after_reserve_j": 280263.241263
+      },
+      {
+        "cell": [
+          128,
+          133
+        ],
+        "distance_m": 470.724963,
+        "nominal_spent_j": 109128.317606,
+        "energy_left_j": 490871.682394,
+        "return_j": 90608.441131,
+        "margin_after_reserve_j": 280263.241263
+      },
+      {
+        "cell": [
+          128,
+          134
+        ],
+        "distance_m": 478.724963,
+        "nominal_spent_j": 111183.693371,
+        "energy_left_j": 488816.306629,
+        "return_j": 88553.065366,
+        "margin_after_reserve_j": 280263.241263
+      },
+      {
+        "cell": [
+          127,
+          135
+        ],
+        "distance_m": 490.038672,
+        "nominal_spent_j": 113407.865335,
+        "energy_left_j": 486592.134665,
+        "return_j": 86328.893403,
+        "margin_after_reserve_j": 280263.241263
+      },
+      {
+        "cell": [
+          127,
+          136
+        ],
+        "distance_m": 498.038672,
+        "nominal_spent_j": 114944.962582,
+        "energy_left_j": 485055.037418,
+        "return_j": 84791.796155,
+        "margin_after_reserve_j": 280263.241263
+      },
+      {
+        "cell": [
+          126,
+          137
+        ],
+        "distance_m": 509.35238,
+        "nominal_spent_j": 117710.447664,
+        "energy_left_j": 482289.552336,
+        "return_j": 82026.311073,
+        "margin_after_reserve_j": 280263.241263
+      },
+      {
+        "cell": [
+          125,
+          138
+        ],
+        "distance_m": 520.666089,
+        "nominal_spent_j": 120056.990944,
+        "energy_left_j": 479943.009056,
+        "return_j": 79679.767793,
+        "margin_after_reserve_j": 280263.241263
+      },
+      {
+        "cell": [
+          125,
+          139
+        ],
+        "distance_m": 528.666089,
+        "nominal_spent_j": 121594.088192,
+        "energy_left_j": 478405.911808,
+        "return_j": 78142.670545,
+        "margin_after_reserve_j": 280263.241263
+      },
+      {
+        "cell": [
+          124,
+          140
+        ],
+        "distance_m": 539.979797,
+        "nominal_spent_j": 124248.23937,
+        "energy_left_j": 475751.76063,
+        "return_j": 75488.519367,
+        "margin_after_reserve_j": 280263.241263
+      },
+      {
+        "cell": [
+          123,
+          141
+        ],
+        "distance_m": 551.293506,
+        "nominal_spent_j": 127817.073916,
+        "energy_left_j": 472182.926084,
+        "return_j": 71919.684821,
+        "margin_after_reserve_j": 280263.241263
+      },
+      {
+        "cell": [
+          123,
+          142
+        ],
+        "distance_m": 559.293506,
+        "nominal_spent_j": 130172.859266,
+        "energy_left_j": 469827.140734,
+        "return_j": 69563.899471,
+        "margin_after_reserve_j": 280263.241263
+      },
+      {
+        "cell": [
+          122,
+          143
+        ],
+        "distance_m": 570.607214,
+        "nominal_spent_j": 132491.569071,
+        "energy_left_j": 467508.430929,
+        "return_j": 67245.189667,
+        "margin_after_reserve_j": 280263.241263
+      },
+      {
+        "cell": [
+          122,
+          144
+        ],
+        "distance_m": 578.607214,
+        "nominal_spent_j": 134641.326869,
+        "energy_left_j": 465358.673131,
+        "return_j": 65095.431868,
+        "margin_after_reserve_j": 280263.241263
+      },
+      {
+        "cell": [
+          121,
+          145
+        ],
+        "distance_m": 589.920923,
+        "nominal_spent_j": 136815.110643,
+        "energy_left_j": 463184.889357,
+        "return_j": 62921.648094,
+        "margin_after_reserve_j": 280263.241263
+      },
+      {
+        "cell": [
+          120,
+          146
+        ],
+        "distance_m": 601.234631,
+        "nominal_spent_j": 141059.129162,
+        "energy_left_j": 458940.870838,
+        "return_j": 58677.629575,
+        "margin_after_reserve_j": 280263.241263
+      },
+      {
+        "cell": [
+          119,
+          147
+        ],
+        "distance_m": 612.54834,
+        "nominal_spent_j": 143232.912936,
+        "energy_left_j": 456767.087064,
+        "return_j": 56503.845801,
+        "margin_after_reserve_j": 280263.241263
+      },
+      {
+        "cell": [
+          118,
+          148
+        ],
+        "distance_m": 623.862048,
+        "nominal_spent_j": 147875.238094,
+        "energy_left_j": 452124.761906,
+        "return_j": 51861.520643,
+        "margin_after_reserve_j": 280263.241263
+      },
+      {
+        "cell": [
+          117,
+          149
+        ],
+        "distance_m": 635.175757,
+        "nominal_spent_j": 152058.614505,
+        "energy_left_j": 447941.385495,
+        "return_j": 47678.144232,
+        "margin_after_reserve_j": 280263.241263
+      },
+      {
+        "cell": [
+          117,
+          150
+        ],
+        "distance_m": 643.175757,
+        "nominal_spent_j": 153595.711753,
+        "energy_left_j": 446404.288247,
+        "return_j": 46869.222648,
+        "margin_after_reserve_j": 279535.065599
+      },
+      {
+        "cell": [
+          117,
+          151
+        ],
+        "distance_m": 651.175757,
+        "nominal_spent_j": 156577.270424,
+        "energy_left_j": 443422.729576,
+        "return_j": 44549.746794,
+        "margin_after_reserve_j": 278872.982782
+      },
+      {
+        "cell": [
+          117,
+          152
+        ],
+        "distance_m": 659.175757,
+        "nominal_spent_j": 159891.391144,
+        "energy_left_j": 440108.608856,
+        "return_j": 41235.626074,
+        "margin_after_reserve_j": 278872.982782
+      },
+      {
+        "cell": [
+          117,
+          153
+        ],
+        "distance_m": 667.175757,
+        "nominal_spent_j": 162214.544143,
+        "energy_left_j": 437785.455857,
+        "return_j": 40125.035712,
+        "margin_after_reserve_j": 277660.420145
+      },
+      {
+        "cell": [
+          117,
+          154
+        ],
+        "distance_m": 675.175757,
+        "nominal_spent_j": 164156.186567,
+        "energy_left_j": 435843.813433,
+        "return_j": 38462.263358,
+        "margin_after_reserve_j": 277381.550075
+      },
+      {
+        "cell": [
+          117,
+          155
+        ],
+        "distance_m": 683.175757,
+        "nominal_spent_j": 167396.884497,
+        "energy_left_j": 432603.115503,
+        "return_j": 36154.477622,
+        "margin_after_reserve_j": 276448.637881
+      },
+      {
+        "cell": [
+          117,
+          156
+        ],
+        "distance_m": 691.175757,
+        "nominal_spent_j": 169200.799203,
+        "energy_left_j": 430799.200797,
+        "return_j": 35354.216232,
+        "margin_after_reserve_j": 275444.984565
+      },
+      {
+        "cell": [
+          118,
+          157
+        ],
+        "distance_m": 702.489465,
+        "nominal_spent_j": 173179.439926,
+        "energy_left_j": 426820.560074,
+        "return_j": 36535.626638,
+        "margin_after_reserve_j": 270284.933436
+      },
+      {
+        "cell": [
+          118,
+          158
+        ],
+        "distance_m": 710.489465,
+        "nominal_spent_j": 176843.878533,
+        "energy_left_j": 423156.121467,
+        "return_j": 32871.188031,
+        "margin_after_reserve_j": 270284.933436
+      },
+      {
+        "cell": [
+          117,
+          159
+        ],
+        "distance_m": 721.803174,
+        "nominal_spent_j": 178931.019021,
+        "energy_left_j": 421068.980979,
+        "return_j": 30784.047543,
+        "margin_after_reserve_j": 270284.933436
+      },
+      {
+        "cell": [
+          117,
+          160
+        ],
+        "distance_m": 729.803174,
+        "nominal_spent_j": 181340.963105,
+        "energy_left_j": 418659.036895,
+        "return_j": 29255.632127,
+        "margin_after_reserve_j": 269403.404767
+      },
+      {
+        "cell": [
+          116,
+          161
+        ],
+        "distance_m": 741.116882,
+        "nominal_spent_j": 183514.74688,
+        "energy_left_j": 416485.25312,
+        "return_j": 27081.848353,
+        "margin_after_reserve_j": 269403.404767
+      },
+      {
+        "cell": [
+          116,
+          162
+        ],
+        "distance_m": 749.116882,
+        "nominal_spent_j": 189301.713013,
+        "energy_left_j": 410698.286987,
+        "return_j": 26352.295121,
+        "margin_after_reserve_j": 264345.991866
+      },
+      {
+        "cell": [
+          115,
+          163
+        ],
+        "distance_m": 760.430591,
+        "nominal_spent_j": 194582.768454,
+        "energy_left_j": 405417.231546,
+        "return_j": 23638.255924,
+        "margin_after_reserve_j": 261778.975622
+      },
+      {
+        "cell": [
+          115,
+          164
+        ],
+        "distance_m": 768.430591,
+        "nominal_spent_j": 196076.486363,
+        "energy_left_j": 403923.513637,
+        "return_j": 22981.894009,
+        "margin_after_reserve_j": 260941.619628
+      },
+      {
+        "cell": [
+          115,
+          165
+        ],
+        "distance_m": 776.430591,
+        "nominal_spent_j": 198440.429801,
+        "energy_left_j": 401559.570199,
+        "return_j": 23216.786112,
+        "margin_after_reserve_j": 258342.784087
+      },
+      {
+        "cell": [
+          115,
+          166
+        ],
+        "distance_m": 784.430591,
+        "nominal_spent_j": 202830.458332,
+        "energy_left_j": 397169.541668,
+        "return_j": 21355.508542,
+        "margin_after_reserve_j": 255814.033126
+      },
+      {
+        "cell": [
+          115,
+          167
+        ],
+        "distance_m": 792.430591,
+        "nominal_spent_j": 208231.60986,
+        "energy_left_j": 391768.39014,
+        "return_j": 20446.233385,
+        "margin_after_reserve_j": 251322.156755
+      },
+      {
+        "cell": [
+          115,
+          168
+        ],
+        "distance_m": 800.430591,
+        "nominal_spent_j": 210544.190376,
+        "energy_left_j": 389455.809624,
+        "return_j": 21082.919912,
+        "margin_after_reserve_j": 248372.889713
+      },
+      {
+        "cell": [
+          114,
+          169
+        ],
+        "distance_m": 811.744299,
+        "nominal_spent_j": 213529.943828,
+        "energy_left_j": 386470.056172,
+        "return_j": 21272.33374,
+        "margin_after_reserve_j": 245197.722433
+      },
+      {
+        "cell": [
+          114,
+          170
+        ],
+        "distance_m": 819.744299,
+        "nominal_spent_j": 216975.058882,
+        "energy_left_j": 383024.941118,
+        "return_j": 21090.332164,
+        "margin_after_reserve_j": 241934.608954
+      },
+      {
+        "cell": [
+          114,
+          171
+        ],
+        "distance_m": 827.744299,
+        "nominal_spent_j": 221777.310789,
+        "energy_left_j": 378222.689211,
+        "return_j": 21050.019607,
+        "margin_after_reserve_j": 237172.669603
+      },
+      {
+        "cell": [
+          114,
+          172
+        ],
+        "distance_m": 835.744299,
+        "nominal_spent_j": 225386.082444,
+        "energy_left_j": 374613.917556,
+        "return_j": 22587.116855,
+        "margin_after_reserve_j": 232026.800701
+      },
+      {
+        "cell": [
+          114,
+          173
+        ],
+        "distance_m": 843.744299,
+        "nominal_spent_j": 228685.326651,
+        "energy_left_j": 371314.673349,
+        "return_j": 24124.214103,
+        "margin_after_reserve_j": 227190.459246
+      },
+      {
+        "cell": [
+          114,
+          174
+        ],
+        "distance_m": 851.744299,
+        "nominal_spent_j": 232914.592864,
+        "energy_left_j": 367085.407136,
+        "return_j": 25661.311351,
+        "margin_after_reserve_j": 221424.095785
+      },
+      {
+        "cell": [
+          114,
+          175
+        ],
+        "distance_m": 859.744299,
+        "nominal_spent_j": 236748.911652,
+        "energy_left_j": 363251.088348,
+        "return_j": 27198.408598,
+        "margin_after_reserve_j": 216052.67975
+      },
+      {
+        "cell": [
+          114,
+          176
+        ],
+        "distance_m": 867.744299,
+        "nominal_spent_j": 239306.249759,
+        "energy_left_j": 360693.750241,
+        "return_j": 28735.505846,
+        "margin_after_reserve_j": 211958.244395
+      },
+      {
+        "cell": [
+          114,
+          177
+        ],
+        "distance_m": 875.744299,
+        "nominal_spent_j": 242915.981189,
+        "energy_left_j": 357084.018811,
+        "return_j": 30272.603094,
+        "margin_after_reserve_j": 206811.415718
+      },
+      {
+        "cell": [
+          114,
+          178
+        ],
+        "distance_m": 883.744299,
+        "nominal_spent_j": 246888.507581,
+        "energy_left_j": 353111.492419,
+        "return_j": 31809.700341,
+        "margin_after_reserve_j": 201301.792078
+      },
+      {
+        "cell": [
+          113,
+          179
+        ],
+        "distance_m": 895.058008,
+        "nominal_spent_j": 250435.729426,
+        "energy_left_j": 349564.270574,
+        "return_j": 33983.484116,
+        "margin_after_reserve_j": 195580.786458
+      },
+      {
+        "cell": [
+          113,
+          180
+        ],
+        "distance_m": 903.058008,
+        "nominal_spent_j": 255901.170923,
+        "energy_left_j": 344098.829077,
+        "return_j": 35520.581364,
+        "margin_after_reserve_j": 188578.247713
+      },
+      {
+        "cell": [
+          112,
+          181
+        ],
+        "distance_m": 914.371716,
+        "nominal_spent_j": 260152.387755,
+        "energy_left_j": 339847.612245,
+        "return_j": 36013.331311,
+        "margin_after_reserve_j": 183834.280934
+      },
+      {
+        "cell": [
+          112,
+          182
+        ],
+        "distance_m": 922.371716,
+        "nominal_spent_j": 263176.176528,
+        "energy_left_j": 336823.823472,
+        "return_j": 37550.428559,
+        "margin_after_reserve_j": 179273.394913
+      },
+      {
+        "cell": [
+          113,
+          183
+        ],
+        "distance_m": 933.685425,
+        "nominal_spent_j": 265349.960302,
+        "energy_left_j": 334650.039698,
+        "return_j": 39969.914742,
+        "margin_after_reserve_j": 174680.124956
+      },
+      {
+        "cell": [
+          113,
+          184
+        ],
+        "distance_m": 941.685425,
+        "nominal_spent_j": 266887.05755,
+        "energy_left_j": 333112.94245,
+        "return_j": 41513.250527,
+        "margin_after_reserve_j": 171599.691923
+      },
+      {
+        "cell": [
+          113,
+          185
+        ],
+        "distance_m": 949.685425,
+        "nominal_spent_j": 270213.655345,
+        "energy_left_j": 329786.344655,
+        "return_j": 43050.347775,
+        "margin_after_reserve_j": 166735.99688
+      },
+      {
+        "cell": [
+          113,
+          186
+        ],
+        "distance_m": 957.685425,
+        "nominal_spent_j": 274482.272335,
+        "energy_left_j": 325517.727665,
+        "return_j": 44587.445023,
+        "margin_after_reserve_j": 160930.282643
+      },
+      {
+        "cell": [
+          113,
+          187
+        ],
+        "distance_m": 965.685425,
+        "nominal_spent_j": 279702.026381,
+        "energy_left_j": 320297.973619,
+        "return_j": 45136.512988,
+        "margin_after_reserve_j": 155161.460631
+      },
+      {
+        "cell": [
+          112,
+          186
+        ],
+        "distance_m": 976.999133,
+        "nominal_spent_j": 281875.810155,
+        "energy_left_j": 318124.189845,
+        "return_j": 42962.729214,
+        "margin_after_reserve_j": 155161.460631
+      },
+      {
+        "cell": [
+          112,
+          185
+        ],
+        "distance_m": 984.999133,
+        "nominal_spent_j": 283351.641348,
+        "energy_left_j": 316648.358652,
+        "return_j": 41486.898021,
+        "margin_after_reserve_j": 155161.460631
+      },
+      {
+        "cell": [
+          111,
+          184
+        ],
+        "distance_m": 996.312842,
+        "nominal_spent_j": 285525.425123,
+        "energy_left_j": 314474.574877,
+        "return_j": 39313.114247,
+        "margin_after_reserve_j": 155161.460631
+      },
+      {
+        "cell": [
+          111,
+          183
+        ],
+        "distance_m": 1004.312842,
+        "nominal_spent_j": 287062.52237,
+        "energy_left_j": 312937.47763,
+        "return_j": 37776.016999,
+        "margin_after_reserve_j": 155161.460631
+      },
+      {
+        "cell": [
+          110,
+          182
+        ],
+        "distance_m": 1015.62655,
+        "nominal_spent_j": 289236.306145,
+        "energy_left_j": 310763.693855,
+        "return_j": 35602.233224,
+        "margin_after_reserve_j": 155161.460631
+      },
+      {
+        "cell": [
+          110,
+          181
+        ],
+        "distance_m": 1023.62655,
+        "nominal_spent_j": 290773.403392,
+        "energy_left_j": 309226.596608,
+        "return_j": 34065.135977,
+        "margin_after_reserve_j": 155161.460631
+      },
+      {
+        "cell": [
+          110,
+          180
+        ],
+        "distance_m": 1031.62655,
+        "nominal_spent_j": 292310.50064,
+        "energy_left_j": 307689.49936,
+        "return_j": 32528.038729,
+        "margin_after_reserve_j": 155161.460631
+      },
+      {
+        "cell": [
+          109,
+          179
+        ],
+        "distance_m": 1042.940259,
+        "nominal_spent_j": 294484.284414,
+        "energy_left_j": 305515.715586,
+        "return_j": 30354.254955,
+        "margin_after_reserve_j": 155161.460631
+      },
+      {
+        "cell": [
+          108,
+          178
+        ],
+        "distance_m": 1054.253967,
+        "nominal_spent_j": 296658.068189,
+        "energy_left_j": 303341.931811,
+        "return_j": 28241.737235,
+        "margin_after_reserve_j": 155100.194576
+      },
+      {
+        "cell": [
+          107,
+          177
+        ],
+        "distance_m": 1065.567676,
+        "nominal_spent_j": 298831.851963,
+        "energy_left_j": 301168.148037,
+        "return_j": 26470.042392,
+        "margin_after_reserve_j": 154698.105645
+      },
+      {
+        "cell": [
+          107,
+          176
+        ],
+        "distance_m": 1073.567676,
+        "nominal_spent_j": 300745.660911,
+        "energy_left_j": 299254.339089,
+        "return_j": 24556.233444,
+        "margin_after_reserve_j": 154698.105645
+      },
+      {
+        "cell": [
+          106,
+          175
+        ],
+        "distance_m": 1084.881384,
+        "nominal_spent_j": 302919.444685,
+        "energy_left_j": 297080.555315,
+        "return_j": 23655.822723,
+        "margin_after_reserve_j": 153424.732591
+      },
+      {
+        "cell": [
+          105,
+          174
+        ],
+        "distance_m": 1096.195093,
+        "nominal_spent_j": 305093.22846,
+        "energy_left_j": 294906.77154,
+        "return_j": 22294.4577,
+        "margin_after_reserve_j": 152612.31384
+      },
+      {
+        "cell": [
+          104,
+          173
+        ],
+        "distance_m": 1107.508801,
+        "nominal_spent_j": 307267.012234,
+        "energy_left_j": 292732.987766,
+        "return_j": 20120.673926,
+        "margin_after_reserve_j": 152612.31384
+      },
+      {
+        "cell": [
+          104,
+          172
+        ],
+        "distance_m": 1115.508801,
+        "nominal_spent_j": 308804.109482,
+        "energy_left_j": 291195.890518,
+        "return_j": 18583.576678,
+        "margin_after_reserve_j": 152612.31384
+      },
+      {
+        "cell": [
+          104,
+          171
+        ],
+        "distance_m": 1123.508801,
+        "nominal_spent_j": 310341.20673,
+        "energy_left_j": 289658.79327,
+        "return_j": 17046.47943,
+        "margin_after_reserve_j": 152612.31384
+      },
+      {
+        "cell": [
+          104,
+          170
+        ],
+        "distance_m": 1131.508801,
+        "nominal_spent_j": 311878.303977,
+        "energy_left_j": 288121.696023,
+        "return_j": 15509.382182,
+        "margin_after_reserve_j": 152612.31384
+      },
+      {
+        "cell": [
+          103,
+          169
+        ],
+        "distance_m": 1142.82251,
+        "nominal_spent_j": 314052.087752,
+        "energy_left_j": 285947.912248,
+        "return_j": 13335.598408,
+        "margin_after_reserve_j": 152612.31384
+      },
+      {
+        "cell": [
+          103,
+          168
+        ],
+        "distance_m": 1150.82251,
+        "nominal_spent_j": 315589.184999,
+        "energy_left_j": 284410.815001,
+        "return_j": 11798.50116,
+        "margin_after_reserve_j": 152612.31384
+      },
+      {
+        "cell": [
+          102,
+          167
+        ],
+        "distance_m": 1162.136218,
+        "nominal_spent_j": 317762.968774,
+        "energy_left_j": 282237.031226,
+        "return_j": 11010.110956,
+        "margin_after_reserve_j": 151226.92027
+      },
+      {
+        "cell": [
+          101,
+          166
+        ],
+        "distance_m": 1173.449927,
+        "nominal_spent_j": 319936.752548,
+        "energy_left_j": 280063.247452,
+        "return_j": 10145.589059,
+        "margin_after_reserve_j": 149917.658392
+      },
+      {
+        "cell": [
+          100,
+          165
+        ],
+        "distance_m": 1184.763635,
+        "nominal_spent_j": 322110.536323,
+        "energy_left_j": 277889.463677,
+        "return_j": 10232.232345,
+        "margin_after_reserve_j": 147657.231332
+      },
+      {
+        "cell": [
+          100,
+          164
+        ],
+        "distance_m": 1192.763635,
+        "nominal_spent_j": 323647.63357,
+        "energy_left_j": 276352.36643,
+        "return_j": 9595.545819,
+        "margin_after_reserve_j": 146756.820611
+      },
+      {
+        "cell": [
+          100,
+          163
+        ],
+        "distance_m": 1200.763635,
+        "nominal_spent_j": 325184.730818,
+        "energy_left_j": 274815.269182,
+        "return_j": 8872.216006,
+        "margin_after_reserve_j": 145943.053176
+      },
+      {
+        "cell": [
+          101,
+          162
+        ],
+        "distance_m": 1212.077344,
+        "nominal_spent_j": 327358.514592,
+        "energy_left_j": 272641.485408,
+        "return_j": 6698.432232,
+        "margin_after_reserve_j": 145943.053176
+      },
+      {
+        "cell": [
+          102,
+          161
+        ],
+        "distance_m": 1223.391052,
+        "nominal_spent_j": 329445.655081,
+        "energy_left_j": 270554.344919,
+        "return_j": 4611.291743,
+        "margin_after_reserve_j": 145943.053176
+      },
+      {
+        "cell": [
+          103,
+          161
+        ],
+        "distance_m": 1231.391052,
+        "nominal_spent_j": 330982.752329,
+        "energy_left_j": 269017.247671,
+        "return_j": 3074.194495,
+        "margin_after_reserve_j": 145943.053176
+      },
+      {
+        "cell": [
+          104,
+          161
+        ],
+        "distance_m": 1239.391052,
+        "nominal_spent_j": 332519.849576,
+        "energy_left_j": 267480.150424,
+        "return_j": 1537.097248,
+        "margin_after_reserve_j": 145943.053176
+      },
+      {
+        "cell": [
+          105,
+          161
+        ],
+        "distance_m": 1247.391052,
+        "nominal_spent_j": 334056.946824,
+        "energy_left_j": 265943.053176,
+        "return_j": 0,
+        "margin_after_reserve_j": 145943.053176
+      }
+    ]
+  },
+  "vision_evidence": {
+    "rocks": {
+      "method": "NASA/JPL ROSCO + human positive review; no new network trained for R3",
+      "review_counts": {
+        "accepted": 23,
+        "uncertain": 2
+      },
+      "review_complete": true,
+      "accepted_points": 23,
+      "occupied_point_cells": 22,
+      "clearance_cells": 180,
+      "total_world_hazard_cells": 1143,
+      "selected_proposal_agreement": {
+        "accepted": 23,
+        "resolved": 23,
+        "fraction": 1,
+        "meaning": "Human acceptance among resolved frozen proposals; excludes uncertainty; not recall or held-out accuracy"
+      },
+      "mosaic_review_counts": {
+        "uncertain": 16,
+        "accepted": 31,
+        "rejected": 3
+      },
+      "mosaic_reference_matches": 0,
+      "precision": null,
+      "recall": null
+    },
+    "terrain": {
+      "architecture": "Frozen ImageNet MobileNetV3-small features + trained 576x4 linear head; fixed unknown logit -100",
+      "train_patches": 1136,
+      "curiosity": {
+        "accuracy": 0.930818,
+        "balanced_accuracy_supported_classes": 0.926587,
+        "samples": 159,
+        "correct": 148,
+        "support_by_class": [
+          0,
+          84,
+          40,
+          35,
+          0
+        ]
+      },
+      "perseverance": {
+        "accuracy": 0.482234,
+        "balanced_accuracy_supported_classes": 0.412837,
+        "samples": 197,
+        "correct": 95,
+        "support_by_class": [
+          0,
+          123,
+          42,
+          29,
+          3
+        ]
+      },
+      "used_for_this_route": false,
+      "limitation": "Rover-photo classifier; not applied to orbital terrain. Curiosity test has zero big-rock examples. Perseverance transfer is poor."
+    },
+    "buddy": {
+      "placeholder": true,
+      "accuracy": null,
+      "limitation": "Not trained, not evaluated, not a navigation policy or terrain prediction."
+    }
+  },
+  "limitations": [
+    "Simulated walk and scout on real NASA-derived terrain, not an astronaut or drone field trial.",
+    "The energy model is an estimate; +/-30% is a chosen stress test, not a measured confidence interval.",
+    "A hazard cell can be a DTM estimate or padded reviewed point. Neither cell count nor route crossings are individual-rock detection accuracy.",
+    "Only one fixed site, budget and stop set; this is not evidence of universal navigation safety.",
+    "Unknown hazards may remain. New route crossings of the full stored layer are audited separately from discovered hazards.",
+    "The app switches to globally scouted return costs only on scanned cells; the report exposes differences from an independently recomputed known-hazard return field.",
+    "Classifier accuracy is reported with its sample sizes and transfer result; the placeholder buddy has no accuracy result."
+  ]
+}
