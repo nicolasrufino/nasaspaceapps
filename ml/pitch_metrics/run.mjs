@@ -78,7 +78,7 @@ export function buildReport(root = ROOT) {
       energy_error: 'Uniform 0.7/1.0/1.3 multiplier on BOTH spent walking energy and remaining return cost; initial budget/reserve and the nominal scouted route stay fixed.',
       ring: 'Cells whose return fits remaining energy minus reserve, as displayed by the app. Area is grid cells x cell area, not a circular radius or a complete outbound-and-return reachability claim.',
       margin_audit: 'Directed reverse shortest paths recomputed using only discovered hazards; app hybrid return lookup reported separately.',
-      scout: 'Shipped three-flight campaign with a re-plan after every flight. Spatial scans every 2 m plus endpoints; 30/60/120 fps must agree.' },
+      scout: 'Shipped three-flight campaign with a re-plan after every flight. Spatial scans every 2 m plus endpoints; 2/30/60/120 fps must agree.' },
     source_hash_convention: 'SHA256: raw binary; canonical sorted-key JSON; LF-normalized JS/MJS source',
     source_sha256: Object.fromEntries(files.map((p) => [p, fileHash(resolve(root, p))])),
     results: calculate(world, targets, reviewed),

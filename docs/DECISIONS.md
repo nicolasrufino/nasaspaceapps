@@ -6,6 +6,7 @@ One place for what the team decided, why, and what is still open. **Add a line h
 
 | Date | Decision | Why | Who | Where it lives |
 |---|---|---|---|---|
+| 2026-11-15 | **Flight playback uses elapsed time even below 10 fps** | The post-merge software-rendered browser check exposed discarded time in the smoothing clamp. Retain camera smoothing, scan every 2 m crossed, and include a 2 fps R5 replay; no weakened checks | Jules | #149; `app/src/main.js`, `ml/pitch_metrics/` |
 | 2026-11-15 | **F4: enforce three route-following flights with a re-plan after each landing** | Remove the five unused pipeline flights; scan every 2 m plus endpoints so frame rate cannot change the evidence. Gale: 3 flights, 5 stops, 0 stored hazard cells on the fully scanned final route. Transit/recharge/flight energy remain unmodelled | Jules | `app/src/scout.js`, `ml/exports/pitch_metrics.json`; #124 |
 | 2026-11-15 | **Unexplored ground is muted, not hidden:** the HiRISE picture at 40% colour and 82% brightness; full colour where flown, within 60 m of the habitat, and within 24 m of where the astronaut walked | A fully grey map lost the "real map" first impression; orbit data is known, just not confirmed up close | Nicolas (delegated to Claude) | `app/src/terrain.js` `REVEAL_GLSL` |
 | 2026-11-15 | **The map opens over the habitat** (about 500 m view), not over the whole 2 km | At true scale the whole slice makes people and the habitat invisible; the hero zone is around the base and stops | Nicolas (delegated to Claude) | `app/src/main.js` camera |
