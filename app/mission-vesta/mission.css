@@ -259,3 +259,8 @@ footer { padding: 2rem var(--gutter) 3rem; background: #000; color: #8f8b88; fon
 @media (prefers-reduced-motion: reduce) {
   .view img { transition: none; }
 }
+
+/* Demo call to action in the hero: opens the map screen on its Demo tab (a guided run: data, rules, plan, scout, walk, home). */
+.welcome a.demo-cta { display: inline-block; margin-top: 14px; padding: 10px 18px; border-radius: 999px; background: #f4f1ea; color: #111;
+  font-weight: 600; text-decoration: none; border: 0; }
+.welcome a.demo-cta:hover { background: #fff; }

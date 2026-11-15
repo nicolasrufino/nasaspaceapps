@@ -173,7 +173,7 @@
     </style>
     <!-- The guided mission mounts only after the world loads (initFlow at the end of src/main.js); until then the
          Vision panels would show for a moment. Same test as main.js's flowMode. -->
-    <script>if (!/[?&](vision|world|flags)(=|&|$)/.test(location.search)) document.documentElement.classList.add('flow-boot')</script>
+    <script>if (!/[?&](vision|world|flags|demo)(=|&|$)/.test(location.search)) document.documentElement.classList.add('flow-boot')</script>
     <style>html.flow-boot body:not(.flow) > * { visibility: hidden; }</style>
     <style>
       /* Vesta Vision (body.vision): no Walk, no route explanation, Scout look (app/src/flow/flow.css colours and type). */
