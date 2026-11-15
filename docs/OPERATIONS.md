@@ -36,7 +36,7 @@ Computed from the latitude and the Sun's seasonal swing of ±25°; to be checked
 | ~6:00 AM | Sunrise. Helicopters are charged and warm in the habitat dock. They can't fly yet: too dark to navigate, and the low Sun's long shadows hide rocks | — |
 | 7:00–9:30 AM | Crew picks tomorrow's science stops on the 2D map. The planner proposes flights, each with its reason (safer, more science, or easier). Crew approves; wind check | Crew + app |
 | **9:30 AM** | **All 3 helicopters fly one strip each.** About 2.5 min in the air per flight (Ingenuity's earliest documented slot was 9:30 AM) | Helicopters |
-| ~9:45 AM | All down. Images come off by cable at the dock (Ingenuity's radio managed only about 80 kbit/s, too slow for a strip of photos; [JPL telecom paper](https://ok2kkw.com/eme/Trenton/papers/N5BF-Mars_Helicopter_Telecom_EME2024.pdf)) | Dock |
+| ~9:45 AM | All down. Images come off by cable at the dock (Ingenuity's radio managed only about 80 kbit/s, too slow for a strip of photos; [JPL telecom paper](https://ok2kkw.com/eme/Trenton/papers/N5BF-Mars_Helicopter_Telecom_EME2024.pdf)). In SkyFall's design the images go to an orbiter by UHF antenna, 100–400 Mbit on the non-flight sol ([NASA SkyFall package](https://science.nasa.gov/wp-content/uploads/2026/09/skyfall-mission-information-package-final.pdf), section II); the cable dock is our assumption, not SkyFall's | Dock |
 | 9:45–11:30 AM | Processing: 3D terrain from the photos, rocks and ground type, belief map updated, routes re-planned | App |
 | 11:30 AM–12:30 PM | Midday meal | Crew |
 | (12:15 PM) | (Optional second wave, **only with habitat charging**, which is our assumption, not SkyFall's design) | Helicopters |

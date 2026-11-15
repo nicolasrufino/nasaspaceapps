@@ -6,6 +6,7 @@
 // NASA MRO HiRISE detections, see models.js), not from a live classifier.
 import { flightSeconds, batteryLeft, FLIGHT_POWER_W, BATTERY_WH } from './heli-energy.js'
 import { MODELS } from './models.js'
+import { INSTRUMENTS, SKYFALL_URL, footprintM, ASSUMED_HEIGHT_M, payloadOff, remsRange, stripRecord } from './scout-payload.js'
 
 const SCOUT = '#35e0ff', HAZARD = '#ff5a3d'
 const NORMAL_S = 40, FAST_S = 20, SKIP_S = 1.5 // screen seconds per flight
@@ -18,6 +19,11 @@ const CSS = `
 .sc-find { padding: 6px 0; }
 .sc-legend { display: grid; gap: 4px; margin: 10px 0; font-size: 12px; color: var(--mute); }
 .sc-legend span { display: flex; gap: 8px; align-items: center; }
+.sc-pay summary { cursor: pointer; color: var(--paper); font-size: 13px; }
+.sc-pay .r { padding: 6px 0; border-top: 1px solid var(--panel2); font-size: 12px; color: var(--mute); }
+.sc-pay .r b { color: var(--paper); font-weight: 700; } .sc-pay .r em { font-style: normal; color: var(--scout); }
+.sc-pay .r em.no { color: var(--mute); }
+.sc-src a { color: var(--scout); }
 .sc-legend i { flex: none; width: 14px; height: 8px; border-radius: 2px; }
 `
 
@@ -55,9 +61,64 @@ export default {
     const scanSec = ui.section('Scan')
     const totals = ui.stats([['m² of ground scanned', '0', 'scout'], ['rock cells found', '0', 'hazard'], ['on the route', '0', 'hazard']])
     const stripM = Math.round(2 * (app.scout.swathM ?? 15))
-    const legend = ui.h('div', 'sc-legend', `<span><i style="background:${SCOUT}"></i>the ${stripM} m strip the camera sees</span><span><i style="background:${HAZARD}"></i>rocks too big to step over (over 0.3 m)</span>`)
+    const legend = ui.h('div', 'sc-legend', `<span><i style="background:${SCOUT}"></i>the strip the camera sees, about ${stripM} m wide (our estimate)</span><span><i style="background:${HAZARD}"></i>rocks too big to step over (over 0.3 m)</span>`)
     scanSec.append(totals.el, legend, ui.model(MODELS.scan))
     ui.body.append(flightSec, heliSec, detSec, scanSec)
+
+    // 5. SkyFall's payload and what each flight recorded (issue #169; ?off=scout_payload hides both).
+    const payload = !payloadOff()
+    const layers = app.world.layers
+    let recList = null, before = null, flightM = 0
+    if (payload) {
+      const recSec = ui.section('This flight recorded')
+      recList = ui.h('div', 'f-list')
+      recList.append(Object.assign(ui.h('p', 'dim'), { textContent: 'Listed when each flight lands.' }))
+      recSec.append(recList)
+      const paySec = ui.section('What the scout carries')
+      const det = ui.h('details', 'sc-pay')
+      const rows = INSTRUMENTS.filter((r) => !r.needs || r.needs === 'weather' || layers[r.needs])
+      const summary = ui.h('summary')
+      summary.textContent = `NASA SkyFall: ${rows.length} instruments, ${rows.filter((r) => r.sim).length} simulated here`
+      det.append(summary)
+      for (const r of rows) {
+        const e = ui.h('div', 'r', '<b></b> <em></em><br><span></span><br><span></span>')
+        e.children[0].textContent = r.name
+        e.children[1].textContent = r.sim ? 'simulated' : 'not simulated'
+        if (!r.sim) e.children[1].classList.add('no')
+        e.children[3].textContent = `${r.kind} · NASA: ${r.nasa}`
+        const stand = e.children[5]
+        stand.textContent = `Here: ${r.stand}`
+        if (r.needs === 'weather') {
+          fetch(`${import.meta.env.BASE_URL}${app.meta.name}/weather.json`).then((res) => (res.ok ? res.json() : null)).catch(() => null).then((w) => {
+            const t = remsRange(w)
+            if (!t) return e.remove()
+            stand.textContent = `Here: Curiosity REMS air ${t.min} to ${t.max} °C over ${t.sols} sols; wind is not simulated`
+          })
+        }
+        det.append(e)
+      }
+      det.append(ui.h('div', 'r', 'Contact chemistry and ground thermal imaging do not fly, so the crew measures them at the stop.'))
+      const note = ui.h('div', 'f-small sc-src', `Strip: about ${stripM} m, our estimate. At ${ASSUMED_HEIGHT_M} m up (our assumption; NASA gives no flying height) the cameras' 106° view covers about ${footprintM().toFixed(1)} m. A SkyFall helicopter lands where its flight ends. `)
+      const a = Object.assign(ui.h('a'), { href: SKYFALL_URL, target: '_blank', rel: 'noopener', textContent: 'NASA SkyFall Mission Information Package (2026)' })
+      note.append(a)
+      paySec.append(det, note)
+      ui.body.append(recSec, paySec)
+    }
+    function recordFlight(n) {
+      if (!recList || !before) return
+      const fresh = []
+      for (let i = 0; i < app.scanned.length; i++) if (app.scanned[i] && !before[i]) fresh.push(i)
+      before = null
+      const r = stripRecord(layers, fresh, cs)
+      const pct = (v) => `${Math.round(v * 100)}%`
+      const parts = []
+      if (r.ridge != null) parts.push(`ridge ${pct(r.ridge)}`, `hollow ${pct(r.hollow)}`)
+      if (r.dose != null) parts.push(`mean dose ${r.dose.toFixed(2)} µGy/h, estimate`)
+      if (r.rocks != null) parts.push(`${r.rocks} rock ${r.rocks === 1 ? 'cell' : 'cells'}`)
+      const e = ui.item({ title: `Flight ${n} · ${num(flightM)} m strip, ${num(r.area_m2)} m² new ground`, sub: r.cells ? parts.join(' · ') : 'no ground seen for the first time' })
+      if (recList.firstChild?.tagName === 'P') recList.replaceChildren()
+      recList.prepend(e)
+    }
 
     // Foot: speed.
     let speed = NORMAL_S, skipped = false
@@ -101,6 +162,7 @@ export default {
     offs.push(app.on('flight:start', (e) => {
       started = flying = true
       tick = { ...e, along: 0 }
+      if (payload) { before = Uint8Array.from(app.scanned); flightM = e.metres ?? 0 }
       flightTitle.textContent = `Flight ${e.n} of ${e.of}`
       cur = null
       dirty = true
@@ -125,6 +187,7 @@ export default {
     offs.push(app.on('flight:end', ({ n, summary }) => {
       const s = summary ?? {}
       flying = false
+      recordFlight(n)
       cur = null
       const kj = Math.round((s.energy_delta_j ?? 0) / 1000) ? `, ${signedKj(s.energy_delta_j)}` : ''
       const moved = s.avoided_cells ? 'route moved' : 'route unchanged'
