@@ -12,7 +12,7 @@ import { hazardRGB, blockedSegments, reviewedMask, legendHTML, COLORS as HAZARD 
 import { beliefMap } from './belief.js'
 import { terrainMaterial, setImageryUVs, loadImagery, imageryCells } from './terrain.js'
 import { detailTiles } from './tiles.js'
-import { makeAstronaut, makeHabitat, makeHelicopter, icon, makeSky, mapFurniture } from './figures.js'
+import { makeAstronaut, makeHabitat, makeHelicopter, icon, makeSky, mapFurniture, STRIDE_M } from './figures.js'
 import { stretches, describe, lowestMargin, shortestAlternative } from './why.js'
 import { initStops } from './stops.js'
 import { initSteps } from './steps.js'
@@ -68,6 +68,7 @@ const scanned = new Uint8Array(W * H) // cells the helicopter has seen
 const rockSeen = (i) => scanned[i] && layers.rocks_fine?.[i]
 const cellPos = ([x, y], lift = 0) => new THREE.Vector3(x * cs, layers.height[y * W + x] + lift, y * cs)
 document.title = flowMode ? 'Vesta Scout' : 'Vesta Vision'
+if (!flowMode) document.body.classList.add('vision') // Vision: no Walk tab, no walk bar, no why-this-route (CSS in scout/index.html)
 // Title in four levels (styled in scout/index.html): product, site, the energy scenario, then the grid's size.
 const el = (tag, cls, text) => Object.assign(document.createElement(tag), { className: cls, textContent: text })
 $('title').replaceChildren(el('span', 't-brand', flowMode ? 'Vesta Scout' : 'Vesta Vision'), el('span', 't-site', meta.site?.name ?? meta.name),
@@ -117,7 +118,7 @@ const baseMarker = icon('#ffffff', { ring: '#111111', label: 'H' })
 scene.add(baseMarker)
 const pins = new THREE.Group() // science stops, rebuilt when the plan changes
 scene.add(pins)
-const walker = makeAstronaut()
+const walker = makeAstronaut({ stride: flags.has('stride') || params.has('stride') }) // flag stride: legs and arms swing as it walks
 scene.add(walker)
 const walkerIcon = icon(flowMode ? '#e3dfd3' : '#35e0ff')
 scene.add(walkerIcon)
@@ -193,7 +194,24 @@ const hudState = () => {
   return { heading: bearingDeg(lookDir.x, lookDir.z), pos: [walker.position.x, walker.position.z], cs,
     next: nextStop(route, k, allStops(), cs), home: [meta.base_cell[0] * cs, meta.base_cell[1] * cs],
     marginJ: ringLimit(meta, walk) - s.cost_to_go_j, usableJ: usable, energyJ: walk.energy_left_j, budgetJ: meta.energy_budget_j,
-    o2L: oxygenL(meta, walk.energy_left_j), t: walk.t }
+    o2L: oxygenL(meta, walk.energy_left_j), t: walk.t, k, route: route.cells, speed: meta.knobs?.speed_mps ?? 1,
+    stops: allStops().filter((t) => route.stops.includes(t.id)).map((t) => t.cell), project: hudProject,
+    eye: view.mode === 'eye', ahead: route.cells[Math.min(k + 2, route.cells.length - 1)], canGo: k < route.cells.length - 1, go: hudGo }
+}
+// Street-view step (in the Eye view, with the HUD): tap the arrow on the ground, or press the up arrow or W, to walk
+// two cells on along the route and turn to face the way ahead. It is the same walk as the Step button.
+function hudGo() {
+  $('step').click()
+  $('step').click()
+  view.turnTo = heading()
+}
+addEventListener('keydown', (e) => { if (hud && view.mode === 'eye' && (e.key === 'ArrowUp' || e.key === 'w')) { e.preventDefault(); hudGo() } })
+const hudV = new THREE.Vector3()
+const hudProject = (x, z) => { // app metres -> screen pixels, and whether the point is behind the camera
+  hudV.set(x, groundAt(x, z) + 2, z)
+  const behind = hudV.clone().applyMatrix4(camera.matrixWorldInverse).z > 0
+  hudV.project(camera)
+  return [((hudV.x + 1) / 2) * innerWidth, ((1 - hudV.y) / 2) * innerHeight, behind]
 }
 const heading = () => { // where the astronaut is going: along the route from where they stand
   const from = route?.cells[k + 1] ? walk.cell : route?.cells[k - 1]
@@ -204,6 +222,7 @@ function setView(mode) {
   view.mode = mode
   viewBtn.textContent = { map: 'View: Map', follow: 'View: Follow', eye: 'View: Eye level' }[mode]
   visionNote.hidden = visionBar.hidden = mode === 'map'
+  revealShared.uContour.value = mode === 'map' && $('contours')?.checked ? 1 : 0 // contours only in the map view
   hud?.show(mode !== 'map')
   if (hud) visionNote.hidden = true // the HUD replaces the note
   document.querySelectorAll('.panel').forEach((el) => (el.style.display = mode === 'map' ? '' : 'none'))
@@ -230,7 +249,7 @@ function setView(mode) {
 }
 viewBtn.onclick = () => setView({ map: 'follow', follow: 'eye', eye: 'map' }[view.mode])
 const canvasEl = $('scene')
-canvasEl.addEventListener('pointerdown', (e) => { if (view.mode === 'eye') view.drag = [e.clientX, e.clientY] })
+canvasEl.addEventListener('pointerdown', (e) => { if (view.mode === 'eye') { view.drag = [e.clientX, e.clientY]; view.turnTo = null } })
 addEventListener('pointerup', () => (view.drag = null))
 addEventListener('pointermove', (e) => {
   if (view.mode !== 'eye' || !view.drag) return
@@ -246,6 +265,11 @@ function tickView(dt) {
     controls.target.copy(head)
   } else if (view.mode === 'eye') {
     camera.position.copy(head)
+    if (view.turnTo != null) { // street-view step: ease round to face the way ahead (the short way)
+      const d = Math.atan2(Math.sin(view.turnTo - view.yaw), Math.cos(view.turnTo - view.yaw))
+      view.yaw += d * Math.min(1, dt * 4)
+      if (Math.abs(d) < 0.01) view.turnTo = null
+    }
     camera.rotation.set(view.pitch, view.yaw, 0, 'YXZ')
   } else if (flight) {
     controls.target.lerp(heli.position, 1 - Math.exp(-dt * 3)) // watch the helicopter
@@ -301,8 +325,12 @@ renderer.setAnimationLoop((now) => {
   lastWalkFrame = now
   if (!document.hidden && walkClock.tick(walkElapsed, advanceWalk)) render()
   // Exponential easing already handles a long frame; clamping its time made the figure lag behind the route.
+  const wasX = walker.position.x, wasZ = walker.position.z
   walker.position.lerp(walkerGoal, 1 - Math.exp(-elapsed * 6))
   walker.position.y = groundAt(walker.position.x, walker.position.z)
+  const moved = Math.hypot(walker.position.x - wasX, walker.position.z - wasZ), st = walker.userData.stride // one stride per STRIDE_M walked
+  st.uPhase.value += (moved / STRIDE_M) * Math.PI
+  st.uAmp.value += ((moved > 0.002 ? 1 : 0) - st.uAmp.value) * Math.min(1, dt * 6)
   if (walkerGoal.distanceToSquared(walker.position) > 0.01) walker.rotation.y = Math.atan2(-(walkerGoal.x - walker.position.x), -(walkerGoal.z - walker.position.z))
   walkerIcon.position.set(walker.position.x, walker.position.y + 3, walker.position.z)
   baseMarker.position.set(habitat.position.x, habitat.position.y + 12, habitat.position.z)
@@ -406,7 +434,7 @@ $('layers').append(...VIEWS.map(([n, title]) => viewRadio(n, title)), ...(advanc
 if (flags.has('contours')) {
   const c = document.createElement('label')
   c.innerHTML = '<input type="checkbox" id="contours"><span><b>Contours</b><small>Every 5 m, bold every 25 m · USGS MSL Gale DEM (MRO HiRISE stereo)</small></span>'
-  c.querySelector('input').onchange = (e) => { revealShared.uContour.value = e.target.checked ? 1 : 0 }
+  c.querySelector('input').onchange = (e) => { revealShared.uContour.value = e.target.checked && view.mode === 'map' ? 1 : 0 }
   $('layers').prepend(c)
 }
 
