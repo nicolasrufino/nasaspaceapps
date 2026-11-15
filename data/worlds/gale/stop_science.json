@@ -27,6 +27,7 @@
     "instrument": "DAN passive",
     "sol": 4564,
     "matched_by": "sol",
+    "metres_away": 0.0,
     "thermal_epithermal_ratio": 2.564
    },
    "weather": {
@@ -62,6 +63,7 @@
     "instrument": "DAN passive",
     "sol": 4600,
     "matched_by": "sol",
+    "metres_away": 11.3,
     "thermal_epithermal_ratio": 2.805
    },
    "weather": {
@@ -97,6 +99,7 @@
     "instrument": "DAN passive",
     "sol": 4611,
     "matched_by": "sol",
+    "metres_away": 0.0,
     "thermal_epithermal_ratio": 3.093
    },
    "weather": {
@@ -132,6 +135,7 @@
     "instrument": "DAN passive",
     "sol": 4693,
     "matched_by": "sol",
+    "metres_away": 0.0,
     "thermal_epithermal_ratio": 3.284
    },
    "weather": {
@@ -167,6 +171,7 @@
     "instrument": "DAN passive",
     "sol": 4718,
     "matched_by": "sol",
+    "metres_away": 0.0,
     "thermal_epithermal_ratio": 2.917
    },
    "weather": {

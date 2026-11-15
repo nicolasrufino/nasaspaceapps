@@ -51,7 +51,7 @@ def main():
 
     cells = {}
     # Rover positions come from the chemistry points: they match the stops' cells exactly.
-    # neutron_points.json is about 200 m off on the same sols, so it is not used for positions.
+    # (neutron_points.json was about 200 m off until #171; the chemistry points stay the source here.)
     chem = json.loads((WORLD / "chem_points.json").read_text())
     for p in chem:
         cells.setdefault(tuple(p["cell"]), []).append(p["sol"])

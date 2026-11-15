@@ -38,7 +38,7 @@ def main():
         x, y = t["cell"]
         c, c_m = nearest(chem, t["cell"], t["sol"], cell_m)
         # DAN rides on the rover, so the reading for the stop is the one from the sol the rover was there.
-        # We match by sol, not position: the cells in neutron_points.json are about 200 m off (to fix).
+        # Matched by sol; since #171 the DAN cells use the same waypoints as the stops, so metres_away is a check.
         d = min(neutron, key=lambda p: abs(p["sol"] - t["sol"]))
         d = d if abs(d["sol"] - t["sol"]) <= 2 else None
         w = weather.get(t["sol"])
@@ -48,6 +48,7 @@ def main():
             "chem": c and {"instrument": c["instrument"], "target": c["target"], "sol": c["sol"],
                            "metres_away": c_m, "oxides_wt_pct": c["oxides_wt_pct"]},
             "neutron": d and {"instrument": "DAN passive", "sol": d["sol"], "matched_by": "sol",
+                              "metres_away": round(math.dist(d["cell"], t["cell"]) * cell_m, 1),
                               "thermal_epithermal_ratio": d["thermal_epithermal_ratio"]},
             "weather": w and {"instrument": "REMS", "sol": w["sol"], "min_temp_c": w["min_temp_c"],
                               "max_temp_c": w["max_temp_c"], "pressure_pa": w["pressure_pa"]},
