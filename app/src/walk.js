@@ -2,7 +2,8 @@
 // Energy model mirrors data/pipeline/make_world.py so the drain matches cost_to_go exactly:
 // Pandolf (1977) metabolic rate, terrain factor per AI4Mars class, scaled to Mars gravity.
 
-// ponytail: copied from make_world.py CLASSES; move into world.json if Galsan ever tunes it.
+// Terrain factors and the gravity factor come from world.json knobs (make_world.py writes them: knobs.eta,
+// knobs.gravity_energy_factor). These fallbacks are the old values, for worlds built before those knobs existed.
 const ETA = [1.2, 1.1, 1.0, 2.1, 1.5] // unknown, soil, bedrock, sand, big rock
 
 const idx = (meta, [x, y]) => y * meta.width + x
@@ -16,9 +17,11 @@ export function stepCostIdx(meta, height, cls, i, j) {
   const dist = meta.cell_size_m * Math.hypot((i % w) - (j % w), Math.floor(i / w) - Math.floor(j / w))
   const grade = (100 * (height[j] - height[i])) / dist
   const { body_kg: W, load_kg: L, speed_mps: V } = meta.knobs
-  const eta = ETA[cls[j]] ?? ETA[0]
+  const etas = meta.knobs.eta ?? ETA
+  const eta = etas[cls[j]] ?? etas[0]
   const watts = 1.5 * W + 2 * (W + L) * (L / W) ** 2 + eta * (W + L) * (1.5 * V * V + 0.35 * V * Math.max(grade, 0))
-  return (watts * (meta.gravity_mps2 / 9.81) * dist) / V
+  const g = meta.knobs.gravity_energy_factor ?? meta.gravity_mps2 / 9.81
+  return (watts * g * dist) / V
 }
 
 export function startWalk(meta) {
