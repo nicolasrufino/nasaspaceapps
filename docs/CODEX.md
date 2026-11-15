@@ -56,6 +56,8 @@ git pull
 
 Then pick the next issue (ask the orchestrator) and make a new worktree.
 
+**Releasing `dev` → `main`:** run `scripts/release.sh "short summary"`. It records `main` in `dev` (`git merge -s ours`, retried), opens or reuses the release PR with the merged PR titles, and turns on squash auto-merge, so it lands when `ci` is green. After it lands, the "Record main in dev" action records `main` in `dev` again on its own.
+
 ## 6. Models and effort: quality first, no waste
 
 Spend reasoning where a mistake costs hours; save it where a mistake is cheap and visible. Profiles are in `.codex/config.toml` (start Codex with `codex --profile <name>`). Model names change often: check `/model` in Codex and edit the file.
