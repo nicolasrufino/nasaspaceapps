@@ -149,7 +149,23 @@ The compass (iOS: `webkitCompassHeading`; Android: absolute orientation) says wh
 
 Code: `app/src/stops.js`, `app/src/steps.js`, `app/src/log.js`.
 
-## 11. What is real and what is simulated
+## 11. Ground-photo classification (flag `classifier`, M2 R4 → E6)
+
+In Walk mode, choose a ground photo and select a square of 256 × 256 source pixels.
+The retained MobileNet v1 model predicts the dominant surface in that square: soil, bedrock,
+sand or big rock. Resizing and RGB conversion match the training input; the model does its own
+normalization. Computation runs on the device in a Web Worker, after downloading the model once
+for that page session. The photo is not sent to a server.
+
+The displayed percentages are softmax scores: exponentiate each of the four learned logits,
+then divide by their sum. They express relative preference, not measured accuracy or safety.
+Unknown is a fixed logit and is not a learned rejection class. Training used NASA/JPL AI4Mars
+Curiosity ground photos, so helicopter and orbital use remain unvalidated. There is no per-pixel
+segmentation, height measurement or georeferencing here; the current map and route remain unchanged.
+
+Code and verification: `app/src/terrain-*.js`, `app/e2e/terrain.spec.js`, `app/README.md`.
+
+## 12. What is real and what is simulated
 
 - **Real:** terrain, slope and images (NASA MRO HiRISE via USGS), the Curiosity stops and their photos, the walking-energy formula, all the route and safety maths.
 - **Estimates, marked:** ground type on Gale (from image brightness and roughness until the classifier lands), rock layer on Gale (until shadow-based rock detection lands), the energy budget size, and the walking-energy factors above.

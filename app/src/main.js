@@ -9,6 +9,7 @@ import { bestAreas } from './best-areas.js'
 import { stretches, describe, lowestMargin, shortestAlternative } from './why.js'
 import { initStops } from './stops.js'
 import { initSteps } from './steps.js'
+import { initTerrainClassifier } from './terrain-classifier.js'
 
 const $ = (id) => document.getElementById(id)
 const params = new URLSearchParams(location.search)
@@ -17,6 +18,7 @@ const params = new URLSearchParams(location.search)
 const DEMO_FLAGS = 'drone_scout,why_route,layers_extra,pov_images,science_stop,step_mode'
 const worldName = params.get('world') ?? 'gale'
 const flags = new Set((params.get('flags') ?? DEMO_FLAGS).split(',').filter(Boolean))
+if (flags.has('classifier')) initTerrainClassifier($('walk'))
 const base = `${import.meta.env.BASE_URL}${worldName}`
 const optionalJSON = (file, fallback) => fetch(`${base}/${file}`).then((r) => (r.ok ? r.json() : fallback)).catch(() => fallback)
 
