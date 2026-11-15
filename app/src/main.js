@@ -5,6 +5,7 @@ import { loadWorld, layerRGB, sourceLabel } from './world.js'
 import { startWalk, stepTo, ringMask, ringLimit, appState, oxygenL } from './walk.js'
 import { planTour, MAX_STOPS } from './plan.js'
 import { mountFlightLog } from './scout-why.js'
+import { createVoiSelector } from './scout-voi-client.js'
 import { createScout, launchScoutFlight, completeScoutFlight, scanFlight, pointAlong, MAX_FLIGHTS, FLIGHT_ANIMATION_S } from './scout.js'
 import { hazardRGB, blockedSegments, reviewedMask, legendHTML, COLORS as HAZARD } from './hazards.js'
 import { beliefMap } from './belief.js'
@@ -231,7 +232,7 @@ renderer.setAnimationLoop((now) => {
   const elapsed = Math.max(0, (now - lastFrame) / 1000)
   const dt = Math.min(elapsed, 0.1) // smooth camera/character motion, not the flight clock
   lastFrame = now
-  if (flight) tickFlight(elapsed) // spatial scanning retains every crossed sample, even on a slow frame
+  if (flight?.active) tickFlight(elapsed) // spatial scanning retains every crossed sample, even on a slow frame
   walker.position.lerp(walkerGoal, 1 - Math.exp(-dt * 6))
   walker.position.y = groundAt(walker.position.x, walker.position.z)
   if (walkerGoal.distanceToSquared(walker.position) > 0.01) walker.rotation.y = Math.atan2(-(walkerGoal.x - walker.position.x), -(walkerGoal.z - walker.position.z))
@@ -598,23 +599,41 @@ function reveal(fresh) {
 }
 
 const logFlight = flags.has('why_flight') ? mountFlightLog($('scoutBox'), world) : null
+const selectVoi = flags.has('voi') ? createVoiSelector(world) : null
 if (flags.has('drone_scout') && layers.rocks_fine) $('scoutBox').hidden = false
-$('scout').onclick = () => {
+$('scout').onclick = async () => {
   if (flight || flightsUsed >= MAX_FLIGHTS) return
   flight = createScout(world, allStops().filter((s) => included.has(s.id)), { scanned, maxFlights: MAX_FLIGHTS - flightsUsed })
   flight.before = route
   flight.found = 0
-  if (!launchScoutFlight(world, flight)) {
-    flight = null
-    $('scoutStatus').textContent = 'The current route is already scouted.'
-    return
-  }
-  flight.along = 0
   pause()
   $('scout').disabled = true
-  heli.visible = heliIcon.visible = scanDots.visible = true
   listStops()
+  if (!await startNextFlight()) { land(); return }
   tickFlight(0)
+}
+
+async function startNextFlight() {
+  if (flight.flights.length >= flight.maxFlights) return false
+  let next
+  if (selectVoi) {
+    heli.visible = heliIcon.visible = scanDots.visible = false
+    revealShared.uHeli.value.z = 0
+    $('scoutStatus').textContent = 'Comparing possible flights… experimental, uncalibrated belief model.'
+    try {
+      const choice = await selectVoi(flight)
+      flight.voiNote = choice.reason + ' Experimental value estimates; belief probabilities are not calibrated.'
+      next = launchScoutFlight(world, flight, () => choice.flight)
+    } catch {
+      flight.voiNote = 'Experimental selection unavailable; used the route-following baseline.'
+      next = launchScoutFlight(world, flight)
+    }
+  } else next = launchScoutFlight(world, flight)
+  if (next) {
+    flight.along = 0
+    heli.visible = heliIcon.visible = scanDots.visible = true
+  }
+  return !!next
 }
 
 function tickFlight(dt) {
@@ -643,12 +662,11 @@ function tickFlight(dt) {
   beforeLine.computeLineDistances()
   replan(true, flight.route)
   beforeLine.visible = crossed > 0
-  if (launchScoutFlight(world, flight)) flight.along = 0
-  else land()
+  startNextFlight().then((started) => { if (!started) land() })
 }
 
 function land() {
-  const { before, found } = flight
+  const { before, found, voiNote, flights } = flight
   flight = null
   heli.visible = heliIcon.visible = scanDots.visible = false
   revealShared.uHeli.value.z = 0
@@ -656,10 +674,11 @@ function land() {
   $('scout').textContent = flightsUsed >= MAX_FLIGHTS ? '3 flights used' : 'Scout remaining route'
   listStops()
   const fullyScanned = route.cells.every(([x, y]) => scanned[y * W + x])
-  $('scoutStatus').textContent = `${flightsUsed} of ${MAX_FLIGHTS} flights used · ${found} rock cells found. Re-planned after every flight: ` +
+  $('scoutStatus').textContent = `${flightsUsed} of ${MAX_FLIGHTS} flights used · ${found} rock cells found. ${flights.length ? 'Re-planned after every flight' : 'Route unchanged'}: ` +
     `${kj(before.energy_j)} → ${kj(route.energy_j)}. ` +
     (fullyScanned ? 'The final route is fully scouted.' : 'Unscouted ground remains on this route.') +
-    ' Simulated corridor flights; repositioning, recharge and helicopter energy excluded.'
+    ' Simulated corridor flights; repositioning, recharge and helicopter energy excluded.' +
+    (voiNote ? ` ${voiNote}` : '')
 }
 
 // --- Walk (block E2): along the planned route, energy and oxygen drain, ring, point of no return. ---

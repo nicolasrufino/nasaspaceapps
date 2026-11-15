@@ -21,6 +21,7 @@ test('Gale scouts three times, replans, and leaves the walk usable without runti
   await expect(page.locator('#flightLog li').nth(1)).toContainText('+1.1 kJ; 3 newly found route cells avoided')
   await expect(page.locator('#flightLog li').nth(2)).toContainText('0.0 kJ; 0 newly found route cells avoided')
   expect(requests.some((url) => url.includes('scout_plan.json'))).toBe(false)
+  expect(requests.some((url) => url.includes('scout-voi-worker'))).toBe(false)
   await page.getByRole('tab', { name: 'Walk', exact: true }).click()
   await page.getByRole('button', { name: 'Step', exact: true }).click()
   await expect(page.locator('#stats')).toContainText('Margin')
