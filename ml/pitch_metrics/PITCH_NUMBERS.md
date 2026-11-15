@@ -38,9 +38,9 @@ The route, initial budget and reserve stay fixed. Scale both energy already spen
 
 | Walking-energy multiplier | Departure ring cells | Area change | Minimum extra margin (kJ) | Distance with extra 20% margin |
 |---|---:|---:|---:|---:|
-| 0.7x | 50,017 | 13.5% | 825.3 | 100.0% |
-| 1.0x | 44,082 | 0.0% | 636.4 | 100.0% |
-| 1.3x | 36,519 | -17.2% | 447.5 | 54.9% |
+| 0.7x | 49,928 | 13.5% | 825.3 | 100.0% |
+| 1.0x | 43,993 | 0.0% | 636.4 | 100.0% |
+| 1.3x | 36,430 | -17.2% | 447.5 | 54.9% |
 
 The app's hybrid return lookup differs from a recomputed known-hazard return field by at most 5339.67 J of understatement and 0.01 J of overstatement on this route. This audit does not certify unobserved ground.
 

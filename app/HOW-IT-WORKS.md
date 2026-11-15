@@ -12,7 +12,7 @@ The map is a grid. The real Gale slice is 256 × 256 squares ("cells") of 8 m ea
 
 ```
 watts = 1.5·W + 2·(W + L)·(L / W)² + η·(W + L)·(1.5·V² + 0.35·V·G)
-watts on Mars = watts × (3.71 / 9.81)
+watts on Mars = watts × gravity_energy_factor (0.68 for this world)
 joules for a step = watts on Mars × distance / V
 ```
 
@@ -22,33 +22,24 @@ joules for a step = watts on Mars × distance / V
 | L | load carried | 60 kg (suit and kit) |
 | V | walking speed | 1.0 m/s |
 | G | uphill grade, in % (downhill counts as flat) | from the height of the two cells |
-| η | terrain factor: how hard the ground is to walk on | bedrock 1.0, soil 1.1, unknown 1.2, big rock 1.5, sand 2.1 |
+| η | terrain factor: how hard the ground is to walk on | bedrock 1.0, soil 1.1, unknown 1.2, big rock 1.5, sand 4.372 |
 
-**What it means, per metre walked on Mars (from the code):**
-
-| Ground | Energy per metre |
-|---|---|
-| Flat bedrock | 184 J |
-| Flat soil | 192 J |
-| Flat big-rock ground | 223 J |
-| Flat sand | 269 J |
-| Bedrock, 10% uphill | 363 J |
-| Flat bedrock **on Earth**, for comparison | 488 J |
-
-In our formula sand costs about 1.5× bedrock, a 10% climb about 2×, and Mars gravity cuts the cost to about 38% of Earth's. The first and last of these are too optimistic; see below.
-
-**Where these numbers are known to be too low (research, see `docs/SCOUTING.md` §2):**
-- **Sand:** people measured on sand use **2.1 to 2.7 times** the energy of hard ground ([Lejeune et al. 1998](https://pubmed.ncbi.nlm.nih.gov/9622579/)). Our formula gives only 1.46×, because η = 2.1 multiplies only part of the equation.
-- **Gravity:** we scale energy by 0.38 (straight in proportion to gravity). A 2018 study in simulated 0.38 g measured walking oxygen use at about **68%** of Earth's, so our walking energy may be **about 1.8× too low**. Suits add more ([NASA TP-2009-214796](https://www.lpi.usra.edu/lunar/artemis/NorcrossEtAl_NASA-TP-2009-214796_EVA%20Walkback%20Test.pdf)).
-- **Our assumption:** matching Mars ground types to the Earth terrains the factors were measured on (bedrock = blacktop, soil = dirt road, big rock = heavy brush). The factors themselves (1.0, 1.1, 1.2, 1.5) are measured (Soule & Goldman 1972).
-
-A fix for the pipeline and the app together is proposed in `docs/SCOUTING.md` §6. Downhill gets no discount or penalty, and speed is fixed. Planned upgrade: a hypogravity model that adds the Santee downhill term to Pandolf ([2025 paper](https://www.researchgate.net/publication/394929719_A_Novel_Metabolic_Model_for_Ambulation_in_Hypogravity_and_Applications_to_Planetary_Extravehicular_Activity)).
+**PR #94 assumptions:** `knobs.eta` and `gravity_energy_factor` now come from
+the world. Sand's factor is chosen so the complete formula costs **2.4× flat
+bedrock**; multiplying only one term by 2.4 would not produce that ratio.
+The **0.68 gravity-energy factor is an estimate to verify**, not certified Mars
+walking performance. Ground-class mappings and suit effort also need field
+calibration. Downhill receives no discount or penalty, and speed stays fixed.
+Worlds without the new knobs retain the old fallback for compatibility.
+See `docs/CONTRACTS.md` §1 and `ml/pitch_metrics/PITCH_NUMBERS.md` for the
+current assumptions and the ±30% sensitivity calculation.
 
 Code: `stepCostIdx` in `app/src/walk.js`, `pandolf_watts` in `data/pipeline/make_world.py`. A test checks the app and the pipeline agree to within 0.1%.
 
 ## 2. Walls: where you can't walk
 
-- **Slope over the limit** (`max_slope_deg`): a suited astronaut can't climb it, so the cell is a wall. Today's world files use **25°**. The team decided on **20°**, the Artemis xEVA suit limit; it takes effect when the world files are rebuilt. The app reads the number from `world.json`, so it follows without a code change. On Gale, 20° turns 15.5% → 24.2% of cells into walls (`app/scripts/slope-check.json`).
+- **Slope over the limit** (`max_slope_deg`): a suited astronaut can't climb it, so the cell is a wall. The rebuilt PR #94 world uses **20°**, the team's Artemis xEVA limit. The app reads it from `world.json`; crossings and scout anomalies were rebuilt at the same limit.
+- **Crossings:** when `passable.u8` exists, each step must follow an allowed direction. The pipeline and app both use these constraints.
 - **Rocks the helicopter has seen** (`rocks_fine`): walls once known. Before scouting nobody knows they are there, which is the point of the scout.
 
 ## 3. The way home from everywhere (cost to go)
@@ -57,8 +48,9 @@ For every cell, the pipeline works out **the least energy needed to walk from th
 
 ## 4. Energy budget, reserve and oxygen
 
-- **Budget:** 600 kJ for a walk on the Gale world (`energy_budget_j`, a knob sized so the five-stop Curiosity tour uses about 80% of the usable energy).
-- **Reserve:** 20% of the budget is never planned for (`reserve_fraction`). It stands for NASA's rule of keeping a 1-hour emergency return, plus about 30 minutes for dust removal and getting back inside. Usable energy = 600 × 0.8 = **480 kJ**.
+- **Budget:** the default Gale `worst` scenario has **3,165.180 kJ** for walking. It assumes 5 h of suit time left after 3 h of station work, subtracts 2.5 h at science stops, and uses a 1200 BTU/hr suit sizing rate. These are estimates, not measured EVA endurance.
+- **Reserve:** **1,899.108 kJ**, or **60%** of that budget, represents 1.5 h at the same sizing rate. Usable walking energy is **1,266.072 kJ**. `?scenario=ideal` selects a different scenario; the pitch uses `worst`.
+- **Extra 20% margin:** the R5 audit asks for another **633.036 kJ** beyond the energy home and this reserve. It is separate from `reserve_fraction`.
 - **Oxygen:** the body burns about **20.1 kJ per litre of oxygen** (`kj_per_l_o2`), so oxygen left = energy left ÷ 20.1. For example, 300 kJ left ≈ 15 L of oxygen.
 
 ## 5. The walk-back ring and the point of no return
@@ -76,9 +68,9 @@ You choose the stops (Curiosity's drill sites from `targets.json`, or your own s
 
 "Best" means **least effort, not shortest or fastest**: it will walk around a hill rather than over it if that's easier. Because speed is fixed at 1 m/s, time = distance ÷ 1 m/s.
 
-**Result on Gale (from the code):** all 5 Curiosity stops in one walk, **330 kJ, about 21 minutes of walking**; the pipeline's own route is 332 kJ. Planning takes about 0.1 s.
+**Current Gale result:** all five default stops, 1274.7 m and 621.4 kJ before scouting (`ml/exports/pitch_metrics.json`). This is a simulated route, not measured human exertion.
 
-**Not yet in the plan:** fastest or safest route options, daylight and temperature, radiation dose (issue #78); shaping the route by hand (#79); time spent at each stop.
+**Not yet in the plan:** fastest or safest route options, daylight and temperature, radiation dose (issue #78); shaping the route by hand (#79); per-stop effort simulation (estimated stop time is already deducted when sizing the world budget).
 
 Code: `app/src/plan.js`.
 
@@ -91,7 +83,7 @@ Orbit images can't see rocks smaller than about a metre. A small helicopter (Ing
 - **Order of flights before a walk:** first along the **planned route**, then the team's extra flights (`scout_plan.json`): **anomalies** (places where the data disagrees), then the **least certain** areas.
 - **What changes when it lands:** rocks it saw become walls, the way home switches to the scouted version for every cell it saw, and the route re-plans. The old route stays on screen as red dashes.
 
-**Result on Gale (from the code):** 7 flights, 85 rock cells found; the planned route crossed 12 of them; the new route avoids them for 330 → 334 kJ.
+**Fixed 60 fps Gale replay:** seven flights discover 95 hazard cells; 6 distinct discovered cells lie on the original route, zero on the first replan. Walking energy changes 621.4 → 629.7 kJ. Two unobserved stored hazards remain. Two passes (14 flight legs, 9.43 km) fully scan the final 630.5 kJ route with zero stored-hazard crossings. Helicopter energy is excluded; live frame timing can change counts.
 
 ## 8. The "best areas" map
 
@@ -117,11 +109,11 @@ The panel decides nothing; it measures the route the planner chose and the ones 
 - **The rejected alternative:** the **shortest-distance** route through the same stops in the same order (what a person would draw), drawn as grey dashes. The panel says what it would cost and why: more sand, more climbing, steeper ground.
 - **After a scout:** how many rock cells the old route crossed and what avoiding them costs.
 
-**Result on Gale (from the code):**
-- Our route: 1,239 m, 330 kJ, 21 min, 10% sand, 43 m of climbing, steepest 17°.
-- The shortest route through the same stops: about 24 m shorter but **412 kJ, 25% more energy**, because 41% of it is sand and it climbs 52 m.
-- Tightest moment: 150 kJ to spare on the last stretch home.
-- After the helicopter: the old route crossed 12 rock cells; avoiding them costs 4 kJ.
+**Current reproducible Gale audit:** the first replan adds 36.7 m and 1.33%
+walking energy. After two passes, the final route is 1311.4 m and 630.5 kJ.
+Minimum extra margin beyond home and reserve is 635.6 kJ nominally, or 446.5 kJ
+at +30% walking cost. These values come from `ml/pitch_metrics/PITCH_NUMBERS.md`;
+the panel itself reflects the current route and live scout sampling.
 
 Code: `app/src/why.js`.
 

@@ -104,14 +104,26 @@ def union_masks(existing, positive):
     return bytes(a | b for a, b in zip(existing, positive))
 
 
-def scouted_cost(meta, heights, classes, blocked, previous):
+def scouted_cost(meta, heights, classes, blocked, previous, passable=None):
     n = meta["width"]
-    if meta["height"] != n or meta["knobs"] != make_world.KNOBS or meta["gravity_mps2"] != make_world.G_MARS:
+    knobs = meta["knobs"]
+    # build() uses the pipeline's constants, not arbitrary world overrides.
+    # eta is serialized separately; the crossing knobs have already been
+    # applied to passable.u8 by terrain_1m.py and do not change walking cost.
+    crossing_knobs = {"step_max_m", "steep_run_m", "lane_offset_m"}
+    energy_knobs = {key: value for key, value in knobs.items() if key not in crossing_knobs | {"eta"}}
+    eta = [make_world.CLASSES[c][1] for c in range(5)]
+    if (meta["height"] != n or energy_knobs != make_world.KNOBS
+            or knobs.get("eta", eta) != eta or meta["gravity_mps2"] != make_world.G_MARS):
         raise ValueError("World energy model differs from the supported pipeline")
+    if (crossing_knobs & knobs.keys() or meta.get("files", {}).get("passable")) and passable is None:
+        raise ValueError("World requires passable crossings")
+    if passable is not None and len(passable) != n*n:
+        raise ValueError("Wrong passable layer size")
     if blocked[meta["base_cell"][1]*n+meta["base_cell"][0]]:
         raise ValueError("Hazard clearance intersects the habitat; do not erase the hazard")
     values = make_world.build(n, meta["cell_size_m"], meta["base_cell"], meta["energy_budget_j"],
-                              h=heights, cls=classes, blocked=blocked)[-1]
+                              h=heights, cls=classes, blocked=blocked, passable=passable)[-1]
     # The shared builder prevents entering hazards but allows exiting a blocked
     # starting cell. The exported contract says impassable, including that cell.
     values = [BIG if blocked[i] else min(value, BIG) for i, value in enumerate(values)]
@@ -162,6 +174,10 @@ def export(world, destination, preview=False, artifacts=HERE, reviewed_only=Fals
     for name, expected in reference["layer_sha256"].items():
         if sha((world/name).read_bytes()) != expected:
             raise ValueError(f"Target world layer changed: {name}")
+    passable_name = meta.get("files", {}).get("passable", "passable.u8")
+    has_crossings = (world/passable_name).exists() or "passable" in meta.get("files", {})
+    if has_crossings and passable_name not in reference["layer_sha256"]:
+        raise ValueError("Passable crossings are missing from the world reference")
     rows = resolve(candidates, decisions, complete=not (preview or reviewed_only))
     positive, points = positive_mask(rows, local["checks"], meta["width"], meta["height"])
     if not points:
@@ -189,6 +205,7 @@ def export(world, destination, preview=False, artifacts=HERE, reviewed_only=Fals
               "precision": None, "recall": None,
               "clearance_policy": {"cells": 1, "meaning": "Point cell plus eight neighbours; 8 m padding is a demo design choice, not measured rock size"},
               "accepted_points": points, "positive_cells": sum(positive), "existing_dtm_cells": sum(base),
+              "existing_layer_scope": "Input hazard cells retained; may already include reviewed positives from an earlier R3 export",
               "reviewed_point_density": {
                   "cell_area_m2": meta["cell_size_m"]**2,
                   "meaning": "Counts of accepted native detections before clearance padding; incomplete sampling, not total rock abundance",
@@ -211,7 +228,8 @@ def export(world, destination, preview=False, artifacts=HERE, reviewed_only=Fals
         size = meta["width"]*meta["height"]
         ctg = scouted_cost(meta, read_array(world/"height.f32", "f", size),
                           read_array(world/"terrain_class.u8", "B", size), merged,
-                          read_array(world/"cost_to_go_scouted.f32", "f", size))
+                          read_array(world/"cost_to_go_scouted.f32", "f", size),
+                          passable=read_array(world/passable_name, "B", size) if has_crossings else None)
         staged = destination/"world"
         shutil.copytree(world, staged)
         (staged/"rocks_fine.u8").write_bytes(merged)

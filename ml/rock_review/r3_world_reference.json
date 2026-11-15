@@ -1,6 +1,6 @@
 {
-  "base_commit": "5d79ac35fb8296cc227a883ce8d392d1bd2dd5e5",
-  "world_semantic_sha256": "6b8ab4126779c01c85c98651e59261a506c3d27fcd13e38a0f58a0f35c81921b",
+  "base_commit": "1d93099a0aeceec60219ac6c81f32e408482752e",
+  "world_semantic_sha256": "6a69f2b7c758d2289f115dc2f72ffd98c99595bb03ed3ac4321c99648de38a3d",
   "site": {
     "name": "Gale crater, lower Mount Sharp boxwork",
     "centre_lonlat": [
@@ -22,16 +22,27 @@
     "row_order": "north_to_south"
   },
   "layer_sha256": {
-    "cost_per_m.f32": "1a64b160548b501581a368a5caff4f8989e85d740db77192a1aec23791517853",
-    "cost_to_go.f32": "9d3859c4b017f27983e108f8e5c72f68c2832ce09df758aec787aa42ce4fe005",
-    "cost_to_go_scouted.f32": "342eab90eb5ade67104793f3ee5c7a6a3659159fdcc929e71b48c8f6f715dc02",
+    "chokepoint.f32": "ea1ee8f262ce33bcdef575be5ce23f46417c3de428bf9feacf9edb04a159e31a",
+    "cost_per_m.f32": "c7bbf5f9d2fd44cd807158fea93377af255834761f1f3160ffb20eaec560747c",
+    "cost_to_go.f32": "9c7a7afac2c657a8b3c45de6f2823c2b9a4b06875b0fe2e1a740d6fd1f0520cf",
+    "cost_to_go_scouted.f32": "a248f9f75a70e4ea5caf5a03eda20f37a8b309dc83331312ce3b3df914fb3880",
+    "crevice.f32": "e93fdf44b23e2dff81159a5a16a72e873a17a4d1536e315eba2ffef2ebc2ba80",
     "dose_rate.f32": "ff79eac2124ac7cc9320fe848856295dcd8760ee1258a8a2ee2c9158fc3c75c8",
+    "dropoff.f32": "65c135f50c56d11e1db0aa9dcb9d096581278a1d36fadae44bc54334d50e8724",
+    "fine_steep.u8": "6c272fd3043492df4f9ba67c7e5bc40c8761d0339bf65ea3536e52d35daa9d0b",
     "height.f32": "975c3b0dfd31d40ee876a960462d83a5d135b835e5c074f5a7146d141979f9e4",
+    "landform.u8": "3abdc25e0361b002c991f00b50e090feb3b949b10db1bbeab9d6b153a5e323df",
+    "open_dirs.u8": "5e99c58cd132629b828b114e91d5a169126e7675c5d4e3df752d3ea77a88f46d",
     "optical.png": "565969eb41e7d2affb8bf40899c1b5653b13d25a3ac6c8979fb0fdcc29658eea",
-    "rocks_fine.u8": "c0ab7584896b3cb179ffca8ab50a220559b2eca21af8b5c7bcad53b446a2915e",
+    "passable.u8": "aa094aa98b2251b249129ef3fc318abe4cf956cadad062b7495146dc283d1137",
+    "reach.u8": "ab030475dd588de2d0ec5c48ba9a66eea1958b86c37aa1e7b50034780d614313",
+    "rocks_fine.u8": "15ebe3865779117d9a66ebbdea678f33b11c91dbd9becf5b2119af2912e9fa3b",
     "science.u8": "b880d4d79923c8460c768afb0543aecab48b6e65fc9c35c869f77a9615db28f1",
     "slope.f32": "33c178a91cc01bfb869f1bad1638fcb9bc30a21b375093ecc315ef5b6419dd68",
+    "terrain.u8": "f4dc74c18bcbb82a0e0dd2e33daca099a3266b4a08029714f2f9027f80692941",
     "terrain_class.u8": "3fbc91da8e604766c770321667b0f8d2a6132a228a4fa5df336760dd00126d27",
-    "thermal_inertia.f32": "3df824de6ccbc353a34b8b23aef130915037d262812e75045c40c747e91737ea"
-  }
+    "thermal_inertia.f32": "3df824de6ccbc353a34b8b23aef130915037d262812e75045c40c747e91737ea",
+    "unsure.f32": "40b973bca03123573173e30f8de441c887e5b02cd5270e1f3cb1ea5890f78ca7"
+  },
+  "refresh_reason": "PR #94 final 20-degree world: energy model, EVA scenarios, crossings and scout plan rebuilt. Site, grid, reviewed points, imagery, heights, slopes, classes and combined rock mask verified unchanged."
 }

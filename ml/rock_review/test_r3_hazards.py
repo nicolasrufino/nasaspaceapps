@@ -86,6 +86,31 @@ def test_return_cost_blocks_hazards_and_preserves_the_way_home():
         scouted_cost(meta, h, cls, blocked, old)
 
 
+def test_return_cost_obeys_directed_crossings_and_accepts_serialized_knobs():
+    meta = {"width": 3, "height": 3, "cell_size_m": 8, "base_cell": [0, 1],
+            "energy_budget_j": 3165180, "gravity_mps2": make_world.G_MARS,
+            "knobs": {**make_world.KNOBS, "eta": [make_world.CLASSES[c][1] for c in range(5)],
+                      "step_max_m": .3, "steep_run_m": 3., "lane_offset_m": 2.}}
+    # Only the middle row can walk west to base. No eastbound edges exist.
+    passable = bytearray(9)
+    passable[4] = passable[5] = 1 << 3
+    h, cls, blocked = [0.]*9, [1]*9, bytes(9)
+    old = make_world.build(3, 8, [0, 1], meta["energy_budget_j"], h=h, cls=cls)[-1]
+    costs = np.frombuffer(scouted_cost(meta, h, cls, blocked, old, passable=passable), "<f4")
+    assert costs[3] == 0 and 0 < costs[4] < costs[5] < BIG*.99
+    assert all(costs[i] >= BIG*.99 for i in (0, 1, 2, 6, 7, 8))
+    assert make_world.path_home(costs, 3, [2, 1], passable=passable) == [[2, 1], [1, 1], [0, 1]]
+    with pytest.raises(ValueError, match="requires passable"):
+        scouted_cost(meta, h, cls, blocked, old)
+    with pytest.raises(ValueError, match="passable layer size"):
+        scouted_cost(meta, h, cls, blocked, old, passable=bytes(8))
+    for key, value in (("eta", [1.]*5), ("gravity_energy_factor", .38), ("unhandled_energy_knob", 1)):
+        bad = copy.deepcopy(meta)
+        bad["knobs"][key] = value
+        with pytest.raises(ValueError, match="energy model differs"):
+            scouted_cost(bad, h, cls, blocked, old, passable=passable)
+
+
 def test_local_check_uses_affine_in_correct_direction_and_rejects_bad_alignment():
     reference = np.random.default_rng(42).normal(100, 20, (2048, 2048)).astype(np.float32)
     matrix = np.array([[1., 0., 21.], [0., 1., -15.]])
@@ -152,6 +177,29 @@ def test_end_to_end_stages_valid_world_and_preserves_every_unrelated_file(tmp_pa
     assert all(not v or merged[i] for i, v in enumerate(before["rocks_fine.u8"]))
     assert sum((output/"rocks_verified.u8").read_bytes()) == 9
     assert len(read_array(output/"world/cost_to_go_scouted.f32", "f", 256)) == 256
+
+
+def test_export_loads_and_pins_crossings(tmp_path):
+    world, artifacts = fixture_bundle(tmp_path)
+    meta = json.loads((world/"world.json").read_bytes())
+    meta["files"]["passable"] = "passable.u8"
+    write_json(world/"world.json", meta)
+    # No crossing leaves the last cell, despite its flat, unblocked terrain.
+    crossings = bytes([255]*255+[0])
+    (world/"passable.u8").write_bytes(crossings)
+    reference = json.loads((artifacts/"r3_world_reference.json").read_bytes())
+    reference["world_semantic_sha256"] = semantic_sha(meta)
+    write_json(artifacts/"r3_world_reference.json", reference)
+    with pytest.raises(ValueError, match="missing from the world reference"):
+        export(world, tmp_path/"unpinned", artifacts=artifacts)
+    reference["layer_sha256"]["passable.u8"] = sha(crossings)
+    write_json(artifacts/"r3_world_reference.json", reference)
+    export(world, tmp_path/"crossings", artifacts=artifacts)
+    assert read_array(tmp_path/"crossings/world/cost_to_go_scouted.f32", "f", 256)[255] >= BIG*.99
+    assert (tmp_path/"crossings/world/passable.u8").read_bytes() == crossings
+    (world/"passable.u8").write_bytes(bytes([255]*256))
+    with pytest.raises(ValueError, match="Target world layer changed: passable"):
+        export(world, tmp_path/"tampered", artifacts=artifacts)
 
 
 @pytest.mark.parametrize("tamper", ["review", "pixels", "coordinates", "world"])
@@ -236,5 +284,12 @@ def test_published_gale_layer_matches_reviewed_points_and_manifest():
     for filename, expected in reference["layer_sha256"].items():
         # Changes to unrelated NASA layers/metadata do not invalidate rock
         # labels. Changes to imagery, terrain or geometry require rechecking.
-        if filename in ("height.f32", "slope.f32", "terrain_class.u8", "optical.png"):
+        if filename in ("height.f32", "slope.f32", "terrain_class.u8", "optical.png", "passable.u8"):
             assert sha((world/filename).read_bytes()) == expected
+    size = meta["width"]*meta["height"]
+    current = read_array(world/"cost_to_go_scouted.f32", "f", size)
+    rebuilt = scouted_cost(meta, read_array(world/"height.f32", "f", size),
+                           read_array(world/"terrain_class.u8", "B", size), combined, current,
+                           passable=read_array(world/"passable.u8", "B", size))
+    assert sha(rebuilt) == report["staged_world"]["cost_to_go_scouted_sha256"]
+    assert all(cost >= BIG*.99 for cost, hazard in zip(current, combined) if hazard)

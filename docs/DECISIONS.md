@@ -12,7 +12,8 @@ One place for what the team decided, why, and what is still open. **Add a line h
 | 2026-11-15 | **Energy budget from a real suit figure** (1,200 BTU/h, 8 h suit, 1.5 h reserve; ICES-2026-127), not sized to fit the tour | Sizing the budget to the tour was circular and hid that the walk got harder | Nicolas | PR #94; brief §2 |
 | 2026-11-15 | **Scouting mode first: reach the targets** (the specific stops chosen for this walk); network mode later | It is the demo, the building block of network mode, and measurable against "knowing everything" | Nicolas | Brief §3 |
 | 2026-11-15 | **"Blocked" follows NASA's suit data:** a rock taller than 0.3 m is an obstacle (smallest crew member's step, ICES-2025-294); a cell is blocked when obstacles leave gaps under 1.0 m (the hatch width NASA sizes for the largest crew member); otherwise rocks only add walking cost | Uses NASA's measured suit limits, the same 0.3 m Luca uses for ledges | Nicolas | Brief §5 |
-| 2026-11-14 | **Walking slope limit is 20°**, not 25° | Artemis xEVA suit specification (flagged by Luca in PR #94). On Gale: walls go from 15.5% to 24.2% of cells, cells reachable from base from 82.2% to 69.6%; the five-stop Curiosity tour is unchanged (334.7 kJ) because it already avoids steep ground (`app/scripts/slope-check.json`) | Nicolas, Luca | `max_slope_deg` in `world.json`. Applied in PR #94: Gale and synthetic worlds rebuilt at 20°, scout anomalies follow the knob; the app follows the knob without a code change |
+| 2026-11-15 | **Refresh R3 and R5 against PR #94, using its default worst scenario** | Passable crossings and the new energy knobs invalidate the old exports. Re-export keeps 23 accepted / 2 excluded proposals and the same hazard mask. Two passes: 630.5 kJ, 446.5 kJ extra margin at +30% walking cost, after the 1,899.1 kJ reserve. These are simulations at the rebuilt 20° limit | Jules | `ml/rock_review/R3.md`, `ml/pitch_metrics/PITCH_NUMBERS.md`, `docs/PITCH.md`; PR #99 depends on #94 contract approvals |
+| 2026-11-14 | **Walking slope limit is 20°**, not 25° | Artemis xEVA suit specification (flagged by Luca in PR #94). On Gale: walls go from 15.5% to 24.2% of cells, cells reachable from base from 82.2% to 69.6%; the historical 8 m-only check kept the then-current tour unchanged (`app/scripts/slope-check.json`); current energy/crossing results are in R5 | Nicolas, Luca | `max_slope_deg` in `world.json`. Applied in PR #94: Gale and synthetic worlds rebuilt at 20°, scout anomalies follow the knob; the app follows the knob without a code change |
 | 2026-11-14 | **The visualizer is a guided tour** (11 steps, Next / Play), with free play folded underneath | The free-play version was hard to follow | Nicolas | [Scouting explainer](https://claude.ai/artifact/8FDY6zGHXoewAtzxYBCJKG); source `docs/scouting/explainer.html` |
 | 2026-11-14 | **Helicopters are based on SkyFall plus newer concepts**, recharged at the habitat | SkyFall (JPL, 3 helicopters, 2028) proves scouting is planned but publishes no range or recharge; Mars Science Helicopter, Ingenuity and Dragonfly fill the gaps. Habitat recharge is **our assumption**, said as such | Nicolas | `docs/SCOUT-ALGORITHM.md` §7 |
 | 2026-11-14 | **No "two months to recharge" rule, no Ingenuity flight cadence** | "Two months" was rover driving time one flight saved, not a recharge time; one flight per 13.6 sols was a technology demonstrator's pace | Nicolas | `docs/SCOUT-ALGORITHM.md` §7, `docs/SCOUTING.md` |
@@ -36,7 +37,6 @@ Recommendations with evidence and the holes checked: `docs/DECISION-BRIEFS.md` (
 
 | Question | Options | Needs | Blocks |
 |---|---|---|---|
-| **Rebuild world files at 20°** [1] | With #94 (one R3 re-export, recommended) or as its own PR | Luca or Galsan; Jules's R3 hashes change too | The 20° decision taking effect |
 | **How high the helicopter flies** [4] | Low (about 2–4 m, matches the rover images the model learns from; dusty) / about 10 m (safe; needs the model adapted to the air view). Deciding test: run the rover-trained model on labelled Ingenuity images | Nicolas | Helicopter-view model, flight planner |
 | **Labels for sensing** | Start with the reviewed ROSCO rocks / also project Curiosity's labelled images onto Gale cells | Jules, Nicolas | Belief-map training |
 | **Stop rule: when to stop flying** [6] | Keep flying while a flight could still make the walk safer, reach more science, or make it easier; stop when none would change the plan, or at the budget | Nicolas | Value-of-information planner |
@@ -52,14 +52,13 @@ Recommendations with evidence and the holes checked: `docs/DECISION-BRIEFS.md` (
 - **Sun and shadow model** (Mars24 algorithm) for flight windows and walking windows.
 - **Generated test worlds** where hidden rocks follow orbit features (today's synthetic rocks are random), and the **benchmark** on them and on Gale.
 - **Compute time** of value of information at Gale size (256 × 256), to measure.
-- **Scout plan at 20°:** `scout_plan.py` marks anomalies "near the limit"; it must use the new limit after the rebuild.
-- **`app/HOW-IT-WORKS.md` formulas** for #94 once it merges.
+- **Integrate PR #94 and #99:** contracts need all owners' approval; the new formulas and evidence are staged in those branches.
 - **Real-phone test** over HTTPS.
 
 ## How slopes enter the algorithm
 
 - **Walking cost:** Pandolf's formula charges for going uphill (grade term), so steeper routes cost more energy. Downhill gets no discount yet.
-- **Walls:** a cell steeper than `max_slope_deg` (20° once rebuilt) cannot be entered; the walk-back ring and every route respect it.
+- **Walls:** a cell steeper than `max_slope_deg` (20° in this rebuilt world) cannot be entered; the walk-back ring and every route respect it.
 - **Hidden steepness:** 8 m cells average away short steep steps. Luca's crossings (#93) check every step between cells on the 1 m terrain (0.3 m step limit, steep runs up, down or across). #94 makes routes use them.
 - **Uncertainty:** slope comes from orbit, so it is mostly known. What is uncertain is ground *near* the limit: 13.1% of Gale cells are between 15° and 20°. The belief map should treat those, and crossings close to the limit (#93's `unsure` layer), as places a flight is worth more.
 - **In the toy simulator:** step cost grows with climbing and height change, and the steepest 7% of cells are walls seen from orbit.
