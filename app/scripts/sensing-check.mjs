@@ -32,8 +32,9 @@ const cells = [...Array(N).keys()].filter((i) => slope[i] <= meta.knobs.max_slop
 const west = cells.filter((i) => i % W < W / 2), east = cells.filter((i) => i % W >= W / 2)
 
 // AUC: chance a random rock cell scores higher than a random clear cell (0.5 = no signal).
-function auc(score, idx) {
-  const s = idx.map((i) => [score(i), rocks[i]]).sort((a, b) => a[0] - b[0])
+const auc = (score, idx) => auc2(score, idx, (i) => rocks[i])
+function auc2(score, idx, label) {
+  const s = idx.map((i) => [score(i), label(i)]).sort((a, b) => a[0] - b[0])
   let pos = 0, neg = 0, rank = 0
   for (let k = 0; k < s.length;) {
     let j = k
@@ -62,12 +63,27 @@ const rate = (idx) => idx.reduce((a, i) => a + rocks[i], 0) / idx.length
 const top = [...east].sort((a, b) => p(b) - p(a)).slice(0, Math.round(east.length * 0.2))
 const caught = top.reduce((a, i) => a + rocks[i], 0) / east.reduce((a, i) => a + rocks[i], 0)
 
+// Jules's human-reviewed ROSCO rocks (ml/exports/rocks.json, R3): the only cells that are not a DTM rule.
+// Scored apart: reviewed cells vs cells with no hazard at all, over the whole slice (too few to split).
+let reviewed = null
+try {
+  const r = JSON.parse(readFileSync(new URL('../../ml/exports/rocks.json', import.meta.url)))
+  const own = new Set(r.accepted_points.map((a) => a.cell[1] * W + a.cell[0]))
+  const pad = new Set(r.accepted_points.flatMap((a) => a.clearance_cells.map(([x, y]) => y * W + x)))
+  const idx = cells.filter((i) => own.has(i) || !rocks[i])
+  const lab = (i) => own.has(i) ? 1 : 0
+  const aucOn = (score) => auc2(score, idx, lab)
+  reviewed = { rock_cells: own.size, padded_cells: pad.size,
+    auc_per_feature: Object.fromEntries(names.map((f) => [f, aucOn((i) => feats[f][i])])), auc_combined: aucOn(p) }
+} catch { /* no R3 export in this checkout */ }
+
 const out = {
   label: 'rocks_fine (Gale estimate from the 1 m HiRISE DTM; not ground truth)',
   cells_walkable: cells.length, rock_rate_west: rate(west), rock_rate_east: rate(east),
   auc_east_per_feature: Object.fromEntries(names.map((f) => [f, auc((i) => feats[f][i], east)])),
   auc_east_combined: auc(p, east),
   rocks_caught_by_top_20pct_east: caught,
+  reviewed_rocks_R3: reviewed,
   weights: Object.fromEntries([['bias', w[0]], ...names.map((f, k) => [f, w[k + 1]])]),
 }
 writeFileSync(new URL('sensing-check.json', import.meta.url), JSON.stringify(out, null, 1) + '\n')

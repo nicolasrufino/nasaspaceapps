@@ -66,6 +66,40 @@ A route is blocked if any cell on it is. Rock fields come in patches, so neighbo
 - **Our label is circular on Gale.** `rocks_fine` is itself computed from the 1 m orbit DTM. A model using that DTM would score near-perfectly and prove nothing. **Real labels must come from the ground:** Curiosity's images or reviewed rocks.
 - **A weak predictor is still useful.** Value of information needs *probabilities*, not certainties. Even a weak but honest prediction tells the planner where uncertainty is, and every flight adds labels.
 
+**Second measurement: Jules's reviewed rocks (R3, PR #88).** The Gale world now holds 23 human-accepted ROSCO rocks from one HiRISE image (22 cells, padded to 180), on top of the 963 DTM-estimate cells. Scored against cells with no hazard (same script):
+
+- These real rocks sit on **steeper, bumpier 8 m ground**: AUC **0.83** for 8 m slope and **0.82** for 8 m relief. THEMIS adds little (0.55).
+- The model trained on the old DTM rule scores them at **0.52**, no better than guessing. The rule assumes rocks hide on *gentle* ground; the reviewed rocks are on *steep* ground. **So the rule label is not just circular, it points the wrong way for real rocks. Do not train on it.**
+- **Caveat:** 22 rocks from one image, chosen from a detector's proposals rather than at random. The uncertainty is wide (roughly ±0.15) and the steep-ground link may partly be where shadows are easiest to see. This is a lead, not a result.
+
+**What R3 gives us and what the belief map still needs:**
+
+| R3 gives | Still needed |
+|---|---|
+| Real, human-checked rocks, kept apart from the DTM estimates | **Wall-to-wall coverage:** ROSCO run over the whole slice, keeping every detection, not 25 proposals |
+| Exact placement on our grid (registered to the mosaic) | **Rock sizes per cell**, to get rock cover and apply the rock-size law |
+| A demo the helicopter can reveal | **Negatives:** "looked here in good light, found nothing", which are as useful as rocks |
+| | **Probabilities, not a yes/no mask**, so value of information can weigh flights |
+
+**Luca's PR #93 is the other half of the blocker.** It computes from the 1 m DTM which **crossings between cells** a suited walker can make (0.3 m step limit, NASA ICES-2025-294). Its `unsure` layer, "share of crossings near a limit", is a ready-made uncertainty input for choosing flights. Rocks (R3) plus crossings (#93) plus probabilities is the belief map.
+
+#### How the helicopter looks: low and slanted, like a rover
+
+**The idea:** fly at about 2 m and look across the ground at a slant, like a rover's camera. Then models trained on rover images (AI4Mars) apply. And unlike a walker or rover, a helicopter never pays to back out of a dead end: it lifts over and moves on.
+
+**What checks out:**
+- **The height matches.** Curiosity's Navcams sit 1.94–1.99 m above the wheel base ([WUSTL instrument page](https://an.rsl.wustl.edu/help/Content/About%20the%20mission/MSL/Instruments/MSL%20Navcam.htm)). AI4Mars labels come from those cameras.
+- **No cost to back out.** This is the asymmetry the algorithm uses: sensing is cheap next to walking into a dead end. The helicopter still has to get back to the habitat to recharge, so its battery range still limits each flight.
+
+**What argues against 2 m:**
+- **Dust.** Ingenuity's rotor lifted dust on take-off until it was above 3 m, on landing from 2.3–3.6 m, and in places even cruising at 5.1–5.7 m ([Lemmon et al., JGR Planets 2022](https://pmc.ncbi.nlm.nih.gov/articles/PMC10078181)). At 2 m the camera would look through its own dust cloud, and the downwash would disturb the ground it is trying to see.
+- **Clearance at our site.** Luca measured (#93) boxwork ridge relief inside a cell: median 0.8 m, 90th percentile 1.7 m. A 2 m hover leaves about 0.3 m over the high ridges.
+- **Same height does not mean the model transfers.** Jules's classifier scored 93% on Curiosity but **48% on Perseverance**, both at about 2 m on a mast. Rover-to-rover already fails, so rover-to-helicopter needs its own labelled helicopter images to fine-tune and test.
+
+**Proposal: match the viewing angle, not the height.** What makes the ground look like a rover's view is the **slant**, not the altitude. Fly above the dust (above about 6 m, a knob) with a camera tilted toward the horizon, like Ingenuity's colour camera. Sources differ on its tilt: 22° below the horizon ([JPL](https://photojournal.jpl.nasa.gov/catalog/PIA24593)) or 45° ([Maki et al., LPSC 2025](https://epizodyspace.ru/bibl/inostr-yazyki/Lunar_and_Planetary_Science/2025/Maki_et_al_Ingenuity_Mars_Helicopter_Cameras_56th_LPSC_no_2685_(2025).pdf)). The 13 MP camera keeps rocks sharp from further away.
+
+**Test set that exists today:** Ingenuity's colour images are public. Labelling a few hundred patches would tell us whether the rover-trained model works from the air, before anyone builds on it.
+
 #### Training sensing: what is missing, whether Moon data helps, and what we start now
 
 **What training needs:** pairs of (orbit picture of a place, what is really on the ground there, at the scale that stops a walker). Here is what exists for each part:
