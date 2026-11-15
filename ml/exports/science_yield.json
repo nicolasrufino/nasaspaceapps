@@ -1,0 +1,48 @@
+{
+  "what": "Science-yield numbers for the pitch, from repo files. Made by ml/pitch_metrics/science_yield.py.",
+  "walk": {
+    "stops": 5,
+    "stop_ids": [
+      "ridge_top",
+      "overlook",
+      "nevado_sajama",
+      "valle_de_la_luna",
+      "altadena"
+    ],
+    "route_m": 1311.4,
+    "route_energy_kj": 630.5,
+    "visit_tasks_per_stop": 6,
+    "visit_tasks": [
+      "Look around",
+      "Close-up of the feature",
+      "Read the rock's chemistry",
+      "Water in the ground",
+      "Weather and radiation",
+      "Take a sample"
+    ],
+    "visit_minutes_per_stop": 28,
+    "measurements_per_walk": 30,
+    "source": "ml/exports/pitch_metrics.json results.repeated_scout.final_route; docs/SUNDAY-PLAN.md Visit table"
+  },
+  "stay": {
+    "stay_sols": 30,
+    "sols_per_walk": 2,
+    "walks_max": 15,
+    "stops_max": 75,
+    "measurements_max": 450,
+    "note": "Our arithmetic: at most, if every second sol is a walk sol and every walk has five stops. Stay length: National Academies 2025 / NASA NTRS 20220001816; 2 sols per walk: docs/OPERATIONS.md."
+  },
+  "curiosity": {
+    "first_sol": 4564,
+    "last_sol": 4718,
+    "sols_first_to_last_stop": 154,
+    "caveat": "Not a like-for-like race: Curiosity drilled and ran lab analyses (CheMin, SAM) for weeks at each drill stop, which a crew walk does not do. Say: the rover took this long to visit these five places.",
+    "source": "data/worlds/gale/targets.json (sols of the five stops)"
+  },
+  "dose": {
+    "mean_dose_rate_ugy_per_h": 8.58,
+    "walk_hours": 0.364,
+    "walk_dose_ugy": 3.13,
+    "note": "Walking time only (route length / knob speed), stop time excluded. dose_rate.f32 = Curiosity RAD mean 0.210 mGy/day (Hassler 2014) x sky-view factor: an estimate, absorbed dose not dose equivalent."
+  }
+}
