@@ -49,7 +49,7 @@ def cahv_rays(c, a, h, v, cols, rows):
     hx = h[None, None] - x[..., None] * a[None, None]
     vy = v[None, None] - y[..., None] * a[None, None]
     d = np.cross(vy, hx)
-    d *= np.sign((d @ a))[..., None]
+    d *= np.sign(d @ a)[..., None]
     return d / np.linalg.norm(d, axis=-1, keepdims=True)
 
 
