@@ -23,7 +23,8 @@ def build():
     css = (ROOT / "deck.css").read_text(encoding="utf-8")
     return """<!doctype html><html lang="en"><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mission VESTA — Vesta Scout</title><style>
+<title>Mission VESTA — Vesta Scout</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rethink+Sans:wght@400..800&family=Michroma&display=swap"><style>
 *{box-sizing:border-box;margin:0}body{background:#252525;overflow:hidden}
 """ + css + """
 #stage{position:absolute;transform-origin:top left;width:1920px;height:1080px}
