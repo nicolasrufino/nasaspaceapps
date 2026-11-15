@@ -8,6 +8,8 @@ Written 2026-11-15.
 
 ## 1. Approve PR #94 (routes on crossings + measured walking energy)
 
+**Status: accepted by Nicolas, 2026-11-15.**
+
 **Recommendation: approve, on two conditions.** (a) Jules re-exports R3 first. (b) Rebuild the world files at 20° **in the same PR**, so Jules re-exports once instead of twice (both changes alter `cost_to_go_scouted.f32`, which R3 pins by hash).
 
 **Evidence.**
@@ -26,6 +28,8 @@ Written 2026-11-15.
 
 ## 2. Energy budget: real suit figure, not auto-sized
 
+**Status: accepted by Nicolas, 2026-11-15.**
+
 **Recommendation: use the suit-based budget Luca put in #94** (NASA planetary suit sizing rate of 1,200 BTU/h, 8 h suit, 1.5 h reserve, stops subtracted; ICES-2026-127). **Drop auto-sizing.**
 
 **Why not auto-sizing:** it sizes the budget so the tour uses about 80% of it, which is circular. It hides exactly what #94 revealed (the walk is harder), and it is an invented number (rule 5).
@@ -37,6 +41,8 @@ Written 2026-11-15.
 ---
 
 ## 3. Which scouting mode first: **reach the targets**
+
+**Status: accepted by Nicolas, 2026-11-15.**
 
 **Recommendation: build "reach the targets" first; "build a network" after.**
 
@@ -51,25 +57,47 @@ Written 2026-11-15.
 
 ---
 
-## 4. How high the helicopter flies: **cruise at about 10 m, camera tilted 45° below the horizon**
+## 4. How high the helicopter flies, and does it matter for the model?
 
-**Recommendation:** about 10 m (a knob), camera looking forward and down at 45°, like Ingenuity's colour camera. The earlier "above 6 m" proposal was not high enough (see dust below).
+**Status: open.** Nicolas's question: the terrain model learns from **rover** images; the helicopter **flies**. Does that change anything for the machine learning?
 
-**Evidence.**
-- **Dust:** Ingenuity's rotor lifted dust below 3 m on take-off, from 2.3–3.6 m on landing, and **extensively even when traversing at 5.1–5.7 m** ([Lemmon et al. 2022](https://pmc.ncbi.nlm.nih.gov/articles/PMC10078181)). 2 m puts the camera inside its own dust cloud; 6 m is still marginal.
-- **Clearance:** Gale boxwork ridges reach 1.7 m inside a cell (90th percentile, Luca #93). 2 m leaves about 0.3 m.
-- **Resolution is not a reason to fly low:** Ingenuity's colour camera is 4208 × 3120 pixels with a 102° × 82° field of view, boresight 45° below horizontal ([Maki et al., LPSC 2025](https://epizodyspace.ru/bibl/inostr-yazyki/Lunar_and_Planetary_Science/2025/Maki_et_al_Ingenuity_Mars_Helicopter_Cameras_56th_LPSC_no_2685_(2025).pdf)). That is about 0.42 mrad per pixel: from 10 m up, at a 14 m slant range, one pixel covers about 6 mm, so a 0.3 m rock is about 50 pixels across. Even at 50 m range it is 14 pixels.
-- **Swath:** at 10 m and 45°, the view at about 14 m range is roughly 34 m wide, which matches the 15 m swath radius the app already uses.
+**Short answer: yes. Height is the biggest factor, so we either fly near rover height or adapt the model to the air view. One small test tells us which.**
 
-**Why not 2 m for the rover-like view:** the classifier must be fine-tuned on helicopter images anyway (93% on Curiosity fell to 48% on Perseverance at the *same* height). Similar height does not buy transfer; dust and ridges make it unsafe.
+**What the research says.**
+- **Height matters more than camera tilt.** A drone segmentation study measured accuracy changing by **3–25% with flight height**, but only **0.5% with camera angle** ([ASCE 2021](https://ascelibrary.com/doi/10.1061/9780784483893.109)).
+- **Ground-trained models degrade as the drone climbs.** In a ground-to-aerial study, a model trained on ground-view labels lost about **46% of its accuracy** going from the lowest to the highest flight level. Training on unlabelled flying images as well (self-distillation) cut the loss to about 21% ([Progressive Self-Distillation, 2022](https://arxiv.org/pdf/2208.13404)). [FlyAwareV2](https://arxiv.org/pdf/2510.13243) reports the same pattern: the bigger the altitude difference, the bigger the drop.
+- **Our own data agrees:** Jules's model scored 93% on Curiosity but 48% on Perseverance, both at about 2 m. Even a different camera at the same height breaks it.
+- **No labelled helicopter terrain dataset exists for Mars** (AI4Mars is rover images only). Ingenuity's images are public but unlabelled.
 
-**Holes checked.**
-- *JPL's photojournal says the camera points 22° below the horizon; Maki et al. (2025, the camera team) say 45°.* We take the camera team's paper; it is a knob either way.
-- *Navigation:* Ingenuity navigates by tracking ground features with a downward camera; flying higher keeps more features in view and slower across it. No published minimum, so no number claimed.
+**Why height matters: it changes how many pixels a rock gets (scale) and how much of its side you see (angle).** The numbers for our cameras:
+- Curiosity's Navcam: 0.82 mrad per pixel, about 2 m up ([WUSTL](https://an.rsl.wustl.edu/help/Content/About%20the%20mission/MSL/Instruments/MSL%20Navcam.htm)).
+- Ingenuity's colour camera: about 0.42 mrad per pixel (102° over 4,208 pixels).
+- So the helicopter sees the ground **at the same angle and the same scale as the rover's training images when it flies at about 4 m** (2 m × 0.82 / 0.42).
+- At 10 m, the same view angle is about **2.6× coarser** than the training images. A 0.3 m rock is still about 14 pixels across, but it looks smaller than anything the model learned from.
 
+**The two options:**
+
+| | Fly low (about 4 m) | Fly at about 10 m |
+|---|---|---|
+| Model | Sees what it was trained on | Needs adapting |
+| Dust | Ingenuity raised dust up to 3.6 m on landing and at 5.1–5.7 m in flight ([Lemmon 2022](https://pmc.ncbi.nlm.nih.gov/articles/PMC10078181)): images may be hazy, which is its own domain shift | Clearer |
+| Clearance | About 2.3 m over Gale's highest ridges | Plenty |
+
+**How we adapt the model at 10 m (known techniques, cheap):**
+1. Shrink the rover training images by about 2.6×, so training looks like flight.
+2. Add Ingenuity's unlabelled images with the self-distillation method above.
+3. **Label about 200 patches of Ingenuity colour images** as the test set.
+
+**Recommendation:** do not decide by guessing. Jules runs the rover-trained model on the labelled Ingenuity patches, with and without step 1, grouped by Ingenuity's height in each image.
+- If the adapted model holds up at 10 m: fly at 10 m.
+- If it does not: fly at about 4 m on clear sols and treat hazy images as unknown.
+
+The app keeps height as a knob either way, so nothing waits on this.
 ---
 
 ## 5. What "blocked" means for a suited walker
+
+**Status: accepted by Nicolas, 2026-11-15.**
 
 **Recommendation: a rock taller than 0.3 m is an obstacle. A cell is blocked when the average gap between obstacle rocks is under 1.0 m. Otherwise rocks only make the cell costlier** (the "big rock" walking cost, η = 1.5, Soule & Goldman).
 
@@ -87,19 +115,28 @@ Written 2026-11-15.
 
 ---
 
-## 6. Stop rule: when is a flight worth flying?
+## 6. Stop rule: when do we stop flying?
 
-**Recommendation: fly the best strip only if both are true: (a) its value is clearly above sampling noise (lower 90% bound above zero), and (b) it saves at least 1% of the walk's expected energy. Stop at the flight budget (brief 7) regardless.**
+**Status: open (rewritten 2026-11-15 after Nicolas's question).**
 
-**Why this shape:**
-- **Energy is not what a flight costs.** One flight uses about 10 Wh, which a 40 kW habitat reactor makes in about one second. What a flight really costs is **a scarce flight**, and a risk to the helicopter. Ingenuity was lost on its 72nd flight: one loss in 72 flights, about 1.4% per flight (a crude single-event estimate). So the rule must avoid wasting flights, not save electricity.
-- **(a) Noise:** value is estimated from sampled worlds. Without a noise test, the planner would fly toward random noise when every true value is near zero.
-- **(b) 1% of the walk:** on the Gale tour under #94 (617 kJ), 1% is 6 kJ, about 0.3 L of oxygen. Savings below that do not change any decision the crew would make.
+**First, the words:**
+- A **strip** is the piece of ground one flight photographs: a path of up to 700 m, about 30 m wide.
+- Each sol, the planner looks at every strip it could fly along the candidate routes. The **best strip** is the one whose photos would change the walking plan the most.
+
+**What "change the plan" means has to follow the challenge.** NASA asks for a walk that is **safe first**, **does new science**, and works at the scale of one walk. So a flight's value is measured on those three, in that order:
+1. **Safer:** it lowers the chance that the planned route turns out blocked, or raises the thinnest margin to get home.
+2. **More science:** it makes a stop reachable that was dropped or uncertain.
+3. **Easier:** it saves walking energy and time.
+
+**The rule:** keep flying while some strip could still change the plan on one of those three. Stop when no strip would change it, or when the flight budget is used.
+
+**Why a rule is needed at all:** a flight's electricity is trivial; what it really costs is a scarce flight and some risk to the helicopter. Ingenuity was lost on its 72nd flight: one loss in 72 flights, about 1.4% per flight, a crude single-event figure. A flight that would not change anything is pure risk.
+
+**One technical guard:** values come from sampled worlds, so tiny values may be noise. A strip only counts if its value is clearly above the sampling noise.
 
 **Holes checked.**
-- *Does an expected-value rule ignore a rare dead end?* The walk-back ring and the 20% reserve (or the 1.5 h suit reserve) already cover the worst case on every step. The stop rule only decides when more information stops paying.
-- **Still a judgment:** 1% is a judgment call, and it is a knob. Part (a) is not a judgment.
-
+- *Does focusing on one walk miss long-term value?* Confirmed ground is kept for later walks (brief 3). The rule just does not spend flights on ground this walk will never use.
+- *Is the order safety, science, effort right?* It is the challenge's order (R4 "safety first"). The weights between them are a team choice; the default is strict priority.
 ---
 
 ## 7. Flight budget: **6 flights per walk** (3 helicopters × 2 flights, in the sol before the walk)
