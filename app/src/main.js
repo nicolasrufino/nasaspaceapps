@@ -1,3 +1,4 @@
+import { parseWalkNotes, showWalkNotes } from './walk-notes.js'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { loadWorld, layerRGB, sourceLabel } from './world.js'
@@ -30,6 +31,12 @@ const scoutPlan = await optionalJSON('scout_plan.json', []) // pipeline's extra 
 let flight = null // helicopter in the air: { flights, k, along, speed, found, before }
 const { meta, layers } = world
 const { width: W, height: H, cell_size_m: cs } = meta
+const walkNotesUrl = `${base}/walk.jsonl`
+const walkNotes = flags.has('map_grows')
+  ? await fetch(walkNotesUrl).then(async (response) =>
+    response.ok ? parseWalkNotes(await response.text(), W, H) : []).catch(() => [])
+  : []
+showWalkNotes($('layers'), walkNotes, walkNotesUrl)
 // The way home the ring and walk read. Live: cells the helicopter scouts switch to cost_to_go_scouted (E4).
 const ctg = layers.cost_to_go
 const scanned = new Uint8Array(W * H) // cells the helicopter has seen
@@ -327,6 +334,8 @@ function paintMinimap(inside) {
     ctx.fillStyle = !included.has(s.id) ? '#8a8a8a' : route.dropped.includes(s.id) ? '#ff5a3d' : s.custom ? '#ff9f1c' : '#ffd23f'
     ctx.fillRect(s.cell[0] - r, s.cell[1] - r, 2 * r + 1, 2 * r + 1)
   }
+  ctx.fillStyle = '#f488ee'
+  for (const { cell: [x, y] } of walkNotes) ctx.fillRect(x - 1, y - 1, 3, 3)
   ctx.fillStyle = '#fff'
   ctx.fillRect(meta.base_cell[0] - 1, meta.base_cell[1] - 1, 3, 3)
   ctx.fillStyle = '#35e0ff'
