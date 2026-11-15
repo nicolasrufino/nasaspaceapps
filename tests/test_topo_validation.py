@@ -4,6 +4,10 @@ import os
 import sys
 
 import numpy as np
+import pytest
+
+pytest.importorskip('scipy')
+pytest.importorskip('rasterio')  # topo_overlay -> terrain_1m; runs in the data job
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, '..', 'data', 'pipeline'))
