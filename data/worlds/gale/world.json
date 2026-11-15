@@ -204,6 +204,7 @@
   },
   "detail_tiles": {
     "url": "https://marsmapchi.blob.core.windows.net/tiles/gale/tiles.json",
-    "note": "Optional 1 m terrain + 25 cm HiRISE tiles for the 3D view (make_tiles.py)"
+    "overview": "https://marsmapchi.blob.core.windows.net/tiles/gale/overview.jpg",
+    "note": "Optional 1 m terrain + 25 cm HiRISE tiles for the 3D view (make_tiles.py); overview: the whole box in HiRISE colour at 1 m/px, north up"
   }
 }

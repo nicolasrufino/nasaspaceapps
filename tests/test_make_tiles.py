@@ -43,3 +43,28 @@ def test_tiles_match_the_world_and_join(tmp_path):
     a = np.fromfile(out / 'h' / '0_0.u16', '<u2').reshape(33, 33)
     b = np.fromfile(out / 'h' / '0_1.u16', '<u2').reshape(33, 33)
     assert np.array_equal(a[:, 32], b[:, 0])  # shared edge: no gap between meshes
+
+
+def test_levels_are_coarser_copies_on_the_same_datum(tmp_path):
+    raw, world, out = tmp_path / 'raw', tmp_path / 'world', tmp_path / 'tiles'
+    raw.mkdir()
+    world.mkdir()
+    yy, xx = np.mgrid[0:64, 0:64]
+    h = (-3900 + 0.3 * xx + 5 * np.sin(yy / 5)).astype('float32')
+    prof = {'driver': 'GTiff', 'width': 64, 'height': 64, 'count': 1, 'dtype': 'float32',
+            'transform': from_origin(0, 0, 1, 1)}
+    with rasterio.open(raw / 'dem_1m.tif', 'w', **prof) as d:
+        d.write(h, 1)
+    with rasterio.open(raw / 'ortho_25cm.tif', 'w', **{**prof, 'width': 256, 'height': 256, 'count': 3,
+                                                        'dtype': 'uint8', 'transform': from_origin(0, 0, .25, .25)}) as d:
+        d.write(np.full((3, 256, 256), 120, 'uint8'))
+    (world / 'world.json').write_text(json.dumps({'name': 't', 'width': 8, 'cell_size_m': 8.0,
+                                                  'height_offset_m': float(h.min())}))
+    m, _ = mt.make(str(raw), str(world), str(out), tile_m=32)
+    assert [lv['tiles'] for lv in m['levels']] == [2, 1] and m['levels'][1]['height_res_m'] == 2.0
+    t1 = np.fromfile(out / 'L1' / 'h' / '0_0.u16', '<u2').reshape(33, 33)[:32, :32]
+    expect = (h - h.min()).reshape(32, 2, 32, 2).mean(axis=(1, 3))
+    assert np.abs(m['height_base_m'] + t1 / 100 - expect).max() < 0.01
+    assert (out / 'L1' / 'img' / '0_0.jpg').exists()
+    from PIL import Image
+    assert Image.open(out / 'overview.jpg').size == (64, 64) and m['overview']['res_m'] == 1.0
