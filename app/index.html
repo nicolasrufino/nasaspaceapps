@@ -26,7 +26,10 @@
       .warn:empty { display: none; }
       #map { cursor: crosshair; }
       #fleet { width: 3.5em; font: inherit; }
-      #fleetTable { border-collapse: collapse; width: 100%; }
+      #fleetTable, #whyTable { border-collapse: collapse; width: 100%; }
+      #whyTable th, #whyTable td { text-align: left; padding: 1px 6px 1px 0; font-weight: normal; }
+      #whyTable th { color: #f3e6d8; }
+      #whyNotes { margin: 4px 0; padding-left: 1.1em; }
       #fleetTable caption { text-align: left; }
       #fleetTable th, #fleetTable td { text-align: left; padding: 1px 6px 1px 0; font-weight: normal; }
       #fleetTable th { color: #f3e6d8; }
@@ -64,6 +67,11 @@
         <div id="dropped" class="warn"></div>
         <div id="targets"></div>
         <small class="src">Tick the stops for this walk. Tap the minimap to add your own stop.</small>
+        <div id="whyBox" hidden>
+          <h2>Why this route</h2>
+          <table id="whyTable" class="src"></table>
+          <ul id="whyNotes" class="src"></ul>
+        </div>
         <div id="scoutBox" hidden>
           <h2>Scout</h2>
           <div class="row">

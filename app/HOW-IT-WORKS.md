@@ -122,7 +122,25 @@ science weight = 0.4 + 0.2 × science value (0–3), when the world has a scienc
 
 Brighter green = more energy to spare after going there and back. The map brightens as helicopters scout, because scouted ground is trusted twice as much.
 
-## 10. What is real and what is simulated
+## 10. "Why this route" (the explanation panel)
+
+The panel decides nothing; it measures the route the planner chose and the ones it beat (flag `why_route`).
+
+- **Each stretch** (base → stop → … → base): distance, energy (the Pandolf cost of every step), walking time, steepest slope and share of sand.
+- **Steepest ground** on the whole route, against the 25° limit.
+- **Tightest moment:** the least energy to spare at any point, after the cost of getting home and the reserve: `energy left − reserve − cost to go`.
+- **The rejected alternative:** the **shortest-distance** route through the same stops in the same order (what a person would draw), drawn as grey dashes. The panel says what it would cost and why: more sand, more climbing, steeper ground.
+- **After a scout:** how many rock cells the old route crossed and what avoiding them costs.
+
+**Result on Gale (from the code):**
+- Our route: 1,239 m, 330 kJ, 21 min, 10% sand, 43 m of climbing, steepest 17°.
+- The shortest route through the same stops: about 24 m shorter but **412 kJ, 25% more energy**, because 41% of it is sand and it climbs 52 m.
+- Tightest moment: 150 kJ to spare on the last stretch home.
+- After the helicopter: the old route crossed 12 rock cells; avoiding them costs 4 kJ.
+
+Code: `app/src/why.js`.
+
+## 11. What is real and what is simulated
 
 - **Real:** terrain, slope and images (NASA MRO HiRISE via USGS), the Curiosity stops and their photos, the walking-energy formula, all the route and safety maths.
 - **Estimates, marked:** ground type on Gale (from image brightness and roughness until the classifier lands), rock layer on Gale (until shadow-based rock detection lands), helicopter flights per sol, the energy budget size.

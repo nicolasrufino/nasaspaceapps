@@ -5,6 +5,7 @@ import { startWalk, stepTo, ringMask, ringLimit, appState, oxygenL } from './wal
 import { planTour, MAX_STOPS } from './plan.js'
 import { routeFlights, scanAt, pointAlong } from './scout.js'
 import { surveyPlan, scanSegment, bestAreas, FLIGHTS_PER_SOL } from './survey.js'
+import { stretches, describe, lowestMargin, shortestAlternative } from './why.js'
 
 const $ = (id) => document.getElementById(id)
 const params = new URLSearchParams(location.search)
@@ -66,6 +67,9 @@ const pins = new THREE.Group() // science stops, rebuilt when the plan changes
 scene.add(pins)
 const walker = new THREE.Mesh(new THREE.CapsuleGeometry(span / 200, span / 60, 4, 12), new THREE.MeshBasicMaterial({ color: 0x35e0ff }))
 scene.add(walker)
+const altLine = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineDashedMaterial({ color: 0xd0d0d0, dashSize: span / 120, gapSize: span / 120 }))
+altLine.visible = false // E5: the shortest-distance route the planner rejected
+scene.add(altLine)
 const beforeLine = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineDashedMaterial({ color: 0xff3b30, dashSize: span / 100, gapSize: span / 150 }))
 beforeLine.visible = false // the route before the scout flight, for the before/after
 scene.add(beforeLine)
@@ -137,15 +141,66 @@ let route // { cells, stops, dropped, energy_j, minutes }
 let blocked = null // rocks the scout has found (E4); the planner routes around them
 const allStops = () => [...targets, ...custom]
 
+let scoutBefore = null // { cells, energy_j, crossed }: the route before the last scout, for E5
 function replan(keepBefore = false) {
   beforeLine.visible = keepBefore
+  if (!keepBefore) scoutBefore = null
   if (!keepBefore) $('scoutStatus').textContent = ''
   route = planTour(world, allStops().filter((s) => included.has(s.id)), blocked)
   refreshLayer()
   routeLine.geometry.dispose()
   routeLine.geometry = new THREE.BufferGeometry().setFromPoints(route.cells.map((c) => cellPos(c, 1)))
+  if (flags.has('why_route')) explain()
   reset() // a new plan starts a new walk; reset also draws the stops
 }
+
+// --- Why this route (block E5, flag why_route): numbers for each stretch, the tightest moment,
+// and the alternatives the planner beat. Measures; decides nothing. ---
+function explain() {
+  $('whyBox').hidden = !route.stops.length
+  altLine.visible = false
+  if (!route.stops.length) return
+  const name = (id) => allStops().find((s) => s.id === id)?.name ?? id
+  const ends = ['Base', ...route.stops.map(name), 'Base']
+  const stopCells = route.stops.map((id) => allStops().find((s) => s.id === id).cell)
+  const parts = stretches(route, stopCells)
+  const pct = (v) => `${Math.round(v * 100)}%`
+  const rows = parts.map((p, k) => {
+    const d = describe(world, p)
+    return `<tr><td>${esc(ends[k])} → ${esc(ends[k + 1])}</td><td>${Math.round(d.metres)}</td><td>${Math.round(d.energy_j / 1000)}</td>` +
+      `<td>${d.minutes.toFixed(1)}</td><td>${d.steepest_deg.toFixed(0)}°</td><td>${pct(d.sand_share)}</td></tr>`
+  })
+  $('whyTable').innerHTML = `<tr><th>Stretch</th><th>m</th><th>kJ</th><th>min</th><th>Steepest</th><th>Sand</th></tr>${rows.join('')}`
+
+  const all = describe(world, route.cells, blocked)
+  const notes = []
+  const steepK = parts.findIndex((p) => describe(world, p).steepest_deg === all.steepest_deg)
+  notes.push(`Steepest ground: ${all.steepest_deg.toFixed(0)}° on ${ends[steepK]} → ${ends[steepK + 1]} (the limit is ${meta.knobs.max_slope_deg}°).`)
+  const low = lowestMargin(world, route.cells, ctg)
+  let at = 0
+  for (let n = 0, k = 0; k < parts.length; k++) if (low.index <= (n += parts[k].length - 1)) { at = k; break }
+  notes.push(`Tightest moment: ${kj(low.margin_j)} to spare after the way home and the ${kj(meta.reserve_fraction * meta.energy_budget_j)} reserve, on ${ends[at]} → ${ends[at + 1]}.`)
+
+  const altCells = shortestAlternative(world, stopCells, blocked)
+  const alt = describe(world, altCells)
+  const extra = alt.energy_j - all.energy_j
+  if (extra < all.energy_j * 0.01) notes.push('The shortest route through these stops is also the easiest here.')
+  else {
+    const why = []
+    if (alt.sand_share > all.sand_share + 0.02) why.push(`${pct(alt.sand_share)} of it is sand (ours ${pct(all.sand_share)})`)
+    if (alt.climb_m > all.climb_m + 1) why.push(`it climbs ${Math.round(alt.climb_m)} m (ours ${Math.round(all.climb_m)} m)`)
+    if (alt.steepest_deg > all.steepest_deg + 0.5) why.push(`it gets as steep as ${alt.steepest_deg.toFixed(0)}°`)
+    notes.push(`Rejected (grey dashes): the shortest route through the same stops is ${Math.round(all.metres - alt.metres)} m shorter ` +
+      `but costs ${kj(alt.energy_j)} (+${Math.round((extra / all.energy_j) * 100)}%)${why.length ? `: ${why.join(', ')}` : ''}.`)
+    altLine.geometry.dispose()
+    altLine.geometry = new THREE.BufferGeometry().setFromPoints(altCells.map((c) => cellPos(c, 0.6)))
+    altLine.computeLineDistances()
+    altLine.visible = true
+  }
+  if (scoutBefore?.crossed) notes.push(`Before scouting (red dashes), the route crossed ${scoutBefore.crossed} rock cells the helicopter found; avoiding them costs ${kj(all.energy_j - scoutBefore.energy_j)} more.`)
+  $('whyNotes').replaceChildren(...notes.map((t) => Object.assign(document.createElement('li'), { textContent: t })))
+}
+const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c])
 
 function drawStops() {
   pins.clear()
@@ -371,6 +426,7 @@ function land() {
   $('scout').textContent = 'Fly the new route'
   blocked = Uint8Array.from(scanned, (v, i) => v && layers.rocks_fine[i])
   const crossed = before.cells.filter(([x, y]) => blocked[y * W + x]).length
+  scoutBefore = { cells: before.cells, energy_j: before.energy_j, crossed }
   beforeLine.geometry.dispose()
   beforeLine.geometry = new THREE.BufferGeometry().setFromPoints(before.cells.map((c) => cellPos(c, 1.5)))
   beforeLine.computeLineDistances()
@@ -450,7 +506,9 @@ function endSurvey() {
   $('survey').textContent = 'Survey the whole area'
   $('scout').disabled = false
   blocked = Uint8Array.from(scanned, (v, i) => v && layers.rocks_fine[i])
-  replan()
+  const crossed = before.cells.filter(([x, y]) => blocked[y * W + x]).length
+  scoutBefore = crossed ? { cells: before.cells, energy_j: before.energy_j, crossed } : null
+  replan(crossed > 0)
   const mapped = Math.round((scanned.reduce((a, v) => a + v, 0) / (W * H)) * 100)
   $('scoutStatus').textContent = `Survey ${sol > plan.sols ? 'done' : 'stopped'}: ${mapped}% mapped in ${Math.min(sol, plan.sols)} sols ` +
     `with ${fleetSize()} helicopters (at ${FLIGHTS_PER_SOL} flight per helicopter per sol, an estimate); ${found} rock cells found. ` +
