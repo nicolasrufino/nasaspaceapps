@@ -68,6 +68,7 @@ const scanned = new Uint8Array(W * H) // cells the helicopter has seen
 const rockSeen = (i) => scanned[i] && layers.rocks_fine?.[i]
 const cellPos = ([x, y], lift = 0) => new THREE.Vector3(x * cs, layers.height[y * W + x] + lift, y * cs)
 document.title = flowMode ? 'Vesta Scout' : 'Vesta Vision'
+if (!flowMode) document.body.classList.add('vision') // Vision: no Walk tab, no walk bar, no why-this-route (CSS in scout/index.html)
 // Title in four levels (styled in scout/index.html): product, site, the energy scenario, then the grid's size.
 const el = (tag, cls, text) => Object.assign(document.createElement(tag), { className: cls, textContent: text })
 $('title').replaceChildren(el('span', 't-brand', flowMode ? 'Vesta Scout' : 'Vesta Vision'), el('span', 't-site', meta.site?.name ?? meta.name),
@@ -221,6 +222,7 @@ function setView(mode) {
   view.mode = mode
   viewBtn.textContent = { map: 'View: Map', follow: 'View: Follow', eye: 'View: Eye level' }[mode]
   visionNote.hidden = visionBar.hidden = mode === 'map'
+  revealShared.uContour.value = mode === 'map' && $('contours')?.checked ? 1 : 0 // contours only in the map view
   hud?.show(mode !== 'map')
   if (hud) visionNote.hidden = true // the HUD replaces the note
   document.querySelectorAll('.panel').forEach((el) => (el.style.display = mode === 'map' ? '' : 'none'))
@@ -432,7 +434,7 @@ $('layers').append(...VIEWS.map(([n, title]) => viewRadio(n, title)), ...(advanc
 if (flags.has('contours')) {
   const c = document.createElement('label')
   c.innerHTML = '<input type="checkbox" id="contours"><span><b>Contours</b><small>Every 5 m, bold every 25 m · USGS MSL Gale DEM (MRO HiRISE stereo)</small></span>'
-  c.querySelector('input').onchange = (e) => { revealShared.uContour.value = e.target.checked ? 1 : 0 }
+  c.querySelector('input').onchange = (e) => { revealShared.uContour.value = e.target.checked && view.mode === 'map' ? 1 : 0 }
   $('layers').prepend(c)
 }
 
