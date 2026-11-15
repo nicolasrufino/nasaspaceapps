@@ -7,6 +7,7 @@ import { planTour, MAX_STOPS } from './plan.js'
 import { routeFlights, scanAt, pointAlong } from './scout.js'
 import { bestAreas } from './best-areas.js'
 import { beliefMap } from './belief.js'
+import { terrainMaterial, setImageryUVs, loadImagery, imageryCells } from './terrain.js'
 import { stretches, describe, lowestMargin, shortestAlternative } from './why.js'
 import { initStops } from './stops.js'
 import { initSteps } from './steps.js'
@@ -64,7 +65,9 @@ for (let i = 0; i < W * H; i++) pos.setY(i, layers.height[i])
 geo.computeVertexNormals()
 const colors = new THREE.BufferAttribute(new Uint8Array(W * H * 3), 3, true)
 geo.setAttribute('color', colors)
-const terrain = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 1 }))
+setImageryUVs(geo, meta)
+const terrainMat = terrainMaterial()
+const terrain = new THREE.Mesh(geo, terrainMat)
 
 const renderer = new THREE.WebGLRenderer({ canvas: $('scene'), antialias: true })
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
@@ -121,13 +124,22 @@ renderer.setAnimationLoop((now) => {
 // rocks_fine and cost_to_go_scouted stay hidden until the drone has flown (E4).
 const EXTRA = ['thermal_inertia', 'science', 'dose_rate'] // THEMIS, CRISM, Curiosity RAD: flag layers_extra
 const shownLayers = meta.layers.filter((n) => layers[n] && n !== 'rocks_fine' && (!EXTRA.includes(n) || flags.has('layers_extra')))
+const IMAGERY = 'imagery' // HiRISE colour draped on the terrain (ticket F2); the default view when the world has it
+const WHITE = new Uint8Array(W * H * 3).fill(255)
+let imageryRGB = null // one colour per cell, for the minimap
 let layerName = 'terrain_class'
 let layerColors = layerRGB(layerName, layers[layerName])
 // Colours for a layer; "best areas" is computed from what is known now (best-areas.js), not read from a file.
-const colorsFor = (name) => layerRGB(name, name === 'best_areas' ? bestAreas(world, ctg, scanned, blocked)
+const colorsFor = (name) => name === IMAGERY ? (imageryRGB ?? WHITE) : layerRGB(name, name === 'best_areas' ? bestAreas(world, ctg, scanned, blocked)
   : name === 'belief' ? beliefMap(world, scanned, blocked) : layers[name])
 function refreshLayer() {
   if (layerName === 'best_areas' || layerName === 'belief') layerColors = colorsFor(layerName)
+}
+function setLayer(name) {
+  layerName = name
+  layerColors = colorsFor(name)
+  terrainMat.userData.uniforms.uOverlay.value = name === IMAGERY ? 0 : 1
+  document.querySelectorAll('#layers input').forEach((el) => (el.checked = el.value === name))
 }
 $('sources').textContent = meta.sources?.all ?? '' // applies to every layer without its own source
 const BEST = 'best_areas'
@@ -136,16 +148,18 @@ const layerSource = (name) => name === BEST
   ? 'Computed: round trip from base fits the usable energy, slope within the limit, no rocks seen; unscouted ground counts half'
   : name === 'belief'
     ? 'Predicted chance of hidden rocks from 8 m slope and relief (HiRISE terrain); scouted cells show what was found. Estimate'
-    : sourceLabel(meta, name)
-$('layers').append(...[...shownLayers, BEST, ...BELIEF].map((name) => {
+    : name === IMAGERY
+      ? 'MRO · HiRISE colour (USGS MSL Gale LRGB 25 cm mosaic) · NASA/JPL-Caltech/University of Arizona'
+      : sourceLabel(meta, name)
+$('layers').append(...[...(meta.detail_tiles?.url ? [IMAGERY] : []), ...shownLayers, BEST, ...BELIEF].map((name) => {
   const label = document.createElement('label')
   label.innerHTML = `<input type="radio" name="layer"><span><b></b><small></small></span>`
   label.querySelector('input').checked = name === layerName
+  label.querySelector('input').value = name
   label.querySelector('b').textContent = name.replaceAll('_', ' ')
   label.querySelector('small').textContent = layerSource(name)
   label.querySelector('input').onchange = () => {
-    layerName = name
-    layerColors = colorsFor(name)
+    setLayer(name)
     render()
   }
   return label
@@ -502,10 +516,11 @@ function pause() {
 
 function render() {
   const inside = ringMask(ctg, ringLimit(meta, walk))
+  const vertexBase = layerName === IMAGERY ? WHITE : layerColors // the image itself carries the colour in the Imagery view
   for (let i = 0; i < W * H; i++) {
     const f = inside[i] ? 1 : 0.45
     if (rockSeen(i)) colors.array.set([200, 35, 35], i * 3)
-    else for (let c = 0; c < 3; c++) colors.array[i * 3 + c] = layerColors[i * 3 + c] * f
+    else for (let c = 0; c < 3; c++) colors.array[i * 3 + c] = vertexBase[i * 3 + c] * f
   }
   colors.needsUpdate = true
   walker.position.copy(cellPos(walk.cell, span / 100))
@@ -546,3 +561,16 @@ $('play').onclick = () => (timer ? pause() : play())
 $('step').onclick = () => (unlockAudio(), step())
 $('reset').onclick = reset
 replan()
+
+// Real imagery (ticket F2): drape HiRISE on the terrain and make it the default view; it sharpens as tiles arrive.
+loadImagery(meta, renderer, (canvas) => {
+  imageryRGB = imageryCells(canvas, W, H)
+  if (layerName === IMAGERY) { layerColors = imageryRGB; render() }
+}).then((imagery) => {
+  if (!imagery) return
+  terrainMat.map = imagery.texture
+  terrainMat.userData.uniforms.uHasMap.value = 1
+  terrainMat.needsUpdate = true
+  setLayer(IMAGERY)
+  render()
+}).catch(() => {}) // no network or no tiles: the class colours stay

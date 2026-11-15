@@ -182,7 +182,11 @@ z = bias + w1 × (slope ÷ slope limit, standardised) + w2 × (8 m relief, stand
 - **Refitting:** `node app/scripts/belief-fit.mjs` reproduces the current prototype. A full-slice detector run does not by itself justify replacing `rocks_fine` or calling zero detections safe. A scientific refit needs separately reviewed negatives, held-out spatial areas and calibration checks (`ml/LABEL_POLICY.md`).
 - **On the map:** grey means unlikely; red means a 10% chance or more (found rocks are full red). Labelled "Estimate".
 
-## 13. What is real and what is simulated
+## 13. The picture on the ground (Imagery view)
+
+The default view shows **real HiRISE colour imagery** on the terrain (NASA Mars Reconnaissance Orbiter; USGS MSL Gale 25 cm mosaic; credit NASA/JPL-Caltech/University of Arizona). The app draws it at 1 m per pixel over the whole 2 × 2 km. It is for looking only: routes, energy and the walk-back ring never read the picture. In the other views, the layer's colour is laid over the picture's light and dark, so ridges still show through. Ground outside the walk-back ring is dimmed.
+
+## 14. What is real and what is simulated
 
 - **Real:** terrain, slope and images (NASA MRO HiRISE via USGS), the Curiosity stops and their photos, the walking-energy formula, all the route and safety maths.
 - **Estimates, marked:** ground type on Gale (from image brightness and roughness until the classifier lands), rock layer on Gale (until shadow-based rock detection lands), the energy budget size, and the walking-energy factors above.
