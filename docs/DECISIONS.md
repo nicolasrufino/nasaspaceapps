@@ -6,6 +6,7 @@ One place for what the team decided, why, and what is still open. **Add a line h
 
 | Date | Decision | Why | Who | Where it lives |
 |---|---|---|---|---|
+| 2026-11-15 | **The Mission VESTA page is the home page; the map app moved to `/scout/`** (nasa.nicolasrufino.com/scout/). Old `/?world=…` and `/?flags=…` links forward there; `/mission-vesta/` redirects home | The custom domain should open on the design; the app is Vesta Scout | Nicolas | `app/index.html`, `app/scout/index.html` |
 | 2026-11-15 | **Two products on the site: Vesta Scout = the map app we are building now; Vesta Vision = later**, a Google Earth for Mars built from orbit data plus what scouts and models learn | Scout simulates the discovery; Vision needs the trained models first. Scout UI redesign is planned for later | Nicolas | `app/mission-vesta/` |
 | 2026-11-15 | **Mission VESTA site title font is Michroma** (tagline and product names stay Rethink Sans) | Picked from five previewed fonts; wide and technical, closest to NASA lettering | Nicolas | `app/mission-vesta/` |
 | 2026-11-15 | **PR #94 approved by P2** (routes on crossings, gravity factor 0.68, sand 2.4×). Merge after Jules's R3 re-export, with the 20° rebuild in the same PR | Measured values; the old model under-counted energy by about 1.8× and let routes cross ledges. Tested on the branch: 31 app tests, build, Gale in the browser with no console errors | Nicolas | PR #94 review; `docs/DECISION-BRIEFS.md` §1 |

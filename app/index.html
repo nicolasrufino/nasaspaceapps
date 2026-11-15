@@ -1,95 +1,97 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Martian Map</title>
-    <style>
-      html, body { margin: 0; height: 100%; overflow: hidden; background: #1a0f0a; color: #f3e6d8; font: 14px system-ui, sans-serif; }
-      #scene { display: block; width: 100%; height: 100%; touch-action: none; }
-      .panel { position: fixed; background: #000b; padding: 8px 10px; border-radius: 8px; }
-      #hud { left: max(12px, env(safe-area-inset-left)); top: max(12px, env(safe-area-inset-top)); display: grid; gap: 8px;
-        width: min(320px, calc(100vw - 24px)); max-height: 52vh; overflow: auto; }
-      [role=tablist] { display: flex; gap: 4px; }
-      [role=tab] { flex: 1; }
-      [role=tab][aria-selected=true] { background: #35e0ff; }
-      #plan, #walk { display: grid; gap: 8px; }
-      [hidden] { display: none !important; }
-      #layers { display: grid; gap: 4px; }
-      #layers label { display: flex; gap: 6px; align-items: start; }
-      #layers small, #detail small, .src, figcaption { display: block; color: #cdbba8; font-size: 12px; }
-      #targets { display: grid; gap: 4px; }
-      .stop { display: flex; gap: 6px; align-items: center; }
-      .stop .name { flex: 1; text-align: left; }
-      .stop button[aria-pressed=true] { background: #ffd23f; }
-      .warn { color: #ff8a6a; }
-      .warn:empty { display: none; }
-      #map { cursor: crosshair; }
-      #whyTable { border-collapse: collapse; width: 100%; }
-      #whyTable th, #whyTable td { text-align: left; padding: 1px 6px 1px 0; font-weight: normal; }
-      #whyTable th { color: #f3e6d8; }
-      #whyNotes { margin: 4px 0; padding-left: 1.1em; }
-      #detail p { margin: 4px 0; }
-      #detail figure { margin: 6px 0 0; }
-      #detail img { width: 100%; border-radius: 4px; }
-      #hud progress { width: 100%; accent-color: #35e0ff; }
-      #stats { margin: 0; font: 13px/1.4 ui-monospace, monospace; white-space: pre-wrap; }
-      .row { display: flex; gap: 6px; }
-      button { font: inherit; padding: 6px 12px; border-radius: 6px; border: 0; }
-      h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; margin: 0; color: #cdbba8; }
-      #minimap { right: max(12px, env(safe-area-inset-right)); bottom: max(12px, env(safe-area-inset-bottom)); }
-      #minimap canvas { display: block; width: min(38vmin, 260px); image-rendering: pixelated; border: 1px solid #fff4; }
-      /* Point of no return: the screen turns red. */
-      #alarm { position: fixed; inset: 0; pointer-events: none; box-shadow: inset 0 0 0 6px #e02020, inset 0 0 80px #e0202088; display: none; }
-      body.danger #alarm { display: block; }
-      body.danger #hud { background: #8a0d0dd9; }
-    </style>
-  </head>
-  <body>
-    <canvas id="scene"></canvas>
-    <div id="alarm"></div>
-    <div id="hud" class="panel">
-      <strong id="title">Loading world…</strong>
-      <div role="tablist">
-        <button role="tab" data-tab="plan" aria-selected="true">Plan</button>
-        <button role="tab" data-tab="walk" aria-selected="false">Walk</button>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Mission VESTA builds tools to plan science walks on Mars.">
+  <meta name="theme-color" content="#000000">
+  <link rel="stylesheet" href="./mission-vesta/mission.css">
+  <title>MISSION: VESTA</title>
+  <!-- Old app links (/?world=…, /?flags=…) predate this home page: send them to the app at /scout/. -->
+  <script>if (/[?&](world|flags)=/.test(location.search)) location.replace('/scout/' + location.search)</script>
+</head>
+<body>
+  <main>
+    <section class="hero" aria-labelledby="mission-title">
+      <!-- Viking Orbiter Mars globe mosaic, NASA/JPL-Caltech.
+           https://science.nasa.gov/resource/mars-planet-globe/ -->
+      <div class="mars">
+        <img src="./mission-vesta/assets/mars-globe.jpg" alt="" width="2048" height="2048" fetchpriority="high">
+        <button type="button" class="mars-control" aria-label="Automatic Mars rotation" aria-pressed="false"
+          title="Drag or use the arrow keys to turn Mars. Click to pause or play." hidden>
+          <canvas aria-hidden="true"></canvas>
+        </button>
       </div>
-      <section id="plan">
-        <h2>Map layer</h2>
-        <div id="layers" role="radiogroup" aria-label="Map layer"></div>
-        <small id="sources" class="src"></small>
-        <h2>Science stops</h2>
-        <div id="route"></div>
-        <div id="dropped" class="warn"></div>
-        <div id="targets"></div>
-        <small class="src">Tick the stops for this walk. Tap the minimap to add your own stop.</small>
-        <div id="whyBox" hidden>
-          <h2>Why this route</h2>
-          <table id="whyTable" class="src"></table>
-          <ul id="whyNotes" class="src"></ul>
+      <div class="welcome">
+        <h1 id="mission-title"><span>MISSION:</span> VESTA</h1>
+        <p>We’re building tools to plan science walks on Mars.</p>
+        <a href="#why">Explore the mission <span aria-hidden="true">↓</span></a>
+      </div>
+    </section>
+
+    <section class="why" id="why" aria-labelledby="why-title">
+      <p class="eyebrow">Why</p>
+      <h2 id="why-title">There is no map of Mars detailed enough for a single walk.</h2>
+      <div class="reasons">
+        <div>
+          <p class="stat">~1.5 m</p>
+          <p>The smallest rock orbit reliably sees. The ones that trip a walker are smaller.</p>
         </div>
-        <div id="scoutBox" hidden>
-          <h2>Scout</h2>
-          <div class="row">
-            <button id="scout">Fly the route</button>
-          </div>
-          <p id="scoutStatus" class="src" aria-live="polite"></p>
+        <div>
+          <p class="stat">4–22 min</p>
+          <p>For a message to reach Earth. Mission control can’t guide each step.</p>
         </div>
-        <div id="detail" aria-live="polite"></div>
-      </section>
-      <section id="walk" hidden role="status" aria-live="polite">
-        <progress id="energy" max="1" value="1" aria-label="Energy left"></progress>
-        <pre id="stats"></pre>
-        <div class="row">
-          <button id="play">Walk</button>
-          <button id="step">Step</button>
-          <button id="reset">Reset</button>
+        <div>
+          <p class="stat">~8 h</p>
+          <p>Of oxygen in a spacesuit. Every step out has to leave enough to walk back.</p>
         </div>
-      </section>
-    </div>
-    <div id="minimap" class="panel">
-      <canvas id="map" aria-label="Minimap of the site, north up; shaded cells are outside the walk-back ring"></canvas>
-    </div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
+      </div>
+      <p class="answer">So we build that map: start from NASA’s orbit data, scout the route from the air,
+        then walk with the way home always in view.</p>
+    </section>
+
+    <section class="products" id="products" aria-label="Mission products">
+      <a class="product scout" href="./scout/">
+        <h2>
+          <!-- Ingenuity-style: solar panel, two stacked rotors, body, four legs -->
+          <svg class="icon heli" viewBox="0 0 64 48" aria-hidden="true">
+            <rect x="25" y="1" width="14" height="3"/>
+            <path d="M32 4V24"/>
+            <ellipse class="rotor" cx="32" cy="10" rx="27" ry="2"/>
+            <ellipse class="rotor b" cx="32" cy="16" rx="27" ry="2"/>
+            <rect x="25" y="24" width="14" height="10" rx="1"/>
+            <path d="M26 34 15 46M38 34 49 46M29 34 25 46M35 34 39 46"/>
+          </svg>
+          Vesta Scout
+        </h2>
+        <p>Plan a science walk on NASA’s Mars data. A simulated scout helicopter, like NASA’s Ingenuity, flies the
+          route first and reveals the hazards orbit can’t see. Then you walk with the way home always known.
+          <span class="go">Open Vesta Scout <span aria-hidden="true">→</span></span></p>
+      </a>
+      <div class="product later">
+        <h2>
+          <svg class="icon layers" viewBox="0 0 64 48" aria-hidden="true">
+            <path class="l1" d="M8 34 32 44 56 34 32 24Z"/>
+            <path class="l2" d="M8 24 32 34 56 24 32 14Z"/>
+            <path class="l3" d="M8 14 32 24 56 14 32 4Z"/>
+          </svg>
+          Vesta Vision
+          <span class="tag">Coming later</span>
+        </h2>
+        <p>A Google Earth for Mars: one explorable map of the planet, built from NASA’s orbit data and sharpened by
+          everything our scouts and models learn.</p>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="./mission-vesta/mars.js"></script>
+  <script type="module">
+    // The helicopter flies a loop over the Scout row and lands back: once when the row comes into view, then on hover.
+    const scout = document.querySelector('.scout')
+    const fly = () => scout.classList.add('fly')
+    scout.querySelector('.heli').addEventListener('animationend', (e) => e.animationName === 'fly' && scout.classList.remove('fly'))
+    scout.addEventListener('pointerenter', fly)
+    scout.addEventListener('focus', fly)
+    new IntersectionObserver(([e], o) => { if (e.isIntersecting) { fly(); o.disconnect() } }, { threshold: 0.6 }).observe(scout)
+  </script>
+</body>
 </html>
