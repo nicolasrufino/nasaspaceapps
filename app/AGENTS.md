@@ -2,7 +2,7 @@
 
 ```bash
 cd app && npm install
-npm run dev        # http://localhost:5173, Gale demo; ?world=synthetic loads the test world
+npm run dev        # http://localhost:5173 home page; /scout/ is the app (Gale demo; ?world=synthetic loads the test world)
 npm run phone      # HTTPS on the LAN for a phone (accept the self-signed certificate once)
 npm test           # world files match world.json; layer colours
 npm run build      # dist/ for Azure Static Web Apps, world folders included
