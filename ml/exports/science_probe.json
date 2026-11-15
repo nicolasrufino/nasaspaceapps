@@ -41,5 +41,52 @@
       "outside_median": 8.5,
       "outside_n": 67
     }
+  },
+  "candidates_check": {
+    "what": "S5 candidate sites (data/worlds/gale/candidates.json): a guide; the crew decides.",
+    "rule_auc": 0.851,
+    "cells_inside": 67,
+    "cells_outside": 23,
+    "crism_cells_with_coverage": {
+      "inside": 67,
+      "outside": 23
+    },
+    "rule_auc_on_crism_cells": 0.851,
+    "crism_alone_auc": 0.464,
+    "rule_x_crism_auc": 0.851,
+    "crism_kept": false,
+    "limits": "Only 90 cells, all on Curiosity's own path; 'outside' is only the sulfate rock next door. Untested away from the rover's path. Rule fixed before the check (no tuning). Score, not a probability.",
+    "logistic_regression": {
+      "features": [
+        "ridge_share",
+        "hollow_share",
+        "slope",
+        "crevice",
+        "thermal_inertia"
+      ],
+      "split": "2 folds by sol: alternate blocks of 20 sols; standardised on the training fold only",
+      "folds": [
+        {
+          "test_cells": 41,
+          "test_inside": 27,
+          "model_auc": 0.926,
+          "rule_auc_same_cells": 0.926
+        },
+        {
+          "test_cells": 49,
+          "test_inside": 40,
+          "model_auc": 0.85,
+          "rule_auc_same_cells": 0.8
+        }
+      ],
+      "model_auc_out_of_fold": 0.892,
+      "shipped": false,
+      "note": "Neighbouring sols are neighbouring places, so blocks still leak space; the rule stays the baseline and the model ranks nothing on the map."
+    },
+    "usable_energy_kj": 1266.1,
+    "rule": "top cells by score, reach == 1, round trip <= usable energy, >= 80 m apart; visited = within 24 m of a ChemCam/APXS point or a stop",
+    "forward_search_vs_cost_to_go_max_rel_diff": 5.9188756627891604e-08,
+    "sites": 8,
+    "sites_curiosity_never_visited": 8
   }
 }

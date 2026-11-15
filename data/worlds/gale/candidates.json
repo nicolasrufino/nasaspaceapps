@@ -1,0 +1,114 @@
+[
+  {
+    "id": "cand_a",
+    "name": "Site A: 220 m SW of base",
+    "cell": [
+      80,
+      173
+    ],
+    "score": 0.285,
+    "why": "ridges 27%, hollows 31% within 56 m",
+    "curiosity_visited": false,
+    "score_percentile": 99.7,
+    "round_trip_kj": 298.8,
+    "nearest_curiosity_point_m": 153
+  },
+  {
+    "id": "cand_b",
+    "name": "Site B: 530 m NW of base",
+    "cell": [
+      73,
+      103
+    ],
+    "score": 0.274,
+    "why": "ridges 37%, hollows 20% within 56 m",
+    "curiosity_visited": false,
+    "score_percentile": 99.5,
+    "round_trip_kj": 628.7,
+    "nearest_curiosity_point_m": 448
+  },
+  {
+    "id": "cand_c",
+    "name": "Site C: 870 m N of base",
+    "cell": [
+      138,
+      57
+    ],
+    "score": 0.267,
+    "why": "ridges 39%, hollows 18% within 56 m",
+    "curiosity_visited": false,
+    "score_percentile": 99.4,
+    "round_trip_kj": 968.1,
+    "nearest_curiosity_point_m": 306
+  },
+  {
+    "id": "cand_d",
+    "name": "Site D: 250 m W of base",
+    "cell": [
+      74,
+      155
+    ],
+    "score": 0.267,
+    "why": "ridges 39%, hollows 18% within 56 m",
+    "curiosity_visited": false,
+    "score_percentile": 99.4,
+    "round_trip_kj": 451.7,
+    "nearest_curiosity_point_m": 218
+  },
+  {
+    "id": "cand_e",
+    "name": "Site E: 770 m NE of base",
+    "cell": [
+      149,
+      76
+    ],
+    "score": 0.265,
+    "why": "ridges 27%, hollows 27% within 56 m",
+    "curiosity_visited": false,
+    "score_percentile": 99.4,
+    "round_trip_kj": 790.8,
+    "nearest_curiosity_point_m": 152
+  },
+  {
+    "id": "cand_f",
+    "name": "Site F: 300 m NW of base",
+    "cell": [
+      83,
+      130
+    ],
+    "score": 0.258,
+    "why": "ridges 33%, hollows 20% within 56 m",
+    "curiosity_visited": false,
+    "score_percentile": 99.1,
+    "round_trip_kj": 345.8,
+    "nearest_curiosity_point_m": 244
+  },
+  {
+    "id": "cand_g",
+    "name": "Site G: 210 m NW of base",
+    "cell": [
+      84,
+      146
+    ],
+    "score": 0.252,
+    "why": "ridges 35%, hollows 18% within 56 m",
+    "curiosity_visited": false,
+    "score_percentile": 99.0,
+    "round_trip_kj": 202.2,
+    "nearest_curiosity_point_m": 180
+  },
+  {
+    "id": "cand_h",
+    "name": "Site H: 600 m S of base",
+    "cell": [
+      77,
+      230
+    ],
+    "score": 0.237,
+    "why": "ridges 31%, hollows 18% within 56 m",
+    "curiosity_visited": false,
+    "score_percentile": 98.4,
+    "round_trip_kj": 839.1,
+    "nearest_curiosity_point_m": 384
+  }
+]
