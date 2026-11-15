@@ -225,6 +225,16 @@ battery left   = 1 - energy used / 38.8 Wh       (about 62% after 1 km)
   38.8 Wh is the whole battery, not the usable part (NASA gives no usable share), so the percentage is optimistic. Each flight starts full: three helicopters, one flight each.
 - **The scan on screen is simulated**: found rocks come from the hidden-rock layer (`rocks_fine`), not from a live classifier.
 
+## 13c. The Visit step: what the crew measures at a stop (flag `stop_science`, off with `?off=stop_science`)
+
+In the walk preview the walker pauses at each stop and the rail lists what the crew does there. A helicopter carries cameras, radar, weather and radiation sensors, but no chemistry: that needs contact, so it is the crew's job.
+
+- **Time at a stop:** 30 minutes, a planning assumption (the plan's 2.5 h of stop time ÷ 5 stops). Tasks: look around 3, close-up 4, chemistry 8, water in the ground 5, weather and radiation 0 (the suit records it), sample 8. Going over 30 minutes only shows a warning; nothing here changes the energy or the route.
+- **Readings** come from `data/worlds/gale/stop_science.json` (`data/pipeline/stop_science.py`): the nearest real Curiosity measurement to each stop: ChemCam oxides (wt%), DAN thermal/epithermal neutron ratio (relative hydrogen, matched by sol), REMS temperature range and pressure. They stand in for the crew's own.
+- **Dose at a stop** = dose rate × minutes at the stop ÷ 60. The dose rate (µGy per hour) is Curiosity RAD's mean × the sky view at that spot, an estimate.
+- **Ridge against hollow:** once both Nevado Sajama (ridge) and Valle de la Luna (hollow) have had their chemistry read, a card shows the two readings side by side.
+- The log the crew builds is `app.scienceLog`: `[{ target_id, tasks_done, minutes, dose_ugy }]`.
+
 ## 14. What is real and what is simulated
 
 - **Real:** terrain, slope and images (NASA MRO HiRISE via USGS), the Curiosity stops and their photos, the walking-energy formula, all the route and safety maths.

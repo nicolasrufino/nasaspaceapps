@@ -5,6 +5,7 @@
 // Every number here is read from `app` at run time. Picture: NASA MRO HiRISE (NASA/JPL-Caltech/University of Arizona);
 // heights: the USGS MSL Gale terrain model in world.layers.height.
 import { MODELS } from './models.js'
+import * as stopScience from './stop-science.js'
 
 const RED = '#ff5a3d', WHITE = '#fff', AMBER = '#ffd23f', CYAN = '#35e0ff'
 const SPEEDS = [[120, '1×'], [60, '2×'], [30, '4×']] // milliseconds per 8 m step
@@ -32,6 +33,8 @@ export default {
 
     let mode = 'compare' // or 'preview'
     let timer = null, mine = [], hot = null, pin = null, speedK = 0, want = false, lastScale = 0, prof = null, live = null
+    let sci = null // the Visit step (stop-science.js); null when off or its data did not load: the preview plays as before
+    const sciData = stopScience.enabled() ? stopScience.load() : Promise.resolve(null)
     const setBody = (...nodes) => { for (const n of mine) n.remove(); mine = nodes; ui.body.append(...nodes) } // keeps the shell's Back button
     const rocksOn = (cells) => (cells ?? []).filter(([x, y]) => app.rockSeen(y * W + x))
     const p = (text, cls = '') => Object.assign(ui.h('p', cls), { textContent: text })
@@ -220,6 +223,7 @@ export default {
       let mk = drawMap(true)
 
       live = { stats, bar, playBtn, msg, note, head2, clipRect, totalM, redraw: () => { mk = drawMap(true) }, k: () => mk }
+      sciData.then((d) => { if (!d || !live) return; sci = stopScience.createStopScience(ui, app, d); mine.push(sci.el); ui.body.append(sci.el) })
       tick()
       timer = setInterval(tick, 200)
     }
@@ -229,6 +233,9 @@ export default {
       const s = app.walk.state(), cells = app.route().cells
       const k = Math.max(0, Math.min(s.k, cells.length - 1)), of = Math.max(1, s.of)
       const done = s.k >= s.of, spent = !done && s.energy_left_j <= 0
+      // The Visit step: at a stop, put the walker on it and wait for "Carry on walking".
+      const hit = sci?.at(s.k, () => { want = true; app.walk.play(); tick() })
+      if (hit) { want = false; app.walk.pause(); app.walk.seek(hit.k); return tick() }
       // The walk pauses itself at a stop; carry on, since this preview plays by itself.
       if (want && !done && !spent && !app.walk.playing()) app.walk.play()
       if (done || spent) want = false
@@ -252,6 +259,7 @@ export default {
       clearInterval(timer); timer = null
       want = false
       live = null
+      sci = null
       app.walk.pause()
       app.walk.speed(SPEEDS[0][0])
       ui.br.style.bottom = ''
