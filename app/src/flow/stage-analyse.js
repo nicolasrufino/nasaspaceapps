@@ -7,7 +7,7 @@ import { MODELS } from './models.js'
 
 const SVG = 'http://www.w3.org/2000/svg'
 const NEAR = 12 // cells either side of the route that get the hidden-rock estimate
-const RED = '#ff5a3d', AMBER = '#ffaa28', CYAN = '#35e0ff', GREEN = '#46aa5a'
+const RED = '#ff5a3d', AMBER = '#ffaa28', SCOUT = '#e3dfd3', GREEN = '#46aa5a'
 const AMBER_RGB = [255, 170, 40]
 const LAYERS = ['fa-straight', 'fa-band', 'fa-centre', 'fa-route'] // map.line layers owned by this stage
 const CSS = `
@@ -100,7 +100,7 @@ export default {
         models: [MODELS.rockChance, MODELS.rockReview] },
       { title: 'Ready to scout',
         text: () => [getFlight()
-          ? `Up to ${left} ${left === 1 ? 'flight' : 'flights'} of ${km(app.scout.flightM)}, each seeing a ${span(CYAN, `${Math.round(2 * app.scout.swathM)} m strip`)}. After each landing the route is planned again with what was found.`
+          ? `Up to ${left} ${left === 1 ? 'flight' : 'flights'} of ${km(app.scout.flightM)}, each seeing a ${span(SCOUT, `${Math.round(2 * app.scout.swathM)} m strip`)}. After each landing the route is planned again with what was found.`
           : `No flight is planned from here: ${left <= 0 ? 'the helicopter has no flights left' : 'there is no unseen route ground in reach'}. The route stands as orbit gave it.`],
         detail: () => 'Planning with unknown blockages is known as the Canadian Traveller Problem.' },
     ]
@@ -205,8 +205,8 @@ export default {
       // 5. The first flight: a translucent band as wide as the camera sees, with a thin centre line. Under the route.
       const f = s === 4 ? getFlight() : null
       if (f) {
-        map.line('fa-band', f.waypoints, { color: CYAN, width: (2 * app.scout.swathM) / cs, opacity: 0.3 })
-        map.line('fa-centre', f.waypoints, { color: CYAN, width: thin * 0.8 })
+        map.line('fa-band', f.waypoints, { color: SCOUT, width: (2 * app.scout.swathM) / cs, opacity: 0.3 })
+        map.line('fa-centre', f.waypoints, { color: SCOUT, width: thin * 0.8 })
         if (fresh) { map.drawOn('fa-band', 1100); map.drawOn('fa-centre', 1100) }
       }
 

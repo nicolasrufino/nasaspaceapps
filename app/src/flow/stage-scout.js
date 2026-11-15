@@ -8,7 +8,7 @@ import { flightSeconds, batteryLeft, FLIGHT_POWER_W, BATTERY_WH } from './heli-e
 import { MODELS } from './models.js'
 import { scoutPayloadEnabled, summarizePayloadFlight, latestWeather, SKYFALL_SOURCE, CAMERA_FOOTPRINT_M } from './scout-payload.js'
 
-const SCOUT = '#35e0ff', HAZARD = '#ff5a3d'
+const SCOUT = '#e3dfd3', HAZARD = '#c5a065'
 const NORMAL_S = 40, FAST_S = 20, SKIP_S = 1.5 // screen seconds per flight
 const FIND_GAP_M = 40 // rocks after this much flight without any start a new find
 const MAX_ROWS = 5
@@ -46,6 +46,12 @@ export default {
     const flightSec = ui.section(`Flight 1 of ${app.MAX_FLIGHTS ?? 3}`, true)
     const flightTitle = flightSec.querySelector('h2')
     const dist = ui.bar(), distText = ui.h('p', '', 'Taking off')
+    dist.el.classList.add('f-flight-progress')
+    dist.el.setAttribute('role', 'progressbar')
+    dist.el.setAttribute('aria-label', 'Flight progress')
+    dist.el.setAttribute('aria-valuemin', '0')
+    dist.el.setAttribute('aria-valuemax', '100')
+    dist.el.setAttribute('aria-valuenow', '0')
     flightSec.append(ui.h('p', 'dim', 'Simulated scan · stored HiRISE data'), dist.el, distText)
 
     // 2. The helicopter (estimates from heli-energy.js).
@@ -259,7 +265,10 @@ export default {
       totals.set(0, num(seenCells * cs * cs)); totals.set(1, num(rockCells)); totals.set(2, num(onRouteCells))
       if (!tick) return
       const along = Math.min(tick.along, tick.metres)
-      dist.set(tick.metres ? along / tick.metres : 0)
+      const progress = tick.metres ? Math.max(0, Math.min(1, along / tick.metres)) : 0
+      dist.set(progress)
+      dist.el.setAttribute('aria-valuenow', Math.round(progress * 100))
+      dist.el.classList.toggle('is-active', flying)
       distText.textContent = campaignLanded ? 'Flights complete. Your route is ready.' : `${Math.round(along)} / ${Math.round(tick.metres)} m`
       const left = batteryLeft(along)
       heli.set(0, Math.round(left * 100)); heli.set(1, Math.round(flightSeconds(along)))
