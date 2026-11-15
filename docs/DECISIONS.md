@@ -6,6 +6,7 @@ One place for what the team decided, why, and what is still open. **Add a line h
 
 | Date | Decision | Why | Who | Where it lives |
 |---|---|---|---|---|
+| 2026-11-15 | **F4: enforce three route-following flights with a re-plan after each landing** | Remove the five unused pipeline flights; scan every 2 m plus endpoints so frame rate cannot change the evidence. Gale: 3 flights, 5 stops, 0 stored hazard cells on the fully scanned final route. Transit/recharge/flight energy remain unmodelled | Jules | `app/src/scout.js`, `ml/exports/pitch_metrics.json`; #124 |
 | 2026-11-15 | **Unexplored ground is muted, not hidden:** the HiRISE picture at 40% colour and 82% brightness; full colour where flown, within 60 m of the habitat, and within 24 m of where the astronaut walked | A fully grey map lost the "real map" first impression; orbit data is known, just not confirmed up close | Nicolas (delegated to Claude) | `app/src/terrain.js` `REVEAL_GLSL` |
 | 2026-11-15 | **The map opens over the habitat** (about 500 m view), not over the whole 2 km | At true scale the whole slice makes people and the habitat invisible; the hero zone is around the base and stops | Nicolas (delegated to Claude) | `app/src/main.js` camera |
 | 2026-11-15 | **Self-contained Ingenuity review with optional suggested categories and explicit human confirmation** | Jules requested prefilled categories after the separate image folder failed to load. Embedded images work offline; assisted labels remain distinguishable from an independent blind test and are rejected by its evaluator | Jules | `ml/ingenuity_review/build_review.py`, `review.html`, `evaluate.py` |
@@ -68,7 +69,7 @@ Integration status: #94 (`af3d666`), #99 (`b668204`), #115 (detail tiles) and #1
 
 - **Belief-map calibration:** v1 is implemented behind `belief` (#118), but its 0.729 AUC is a development/model-selection diagnostic against unreviewed negative cells, not independent ground-truth validation. Full-slice detections and estimated sizes are available; cells without detections remain unlabeled, not confirmed empty.
 - **Ground truth at a walker's scale:** verify Curiosity image/site overlap and camera-to-map projection. The 200-patch Ingenuity pack is prepared, with zero human labels and no validated altitude AGL yet (`ml/ingenuity_review/`).
-- **The scouting planner in the app:** K candidate routes, value of information, flight planner with the daylight window and no-fly cells, the re-plan loop and "why this flight". It exists only in the toy simulator so far.
+- **Scouting additions:** F4 now implements the three-flight route baseline with re-planning after each flight. K candidate routes, value of information (#138), "why this flight" (#134), daylight and no-fly constraints remain separate work.
 - **Sun and shadow model** (Mars24 algorithm) for flight windows and walking windows.
 - **Generated test worlds** where hidden rocks follow orbit features (today's synthetic rocks are random), and the **benchmark** on them and on Gale.
 - **Compute time** of value of information at Gale size (256 × 256), to measure.

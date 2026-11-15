@@ -4,7 +4,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { loadWorld, layerRGB, sourceLabel } from './world.js'
 import { startWalk, stepTo, ringMask, ringLimit, appState, oxygenL } from './walk.js'
 import { planTour, MAX_STOPS } from './plan.js'
-import { routeFlights, scanAt, pointAlong } from './scout.js'
+import { createScout, launchScoutFlight, completeScoutFlight, scanFlight, pointAlong, MAX_FLIGHTS } from './scout.js'
 import { hazardRGB, blockedSegments, reviewedMask, legendHTML, COLORS as HAZARD } from './hazards.js'
 import { beliefMap } from './belief.js'
 import { terrainMaterial, setImageryUVs, loadImagery, imageryCells } from './terrain.js'
@@ -35,8 +35,8 @@ try {
 }
 const targets = await optionalJSON('targets.json', [])
 const photos = await optionalJSON('stops.json', []) // rover photos per stop (contract: stops.json)
-const scoutPlan = await optionalJSON('scout_plan.json', []) // pipeline's extra helicopter flights (D4), when it exists
-let flight = null // helicopter in the air: { flights, k, along, speed, found, before }
+let flight = null // current scouting campaign; re-plan and select again after each landing
+let flightsUsed = 0 // at most three flights per page/walk, including repeated clicks
 const { meta, layers } = world
 // Energy scenario (world.json "scenarios", made by the pipeline from NASA suit figures): ?scenario=ideal or worst.
 // Without the parameter the world's default applies; worlds without scenarios keep their single budget.
@@ -343,11 +343,11 @@ let blocked = null // rocks the scout has found (E4); the planner routes around 
 const allStops = () => [...targets, ...custom]
 
 let scoutBefore = null // { cells, energy_j, crossed }: the route before the last scout, for E5
-function replan(keepBefore = false) {
+function replan(keepBefore = false, planned = null) {
   beforeLine.visible = keepBefore
   if (!keepBefore) scoutBefore = null
   if (!keepBefore) $('scoutStatus').textContent = ''
-  route = planTour(world, allStops().filter((s) => included.has(s.id)), blocked)
+  route = planned ?? planTour(world, allStops().filter((s) => included.has(s.id)), blocked)
   refreshLayer()
   routeLine.geometry.dispose()
   drawRouteLine()
@@ -430,6 +430,7 @@ function listStops() {
     row.innerHTML = '<input type="checkbox"><button class="name"></button>'
     const box = row.querySelector('input')
     box.checked = included.has(s.id)
+    box.disabled = !!flight
     box.setAttribute('aria-label', `Include ${s.name} in the walk`)
     box.onchange = () => (box.checked ? included.add(s.id) : included.delete(s.id), replan())
     const b = row.querySelector('button')
@@ -446,6 +447,7 @@ function listStops() {
 }
 
 function removeCustom(id) {
+  if (flight) return
   custom.splice(custom.findIndex((s) => s.id === id), 1)
   included.delete(id)
   if (selected === id) (selected = null), $('detail').replaceChildren()
@@ -455,7 +457,7 @@ function removeCustom(id) {
 let customCount = 0
 // Tap the minimap (plan tab): on your own stop removes it, on a target toggles it, elsewhere adds a stop.
 $('map').addEventListener('click', (e) => {
-  if ($('plan').hidden) return
+  if ($('plan').hidden || flight) return
   const cell = [Math.floor((e.offsetX / $('map').clientWidth) * W), Math.floor((e.offsetY / $('map').clientHeight) * H)]
   const near = allStops().find((s) => Math.hypot(s.cell[0] - cell[0], s.cell[1] - cell[1]) <= 2)
   if (near?.custom) return removeCustom(near.id)
@@ -587,36 +589,50 @@ function reveal(fresh) {
 
 if (flags.has('drone_scout') && layers.rocks_fine) $('scoutBox').hidden = false
 $('scout').onclick = () => {
-  if (flight) return
-  const flights = [...routeFlights(meta, route.cells).map((f) => ({ ...f, kind: 'route corridor' })),
-    ...scoutPlan.map((f) => ({ waypoints: f.waypoints, metres: f.metres, kind: f.kind === 'uncertain' ? 'least certain' : f.kind ?? 'extra' }))]
-  if (!flights.length) return
-  const metres = flights.reduce((m, f) => m + f.metres, 0)
-  flight = { flights, k: 0, along: 0, speed: metres / 30, found: 0, before: route } // the whole scout plays in ~30 s, slow enough to watch the ground appear
+  if (flight || flightsUsed >= MAX_FLIGHTS) return
+  flight = createScout(world, allStops().filter((s) => included.has(s.id)), { scanned, maxFlights: MAX_FLIGHTS - flightsUsed })
+  flight.before = route
+  flight.found = 0
+  if (!launchScoutFlight(world, flight)) {
+    flight = null
+    $('scoutStatus').textContent = 'The current route is already scouted.'
+    return
+  }
+  flight.along = 0
   pause()
   $('scout').disabled = true
   heli.visible = heliIcon.visible = scanDots.visible = true
+  listStops()
+  tickFlight(0)
 }
 
 function tickFlight(dt) {
-  heli.userData.rotors.forEach((r, k) => (r.rotation.y += dt * (k ? -40 : 40)))
-  const f = flight.flights[flight.k]
-  flight.along += flight.speed * dt
-  const p = pointAlong(meta, f.waypoints, flight.along)
-  if (!p) {
-    flight.k++
-    flight.along = 0
-    if (flight.k >= flight.flights.length) land()
-    return
-  }
-  placeHeli(heli, p)
-  heliIcon.position.copy(heli.position)
-  revealShared.uHeli.value.set(heli.position.x, heli.position.z, 4 + ((performance.now() / 60) % 16)) // scan ring pulses out to 20 m
-  const fresh = scanAt(meta, scanned, p[0], p[1])
+  rotor.rotation.y += dt * 40
+  const f = flight.active
+  flight.along = Math.min(f.metres, flight.along + (f.metres / 3) * dt) // up to 3 seconds per simulated flight
+  const fresh = scanFlight(meta, scanned, f, flight.along)
   flight.found += reveal(fresh)
+  placeHeli(heli, pointAlong(meta, f.waypoints, flight.along) ?? f.waypoints.at(-1))
+  heliIcon.position.copy(heli.position)
+  revealShared.uHeli.value.set(heli.position.x, heli.position.z, 4 + ((performance.now() / 60) % 16))
   if (fresh.length) render()
-  $('scoutStatus').textContent = `Flight ${flight.k + 1} of ${flight.flights.length} (${f.kind}) · ${flight.found} rock cells found · ` +
+  $('scoutStatus').textContent = `Flight ${flightsUsed + 1} of ${MAX_FLIGHTS} (${f.kind}) · ${flight.found} rock cells found · ` +
     `simulated helicopter flight, rocks from ${sourceLabel(meta, 'rocks_fine') || meta.sources?.all || 'rocks_fine'}`
+  if (flight.along < f.metres) return
+
+  completeScoutFlight(world, flight)
+  flightsUsed++
+  blocked = flight.blocked
+  const before = flight.before
+  const crossed = new Set(before.cells.filter(([x, y]) => blocked[y * W + x]).map(([x, y]) => y * W + x)).size
+  scoutBefore = { cells: before.cells, energy_j: before.energy_j, crossed }
+  beforeLine.geometry.dispose()
+  beforeLine.geometry = new THREE.BufferGeometry().setFromPoints(before.cells.map((c) => cellPos(c, 1.5)))
+  beforeLine.computeLineDistances()
+  replan(true, flight.route)
+  beforeLine.visible = crossed > 0
+  if (launchScoutFlight(world, flight)) flight.along = 0
+  else land()
 }
 
 function land() {
@@ -624,22 +640,14 @@ function land() {
   flight = null
   heli.visible = heliIcon.visible = scanDots.visible = false
   revealShared.uHeli.value.z = 0
-  $('scout').disabled = false
-  $('scout').textContent = 'Fly the new route'
-  blocked = Uint8Array.from(scanned, (v, i) => v && layers.rocks_fine[i])
-  const crossed = before.cells.filter(([x, y]) => blocked[y * W + x]).length
-  scoutBefore = { cells: before.cells, energy_j: before.energy_j, crossed }
-  beforeLine.geometry.dispose()
-  beforeLine.geometry = new THREE.BufferGeometry().setFromPoints(before.cells.map((c) => cellPos(c, 1.5)))
-  beforeLine.computeLineDistances()
-  replan(crossed > 0)
-  $('scoutStatus').textContent = !crossed
-    ? `Scouted: ${found} rock cells found, none on the route. The route stands.`
-    : `Scouted: ${found} rock cells found; the old route (red dashes) crossed ${crossed}. ` +
-      `New route avoids them: ${kj(before.energy_j)} → ${kj(route.energy_j)}` +
-      (route.dropped.length > before.dropped.length
-        ? `; now doesn't fit: ${route.dropped.filter((d) => !before.dropped.includes(d)).map((d) => allStops().find((s) => s.id === d)?.name ?? d).join(', ')}`
-        : '')
+  $('scout').disabled = flightsUsed >= MAX_FLIGHTS
+  $('scout').textContent = flightsUsed >= MAX_FLIGHTS ? '3 flights used' : 'Scout remaining route'
+  listStops()
+  const fullyScanned = route.cells.every(([x, y]) => scanned[y * W + x])
+  $('scoutStatus').textContent = `${flightsUsed} of ${MAX_FLIGHTS} flights used · ${found} rock cells found. Re-planned after every flight: ` +
+    `${kj(before.energy_j)} → ${kj(route.energy_j)}. ` +
+    (fullyScanned ? 'The final route is fully scouted.' : 'Unscouted ground remains on this route.') +
+    ' Simulated corridor flights; repositioning, recharge and helicopter energy excluded.'
 }
 
 // --- Walk (block E2): along the planned route, energy and oxygen drain, ring, point of no return. ---
@@ -662,6 +670,7 @@ function reset() {
 }
 
 function step() {
+  if (flight) return
   if (k >= route.cells.length - 1 || walk.energy_left_j <= 0 || field?.blocking()) return pause()
   if (stepTo(world, walk, route.cells[++k])) buzz()
   if (field?.arrive(k)) pause()
@@ -669,6 +678,7 @@ function step() {
 }
 
 function play() {
+  if (flight) return
   unlockAudio()
   timer ??= setInterval(step, 120) // ponytail: fixed playback speed; a speed knob when the demo asks for one
   $('play').textContent = 'Pause'
