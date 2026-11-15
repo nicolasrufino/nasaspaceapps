@@ -2,6 +2,29 @@
 // Simple built-in shapes until the glTF models of ticket A1 replace them. Sizes: astronaut 1.8 m; helicopter with a
 // 1.2 m rotor (Ingenuity's rotor span; NASA/JPL); habitat about 9 m across (our design, not a NASA vehicle).
 import * as THREE from 'three'
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
+import ingenuityUrl from './models/ingenuity.glb?url'
+import suitUrl from './models/z2-spacesuit.glb?url'
+import habitatUrl from './models/habitat-demonstration-unit.glb?url'
+
+// NASA models (ticket A1; sources and credits in models/README.md) replace the built-in shapes once they load.
+// size: metres along `axis` after scaling; the model is then centred with its lowest point on the ground.
+const loader = new GLTFLoader()
+function useModel(g, url, { size, axis = 'y', turn = 0 }, then) {
+  const old = [...g.children]
+  loader.loadAsync(url).then(({ scene: m }) => {
+    m.traverse((o) => { if (o.material) Object.assign(o.material, { transmission: 0, transparent: false, metalness: Math.min(o.material.metalness, 0.2), side: THREE.DoubleSide }) }) // some NASA exports mark everything as glass; metal is black without an environment map
+    m.rotation.y = turn
+    const box = new THREE.Box3().setFromObject(m)
+    m.scale.setScalar(size / box.getSize(new THREE.Vector3())[axis])
+    box.setFromObject(m)
+    const c = box.getCenter(new THREE.Vector3())
+    m.position.set(-c.x, -box.min.y, -c.z)
+    g.remove(...old)
+    g.add(m)
+    then?.(m)
+  }).catch(() => {}) // the built-in shapes stay
+}
 
 const mat = (color, extra) => new THREE.MeshStandardMaterial({ color, roughness: 0.8, emissive: color, emissiveIntensity: 0.35, ...extra }) // a little self-lit so the shaded side still reads
 const box = (w, h, d, m) => new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m)
@@ -16,6 +39,7 @@ export function makeAstronaut() {
   g.add(at(new THREE.Mesh(new THREE.SphereGeometry(0.19, 20, 14), suit), 0, 1.61, 0)) // helmet, top at 1.8 m
   g.add(at(new THREE.Mesh(new THREE.SphereGeometry(0.15, 20, 14), mat(0xd9a441, { metalness: 0.9, roughness: 0.25 })), 0, 1.61, -0.07)) // visor
   g.add(at(box(0.5, 0.05, 0.3, mat(0x35e0ff, { emissive: 0x35e0ff, emissiveIntensity: 0.6 })), 0, 0.82, 0)) // belt, so it reads from above
+  useModel(g, suitUrl, { size: 1.8, turn: Math.PI }) // NASA Z-2 suit; it faces +z, the walker faces -z
   return g
 }
 
@@ -45,6 +69,7 @@ export function makeHabitat() {
   g.add(at(box(6, 0.08, 2.2, panel), -7.6, 3.2, 0), at(box(6, 0.08, 2.2, panel), 7.6, 3.2, 0)) // solar wings
   g.add(at(box(0.12, 0.12, 0.12, metal), 0, 0, 0), at(new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 3, 6), metal), 1.2, 8, 0)) // mast
   g.add(at(new THREE.Mesh(new THREE.SphereGeometry(0.16, 8, 8), mat(0xff3b30, { emissive: 0xff3b30, emissiveIntensity: 2 })), 1.2, 9.5, 0)) // beacon
+  useModel(g, habitatUrl, { size: 9.7, axis: 'x' }) // NASA Habitat Demonstration Unit
   return g
 }
 
@@ -60,7 +85,11 @@ export function makeHelicopter() {
   g.add(at(new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.3, 6), dark), 0, 0.42, 0))
   const r1 = at(box(1.2, 0.012, 0.07, dark), 0, 0.42, 0), r2 = at(box(1.2, 0.012, 0.07, dark), 0, 0.5, 0)
   g.add(r1, r2, at(box(0.42, 0.01, 0.16, mat(0x1d2f5c, { metalness: 0.5 })), 0, 0.58, 0))
-  g.userData.rotors = [r1, r2]
+  g.userData.spin = (dt) => { r1.rotation.y += dt * 40; r2.rotation.y -= dt * 40 }
+  useModel(g, ingenuityUrl, { size: 1.11, axis: 'z' }, (m) => { // NASA Ingenuity, true size; its two rotors turn about their local x
+    const [a, b] = ['rotors_01', 'rotors_02'].map((n) => m.getObjectByName(n))
+    if (a && b) g.userData.spin = (dt) => { a.rotateX(dt * 40); b.rotateX(-dt * 40) }
+  })
   return g
 }
 
