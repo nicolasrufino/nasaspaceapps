@@ -1,0 +1,45 @@
+{
+  "what": "First probe, not a validated detector. Score = ridges and hollows both nearby, 8 m cells.",
+  "boxwork_sols": [
+    4534,
+    4845
+  ],
+  "stop_percentile_on_score": {
+    "altadena": 0.0,
+    "ridge_top": 70.3,
+    "overlook": 86.1,
+    "valle_de_la_luna": 82.5,
+    "nevado_sajama": 75.8
+  },
+  "rover_cells": {
+    "inside": 81,
+    "outside": 30,
+    "auc_inside_vs_outside": 0.589
+  },
+  "chemistry_wt_pct": {
+    "SiO2": {
+      "inside_median": 43.6,
+      "inside_n": 354,
+      "outside_median": 41.8,
+      "outside_n": 67
+    },
+    "MgO": {
+      "inside_median": 8.1,
+      "inside_n": 354,
+      "outside_median": 10.9,
+      "outside_n": 67
+    },
+    "SO3": {
+      "inside_median": 10.7,
+      "inside_n": 138,
+      "outside_median": 14.1,
+      "outside_n": 20
+    },
+    "Al2O3": {
+      "inside_median": 8.3,
+      "inside_n": 354,
+      "outside_median": 8.5,
+      "outside_n": 67
+    }
+  }
+}
