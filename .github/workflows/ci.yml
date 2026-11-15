@@ -49,14 +49,14 @@ jobs:
           npm test --if-present
           npm run build --if-present
 
-  # Browser tests on a software renderer are CPU-bound: one runner per shard, all 9 tests still run.
+  # Browser tests on a software renderer are CPU-bound: one runner and one worker per shard, all 9 tests still run.
   app-browser:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3]
+        shard: [1, 2, 3, 4]
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
@@ -83,7 +83,7 @@ jobs:
       - working-directory: app
         run: |
           npm run build
-          npx playwright test --shard=${{ matrix.shard }}/3
+          npx playwright test --shard=${{ matrix.shard }}/4
 
   # P3: world files are the contract every lane reads. Pipeline must run, every world must validate.
   data:
