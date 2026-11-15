@@ -4,7 +4,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { loadWorld, layerRGB, sourceLabel } from './world.js'
 import { startWalk, stepTo, ringMask, ringLimit, appState, oxygenL } from './walk.js'
 import { planTour, MAX_STOPS } from './plan.js'
-import { createScout, launchScoutFlight, completeScoutFlight, scanFlight, pointAlong, MAX_FLIGHTS } from './scout.js'
+import { createScout, launchScoutFlight, completeScoutFlight, scanFlight, pointAlong, MAX_FLIGHTS, FLIGHT_ANIMATION_S } from './scout.js'
 import { hazardRGB, blockedSegments, reviewedMask, legendHTML, COLORS as HAZARD } from './hazards.js'
 import { beliefMap } from './belief.js'
 import { terrainMaterial, setImageryUVs, loadImagery, imageryCells } from './terrain.js'
@@ -607,9 +607,9 @@ $('scout').onclick = () => {
 }
 
 function tickFlight(dt) {
-  rotor.rotation.y += dt * 40
+  heli.userData.rotors.forEach((r, k) => (r.rotation.y += dt * (k ? -40 : 40)))
   const f = flight.active
-  flight.along = Math.min(f.metres, flight.along + (f.metres / 3) * dt) // up to 3 seconds per simulated flight
+  flight.along = Math.min(f.metres, flight.along + (f.metres / FLIGHT_ANIMATION_S) * dt) // slow enough to see the discovery
   const fresh = scanFlight(meta, scanned, f, flight.along)
   flight.found += reveal(fresh)
   placeHeli(heli, pointAlong(meta, f.waypoints, flight.along) ?? f.waypoints.at(-1))

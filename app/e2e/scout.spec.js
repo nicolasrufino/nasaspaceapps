@@ -1,0 +1,24 @@
+import { test, expect } from '@playwright/test'
+
+test('Gale scouts three times, replans, and leaves the walk usable without runtime errors', async ({ page }) => {
+  const errors = [], requests = []
+  page.on('pageerror', (e) => errors.push(e.message))
+  page.on('request', (r) => requests.push(r.url()))
+  await page.goto('/scout/')
+  await expect(page.locator('#route')).toContainText('621 kJ')
+  await page.getByRole('button', { name: 'Fly the route', exact: true }).click()
+  await expect(page.locator('#scoutStatus')).toContainText('Flight 1 of 3')
+  await expect(page.getByLabel('Include Altadena drill site in the walk')).toBeDisabled()
+  await expect(page.locator('#scoutStatus')).toContainText('Flight 2 of 3', { timeout: 30000 })
+  await expect(page.locator('#route')).toContainText('629 kJ')
+  await expect(page.locator('#scoutStatus')).toContainText('3 of 3 flights used', { timeout: 45000 })
+  await expect(page.locator('#scoutStatus')).toContainText('44 rock cells found')
+  await expect(page.locator('#scoutStatus')).toContainText('fully scouted')
+  await expect(page.locator('#route')).toContainText('630 kJ')
+  await expect(page.locator('#scout')).toBeDisabled()
+  expect(requests.some((url) => url.includes('scout_plan.json'))).toBe(false)
+  await page.getByRole('tab', { name: 'Walk', exact: true }).click()
+  await page.getByRole('button', { name: 'Step', exact: true }).click()
+  await expect(page.locator('#stats')).toContainText('Margin')
+  expect(errors).toEqual([])
+})

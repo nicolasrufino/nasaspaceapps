@@ -7,6 +7,7 @@ import { planTour } from './plan.js'
 
 export const FLIGHT_M = 1000
 export const MAX_FLIGHTS = 3
+export const FLIGHT_ANIMATION_S = 10 // playback only; not a physical speed
 export const SCAN_STEP_M = 2 // spatial sampling, independent of animation frame rate
 export const SWATH_M = 15 // ponytail: radius the camera sees from scouting height; tune with the real camera footprint
 

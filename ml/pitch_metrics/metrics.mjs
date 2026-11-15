@@ -3,7 +3,7 @@
 import { costFrom, energyCost, planTour } from '../../app/src/plan.js'
 import { describe } from '../../app/src/why.js'
 import { stepCost, reserveJ } from '../../app/src/walk.js'
-import { createScout, launchScoutFlight, completeScoutFlight, scanFlight } from '../../app/src/scout.js'
+import { createScout, launchScoutFlight, completeScoutFlight, scanFlight, FLIGHT_ANIMATION_S } from '../../app/src/scout.js'
 
 const at = (meta, [x, y]) => y * meta.width + x
 const count = (values) => values.reduce((sum, value) => sum + Number(Boolean(value)), 0)
@@ -30,7 +30,7 @@ export function simulateScout(world, targets, mode = '60fps', previouslyScanned 
       let along = 0
       do {
         scanFlight(meta, scanned, f, along)
-        along = Math.min(f.metres, along + (f.metres / 3) * Math.min(1 / fps, .1))
+        along = Math.min(f.metres, along + (f.metres / FLIGHT_ANIMATION_S) * Math.min(1 / fps, .1))
       } while (along < f.metres)
       scanFlight(meta, scanned, f, f.metres)
     }
