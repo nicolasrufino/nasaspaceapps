@@ -1,9 +1,8 @@
 // Helicopter scout (block E4). The flight is simulated; what it reveals is the world's rocks_fine layer
 // (synthetic now; on real sites, rocks detected on full-resolution HiRISE images by Person 1).
-// Distance per flight: 1 km, the low end of SkyFall's "~1-2 km per flight sol" (NASA SkyFall Mission Information
-// Package, Sept 2026). 700 m is Ingenuity's longest flown; 2 km needs 13 m/s, above any Ingenuity flight (docs/OPERATIONS.md).
+// Ingenuity-class limits: about 700 m per flight (docs/PLAN.md, Scout).
 
-export const FLIGHT_M = 1000
+export const FLIGHT_M = 700
 export const SWATH_M = 15 // ponytail: radius the camera sees from scouting height; tune with the real camera footprint
 
 // Split the planned route into flights of at most FLIGHT_M metres; each lands where the next takes off.
