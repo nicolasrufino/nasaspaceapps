@@ -97,6 +97,7 @@ test('flags-off walking keeps the energy model and reset working', async ({ page
   const errors = []
   page.on('pageerror', (e) => errors.push(e.message))
   await page.goto('/scout/?world=synthetic&flags=')
+  await page.waitForFunction(() => window.vesta)
   await page.getByRole('tab', { name: 'Walk', exact: true }).click()
   await page.getByRole('button', { name: 'Walk', exact: true }).click()
   await expect.poll(() => page.evaluate(() => window.vesta.app.walk.state().k)).toBeGreaterThan(4)
