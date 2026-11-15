@@ -3,9 +3,31 @@ from pathlib import Path
 
 import pytest
 
+from data.pipeline import merge_walk
 from data.pipeline.merge_walk import LOG, merge
 
 WORLD = Path(__file__).resolve().parents[1] / 'data/worlds/synthetic'
+
+
+def test_concurrent_destination_is_preserved(tmp_path, monkeypatch):
+    """A publisher winning after the initial check must never be overwritten."""
+    walk = tmp_path / 'walk.jsonl'
+    walk.write_text(json.dumps({'cell': [2, 2], 'kind': 'marker', 'time': 1, 'value': 'flag'}))
+    destination = tmp_path / 'next'
+    original_check = merge_walk.check
+
+    def concurrent_publish(folder):
+        errors = original_check(folder)
+        if folder != WORLD.resolve():
+            destination.mkdir()
+            (destination / 'other-owner.txt').write_text('preserve this world')
+        return errors
+
+    monkeypatch.setattr(merge_walk, 'check', concurrent_publish)
+    with pytest.raises(OSError):
+        merge(WORLD, walk, destination)
+    assert [p.name for p in destination.iterdir()] == ['other-owner.txt']
+    assert (destination / 'other-owner.txt').read_text() == 'preserve this world'
 
 
 def test_merges_all_kinds_preserves_world_and_deduplicates(tmp_path):

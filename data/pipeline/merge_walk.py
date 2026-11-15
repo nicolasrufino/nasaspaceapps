@@ -2,6 +2,7 @@
 import argparse
 import json
 import math
+import os
 import shutil
 import tempfile
 from datetime import datetime
@@ -81,7 +82,12 @@ def merge(source, walk, destination):
         errors = check(staged)
         if errors:
             raise ValueError('; '.join(errors))
-        # Reserve the name without overwriting a world published by another invocation.
+        # Windows rename already refuses any existing destination directory,
+        # including an empty one. Reserving it first prevents every publication.
+        if os.name == 'nt':
+            staged.rename(destination)
+            return len(merged) - len(prior)
+        # POSIX can replace an empty directory: reserve the name first.
         destination.mkdir()
         try:
             staged.rename(destination)
