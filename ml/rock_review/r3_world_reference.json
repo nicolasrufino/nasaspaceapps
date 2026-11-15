@@ -1,6 +1,6 @@
 {
-  "base_commit": "5d79ac35fb8296cc227a883ce8d392d1bd2dd5e5",
-  "world_semantic_sha256": "6b8ab4126779c01c85c98651e59261a506c3d27fcd13e38a0f58a0f35c81921b",
+  "base_commit": "a42285e3a4c11ee3dcb5e6ac145e19ab0edfe55c",
+  "world_semantic_sha256": "6a69f2b7c758d2289f115dc2f72ffd98c99595bb03ed3ac4321c99648de38a3d",
   "site": {
     "name": "Gale crater, lower Mount Sharp boxwork",
     "centre_lonlat": [
@@ -22,9 +22,9 @@
     "row_order": "north_to_south"
   },
   "layer_sha256": {
-    "cost_per_m.f32": "1a64b160548b501581a368a5caff4f8989e85d740db77192a1aec23791517853",
-    "cost_to_go.f32": "9d3859c4b017f27983e108f8e5c72f68c2832ce09df758aec787aa42ce4fe005",
-    "cost_to_go_scouted.f32": "342eab90eb5ade67104793f3ee5c7a6a3659159fdcc929e71b48c8f6f715dc02",
+    "cost_per_m.f32": "c7bbf5f9d2fd44cd807158fea93377af255834761f1f3160ffb20eaec560747c",
+    "cost_to_go.f32": "9c7a7afac2c657a8b3c45de6f2823c2b9a4b06875b0fe2e1a740d6fd1f0520cf",
+    "cost_to_go_scouted.f32": "ad356bdbf89a10112934e58386cf1d625e9fbb4f1e393b15932357561aaf16ff",
     "dose_rate.f32": "ff79eac2124ac7cc9320fe848856295dcd8760ee1258a8a2ee2c9158fc3c75c8",
     "height.f32": "975c3b0dfd31d40ee876a960462d83a5d135b835e5c074f5a7146d141979f9e4",
     "optical.png": "565969eb41e7d2affb8bf40899c1b5653b13d25a3ac6c8979fb0fdcc29658eea",

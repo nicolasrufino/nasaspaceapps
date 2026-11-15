@@ -104,14 +104,16 @@ def union_masks(existing, positive):
     return bytes(a | b for a, b in zip(existing, positive))
 
 
-def scouted_cost(meta, heights, classes, blocked, previous):
+def scouted_cost(meta, heights, classes, blocked, previous, passable=None):
     n = meta["width"]
-    if meta["height"] != n or meta["knobs"] != make_world.KNOBS or meta["gravity_mps2"] != make_world.G_MARS:
+    # world.json knobs = pipeline KNOBS + per-world extras (eta, terrain_1m crossing knobs); every pipeline knob must match.
+    knobs_match = all(meta["knobs"].get(k) == v for k, v in make_world.KNOBS.items())
+    if meta["height"] != n or not knobs_match or meta["gravity_mps2"] != make_world.G_MARS:
         raise ValueError("World energy model differs from the supported pipeline")
     if blocked[meta["base_cell"][1]*n+meta["base_cell"][0]]:
         raise ValueError("Hazard clearance intersects the habitat; do not erase the hazard")
     values = make_world.build(n, meta["cell_size_m"], meta["base_cell"], meta["energy_budget_j"],
-                              h=heights, cls=classes, blocked=blocked)[-1]
+                              h=heights, cls=classes, blocked=blocked, passable=passable)[-1]
     # The shared builder prevents entering hazards but allows exiting a blocked
     # starting cell. The exported contract says impassable, including that cell.
     values = [BIG if blocked[i] else min(value, BIG) for i, value in enumerate(values)]
@@ -211,7 +213,8 @@ def export(world, destination, preview=False, artifacts=HERE, reviewed_only=Fals
         size = meta["width"]*meta["height"]
         ctg = scouted_cost(meta, read_array(world/"height.f32", "f", size),
                           read_array(world/"terrain_class.u8", "B", size), merged,
-                          read_array(world/"cost_to_go_scouted.f32", "f", size))
+                          read_array(world/"cost_to_go_scouted.f32", "f", size),
+                          read_array(world/"passable.u8", "B", size) if (world/"passable.u8").exists() else None)
         staged = destination/"world"
         shutil.copytree(world, staged)
         (staged/"rocks_fine.u8").write_bytes(merged)

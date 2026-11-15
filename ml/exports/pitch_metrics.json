@@ -48,8 +48,8 @@
     "data/worlds/gale/terrain_class.u8": "3fbc91da8e604766c770321667b0f8d2a6132a228a4fa5df336760dd00126d27",
     "data/worlds/gale/rocks_fine.u8": "15ebe3865779117d9a66ebbdea678f33b11c91dbd9becf5b2119af2912e9fa3b",
     "data/worlds/gale/cost_to_go.f32": "9c7a7afac2c657a8b3c45de6f2823c2b9a4b06875b0fe2e1a740d6fd1f0520cf",
-    "data/worlds/gale/cost_to_go_scouted.f32": "a248f9f75a70e4ea5caf5a03eda20f37a8b309dc83331312ce3b3df914fb3880",
-    "ml/exports/rocks.json": "d4f9a4bb901ff48c99a4f0f2b40759a18df9c30fcffb8be9ed65ddb189989517",
+    "data/worlds/gale/cost_to_go_scouted.f32": "815dab956b7faa9eff8d2eff442f32f814dc7bc3d6ab9d30479019bdb9bb7df7",
+    "ml/exports/rocks.json": "d3af3171e2f75c110e75c3d31138eb11576e53b2e71878791fcbb71a101562ff",
     "ml/exports/terrain_cls.json": "ebde871cf04878ab8d8bed3779712424ba7f7e0b5a1f935971abd46fd6e1f3d0",
     "ml/exports/buddy_policy.json": "ddc2696b80bc3cc7a17ae980bdbcb452385c677dbf52eec71fe1be0a5b463dfa",
     "app/src/plan.js": "234b04b1e4a770847b089b675fec200802c0f0e6b71875b2e418b98d908f782b",
@@ -1638,11 +1638,11 @@
             "distance_m": 0,
             "nominal_spent_j": 0,
             "app_ring": {
-              "cells": 50017,
-              "area_m2": 3201088,
+              "cells": 49928,
+              "area_m2": 3195392,
               "gained_cells": 5935,
               "lost_cells": 0,
-              "change_percent_vs_nominal": 13.463545
+              "change_percent_vs_nominal": 13.490783
             },
             "known_hazards_ring_audit": {
               "cells": 49919,
@@ -1661,11 +1661,11 @@
             "distance_m": 328.333044,
             "nominal_spent_j": 205787.747133,
             "app_ring": {
-              "cells": 47412,
-              "area_m2": 3034368,
+              "cells": 47323,
+              "area_m2": 3028672,
               "gained_cells": 7567,
               "lost_cells": 0,
-              "change_percent_vs_nominal": 18.99109
+              "change_percent_vs_nominal": 19.033605
             },
             "known_hazards_ring_audit": {
               "cells": 47243,
@@ -1684,11 +1684,11 @@
             "distance_m": 658.038672,
             "nominal_spent_j": 325639.529062,
             "app_ring": {
-              "cells": 45808,
-              "area_m2": 2931712,
+              "cells": 45719,
+              "area_m2": 2926016,
               "gained_cells": 10452,
               "lost_cells": 0,
-              "change_percent_vs_nominal": 29.562168
+              "change_percent_vs_nominal": 29.636771
             },
             "known_hazards_ring_audit": {
               "cells": 45672,
@@ -1707,11 +1707,11 @@
             "distance_m": 987.744299,
             "nominal_spent_j": 464975.506847,
             "app_ring": {
-              "cells": 44829,
-              "area_m2": 2869056,
+              "cells": 44740,
+              "area_m2": 2863360,
               "gained_cells": 13429,
               "lost_cells": 0,
-              "change_percent_vs_nominal": 42.767516
+              "change_percent_vs_nominal": 42.889081
             },
             "known_hazards_ring_audit": {
               "cells": 44724,
@@ -1730,11 +1730,11 @@
             "distance_m": 1311.391052,
             "nominal_spent_j": 629675.717217,
             "app_ring": {
-              "cells": 42372,
-              "area_m2": 2711808,
+              "cells": 42283,
+              "area_m2": 2706112,
               "gained_cells": 15335,
               "lost_cells": 0,
-              "change_percent_vs_nominal": 56.718571
+              "change_percent_vs_nominal": 56.905893
             },
             "known_hazards_ring_audit": {
               "cells": 42188,
@@ -1786,8 +1786,8 @@
             "distance_m": 0,
             "nominal_spent_j": 0,
             "app_ring": {
-              "cells": 44082,
-              "area_m2": 2821248,
+              "cells": 43993,
+              "area_m2": 2815552,
               "gained_cells": 0,
               "lost_cells": 0,
               "change_percent_vs_nominal": 0
@@ -1809,8 +1809,8 @@
             "distance_m": 328.333044,
             "nominal_spent_j": 205787.747133,
             "app_ring": {
-              "cells": 39845,
-              "area_m2": 2550080,
+              "cells": 39756,
+              "area_m2": 2544384,
               "gained_cells": 0,
               "lost_cells": 0,
               "change_percent_vs_nominal": 0
@@ -1832,8 +1832,8 @@
             "distance_m": 658.038672,
             "nominal_spent_j": 325639.529062,
             "app_ring": {
-              "cells": 35356,
-              "area_m2": 2262784,
+              "cells": 35267,
+              "area_m2": 2257088,
               "gained_cells": 0,
               "lost_cells": 0,
               "change_percent_vs_nominal": 0
@@ -1855,8 +1855,8 @@
             "distance_m": 987.744299,
             "nominal_spent_j": 464975.506847,
             "app_ring": {
-              "cells": 31400,
-              "area_m2": 2009600,
+              "cells": 31311,
+              "area_m2": 2003904,
               "gained_cells": 0,
               "lost_cells": 0,
               "change_percent_vs_nominal": 0
@@ -1878,8 +1878,8 @@
             "distance_m": 1311.391052,
             "nominal_spent_j": 629675.717217,
             "app_ring": {
-              "cells": 27037,
-              "area_m2": 1730368,
+              "cells": 26948,
+              "area_m2": 1724672,
               "gained_cells": 0,
               "lost_cells": 0,
               "change_percent_vs_nominal": 0
@@ -1934,11 +1934,11 @@
             "distance_m": 0,
             "nominal_spent_j": 0,
             "app_ring": {
-              "cells": 36519,
-              "area_m2": 2337216,
+              "cells": 36430,
+              "area_m2": 2331520,
               "gained_cells": 0,
               "lost_cells": 7563,
-              "change_percent_vs_nominal": -17.156663
+              "change_percent_vs_nominal": -17.191371
             },
             "known_hazards_ring_audit": {
               "cells": 36330,
@@ -1957,11 +1957,11 @@
             "distance_m": 328.333044,
             "nominal_spent_j": 205787.747133,
             "app_ring": {
-              "cells": 30680,
-              "area_m2": 1963520,
+              "cells": 30591,
+              "area_m2": 1957824,
               "gained_cells": 0,
               "lost_cells": 9165,
-              "change_percent_vs_nominal": -23.001631
+              "change_percent_vs_nominal": -23.053124
             },
             "known_hazards_ring_audit": {
               "cells": 30540,
@@ -1980,11 +1980,11 @@
             "distance_m": 658.038672,
             "nominal_spent_j": 325639.529062,
             "app_ring": {
-              "cells": 27514,
-              "area_m2": 1760896,
+              "cells": 27425,
+              "area_m2": 1755200,
               "gained_cells": 0,
               "lost_cells": 7842,
-              "change_percent_vs_nominal": -22.180111
+              "change_percent_vs_nominal": -22.236085
             },
             "known_hazards_ring_audit": {
               "cells": 27348,
@@ -2003,11 +2003,11 @@
             "distance_m": 987.744299,
             "nominal_spent_j": 464975.506847,
             "app_ring": {
-              "cells": 21713,
-              "area_m2": 1389632,
+              "cells": 21624,
+              "area_m2": 1383936,
               "gained_cells": 0,
               "lost_cells": 9687,
-              "change_percent_vs_nominal": -30.850318
+              "change_percent_vs_nominal": -30.938009
             },
             "known_hazards_ring_audit": {
               "cells": 21543,
@@ -2026,11 +2026,11 @@
             "distance_m": 1311.391052,
             "nominal_spent_j": 629675.717217,
             "app_ring": {
-              "cells": 15232,
-              "area_m2": 974848,
+              "cells": 15143,
+              "area_m2": 969152,
               "gained_cells": 0,
               "lost_cells": 11805,
-              "change_percent_vs_nominal": -43.662389
+              "change_percent_vs_nominal": -43.80659
             },
             "known_hazards_ring_audit": {
               "cells": 15028,
@@ -2727,11 +2727,11 @@
               "distance_m": 0,
               "nominal_spent_j": 0,
               "app_ring": {
-                "cells": 50017,
-                "area_m2": 3201088,
+                "cells": 49915,
+                "area_m2": 3194560,
                 "gained_cells": 5935,
                 "lost_cells": 0,
-                "change_percent_vs_nominal": 13.463545
+                "change_percent_vs_nominal": 13.49477
               },
               "known_hazards_ring_audit": {
                 "cells": 49906,
@@ -2750,11 +2750,11 @@
               "distance_m": 328.333044,
               "nominal_spent_j": 205787.747133,
               "app_ring": {
-                "cells": 47412,
-                "area_m2": 3034368,
+                "cells": 47310,
+                "area_m2": 3027840,
                 "gained_cells": 7568,
                 "lost_cells": 0,
-                "change_percent_vs_nominal": 18.994077
+                "change_percent_vs_nominal": 19.042826
               },
               "known_hazards_ring_audit": {
                 "cells": 47230,
@@ -2773,11 +2773,11 @@
               "distance_m": 658.038672,
               "nominal_spent_j": 326433.709834,
               "app_ring": {
-                "cells": 45794,
-                "area_m2": 2930816,
+                "cells": 45692,
+                "area_m2": 2924288,
                 "gained_cells": 10478,
                 "lost_cells": 0,
-                "change_percent_vs_nominal": 29.669272
+                "change_percent_vs_nominal": 29.755211
               },
               "known_hazards_ring_audit": {
                 "cells": 45653,
@@ -2796,11 +2796,11 @@
               "distance_m": 987.744299,
               "nominal_spent_j": 465769.687619,
               "app_ring": {
-                "cells": 44826,
-                "area_m2": 2868864,
+                "cells": 44724,
+                "area_m2": 2862336,
                 "gained_cells": 13438,
                 "lost_cells": 0,
-                "change_percent_vs_nominal": 42.81254
+                "change_percent_vs_nominal": 42.952119
               },
               "known_hazards_ring_audit": {
                 "cells": 44709,
@@ -2819,11 +2819,11 @@
               "distance_m": 1311.391052,
               "nominal_spent_j": 630469.897989,
               "app_ring": {
-                "cells": 42342,
-                "area_m2": 2709888,
+                "cells": 42240,
+                "area_m2": 2703360,
                 "gained_cells": 15338,
                 "lost_cells": 0,
-                "change_percent_vs_nominal": 56.798993
+                "change_percent_vs_nominal": 57.014348
               },
               "known_hazards_ring_audit": {
                 "cells": 42157,
@@ -2875,8 +2875,8 @@
               "distance_m": 0,
               "nominal_spent_j": 0,
               "app_ring": {
-                "cells": 44082,
-                "area_m2": 2821248,
+                "cells": 43980,
+                "area_m2": 2814720,
                 "gained_cells": 0,
                 "lost_cells": 0,
                 "change_percent_vs_nominal": 0
@@ -2898,8 +2898,8 @@
               "distance_m": 328.333044,
               "nominal_spent_j": 205787.747133,
               "app_ring": {
-                "cells": 39844,
-                "area_m2": 2550016,
+                "cells": 39742,
+                "area_m2": 2543488,
                 "gained_cells": 0,
                 "lost_cells": 0,
                 "change_percent_vs_nominal": 0
@@ -2921,8 +2921,8 @@
               "distance_m": 658.038672,
               "nominal_spent_j": 326433.709834,
               "app_ring": {
-                "cells": 35316,
-                "area_m2": 2260224,
+                "cells": 35214,
+                "area_m2": 2253696,
                 "gained_cells": 0,
                 "lost_cells": 0,
                 "change_percent_vs_nominal": 0
@@ -2944,8 +2944,8 @@
               "distance_m": 987.744299,
               "nominal_spent_j": 465769.687619,
               "app_ring": {
-                "cells": 31388,
-                "area_m2": 2008832,
+                "cells": 31286,
+                "area_m2": 2002304,
                 "gained_cells": 0,
                 "lost_cells": 0,
                 "change_percent_vs_nominal": 0
@@ -2967,8 +2967,8 @@
               "distance_m": 1311.391052,
               "nominal_spent_j": 630469.897989,
               "app_ring": {
-                "cells": 27004,
-                "area_m2": 1728256,
+                "cells": 26902,
+                "area_m2": 1721728,
                 "gained_cells": 0,
                 "lost_cells": 0,
                 "change_percent_vs_nominal": 0
@@ -3023,11 +3023,11 @@
               "distance_m": 0,
               "nominal_spent_j": 0,
               "app_ring": {
-                "cells": 36519,
-                "area_m2": 2337216,
+                "cells": 36417,
+                "area_m2": 2330688,
                 "gained_cells": 0,
                 "lost_cells": 7563,
-                "change_percent_vs_nominal": -17.156663
+                "change_percent_vs_nominal": -17.196453
               },
               "known_hazards_ring_audit": {
                 "cells": 36312,
@@ -3046,11 +3046,11 @@
               "distance_m": 328.333044,
               "nominal_spent_j": 205787.747133,
               "app_ring": {
-                "cells": 30680,
-                "area_m2": 1963520,
+                "cells": 30578,
+                "area_m2": 1956992,
                 "gained_cells": 0,
                 "lost_cells": 9164,
-                "change_percent_vs_nominal": -22.999699
+                "change_percent_vs_nominal": -23.058729
               },
               "known_hazards_ring_audit": {
                 "cells": 30512,
@@ -3069,11 +3069,11 @@
               "distance_m": 658.038672,
               "nominal_spent_j": 326433.709834,
               "app_ring": {
-                "cells": 27485,
-                "area_m2": 1759040,
+                "cells": 27383,
+                "area_m2": 1752512,
                 "gained_cells": 0,
                 "lost_cells": 7831,
-                "change_percent_vs_nominal": -22.174085
+                "change_percent_vs_nominal": -22.238314
               },
               "known_hazards_ring_audit": {
                 "cells": 27293,
@@ -3092,11 +3092,11 @@
               "distance_m": 987.744299,
               "nominal_spent_j": 465769.687619,
               "app_ring": {
-                "cells": 21686,
-                "area_m2": 1387904,
+                "cells": 21584,
+                "area_m2": 1381376,
                 "gained_cells": 0,
                 "lost_cells": 9702,
-                "change_percent_vs_nominal": -30.909902
+                "change_percent_vs_nominal": -31.010676
               },
               "known_hazards_ring_audit": {
                 "cells": 21504,
@@ -3115,11 +3115,11 @@
               "distance_m": 1311.391052,
               "nominal_spent_j": 630469.897989,
               "app_ring": {
-                "cells": 15188,
-                "area_m2": 972032,
+                "cells": 15086,
+                "area_m2": 965504,
                 "gained_cells": 0,
                 "lost_cells": 11816,
-                "change_percent_vs_nominal": -43.756481
+                "change_percent_vs_nominal": -43.922385
               },
               "known_hazards_ring_audit": {
                 "cells": 14960,
