@@ -30,7 +30,40 @@ const mat = (color, extra) => new THREE.MeshStandardMaterial({ color, roughness:
 const box = (w, h, d, m) => new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m)
 const at = (mesh, x, y, z) => (mesh.position.set(x, y, z), mesh)
 
-export function makeAstronaut() {
+// Walking motion for the Z-2 suit (flag stride): the model is one mesh with no skeleton, so the vertex shader swings
+// the legs and arms about the hips and shoulders, opposite sides out of step. In the mesh's own space the feet are
+// at z = 0, the head at z = -1.93, x is left-right and y is front-back (read from the file's bounds). An estimate
+// of a walk for the eye, not a simulation of the suit's joints.
+export const STRIDE_M = 1.3
+function addStride(model, u) {
+  model.traverse((o) => {
+    if (!o.isMesh) return
+    o.material.onBeforeCompile = (sh) => {
+      Object.assign(sh.uniforms, u)
+      sh.vertexShader = sh.vertexShader
+        .replace('#include <common>', '#include <common>\nuniform float uPhase;\nuniform float uAmp;')
+        .replace('#include <begin_vertex>', `#include <begin_vertex>
+          {
+            float h = -transformed.z / 1.926;                // 0 at the feet, 1 at the top of the helmet
+            float side = sign(transformed.x);
+            float sw = sin(uPhase) * uAmp;
+            float leg = smoothstep(0.50, 0.40, h) * smoothstep(0.0, 0.03, abs(transformed.x));
+            float arm = smoothstep(0.20, 0.27, abs(transformed.x)) * smoothstep(0.80, 0.70, h) * step(0.40, h);
+            float a = side * sw * 0.50 * leg - side * sw * 0.42 * arm;   // arms swing against the legs
+            float pz = -1.926 * (leg > 0.0 ? 0.50 : 0.78);  // hip or shoulder height
+            float py = 0.10;
+            float c = cos(a), s = sin(a);
+            vec2 d = vec2(transformed.y - py, transformed.z - pz);
+            transformed.y = py + c * d.x - s * d.y;
+            transformed.z = pz + s * d.x + c * d.y;
+            transformed.z -= abs(sin(uPhase)) * 0.03 * uAmp;  // a small rise at mid-stride
+          }`)
+    }
+    o.material.needsUpdate = true
+  })
+}
+
+export function makeAstronaut({ stride = false } = {}) {
   const g = new THREE.Group(), suit = mat(0xf2f2f2), dark = mat(0x3a3f47)
   g.add(at(box(0.16, 0.8, 0.2, suit), -0.11, 0.4, 0), at(box(0.16, 0.8, 0.2, suit), 0.11, 0.4, 0)) // legs
   g.add(at(box(0.5, 0.62, 0.3, suit), 0, 1.11, 0)) // torso
@@ -39,7 +72,8 @@ export function makeAstronaut() {
   g.add(at(new THREE.Mesh(new THREE.SphereGeometry(0.19, 20, 14), suit), 0, 1.61, 0)) // helmet, top at 1.8 m
   g.add(at(new THREE.Mesh(new THREE.SphereGeometry(0.15, 20, 14), mat(0xd9a441, { metalness: 0.9, roughness: 0.25 })), 0, 1.61, -0.07)) // visor
   g.add(at(box(0.5, 0.05, 0.3, mat(0x35e0ff, { emissive: 0x35e0ff, emissiveIntensity: 0.6 })), 0, 0.82, 0)) // belt, so it reads from above
-  useModel(g, suitUrl, { size: 1.8, turn: Math.PI }) // NASA Z-2 suit; it faces +z, the walker faces -z
+  g.userData.stride = { uPhase: { value: 0 }, uAmp: { value: 0 } }
+  useModel(g, suitUrl, { size: 1.8, turn: Math.PI }, stride ? (m) => addStride(m, g.userData.stride) : undefined) // NASA Z-2 suit; it faces +z, the walker faces -z
   return g
 }
 

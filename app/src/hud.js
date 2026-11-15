@@ -1,6 +1,7 @@
 // Helmet heads-up display for Vesta Vision (issue #41, flag hud): only what matters while walking.
 // A compass tape with the next stop and the habitat marked, the way-home margin as an arc and a number,
-// energy, oxygen, time, distance to the next stop, and one alert line (turn back soon / point of no return).
+// oxygen and energy bars, distance and ETA to the next stop, distance and ETA home, a home beacon and a next-stop
+// beacon pinned to the view, a heading-up minimap, and one alert line (turn back soon / point of no return).
 // Same app state as the map screen (walk.js appState); this file only draws. Shown in the Follow and Eye views.
 
 // Compass bearing in degrees (0 = north, 90 = east) from a direction in app space: +x east, +z south.
@@ -21,6 +22,27 @@ export function nextStop(route, k, stops, cs) {
     if (i === route.cells.length - 1) return { name: 'Habitat', metres, cell: route.cells[i] }
   }
   return null
+}
+
+// Metres left to walk along the route from cell k to its end (the habitat).
+export function remainingMetres(route, k, cs) {
+  let m = 0
+  for (let i = k + 1; i < route.cells.length; i++) m += Math.hypot(route.cells[i][0] - route.cells[i - 1][0], route.cells[i][1] - route.cells[i - 1][1]) * cs
+  return m
+}
+
+// "4 min", "1 h 05": walking time for a distance at the planning speed (knobs.speed_mps), stops not included.
+export function eta(metres, speedMps) {
+  const min = Math.ceil(metres / speedMps / 60)
+  return min < 60 ? `${min} min` : `${Math.floor(min / 60)} h ${String(min % 60).padStart(2, '0')}`
+}
+
+// Where a beacon sits on screen: at the point if it is in view, else clamped to the edge it lies beyond.
+// p: [x, y, behind] in pixels; returns { x, y, off } with off = true when clamped.
+export function beaconSpot([x, y, behind], w, h, pad = 34) {
+  if (behind) { x = w - x; y = h - pad } // behind you: mirror and push to the bottom edge
+  const cx = Math.max(pad, Math.min(w - pad, x)), cy = Math.max(pad + 60, Math.min(h - pad - 70, y))
+  return { x: cx, y: cy, off: behind || cx !== x || cy !== y }
 }
 
 // Alert for the margin left after the way home and the reserve. frac: margin / usable energy at the start.
@@ -50,6 +72,22 @@ const CSS = `
 #helmet .alert.warn{background:#ffb02ee6;color:#201400;text-shadow:none}
 #helmet .alert.danger{background:#e02020e6;color:#fff;animation:hudblink 1s steps(2) infinite}
 #helmet .cross{position:absolute;left:50%;top:50%;width:18px;height:18px;margin:-9px;border:1px solid #5fe6ff88;border-radius:50%}
+#helmet .bar{height:8px;border-radius:4px;background:#ffffff26;margin-top:4px;overflow:hidden}
+#helmet .bar i{display:block;height:100%;background:#5fe6ff;border-radius:4px}
+#helmet .kv{display:flex;justify-content:space-between;gap:10px;margin-top:5px;font-size:13px}
+#helmet .kv span:first-child{color:#9fdcec;font-weight:500}
+#helmet .beacon{position:absolute;transform:translate(-50%,-50%);display:grid;justify-items:center;gap:2px;font-size:12px;white-space:nowrap}
+#helmet .beacon i{width:16px;height:16px;transform:rotate(45deg);border:2px solid currentColor;background:#0008}
+#helmet .beacon.off i{background:currentColor}
+#helmet .beacon.home{color:#fff}#helmet .beacon.next{color:#ffd23f}
+#helmet .go{position:absolute;transform:translate(-50%,-50%);width:64px;height:64px;border-radius:50%;border:2px solid #fff;background:#ffffff38;
+  color:#fff;font-size:30px;line-height:1;pointer-events:auto;cursor:pointer;display:grid;place-items:center;box-shadow:0 2px 12px #0008;
+  -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+#helmet .go:hover{background:#ffffff66}#helmet .go:active{transform:translate(-50%,-50%) scale(.92)}
+#helmet .go[hidden]{display:none}
+#helmet .mini{position:absolute;right:max(12px,env(safe-area-inset-right));bottom:calc(max(14px,env(safe-area-inset-bottom)) + 62px);
+  width:min(30vmin,170px);aspect-ratio:1;border-radius:50%;border:1px solid #5fe6ff66;background:#0a141cb3;overflow:hidden}
+#helmet .mini canvas{width:100%;height:100%}
 @keyframes hudblink{50%{opacity:.55}}
 @media (prefers-reduced-motion:reduce){#helmet .alert.danger{animation:none}}
 @media (max-width:480px){#helmet .big{font-size:21px}#helmet .arc{width:96px;height:54px}}`
@@ -65,14 +103,61 @@ export function initHud() {
 <div class="box left" role="status"><small>MARGIN HOME</small>
   <svg class="arc" viewBox="0 0 120 66"><path d="M10 60 A50 50 0 0 1 110 60" fill="none" stroke="#ffffff30" stroke-width="8" stroke-linecap="round"/>
   <path id="hudArc" d="M10 60 A50 50 0 0 1 110 60" fill="none" stroke="#5fe6ff" stroke-width="8" stroke-linecap="round" pathLength="100" stroke-dasharray="100 100"/></svg>
-  <div class="big" id="hudMargin"></div><div class="row" id="hudEnergy"></div><div class="row" id="hudO2"></div></div>
+  <div class="big" id="hudMargin"></div>
+  <div class="kv"><span>OXYGEN</span><span id="hudO2"></span></div><div class="bar"><i id="hudO2Bar"></i></div>
+  <div class="kv"><span>ENERGY</span><span id="hudEnergy"></span></div><div class="bar"><i id="hudEnergyBar"></i></div></div>
 <div class="box right" role="status"><small>NEXT STOP</small><div class="big" id="hudDist"></div><div class="row" id="hudStop"></div>
-  <div class="row" id="hudHome"></div><div class="row" id="hudTime"></div></div>
+  <div class="kv"><span>ETA</span><span id="hudEta"></span></div>
+  <div class="kv"><span>HOME DIRECT</span><span id="hudHome"></span></div>
+  <div class="kv"><span>HOME BY ROUTE</span><span id="hudHomeEta"></span></div>
+  <div class="kv"><span>ELAPSED</span><span id="hudTime"></span></div></div>
+<div class="beacon home" id="hudBHome"><i></i><span></span></div><div class="beacon next" id="hudBNext"><i></i><span></span></div>
+<button class="go" id="hudGo" type="button" aria-label="Walk on along the route" hidden>&#x2303;</button>
+<div class="mini" aria-hidden="true"><canvas width="340" height="340"></canvas></div>
 <div class="alert" id="hudAlert" role="alert" hidden></div>`
   document.head.append(style)
   document.body.append(el)
   const q = (id) => el.querySelector('#' + id)
-  const cv = el.querySelector('canvas'), ctx = cv.getContext('2d')
+  const cv = el.querySelector('.tape canvas'), ctx = cv.getContext('2d')
+  const mc = el.querySelector('.mini canvas'), mx = mc.getContext('2d')
+
+  // Minimap: heading up, 160 m to the rim. The route, the stops, the habitat, and you in the middle.
+  function mini(s) {
+    const w = mc.width, r = w / 2, scale = r / 160, a = (-s.heading * Math.PI) / 180
+    mx.clearRect(0, 0, w, w)
+    mx.save()
+    mx.translate(r, r)
+    mx.rotate(a)
+    const P = (x, z) => [(x - s.pos[0]) * scale, (z - s.pos[1]) * scale]
+    mx.lineWidth = 3
+    mx.strokeStyle = '#ffffff55'
+    mx.beginPath()
+    s.route.forEach(([cx, cy], i) => { const [x, y] = P(cx * s.cs, cy * s.cs); if (i) mx.lineTo(x, y); else mx.moveTo(x, y) })
+    mx.stroke()
+    mx.strokeStyle = '#5fe6ff'
+    mx.beginPath()
+    s.route.slice(s.k).forEach(([cx, cy], i) => { const [x, y] = P(cx * s.cs, cy * s.cs); if (i) mx.lineTo(x, y); else mx.moveTo(x, y) })
+    mx.stroke()
+    mx.fillStyle = '#ffd23f'
+    for (const [cx, cy] of s.stops) { const [x, y] = P(cx * s.cs, cy * s.cs); mx.beginPath(); mx.arc(x, y, 7, 0, 7); mx.fill() }
+    const [hx, hy] = P(s.home[0], s.home[1])
+    mx.fillStyle = '#fff'
+    mx.fillRect(hx - 8, hy - 8, 16, 16)
+    mx.restore()
+    mx.fillStyle = '#5fe6ff' // you, looking up the screen
+    mx.beginPath(); mx.moveTo(r, r - 16); mx.lineTo(r - 11, r + 11); mx.lineTo(r + 11, r + 11); mx.fill()
+    mx.fillStyle = '#fff'
+    mx.font = '600 20px ui-monospace,Menlo,monospace'
+    mx.textAlign = 'center'
+    mx.fillText('N', r + Math.sin(a) * (r - 16), r - Math.cos(a) * (r - 16) + 7)
+  }
+  function beacon(node, p, label) {
+    const { x, y, off } = beaconSpot(p, innerWidth, innerHeight)
+    node.style.left = `${x}px`
+    node.style.top = `${y}px`
+    node.classList.toggle('off', off)
+    node.lastElementChild.textContent = label
+  }
   const kj = (j) => `${Math.round(j / 1000)} kJ`
 
   function tape(heading, marks) {
@@ -105,6 +190,9 @@ export function initHud() {
     ctx.fillRect(w / 2 - 2, 36, 4, 40) // lubber line: where you are looking
   }
 
+  let onGo = null
+  q('hudGo').onclick = () => onGo?.()
+
   return {
     el,
     show(on) { el.hidden = !on },
@@ -124,13 +212,31 @@ export function initHud() {
       q('hudArc').setAttribute('stroke', col)
       q('hudMargin').textContent = s.marginJ >= 0 ? kj(s.marginJ) : `−${kj(-s.marginJ)}`
       q('hudMargin').style.color = a ? col : '#fff'
-      q('hudEnergy').textContent = `ENERGY ${Math.round((100 * Math.max(s.energyJ, 0)) / s.budgetJ)}%`
-      q('hudO2').textContent = `O₂ ${s.o2L.toFixed(1)} L`
+      const left = Math.max(0, Math.min(1, s.energyJ / s.budgetJ)), low = left < 0.25 ? '#ffb02e' : '#5fe6ff'
+      q('hudEnergy').textContent = `${Math.round(100 * left)}%`
+      q('hudO2').textContent = `${s.o2L.toFixed(1)} L`
+      for (const id of ['hudO2Bar', 'hudEnergyBar']) { q(id).style.width = `${100 * left}%`; q(id).style.background = low }
       q('hudDist').textContent = s.next ? `${Math.round(s.next.metres)} m` : '—'
       q('hudStop').textContent = s.next ? s.next.name : 'Walk complete'
-      q('hudHome').textContent = `HOME ${Math.round(Math.hypot(s.home[0] - s.pos[0], s.home[1] - s.pos[1]))} m`
+      const direct = Math.hypot(s.home[0] - s.pos[0], s.home[1] - s.pos[1]), byRoute = remainingMetres({ cells: s.route }, s.k, s.cs)
+      q('hudEta').textContent = s.next ? eta(s.next.metres, s.speed) : '—'
+      q('hudHome').textContent = `${Math.round(direct)} m`
+      q('hudHomeEta').textContent = `${Math.round(byRoute)} m · ${eta(byRoute, s.speed)}`
+      beacon(q('hudBHome'), s.project(s.home[0], s.home[1]), `HOME ${Math.round(direct)} m`)
+      const nb = q('hudBNext'), showNext = s.next && s.next.name !== 'Habitat'
+      nb.hidden = !showNext
+      if (showNext) beacon(nb, s.project(s.next.cell[0] * s.cs, s.next.cell[1] * s.cs), `${Math.round(s.next.metres)} m`)
+      mini(s)
+      // Street-view step: an arrow on the ground two cells ahead, kept in the lower middle of the view.
+      const g = q('hudGo'), [gx, gy, gb] = s.project(s.ahead[0] * s.cs, s.ahead[1] * s.cs)
+      onGo = s.go
+      g.hidden = !(s.eye && s.canGo)
+      if (!g.hidden) {
+        g.style.left = `${gb ? innerWidth / 2 : Math.max(innerWidth * 0.25, Math.min(innerWidth * 0.75, gx))}px`
+        g.style.top = `${gb ? innerHeight * 0.72 : Math.max(innerHeight * 0.55, Math.min(innerHeight * 0.78, gy))}px`
+      }
       const t = Math.round(s.t)
-      q('hudTime').textContent = `T+ ${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`
+      q('hudTime').textContent = `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`
       q('hudAlert').hidden = !a
       if (a) { q('hudAlert').textContent = a.text; q('hudAlert').className = `alert ${a.level}` }
     },
