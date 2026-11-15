@@ -8,5 +8,9 @@ export default ({ mode }) => ({
   // Plain `npm run dev` stays HTTP; localhost already counts as secure on a laptop.
   plugins: mode === 'phone' ? [basicSsl()] : [],
   server: { host: mode === 'phone' },
-  build: { chunkSizeWarningLimit: 1000 }, // three.js alone is ~550 kB (140 kB gzipped)
+  build: {
+    chunkSizeWarningLimit: 1000,
+    // Two pages: the app at / and the Mission VESTA site at /mission-vesta/.
+    rollupOptions: { input: { app: 'index.html', vesta: 'mission-vesta/index.html' } },
+  }, // three.js alone is ~550 kB (140 kB gzipped)
 })
