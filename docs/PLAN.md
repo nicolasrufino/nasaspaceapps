@@ -209,7 +209,7 @@ The base must always work; every feature sits behind a flag and can be turned of
 
 **Foundation:** site map with three layers → route around obstacles → walk along it → walk-back ring and buzz → runs on one phone.
 
-**Features (flags):** `helicopter_scout`, `why_route`, `export`, `packing_list`, `map_grows`, `layers_extra` (thermal, spectral, radiation), `pov_images`, `science_stop`, `step_mode`, `buddy_scripted`, `buddy_rl`, `override`, `rideback_ring`, `storm`, `classifier`, `capcom`, `debrief`, `before_after`.
+**Features (flags):** `drone_scout` (the helicopter scout), `why_route`, `export`, `packing_list`, `map_grows`, `layers_extra` (thermal, spectral, radiation), `pov_images`, `science_stop`, `step_mode`, `buddy_scripted`, `buddy_rl`, `override`, `rideback_ring`, `storm`, `classifier`, `capcom`, `debrief`, `before_after`.
 
 | Milestone | Time | Done when |
 |---|---|---|

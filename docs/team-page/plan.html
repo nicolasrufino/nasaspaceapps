@@ -988,6 +988,14 @@ a.bg-lane:hover{filter:brightness(1.15);text-decoration:none}.bg-lane.p1{backgro
 </tr>
 </tbody>
 </table></div>
+<h3 id="the-box-we-chose-d1-done">The box we chose (D1, done)</h3>
+<ul>
+<li><strong>Centre</strong> −4.800° N, 137.383° E; <strong>2048 × 2048 m</strong> (lat −4.8173..−4.7827, lon 137.3657..137.4003), equirectangular Mars sphere (r = 3,396,190 m), same grid as the USGS mosaics. Full georeferencing in <code>data/raw/gale/slice.json</code> (made by <code>data/pipeline/cut_slice.py</code>).</li>
+<li><strong>Why here:</strong> it holds Curiosity's 2025 boxwork route (sols ~4480–4900: the Altadena, Valle de la Luna and Nevado Sajama drill sites, the ramp and the overlook), buttes with slopes over 25°, dark sand in the hollows, and blocky ground that only shows at 1 m.</li>
+<li><strong>Files:</strong> USGS 1 m DEM (<a href="https://planetarymaps.usgs.gov/mosaic/Mars/MSL/MSL_Gale_DEM_Mosaic_1m_v3.tif" target="_blank" rel="noopener">MSL_Gale_DEM_Mosaic_1m_v3.tif</a>) and 25 cm HiRISE colour (<a href="https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/Mars/MSL/MSL_Gale_HiRISE-LRGB_78quads_sharp_cog.tif" target="_blank" rel="noopener">MSL_Gale_HiRISE-LRGB_78quads_sharp_cog.tif</a>); the lossless greyscale 25 cm mosaic also works (<code>--ortho gray</code>, ~1.5 GB read). Only the box is read; nothing large goes in Git.</li>
+<li><strong>Rebuild:</strong> <code>pip install -r data/pipeline/requirements-gdal.txt</code>, then <code>python3 data/pipeline/cut_slice.py --lat -4.800 --lon 137.383 --ortho color</code> , <code>python3 data/pipeline/make_gale.py</code>, <code>python3 data/pipeline/add_d6_layers.py</code>, <code>python3 data/pipeline/terrain_1m.py</code> and <code>python3 data/pipeline/scout_plan.py data/worlds/gale</code> → <code>data/worlds/gale/</code> (open the app with <code>?world=gale</code>; add <code>&amp;flags=drone_scout</code> for the helicopter).</li>
+<li><strong>Note:</strong> the 256 m rock-review test patch at −4.720°, 137.375° E is about 5 km north of this box, outside it.</li>
+</ul>
 <h3 id="how-the-data-flows">How the data flows</h3>
 <ol type="1">
 <li><strong>Mars Trek:</strong> choose the box.</li>
@@ -1550,7 +1558,7 @@ flowchart LR
 <p><strong>Who builds what, block by block, with prerequisites: <code>docs/BUILD.md</code></strong> (drawn as a four-lane graph on the team page).</p>
 <p>The base must always work; every feature sits behind a flag and can be turned off.</p>
 <p><strong>Foundation:</strong> site map with three layers → route around obstacles → walk along it → walk-back ring and buzz → runs on one phone.</p>
-<p><strong>Features (flags):</strong> <code>helicopter_scout</code>, <code>why_route</code>, <code>export</code>, <code>packing_list</code>, <code>map_grows</code>, <code>layers_extra</code> (thermal, spectral, radiation), <code>pov_images</code>, <code>science_stop</code>, <code>step_mode</code>, <code>buddy_scripted</code>, <code>buddy_rl</code>, <code>override</code>, <code>rideback_ring</code>, <code>storm</code>, <code>classifier</code>, <code>capcom</code>, <code>debrief</code>, <code>before_after</code>.</p>
+<p><strong>Features (flags):</strong> <code>drone_scout</code> (the helicopter scout), <code>why_route</code>, <code>export</code>, <code>packing_list</code>, <code>map_grows</code>, <code>layers_extra</code> (thermal, spectral, radiation), <code>pov_images</code>, <code>science_stop</code>, <code>step_mode</code>, <code>buddy_scripted</code>, <code>buddy_rl</code>, <code>override</code>, <code>rideback_ring</code>, <code>storm</code>, <code>classifier</code>, <code>capcom</code>, <code>debrief</code>, <code>before_after</code>.</p>
 <div class="tbl"><table>
 <thead>
 <tr>
@@ -1766,6 +1774,16 @@ flowchart LR
 <td>3</td>
 <td class="score">13</td>
 <td><strong class="keep">Keep.</strong> It is the solution in action. Label the flight as simulated</td>
+</tr>
+<tr>
+<td>Whole-area helicopter survey (SkyFall-style fleet) before choosing stops: strips over the slice, reachable area first; shows flights and sols per fleet size; a "best areas" layer (round trip fits the budget, not too steep, no rocks seen, scouted, science value)</td>
+<td>3</td>
+<td>3</td>
+<td>2</td>
+<td>2</td>
+<td>3</td>
+<td class="score">13</td>
+<td><strong class="keep">Keep</strong>, behind <code>drone_scout</code>. Turns "explore the area" into a hardware answer (how many helicopters, how many sols). Label the flight simulated and the flights-per-sol rate an estimate</td>
 </tr>
 <tr>
 <td>Drop the player anywhere on Mars at random</td>
@@ -2229,8 +2247,16 @@ flowchart LR
 
   <div class="col">
     <h2 id="pitch">The pitch (draft 3)</h2>
-
-<p>Five minutes, the organizers' seven parts. One argument runs through it: <strong>there is no map at the scale of one walk; every option today fails on its own; ours combines pieces NASA has already proven, and we show it working.</strong> Numbers marked <em>(to measure)</em> come from our own runs before Sunday.</p>
+<h2 id="the-pitch-draft-4-measured-f1-update-sat-nov-14">The pitch (draft 4, measured F1 update, Sat Nov 14)</h2>
+<p>Five minutes, the organizers' seven parts. One argument runs through it: <strong>there is no map at the scale of one walk; we combine NASA data, local planning and simulated scouting, and measure the result.</strong> The proof numbers below come from repository runs, not field trials.</p>
+<h3 id="current-evidence-and-scope">Current evidence and scope</h3>
+<ul>
+<li>R5 scenario: the fixed Gale world, five default science stops, 600 kJ budget, 120 kJ reserve, 60 fps replay. <a href="../ml/pitch_metrics/PITCH_NUMBERS.md">Measured route numbers</a> and <a href="../ml/exports/pitch_metrics.json">machine-readable evidence</a>.</li>
+<li>R4: AI4Mars <strong>Curiosity ground photographs in Gale</strong>, not Ingenuity. Original test 148/159 (93.1%); additional expert sample 275/302 (91.1%) for the published model. Neither sample contains big-rock patches. The new regularized head's 278/302 does not pass the promotion gates; v1 stays published. <a href="../ml/terrain_classifier/README.md#gale-follow-up-keep-v1-after-a-small-head-training-experiment">Experiment and limitations</a>.</li>
+<li>A future scout at approximately <strong>five metres above ground</strong> is a scenario assumption, not training-image provenance or aerial validation. Exact overlap between the training photos and Luca's target slice is not established. <a href="../ml/terrain_classifier/PROVENANCE.md">Provenance and scope</a>.</li>
+<li>The map's 3D terrain and slopes come from orbital terrain products. The ground classifier does not reconstruct 3D and did not generate the R5 route layers.</li>
+<li>R7 CAPCOM/Foundry is deferred by the user. Azure Static Web Apps hosting is deployed; a live Foundry agent is not part of this pitch.</li>
+</ul>
 <h3 id="the-argument-in-one-breath">The argument in one breath</h3>
 <blockquote>
 <p>There is no map at the scale of one Mars walk. Orbit misses the rocks, mission control is 20 minutes away, rovers are too slow to scout ahead, and walking in blind breaks the plan. Martian Map makes the map: orbit gives the base, a NASA JPL-style scout helicopter flies the route first, the device plans the path and the packing list, and every walk makes the map better. Each piece is already proven at NASA. We put them in the crew's hands.</p>
@@ -2253,23 +2279,24 @@ flowchart LR
 </blockquote>
 <p><strong>4. Demo (1:45–3:00)</strong></p>
 <ul>
-<li>Habitat screen, a random spot inside Gale crater, goal "boxwork". Orbit-only map and a first route.</li>
+<li>Habitat screen, the fixed Gale boxwork scenario with five default science stops. Orbit-only map and a first route.</li>
 <li>Deploy the scout helicopter. It flies Ingenuity-sized legs along the route, then where it is least sure. Where it flies, the map sharpens: real full-resolution HiRISE terrain and detected rocks. A hidden rock field appears.</li>
-<li>The route re-plans. "Why this route": +120 m, less effort, avoids the rock field, never steeper than the limit, home reachable everywhere <em>(numbers to measure)</em>. The packing list moves the drill to the rover.</li>
+<li>The first re-plan crosses zero of the 12 newly discovered hazard cells on the original route: 1238.8 to 1247.4 m, 329.6 to 334.1 kJ (+1.36% effort). Six unobserved stored hazards remain on the new route. Repeat "Fly the new route": after three passes, the final 1243.5 m route is fully scanned and crosses zero stored hazard cells. This takes 21 simulated flight legs and 14.05 km of helicopter travel; helicopter energy is excluded. Unmapped real hazards can remain.</li>
 <li>A judge carries the phone (the suit display). Real steps move the astronaut; the ring of "can still get home" shrinks. At a stop, the science checklist runs. Past the point of no return, it buzzes.</li>
-<li>Export the map: mission control gets it 11 minutes later.</li>
+<li>Export the map for mission control. A live CAPCOM/Foundry reply is deferred, not a demo step.</li>
 </ul>
 <p><strong>5. Space data inside, and proof (3:00–3:40)</strong></p>
 <blockquote>
-<p>NASA asked for at least three data types; we use all eight it lists. Optical and terrain from HiRISE, THEMIS for loose sand, CRISM and the geologic map for science targets, Curiosity's radiation and weather measured in this crater, and its chemistry and subsurface readings along its path. And every piece is already proven at NASA. Shadow-based rock detection on HiRISE chose or checked the Phoenix, Gale, Jezero and InSight landing sites. Ingenuity scouted Perseverance's routes. Perseverance plans its own safe path. Walkback limits keep crews safe today. What's new is putting them together for the person on foot.</p>
+<p>Optical and terrain from HiRISE, thermal context from THEMIS, CRISM and the geologic map for science targets, Curiosity's radiation and weather in this crater, and chemistry and subsurface readings along its path. In our fixed Gale simulation, the first re-plan removes 12 discovered hazard cells from the route for 1.36% more walking energy. Three scout passes cover the final route. Even with walking costs raised 30%, it keeps 44.8 kJ beyond the cost home and the reserve. Separately, our ground-photo classifier gets 275 of 302 additional expert-labelled Curiosity crops right. These are measured prototype results, not a certification of safe terrain.</p>
 </blockquote>
+<p>Speaker detail: the nominal final route costs 334.7 kJ and its minimum spare margin is 145.3 kJ. R3 contains 23 visually accepted rock proposals and two uncertain ones excluded. The 12 avoided cells are DTM-derived hazards, not 12 of these accepted rocks. Proposal acceptance is not detector precision/recall.</p>
 <p><strong>6. Impact: why it wins, who wins, how much (3:40–4:20)</strong></p>
 <blockquote>
 <p>Side by side: orbit alone misses hazards; voice guidance fails with delay; rovers are too slow; walking blind breaks plans. Only the combination works, and it runs on the crew's side of the delay. NASA ranks surface mobility #2 of its 32 technology gaps and asks by name for "in-situ decision support tools" for Mars walks. It funds the rover (up to $4.6B) and the suit (up to $3.1B); nobody funds the map between them.</p>
 </blockquote>
 <p><strong>7. Team + next (4:20–5:00)</strong></p>
 <blockquote>
-<p>Jules built the vision models and the Azure mission-control agent; Nicolas built the app and the 3D map; Galsan built the data pipeline from NASA's missions. <em>(Adjust to what each person actually shipped.)</em> Next: real drone imagery from an analog field test, the same engine for the first crewed Moon landing in 2028, and people on Earth who walk far from help. The first people on Mars will get one chance at each walk. This is the map they should carry.</p>
+<p>Jules built the rock-detection work, ground classifier and measured route tests; Nicolas built the app and the 3D map; Galsan built the data pipeline from NASA's missions. <em>(Confirm team credits before presenting.)</em> Next: real drone imagery from an analog field test, then Moon walks and people on Earth who walk far from help. The first people on Mars will get one chance at each walk. This is the map they should carry.</p>
 </blockquote>
 <h3 id="slides-in-order">Slides (in order)</h3>
 <ol type="1">
@@ -2281,7 +2308,7 @@ flowchart LR
 <li>NASA's objectives, one by one: today's tools versus ours</li>
 <li>Live demo</li>
 <li>All eight NASA data types, each with a job</li>
-<li>Proof: every piece is already proven at NASA</li>
+<li>Measured Gale proof: known hazards, scout coverage, margin home, ground classifier</li>
 <li>Why this beats every option on its own (comparison table)</li>
 <li>Impact and money</li>
 <li>Team + next</li>
@@ -2311,9 +2338,9 @@ flowchart LR
 <tr>
 <td><strong>Best Use of Technology</strong></td>
 <td>The most innovative use of technology. <strong>Must use Microsoft Azure</strong></td>
-<td>Good, <strong>only if Azure is real</strong></td>
-<td>App hosted on Azure Static Web Apps (#14); CAPCOM agent on Microsoft Foundry answering through the delay (#42); vision models running in the browser; the helicopter's scan sweep</td>
-<td><strong>Second target.</strong> #14 and #42 are now required, not optional</td>
+<td>Azure hosting is real</td>
+<td>App hosted on Azure Static Web Apps (#14), three.js map and simulated scout; ONNX model exports are separate evidence</td>
+<td><strong>Second target.</strong> CAPCOM/Foundry (#42) is deferred; do not claim it is deployed</td>
 </tr>
 <tr>
 <td><strong>Art &amp; Technology</strong></td>
@@ -2334,7 +2361,7 @@ flowchart LR
 <p><strong>One line per award, if asked:</strong></p>
 <ul>
 <li><em>Science:</em> "Every claim on screen is a measurement from a NASA instrument or a number our code tested."</li>
-<li><em>Technology:</em> "The map runs on Azure, and mission control is an AI agent on Microsoft Foundry that answers 20 minutes late, so the crew's device has to decide."</li>
+<li><em>Technology:</em> "Azure Static Web Apps hosts the map. Planning and the simulated scout run locally in the browser."</li>
 <li><em>Art &amp; Technology:</em> "A helicopter that sees like a bat, but with light, and a helmet display you can read while walking."</li>
 </ul>
 <h3 id="questions-judges-are-likely-to-ask">Questions judges are likely to ask</h3>
@@ -2352,7 +2379,7 @@ flowchart LR
 </tr>
 <tr>
 <td>Is the helicopter real?</td>
-<td>The flight is simulated and labelled. Ingenuity proved a helicopter can scout on Mars (72 flights, up to 704 m each); NASA's SkyFall helicopters are contracted to scout exploration zones for crews (launch late 2028).</td>
+<td>The flight is simulated and labelled. Ingenuity proved a helicopter can scout on Mars (72 flights, up to 704 m each); NASA's SkyFall helicopters are contracted to scout exploration zones for crews (launch late 2028). In the demo, full-resolution HiRISE stands in for what its cameras would see.</td>
 </tr>
 <tr>
 <td>What does a helicopter see that HiRISE doesn't?</td>
@@ -2364,35 +2391,47 @@ flowchart LR
 </tr>
 <tr>
 <td>How do you detect rocks?</td>
-<td>From their shadows in HiRISE images, the method NASA used to check landing sites.</td>
-</tr>
-<tr>
-<td>Does the detector find real rocks or image artefacts?</td>
-<td>We measured it: precision and recall against about 50 rocks we marked by hand on a tile the detector never saw <em>(to measure, R3)</em>, and we can show a miss and a false alarm on screen. Small rocks are where it is weakest, and that is the helicopter's job.</td>
-</tr>
-<tr>
-<td>Can humans check or correct the ML?</td>
-<td>Yes. At each stop the crew confirms or rejects the hazards flagged nearby, and the corrections go back into the site files, so the next walk starts from a better map (block D7). It is the citizen-science idea, people checking machine labels, applied to one crew.</td>
+<td>Shadow-based proposals in HiRISE: 23 visually accepted, two uncertain and excluded. Acceptance is not precision/recall. Separate reference-mosaic correspondence matched 0/31 accepted locations; do not hide that limitation.</td>
 </tr>
 <tr>
 <td>How accurate is the energy model?</td>
-<td>A published walking model with a simple Mars-gravity correction; we show how the ring moves if it is off by ±30% <em>(to measure)</em>. The upgrade path is NASA's field-calibrated model.</td>
+<td>This is a sensitivity test, not field calibration. At ±30% walking cost, departure ring area changes +26.1% / −21.2% after the first scout pass. The final route's minimum spare margin is 245.7 / 145.3 / 44.8 kJ at 0.7× / 1× / 1.3×, after home and reserve. Helicopter energy is excluded.</td>
+</tr>
+<tr>
+<td>Was the classifier trained on Ingenuity views at five metres?</td>
+<td>No. It uses AI4Mars Curiosity ground photos in Gale. Five metres is a proposed future scouting altitude. Ground-view accuracy does not establish aerial performance or exact-site coverage.</td>
+</tr>
+<tr>
+<td>Did the retraining improve it?</td>
+<td>The selected new head gets 278/302 versus the current 275/302 on an additional expert sample. The gain's grouped 95% interval includes zero, and the older test falls by one correct crop. We keep the published model and report the experiment; no 95% reliability claim.</td>
+</tr>
+<tr>
+<td>Does MobileNet produce slopes or the 3D map?</td>
+<td>No. It predicts a majority terrain category for a crop. The current map and slopes use orbital terrain products; pixel segmentation and reconstruction are separate tasks.</td>
+</tr>
+<tr>
+<td>Does the detector find real rocks or image artefacts?</td>
+<td>Every rock in the map was checked by eye on HiRISE: 23 accepted, two uncertain and left out. That is acceptance, not precision or recall, and we don't claim recall. Rocks under about 1.5 m are below what orbit can see; that is the helicopter's job.</td>
+</tr>
+<tr>
+<td>Can humans check or correct the ML?</td>
+<td>Yes, twice. The rock layer itself is human-reviewed. And on the walk the crew logs what they find at each stop; the next world merges those observations in (block D7, <code>merge_walk.py</code>), so the next walk starts from a better map. It is the citizen-science idea, people checking machine labels, applied to one crew.</td>
 </tr>
 <tr>
 <td>Which numbers are measured and which are assumed?</td>
-<td>One backup slide lists every input to the energy and oxygen model, where it comes from, and whether it was measured (on Earth, in field tests) or assumed (Mars gravity scaling, suit values). Nobody has walked on Mars, so the first walks calibrate it.</td>
+<td><code>app/HOW-IT-WORKS.md</code> lists every input to the energy and oxygen model, where it comes from, and where it is known to be too low (Mars-gravity scaling may understate walking energy by about 1.8×; suits add more). Nobody has walked on Mars, so the first walks calibrate it.</td>
 </tr>
 <tr>
 <td>What failure rate does the oxygen margin tolerate?</td>
-<td>We don't claim a probability we can't measure. We follow NASA's rule instead: an untouched reserve, with walks sized to a 1-hour return on contingency oxygen, and we show the ring still holds if the energy model is 30% off.</td>
+<td>We don't claim a probability we can't measure. We follow NASA's rule instead: an untouched reserve (120 kJ here), and we show the route still keeps 44.8 kJ spare if walking costs 30% more.</td>
 </tr>
 <tr>
 <td>What are the uncertainties on your data layers?</td>
 <td>Each layer lists its source and resolution in <code>world.json</code> (HiRISE terrain points about 1 m apart, height precise to tens of centimetres; CRISM minerals about 18 m per pixel). Where layers disagree is exactly where the helicopter flies first.</td>
 </tr>
 <tr>
-<td>What runs on Azure, and why an agent rather than a script?</td>
-<td>The browser runs the 3D view and the ML models, so the walk works with no connection. Azure Static Web Apps hosts the app. The mission-control agent on Microsoft Foundry answers the crew's own questions in plain language from the exported map package, with the light delay built in. A script can only answer questions written in advance.</td>
+<td>What runs on Azure?</td>
+<td>Azure Static Web Apps hosts the app. Planning, the walk and the simulated scout run in the browser, so the walk works with no connection. The mission-control (CAPCOM) agent exists as an offline service with the light delay built in; connecting it to Microsoft Foundry is the next step, and we don't present it as live.</td>
 </tr>
 <tr>
 <td>Astronauts don't use phones.</td>
@@ -2410,7 +2449,7 @@ flowchart LR
 <li>"After hearing this once, what does it do?" (tests the one sentence)</li>
 <li>"Which part convinced you it works?" (tells us which proof to lead with)</li>
 <li>"What would make you doubt the route?" (tells us which number to show)</li>
-<li>For Best Use of Technology: "Is hosting plus a Foundry agent enough Azure, or do you expect more?"</li>
+<li>For Best Use of Technology: "Does our deployed Azure hosting satisfy your criteria? Foundry is deferred."</li>
 </ol>
 <p>Write the answers in <code>docs/pitch-notes.md</code> and change this draft.</p>
 
@@ -2838,9 +2877,9 @@ flowchart LR
 </ul>
 <h3 id="integration-rules-you-enforce">Integration rules you enforce</h3>
 <ul>
-<li>PRs into <code>main</code> only; each PR names its block, milestone and flag.</li>
+<li>PRs into <code>dev</code>; each PR names its block, milestone and flag. <code>main</code> moves only by a release PR <code>dev</code> -&gt; <code>main</code> at a milestone.</li>
 <li>Contract changes need every owner's approval.</li>
-<li>At each milestone, <code>main</code> must run. A late feature ships with its flag off.</li>
+<li><code>dev</code> must always run; at each milestone, <code>main</code> must run. A late feature ships with its flag off.</li>
 <li>Run the orchestrator's "status" about once an hour (<code>docs/CODEX.md</code> §3).</li>
 </ul>
 <h3 id="agent-brief-paste-into-your-coding-agent">Agent brief (paste into your coding agent)</h3>
@@ -3030,12 +3069,77 @@ CLAUDE.md
 README.md
 agent/AGENTS.md
 agent/README.md
+agent/__init__.py
+agent/requirements.txt
+agent/service.py
+agent/test_service.py
 app/AGENTS.md
+app/HOW-IT-WORKS.md
 app/README.md
+app/index.html
+app/package-lock.json
+app/package.json
+app/src/best-areas.js
+app/src/best-areas.test.js
+app/src/log.js
+app/src/main.js
+app/src/plan.js
+app/src/plan.test.js
+app/src/scout.js
+app/src/scout.test.js
+app/src/steps.js
+app/src/steps.test.js
+app/src/stops.js
+app/src/stops.test.js
+app/src/walk-notes.js
+app/src/walk-notes.test.js
+app/src/walk.js
+app/src/walk.test.js
+app/src/why.js
+app/src/why.test.js
+app/src/world.js
+app/src/world.test.js
 app/staticwebapp.config.json
+app/vite.config.js
 data/AGENTS.md
+data/pipeline/add_d6_layers.py
 data/pipeline/check_world.py
+data/pipeline/cut_slice.py
+data/pipeline/make_gale.py
 data/pipeline/make_world.py
+data/pipeline/merge_walk.py
+data/pipeline/requirements-gdal.txt
+data/pipeline/scout_plan.py
+data/pipeline/terrain_1m.py
+data/worlds/gale/chem_points.json
+data/worlds/gale/chokepoint.f32
+data/worlds/gale/cost_per_m.f32
+data/worlds/gale/cost_to_go.f32
+data/worlds/gale/cost_to_go_scouted.f32
+data/worlds/gale/crevice.f32
+data/worlds/gale/dose_rate.f32
+data/worlds/gale/dropoff.f32
+data/worlds/gale/fine_steep.u8
+data/worlds/gale/height.f32
+data/worlds/gale/landform.u8
+data/worlds/gale/neutron_points.json
+data/worlds/gale/open_dirs.u8
+data/worlds/gale/optical.png
+data/worlds/gale/passable.u8
+data/worlds/gale/reach.u8
+data/worlds/gale/rocks_fine.u8
+data/worlds/gale/route.json
+data/worlds/gale/science.u8
+data/worlds/gale/scout_plan.json
+data/worlds/gale/slope.f32
+data/worlds/gale/stops.json
+data/worlds/gale/targets.json
+data/worlds/gale/terrain.u8
+data/worlds/gale/terrain_class.u8
+data/worlds/gale/thermal_inertia.f32
+data/worlds/gale/unsure.f32
+data/worlds/gale/weather.json
+data/worlds/gale/world.json
 docs/BUILD.md
 docs/CODEX.md
 docs/CONTRACTS.md
@@ -3045,6 +3149,7 @@ docs/PITCH.md
 docs/PLAN.md
 docs/PRODUCT.md
 docs/RESEARCH.md
+docs/map-grows.md
 docs/pitch-notes.md
 docs/roles/README.md
 docs/roles/person-1-ml.md
@@ -3061,19 +3166,100 @@ docs/team-page/world64.json
 ml/.gitignore
 ml/AGENTS.md
 ml/README.md
+ml/__init__.py
 ml/buddy_rover/.gitkeep
 ml/check_exports.py
+ml/export_placeholders.py
 ml/exports/.gitkeep
+ml/exports/buddy_policy.json
+ml/exports/buddy_policy.onnx
+ml/exports/pitch_metrics.json
+ml/exports/rocks.json
+ml/exports/terrain_cls.json
+ml/exports/terrain_cls.onnx
+ml/pitch_metrics/PITCH_NUMBERS.md
+ml/pitch_metrics/README.md
+ml/pitch_metrics/metrics.mjs
+ml/pitch_metrics/metrics.test.mjs
+ml/pitch_metrics/run.mjs
+ml/pitch_metrics/test_pitch_metrics.py
 ml/requirements-ci.txt
 ml/requirements.txt
+ml/rock_review/.gitattributes
+ml/rock_review/CI_STATUS.md
+ml/rock_review/FINAL_SITE.md
+ml/rock_review/HANDOFF.md
+ml/rock_review/R3.md
+ml/rock_review/README.md
+ml/rock_review/REGISTRATION.md
+ml/rock_review/ROSCO.md
+ml/rock_review/ROSCO_LICENSE.txt
+ml/rock_review/__init__.py
+ml/rock_review/baseline_metrics.json
+ml/rock_review/candidates_reviewed.json
+ml/rock_review/candidates_unreviewed.json
+ml/rock_review/evaluate_final_site.py
+ml/rock_review/evaluate_rosco.py
+ml/rock_review/final_site.py
+ml/rock_review/final_site_baseline_metrics.json
+ml/rock_review/final_site_candidates.json
+ml/rock_review/final_site_review.json
+ml/rock_review/prepare_review.py
+ml/rock_review/r3_alignment.json
+ml/rock_review/r3_alignment.py
+ml/rock_review/r3_candidates.json
+ml/rock_review/r3_decisions.json
+ml/rock_review/r3_hazards.py
+ml/rock_review/r3_review.py
+ml/rock_review/r3_world_reference.json
+ml/rock_review/register_observation.py
+ml/rock_review/registered_candidates.json
+ml/rock_review/registration_metrics.json
+ml/rock_review/requirements-site.txt
+ml/rock_review/rosco_confidence_decisions.json
+ml/rock_review/rosco_confidence_metrics.json
+ml/rock_review/rosco_confidence_review.json
+ml/rock_review/rosco_native.py
+ml/rock_review/rosco_shapes_metrics.json
+ml/rock_review/rosco_upstream_metrics.json
+ml/rock_review/shadow_baseline.py
+ml/rock_review/shadow_review.json
+ml/rock_review/single_observation.py
+ml/rock_review/single_observation_source.json
+ml/rock_review/source.json
+ml/rock_review/test_final_evaluation.py
+ml/rock_review/test_final_site.py
+ml/rock_review/test_r3_hazards.py
+ml/rock_review/test_registration.py
+ml/rock_review/test_review.py
+ml/rock_review/test_rosco.py
+ml/rock_review/test_shadow_baseline.py
 ml/terrain_classifier/.gitkeep
+ml/terrain_classifier/PROVENANCE.md
+ml/terrain_classifier/README.md
+ml/terrain_classifier/__init__.py
+ml/terrain_classifier/dataset.py
+ml/terrain_classifier/fresh_gale.py
+ml/terrain_classifier/gale_experiment.py
+ml/terrain_classifier/gale_experiment_v2.json
+ml/terrain_classifier/gale_fresh_manifest_v2.json
+ml/terrain_classifier/gale_protocol.py
+ml/terrain_classifier/subset_manifest.json
+ml/terrain_classifier/test_dataset.py
+ml/terrain_classifier/test_gale_protocol.py
+ml/terrain_classifier/train.py
+ml/test_placeholders.py
 requirements.txt
 scripts/check-hygiene.sh
 scripts/protect-main.sh
 tests/test_agent_offline.py
+tests/test_eight_data_types.py
 tests/test_make_world.py
+tests/test_merge_walk.py
 tests/test_ml_agent_hygiene.py
 tests/test_ml_exports.py
+tests/test_scout_plan.py
+tests/test_terrain_1m.py
 tests/test_worlds.py
 </code></pre>
     <h3>Rules for coding agents (AGENTS.md)</h3>
@@ -3092,12 +3278,14 @@ tests/test_worlds.py
 <li><strong>Small, working commits.</strong> Each commit leaves the project runnable. Say which milestone (M0–M3) and which flag a PR touches.</li>
 <li><strong>No invented numbers.</strong> Accuracy, energy and validation numbers come from code in this repo, written to a file. Mark anything else as an estimate.</li>
 <li><strong>No secrets in the repo.</strong> Keys go in environment variables or <code>.env</code> (ignored by git).</li>
-<li><strong>Phone first.</strong> Test on a phone over HTTPS. No pathfinding on the phone; the walk-back ring is a lookup in <code>cost_to_go</code>.</li>
+<li><strong>Phone first.</strong> Build for a phone and check it on one over HTTPS when you can (not a merge gate, see rule 13). No pathfinding on the phone; the walk-back ring is a lookup in <code>cost_to_go</code>.</li>
 <li><strong>Cite NASA data by name</strong> in code comments and in the project page (Mars Trek, USGS Gale terrain and images, HiRISE, THEMIS, CRISM, Curiosity RAD, REMS, ChemCam, APXS, DAN, Perseverance raw images, AI4Mars). See <code>docs/DATA.md</code>.</li>
 <li><strong>Do not read data files.</strong> Binary world layers (<code>*.f32</code>, <code>*.u8</code>), datasets, model weights and logs waste tokens. Use <code>world.json</code> and the scripts' printed summaries.</li>
 <li><strong>Model and effort per job:</strong> see <code>docs/CODEX.md</code> §6.</li>
 <li><strong>Grade new ideas first.</strong> Before building a feature that is not in <code>docs/PLAN.md</code>, add it to <code>docs/CRITIQUE.md</code> and score it. 8 or less: do not build it.</li>
 <li><strong>Respect the build order.</strong> Don't start a block until the blocks under its <strong>Needs</strong> are done, except by building against the synthetic world. When you finish a block, say in the PR which blocks it unlocks.</li>
+<li><strong>Test, then merge as you go.</strong> Once CI is green and you have tested the change yourself (unit tests, build, run it in a browser, the feature works, no console errors), squash-merge your own PR without waiting for a human. Rebase any PR stacked on it onto <code>dev</code> and keep going. Say in the PR what you tested and that a real-phone check is still to do. Contract changes (rule 2) still need every owner's approval.</li>
+<li><strong><code>dev</code> to test, <code>main</code> to submit.</strong> Open every PR into <code>dev</code>: it gets a preview URL, and once merged it shows on the team's dev test URL. <code>main</code> is the official build we submit; it moves only by a release PR from <code>dev</code> at a milestone, after the dev URL works on a phone.</li>
 </ol>
 
     <h3>How we merge</h3>
@@ -3201,9 +3389,34 @@ tests/test_worlds.py
 <td>JSON</td>
 <td>The planned route: <code>{"cells": [[x, y], ...], "stops": ["target id", ...], "energy_j", "minutes", "dose_ugy"}</code>, computed by the pipeline.</td>
 </tr>
+<tr>
+<td><code>passable.u8</code></td>
+<td>uint8</td>
+<td><strong>Crossings at walk scale.</strong> Bit k set = you can step from this cell to neighbour k, order (-1,-1) (0,-1) (1,-1) (-1,0) (1,0) (-1,1) (0,1) (1,1) (as <code>app/src/plan.js</code> <code>NB</code>). Checked along the 1 m terrain between cell centres: ledges over the suited step limit (<code>knobs.step_max_m</code>, 0.3 m, NASA ICES-2025-294) and slopes over <code>max_slope_deg</code> (up, down or across) for at least <code>knobs.steep_run_m</code>. <em>Optional.</em></td>
+</tr>
+<tr>
+<td><code>terrain.u8</code>, <code>fine_steep.u8</code>, <code>dropoff.f32</code>, <code>crevice.f32</code>, <code>landform.u8</code>, <code>open_dirs.u8</code>, <code>reach.u8</code>, <code>chokepoint.f32</code>, <code>unsure.f32</code></td>
+<td>grids</td>
+<td><strong>Terrain views</strong> from the 1 m terrain: hillshade; % steeper than the limit at 2 m scale; largest 1 m height jump (m); deepest narrow trough (m); 0 flat / 1 slope / 2 ridge / 3 hollow; passable neighbours (0-8); reachable from base (0/1); how many reachable cells' way from base passes here (log scale 0-1); share of marginal crossings (0-1). Made by <code>data/pipeline/terrain_1m.py</code>. <em>Optional.</em></td>
+</tr>
+<tr>
+<td><code>chem_points.json</code></td>
+<td>JSON list</td>
+<td>Chemistry along Curiosity's path, as points (not a full map): <code>{"id", "instrument": "ChemCam" or "APXS", "target", "sol", "cell": [x, y], "oxides_wt_pct": {...}, "source"}</code>. <em>Optional.</em></td>
+</tr>
+<tr>
+<td><code>neutron_points.json</code></td>
+<td>JSON list</td>
+<td>DAN passive neutrons per sol, as points: <code>{"sol", "cell", "hours", "thermal_cps", "epithermal_cps", "thermal_epithermal_ratio", "source"}</code>. Higher ratio suggests more hydrogen (relative). <em>Optional.</em></td>
+</tr>
+<tr>
+<td><code>weather.json</code></td>
+<td>JSON</td>
+<td>Curiosity REMS daily weather: <code>{"source", "sols": [{"sol", "earth_date", "ls", "min_temp_c", "max_temp_c", "pressure_pa", "ground_min_c", "ground_max_c", "opacity", "uv"}]}</code>. <em>Optional.</em></td>
+</tr>
 </tbody>
 </table></div>
-<p>Optional layers may be missing in a world; the app hides that layer's toggle. <code>world.json</code> lists which layers exist under <code>"layers"</code> and each layer's mission, instrument and date under <code>"sources"</code>.</p>
+<p>Optional layers may be missing in a world; the app hides that layer's toggle. <code>world.json</code> lists which layers exist under <code>"layers"</code> and each layer's mission, instrument and date under <code>"sources"</code>. Real sites may add <code>"data_types"</code>: which layer or file carries each of NASA's eight data types (optical, topographic, thermal, spectral, radiation, atmospheric, chemical, geophysical).</p>
 <p><strong>The way home is always known:</strong> from any cell, step to the neighbour with the lowest <code>cost_to_go</code> until you reach base. No search is needed on the phone.</p>
 <p>Index of cell (x, y): <code>y * width + x</code>. World position of a cell centre: <code>x * cell_size_m</code>, <code>y * cell_size_m</code>.</p>
 <p><strong>The walk-back ring</strong> is every cell where <code>cost_to_go[cell] &lt;= energy_left - reserve</code>, with <code>reserve = reserve_fraction * energy_budget_j</code>. The app only looks this up. No pathfinding runs on the phone.</p>

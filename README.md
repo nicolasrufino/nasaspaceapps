@@ -45,7 +45,7 @@ Background: `docs/PLAN.md` (the whole plan), `docs/DATA.md` (each NASA resource 
 ## Local awards we aim for
 
 1. **Best Use of Science** (main target): eight types of NASA data, every claim tested.
-2. **Best Use of Technology** (requires Microsoft Azure): hosted on Azure Static Web Apps; CAPCOM agent on Microsoft Foundry.
+2. **Best Use of Technology** (requires Microsoft Azure): hosted on Azure Static Web Apps. The CAPCOM agent runs offline for now; connecting it to Microsoft Foundry is next.
 3. **Art & Technology**: 3D terrain, the helicopter's scan sweep, the helmet HUD.
 
 ## Quick start
@@ -62,7 +62,7 @@ Everyone builds against `data/worlds/synthetic/` from the first minute; the real
 |---|---|---|
 | `data/` | Galsan | Pipeline and world files |
 | `ml/` | Jules | Rock detection, ground classifier, buddy rover; ONNX exports |
-| `agent/` | Jules | CAPCOM agent (Microsoft Foundry) |
+| `agent/` | Jules | CAPCOM agent (offline service; Microsoft Foundry next) |
 | `app/` | Nicolas | The three.js web app |
 | `docs/` | Everyone (Galsan merges) | Product, build plan, contracts, role briefs, pitch |
 
