@@ -1,10 +1,10 @@
 # Product spec: the rescope (2026-11-15)
 
-**Status: proposed by Nicolas (P2) for the team. Tickets in §7 are drafts; none are created until the spec is accepted.** This replaces the build order in `docs/BUILD.md` for the time that is left. Evidence: three audits run on 2026-11-15 (planned vs built, app code, map rendering research), summarised in §2.
+**Status: accepted by Nicolas, 2026-11-15. Tickets in §7 are created and assigned.** This replaces the build order in `docs/BUILD.md` for the time that is left. Evidence: three audits run on 2026-11-15 (planned vs built, app code, map rendering research), summarised in §2.
 
 ## 0. The clock
 
-`docs/PLAN.md` puts the freeze at **Sunday 08:00** and submission at **Sunday about 13:30 (to confirm)**. This spec was written Sunday 02:10. **Someone must confirm the real deadline now**; every priority below assumes about 11 hours. If the deadline is later, Tier 2 moves up.
+**Submission closes Sunday 1:30 PM** (confirmed by Nicolas). Freeze at 8:00 AM for the first release; fixes and additions continue to noon. The exact submission checklist is ticket F1.
 
 ## 1. What wins
 
@@ -37,7 +37,11 @@ Everything else is secondary to those three and to **submitting on time**.
 
 ## 3. The product, rescoped
 
-**One sentence:** *Vesta Scout shows a real, true-scale map of one walk on Mars, shows what would stop you, sends three helicopter flights where they matter, and gets you home.*
+**Mission VESTA has two products, built on one map:**
+- **Vesta Scout** (the one we submit): the planning map. A real, true-scale map of one walk on Mars that shows what would stop you, sends three helicopter flights where they matter, and gets you home.
+- **Vesta Vision** (v0 if time allows): the same Mars, walked at eye height, with no HUD. The helmet HUD is a later addition on top of Vision, not part of this submission.
+
+**Order: foundations first** (make it work, make it not fail), **then additions** (models, animations, Vision, the designed scouting algorithm).
 
 ### Pillar A: the map (rebuild)
 
@@ -45,7 +49,7 @@ Everything else is secondary to those three and to **submitting on time**.
 |---|---|
 | **A1 Real imagery by default.** The 3D ground shows HiRISE colour, not class colours | Opening `/scout/` shows the HiRISE image on the terrain; source credit on screen |
 | **A2 Real detail near you.** 1 m heights and 25 cm imagery load near the camera and along the route; 8 m elsewhere | Boxwork ridges are visible at the stops; at most about 9 detail tiles live; no crash on a phone |
-| **A3 True human scale.** Astronaut 1.8 m, habitat and helicopter at real size, vertical 1:1 | A scale bar, a "1:1" note, and a **walker's-eye view** button (camera at 1.7 m). Far-away markers are fixed-size icons, not giant models |
+| **A3 True human scale.** Astronaut 1.8 m, habitat (spaceship) and helicopter as real 3D models at real size, vertical 1:1 | A scale bar and a "1:1" note. Far-away markers are fixed-size icons, not giant models. Eye-height walking is Vesta Vision v0 |
 | **A4 One hazard view instead of 17 layers.** Slope in green / amber / red against the 20° limit; blocked crossings as red edges; reviewed rocks as pins; estimated rocks hatched "orbit estimate" | A legend with units. Other layers reduced to about 5 named views (Imagery, Hazards, Energy home, Science, Radiation); the rest under "Advanced" |
 | **A5 Map furniture** | Scale bar, north arrow, contour lines (5 m, bold every 25 m) |
 
@@ -79,55 +83,61 @@ Keep everything that works. Fix: the default view (imagery + hazards), the phone
 
 ## 4. Cut (say so, don't half-build)
 
-Buddy rover and RL (E7, R6), CAPCOM on Foundry (R7; ask organizers if Azure hosting alone counts for the Technology award), export (E8), helmet HUD (X1), radar curtain / near-IR tint / dose gauge (SCOUT-3D step 6), sun clock and two-sol timeline strip (keep `docs/OPERATIONS.md` as the story), exploration modes, generated-world benchmark, route options (#78), interactive route shaping (#79), 4 m vs 10 m helicopter test, `best_areas` layer (leftover of the removed survey).
+Buddy rover and RL (E7, R6), CAPCOM on Foundry (R7; ask organizers if Azure hosting alone counts for the Technology award), export (E8), helmet HUD (X1; a later addition on Vesta Vision), radar curtain / near-IR tint / dose gauge (SCOUT-3D step 6), sun clock and two-sol timeline strip (keep `docs/OPERATIONS.md` as the story), exploration modes, generated-world benchmark, route options (#78), interactive route shaping (#79), 4 m vs 10 m helicopter test, `best_areas` layer (leftover of the removed survey).
 
 **Cheap extras only if Tier 1 is done:** packing list from the route (R4 "loads"), the walk's radiation dose in the why-panel (R4 "space weather"), drawing the ChemCam / DAN / weather points (R1/R3), a science-goal picker (R2).
 
 ## 5. Order of work
 
-**Tier 1, before the freeze (must):**
-1. D-clock: confirm the deadline and submission rules (Galsan, 10 min).
-2. A1 imagery drape + colour fix; B1 three flights with re-plan (both small, immediate visible wins).
-3. A3 human scale + walker's-eye view; A4 hazard view with legend.
-4. D1 project page draft and D4 deck clean-up, in parallel, by whoever is not in `app/`.
-5. A2 detail tiles near the camera (largest item; start as soon as 2 is merged).
-6. B2 "why this flight"; B3 reveal look; C fixes.
-7. D3 release to `main` and a phone test; D2 video.
+1. **Foundations (F tickets), now:** real imagery, 3 honest flights, true scale, the hazard view, detail tiles, phone layout, project page, deck, release and phone test, video.
+2. **First release `dev` → `main` at about 8:00 AM**, with whatever foundations are merged and working.
+3. **Additions (A tickets), after your foundations are merged:** 3D models, "why this flight", the discover animation, Vesta Vision v0, the opening animation, value-of-information flights, contours, small challenge extras.
+4. **Final release about noon. Submit before 1:30 PM.**
 
-**Tier 2, only if time remains:** B4 value of information, A5 contours, the cheap extras in §4.
+## 6. Who does what (five or six tickets each)
 
-## 6. Who does what
-
-| Person | Folder | Now |
+| Person | Area | Tickets |
 |---|---|---|
-| **Nicolas** | `app/` | A1–A5, B1–B3, C |
-| **Luca** | `data/`, pipeline | Overview image at 1 m/px stitched from the tiles (for A1); KTX2 tiles if the phone runs out of memory; `scout_plan.json` retired; `CODEOWNERS` |
-| **Jules** | `ml/` | Rock pins data check (A4); pitch numbers regenerated for "3 flights, re-plan each" (D4); proof slide |
-| **Galsan** | `docs/`, deploy | D1 project page, D2 video, D3 release + phones, deadline and Azure-award question |
+| **Nicolas** | The terrain: imagery, detail, scale, reveal, Vision | F2 #122, F5 #125, F7 #127, A3 #135, A4 #136 |
+| **Luca** | What the map shows: overview image, hazards, models, contours, opening | F3 #123, F6 #126, A1 #133, A5 #137, A7 #139 |
+| **Jules** | The scout and its proof: flights, reasons, algorithm, deck numbers | F4 #124, F10 #130, A2 #134, A6 #138 |
+| **Galsan** | Shipping: submission rules, phone layout, project page, releases, video, extras | F1 #121, F8 #128, F9 #129, F11 #131, F12 #132, A8 #140 |
 
-## 7. Draft tickets (to create once accepted)
+Everyone works in `app/` now where their ticket says so; each ticket names a **new file** to keep people out of each other's way. `app/src/main.js` is shared: say so in the group chat before editing it.
 
-| # | Title | Owner | Size | Tier |
-|---|---|---|---|---|
-| T1 | Confirm deadline, submission rules, Azure award eligibility | Galsan | S | 1 |
-| T2 | Map: HiRISE imagery on the terrain by default (+ colour-space fix) | Nicolas | M | 1 |
-| T3 | Pipeline: one overview image of the slice at 1 m/px | Luca | S | 1 |
-| T4 | Scout: 3 flights, re-plan after each, drop pre-computed flights | Nicolas | S | 1 |
-| T5 | Map: true human scale (1.8 m astronaut, real helicopter, icons, scale bar, walker's-eye view) | Nicolas | S | 1 |
-| T6 | Map: hazard view (slope ramp vs 20°, blocked crossings, reviewed-rock pins, hatched estimates) + legend; 5 named views | Nicolas | M | 1 |
-| T7 | Map: load 1 m / 25 cm detail tiles near camera and route | Nicolas | L | 1 |
-| T8 | Scout: "why this flight" line + muted-to-revealed look | Nicolas | M | 1 |
-| T9 | Phone layout: Scout button on top, compact layer picker, title "Vesta Scout" | Nicolas | S | 1 |
-| T10 | Project page from built features only | Galsan | M | 1 |
-| T11 | Deck + demo script match the build; fix credits; name | Galsan + Jules | S | 1 |
-| T12 | Pitch numbers for "3 flights, re-plan each" | Jules | S | 1 |
-| T13 | Release dev → main; test on 3 real phones | Galsan | S | 1 |
-| T14 | 30-second video | Galsan + Nicolas | S | 1 |
-| T15 | Scout: value-of-information flight choice (belief map, candidate routes, stop rule) | Nicolas | L | 2 |
-| T16 | Contours, north arrow | Nicolas | S | 2 |
-| T17 | Packing list; walk dose; ChemCam/DAN/weather points; goal picker | Nicolas / Galsan | S each | 2 |
+## 7. Tickets
 
-**Close as done:** #33, #22, #11, #27, #14. **Close as cut:** #4, #7, #12, #34, #41, #42, #78, #79. **Keep:** #45–#48, #16, #17, #26, #80 (covered by T5).
+**Foundations (do first):**
+
+| Key | Issue | Title | Owner |
+|---|---|---|---|
+| F1 | [#121](https://github.com/nicolasrufino/nasaspaceapps/issues/121) | Confirm submission rules and the Azure award question | Galsan |
+| F2 | [#122](https://github.com/nicolasrufino/nasaspaceapps/issues/122) | Map: HiRISE imagery on the terrain by default | Nicolas |
+| F3 | [#123](https://github.com/nicolasrufino/nasaspaceapps/issues/123) | Pipeline: one overview image of the whole slice at 1 m per pixel | Luca |
+| F4 | [#124](https://github.com/nicolasrufino/nasaspaceapps/issues/124) | Scout: 3 flights, re-plan after each, remove the wandering flights | Jules |
+| F5 | [#125](https://github.com/nicolasrufino/nasaspaceapps/issues/125) | Map: true human scale | Nicolas |
+| F6 | [#126](https://github.com/nicolasrufino/nasaspaceapps/issues/126) | Map: one hazard view with a legend (slope, blocked steps, rocks) | Luca |
+| F7 | [#127](https://github.com/nicolasrufino/nasaspaceapps/issues/127) | Map: load the 1 m terrain and 25 cm imagery near the camera | Nicolas |
+| F8 | [#128](https://github.com/nicolasrufino/nasaspaceapps/issues/128) | Phone layout: Scout button on top, compact view picker, name "Vesta Scout" | Galsan |
+| F9 | [#129](https://github.com/nicolasrufino/nasaspaceapps/issues/129) | Project page, written only from what is built | Galsan |
+| F10 | [#130](https://github.com/nicolasrufino/nasaspaceapps/issues/130) | Deck and demo script match the build | Jules |
+| F11 | [#131](https://github.com/nicolasrufino/nasaspaceapps/issues/131) | Release dev to main and test on real phones | Galsan |
+| F12 | [#132](https://github.com/nicolasrufino/nasaspaceapps/issues/132) | 30-second video | Galsan |
+
+**Additions (after the foundations work):**
+
+| Key | Issue | Title | Owner |
+|---|---|---|---|
+| A1 | [#133](https://github.com/nicolasrufino/nasaspaceapps/issues/133) | 3D models at true scale: habitat (spaceship), astronaut, helicopter | Luca |
+| A2 | [#134](https://github.com/nicolasrufino/nasaspaceapps/issues/134) | Scout: say why each flight flew, and what it found | Jules |
+| A3 | [#135](https://github.com/nicolasrufino/nasaspaceapps/issues/135) | Discover animation: unexplored ground is muted, flights reveal it | Nicolas |
+| A4 | [#136](https://github.com/nicolasrufino/nasaspaceapps/issues/136) | Vesta Vision v0: walk on Mars at eye height | Nicolas |
+| A5 | [#137](https://github.com/nicolasrufino/nasaspaceapps/issues/137) | Opening animation: from orbit down to the site | Luca |
+| A6 | [#138](https://github.com/nicolasrufino/nasaspaceapps/issues/138) | Scout: choose flights by value of information (the designed algorithm) | Jules |
+| A7 | [#139](https://github.com/nicolasrufino/nasaspaceapps/issues/139) | Map: contour lines | Luca |
+| A8 | [#140](https://github.com/nicolasrufino/nasaspaceapps/issues/140) | Small additions that answer the challenge: packing list, walk dose, science points | Galsan |
+
+**Closed as done:** #33, #22, #11, #27, #14. **Closed as cut:** #4, #7, #12, #34, #42, #78, #79. **Replaced:** #17 → F9, #26 → A8, #80 → F5 and A4. **Later:** #41 helmet HUD.
 
 ## 8. How we push code (from now to submission)
 
