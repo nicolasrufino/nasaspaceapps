@@ -228,7 +228,7 @@ Later: a learned belief map (with Jules); a learned scouting policy, compared on
   - delivered by a mid-air deployment from the spacecraft, with no landing platform;
   - 13 MP colour and near-infrared cameras, ground-penetrating radar, air temperature sensors and a micro dosimeter;
   - purpose: map hidden ice and the terrain above and below ground, to find safe and resource-rich places and scout landing sites.
-- **What JPL does not publish:** flight range, flight time, battery, recharge time and flights per sol.
+- **What NASA's mission package adds (Sept 2026):** about 1–2 km and 2.5 min per flight sol, then one non-flight sol to recharge; at least 50 km per helicopter over 6 months ([SkyFall Mission Information Package, NASA, Sept 2026](https://science.nasa.gov/wp-content/uploads/2026/09/skyfall-mission-information-package-final.pdf)). Battery capacity is still not given. (Corrected 2026-11-15; earlier this said none of it was published.)
 - **Other helicopters that fill SkyFall's gaps:**
 
 | Craft | Status | What it shows |

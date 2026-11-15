@@ -6,6 +6,9 @@ One place for what the team decided, why, and what is still open. **Add a line h
 
 | Date | Decision | Why | Who | Where it lives |
 |---|---|---|---|---|
+| 2026-11-15 | **Stop rule follows the challenge:** keep flying while a flight could make the walk safer, reach more science, or make it easier (in that order); stop when no flight would change the plan, or at the budget | NASA asks for a safe walk first, with new science, at one-walk scale | Nicolas | Brief §6 |
+| 2026-11-15 | **Demo look:** unexplored ground is flat muted grey around a well-designed habitat (spaceship) model; the helicopter reveals ground with a sonar-like scanning sweep; flown ground shows in full colour | Shows only what we know; the map grows where we learned | Nicolas | Brief §9 |
+| 2026-11-15 | **Always check a choice against what the challenge asks** (`docs/PRODUCT.md` §1) | The stop rule first drafted on energy alone did not match the challenge | Nicolas | This file |
 | 2026-11-15 | **Two products on the site: Vesta Scout = the map app we are building now; Vesta Vision = later**, a Google Earth for Mars built from orbit data plus what scouts and models learn | Scout simulates the discovery; Vision needs the trained models first. Scout UI redesign is planned for later | Nicolas | `app/mission-vesta/` |
 | 2026-11-15 | **Mission VESTA site title font is Michroma** (tagline and product names stay Rethink Sans) | Picked from five previewed fonts; wide and technical, closest to NASA lettering | Nicolas | `app/mission-vesta/` |
 | 2026-11-15 | **PR #94 approved by P2** (routes on crossings, gravity factor 0.68, sand 2.4×). Merge after Jules's R3 re-export, with the 20° rebuild in the same PR | Measured values; the old model under-counted energy by about 1.8× and let routes cross ledges. Tested on the branch: 31 app tests, build, Gale in the browser with no console errors | Nicolas | PR #94 review; `docs/DECISION-BRIEFS.md` §1 |
@@ -15,7 +18,7 @@ One place for what the team decided, why, and what is still open. **Add a line h
 | 2026-11-15 | **Refresh R3 and R5 against PR #94, using its default worst scenario** | Passable crossings and the new energy knobs invalidate the old exports. Re-export keeps 23 accepted / 2 excluded proposals and the same hazard mask. Two passes: 630.5 kJ, 446.5 kJ extra margin at +30% walking cost, after the 1,899.1 kJ reserve. These are simulations at the rebuilt 20° limit | Jules | `ml/rock_review/R3.md`, `ml/pitch_metrics/PITCH_NUMBERS.md`, `docs/PITCH.md`; PR #99 depends on #94 contract approvals |
 | 2026-11-14 | **Walking slope limit is 20°**, not 25° | Artemis xEVA suit specification (flagged by Luca in PR #94). On Gale: walls go from 15.5% to 24.2% of cells, cells reachable from base from 82.2% to 69.6%; the historical 8 m-only check kept the then-current tour unchanged (`app/scripts/slope-check.json`); current energy/crossing results are in R5 | Nicolas, Luca | `max_slope_deg` in `world.json`. Applied in PR #94: Gale and synthetic worlds rebuilt at 20°, scout anomalies follow the knob; the app follows the knob without a code change |
 | 2026-11-14 | **The visualizer is a guided tour** (11 steps, Next / Play), with free play folded underneath | The free-play version was hard to follow | Nicolas | [Scouting explainer](https://claude.ai/artifact/8FDY6zGHXoewAtzxYBCJKG); source `docs/scouting/explainer.html` |
-| 2026-11-14 | **Helicopters are based on SkyFall plus newer concepts**, recharged at the habitat | SkyFall (JPL, 3 helicopters, 2028) proves scouting is planned but publishes no range or recharge; Mars Science Helicopter, Ingenuity and Dragonfly fill the gaps. Habitat recharge is **our assumption**, said as such | Nicolas | `docs/SCOUT-ALGORITHM.md` §7 |
+| 2026-11-14 | **Helicopters are based on SkyFall plus newer concepts**, recharged at the habitat | SkyFall (JPL, 3 helicopters, 2028) proves scouting is planned; its Sept 2026 mission package gives about 1–2 km per flight sol and a recharge sol between flights (corrected 2026-11-15; earlier we said it published none); Mars Science Helicopter, Ingenuity and Dragonfly fill the gaps. Habitat recharge is **our assumption**, said as such | Nicolas | `docs/SCOUT-ALGORITHM.md` §7 |
 | 2026-11-14 | **No "two months to recharge" rule, no Ingenuity flight cadence** | "Two months" was rover driving time one flight saved, not a recharge time; one flight per 13.6 sols was a technology demonstrator's pace | Nicolas | `docs/SCOUT-ALGORITHM.md` §7, `docs/SCOUTING.md` |
 | 2026-11-14 | **Unpublished helicopter numbers are knobs, labelled estimates**: 700 m per flight (Ingenuity's flown limit), flights per helicopter per sol | No invented numbers (AGENTS.md rule 5) | Nicolas | `docs/SCOUT-ALGORITHM.md` §7 |
 | 2026-11-14 | **Sensing = predict, then confirm.** Predict each cell's chance of being blocked from orbit (the belief map); the helicopter confirms; every confirmed cell becomes a training label | The textbook problem gives blocking chances; on Mars we must predict them. The simulator shows the planner losing to plain route scouting without a prediction | Nicolas | `docs/SCOUT-ALGORITHM.md` §2A |
@@ -39,12 +42,16 @@ Recommendations with evidence and the holes checked: `docs/DECISION-BRIEFS.md` (
 |---|---|---|---|
 | **How high the helicopter flies** [4] | Low (about 2–4 m, matches the rover images the model learns from; dusty) / about 10 m (safe; needs the model adapted to the air view). Deciding test: run the rover-trained model on labelled Ingenuity images | Nicolas | Helicopter-view model, flight planner |
 | **Labels for sensing** | Start with the reviewed ROSCO rocks / also project Curiosity's labelled images onto Gale cells | Jules, Nicolas | Belief-map training |
-| **Stop rule: when to stop flying** [6] | Keep flying while a flight could still make the walk safer, reach more science, or make it easier; stop when none would change the plan, or at the budget | Nicolas | Value-of-information planner |
-| **Flight budget per campaign** [7] | A number of flights / a number of sols; flights per helicopter per sol | Team | Flight planner |
-| **Walking window before sunset** [8] | How long before sunset a walk must end | Team | Sun model, plan mode |
-| **Demo look** [9] | 3D view starts coarse and fills in where flown | Nicolas | Re-plan loop screen |
+| **Flight budget per campaign** [7] | SkyFall as published: 1 flight per helicopter every other sol, so **3 per walk**; up to 6 with habitat charging (our assumption) | Nicolas, after reading the evidence | Flight planner |
+| **Scouting sol and walk sol timeline** [8] | Proposed: scout on the non-walk sol (flights 9:30 AM and ~12:15 PM), walk next morning about 7:15 AM to 3:15 PM, Sun at least 15° up | Nicolas | Sun model, plan-mode timeline |
+| **Helicopter science sensors** [10] | Proposed: cameras for 3D and hazards (main job); radiation from resting helicopters; radar sand depth as a labelled future layer; near-IR as a mineral hint | Nicolas | Helicopter spec, layers |
+| **Distance per flight** [7] | 700 m (Ingenuity's longest flight, in the app now) / 1–2 km (SkyFall's published figure, recommended) | Nicolas | Flight planner, `FLIGHT_M` in `app/src/scout.js` |
 
 ## Missing: not built or not available yet
+
+- **Habitat (spaceship) 3D model** and the muted-grey unexplored look with a scanning reveal (brief §9).
+- **Plan-mode timeline strip** (scouting sol, walk sol, Sun height, last safe turn-back time; brief §8).
+- **Helicopter docking for images:** Ingenuity's radio (about 80 kbit/s) is too slow for a strip of images; we assume a dock or cable at the habitat (brief §7).
 
 - **Belief map with probabilities** (today the world has a yes/no rock mask), plus ROSCO run over the whole slice with rock sizes and "looked, found nothing" cells.
 - **Ground truth at a walker's scale:** Curiosity's labelled images placed on Gale cells; labelled helicopter images (Ingenuity's colour images).

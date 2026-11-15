@@ -303,12 +303,12 @@ td.area { font: 12px var(--mono); color: var(--muted); white-space: nowrap }
   <div class="sechead">
     <span class="eyebrow">5 · The helicopter</span>
     <h2>Adapted from SkyFall, recharged at the habitat</h2>
-    <p class="muted">JPL's SkyFall is the proof that scouting helicopters are planned. It does not publish range, battery or recharge time, so we fill those gaps from flown and studied craft, and label every gap-filling number as an estimate.</p>
+    <p class="muted">JPL's SkyFall is the proof that scouting helicopters are planned. Its September 2026 mission package gives each helicopter about 1–2 km and 2.5 minutes per flight sol, then a sol on the ground to recharge. It does not give battery capacity; we fill that gap from flown and studied craft and label every gap-filling number as an estimate.</p>
   </div>
   <div class="tablewrap"><table>
     <thead><tr><th>Craft</th><th>Status</th><th>What we take from it</th></tr></thead>
     <tbody>
-      <tr><td><b>SkyFall</b> (JPL)</td><td>Launch 2028</td><td>Three helicopters, mid-air deployment, 13 MP colour and near-IR cameras, ground-penetrating radar. <b>Fleet size and sensors.</b></td></tr>
+      <tr><td><b>SkyFall</b> (JPL)</td><td>Launch 2028</td><td>Three helicopters, mid-air deployment. Colour cameras pointing down and at the horizon, near-IR cameras, ground-penetrating radar, a dosimeter, air temperature. About 1–2 km and 2.5 min per flight sol, then a recharge sol. <b>Fleet, sensors and flight cadence.</b></td></tr>
       <tr><td><b>Ingenuity</b></td><td>Flew 72 times, 2021–2024</td><td>Longest flight 704 m, up to about 170 s. Flew around midday. Crashed over featureless sand. <b>700 m per flight (knob), daylight only, no-fly over smooth sand.</b></td></tr>
       <tr><td><b>Mars Science Helicopter</b></td><td>NASA concept</td><td>About 30 kg, about 5 kg payload, roughly 10–12 km per flight; recharge over one sol (single source). <b>Where range could go.</b></td></tr>
       <tr><td><b>Dragonfly</b> (Titan)</td><td>Launch 2028</td><td>Recharges its battery between flights from a nuclear generator of about 100 W. <b>Recharging from a base, not the Sun.</b></td></tr>
@@ -406,7 +406,7 @@ const LIMITS = [
   ['Models', 'The ground-photo model drops from 93% to 48% on another rover.', 'Fine-tune on helicopter images; test on Ingenuity\'s images before building on it.', 'proposed'],
   ['Models', 'Few big-rock labels (9 in training).', 'Rocks come from ROSCO and the rock-size law; Moon pre-training as an option.', 'proposed'],
   ['Models', 'Moon data has no sand, no dust, and only big boulders.', 'Use it for pre-training the rock part only; always test on Mars.', 'decided'],
-  ['Helicopter', 'SkyFall publishes no range, battery, recharge time or flights per sol.', 'Knobs, labelled as estimates. 700 m per flight from Ingenuity, the only flown number.', 'decided'],
+  ['Helicopter', 'SkyFall gives 1–2 km per flight and a recharge sol between flights, but no battery capacity.', 'Plan on 3 flights per walk as published; 6 only with habitat charging, labelled as our assumption.', 'proposed'],
   ['Helicopter', 'Rotor dust below about 3–6 m blinds a low camera.', 'Fly above about 6 m with a tilted camera.', 'proposed'],
   ['Helicopter', 'Daylight only; featureless sand broke Ingenuity\'s navigation.', 'Midday flight windows from the sun model; no-fly over smooth sand.', 'proposed'],
   ['Helicopter', 'Recharging at the habitat is our assumption.', 'Say so in the app and the pitch.', 'decided'],
