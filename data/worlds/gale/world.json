@@ -25,7 +25,10 @@
     "body_kg": 75.0,
     "load_kg": 60.0,
     "speed_mps": 1.0,
-    "max_slope_deg": 25.0
+    "max_slope_deg": 25.0,
+    "step_max_m": 0.3,
+    "steep_run_m": 3.0,
+    "lane_offset_m": 2.0
   },
   "layers": [
     "optical",
@@ -36,7 +39,16 @@
     "rocks_fine",
     "thermal_inertia",
     "science",
-    "dose_rate"
+    "dose_rate",
+    "terrain",
+    "fine_steep",
+    "dropoff",
+    "crevice",
+    "landform",
+    "open_dirs",
+    "reach",
+    "chokepoint",
+    "unsure"
   ],
   "sources": {
     "height": {
@@ -91,7 +103,17 @@
       "mission": "MSL Curiosity",
       "instrument": "REMS, 412 sols",
       "date": "sols 4480-4900"
-    }
+    },
+    "terrain": "Hillshade of the 1 m HiRISE terrain, averaged to 8 m",
+    "fine_steep": "% of the cell steeper than the slope limit at 2 m scale (1 m HiRISE terrain)",
+    "dropoff": "Largest height change between neighbouring 1 m points, m (1 m HiRISE terrain)",
+    "crevice": "Deepest trough or fracture narrower than ~5 m, m (1 m HiRISE terrain)",
+    "landform": "0 flat, 1 slope, 2 ridge, 3 hollow (height vs 21 m neighbourhood, 1 m HiRISE terrain)",
+    "open_dirs": "Neighbours you can step to (0-8), checked along the 1 m profile; step limit 0.3 m (NASA ICES-2025-294)",
+    "reach": "1 = reachable from base through passable crossings",
+    "chokepoint": "How many reachable cells' shortest way from base passes here, log scale 0-1 (1 = all)",
+    "unsure": "Share of crossings close to a limit: where the helicopter should look (0-1)",
+    "passable": "Bit k: can step to neighbour k (order as app/src/plan.js NB); see data/pipeline/terrain_1m.py"
   },
   "files": {
     "height": "height.f32",
@@ -108,7 +130,17 @@
     "dose_rate": "dose_rate.f32",
     "chem_points": "chem_points.json",
     "neutron_points": "neutron_points.json",
-    "weather": "weather.json"
+    "weather": "weather.json",
+    "terrain": "terrain.u8",
+    "fine_steep": "fine_steep.u8",
+    "dropoff": "dropoff.f32",
+    "crevice": "crevice.f32",
+    "landform": "landform.u8",
+    "open_dirs": "open_dirs.u8",
+    "reach": "reach.u8",
+    "chokepoint": "chokepoint.f32",
+    "unsure": "unsure.f32",
+    "passable": "passable.u8"
   },
   "site": {
     "name": "Gale crater, lower Mount Sharp boxwork",
