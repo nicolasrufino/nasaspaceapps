@@ -125,6 +125,38 @@
         #layers details summary { padding: 10px 14px; color: #a9b7c6; }
       }
       @media (prefers-reduced-motion: reduce) { #hud button, #hud [role=tab], #layers #contours, #layers #contours::after { transition: none; } }
+      /* Vesta Vision menu, third pass: information in levels (title, route numbers, the walk as steps) and texture. */
+      .panel { background-color: #10161dcc; background-image: linear-gradient(180deg, #ffffff14, #ffffff00 120px),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"); }
+      #title { display: grid; gap: 4px; justify-items: start; }
+      #title .t-brand { font-size: 20px; font-weight: 700; color: #fff; letter-spacing: -.01em; line-height: 1.1; }
+      #title .t-site { font-size: 13px; font-weight: 500; color: #c9d3de; }
+      #title .t-chip { font-size: 11px; font-weight: 600; color: #ffd9a0; background: #ffb02e24; border: 1px solid #ffb02e55; border-radius: 999px; padding: 3px 9px; margin-top: 2px; }
+      #title .t-tech { font: 500 10px ui-monospace, SFMono-Regular, Menlo, monospace; color: #7f90a2; letter-spacing: .04em; }
+      #hud h2 { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+      #hud h2::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, #ffffff26, #ffffff00); }
+      #layers label:has(:focus-visible) { outline: none; background: #ffffff14; }
+      #route { display: grid; gap: 10px; }
+      #route .r-stats { display: grid; grid-template-columns: 1.5fr 1fr .8fr; gap: 6px; }
+      #route .r-stat { background: #ffffff0f; border: 1px solid #ffffff14; border-radius: 12px; padding: 8px 10px; font-size: 11px; color: #9fb0c0; line-height: 1.25; }
+      #route .r-stat b { display: block; font-size: 17px; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; }
+      #route .r-path { list-style: none; margin: 0; padding: 0 0 0 4px; display: grid; }
+      #route .r-path li { position: relative; padding: 4px 0 4px 22px; font-size: 13px; color: #dfe7ee; }
+      #route .r-path li::before { content: ""; position: absolute; left: 3px; top: 50%; width: 9px; height: 9px; margin-top: -5px; border-radius: 50%; background: #ffd23f; box-shadow: 0 0 0 3px #ffd23f2e; }
+      #route .r-path li::after { content: ""; position: absolute; left: 7px; top: 50%; bottom: -50%; width: 1px; background: #ffffff33; }
+      #route .r-path li:last-child::after { display: none; }
+      #route .r-path li:first-child, #route .r-path li:last-child { color: #9fb0c0; font-size: 12px; }
+      #route .r-path li:first-child::before, #route .r-path li:last-child::before { background: #fff; box-shadow: 0 0 0 3px #ffffff26; }
+      #targets { gap: 0; background: #ffffff0f; border: 1px solid #ffffff14; border-radius: 14px; overflow: hidden; }
+      #targets .stop { padding: 4px 10px; gap: 10px; }
+      #targets .stop + .stop { border-top: 1px solid #ffffff14; }
+      #targets .stop input[type=checkbox] { accent-color: #ffd23f; width: 16px; height: 16px; flex: none; }
+      #hud #targets .stop button.name { background: transparent; padding: 6px 0; font-weight: 500; }
+      #hud #targets .stop button.name[aria-pressed=true] { background: transparent; color: #ffd23f; }
+      .src { font-size: 11px; line-height: 1.35; }
+      #whyTable { font-size: 11px; }
+      #whyTable th { color: #8fa1b3; font-size: 10px; letter-spacing: .06em; text-transform: uppercase; padding-bottom: 4px; }
+      #whyTable td { padding: 3px 6px 3px 0; border-top: 1px solid #ffffff12; font-variant-numeric: tabular-nums; }
       /* Phones (ticket F8): view picker as chips without the source lines (they stay in the legend and on wide screens), 44 px buttons. */
       @media (max-width: 600px) {
         #hud { max-height: 44vh; }

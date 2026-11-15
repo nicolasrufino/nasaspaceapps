@@ -68,7 +68,10 @@ const scanned = new Uint8Array(W * H) // cells the helicopter has seen
 const rockSeen = (i) => scanned[i] && layers.rocks_fine?.[i]
 const cellPos = ([x, y], lift = 0) => new THREE.Vector3(x * cs, layers.height[y * W + x] + lift, y * cs)
 document.title = flowMode ? 'Vesta Scout' : 'Vesta Vision'
-$('title').textContent = `${flowMode ? 'Vesta Scout' : 'Vesta Vision'} · ${meta.name} · ${W}×${H} cells · ${cs} m${scenario ? ` · ${scenario.name}` : ''}`
+// Title in four levels (styled in scout/index.html): product, site, the energy scenario, then the grid's size.
+const el = (tag, cls, text) => Object.assign(document.createElement(tag), { className: cls, textContent: text })
+$('title').replaceChildren(el('span', 't-brand', flowMode ? 'Vesta Scout' : 'Vesta Vision'), el('span', 't-site', meta.site?.name ?? meta.name),
+  ...(scenario ? [el('span', 't-chip', scenario.name)] : []), el('span', 't-tech', `${W}×${H} cells · ${cs} m`))
 
 // --- 3D view: visual only, no route maths here (docs/CRITIQUE.md). ---
 // One vertex per cell; cell (x, y) sits at (x*cs, height, y*cs), so +z is south and north is -z.
@@ -496,9 +499,14 @@ function drawStops() {
   }
   const usable = meta.energy_budget_j * (1 - meta.reserve_fraction)
   const name = (id) => allStops().find((s) => s.id === id)?.name ?? id
-  $('route').textContent = route.stops.length
-    ? `Planned: base → ${route.stops.map(name).join(' → ')} → base · ${kj(route.energy_j)} of ${kj(usable)} usable · ${Math.round(route.minutes)} min walking`
-    : included.size ? 'None of the chosen stops fits in one walk with the reserve kept.' : 'No stops chosen yet.'
+  if (route.stops.length) { // the numbers first, then the order of the walk
+    const stat = (big, rest) => { const d = el('span', 'r-stat', ''); d.append(el('b', '', big), ` ${rest}`); return d }
+    const stats = el('div', 'r-stats', '')
+    stats.append(stat(kj(route.energy_j), `of ${kj(usable)} usable`), stat(`${Math.round(route.minutes)} min`, 'walking'), stat(String(route.stops.length), 'stops'))
+    const path = el('ol', 'r-path', '')
+    path.append(...['Base', ...route.stops.map(name), 'Base'].map((n) => el('li', '', n)))
+    $('route').replaceChildren(stats, path)
+  } else $('route').textContent = included.size ? 'None of the chosen stops fits in one walk with the reserve kept.' : 'No stops chosen yet.'
   const over = route.dropped.length ? `Doesn't fit in one walk: ${route.dropped.map(name).join(', ')}` : ''
   const many = included.size > MAX_STOPS ? ` Only the first ${MAX_STOPS} stops are planned.` : ''
   $('dropped').textContent = over + many
