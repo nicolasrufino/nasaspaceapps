@@ -23,11 +23,8 @@ export const STOP_MIN = 30 // time at each stop: the energy budget's own plannin
 // Mission clock at a stop: walking time so far plus the planned time at the stops already done.
 export const missionSeconds = (walkSeconds, stopsDone) => walkSeconds + stopsDone * STOP_MIN * 60
 
-// How long autoplay stays on a scene: about 0.45 s a word, never under 8 s or over 14 s.
-export function lingerMs(html) {
-  const words = html.replace(/<[^>]+>/g, ' ').trim().split(/\s+/).length
-  return Math.max(8000, Math.min(14000, words * 450))
-}
+// Autoplay holds every scene for the same 10 seconds, then moves on.
+export const HOLD_MS = 10000
 
 // Margin left after the way home and the reserve, from the app's own state (contract §3).
 export const marginJ = (s) => s.energy_left_j - s.reserve_j - s.cost_to_go_j
@@ -79,7 +76,7 @@ export function initDemo(app, ui) {
   sec.innerHTML = `<h2>Mission walkthrough</h2>
 <p class="lead">One mission, start to finish, on real Gale data: plan, scout, walk, home.</p>
 <div class="row"><button id="demoPlay" type="button">Step through</button><button id="demoAutoPlay" type="button">Autoplay</button></div>
-<p style="margin-top:8px">Step through: Next and Back move between scenes. Autoplay: each scene stays 8 to 14 seconds; the whole run is about 3 minutes.</p>
+<p style="margin-top:8px">Step through: Next and Back move between scenes. Autoplay: every scene holds 10 seconds, then moves on.</p>
 `
   tabs.append(tab)
   document.getElementById('walk').after(sec)
@@ -90,9 +87,9 @@ export function initDemo(app, ui) {
     sec.hidden = false
   }
 
-  // Two ways to watch: step through (each scene waits for Next) or autoplay (each scene stays long enough to read,
-  // 8 to 14 s by its length, so the whole run fits a five-minute slot). Back returns to the scene before.
-  let run = 0, skip = null, goBack = null, auto = false, need = 8000
+  // Two ways to watch: step through (each scene waits for Next) or autoplay (each scene holds 10 s once it has
+  // arrived: after the flights have landed, or the astronaut has reached the stop). Back returns to the scene before.
+  let run = 0, skip = null, goBack = null, auto = false
   const hold = (my) => new Promise((ok) => { // resolves 'next', 'back', or false when the demo was ended
     let spent = 0, last = performance.now(), go = null
     skip = () => { go = 'next' }
@@ -102,7 +99,7 @@ export function initDemo(app, ui) {
       const now = performance.now()
       if (auto) spent += now - last
       last = now
-      if (go || (auto && spent >= need)) return ok(go ?? 'next')
+      if (go || (auto && spent >= HOLD_MS)) return ok(go ?? 'next')
       setTimeout(tick, 100)
     }
     tick()
@@ -113,7 +110,6 @@ export function initDemo(app, ui) {
   })
   const link = (k) => `<a href="${SRC[k][1]}" target="_blank" rel="noopener">${SRC[k][0]}</a>`
   function show(step, of, ch, title, html, sources = []) {
-    need = lingerMs(html)
     card.hidden = false
     card.innerHTML = `<div class="ch">${ch}</div><h3>${title}</h3>${html}
 ${sources.length ? `<div class="src">Sources: ${sources.map(link).join(' · ')}</div>` : ''}
