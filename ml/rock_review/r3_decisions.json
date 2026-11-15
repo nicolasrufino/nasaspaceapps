@@ -1,5 +1,5 @@
 {
-  "status": "partial_review",
+  "status": "complete_review",
   "reviewer": "Jules Rumeau",
   "timezone": "America/Chicago",
   "candidate_file_sha256": "024e23b6a777acde3d0b01ae98ef11ffcc1a828e7e40f291fcee3a71d69286a3",
@@ -112,6 +112,46 @@
           "id": "H18",
           "status": "accepted",
           "note": "User certain for H14-H18; H13 is the explicit exception."
+        }
+      ]
+    },
+    {
+      "user_response_verbatim": "tous sont corect cest valide",
+      "decisions": [
+        {
+          "id": "H19",
+          "status": "accepted",
+          "note": "User explicitly validates the entire requested H19-H25 group."
+        },
+        {
+          "id": "H20",
+          "status": "accepted",
+          "note": "User explicitly validates the entire requested H19-H25 group."
+        },
+        {
+          "id": "H21",
+          "status": "accepted",
+          "note": "User explicitly validates the entire requested H19-H25 group."
+        },
+        {
+          "id": "H22",
+          "status": "accepted",
+          "note": "User explicitly validates the entire requested H19-H25 group."
+        },
+        {
+          "id": "H23",
+          "status": "accepted",
+          "note": "User explicitly validates the entire requested H19-H25 group."
+        },
+        {
+          "id": "H24",
+          "status": "accepted",
+          "note": "User explicitly validates the entire requested H19-H25 group."
+        },
+        {
+          "id": "H25",
+          "status": "accepted",
+          "note": "User explicitly validates the entire requested H19-H25 group."
         }
       ]
     }

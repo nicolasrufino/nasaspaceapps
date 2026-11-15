@@ -25,7 +25,7 @@
   },
   "artifact_sha256": {
     "r3_candidates.json": "024e23b6a777acde3d0b01ae98ef11ffcc1a828e7e40f291fcee3a71d69286a3",
-    "r3_decisions.json": "66dc4b234fabc86f5832e6a220717110a1406fc565710db76d5e34139eb7eaca",
+    "r3_decisions.json": "4cccd2d670e8755ba7fa2d80e242f79d15698421d4252b5ebd3468167507086b",
     "r3_alignment.json": "9950cd04bfb1ca8f2189dbdcd58657d8a87646b5cc7c33a3a53fdeae6e623c51",
     "r3_world_reference.json": "e7dc500816aa4a294268370195eb5e44178ae761759696fc18ddddc318b34c9c",
     "registration_metrics.json": "3325264b48d86e186af4279833e02c75f5300dc9fc398115b03d99dffbd6fc97",
@@ -33,16 +33,15 @@
     "single_observation_source.json": "ff6f0f4c1c26580044b61f78b1d1ed288294039f59a5f664c5e5a89d236538e2"
   },
   "review_counts": {
-    "accepted": 16,
-    "uncertain": 2,
-    "unreviewed": 7
+    "accepted": 23,
+    "uncertain": 2
   },
   "candidate_count": 25,
-  "review_complete": false,
+  "review_complete": true,
   "delivery_scope": "Accepted positive additions only; unresolved proposals excluded, coverage not exhaustive",
   "selected_proposal_agreement": {
-    "accepted": 16,
-    "resolved": 16,
+    "accepted": 23,
+    "resolved": 23,
     "fraction": 1.0,
     "meaning": "Human acceptance among resolved frozen proposals; excludes uncertainty; not recall or held-out accuracy"
   },
@@ -858,9 +857,359 @@
           160
         ]
       ]
+    },
+    {
+      "id": "H19",
+      "detection_id": "HRC00007",
+      "cell": [
+        54,
+        141
+      ],
+      "registered_world_projected_m": [
+        8142747.247074638,
+        -284627.40259977995
+      ],
+      "clearance_cells": [
+        [
+          53,
+          140
+        ],
+        [
+          54,
+          140
+        ],
+        [
+          55,
+          140
+        ],
+        [
+          53,
+          141
+        ],
+        [
+          54,
+          141
+        ],
+        [
+          55,
+          141
+        ],
+        [
+          53,
+          142
+        ],
+        [
+          54,
+          142
+        ],
+        [
+          55,
+          142
+        ]
+      ]
+    },
+    {
+      "id": "H20",
+      "detection_id": "HRC00011",
+      "cell": [
+        64,
+        150
+      ],
+      "registered_world_projected_m": [
+        8142829.939278056,
+        -284701.9359116486
+      ],
+      "clearance_cells": [
+        [
+          63,
+          149
+        ],
+        [
+          64,
+          149
+        ],
+        [
+          65,
+          149
+        ],
+        [
+          63,
+          150
+        ],
+        [
+          64,
+          150
+        ],
+        [
+          65,
+          150
+        ],
+        [
+          63,
+          151
+        ],
+        [
+          64,
+          151
+        ],
+        [
+          65,
+          151
+        ]
+      ]
+    },
+    {
+      "id": "H21",
+      "detection_id": "HRC00021",
+      "cell": [
+        70,
+        165
+      ],
+      "registered_world_projected_m": [
+        8142875.192829651,
+        -284822.7118759755
+      ],
+      "clearance_cells": [
+        [
+          69,
+          164
+        ],
+        [
+          70,
+          164
+        ],
+        [
+          71,
+          164
+        ],
+        [
+          69,
+          165
+        ],
+        [
+          70,
+          165
+        ],
+        [
+          71,
+          165
+        ],
+        [
+          69,
+          166
+        ],
+        [
+          70,
+          166
+        ],
+        [
+          71,
+          166
+        ]
+      ]
+    },
+    {
+      "id": "H22",
+      "detection_id": "HRC00012",
+      "cell": [
+        65,
+        155
+      ],
+      "registered_world_projected_m": [
+        8142834.4123032605,
+        -284739.45514672063
+      ],
+      "clearance_cells": [
+        [
+          64,
+          154
+        ],
+        [
+          65,
+          154
+        ],
+        [
+          66,
+          154
+        ],
+        [
+          64,
+          155
+        ],
+        [
+          65,
+          155
+        ],
+        [
+          66,
+          155
+        ],
+        [
+          64,
+          156
+        ],
+        [
+          65,
+          156
+        ],
+        [
+          66,
+          156
+        ]
+      ]
+    },
+    {
+      "id": "H23",
+      "detection_id": "HRC00002",
+      "cell": [
+        37,
+        64
+      ],
+      "registered_world_projected_m": [
+        8142612.85380035,
+        -284007.7256878535
+      ],
+      "clearance_cells": [
+        [
+          36,
+          63
+        ],
+        [
+          37,
+          63
+        ],
+        [
+          38,
+          63
+        ],
+        [
+          36,
+          64
+        ],
+        [
+          37,
+          64
+        ],
+        [
+          38,
+          64
+        ],
+        [
+          36,
+          65
+        ],
+        [
+          37,
+          65
+        ],
+        [
+          38,
+          65
+        ]
+      ]
+    },
+    {
+      "id": "H24",
+      "detection_id": "HRC00025",
+      "cell": [
+        184,
+        249
+      ],
+      "registered_world_projected_m": [
+        8143787.554487263,
+        -285488.2048310819
+      ],
+      "clearance_cells": [
+        [
+          183,
+          248
+        ],
+        [
+          184,
+          248
+        ],
+        [
+          185,
+          248
+        ],
+        [
+          183,
+          249
+        ],
+        [
+          184,
+          249
+        ],
+        [
+          185,
+          249
+        ],
+        [
+          183,
+          250
+        ],
+        [
+          184,
+          250
+        ],
+        [
+          185,
+          250
+        ]
+      ]
+    },
+    {
+      "id": "H25",
+      "detection_id": "HRC00006",
+      "cell": [
+        67,
+        97
+      ],
+      "registered_world_projected_m": [
+        8142853.587537664,
+        -284272.6926502155
+      ],
+      "clearance_cells": [
+        [
+          66,
+          96
+        ],
+        [
+          67,
+          96
+        ],
+        [
+          68,
+          96
+        ],
+        [
+          66,
+          97
+        ],
+        [
+          67,
+          97
+        ],
+        [
+          68,
+          97
+        ],
+        [
+          66,
+          98
+        ],
+        [
+          67,
+          98
+        ],
+        [
+          68,
+          98
+        ]
+      ]
     }
   ],
-  "positive_cells": 119,
+  "positive_cells": 180,
   "existing_dtm_cells": 963,
   "reviewed_point_density": {
     "cell_area_m2": 64.0,
@@ -870,6 +1219,14 @@
         "cell": [
           246,
           14
+        ],
+        "count": 1,
+        "rocks_per_m2": 0.015625
+      },
+      {
+        "cell": [
+          37,
+          64
         ],
         "count": 1,
         "rocks_per_m2": 0.015625
@@ -886,6 +1243,22 @@
         "cell": [
           35,
           84
+        ],
+        "count": 1,
+        "rocks_per_m2": 0.015625
+      },
+      {
+        "cell": [
+          67,
+          97
+        ],
+        "count": 1,
+        "rocks_per_m2": 0.015625
+      },
+      {
+        "cell": [
+          54,
+          141
         ],
         "count": 1,
         "rocks_per_m2": 0.015625
@@ -910,6 +1283,22 @@
         "cell": [
           57,
           150
+        ],
+        "count": 1,
+        "rocks_per_m2": 0.015625
+      },
+      {
+        "cell": [
+          64,
+          150
+        ],
+        "count": 1,
+        "rocks_per_m2": 0.015625
+      },
+      {
+        "cell": [
+          65,
+          155
         ],
         "count": 1,
         "rocks_per_m2": 0.015625
@@ -972,6 +1361,14 @@
       },
       {
         "cell": [
+          70,
+          165
+        ],
+        "count": 1,
+        "rocks_per_m2": 0.015625
+      },
+      {
+        "cell": [
           162,
           176
         ],
@@ -985,19 +1382,27 @@
         ],
         "count": 1,
         "rocks_per_m2": 0.015625
+      },
+      {
+        "cell": [
+          184,
+          249
+        ],
+        "count": 1,
+        "rocks_per_m2": 0.015625
       }
     ]
   },
-  "added_cells": 119,
-  "combined_cells": 1082,
+  "added_cells": 180,
+  "combined_cells": 1143,
   "files": {
     "rocks_verified.u8": {
       "bytes": 65536,
-      "sha256": "7a689cba0ccbe2ef3ed4abf558222044d77e3ca760092f597ce9e61a3b76432d"
+      "sha256": "e332c39c9b3a319b3e30f8e07226f1c9aa14097e24d38e9cf41758868f8a5920"
     },
     "rocks_fine.u8": {
       "bytes": 65536,
-      "sha256": "3ad75231004ff967d49541da1dee321dedd2a088cebace2af3f72406db0ab515"
+      "sha256": "15ebe3865779117d9a66ebbdea678f33b11c91dbd9becf5b2119af2912e9fa3b"
     }
   },
   "limitations": [
@@ -1009,7 +1414,7 @@
     "The earlier G mosaic labels and northern starter labels are preserved, not transferred across images."
   ],
   "staged_world": {
-    "cost_to_go_scouted_sha256": "13beb6f4d3cde8ba0d5edb40c181a76f7d69b729250962bffec095ba50f74813",
+    "cost_to_go_scouted_sha256": "f6102d3031738882b7d84ef398dd80693f4291a018f2ac1cd47b589b2cbd7052",
     "world_semantic_sha256": "c6f91a13cf1b698c862392c5f2a3fd784c2cea2ea1a6c077a7b0ae5ed75d2109",
     "changed_files": [
       "rocks_fine.u8",

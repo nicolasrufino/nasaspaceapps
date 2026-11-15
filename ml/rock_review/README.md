@@ -5,6 +5,8 @@ local registration checks and conservative positive-hazard export. The
 delivery adds only human-accepted points; uncertain and unreviewed proposals
 are excluded. Counts and exact evidence are in `../exports/rocks.json`.
 A preview cannot stage a world.
+All 25 H proposals have been reviewed: 23 accepted and two uncertain (H02,
+H13). The final delivery uses the complete-review gate.
 
 **Current site:** Luca delivered a different Gale footprint in #63 on `dev`.
 The original accepted records below remain historical test references, about
