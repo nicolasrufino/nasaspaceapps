@@ -84,6 +84,47 @@
         #layers input[type=checkbox] { accent-color: #35e0ff; width: 16px; height: 16px; flex: none; }
         #layers details summary { padding: 6px 10px; font-size: 12px; }
       }
+      /* Vesta Vision menu, second pass: frosted panels, an iOS-style grouped list with icons and a check mark,
+         a switch for Contours, Material-style pressed states. Styling only. */
+      .panel { background: #10161dcc; -webkit-backdrop-filter: blur(22px) saturate(1.5); backdrop-filter: blur(22px) saturate(1.5);
+        border: 1px solid #ffffff1f; border-radius: 18px; padding: 14px; box-shadow: 0 12px 40px #0008, inset 0 1px 0 #ffffff14; }
+      #title { font-size: 12px; font-weight: 500; color: #a9b7c6; letter-spacing: .01em; }
+      #hud [role=tablist] { background: #00000059; border-radius: 12px; padding: 3px; box-shadow: inset 0 1px 2px #0006; }
+      #hud [role=tab] { border-radius: 9px; min-height: 38px; font-size: 14px; transition: background .18s, color .18s, transform .08s; }
+      #hud [role=tab][aria-selected=true] { background: #f4f7fa; color: #0c1319; box-shadow: 0 1px 3px #0007; }
+      #hud button { transition: background .15s, transform .08s, box-shadow .15s; }
+      #hud button:active { transform: scale(.97); }
+      #hud button:focus-visible, #layers label:has(:focus-visible) { outline: 2px solid #35e0ff; outline-offset: 2px; }
+      #hud [role=tab]:focus:not(:focus-visible) { outline: none; }
+      #hud #scout, #hud #play { border-radius: 999px; padding: 0 18px; min-height: 40px; box-shadow: 0 4px 14px #35e0ff40; }
+      #hud #scout::before { content: "\25B2"; font-size: 10px; margin-right: 8px; display: inline-block; transform: rotate(90deg); }
+      #hud h2 { margin-top: 2px; padding-left: 4px; }
+      @media (min-width: 601px) {
+        #hud { max-height: min(78vh, 760px); }
+        #layers { gap: 0; background: #ffffff0f; border-radius: 14px; overflow: hidden; border: 1px solid #ffffff14; }
+        #layers label { position: relative; border-left: 0; border-radius: 0; padding: 10px 12px; gap: 12px; min-height: 28px; }
+        #layers > label + label, #layers > details { border-top: 1px solid #ffffff14; }
+        #layers label:has(input[type=radio]:checked) { background: #35e0ff1a; }
+        #layers label::before { content: ""; flex: none; width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center;
+          font-size: 15px; color: #fff; background: #5b6b7c; align-self: start; }
+        #layers label:has(input[value=imagery])::before { content: "\25A3\FE0E"; background: linear-gradient(135deg, #c98a5a, #8a4f2c); }
+        #layers label:has(input[value=hazards])::before { content: "\26A0\FE0E"; background: linear-gradient(135deg, #ff6b5e, #d8362b); }
+        #layers label:has(input[value=cost_to_go])::before { content: "\26A1\FE0E"; background: linear-gradient(135deg, #ffc247, #f08a00); }
+        #layers label:has(input[value=science])::before { content: "\25C8\FE0E"; background: linear-gradient(135deg, #5ad1a0, #1f9c6b); }
+        #layers label:has(input[value=dose_rate])::before { content: "\2622\FE0E"; background: linear-gradient(135deg, #b98cff, #7a4fe0); }
+        #layers label:has(#contours)::before { content: "\2248\FE0E"; background: linear-gradient(135deg, #7fb2ff, #3b78e0); }
+        #layers label > span { flex: 1; min-width: 0; align-self: center; }
+        #layers label:has(input[type=radio]:checked)::after { content: "\2713"; color: #35e0ff; font-weight: 800; font-size: 16px; align-self: center; }
+        #layers #contours { order: 3; appearance: none; -webkit-appearance: none; width: 42px; height: 26px; border-radius: 999px; background: #ffffff2e;
+          position: relative; cursor: pointer; transition: background .2s; margin: 0; }
+        #layers #contours::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff;
+          box-shadow: 0 1px 3px #0008; transition: transform .2s; }
+        #layers #contours:checked { background: #34c759; }
+        #layers #contours:checked::after { transform: translateX(16px); }
+        #layers details label::before { width: 8px; height: 8px; border-radius: 50%; align-self: center; margin: 0 10px; }
+        #layers details summary { padding: 10px 14px; color: #a9b7c6; }
+      }
+      @media (prefers-reduced-motion: reduce) { #hud button, #hud [role=tab], #layers #contours, #layers #contours::after { transition: none; } }
       /* Phones (ticket F8): view picker as chips without the source lines (they stay in the legend and on wide screens), 44 px buttons. */
       @media (max-width: 600px) {
         #hud { max-height: 44vh; }
