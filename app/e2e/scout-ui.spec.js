@@ -5,7 +5,7 @@ for (const viewport of [{ width: 1280, height: 800 }, { width: 390, height: 844 
     await page.setViewportSize(viewport)
     const errors = []
     page.on('pageerror', (e) => errors.push(e.message))
-    await page.goto('/scout/')
+    await page.goto('/scout/?off=goals') // old stage 1 layout; the Science goals section (goal.js) sits above it by default
     await expect(page.getByRole('heading', { name: 'Choose your stops', exact: true })).toBeVisible()
     const rows = page.locator('.f-stop-list button')
     const go = page.getByRole('button', { name: 'Plan the route', exact: true })

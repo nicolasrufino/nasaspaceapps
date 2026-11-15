@@ -122,3 +122,11 @@ button.f-item { font: inherit; }
   .f-map .cap { left: 12px; top: 12px; font-size: 10px; }
   .f-map .cap2 { max-width: 90%; font-size: 10px; }
 }
+/* Science goals (goal.js goalsSection, ?off=goals) */
+.f-goals h3 { font-size: 16px; margin-bottom: 6px; }
+.f-goal-card { padding: 10px 12px; border-radius: 10px; background: var(--panel2); margin-bottom: 8px; }
+.f-goal-card label { display: grid; grid-template-columns: auto 1fr; gap: 2px 8px; align-items: center; cursor: pointer; }
+.f-goal-card b { font-size: 15px; }
+.f-goal-card small { grid-column: 2; font-size: 13px; }
+.f-goal-card summary { cursor: pointer; font-size: 16px; width: max-content; padding: 0 6px; }
+.f-goal-card a { color: inherit; }
