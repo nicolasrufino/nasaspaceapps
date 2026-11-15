@@ -33,7 +33,7 @@ Every block's GitHub issue is assigned to its lane's owner and repeats what it n
 |---|---|---|
 | M0 Foundation | Sat 9:00–12:30 | Everyone runs on the fake world; placeholder models load; slice chosen |
 | M1 Walking core | 12:30–16:00 | Walk, ring and buzz on a phone; real slice with three layers |
-| M2 Demo-able | 16:00–21:00 | Plan mode, drone scout, stops, packing list, HUD; deployed link |
+| M2 Demo-able | 16:00–21:00 | Plan mode, helicopter scout, stops, packing list, HUD; deployed link |
 | Overnight | to Sun 7:00 | Extra layers, map grows, buddy rover, numbers, project page |
 | Freeze | Sun 8:00 to submit | Fixes only, rehearse, video, submit |
 
@@ -51,7 +51,7 @@ Every block's GitHub issue is assigned to its lane's owner and repeats what it n
 | E1 | App, 3D view and minimap | P2 | M0 | three.js app that loads the world files; 3D terrain from the height grid; flat minimap coloured by layer | — | #8, #9 |
 | E2 | Walking core | P2 | M1 | Move along the route; energy and oxygen drain; walk-back ring from the cost home; point-of-no-return buzz; works on a phone | E1 | #10 |
 | E3 | Plan mode | P2 | M1 | Layer toggles, targets, the route and stop previews on the habitat screen | E1 | #21 |
-| E4 | Drone scout | P2 | M2 | Flight along the scout plan; scan sweep (rays hit the terrain, dots build up); reveal full detail and rocks; re-plan | E3, D4 | #25 |
+| E4 | Helicopter scout | P2 | M2 | Flight along the scout plan; scan sweep (rays hit the terrain, dots build up); reveal full detail and rocks; re-plan | E3, D4 | #25 |
 | E5 | Why this route | P2 | M2 | Panel: cost per stretch, the rejected alternative, slope, rocks, sand, margin home | E4 | #33 |
 | E6 | Stops and step mode | P2 | M2 | Science checklist and sample card at each stop; real steps and heading move the astronaut; writes the walk log | E2 | #22, #11 |
 | E7 | Buddy rover and override | P2 | Overnight | Scripted lead, heel and return along the breadcrumb path; override ladder | E2 | #12 |
