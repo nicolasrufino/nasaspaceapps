@@ -193,7 +193,15 @@ const hudState = () => {
   return { heading: bearingDeg(lookDir.x, lookDir.z), pos: [walker.position.x, walker.position.z], cs,
     next: nextStop(route, k, allStops(), cs), home: [meta.base_cell[0] * cs, meta.base_cell[1] * cs],
     marginJ: ringLimit(meta, walk) - s.cost_to_go_j, usableJ: usable, energyJ: walk.energy_left_j, budgetJ: meta.energy_budget_j,
-    o2L: oxygenL(meta, walk.energy_left_j), t: walk.t }
+    o2L: oxygenL(meta, walk.energy_left_j), t: walk.t, k, route: route.cells, speed: meta.knobs?.speed_mps ?? 1,
+    stops: allStops().filter((t) => route.stops.includes(t.id)).map((t) => t.cell), project: hudProject }
+}
+const hudV = new THREE.Vector3()
+const hudProject = (x, z) => { // app metres -> screen pixels, and whether the point is behind the camera
+  hudV.set(x, groundAt(x, z) + 2, z)
+  const behind = hudV.clone().applyMatrix4(camera.matrixWorldInverse).z > 0
+  hudV.project(camera)
+  return [((hudV.x + 1) / 2) * innerWidth, ((1 - hudV.y) / 2) * innerHeight, behind]
 }
 const heading = () => { // where the astronaut is going: along the route from where they stand
   const from = route?.cells[k + 1] ? walk.cell : route?.cells[k - 1]
