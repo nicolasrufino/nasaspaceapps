@@ -201,5 +201,9 @@
     "rock_cells_seen_corridor_only": 31,
     "rock_cells_seen_with_plan": 98,
     "note": "extra flights after the route corridor; made by data/pipeline/scout_plan.py"
+  },
+  "detail_tiles": {
+    "url": "https://marsmapchi.blob.core.windows.net/tiles/gale/tiles.json",
+    "note": "Optional 1 m terrain + 25 cm HiRISE tiles for the 3D view (make_tiles.py)"
   }
 }
