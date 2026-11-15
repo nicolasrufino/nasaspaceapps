@@ -88,6 +88,7 @@ tint.magFilter = THREE.LinearFilter
 const mutedLook = flags.has('drone_scout') && !!layers.rocks_fine && !!meta.detail_tiles?.url // unflown ground is muted
 const revealShared = { uTint: { value: tint }, uCells: { value: new THREE.Vector2(cs, W) }, uMuted: { value: mutedLook ? 1 : 0 },
   uHeli: { value: new THREE.Vector3(0, 0, 0) }, // uHeli: x, z of the helicopter and the scan ring's radius (0 = off)
+  uScanColor: { value: flowMode ? new THREE.Color('#e3dfd3') : new THREE.Vector3(0.15, 0.85, 1.0) },
   uContour: { value: 0 }, uContourBase: { value: meta.height_offset_m ?? 0 } } // contour lines (ticket A7, flag contours)
 const terrainMat = terrainMaterial(revealShared)
 const terrain = new THREE.Mesh(geo, terrainMat)
@@ -115,7 +116,7 @@ const pins = new THREE.Group() // science stops, rebuilt when the plan changes
 scene.add(pins)
 const walker = makeAstronaut()
 scene.add(walker)
-const walkerIcon = icon('#35e0ff')
+const walkerIcon = icon(flowMode ? '#e3dfd3' : '#35e0ff')
 scene.add(walkerIcon)
 const walkerGoal = cellPos(meta.base_cell) // where the walk logic says the astronaut is; the figure glides there
 const altLine = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineDashedMaterial({ color: 0xd0d0d0, dashSize: span / 120, gapSize: span / 120 }))
@@ -624,7 +625,7 @@ const ALT = 10 // flying height above the ground, metres (knob; docs/DECISION-BR
 function makeHeli() {
   const g = makeHelicopter()
   const beam = new THREE.Mesh(new THREE.ConeGeometry(15, ALT, 24, 1, true), // 15 m = SWATH_M
-    new THREE.MeshBasicMaterial({ color: 0x35e0ff, transparent: true, opacity: 0.14, side: THREE.DoubleSide, depthWrite: false }))
+    new THREE.MeshBasicMaterial({ color: flowMode ? 0xe3dfd3 : 0x35e0ff, transparent: true, opacity: 0.14, side: THREE.DoubleSide, depthWrite: false }))
   beam.position.y = -ALT / 2
   g.add(beam)
   g.userData.beam = beam
@@ -646,7 +647,7 @@ parkHeli()
 setInterval(() => { // keep the parked ones on the ground as the 1 m tiles load under them
   for (const h of flight ? parked : [heli, ...parked]) h.position.y = groundAt(h.position.x, h.position.z)
 }, 500)
-const heliIcon = icon('#ffffff', { ring: '#35e0ff', label: '✈' })
+const heliIcon = icon('#ffffff', { ring: flowMode ? '#e3dfd3' : '#35e0ff', label: '✈' })
 heliIcon.visible = false
 scene.add(heliIcon)
 function placeHeli(h, [x, y], alt = ALT) {
@@ -659,6 +660,7 @@ function placeHeli(h, [x, y], alt = ALT) {
 }
 const dotPos = new Float32Array(W * H * 3)
 const dotCol = new Float32Array(W * H * 3)
+const scanDotColor = flowMode ? new THREE.Color('#c5a065').toArray() : [1, 0.2, 0.15]
 const dotsGeo = new THREE.BufferGeometry()
 dotsGeo.setAttribute('position', new THREE.BufferAttribute(dotPos, 3))
 dotsGeo.setAttribute('color', new THREE.BufferAttribute(dotCol, 3))
@@ -677,7 +679,7 @@ function reveal(fresh) {
     if (layers.cost_to_go_scouted) ctg[i] = layers.cost_to_go_scouted[i]
     if (!rock) continue // clear ground shows by turning to full colour (the discover look); only rocks get a dot
     dotPos.set([(i % W) * cs, layers.height[i] + 0.5, Math.floor(i / W) * cs], dots * 3)
-    dotCol.set([1, 0.2, 0.15], dots * 3)
+    dotCol.set(scanDotColor, dots * 3)
     dots++
   }
   if (fresh.length) {
@@ -861,7 +863,7 @@ function render() {
   const vertexBase = layerName === IMAGERY ? WHITE : layerColors // the image itself carries the colour in the Imagery view
   for (let i = 0; i < W * H; i++) {
     const f = inside[i] ? 1 : 0.45
-    if (rockSeen(i)) colors.array.set([200, 35, 35], i * 3)
+    if (rockSeen(i)) colors.array.set(flowMode ? [197, 160, 101] : [200, 35, 35], i * 3)
     else for (let c = 0; c < 3; c++) colors.array[i * 3 + c] = vertexBase[i * 3 + c] * f
     tint.image.data.set([colors.array[i * 3], colors.array[i * 3 + 1], colors.array[i * 3 + 2], scanned[i] || nearHome[i] ? 255 : 0], i * 4)
   }

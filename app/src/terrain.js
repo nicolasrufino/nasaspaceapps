@@ -16,8 +16,8 @@ export const REVEAL_GLSL = `
   float grey = dot(diffuseColor.rgb, vec3(0.299, 0.587, 0.114));
   diffuseColor.rgb = mix(mix(vec3(grey), diffuseColor.rgb, 0.4) * 0.82, diffuseColor.rgb, rev);
   float sweep = smoothstep(3.0, 0.0, abs(distance(xz, uHeli.xy) - uHeli.z)) * step(0.01, uHeli.z);
-  diffuseColor.rgb += vec3(0.15, 0.85, 1.0) * sweep * 0.9;`
-export const REVEAL_UNIFORMS = 'uniform sampler2D uTint;\nuniform float uMuted;\nuniform vec3 uHeli;\nuniform vec2 uCells;\n' +
+  diffuseColor.rgb += uScanColor * sweep * 0.9;`
+export const REVEAL_UNIFORMS = 'uniform sampler2D uTint;\nuniform float uMuted;\nuniform vec3 uHeli;\nuniform vec3 uScanColor;\nuniform vec2 uCells;\n' +
   'uniform float uContour;\nuniform float uContourBase;'
 
 // Contour lines (ticket A7): thin brown lines every 5 m and a bolder one every 25 m of real elevation (height.f32 + the

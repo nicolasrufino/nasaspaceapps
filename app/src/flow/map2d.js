@@ -67,7 +67,7 @@ export function createMap2D(app) {
         const [x, y] = it.cell, r = it.r ?? 5
         const n = el('g', { transform: `translate(${x + 0.5},${y + 0.5})`, opacity: it.faded ? 0.45 : 1, 'data-hit': '' })
         n.append(el('circle', { r, fill: it.color ?? '#ffd23f', stroke: it.ring ?? '#191919', 'stroke-width': r * 0.28 }))
-        if (it.label != null) { const t = el('text', { 'text-anchor': 'middle', y: r * 0.36, 'font-size': r * 1.05, 'font-weight': 700, fill: '#191919', 'font-family': 'system-ui' }); t.textContent = it.label; n.append(t) }
+        if (it.label != null) { const t = el('text', { 'text-anchor': 'middle', y: r * 0.36, 'font-size': r * 1.05, 'font-weight': 700, fill: '#191919', 'font-family': 'inherit' }); t.textContent = it.label; n.append(t) }
         if (onTap) { n.style.cursor = 'pointer'; n.style.pointerEvents = 'auto'; n.addEventListener('click', (e) => { e.stopPropagation(); onTap(it.id) }) }
         return n
       }))
@@ -78,8 +78,8 @@ export function createMap2D(app) {
       for (let i = 0; i < W * H; i++) { const v = fn(i); if (v) img.data.set(v, i * 4) }
       c.putImageData(img, 0, 0)
     },
-    // The standard picture of scouting: unseen ground dimmed, found rocks red.
-    paintScouted(dim = 110) { api.paint((i) => (app.rockSeen(i) ? [255, 70, 50, 255] : app.scanned[i] ? null : [20, 16, 14, dim])) },
+    // The standard picture of scouting: unseen ground dimmed, found rocks ochre.
+    paintScouted(dim = 110) { api.paint((i) => (app.rockSeen(i) ? [197, 160, 101, 255] : app.scanned[i] ? null : [20, 16, 14, dim])) },
     // Zoom to the rectangle (same shape as the map's box on screen) that holds these cells plus `pad` cells around;
     // fit() with no cells shows as much of the slice as fits. Re-applied when the box changes size.
     fit(cells, pad = 14) {

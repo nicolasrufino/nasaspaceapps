@@ -7,7 +7,7 @@
 import { MODELS } from './models.js'
 import * as stopScience from './stop-science.js'
 
-const RED = '#ff5a3d', WHITE = '#fff', AMBER = '#ffd23f', CYAN = '#35e0ff'
+const OCHRE = '#c5a065', WHITE = '#fff', AMBER = '#ffd23f', SCOUT = '#e3dfd3'
 const SPEEDS = [[120, '1×'], [60, '2×'], [30, '4×']] // milliseconds per 8 m step
 const STRIP_H = 110
 const NS = 'http://www.w3.org/2000/svg'
@@ -18,7 +18,7 @@ const CSS = `
 .d-route.hot { background: var(--panel2); }
 .d-route.pin { border-color: var(--mute); }
 .d-route h3 i { display: inline-block; width: 18px; height: 0; margin-right: 8px; vertical-align: middle; border-top: 3px solid #fff; }
-.d-route.old h3 i { border-top: 3px dashed ${RED}; }
+.d-route.old h3 i { border-top: 3px dashed ${OCHRE}; }
 .d-strip { align-self: stretch; height: ${STRIP_H}px; box-sizing: border-box; background: var(--panel); border-radius: 10px; padding: 8px 12px 10px; display: flex; flex-direction: column; gap: 4px; }
 .d-strip .lab { display: flex; justify-content: space-between; gap: 12px; font-size: 11px; color: var(--mute); white-space: nowrap; }
 .d-strip .lab b { color: var(--paper); font-weight: 600; overflow: hidden; text-overflow: ellipsis; }
@@ -53,8 +53,8 @@ export default {
       const k = map.scale * (mini ? 2 : 1)
       const em = mini ? null : pin ?? hot // the emphasised route, if any
       const lw = 0.45 * k
-      map.line('before', oldCells, { color: RED, width: lw, dash: `${lw * 2.2} ${lw * 2.4}`, opacity: em === 'new' ? 0.3 : 1 })
-      map.dots('crossed', rocksOn(oldCells).map((cell) => ({ cell, color: RED, ring: WHITE, r: 0.7 * k, faded: em === 'new' })))
+      map.line('before', oldCells, { color: OCHRE, width: lw, dash: `${lw * 2.2} ${lw * 2.4}`, opacity: em === 'new' ? 0.3 : 1 })
+      map.dots('crossed', rocksOn(oldCells).map((cell) => ({ cell, color: OCHRE, ring: WHITE, r: 0.7 * k, faded: em === 'new' })))
       map.line('route', route.cells, { color: WHITE, width: lw * (em === 'new' ? 1.5 : 1), opacity: em === 'old' ? 0.3 : 1 })
       map.dots('stops', [
         { cell: app.meta.base_cell, label: 'H', color: WHITE, r: 1.6 * k },
@@ -99,7 +99,7 @@ export default {
       if (!before) pin = hot = null
 
       map.caption('After scouting', before
-        ? 'White: the scouted route · red dashes: without the scout · red dots: rock it would have crossed · NASA MRO HiRISE'
+        ? 'White: the scouted route · ochre dashes: without the scout · ochre dots: rock it would have crossed · NASA MRO HiRISE'
         : 'White: the route · NASA MRO HiRISE')
       map.clear('walker')
       drawMap(false)
@@ -201,9 +201,9 @@ export default {
       const svg = svgEl('svg', { viewBox: '0 0 1000 100', preserveAspectRatio: 'none', role: 'slider', 'aria-label': 'Position along the route', tabindex: 0 })
       const clip = svgEl('clipPath', { id: 'd-clip' }), clipRect = svgEl('rect', { x: 0, y: 0, width: 0, height: 100 })
       clip.append(clipRect)
-      const head2 = svgEl('line', { x1: 0, x2: 0, y1: 0, y2: 100, stroke: CYAN, 'stroke-width': 2, 'vector-effect': 'non-scaling-stroke' })
+      const head2 = svgEl('line', { x1: 0, x2: 0, y1: 0, y2: 100, stroke: SCOUT, 'stroke-width': 2, 'vector-effect': 'non-scaling-stroke' })
       svg.append(clip, svgEl('rect', { x: 0, y: 0, width: 1000, height: 100, fill: '#2a2927' }),
-        svgEl('path', { d: prof.area, fill: '#6e6a65' }), svgEl('path', { d: prof.area, fill: CYAN, opacity: 0.55, 'clip-path': 'url(#d-clip)' }), head2)
+        svgEl('path', { d: prof.area, fill: '#6e6a65' }), svgEl('path', { d: prof.area, fill: SCOUT, opacity: 0.55, 'clip-path': 'url(#d-clip)' }), head2)
       strip.append(svg)
       const seekTo = (e) => { const b = svg.getBoundingClientRect(); app.walk.seek(prof.stepAt(Math.max(0, Math.min(1, (e.clientX - b.left) / (b.width || 1))))); tick() }
       let dragging = false
@@ -246,7 +246,7 @@ export default {
       if (done || spent) want = false
       if (done) sci?.finish()
       if (map.scale !== lastScale) live.redraw() // the mini map's box changed size
-      if (cells[k]) { map.dots('walker', [{ cell: cells[k], color: CYAN, ring: WHITE, r: 1.3 * live.k() }]); map.raise('walker') }
+      if (cells[k]) { map.dots('walker', [{ cell: cells[k], color: SCOUT, ring: WHITE, r: 1.3 * live.k() }]); map.raise('walker') }
       const f = prof.cum[k] / prof.total
       live.stats.set(0, Math.round(live.totalM * f))
       live.stats.set(1, ui.kj(Math.max(0, s.energy_left_j)))
