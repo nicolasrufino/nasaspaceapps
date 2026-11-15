@@ -19,7 +19,7 @@ const $ = (id) => document.getElementById(id)
 const params = new URLSearchParams(location.search)
 // The bare link is the judges' link: the Gale demo with the demo features on.
 // ?world=synthetic loads the test world; ?flags= (empty) switches every feature off (docs/PLAN.md §10).
-const DEMO_FLAGS = 'drone_scout,why_route,layers_extra,pov_images,science_stop,step_mode,detail,hazards'
+const DEMO_FLAGS = 'drone_scout,why_route,layers_extra,pov_images,science_stop,step_mode,detail,hazards,contours'
 const worldName = params.get('world') ?? 'gale'
 const flags = new Set((params.get('flags') ?? DEMO_FLAGS).split(',').filter(Boolean))
 if (flags.has('classifier')) initTerrainClassifier($('walk'))
@@ -74,7 +74,8 @@ const tint = new THREE.DataTexture(new Uint8Array(W * H * 4).fill(255), W, H, TH
 tint.magFilter = THREE.LinearFilter
 const mutedLook = flags.has('drone_scout') && !!layers.rocks_fine && !!meta.detail_tiles?.url // unflown ground is muted
 const revealShared = { uTint: { value: tint }, uCells: { value: new THREE.Vector2(cs, W) }, uMuted: { value: mutedLook ? 1 : 0 },
-  uHeli: { value: new THREE.Vector3(0, 0, 0) } } // uHeli: x, z of the helicopter and the scan ring's radius (0 = off)
+  uHeli: { value: new THREE.Vector3(0, 0, 0) }, // uHeli: x, z of the helicopter and the scan ring's radius (0 = off)
+  uContour: { value: 0 }, uContourBase: { value: meta.height_offset_m ?? 0 } } // contour lines (ticket A7, flag contours)
 const terrainMat = terrainMaterial(revealShared)
 const terrain = new THREE.Mesh(geo, terrainMat)
 
@@ -330,6 +331,13 @@ const more = document.createElement('details')
 more.innerHTML = '<summary>Advanced</summary>'
 more.append(...advanced.map((n) => viewRadio(n, n.replaceAll('_', ' '))))
 $('layers').append(...VIEWS.map(([n, title]) => viewRadio(n, title)), ...(advanced.length ? [more] : []))
+// Contour lines (ticket A7): drawn on top of whichever view is on, so they are a toggle, not a view.
+if (flags.has('contours')) {
+  const c = document.createElement('label')
+  c.innerHTML = '<input type="checkbox" id="contours"><span><b>Contours</b><small>Every 5 m, bold every 25 m · USGS MSL Gale DEM (MRO HiRISE stereo)</small></span>'
+  c.querySelector('input').onchange = (e) => { revealShared.uContour.value = e.target.checked ? 1 : 0 }
+  $('layers').prepend(c)
+}
 
 const kj = (j) => `${Math.round(Math.max(j, 0) / 1000)} kJ`
 
