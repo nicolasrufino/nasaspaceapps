@@ -1,6 +1,6 @@
-# Scouting, restructured (proposal)
+# Scouting, restructured
 
-**Status:** proposal from Nicolas (P2), for the team to review before it is built. It replaces the whole-area survey (too slow to be realistic: 86 sols with three helicopters on our slice) and reshapes stage 2 of `docs/PRODUCT.md`.
+**Status:** direction accepted by Nicolas (P2) on 2026-11-14; not built yet. Decisions and open questions: `docs/DECISIONS.md`. It replaces the whole-area survey (too slow to be realistic: 86 sols with three helicopters on our slice) and reshapes stage 2 of `docs/PRODUCT.md`.
 
 ## 1. The goal, in one line
 
@@ -50,7 +50,7 @@ How we will know it works (all measured in code, none claimed yet):
 
 **Step 1. Mark the places.** The crew marks points of interest on the **2D orbital map** (science layers, Curiosity sites, or a tap). At the start the 3D view is coarse: orbit only. **Detail appears only where the helicopter has flown**, so the demo shows the map being built.
 
-**Step 2. Guess the corridors from orbit.** For every pair of points (and base), find **several candidate walking corridors** on the orbital data, not one: the cheapest path, then the next-cheapest that doesn't reuse it (penalise cells already used and search again). Each corridor gets an **uncertainty score**: how much orbit can't tell along it (slopes near the 25° limit, possible sand, rough ground, cells nobody has seen up close).
+**Step 2. Guess the corridors from orbit.** For every pair of points (and base), find **several candidate walking corridors** on the orbital data, not one: the cheapest path, then the next-cheapest that doesn't reuse it (penalise cells already used and search again). Each corridor gets an **uncertainty score**: how much orbit can't tell along it (slopes near the 20° limit, possible sand, rough ground, cells nobody has seen up close).
 
 **Step 3. Plan the flights (the first algorithm).** Choose **which corridors to fly and in what order**, so the helicopter removes the most uncertainty per flight:
 - **Order of the points** (A→B→C or A→C→B…): solved exactly for a handful of points, as the walking planner already does, but with flight costs (distance, no-fly cells, low-sun hours).

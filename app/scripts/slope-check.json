@@ -1,0 +1,23 @@
+{
+ "limit_25": {
+  "wall_cells_pct": 15.5,
+  "reachable_cells_pct": 82.2,
+  "out_leg_within_half_usable_pct": 39.4,
+  "tour_stops": 5,
+  "tour_dropped": [],
+  "tour_energy_kj": 334.7,
+  "tour_minutes": 20.7,
+  "targets_unreachable": []
+ },
+ "limit_20": {
+  "wall_cells_pct": 24.2,
+  "reachable_cells_pct": 69.6,
+  "out_leg_within_half_usable_pct": 23.3,
+  "tour_stops": 5,
+  "tour_dropped": [],
+  "tour_energy_kj": 334.7,
+  "tour_minutes": 20.7,
+  "targets_unreachable": []
+ },
+ "cells_15_to_20_deg_pct": 13.1
+}

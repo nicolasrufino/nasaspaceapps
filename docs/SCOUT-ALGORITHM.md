@@ -1,6 +1,6 @@
-# The scouting algorithm (proposal)
+# The scouting algorithm
 
-**Status:** proposal from Nicolas (P2) for team discussion. Companion to `docs/SCOUTING.md` (the flow, the sun and time, the research on energy). This file is about **the decision at the heart of the product: where to send the helicopter, and when to stop.**
+**Status:** direction accepted by Nicolas (P2) on 2026-11-14; not built in the app yet (a toy version runs in the [scouting explainer](https://claude.ai/artifact/8FDY6zGHXoewAtzxYBCJKG), source `docs/scouting/explainer.html`). Decisions and open questions: `docs/DECISIONS.md`. Companion to `docs/SCOUTING.md` (the flow, the sun and time, the research on energy). This file is about **the decision at the heart of the product: where to send the helicopter, and when to stop.**
 
 ## 1. The problem
 
