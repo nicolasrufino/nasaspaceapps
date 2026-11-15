@@ -54,7 +54,7 @@ def main():
             "dose_ugy_per_hour": round(float(dose[y, x]), 2),
         })
     out = {
-        "what": "Nearest real Curiosity measurement to each stop; null when none within %d m" % MAX_M,
+        "what": f"Nearest real Curiosity measurement to each stop; null when none within {MAX_M} m",
         "sources": "MSL ChemCam/APXS, DAN, REMS (NASA PDS); RAD mean x sky view (estimate, microgray per hour), see world.json sources",
         "landform_key": "0 flat, 1 slope, 2 ridge, 3 hollow",
         "stops": stops,
