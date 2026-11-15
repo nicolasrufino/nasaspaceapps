@@ -6,6 +6,10 @@ One place for what the team decided, why, and what is still open. **Add a line h
 
 | Date | Decision | Why | Who | Where it lives |
 |---|---|---|---|---|
+| 2026-11-15 | **3 helicopter flights per walk** (each of the 3 flies once on the scouting sol); up to 6 only with habitat charging, labelled as our assumption | SkyFall flies every other sol (NASA mission package) and crews walk every other sol (HEOMD-415). Tested on Gale: 3 flights leave 0 hidden hazards on the final route and match "knowing every rock" (630.5 kJ); no flights leave 8 | Nicolas | `docs/OPERATIONS.md`; `app/scripts/flight-budget-check.json` |
+| 2026-11-15 | **1 km per flight** (`FLIGHT_M`), the low end of SkyFall's 1–2 km | 2 km in 2.5 min needs 13 m/s, above Ingenuity's 10 m/s record; 700 m is what Ingenuity flew. Gale result is the same at 700 m | Nicolas (his "go with the recommendation", refined by the test) | `FLIGHT_M` in `app/src/scout.js`, **still 700 m in code**: switched after Jules's #99 merges, because R5 pitch numbers are built from it and must be regenerated in the same change |
+| 2026-11-15 | **Scouting sol, then walk sol:** helicopters fly at 9:30 AM on the crew's rest sol; the walk runs about 7:15 AM–3:15 PM next sol, Sun at least 15° up | NASA's rest-sol rule, daylight flying, shadows; same-sol leaves under 2 h of walking | Nicolas | `docs/OPERATIONS.md` |
+| 2026-11-15 | **Helicopter sensors:** cameras do the main job (3D and hazards); radiation from resting helicopters; radar sand depth only as a labelled capability; near-IR as a mineral hint; chemistry stays with Curiosity's data | What SkyFall actually carries, and what each sensor can honestly give (brief §10) | Nicolas | `docs/DECISION-BRIEFS.md` §10, `docs/SCOUT-3D.md` |
 | 2026-11-15 | **The Mission VESTA page is the home page; the map app moved to `/scout/`** (nasa.nicolasrufino.com/scout/). Old `/?world=…` and `/?flags=…` links forward there; `/mission-vesta/` redirects home | The custom domain should open on the design; the app is Vesta Scout | Nicolas | `app/index.html`, `app/scout/index.html` |
 | 2026-11-15 | **Stop rule follows the challenge:** keep flying while a flight could make the walk safer, reach more science, or make it easier (in that order); stop when no flight would change the plan, or at the budget | NASA asks for a safe walk first, with new science, at one-walk scale | Nicolas | Brief §6 |
 | 2026-11-15 | **Demo look:** unexplored ground is flat muted grey around a well-designed habitat (spaceship) model; the helicopter reveals ground with a sonar-like scanning sweep; flown ground shows in full colour | Shows only what we know; the map grows where we learned | Nicolas | Brief §9 |
@@ -43,15 +47,16 @@ Recommendations with evidence and the holes checked: `docs/DECISION-BRIEFS.md` (
 |---|---|---|---|
 | **How high the helicopter flies** [4] | Low (about 2–4 m, matches the rover images the model learns from; dusty) / about 10 m (safe; needs the model adapted to the air view). Deciding test: run the rover-trained model on labelled Ingenuity images | Nicolas | Helicopter-view model, flight planner |
 | **Labels for sensing** | Start with the reviewed ROSCO rocks / also project Curiosity's labelled images onto Gale cells | Jules, Nicolas | Belief-map training |
-| **Flight budget per campaign** [7] | SkyFall as published: 1 flight per helicopter every other sol, so **3 per walk**; up to 6 with habitat charging (our assumption) | Nicolas, after reading the evidence | Flight planner |
-| **Scouting sol and walk sol timeline** [8] | Proposed: scout on the non-walk sol (flights 9:30 AM and ~12:15 PM), walk next morning about 7:15 AM to 3:15 PM, Sun at least 15° up | Nicolas | Sun model, plan-mode timeline |
-| **Helicopter science sensors** [10] | Proposed: cameras for 3D and hazards (main job); radiation from resting helicopters; radar sand depth as a labelled future layer; near-IR as a mineral hint | Nicolas | Helicopter spec, layers |
-| **Distance per flight** [7] | 700 m (Ingenuity's longest flight, in the app now) / 1–2 km (SkyFall's published figure, recommended) | Nicolas | Flight planner, `FLIGHT_M` in `app/src/scout.js` |
 
 ## Missing: not built or not available yet
 
 - **Habitat (spaceship) 3D model** and the muted-grey unexplored look with a scanning reveal (brief §9).
-- **Plan-mode timeline strip** (scouting sol, walk sol, Sun height, last safe turn-back time; brief §8).
+- **Plan-mode timeline strip** (scouting sol, walk sol, Sun height, last safe turn-back time; `docs/OPERATIONS.md`).
+- **SkyFall 3D scene** (muted grey, reveal mask, 1 m tiles, three helicopters with real camera footprints): build order in `docs/SCOUT-3D.md`.
+- **`detail_tiles` pointer in `world.json`:** tiles are on Azure (#103) but `world.json` doesn't point to them yet (Luca runs `make_tiles.py --base-url`).
+- **Jules's PR #99** (R3/R5/F1 refresh at 20°): green CI but conflicts with `dev`; needs a rebase.
+- **ROSCO over the whole Gale slice** (Jules): not started.
+- **Switch `FLIGHT_M` to 1 km** (decided): after #99, together with `node ml/pitch_metrics/run.mjs` so the pitch numbers stay reproducible.
 - **Helicopter docking for images:** Ingenuity's radio (about 80 kbit/s) is too slow for a strip of images; we assume a dock or cable at the habitat (brief §7).
 
 - **Belief map with probabilities** (today the world has a yes/no rock mask), plus ROSCO run over the whole slice with rock sizes and "looked, found nothing" cells.

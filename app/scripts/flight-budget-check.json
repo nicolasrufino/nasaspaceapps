@@ -1,0 +1,121 @@
+{
+ "inputs": {
+  "skyfall_flight_s": 150,
+  "ingenuity_top_mps": 10,
+  "ingenuity_longest_m": 704,
+  "ingenuity_longest_s": 169.5,
+  "swath_radius_m": 15
+ },
+ "average_speed_needed_mps": {
+  "700": 4.67,
+  "1000": 6.67,
+  "1500": 10,
+  "2000": 13.33
+ },
+ "ingenuity_best_average_mps": 4.15,
+ "gale": {
+  "slope_limit_deg": 20,
+  "stops": 5,
+  "dropped": [],
+  "route_m": 1275,
+  "route_energy_kj": 621.4,
+  "farthest_point_from_base_m": 354,
+  "candidate_corridors_m": [
+   376,
+   390,
+   394
+  ],
+  "flights_to_cover_whole_route": {
+   "700": 2,
+   "1000": 2,
+   "1500": 1,
+   "2000": 1
+  }
+ },
+ "single_pass_route_coverage": [
+  {
+   "flights": 3,
+   "metres_each": 700,
+   "route_corridor_seen_pct": 100,
+   "hazard_cells_near_route": 31,
+   "hazard_cells_seen": 31
+  },
+  {
+   "flights": 3,
+   "metres_each": 1000,
+   "route_corridor_seen_pct": 100,
+   "hazard_cells_near_route": 31,
+   "hazard_cells_seen": 31
+  }
+ ],
+ "knowing_all_rocks": {
+  "energy_kj": 630.5,
+  "unseen_hazard_cells_on_route": 0
+ },
+ "no_flights": {
+  "flights_budget": 0,
+  "metres_each": 0,
+  "flights_used": 0,
+  "unseen_hazard_cells_on_final_route": 8,
+  "energy_kj": 621.4,
+  "extra_vs_knowing_all_pct": -1.4
+ },
+ "fly_and_replan_loop": [
+  {
+   "flights_budget": 3,
+   "metres_each": 700,
+   "flights_used": 3,
+   "unseen_hazard_cells_on_final_route": 0,
+   "energy_kj": 630.5,
+   "extra_vs_knowing_all_pct": 0
+  },
+  {
+   "flights_budget": 3,
+   "metres_each": 1000,
+   "flights_used": 3,
+   "unseen_hazard_cells_on_final_route": 0,
+   "energy_kj": 630.5,
+   "extra_vs_knowing_all_pct": 0
+  },
+  {
+   "flights_budget": 3,
+   "metres_each": 1500,
+   "flights_used": 2,
+   "unseen_hazard_cells_on_final_route": 0,
+   "energy_kj": 630.5,
+   "extra_vs_knowing_all_pct": 0
+  },
+  {
+   "flights_budget": 6,
+   "metres_each": 700,
+   "flights_used": 4,
+   "unseen_hazard_cells_on_final_route": 0,
+   "energy_kj": 630.5,
+   "extra_vs_knowing_all_pct": 0
+  },
+  {
+   "flights_budget": 6,
+   "metres_each": 1000,
+   "flights_used": 3,
+   "unseen_hazard_cells_on_final_route": 0,
+   "energy_kj": 630.5,
+   "extra_vs_knowing_all_pct": 0
+  },
+  {
+   "flights_budget": 6,
+   "metres_each": 1500,
+   "flights_used": 2,
+   "unseen_hazard_cells_on_final_route": 0,
+   "energy_kj": 630.5,
+   "extra_vs_knowing_all_pct": 0
+  },
+  {
+   "flights_budget": 12,
+   "metres_each": 1000,
+   "flights_used": 3,
+   "unseen_hazard_cells_on_final_route": 0,
+   "energy_kj": 630.5,
+   "extra_vs_knowing_all_pct": 0
+  }
+ ]
+}
