@@ -59,8 +59,21 @@ export function simulateScout(world, route, extraFlights, mode = '60fps', previo
 
 export function knownReturnCosts(world, blocked) {
   // Reverse the directed energy cost: walking downhill and uphill differ.
-  // Only walkable, unblocked vertices are traversed in either direction.
-  return costFrom(world, world.meta.base_cell, blocked,
+  // Reverse the crossing directions as well. Current Gale crossings are
+  // symmetric, but the contract encodes each direction independently.
+  let reverseWorld = world
+  if (world.layers.passable) {
+    const { width: w, height: h } = world.meta
+    const neighbours = [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]]
+    const reversed = new Uint8Array(w * h)
+    for (let i = 0; i < w * h; i++) for (let k = 0; k < 8; k++) {
+      const [dx, dy] = neighbours[k], x = i % w + dx, y = Math.floor(i / w) + dy
+      if (x >= 0 && x < w && y >= 0 && y < h && (world.layers.passable[i] & (1 << k)))
+        reversed[y * w + x] |= 1 << (7 - k)
+    }
+    reverseWorld = { ...world, layers: { ...world.layers, passable: reversed } }
+  }
+  return costFrom(reverseWorld, world.meta.base_cell, blocked,
     (meta, layers, i, j) => energyCost(meta, layers, j, i)).dist
 }
 
