@@ -6,6 +6,7 @@ One place for what the team decided, why, and what is still open. **Add a line h
 
 | Date | Decision | Why | Who | Where it lives |
 |---|---|---|---|---|
+| 2026-11-15 | **Mission VESTA site title font is Michroma** (tagline and product names stay Rethink Sans) | Picked from five previewed fonts; wide and technical, closest to NASA lettering | Nicolas | `app/mission-vesta/` |
 | 2026-11-15 | **PR #94 approved by P2** (routes on crossings, gravity factor 0.68, sand 2.4×). Merge after Jules's R3 re-export, with the 20° rebuild in the same PR | Measured values; the old model under-counted energy by about 1.8× and let routes cross ledges. Tested on the branch: 31 app tests, build, Gale in the browser with no console errors | Nicolas | PR #94 review; `docs/DECISION-BRIEFS.md` §1 |
 | 2026-11-15 | **Energy budget from a real suit figure** (1,200 BTU/h, 8 h suit, 1.5 h reserve; ICES-2026-127), not sized to fit the tour | Sizing the budget to the tour was circular and hid that the walk got harder | Nicolas | PR #94; brief §2 |
 | 2026-11-15 | **Scouting mode first: reach the targets** (the specific stops chosen for this walk); network mode later | It is the demo, the building block of network mode, and measurable against "knowing everything" | Nicolas | Brief §3 |
