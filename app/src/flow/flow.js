@@ -10,13 +10,13 @@ import analyse from './stage-analyse.js'
 import scout from './stage-scout.js'
 import debrief from './stage-debrief.js'
 
-const STAGES = [['plan', 'Choose stops', plan], ['analyse', 'How the route is found', analyse], ['scout', 'Scout', scout], ['debrief', 'Choose the walk', debrief]]
+const STAGES = [['plan', 'Stops', plan], ['analyse', 'Route', analyse], ['scout', 'Scout', scout], ['debrief', 'Walk', debrief]]
 const BACK = { analyse: 'plan', debrief: 'analyse' } // where Back goes; none while the scout flies
 const h = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e }
 
 export function initFlow(app) {
   document.body.classList.add('flow')
-  const root = h('div', '', `<div id="f-top"><a href="../">← <span>Mission VESTA</span></a><div class="f-steps"></div><span></span></div>
+  const root = h('div', '', `<div id="f-top"><a href="../" aria-label="Back to Mission VESTA">← <span>Vesta <b>Scout</b></span></a><nav class="f-steps" aria-label="Mission steps"></nav><span class="f-context">Mission planner</span></div>
     <div id="f-rail"><div id="f-body"></div><div id="f-foot"></div></div>
     <div id="f-main"><div id="f-strip" class="f-ov"></div><div id="f-bl" class="f-ov"></div><div id="f-bottom" class="f-ov"></div><div id="f-br" class="f-ov"></div></div>`)
   root.id = 'flow'
@@ -25,7 +25,7 @@ export function initFlow(app) {
   const main = q('main'), stepsEl = root.querySelector('.f-steps')
   const map = createMap2D(app)
   let cleanup = null, current = -1, reached = 0
-  const tabs = STAGES.map(([name, title], k) => { const b = h('button', '', `${k + 1}<i> ${title}</i>`); b.type = 'button'; b.onclick = () => { if (b.classList.contains('open')) ui.go(name) }; stepsEl.append(b); return b })
+  const tabs = STAGES.map(([name, title], k) => { const b = h('button', '', `<span class="f-step-num">${k + 1}</span><span>${title}</span>`); b.type = 'button'; b.onclick = () => { if (b.classList.contains('open')) ui.go(name) }; stepsEl.append(b); return b })
 
   const ui = {
     body: q('body'), foot: q('foot'), strip: q('strip'), bl: q('bl'), br: q('br'), bottom: q('bottom'), main,
@@ -36,6 +36,12 @@ export function initFlow(app) {
     scene(on) { main.classList.toggle('scene', on); on ? (innerWidth > 760 ? app.viewShift(q('rail').offsetWidth / 2) : app.viewShift(0, innerHeight * 0.22)) : app.viewShift(0); if (on) map.el.remove(); else { map.size('fill'); main.prepend(map.el) } },
     // A titled block in the rail. big = a heading instead of a small label. Returns the element; append to it.
     section(title, big = false) { return h('div', 'f-sec', title ? `<${big ? 'h2' : 'h3'}>${title}</${big ? 'h2' : 'h3'}>` : '') },
+    // Secondary explanations stay available without competing with the stage's next action.
+    details(title, ...content) {
+      const el = h('details', 'f-details'), summary = h('summary'), body = h('div', 'f-details-body')
+      summary.textContent = title; body.append(...content); el.append(summary, body)
+      return el
+    },
     // A list row: item({ n, title, sub, onRemove, onClick, onHover }). n = the number in the amber dot (omit for none).
     item({ n, title, sub, onRemove, onClick, onHover }) {
       const e = h(onClick ? 'button' : 'div', 'f-item', `${n != null ? '<span class="n"></span>' : ''}<span class="t"></span>`)
@@ -79,6 +85,7 @@ export function initFlow(app) {
       const back = BACK[name]
       if (back) { const b = h('button', 'f-back', `← ${STAGES.find(([n]) => n === back)[1]}`); b.type = 'button'; b.onclick = () => ui.go(back); ui.body.append(b) }
       cleanup = STAGES[k][2].enter(ui, app) ?? null
+      ui.body.scrollTop = 0
       ui.refreshTabs()
     },
     // Finished stages can be reopened from the top bar, except the flight itself, and never while it is flying.
@@ -86,6 +93,7 @@ export function initFlow(app) {
       tabs.forEach((b, j) => {
         j === current ? b.setAttribute('aria-current', 'step') : b.removeAttribute('aria-current')
         b.classList.toggle('open', j !== current && j <= reached && STAGES[j][0] !== 'scout' && STAGES[current][0] !== 'scout')
+        b.disabled = j !== current && !b.classList.contains('open')
       })
     },
     stage: () => STAGES[current]?.[0],

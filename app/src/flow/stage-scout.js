@@ -43,10 +43,10 @@ export default {
     const signedKj = (j) => { const v = Math.round(j / 1000); return `${v > 0 ? '+' : v < 0 ? '−' : ''}${Math.abs(v)} kJ` }
 
     // 1. This flight.
-    const flightSec = ui.section(`Flight 1 of ${app.MAX_FLIGHTS ?? 3}`)
-    const flightTitle = flightSec.querySelector('h3')
+    const flightSec = ui.section(`Flight 1 of ${app.MAX_FLIGHTS ?? 3}`, true)
+    const flightTitle = flightSec.querySelector('h2')
     const dist = ui.bar(), distText = ui.h('p', '', 'Taking off')
-    flightSec.append(dist.el, distText)
+    flightSec.append(ui.h('p', 'dim', 'Simulated scan · stored HiRISE data'), dist.el, distText)
 
     // 2. The helicopter (estimates from heli-energy.js).
     const heliSec = ui.section('Helicopter')
@@ -66,17 +66,18 @@ export default {
     const stripM = Math.round(2 * (app.scout.swathM ?? 15))
     const stripLabel = payloadOn ? `about ${stripM} m, our estimate` : `the ${stripM} m strip the camera sees`
     const legend = ui.h('div', 'sc-legend', `<span><i style="background:${SCOUT}"></i>${stripLabel}</span><span><i style="background:${HAZARD}"></i>rocks too big to step over (over 0.3 m)</span>`)
-    scanSec.append(totals.el, legend, ui.model(MODELS.scan))
-    ui.body.append(flightSec, heliSec, detSec, scanSec)
+    scanSec.append(totals.el, legend)
+    const technical = ui.details('Battery estimate & data sources', heliSec, ui.model(MODELS.scan))
+    ui.body.append(flightSec, scanSec, detSec, technical)
 
     // Payload and landing reports are opt-in. The engine and its event contract
     // stay unchanged; all measurements below read the existing world layers.
     let recordedSec = null, records = null, activeFlight = null
     const weatherAbort = new AbortController()
     if (payloadOn) {
-      const payload = ui.section('What the scout carries')
+      const payload = ui.section('')
       payload.classList.add('sc-payload')
-      const details = ui.h('details', '', '<summary>SkyFall reference · instruments and limits</summary>')
+      const details = ui.h('details', 'f-details', '<summary>SkyFall instruments & limits</summary>')
       details.append(ui.h('p', 'dim', 'Simulated observations from stored data. No live sensor is modelled.'))
       const list = ui.h('ul')
       const instruments = [
@@ -101,11 +102,11 @@ export default {
       const source = details.querySelector('a')
       source.href = SKYFALL_SOURCE; source.target = '_blank'; source.rel = 'noopener noreferrer'
       payload.append(details)
-      ui.body.prepend(payload)
-      recordedSec = ui.section('This flight recorded')
+      ui.body.append(payload)
+      recordedSec = ui.details('Flight recordings')
       recordedSec.hidden = true
       records = ui.h('div', 'sc-records')
-      recordedSec.append(ui.h('p', 'dim', 'Simulated · stored layers over each flight’s full strip. Overlap counts once per flight; these are not newly discovered cells.'), records)
+      recordedSec.querySelector('.f-details-body').append(ui.h('p', 'dim', 'Simulated · stored layers over each flight’s full strip. Overlap counts once per flight; these are not newly discovered cells.'), records)
       payload.after(recordedSec)
       const weatherFile = app.meta.files?.weather
       const noWeather = () => { weatherText.textContent = 'Atmospheric · Not simulated: REMS temperature context unavailable. Wind is not simulated.' }
@@ -125,7 +126,6 @@ export default {
       const s = summarizePayloadFlight(app.world, activeFlight)
       const percent = (v) => v == null ? 'Unavailable' : `${(100 * v).toFixed(1)}%`
       const report = ui.h('details', 'sc-record')
-      report.open = true
       report.append(ui.h('summary', '', `Flight ${n} · ${num(s.metres)} m`), ui.stats([
         ['m strip length', num(s.metres)], ['m² grid footprint', num(s.area_m2)],
         ['ridge cells', percent(s.ridge_share)], ['hollow cells', percent(s.hollow_share)],
@@ -140,7 +140,7 @@ export default {
 
     // Foot: speed.
     let speed = NORMAL_S, skipped = false
-    const fast = ui.button('2×', () => {
+    const fast = ui.button('2× speed', () => {
       if (skipped) return
       speed = speed === NORMAL_S ? FAST_S : NORMAL_S
       app.scout.seconds(speed)
@@ -148,7 +148,7 @@ export default {
     })
     fast.setAttribute('aria-pressed', false)
     fast.setAttribute('aria-label', 'Fly at double speed')
-    const skip = ui.button('Skip', () => { skipped = true; app.scout.seconds(SKIP_S); fast.disabled = skip.disabled = true })
+    const skip = ui.button('Finish flights', () => { skipped = true; app.scout.seconds(SKIP_S); fast.disabled = skip.disabled = true })
     skip.setAttribute('aria-label', 'Skip to the end of the flights')
     const row = ui.h('div', 'f-row')
     row.append(fast, skip)
@@ -233,7 +233,7 @@ export default {
     function drawFinds() {
       detTitle.textContent = `Detections · ${finds.length}`
       if (!finds.length) {
-        detList.replaceChildren(Object.assign(ui.h('p', 'dim'), { textContent: 'None yet. Rocks are listed here as the camera passes over them.' }))
+        detList.replaceChildren(Object.assign(ui.h('p', 'dim'), { textContent: 'Scanning for rocks…' }))
         return
       }
       const rows = finds.slice(-MAX_ROWS).reverse().map((f) => {
@@ -260,7 +260,7 @@ export default {
       if (!tick) return
       const along = Math.min(tick.along, tick.metres)
       dist.set(tick.metres ? along / tick.metres : 0)
-      distText.textContent = campaignLanded ? 'All flights landed. Review the recordings above.' : `${Math.round(along)} m of ${Math.round(tick.metres)} m`
+      distText.textContent = campaignLanded ? 'Flights complete. Your route is ready.' : `${Math.round(along)} / ${Math.round(tick.metres)} m`
       const left = batteryLeft(along)
       heli.set(0, Math.round(left * 100)); heli.set(1, Math.round(flightSeconds(along)))
       batt.set(left)
