@@ -160,10 +160,25 @@ body, h1, h2, p { margin: 0; }
 }
 
 .product:hover .go, .product:focus-visible .go { opacity: 1; transform: none; }
+.heli { position: relative; z-index: 1; }
+
+.tag {
+  margin-left: .25rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: .2em .7em;
+  color: var(--body);
+  font-size: .8rem;
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.later h2 { flex-wrap: wrap; }
 .product:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
 .product:hover .layers .l1, .product:focus-visible .layers .l1 { transform: translateY(5px); }
 .product:hover .layers .l3, .product:focus-visible .layers .l3 { transform: translateY(-5px); }
-.product:hover .heli, .product:focus-visible .heli { transform: translateY(-4px); transition: transform .35s ease; }
 
 @media (hover: none) { .go { opacity: 1; transform: none; } }
 
@@ -222,12 +237,24 @@ body, h1, h2, p { margin: 0; }
 
 @media (prefers-reduced-motion: no-preference) {
   html { scroll-behavior: smooth; }
-  /* Rotors blur in and out, out of step, while hovering Vesta Scout. */
-  .product:hover .rotor { animation: spin .18s linear infinite alternate; }
-  .product:hover .rotor.b { animation-delay: -.09s; }
+  /* Rotors blur in and out, out of step, while hovering or flying. */
+  .scout:hover .rotor, .fly .rotor { animation: spin .18s linear infinite alternate; }
+  .scout:hover .rotor.b, .fly .rotor.b { animation-delay: -.09s; }
   @keyframes spin { to { transform: scaleX(.15); } }
+
+  /* Lift off, swoop out over the description, bank round, fly back and land. */
+  .fly .heli { animation: fly 3.4s ease-in-out; }
+  @keyframes fly {
+    0% { transform: none; }
+    12% { transform: translate(0, -16px); }
+    42% { transform: translate(min(52vw, 620px), -30px) rotate(10deg); }
+    56% { transform: translate(min(60vw, 720px), -8px) rotate(-4deg) scaleX(-1); }
+    78% { transform: translate(min(26vw, 300px), -36px) rotate(8deg) scaleX(-1); }
+    92% { transform: translate(0, -14px) scaleX(-1); }
+    100% { transform: none; }
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .icon path, .icon rect, .icon ellipse, .go, .heli { transition: none; }
+  .icon path, .icon rect, .icon ellipse, .go { transition: none; }
 }
