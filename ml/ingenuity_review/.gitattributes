@@ -1,0 +1,2 @@
+# These provenance files contain byte-level hashes used by the review pack.
+*.json text eol=lf

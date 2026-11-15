@@ -175,10 +175,11 @@ z = bias + w1 × (slope ÷ slope limit, standardised) + w2 × (8 m relief, stand
 ```
 
 - **8 m relief** is how much the heights vary in the 3 × 3 cells around a cell (HiRISE terrain).
-- **The weights are fitted by a script, not chosen** (`app/scripts/belief-fit.mjs`). The script fits on the west half of the map and scores on the east half and on Jules's 22 human-reviewed rocks, the only labels not made from orbit data. Numbers: `app/scripts/belief-fit.json`.
-- **Scores today:** AUC 0.687 against the rock layer, **0.729 against the real reviewed rocks** (0.5 = guessing, 1 = perfect). Average predicted chance 2.2% against a real rate of 1.8%, so the chances are about the right size.
+- **The weights are fitted by a script** (`app/scripts/belief-fit.mjs`) on the west half of the existing DTM-plus-reviewed mask. It reports an east-half mask comparison and a development diagnostic using reviewed positive cells against unreviewed mask-zero negatives. Some reviewed positives are also in the fitted half, and this diagnostic selects the feature set. It is not an independent human test. Counts and caveats: `app/scripts/belief-fit.json`.
+- **Scores today:** AUC 0.687 against the proxy rock layer and 0.729 on that reviewed-positive/development diagnostic. Average prediction is 2.2% versus a 1.8% proxy-mask rate. Neither AUC nor matching a mean rate validates probability calibration; these are not measured probabilities of an astronaut's path being blocked.
+- **Actual human-positive sample after the slope filter:** only 3 of the 22 reviewed cells are evaluated; 2 are also in the training half. The 48,664 negative cells are unreviewed mask zeros. The diagnostic also selects among feature sets, so it cannot serve as a held-out accuracy claim.
 - **Why only two layers:** the 1 m layers (`fine_steep`, `dropoff`, Luca's `unsure`) come from the same 1 m terrain the rock estimate was built from. They predict the estimate well (unsure alone: 0.757) but **not** the real rocks (0.441, worse than guessing). Adding them gives 0.248 on real rocks. They would only echo the estimate.
-- **It updates itself:** when Jules's whole-slice ROSCO export replaces `rocks_fine`, run `node app/scripts/belief-fit.mjs` again. The weights and scores change; the app code doesn't.
+- **Refitting:** `node app/scripts/belief-fit.mjs` reproduces the current prototype. A full-slice detector run does not by itself justify replacing `rocks_fine` or calling zero detections safe. A scientific refit needs separately reviewed negatives, held-out spatial areas and calibration checks (`ml/LABEL_POLICY.md`).
 - **On the map:** grey means unlikely; red means a 10% chance or more (found rocks are full red). Labelled "Estimate".
 
 ## 13. What is real and what is simulated

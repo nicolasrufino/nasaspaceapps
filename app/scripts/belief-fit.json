@@ -1,6 +1,17 @@
 {
  "labels": "rocks_fine.u8 sha256:15ebe3865779117d (R3: DTM estimate + 23 reviewed rocks)",
  "reviewed_rock_cells": 22,
+ "validation": {
+  "status": "development_model_selection_diagnostic",
+  "calibrated_probability": false,
+  "independent_human_test": false,
+  "reviewed_positive_cells_evaluated": 3,
+  "reviewed_positive_cells_in_training": 2,
+  "negative_proxy_cells_evaluated": 48664,
+  "negative_labels": "Unreviewed zero cells in the existing mask; not human-confirmed empty ground",
+  "model_selected_on_this_diagnostic": true,
+  "calibration": "Matching the mean proxy-label rate does not establish probability calibration"
+ },
  "chosen": [
   "slope_ratio",
   "relief_8m"
