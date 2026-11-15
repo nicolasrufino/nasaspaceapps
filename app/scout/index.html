@@ -23,6 +23,13 @@
       #layers { display: grid; gap: 4px; }
       #layers label { display: flex; gap: 6px; align-items: start; }
       #layers small, #detail small, .src, figcaption { display: block; color: #cdbba8; font-size: 12px; }
+      #layers details { margin-top: 2px; }
+      #layers details summary { cursor: pointer; color: #cdbba8; }
+      #legend { left: max(12px, env(safe-area-inset-left)); bottom: max(12px, env(safe-area-inset-bottom));
+        width: min(300px, calc(100vw - min(38vmin, 260px) - 60px)); max-height: 40vh; overflow: auto; font-size: 11px; }
+      #legend ul { list-style: none; margin: 4px 0; padding: 0; display: grid; gap: 3px; }
+      #legend li { display: flex; gap: 6px; align-items: start; }
+      #legend i { flex: none; width: 14px; height: 14px; border-radius: 3px; border: 1px solid #fff4; margin-top: 1px; }
       #targets { display: grid; gap: 4px; }
       .stop { display: flex; gap: 6px; align-items: center; }
       .stop .name { flex: 1; text-align: left; }
@@ -92,6 +99,7 @@
         </div>
       </section>
     </div>
+    <div id="legend" class="panel src" hidden></div>
     <div id="minimap" class="panel">
       <canvas id="map" aria-label="Minimap of the site, north up; shaded cells are outside the walk-back ring"></canvas>
     </div>

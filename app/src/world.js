@@ -41,7 +41,6 @@ export function layerRGB(name, arr) {
   arr.forEach((v, i) => {
     if (v >= UNREACHABLE) return out.set([200, 30, 30], i * 3) // no way home from here
     const t = (v - lo) / span // dark low, pale high
-    if (name === 'best_areas') return out.set(v > 0 ? [40 + 180 * t, 90 + 165 * t, 40 + 40 * t] : [25, 20, 25], i * 3) // green = go
     if (name === 'belief') { // fixed scale: 0 grey .. 10% or more red (found rocks are 1), so contrast survives scouting
       const u = Math.min(1, v / 0.1)
       return out.set([60 + 195 * u, 55 - 25 * u, 60 - 30 * u], i * 3)
