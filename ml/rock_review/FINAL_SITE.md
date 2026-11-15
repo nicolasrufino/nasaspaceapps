@@ -120,3 +120,12 @@ bucket/radius boundaries. Rerunning the original crop reproduced its 812 pairs,
 The AI4Mars terrain classifier is for rover ground photos, not orbital HiRISE
 pixels. Its export must not replace the orbital terrain grid without a separate
 domain evaluation and agreement with Luca.
+
+## Single-acquisition continuation
+
+[ROSCO.md](ROSCO.md) continues the detector work on the same world footprint
+using a separately verified HiRISE orthophoto and the official NASA/JPL ROSCO
+native engine. Its observation-level solar geometry is now known; the mosaic's
+mixed-acquisition illumination remains unverified. The source pixels and new
+H01–H06 review record are separate from the G review above. No prior decisions
+are changed and no world hazard mask is emitted.

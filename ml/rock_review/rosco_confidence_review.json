@@ -1,0 +1,160 @@
+{
+  "source_pixel_sha256": "a1b7b945e5eacfd094f57a0206bc093280c0662fd4378a8a8ec907817beb8b36",
+  "selection": "SHA-256 of native rock coordinates, first six interior candidates",
+  "annotations": [
+    {
+      "id": "H01",
+      "detection_id": "HRC00019",
+      "status": "unreviewed",
+      "source_crop": [
+        1951,
+        5138,
+        64,
+        64
+      ],
+      "page": 1,
+      "rock_point_px": [
+        1982.5999755859375,
+        5169.89990234375
+      ],
+      "shadow_centroid_px": [
+        1986.5,
+        5170.7998046875
+      ],
+      "world_cell": [
+        62,
+        163
+      ],
+      "model_score": 1.0
+    },
+    {
+      "id": "H02",
+      "detection_id": "HRC00024",
+      "status": "unreviewed",
+      "source_crop": [
+        2856,
+        6868,
+        64,
+        64
+      ],
+      "page": 1,
+      "rock_point_px": [
+        2887.60009765625,
+        6899.7998046875
+      ],
+      "shadow_centroid_px": [
+        2890.5,
+        6900.39990234375
+      ],
+      "world_cell": [
+        91,
+        218
+      ],
+      "model_score": 0.864799976348877
+    },
+    {
+      "id": "H03",
+      "detection_id": "HRC00015",
+      "status": "unreviewed",
+      "source_crop": [
+        1813,
+        5077,
+        64,
+        64
+      ],
+      "page": 1,
+      "rock_point_px": [
+        1844.699951171875,
+        5109.10009765625
+      ],
+      "shadow_centroid_px": [
+        1846.699951171875,
+        5109.5
+      ],
+      "world_cell": [
+        58,
+        161
+      ],
+      "model_score": 0.7056999802589417
+    },
+    {
+      "id": "H04",
+      "detection_id": "HRC00001",
+      "status": "unreviewed",
+      "source_crop": [
+        7924,
+        584,
+        64,
+        64
+      ],
+      "page": 2,
+      "rock_point_px": [
+        7955.89990234375,
+        616.5
+      ],
+      "shadow_centroid_px": [
+        7957.7998046875,
+        616.9000244140625
+      ],
+      "world_cell": [
+        251,
+        19
+      ],
+      "model_score": 0.8072999715805054
+    },
+    {
+      "id": "H05",
+      "detection_id": "HRC00018",
+      "status": "unreviewed",
+      "source_crop": [
+        2138,
+        5116,
+        64,
+        64
+      ],
+      "page": 2,
+      "rock_point_px": [
+        2170.0,
+        5148.10009765625
+      ],
+      "shadow_centroid_px": [
+        2173.89990234375,
+        5149.0
+      ],
+      "world_cell": [
+        68,
+        162
+      ],
+      "model_score": 0.7447999715805054
+    },
+    {
+      "id": "H06",
+      "detection_id": "HRC00008",
+      "status": "unreviewed",
+      "source_crop": [
+        1808,
+        4835,
+        64,
+        64
+      ],
+      "page": 2,
+      "rock_point_px": [
+        1840.0999755859375,
+        4867.10009765625
+      ],
+      "shadow_centroid_px": [
+        1844.0,
+        4868.0
+      ],
+      "world_cell": [
+        58,
+        153
+      ],
+      "model_score": 0.7064999938011169
+    }
+  ],
+  "sheet_sha256": {
+    "review_1.png": "3405d0451877eea72e06ca014a1d42bbd3720953c3f087d894751370070db8a3",
+    "review_2.png": "b01b6bfa652656bb8d33d9e7b0184f8cd49964e7def83e034f1023ad78b691a6"
+  }
+}
