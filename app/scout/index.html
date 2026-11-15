@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Martian Map</title>
+    <link rel="icon" href="data:," />
     <style>
       html, body { margin: 0; height: 100%; overflow: hidden; background: #1a0f0a; color: #f3e6d8; font: 14px system-ui, sans-serif; }
       #scene { display: block; width: 100%; height: 100%; touch-action: none; }
@@ -14,6 +15,10 @@
       [role=tab] { flex: 1; }
       [role=tab][aria-selected=true] { background: #35e0ff; }
       #plan, #walk { display: grid; gap: 8px; }
+      #terrainClassifier { display: grid; gap: 8px; }
+      #terrainClassifier summary { cursor: pointer; font-weight: 600; }
+      #terrainPhoto { max-width: 100%; }
+      #terrainPreview { display: block; width: 100%; cursor: crosshair; }
       [hidden] { display: none !important; }
       #layers { display: grid; gap: 4px; }
       #layers label { display: flex; gap: 6px; align-items: start; }
