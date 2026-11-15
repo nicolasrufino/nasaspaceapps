@@ -59,7 +59,7 @@ const CSS = `
 #demoTab .row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 #demoTab code{font-size:12px;color:#e3dfd3}`
 
-// app: the hooks main.js gives the guided mission. ui: { setLayer(name), contours(on), counts: { blocked, reviewed }, validation }
+// app: the hooks main.js gives the guided mission. ui: { setLayer(name), contours(on), counts: { blocked, reviewed }, validation, droneScale }
 export function initDemo(app, ui) {
   const style = Object.assign(document.createElement('style'), { textContent: CSS })
   const card = Object.assign(document.createElement('div'), { id: 'demoCard', hidden: true })
@@ -176,10 +176,10 @@ ${sources.length ? `<div class="src">Sources: ${sources.map(link).join(' · ')}<
       async (i, N) => { map('hazards'); r0 ??= app.route()
         if (!flown && app.scout.left() > 0) { // fly once; coming back here later shows the result
           const flying = (n) => show(i, N, 'Scout · Jules', `Flight ${n} of ${app.MAX_FLIGHTS}`,
-            `<p>A simulated helicopter checks the route for hidden rocks before anyone walks.</p>`, ['skyfall'])
+            `<p>A simulated helicopter checks the route for hidden rocks before anyone walks.${ui.droneScale > 1 ? ` Drawn ${ui.droneScale}× its real 1.1 m size.` : ''}</p>`, ['skyfall'])
           flying(app.scout.used() + 1)
           const offStart = app.on('flight:start', ({ n }) => { if (my === run) flying(n) })
-          app.scout.seconds(6)
+          app.scout.seconds(8)
           const landed = once('landed', 90000)
           app.scout.start() // one press flies every flight the route needs, up to the limit
           const d = await landed

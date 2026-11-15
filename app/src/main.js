@@ -300,8 +300,9 @@ function tickView(dt) {
     }
     camera.rotation.set(view.pitch, view.yaw, 0, 'YXZ')
   } else if (flight) {
-    controls.target.lerp(heli.position, 1 - Math.exp(-dt * 3)) // watch the helicopter
-    if (flight.zoom > 0) { // ease in close at take-off (a 1.2 m helicopter is invisible from far); then the user's zoom is theirs
+    controls.target.lerp(heli.position, demoMode ? 1 : 1 - Math.exp(-dt * 3)) // watch the helicopter (the demo's flights are fast: stay on it)
+    if (flight.zoom > 0 || demoMode) { // the demo keeps the chase for the whole flight
+      // ease in close at take-off (a 1.2 m helicopter is invisible from far); then the user's zoom is theirs
       const dt = frameElapsed // real time, so a slow renderer still gets there
       flight.zoom -= dt
       const off = camera.position.clone().sub(controls.target)
@@ -697,13 +698,17 @@ function makeHeli() {
   return g
 }
 const heli = makeHeli()
-const CHASE_M = 14 // camera distance while it follows a flight
+const CHASE_M = demoMode ? 30 : 14 // camera distance while it follows a flight
+// Demo: the 1.1 m helicopter is drawn 5 times its size while it flies, so it can be seen from the chase camera.
+// Drawn size only: the flight path, the scan strip and what it finds are unchanged. The caption says so.
+const DRONE_SHOW = demoMode ? 5 : 1
 // Three helicopters, as in NASA's SkyFall concept; parked beside the habitat between flights. One flies at a time.
 const padAt = (k) => { const x = habitat.position.x + 11 + k * 3, z = habitat.position.z + 5 - k * 2.5; return new THREE.Vector3(x, groundAt(x, z), z) }
 const parked = [1, 2].map((k) => { const h = makeHelicopter(); h.position.copy(padAt(k)); scene.add(h); return h })
 function parkHeli() {
   heli.position.copy(padAt(0))
   heli.rotation.set(0, 0, 0)
+  heli.scale.setScalar(1)
   heli.userData.beam.visible = false
   heli.visible = true
 }
@@ -719,8 +724,9 @@ function placeHeli(h, [x, y], alt = ALT) {
   const dx = to.x - h.position.x, dz = to.z - h.position.z
   if (dx * dx + dz * dz > 1e-4) h.rotation.set(0.12, Math.atan2(dx, dz), 0, 'YXZ') // nose along the track, tilted forward a little
   h.position.copy(to)
-  h.userData.beam.scale.y = alt / ALT // the scan cone always reaches the ground
-  h.userData.beam.position.y = -alt / 2
+  const S = h.scale.x // the cone keeps its real size when the helicopter is drawn larger
+  h.userData.beam.scale.set(1 / S, alt / ALT / S, 1 / S) // the scan cone always reaches the ground
+  h.userData.beam.position.y = -alt / 2 / S
 }
 const dotPos = new Float32Array(W * H * 3)
 const dotCol = new Float32Array(W * H * 3)
@@ -789,6 +795,7 @@ async function startNextFlight() {
     flight.along = 0
     emit('flight:start', { n: flightsUsed + 1, of: MAX_FLIGHTS, metres: next.metres, waypoints: next.waypoints, kind: next.kind })
     flight.zoom = 3 // seconds of easing the camera in
+    heli.scale.setScalar(DRONE_SHOW)
     flight.camOff ??= camera.position.clone().sub(controls.target) // put back after the last landing
     heli.userData.beam.visible = heli.visible = heliIcon.visible = scanDots.visible = true
   }
@@ -805,7 +812,7 @@ function tickFlight(dt) {
   const climb = Math.min(1, flight.along / 20, (f.metres - flight.along) / 20) // take off and land over 20 m (drawn only; the scan is unchanged)
   placeHeli(heli, pointAlong(meta, f.waypoints, flight.along) ?? f.waypoints.at(-1), Math.max(0.3, ALT * climb))
   heliIcon.position.copy(heli.position)
-  heliIcon.visible = camera.position.distanceTo(heli.position) > 60 // close up, show the helicopter itself, not its map icon
+  heliIcon.visible = camera.position.distanceTo(heli.position) > 60 * DRONE_SHOW // close up, show the helicopter itself, not its map icon
   revealShared.uHeli.value.set(heli.position.x, heli.position.z, 4 + ((performance.now() / 60) % 16))
   if (fresh.length) render()
   $('scoutStatus').textContent = `Flight ${flightsUsed + 1} of ${MAX_FLIGHTS} (${f.kind}) · ${flight.found} rock cells found · ` +
@@ -1052,6 +1059,7 @@ if (flowMode) initFlow(app)
 else if (demoMode) { // one mission played through with captions, on the real hooks above
   initDemo(app, { setLayer: (n) => { if (n !== IMAGERY || imageryRGB) setLayer(n); render() },
     contours: (on) => { if ($('contours')) $('contours').checked = on; revealShared.uContour.value = on && view.mode === 'map' ? 1 : 0 },
+    droneScale: DRONE_SHOW,
     counts: { blocked: crossings?.crossings.length ?? 0, reviewed: reviewedRocks?.points.length ?? 0 },
     validation: await optionalJSON('validation.json', null) })
 }
