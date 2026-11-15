@@ -73,5 +73,7 @@ test('real WASM inference matches CPU reference; invalid files and failed loads 
   await choosePhoto(page, 128)
   await expect(page.locator('#terrainStatus')).toContainText('at least 256')
   await expect(page.locator('#terrainResult')).toBeEmpty()
+  await expect.poll(() => logits.length).toBe(2)
   expect(errors).toEqual([])
+  await page.goto('about:blank') // exercises pagehide worker cleanup before browser teardown
 })

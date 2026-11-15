@@ -23,6 +23,7 @@ export function initTerrainClassifier(panel) {
   const status = $('terrainStatus'), result = $('terrainResult'), cropLabel = $('terrainCrop')
   const context = preview.getContext('2d')
   let photo, crop, version = 0, busy = false, runner
+  addEventListener('pagehide', () => runner?.dispose())
   const clearResult = () => { result.replaceChildren(); status.textContent = '' }
   function draw() {
     clearResult()

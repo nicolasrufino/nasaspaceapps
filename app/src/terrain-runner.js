@@ -7,6 +7,7 @@ export function createTerrainRunner() {
     if (pending) { clearTimeout(pending.timer); pending.reject(error); pending = null }
   }
   return {
+    dispose() { reset(new Error('Analysis closed.')) },
     run(tensor) {
       if (pending) return Promise.reject(new Error('An analysis is already running.'))
       return new Promise((resolve, reject) => {
@@ -15,6 +16,7 @@ export function createTerrainRunner() {
           pending = { resolve, reject, timer: setTimeout(() => reset(new Error('Analysis timed out. Try again.')), 90000) }
           worker.onerror = (event) => { event.preventDefault(); reset(new Error('Could not start the model. Check your connection and try again.')) }
           worker.onmessage = ({ data }) => {
+            if (!pending) return
             if (data.error) { reset(new Error(data.error)); return }
             clearTimeout(pending.timer)
             const { resolve } = pending
