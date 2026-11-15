@@ -217,7 +217,7 @@ The base must always work; every feature sits behind a flag and can be turned of
 
 **Features (flags):** `drone_scout` (the helicopter scout), `why_route`, `export`, `packing_list`, `map_grows`, `layers_extra` (thermal, spectral, radiation), `pov_images`, `science_stop`, `step_mode`, `buddy_scripted`, `buddy_rl`, `override`, `rideback_ring`, `storm`, `classifier`, `capcom`, `debrief`, `before_after`.
 
-`scout_payload` (S4, #169): opt-in with `/scout/?scout_payload=1`; reads the switch in the guided scout stage because `?flags=` selects Vision. SkyFall payload reference, historical REMS context, and per-flight strip reports; off on the bare URL. See `app/README.md`.
+`scout_payload` (S4, #169): on by default since 2026-11-15; `/scout/?scout_payload=0` hides it; reads the switch in the guided scout stage because `?flags=` selects Vision. SkyFall payload reference, historical REMS context, and per-flight strip reports; off on the bare URL. See `app/README.md`.
 
 `classifier`: M2 R4 → E6 integration, opt-in in the Walk view. Choose a ground photo and a 256-pixel crop;
 the retained ONNX model predicts its dominant surface locally. Not validated on helicopter images;

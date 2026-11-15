@@ -8,7 +8,12 @@ export const SKYFALL_SOURCE = 'https://science.nasa.gov/wp-content/uploads/2026/
 export const CAMERA_FOOTPRINT_M = 2 * 10 * Math.tan(53 * Math.PI / 180)
 
 // A stage-local switch: ?flags= selects the legacy Vision UI in main.js.
-export const scoutPayloadEnabled = (search) => new URLSearchParams(search).get('scout_payload') === '1'
+// On by default (decided 2026-11-15, Nicolas): judges open bare /scout/. ?scout_payload=0 or ?off=scout_payload hides it.
+export const scoutPayloadEnabled = (search) => {
+  const q = new URLSearchParams(search)
+  if (['0', 'false'].includes(q.get('scout_payload'))) return false
+  return !(q.get('off') ?? '').split(',').includes('scout_payload')
+}
 
 export function summarizePayloadFlight(world, flight) {
   const { meta, layers } = world
