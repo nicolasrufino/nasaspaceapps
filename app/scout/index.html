@@ -84,6 +84,80 @@
         #layers input[type=checkbox] { accent-color: #35e0ff; width: 16px; height: 16px; flex: none; }
         #layers details summary { padding: 6px 10px; font-size: 12px; }
       }
+      /* Vesta Vision menu, second pass: frosted panels, an iOS-style grouped list with icons and a check mark,
+         a switch for Contours, Material-style pressed states. Styling only. */
+      .panel { background: #10161dcc; -webkit-backdrop-filter: blur(22px) saturate(1.5); backdrop-filter: blur(22px) saturate(1.5);
+        border: 1px solid #ffffff1f; border-radius: 18px; padding: 14px; box-shadow: 0 12px 40px #0008, inset 0 1px 0 #ffffff14; }
+      #title { font-size: 12px; font-weight: 500; color: #a9b7c6; letter-spacing: .01em; }
+      #hud [role=tablist] { background: #00000059; border-radius: 12px; padding: 3px; box-shadow: inset 0 1px 2px #0006; }
+      #hud [role=tab] { border-radius: 9px; min-height: 38px; font-size: 14px; transition: background .18s, color .18s, transform .08s; }
+      #hud [role=tab][aria-selected=true] { background: #f4f7fa; color: #0c1319; box-shadow: 0 1px 3px #0007; }
+      #hud button { transition: background .15s, transform .08s, box-shadow .15s; }
+      #hud button:active { transform: scale(.97); }
+      #hud button:focus-visible, #layers label:has(:focus-visible) { outline: 2px solid #35e0ff; outline-offset: 2px; }
+      #hud [role=tab]:focus:not(:focus-visible) { outline: none; }
+      #hud #scout, #hud #play { border-radius: 999px; padding: 0 18px; min-height: 40px; box-shadow: 0 4px 14px #35e0ff40; }
+      #hud #scout::before { content: ""; display: inline-block; margin-right: 8px; border-left: 8px solid currentColor;
+        border-top: 5px solid transparent; border-bottom: 5px solid transparent; } /* drawn, not text: the button's name stays "Fly the route" */
+      #hud h2 { margin-top: 2px; padding-left: 4px; }
+      @media (min-width: 601px) {
+        #hud { max-height: min(78vh, 760px); }
+        #layers { gap: 0; background: #ffffff0f; border-radius: 14px; overflow: hidden; border: 1px solid #ffffff14; }
+        #layers label { position: relative; border-left: 0; border-radius: 0; padding: 10px 12px; gap: 12px; min-height: 28px; }
+        #layers > label + label, #layers > details { border-top: 1px solid #ffffff14; }
+        #layers label:has(input[type=radio]:checked) { background: #35e0ff1a; }
+        #layers label::before { content: ""; flex: none; width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center;
+          font-size: 15px; color: #fff; background: #5b6b7c; align-self: start; }
+        #layers label:has(input[value=imagery])::before { content: "\25A3\FE0E"; background: linear-gradient(135deg, #c98a5a, #8a4f2c); }
+        #layers label:has(input[value=hazards])::before { content: "\26A0\FE0E"; background: linear-gradient(135deg, #ff6b5e, #d8362b); }
+        #layers label:has(input[value=cost_to_go])::before { content: "\26A1\FE0E"; background: linear-gradient(135deg, #ffc247, #f08a00); }
+        #layers label:has(input[value=science])::before { content: "\25C8\FE0E"; background: linear-gradient(135deg, #5ad1a0, #1f9c6b); }
+        #layers label:has(input[value=dose_rate])::before { content: "\2622\FE0E"; background: linear-gradient(135deg, #b98cff, #7a4fe0); }
+        #layers label:has(#contours)::before { content: "\2248\FE0E"; background: linear-gradient(135deg, #7fb2ff, #3b78e0); }
+        #layers label > span { flex: 1; min-width: 0; align-self: center; }
+        #layers label:has(input[type=radio]:checked)::after { content: "\2713"; color: #35e0ff; font-weight: 800; font-size: 16px; align-self: center; }
+        #layers #contours { order: 3; appearance: none; -webkit-appearance: none; width: 42px; height: 26px; border-radius: 999px; background: #ffffff2e;
+          position: relative; cursor: pointer; transition: background .2s; margin: 0; }
+        #layers #contours::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff;
+          box-shadow: 0 1px 3px #0008; transition: transform .2s; }
+        #layers #contours:checked { background: #34c759; }
+        #layers #contours:checked::after { transform: translateX(16px); }
+        #layers details label::before { width: 8px; height: 8px; border-radius: 50%; align-self: center; margin: 0 10px; }
+        #layers details summary { padding: 10px 14px; color: #a9b7c6; }
+      }
+      @media (prefers-reduced-motion: reduce) { #hud button, #hud [role=tab], #layers #contours, #layers #contours::after { transition: none; } }
+      /* Vesta Vision menu, third pass: information in levels (title, route numbers, the walk as steps) and texture. */
+      .panel { background-color: #10161dcc; background-image: linear-gradient(180deg, #ffffff14, #ffffff00 120px),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"); }
+      #title { display: grid; gap: 4px; justify-items: start; }
+      #title .t-brand { font-size: 20px; font-weight: 700; color: #fff; letter-spacing: -.01em; line-height: 1.1; }
+      #title .t-site { font-size: 13px; font-weight: 500; color: #c9d3de; }
+      #title .t-chip { font-size: 11px; font-weight: 600; color: #ffd9a0; background: #ffb02e24; border: 1px solid #ffb02e55; border-radius: 999px; padding: 3px 9px; margin-top: 2px; }
+      #title .t-tech { font: 500 10px ui-monospace, SFMono-Regular, Menlo, monospace; color: #7f90a2; letter-spacing: .04em; }
+      #hud h2 { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+      #hud h2::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, #ffffff26, #ffffff00); }
+      #layers label:has(:focus-visible) { outline: none; background: #ffffff14; }
+      #route { display: grid; gap: 10px; }
+      #route .r-stats { display: grid; grid-template-columns: 1.5fr 1fr .8fr; gap: 6px; }
+      #route .r-stat { background: #ffffff0f; border: 1px solid #ffffff14; border-radius: 12px; padding: 8px 10px; font-size: 11px; color: #9fb0c0; line-height: 1.25; }
+      #route .r-stat b { display: block; font-size: 17px; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; }
+      #route .r-path { list-style: none; margin: 0; padding: 0 0 0 4px; display: grid; }
+      #route .r-path li { position: relative; padding: 4px 0 4px 22px; font-size: 13px; color: #dfe7ee; }
+      #route .r-path li::before { content: ""; position: absolute; left: 3px; top: 50%; width: 9px; height: 9px; margin-top: -5px; border-radius: 50%; background: #ffd23f; box-shadow: 0 0 0 3px #ffd23f2e; }
+      #route .r-path li::after { content: ""; position: absolute; left: 7px; top: 50%; bottom: -50%; width: 1px; background: #ffffff33; }
+      #route .r-path li:last-child::after { display: none; }
+      #route .r-path li:first-child, #route .r-path li:last-child { color: #9fb0c0; font-size: 12px; }
+      #route .r-path li:first-child::before, #route .r-path li:last-child::before { background: #fff; box-shadow: 0 0 0 3px #ffffff26; }
+      #targets { gap: 0; background: #ffffff0f; border: 1px solid #ffffff14; border-radius: 14px; overflow: hidden; }
+      #targets .stop { padding: 4px 10px; gap: 10px; }
+      #targets .stop + .stop { border-top: 1px solid #ffffff14; }
+      #targets .stop input[type=checkbox] { accent-color: #ffd23f; width: 16px; height: 16px; flex: none; }
+      #hud #targets .stop button.name { background: transparent; padding: 6px 0; font-weight: 500; }
+      #hud #targets .stop button.name[aria-pressed=true] { background: transparent; color: #ffd23f; }
+      .src { font-size: 11px; line-height: 1.35; }
+      #whyTable { font-size: 11px; }
+      #whyTable th { color: #8fa1b3; font-size: 10px; letter-spacing: .06em; text-transform: uppercase; padding-bottom: 4px; }
+      #whyTable td { padding: 3px 6px 3px 0; border-top: 1px solid #ffffff12; font-variant-numeric: tabular-nums; }
       /* Phones (ticket F8): view picker as chips without the source lines (they stay in the legend and on wide screens), 44 px buttons. */
       @media (max-width: 600px) {
         #hud { max-height: 44vh; }
