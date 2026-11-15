@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { loadWorld, layerRGB, sourceLabel } from './world.js'
 import { startWalk, stepTo, ringMask, ringLimit, appState, oxygenL } from './walk.js'
+import { createPlaybackClock } from './playback.js'
 import { planTour, MAX_STOPS } from './plan.js'
 import { mountFlightLog } from './scout-why.js'
 import { createVoiSelector } from './scout-voi-client.js'
@@ -18,6 +19,7 @@ import { initSteps } from './steps.js'
 import { initTerrainClassifier } from './terrain-classifier.js'
 import { explainFlight, flightText } from './scout-why.js'
 import { initFlow } from './flow/flow.js'
+import { initHud, nextStop, bearingDeg } from './hud.js'
 
 const $ = (id) => document.getElementById(id)
 const params = new URLSearchParams(location.search)
@@ -86,6 +88,7 @@ tint.magFilter = THREE.LinearFilter
 const mutedLook = flags.has('drone_scout') && !!layers.rocks_fine && !!meta.detail_tiles?.url // unflown ground is muted
 const revealShared = { uTint: { value: tint }, uCells: { value: new THREE.Vector2(cs, W) }, uMuted: { value: mutedLook ? 1 : 0 },
   uHeli: { value: new THREE.Vector3(0, 0, 0) }, // uHeli: x, z of the helicopter and the scan ring's radius (0 = off)
+  uScanColor: { value: flowMode ? new THREE.Color('#e3dfd3') : new THREE.Vector3(0.15, 0.85, 1.0) },
   uContour: { value: 0 }, uContourBase: { value: meta.height_offset_m ?? 0 } } // contour lines (ticket A7, flag contours)
 const terrainMat = terrainMaterial(revealShared)
 const terrain = new THREE.Mesh(geo, terrainMat)
@@ -113,7 +116,7 @@ const pins = new THREE.Group() // science stops, rebuilt when the plan changes
 scene.add(pins)
 const walker = makeAstronaut()
 scene.add(walker)
-const walkerIcon = icon('#35e0ff')
+const walkerIcon = icon(flowMode ? '#e3dfd3' : '#35e0ff')
 scene.add(walkerIcon)
 const walkerGoal = cellPos(meta.base_cell) // where the walk logic says the astronaut is; the figure glides there
 const altLine = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineDashedMaterial({ color: 0xd0d0d0, dashSize: span / 120, gapSize: span / 120 }))
@@ -178,15 +181,28 @@ for (const [text, id] of [['Walk / pause', 'play'], ['Step', 'step'], ['Back to 
   visionBar.append(b)
 }
 document.body.append(viewBtn, visionNote, visionBar)
+// Helmet HUD (issue #41, flag hud or ?hud; off by default): drawn over the Follow and Eye views. hud.js only draws.
+const hud = flags.has('hud') || params.has('hud') ? initHud() : null
+const lookDir = new THREE.Vector3()
+const hudState = () => {
+  camera.getWorldDirection(lookDir)
+  const s = window.appState, usable = meta.energy_budget_j - s.reserve_j
+  return { heading: bearingDeg(lookDir.x, lookDir.z), pos: [walker.position.x, walker.position.z], cs,
+    next: nextStop(route, k, allStops(), cs), home: [meta.base_cell[0] * cs, meta.base_cell[1] * cs],
+    marginJ: ringLimit(meta, walk) - s.cost_to_go_j, usableJ: usable, energyJ: walk.energy_left_j, budgetJ: meta.energy_budget_j,
+    o2L: oxygenL(meta, walk.energy_left_j), t: walk.t }
+}
 const heading = () => { // where the astronaut is going: along the route from where they stand
-  const k = route?.cells.findIndex(([x, y]) => x === walk.cell[0] && y === walk.cell[1]) ?? -1
-  const next = route?.cells[k + 1] ?? route?.cells[1]
-  return next ? Math.atan2(-(next[0] - walk.cell[0]), -(next[1] - walk.cell[1])) : 0
+  const from = route?.cells[k + 1] ? walk.cell : route?.cells[k - 1]
+  const next = route?.cells[k + 1] ?? walk.cell
+  return from && next ? Math.atan2(-(next[0] - from[0]), -(next[1] - from[1])) : 0
 }
 function setView(mode) {
   view.mode = mode
   viewBtn.textContent = { map: 'View: Map', follow: 'View: Follow', eye: 'View: Eye level' }[mode]
   visionNote.hidden = visionBar.hidden = mode === 'map'
+  hud?.show(mode !== 'map')
+  if (hud) visionNote.hidden = true // the HUD replaces the note
   document.querySelectorAll('.panel').forEach((el) => (el.style.display = mode === 'map' ? '' : 'none'))
   furniture.el.style.display = mode === 'map' ? 'flex' : 'none'
   controls.enabled = mode !== 'eye'
@@ -268,19 +284,28 @@ function tickIntro(dt) {
 let lastFrame = performance.now()
 let frameElapsed = 0
 let lastTiles = 0
+const walkClock = createPlaybackClock()
+let lastWalkFrame = lastFrame
+// Background tabs suspend rendering: resuming must not spend the whole hidden interval walking.
+document.addEventListener('visibilitychange', () => { lastWalkFrame = performance.now() })
 renderer.setAnimationLoop((now) => {
   const elapsed = Math.max(0, (now - lastFrame) / 1000)
   const dt = Math.min(elapsed, 0.1) // smooth camera/character motion, not the flight clock
   frameElapsed = Math.min(elapsed, 1)
   lastFrame = now
   if (flight?.active) tickFlight(elapsed) // spatial scanning retains every crossed sample, even on a slow frame
-  walker.position.lerp(walkerGoal, 1 - Math.exp(-dt * 6))
+  const walkElapsed = Math.max(0, now - lastWalkFrame)
+  lastWalkFrame = now
+  if (!document.hidden && walkClock.tick(walkElapsed, advanceWalk)) render()
+  // Exponential easing already handles a long frame; clamping its time made the figure lag behind the route.
+  walker.position.lerp(walkerGoal, 1 - Math.exp(-elapsed * 6))
   walker.position.y = groundAt(walker.position.x, walker.position.z)
   if (walkerGoal.distanceToSquared(walker.position) > 0.01) walker.rotation.y = Math.atan2(-(walkerGoal.x - walker.position.x), -(walkerGoal.z - walker.position.z))
   walkerIcon.position.set(walker.position.x, walker.position.y + 3, walker.position.z)
   baseMarker.position.set(habitat.position.x, habitat.position.y + 12, habitat.position.z)
   if (intro) tickIntro(dt)
   tickView(dt)
+  hud?.tick(hudState)
   furniture.update(camera, controls, innerHeight)
   if (tiles && now - lastTiles > 500) {
     lastTiles = now
@@ -600,7 +625,7 @@ const ALT = 10 // flying height above the ground, metres (knob; docs/DECISION-BR
 function makeHeli() {
   const g = makeHelicopter()
   const beam = new THREE.Mesh(new THREE.ConeGeometry(15, ALT, 24, 1, true), // 15 m = SWATH_M
-    new THREE.MeshBasicMaterial({ color: 0x35e0ff, transparent: true, opacity: 0.14, side: THREE.DoubleSide, depthWrite: false }))
+    new THREE.MeshBasicMaterial({ color: flowMode ? 0xe3dfd3 : 0x35e0ff, transparent: true, opacity: 0.14, side: THREE.DoubleSide, depthWrite: false }))
   beam.position.y = -ALT / 2
   g.add(beam)
   g.userData.beam = beam
@@ -622,7 +647,7 @@ parkHeli()
 setInterval(() => { // keep the parked ones on the ground as the 1 m tiles load under them
   for (const h of flight ? parked : [heli, ...parked]) h.position.y = groundAt(h.position.x, h.position.z)
 }, 500)
-const heliIcon = icon('#ffffff', { ring: '#35e0ff', label: '✈' })
+const heliIcon = icon('#ffffff', { ring: flowMode ? '#e3dfd3' : '#35e0ff', label: '✈' })
 heliIcon.visible = false
 scene.add(heliIcon)
 function placeHeli(h, [x, y], alt = ALT) {
@@ -635,6 +660,7 @@ function placeHeli(h, [x, y], alt = ALT) {
 }
 const dotPos = new Float32Array(W * H * 3)
 const dotCol = new Float32Array(W * H * 3)
+const scanDotColor = flowMode ? new THREE.Color('#c5a065').toArray() : [1, 0.2, 0.15]
 const dotsGeo = new THREE.BufferGeometry()
 dotsGeo.setAttribute('position', new THREE.BufferAttribute(dotPos, 3))
 dotsGeo.setAttribute('color', new THREE.BufferAttribute(dotCol, 3))
@@ -653,7 +679,7 @@ function reveal(fresh) {
     if (layers.cost_to_go_scouted) ctg[i] = layers.cost_to_go_scouted[i]
     if (!rock) continue // clear ground shows by turning to full colour (the discover look); only rocks get a dot
     dotPos.set([(i % W) * cs, layers.height[i] + 0.5, Math.floor(i / W) * cs], dots * 3)
-    dotCol.set([1, 0.2, 0.15], dots * 3)
+    dotCol.set(scanDotColor, dots * 3)
     dots++
   }
   if (fresh.length) {
@@ -759,8 +785,7 @@ function land() {
 }
 
 // --- Walk (block E2): along the planned route, energy and oxygen drain, ring, point of no return. ---
-let walk, k, timer
-let walkMs = 120 // playback: milliseconds per 8 m step
+let walk, k
 // Block E6 (flags science_stop, step_mode): stop checklist, markers, warnings, walk log; real steps. Off: null.
 const field = flowMode ? null : (flags.has('science_stop') || flags.has('step_mode')) // the mission's walk preview has no checklists to stop it
   ? initStops({ world, checklist: flags.has('science_stop'), flags, photos, scene, pin, cellPos, span, getWalk: () => walk, panel: $('walk'), map })
@@ -769,6 +794,7 @@ const steps = flowMode ? null : flags.has('step_mode')
   ? initSteps({ panel: $('walk'), cs, segment: () => (k < route.cells.length - 1 ? [route.cells[k], route.cells[k + 1]] : null), blocked: () => !!field?.blocking(), step })
   : null
 function reset() {
+  walkClock.reset()
   pause()
   walk = startWalk(meta)
   k = 0
@@ -776,47 +802,74 @@ function reset() {
   document.body.classList.remove('danger')
   drawStops()
   render()
+  snapWalker()
+}
+
+// Called once per crossed cell, including on slow frames; render() is batched by the animation loop.
+function advanceWalk() {
+  if (flight || k >= route.cells.length - 1 || walk.energy_left_j <= 0 || field?.blocking()) { pause(); return false }
+  if (stepTo(world, walk, route.cells[++k])) buzz()
+  rememberGround()
+  if (field?.arrive(k)) pause()
+  emit('walk:step', { k }) // the guided Visit step can pause exactly here, before the next cell
+  if (k >= route.cells.length - 1 || walk.energy_left_j <= 0) pause()
+  return walkClock.playing
 }
 
 function step() {
   if (flight) return
-  if (k >= route.cells.length - 1 || walk.energy_left_j <= 0 || field?.blocking()) return pause()
-  if (stepTo(world, walk, route.cells[++k])) buzz()
-  if (field?.arrive(k)) pause()
+  advanceWalk()
   render()
 }
 
 function play() {
   if (flight) return
   unlockAudio()
-  timer ??= setInterval(step, walkMs)
+  if (!walkClock.playing) lastWalkFrame = performance.now()
+  walkClock.play()
   $('play').textContent = 'Pause'
 }
 function pause() {
-  clearInterval(timer)
-  timer = undefined
+  walkClock.pause()
   $('play').textContent = 'Walk'
+}
+
+// Reset/seek are jumps, not a flight across the intervening terrain. Keep the chase camera's offset.
+function snapWalker() {
+  const previous = walker.position.clone()
+  walker.position.copy(walkerGoal)
+  walker.position.y = groundAt(walker.position.x, walker.position.z)
+  walker.rotation.y = heading()
+  if (view.mode === 'follow') {
+    camera.position.add(walker.position.clone().sub(previous))
+    controls.target.copy(walker.position).y += EYE_M
+  }
+  lastHead.copy(walker.position).y += EYE_M
 }
 
 // Ground the crew already knows first-hand: within 60 m of the habitat. Drawn in full colour from the start.
 const nearHome = Uint8Array.from({ length: W * H }, (_, i) => Math.hypot((i % W) - meta.base_cell[0], Math.floor(i / W) - meta.base_cell[1]) * cs <= 60)
 
-function render() {
-  const inside = ringMask(ctg, ringLimit(meta, walk))
+function rememberGround() {
   for (let dy = -3; dy <= 3; dy++) for (let dx = -3; dx <= 3; dx++) { // the astronaut sees the ground around them first-hand
     const x = walk.cell[0] + dx, y = walk.cell[1] + dy
     if (x >= 0 && y >= 0 && x < W && y < H && dx * dx + dy * dy <= 9) nearHome[y * W + x] = 1
   }
+}
+
+function render() {
+  const inside = ringMask(ctg, ringLimit(meta, walk))
+  rememberGround()
   const vertexBase = layerName === IMAGERY ? WHITE : layerColors // the image itself carries the colour in the Imagery view
   for (let i = 0; i < W * H; i++) {
     const f = inside[i] ? 1 : 0.45
-    if (rockSeen(i)) colors.array.set([200, 35, 35], i * 3)
+    if (rockSeen(i)) colors.array.set(flowMode ? [197, 160, 101] : [200, 35, 35], i * 3)
     else for (let c = 0; c < 3; c++) colors.array[i * 3 + c] = vertexBase[i * 3 + c] * f
     tint.image.data.set([colors.array[i * 3], colors.array[i * 3 + 1], colors.array[i * 3 + 2], scanned[i] || nearHome[i] ? 255 : 0], i * 4)
   }
   colors.needsUpdate = tint.needsUpdate = true
   walkerGoal.copy(cellPos(walk.cell))
-  paintMinimap(inside)
+  if (!flowMode) paintMinimap(inside) // the guided mission draws its own map; this canvas is hidden
 
   const s = appState(world, walk)
   if (steps?.live) s.mode = 'step'
@@ -849,7 +902,7 @@ function buzz() {
   osc.stop(audio.currentTime + 0.4)
 }
 
-$('play').onclick = () => (timer ? pause() : play())
+$('play').onclick = () => (walkClock.playing ? pause() : play())
 $('step').onclick = () => (unlockAudio(), step())
 $('reset').onclick = reset
 replan()
@@ -915,9 +968,9 @@ const app = {
     },
     swathM: SWATH_M, flightM: FLIGHT_M,
   },
-  walk: { play, pause, reset, step, playing: () => !!timer,
-    speed(ms) { walkMs = ms; if (timer) { pause(); play() } }, // milliseconds per 8 m step (120 = normal)
-    seek(n) { const on = !!timer; reset(); while (k < Math.min(n, route.cells.length - 1)) stepTo(world, walk, route.cells[++k]); render(); if (on) play() }, // jump to step n
+  walk: { play, pause, reset, step, playing: () => walkClock.playing,
+    speed: (ms) => walkClock.speed(ms), // milliseconds per grid step (120 = normal)
+    seek(n) { const on = walkClock.playing; reset(); while (k < Math.min(n, route.cells.length - 1)) stepTo(world, walk, route.cells[++k]); render(); snapWalker(); if (on) play() }, // jump to step n
     state: () => ({ k, of: route.cells.length - 1, energy_left_j: walk.energy_left_j }) },
   // Cameras: 'habitat' (third person beside the astronaut and the habitat), 'walker' (behind the astronaut), 'map'.
   camera(mode) {

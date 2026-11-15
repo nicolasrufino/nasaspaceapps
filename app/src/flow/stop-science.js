@@ -60,7 +60,7 @@ export function stopSteps(cells, order, stops) {
 
 const CSS = `
 .ss-task { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-top: 1px solid var(--panel2); }
-.ss-task button { all: unset; cursor: pointer; flex: none; width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--mute); display: grid; place-items: center; font-weight: 700; font-size: 13px; }
+.ss-task button { all: unset; box-sizing: border-box; cursor: pointer; flex: none; width: 44px; height: 44px; border-radius: 8px; border: 2px solid var(--mute); display: grid; place-items: center; font-weight: 700; font-size: 16px; }
 .ss-task button[aria-pressed=true] { background: var(--stop); border-color: var(--stop); color: var(--ink); }
 .ss-task .t { flex: 1; min-width: 0; } .ss-task .t small { display: block; color: var(--mute); font-size: 12px; }
 .ss-task .t .r { display: block; margin-top: 4px; font-size: 13px; } .ss-task .t .r:empty { display: none; }
@@ -81,13 +81,14 @@ export function createStopScience(ui, app, data) {
   const log = (app.scienceLog = [])
   let yieldData = null // S6's numbers (ml/pitch_metrics/science_yield.py, world-side copy); the lines hide without it
   json('science_yield.json').then((y) => (yieldData = y))
-  let samples = 0, lastK = 0, steps = [], seen = new Set(), comparedShown = false
+  let samples = 0, lastK = 0, steps = [], seen = new Set(), comparedShown = false, resume = null
   const txt = (tag, text, cls = '') => Object.assign(ui.h(tag, cls), { textContent: text })
 
   function reset() {
     steps = stopSteps(app.route().cells, app.route().stops, app.stops())
     log.length = 0
     samples = 0; lastK = 0; seen = new Set(); comparedShown = false
+    resume = null
     el.replaceChildren()
   }
 
@@ -133,6 +134,7 @@ export function createStopScience(ui, app, data) {
   }
 
   function open(entry, onDone) {
+    resume = onDone
     const { stop } = entry, rec = recOf(stop.id)
     const row = { target_id: stop.id, tasks_done: [], minutes: 0, dose_ugy: 0 }
     log.push(row)
@@ -163,11 +165,19 @@ export function createStopScience(ui, app, data) {
       r.append(box, body, txt('span', `${t.min} min`, 'm'))
       list.append(r)
     }
-    const go = ui.button('Carry on walking', () => { el.replaceChildren(...[...el.children].filter((c) => c.classList.contains('ss-card'))); onDone() }, true)
+    const go = ui.button('Carry on walking', proceed, true)
     sec.append(time, bar.el, warn, list, go)
     el.replaceChildren(sec, ...[...el.children].filter((c) => c.classList.contains('ss-card')))
     redraw()
     el.scrollIntoView?.({ block: 'start', behavior: 'smooth' })
+  }
+
+  function proceed() {
+    if (!resume) return
+    const onDone = resume
+    resume = null
+    el.replaceChildren(...[...el.children].filter((c) => c.classList.contains('ss-card')))
+    onDone()
   }
 
   // The Science log, shown when the walk is back at the habitat: per stop, then the goal's three checks.
@@ -187,12 +197,15 @@ export function createStopScience(ui, app, data) {
     }
     const goals = ui.section('The goal: did groundwater last here?')
     for (const g of goalChecks(log)) goals.append(ui.item({ title: `${g.answered ? '✓ Answered' : '○ Still open'}: ${g.title}`, sub: g.how }))
-    sec.append(list, txt('p', 'Dose at the stops: RAD mean × sky view at each stop (an estimate) × minutes there.', 'dim'))
+    sec.append(ui.details('Stop-by-stop results', list))
+    const reference = ui.details('Reference scenario & dose assumptions', txt('p', 'Dose at the stops: RAD mean × sky view at each stop (an estimate) × minutes there.', 'dim'))
+    const referenceBody = reference.querySelector('.f-details-body')
+    sec.append(reference)
     const y = yieldData
     // S6 describes a fixed reference route. Even identical stops can produce a different path;
     // never add its walking dose to this walk's stop dose or present its capacity as tasks done.
-    if (y?.walk && y?.stay) sec.append(txt('p', `Reference scenario: ${y.walk.stops} stops × ${y.walk.visit_tasks_per_stop} tasks = ${y.walk.measurements_per_walk} tasks per walk, with all tasks completed. A ${y.stay.stay_sols}-sol stay: at most ${y.stay.walks_max} walks, ${y.stay.stops_max} stops, ${y.stay.measurements_max} tasks (our arithmetic, ${y.stay.sols_per_walk} sols per walk). These are planning assumptions, not the result of this walk.`, 'dim'))
-    if (y?.dose?.walk_dose_ugy != null && y.walk?.route_m != null) sec.append(txt('p', `Reference route (${y.walk.route_m} m): walking dose ${y.dose.walk_dose_ugy} µGy (${y.dose.walk_hours} h at ${y.dose.mean_dose_rate_ugy_per_h} µGy/h, an estimate). Walking only; stops excluded. This is not the dose of your chosen route.`, 'dim'))
+    if (y?.walk && y?.stay) referenceBody.append(txt('p', `Reference scenario: ${y.walk.stops} stops × ${y.walk.visit_tasks_per_stop} tasks = ${y.walk.measurements_per_walk} tasks per walk, with all tasks completed. A ${y.stay.stay_sols}-sol stay: at most ${y.stay.walks_max} walks, ${y.stay.stops_max} stops, ${y.stay.measurements_max} tasks (our arithmetic, ${y.stay.sols_per_walk} sols per walk). These are planning assumptions, not the result of this walk.`, 'dim'))
+    if (y?.dose?.walk_dose_ugy != null && y.walk?.route_m != null) referenceBody.append(txt('p', `Reference route (${y.walk.route_m} m): walking dose ${y.dose.walk_dose_ugy} µGy (${y.dose.walk_hours} h at ${y.dose.mean_dose_rate_ugy_per_h} µGy/h, an estimate). Walking only; stops excluded. This is not the dose of your chosen route.`, 'dim'))
     el.replaceChildren(sec, goals, ...[...el.children].filter((c) => c.classList.contains('ss-card')))
   }
 
@@ -211,5 +224,5 @@ export function createStopScience(ui, app, data) {
   }
 
   reset()
-  return { el, at, reset, finish, log, samples: () => samples }
+  return { el, at, reset, finish, log, samples: () => samples, active: () => resume !== null, proceed }
 }

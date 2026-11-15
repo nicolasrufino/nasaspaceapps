@@ -17,9 +17,9 @@ export const stopCheck = (id) => STOP_CHECK[id]
 
 export function goalCard(ui) {
   const sec = ui.section('Science goal')
-  const title = Object.assign(ui.h('h2'), { textContent: 'Boxwork: did groundwater last here?' })
+  sec.classList.add('f-goal')
   const what = Object.assign(ui.h('p', 'dim'), { textContent: 'Boxwork is low ridges, 1 to 2 m tall, with sandy hollows between: a spiderweb from orbit. It suggests groundwater flowed here later than expected. Three things the crew will check:' })
-  sec.append(title, what, ...CHECKS.map(([name, text]) => {
+  const details = ui.details('Did groundwater last here?', what, ...CHECKS.map(([name, text]) => {
     const row = ui.h('div', 'f-item'), t = ui.h('span', 't'), s = ui.h('small'), a = ui.h('a')
     t.textContent = name
     s.textContent = `${text} `
@@ -28,6 +28,7 @@ export function goalCard(ui) {
     s.append(a); t.append(s); row.append(t)
     return row
   }))
+  sec.append(details)
   return sec
 }
 

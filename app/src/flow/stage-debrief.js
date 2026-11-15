@@ -7,22 +7,37 @@
 import { MODELS } from './models.js'
 import * as stopScience from './stop-science.js'
 
-const RED = '#ff5a3d', WHITE = '#fff', AMBER = '#ffd23f', CYAN = '#35e0ff'
+const OCHRE = '#c5a065', WHITE = '#fff', AMBER = '#ffd23f', SCOUT = '#e3dfd3'
 const SPEEDS = [[120, '1×'], [60, '2×'], [30, '4×']] // milliseconds per 8 m step
 const STRIP_H = 110
 const NS = 'http://www.w3.org/2000/svg'
 const svgEl = (tag, attrs = {}) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); return e }
 
 const CSS = `
-.d-route { cursor: pointer; border-radius: 10px; padding: 10px 12px; margin: 0 -12px; border: 1px solid transparent; }
+.d-route { cursor: pointer; border-radius: 10px; padding: 14px 12px; background: var(--panel2); border: 1px solid transparent; }
 .d-route.hot { background: var(--panel2); }
 .d-route.pin { border-color: var(--mute); }
 .d-route h3 i { display: inline-block; width: 18px; height: 0; margin-right: 8px; vertical-align: middle; border-top: 3px solid #fff; }
-.d-route.old h3 i { border-top: 3px dashed ${RED}; }
+.d-route.old h3 i { border-top: 3px dashed ${OCHRE}; }
 .d-strip { align-self: stretch; height: ${STRIP_H}px; box-sizing: border-box; background: var(--panel); border-radius: 10px; padding: 8px 12px 10px; display: flex; flex-direction: column; gap: 4px; }
 .d-strip .lab { display: flex; justify-content: space-between; gap: 12px; font-size: 11px; color: var(--mute); white-space: nowrap; }
 .d-strip .lab b { color: var(--paper); font-weight: 600; overflow: hidden; text-overflow: ellipsis; }
 .d-strip svg { flex: 1; min-height: 0; width: 100%; display: block; cursor: ew-resize; touch-action: none; border-radius: 4px; }
+@media (max-width: 760px) {
+  .d-strip .lab { flex-wrap: wrap; gap: 2px 8px; white-space: normal; }
+  .d-strip .lab b { order: 3; flex-basis: 100%; }
+}
+.d-win { display: grid; grid-template-columns: 1.25fr 1fr; gap: 10px; margin: 4px 0 4px; }
+.d-win > div { background: var(--panel2); border-radius: 10px; padding: 10px 12px; }
+.d-win small { display: block; color: var(--mute); font-size: 12px; }
+.d-win b { display: block; font-size: 26px; line-height: 1.2; color: var(--paper); }
+.d-win .good b { color: var(--scout); } .d-win .price b { font-size: 20px; }
+.d-why { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.d-why li { position: relative; padding-left: 14px; font-size: 13px; line-height: 1.45; color: var(--paper); }
+.d-why li::before { content: ''; position: absolute; left: 0; top: .55em; width: 6px; height: 6px; border-radius: 50%; background: var(--scout); }
+.d-why.cost li { color: var(--mute); } .d-why.cost li::before { background: var(--mute); }
+.d-bar { position: relative; height: 10px; border-radius: 5px; background: var(--panel2); overflow: hidden; margin: 6px 0 4px; }
+.d-bar i { position: absolute; top: 0; bottom: 0; }
 `
 
 export default {
@@ -49,8 +64,8 @@ export default {
       const k = map.scale * (mini ? 2 : 1)
       const em = mini ? null : pin ?? hot // the emphasised route, if any
       const lw = 0.45 * k
-      map.line('before', oldCells, { color: RED, width: lw, dash: `${lw * 2.2} ${lw * 2.4}`, opacity: em === 'new' ? 0.3 : 1 })
-      map.dots('crossed', rocksOn(oldCells).map((cell) => ({ cell, color: RED, ring: WHITE, r: 0.7 * k, faded: em === 'new' })))
+      map.line('before', oldCells, { color: OCHRE, width: lw, dash: `${lw * 2.2} ${lw * 2.4}`, opacity: em === 'new' ? 0.3 : 1 })
+      map.dots('crossed', rocksOn(oldCells).map((cell) => ({ cell, color: OCHRE, ring: WHITE, r: 0.7 * k, faded: em === 'new' })))
       map.line('route', route.cells, { color: WHITE, width: lw * (em === 'new' ? 1.5 : 1), opacity: em === 'old' ? 0.3 : 1 })
       map.dots('stops', [
         { cell: app.meta.base_cell, label: 'H', color: WHITE, r: 1.6 * k },
@@ -88,6 +103,45 @@ export default {
       return sec
     }
 
+    // The scout found rock on the orbit route: lead with what it bought (rock cells avoided), then what it cost.
+    // Every number is read from the two routes at run time; nothing about the cost of meeting the rocks on foot is claimed.
+    function compareWin(route, before, d, crossedOld, crossedNew) {
+      const od = app.describe(before.cells)
+      const extraJ = route.energy_j - before.energy_j, extraM = Math.round(d.metres - od.metres)
+      const pct = Math.round((route.energy_j / app.usableJ) * 100), spare = ui.kj(app.usableJ - route.energy_j)
+      const sign = (n) => (n >= 0 ? `+${n}` : `${n}`)
+      const cells = (n) => `${n} rock ${n === 1 ? 'cell' : 'cells'}`
+
+      const head = ui.section(crossedNew === 0 ? 'The scout cleared your path' : 'The scout made your path safer', true)
+      head.append(p(`Same stops. The route planned from orbit walked into ${cells(crossedOld)} that orbit can't see. The scouted route goes around them.`, 'dim'))
+      const win = ui.h('div', 'd-win', `<div class="good"><small>Rock cells on your path</small><b>${crossedOld} → ${crossedNew}</b></div>
+        <div class="price"><small>The price</small><b>${sign(Math.round(extraJ / 1000))} kJ</b><small>${sign(+((extraJ / before.energy_j) * 100).toFixed(1))}% energy · ${sign(extraM)} m</small></div>`)
+      head.append(win)
+
+      const why = ui.section("Why it's better")
+      why.append(ui.h('ul', 'd-why', `<li>No surprises on foot. Orbit misses rocks under about 1 m; the helicopter found these before anyone left.</li>
+        <li>Decided in the habitat, not mid-walk. Without the scout the crew meets these rocks on the walk and chooses on the spot, with Earth up to 22 minutes away.</li>
+        <li>The way home is worked out for the route you actually walk, so the walk-back ring can be trusted.</li>`))
+
+      const costSec = ui.section('Why it costs a little more')
+      costSec.append(ui.h('ul', 'd-why cost', `<li>It walks around the rocks instead of over them: ${extraM >= 0 ? `${extraM} m longer` : `${-extraM} m shorter`}. You still have ${spare} kJ to spare before the reserve.</li>`))
+      const orbitW = Math.min(100, (before.energy_j / app.usableJ) * 100), allW = Math.min(100, (route.energy_j / app.usableJ) * 100)
+      costSec.append(p(`Walking energy · ${ui.kj(route.energy_j)} of ${ui.kj(app.usableJ)} kJ (${pct}%)`, 'dim'),
+        ui.h('div', 'd-bar', `<i style="left:0;width:${Math.min(orbitW, allW)}%;background:var(--mute)"></i><i style="left:${Math.min(orbitW, allW)}%;width:${Math.abs(allW - orbitW)}%;background:var(--scout)"></i>`),
+        p(`Grey: the route from orbit (${ui.kj(before.energy_j)} kJ) · light: the scout's detour · the reserve is kept apart`, 'dim'))
+
+      const blocks = [routeBlock('new', 'With the scout', [['metres', Math.round(d.metres)], ['kJ', ui.kj(route.energy_j)], ['rock cells crossed', crossedNew, crossedNew > 0 ? 'hazard' : undefined]]),
+        routeBlock('old', 'Without the scout', [['metres', Math.round(od.metres)], ['kJ', ui.kj(before.energy_j)], ['rock cells crossed', crossedOld, 'hazard']])]
+      const both = ui.details('Compare the two routes', ...blocks)
+
+      const options = ui.details('More actions & model details', visionBtn)
+      if (app.scout.left() > 0) options.querySelector('.f-details-body').append(againBtn)
+      options.querySelector('.f-details-body').append(ui.model(MODELS.groundClassifier))
+      setBody(head, why, costSec, both, options)
+      previewBtn.disabled = route.cells.length < 2
+      ui.foot.replaceChildren(previewBtn, stopsBtn)
+    }
+
     function compare() {
       mode = 'compare'
       const route = app.route(), before = app.scout.before(), d = app.describe(route.cells)
@@ -95,15 +149,16 @@ export default {
       if (!before) pin = hot = null
 
       map.caption('After scouting', before
-        ? 'White: the scouted route · red dashes: without the scout · red dots: rock it would have crossed · NASA MRO HiRISE'
+        ? 'White: the scouted route · ochre dashes: without the scout · ochre dots: rock it would have crossed · NASA MRO HiRISE'
         : 'White: the route · NASA MRO HiRISE')
       map.clear('walker')
       drawMap(false)
 
-      const headline = !before ? 'Route from orbit'
-        : crossedOld > 0 ? 'The scout changed the route'
-        : 'No detected rocks on the original route'
+      const headline = !before ? 'Review your route'
+        : crossedOld > 0 ? 'A clearer way home'
+        : 'Your route, checked'
       const head = ui.section(headline, true)
+      if (before && crossedOld > 0) return compareWin(route, before, d, crossedOld, crossedNew)
       if (!before) head.append(p('No scouting yet: this is the route as seen from orbit.', 'dim'))
       else if (crossedOld > 0) head.append(p(`The route planned from orbit crossed ${crossedOld} rock ${crossedOld === 1 ? 'cell' : 'cells'} the scout found.`, 'dim'))
       else head.append(p('The scout found no rock on the route planned from orbit.', 'dim'))
@@ -118,20 +173,20 @@ export default {
 
       const pct = Math.round((route.energy_j / app.usableJ) * 100)
       const extra = before ? Math.round((route.energy_j - before.energy_j) / 1000) : 0
-      const cost = extra > 0 ? `costs ${extra} kJ more` : extra < 0 ? `costs ${-extra} kJ less` : 'costs the same energy'
+      const extraPct = before ? ((route.energy_j - before.energy_j) / before.energy_j) * 100 : 0
+      const cost = extra > 0 ? `costs ${extra} kJ more (+${extraPct.toFixed(1)}%)` : extra < 0 ? `costs ${-extra} kJ less (${extraPct.toFixed(1)}%)` : 'costs the same energy'
+      // pct is the whole route's share of the energy you may spend walking (budget minus reserve), not the difference.
+      const share = `The whole walk uses ${pct}% of the ${ui.kj(app.usableJ)} kJ you can spend walking; the reserve stays untouched.`
       const sum = ui.section('')
-      sum.append(p(before ? `The scouted route ${cost} and uses ${pct}% of the walking budget.` : `The route uses ${pct}% of the walking budget.`))
+      if (before) sum.append(p(`The scouted route ${cost} than the one planned from orbit.`))
+      sum.append(p(share))
 
-      const ml = ui.section('At each stop')
-      ml.append(ui.model(MODELS.groundClassifier))
-
-      setBody(head, ...blocks, sum, ml)
-
-      const row = ui.h('div', 'f-row')
-      if (app.scout.left() > 0) row.append(againBtn)
-      row.append(stopsBtn)
+      const options = ui.details('More actions & model details', visionBtn)
+      if (app.scout.left() > 0) options.querySelector('.f-details-body').append(againBtn)
+      options.querySelector('.f-details-body').append(ui.model(MODELS.groundClassifier))
+      setBody(head, ...blocks, sum, options)
       previewBtn.disabled = route.cells.length < 2
-      ui.foot.replaceChildren(previewBtn, row, visionBtn)
+      ui.foot.replaceChildren(previewBtn, stopsBtn)
     }
 
     // ---------- Preview ----------
@@ -166,8 +221,8 @@ export default {
       want = true
 
       // Rail
-      const head = ui.section('Walking the scouted route', true)
-      const note = p('The walk plays by itself. Drag along the height strip to jump.', 'dim')
+      const head = ui.section('Walk preview', true)
+      const note = p('Plays automatically. Drag the height strip to jump.', 'dim')
       head.append(note)
       const nums = ui.section('')
       const stats = ui.stats([[`metres of ${totalM}`, '0'], ['kJ left', '0', 'scout'], ['% of the way', '0']])
@@ -177,6 +232,7 @@ export default {
 
       // Controls
       const playBtn = ui.button('Pause', () => {
+        if (sci?.active()) return sci.proceed()
         const s = app.walk.state()
         if (s.k >= s.of || s.energy_left_j <= 0) { app.walk.reset(); app.walk.play(); want = true }
         else if (want || app.walk.playing()) { app.walk.pause(); want = false }
@@ -189,20 +245,20 @@ export default {
       const restartBtn = ui.button('Restart', () => { app.walk.reset(); app.walk.play(); want = true; tick() })
       const backBtn = ui.button('Back to the comparison', stopPreview)
       const r1 = ui.h('div', 'f-row'), r2 = ui.h('div', 'f-row')
-      r1.append(playBtn, stepBtn)
-      r2.append(speedBtn, restartBtn)
+      r1.append(playBtn)
+      r2.append(stepBtn, speedBtn, restartBtn)
       ui.foot.replaceChildren(r1, r2, backBtn)
 
       // Bottom strip: the height profile, which is also the scrubber.
       const strip = ui.h('div', 'd-strip', '<div class="lab"><span>Height along the route</span><b></b><span></span></div>')
       const [, msg, right] = strip.firstChild.children
-      right.textContent = `${totalM} m · ${prof.climb} m between lowest and highest`
+      right.textContent = `${totalM} m · ${prof.climb} m elevation range`
       const svg = svgEl('svg', { viewBox: '0 0 1000 100', preserveAspectRatio: 'none', role: 'slider', 'aria-label': 'Position along the route', tabindex: 0 })
       const clip = svgEl('clipPath', { id: 'd-clip' }), clipRect = svgEl('rect', { x: 0, y: 0, width: 0, height: 100 })
       clip.append(clipRect)
-      const head2 = svgEl('line', { x1: 0, x2: 0, y1: 0, y2: 100, stroke: CYAN, 'stroke-width': 2, 'vector-effect': 'non-scaling-stroke' })
+      const head2 = svgEl('line', { x1: 0, x2: 0, y1: 0, y2: 100, stroke: SCOUT, 'stroke-width': 2, 'vector-effect': 'non-scaling-stroke' })
       svg.append(clip, svgEl('rect', { x: 0, y: 0, width: 1000, height: 100, fill: '#2a2927' }),
-        svgEl('path', { d: prof.area, fill: '#6e6a65' }), svgEl('path', { d: prof.area, fill: CYAN, opacity: 0.55, 'clip-path': 'url(#d-clip)' }), head2)
+        svgEl('path', { d: prof.area, fill: '#6e6a65' }), svgEl('path', { d: prof.area, fill: SCOUT, opacity: 0.55, 'clip-path': 'url(#d-clip)' }), head2)
       strip.append(svg)
       const seekTo = (e) => { const b = svg.getBoundingClientRect(); app.walk.seek(prof.stepAt(Math.max(0, Math.min(1, (e.clientX - b.left) / (b.width || 1))))); tick() }
       let dragging = false
@@ -225,8 +281,9 @@ export default {
       map.caption('The walk', '')
       let mk = drawMap(true)
 
-      live = { stats, bar, playBtn, msg, note, head2, clipRect, totalM, redraw: () => { mk = drawMap(true) }, k: () => mk }
-      sciData.then((d) => { if (!d || !live) return; sci = stopScience.createStopScience(ui, app, d); mine.push(sci.el); ui.body.append(sci.el) })
+      live = { stats, bar, playBtn, stepBtn, msg, note, head2, clipRect, totalM, redraw: () => { mk = drawMap(true) }, k: () => mk }
+      const session = live
+      sciData.then((d) => { if (!d || live !== session) return; sci = stopScience.createStopScience(ui, app, d); mine.push(sci.el); ui.body.append(sci.el) })
       tick()
       timer = setInterval(tick, 200)
     }
@@ -244,7 +301,7 @@ export default {
       if (done || spent) want = false
       if (done) sci?.finish()
       if (map.scale !== lastScale) live.redraw() // the mini map's box changed size
-      if (cells[k]) { map.dots('walker', [{ cell: cells[k], color: CYAN, ring: WHITE, r: 1.3 * live.k() }]); map.raise('walker') }
+      if (cells[k]) { map.dots('walker', [{ cell: cells[k], color: SCOUT, ring: WHITE, r: 1.3 * live.k() }]); map.raise('walker') }
       const f = prof.cum[k] / prof.total
       live.stats.set(0, Math.round(live.totalM * f))
       live.stats.set(1, ui.kj(Math.max(0, s.energy_left_j)))
@@ -253,10 +310,13 @@ export default {
       const x = prof.X(k)
       live.head2.setAttribute('x1', x); live.head2.setAttribute('x2', x)
       live.clipRect.setAttribute('width', x)
-      const text = done ? 'Arrived back at the habitat.' : spent ? 'Out of walking energy before the habitat.' : ''
+      const visiting = sci?.active()
+      live.stepBtn.disabled = !!visiting
+      const text = done ? 'Arrived back at the habitat.' : spent ? 'Out of walking energy before the habitat.'
+        : visiting ? 'Paused at a science stop. Complete tasks below or carry on walking.' : ''
       live.msg.textContent = text
-      live.note.textContent = text || 'The walk plays by itself. Drag along the height strip to jump.'
-      live.playBtn.textContent = done || spent ? 'Restart' : want || app.walk.playing() ? 'Pause' : 'Play'
+      live.note.textContent = text || 'Plays automatically. Drag the height strip to jump.'
+      live.playBtn.textContent = done || spent ? 'Restart' : visiting ? 'Carry on walking' : want || app.walk.playing() ? 'Pause' : 'Play'
     }
 
     function leavePreview() {
@@ -283,11 +343,13 @@ export default {
     const onResize = () => { if (mode === 'compare') drawMap(false) }
     addEventListener('resize', onResize)
     const off = app.on('plan', () => { if (mode === 'compare') compare() })
+    const offWalk = app.on('walk:step', tick) // visit every crossed stop, even when a slow frame advances several cells
     compare()
 
     return () => {
       removeEventListener('resize', onResize)
       off()
+      offWalk()
       leavePreview()
       mode = 'compare'
       for (const n of mine) n.remove()

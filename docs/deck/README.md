@@ -3,9 +3,9 @@
 The F10 source refresh (2026-11-15) follows the accepted rescope and the three-flight build. The five-minute script, demo steps, caveats and Q&A are in [PITCH.md](../PITCH.md).
 
 - `deck.json`: the existing 14-slide order and design-system metadata; the last two slides are backups.
-- `deck.css`, `slides/*.html`: the slide layout and speaker notes (`aside`).
+- `deck.css`, `slides/*.html`: the slide layout and speaker notes (`aside`). `deck.css` is the same file as the Claude deck's and matches the landing page: black and warm paper, Rethink Sans, Michroma for the one cover title.
 - `assets/scout-three-flights.png`: an actual browser screenshot after the Gale campaign, not an illustration. The HUD shows three flights, 44 found cells and the final route.
-- `build.py`: makes a self-contained HTML presentation using local fonts (Arial/Courier fallback) and the embedded screenshot. It needs only Python's standard library.
+- `build.py`: makes a self-contained HTML presentation; it links Rethink Sans and Michroma from Google Fonts and falls back to Arial offline and the embedded screenshot. It needs only Python's standard library.
 
 From the repository root:
 
