@@ -35,9 +35,14 @@ joules for a step = watts on Mars × distance / V
 | Bedrock, 10% uphill | 363 J |
 | Flat bedrock **on Earth**, for comparison | 488 J |
 
-So sand costs about 1.5× bedrock, a 10% climb about 2×, and Mars gravity cuts the cost to about 38% of Earth's.
+In our formula sand costs about 1.5× bedrock, a 10% climb about 2×, and Mars gravity cuts the cost to about 38% of Earth's. The first and last of these are too optimistic; see below.
 
-**Limits:** gravity is scaled in a straight line, downhill gets no discount or penalty, and speed is fixed. Planned upgrade: NASA JSC's field-tested model (Kim et al., 2024).
+**Where these numbers are known to be too low (research, see `docs/SCOUTING.md` §2):**
+- **Sand:** people measured on sand use **2.1 to 2.7 times** the energy of hard ground ([Lejeune et al. 1998](https://pubmed.ncbi.nlm.nih.gov/9622579/)). Our formula gives only 1.46×, because η = 2.1 multiplies only part of the equation.
+- **Gravity:** we scale energy by 0.38 (straight in proportion to gravity). A 2018 study in simulated 0.38 g measured walking oxygen use at about **68%** of Earth's, so our walking energy may be **about 1.8× too low**. Suits add more ([NASA TP-2009-214796](https://www.lpi.usra.edu/lunar/artemis/NorcrossEtAl_NASA-TP-2009-214796_EVA%20Walkback%20Test.pdf)).
+- **Our assumption:** matching Mars ground types to the Earth terrains the factors were measured on (bedrock = blacktop, soil = dirt road, big rock = heavy brush). The factors themselves (1.0, 1.1, 1.2, 1.5) are measured (Soule & Goldman 1972).
+
+A fix for the pipeline and the app together is proposed in `docs/SCOUTING.md` §6. Downhill gets no discount or penalty, and speed is fixed. Planned upgrade: a hypogravity model that adds the Santee downhill term to Pandolf ([2025 paper](https://www.researchgate.net/publication/394929719_A_Novel_Metabolic_Model_for_Ambulation_in_Hypogravity_and_Applications_to_Planetary_Extravehicular_Activity)).
 
 Code: `stepCostIdx` in `app/src/walk.js`, `pandolf_watts` in `data/pipeline/make_world.py`. A test checks the app and the pipeline agree to within 0.1%.
 
@@ -88,27 +93,7 @@ Orbit images can't see rocks smaller than about a metre. A small helicopter (Ing
 
 **Result on Gale (from the code):** 7 flights, 85 rock cells found; the planned route crossed 12 of them; the new route avoids them for 330 → 334 kJ.
 
-## 8. Surveying the whole area
-
-Like NASA's planned **SkyFall** mission (three helicopters, launch 2028), a fleet can map the whole slice before anyone chooses stops.
-
-- The slice is cut into **back-and-forth strips** spaced so the 30 m views touch (no gaps), and each strip into flights of at most 700 m.
-- **Ground you can reach and come back from is surveyed first**, nearest base first; the rest after.
-- Flights are shared across the fleet at **1 flight per helicopter per sol (an estimate**: helicopters recharge on solar power; Ingenuity flew far less often).
-
-**Result on Gale (from the code):** 258 flights, about 174 km of flying; about **35%** of the slice is reachable for a round trip in one walk.
-
-| Helicopters | Sols to map the reachable area | Sols to map the whole slice |
-|---|---|---|
-| 1 | 158 | 258 |
-| 3 (SkyFall) | 53 | 86 |
-| 6 | 27 | 43 |
-
-The full survey finds 963 rock cells.
-
-Code: `app/src/survey.js`.
-
-## 9. The "best areas" map
+## 8. The "best areas" map
 
 A score from 0 (don't go) to 1 (go) for every cell, from what is known right now:
 
@@ -122,7 +107,7 @@ science weight = 0.4 + 0.2 × science value (0–3), when the world has a scienc
 
 Brighter green = more energy to spare after going there and back. The map brightens as helicopters scout, because scouted ground is trusted twice as much.
 
-## 10. "Why this route" (the explanation panel)
+## 9. "Why this route" (the explanation panel)
 
 The panel decides nothing; it measures the route the planner chose and the ones it beat (flag `why_route`).
 
@@ -140,8 +125,8 @@ The panel decides nothing; it measures the route the planner chose and the ones 
 
 Code: `app/src/why.js`.
 
-## 11. What is real and what is simulated
+## 10. What is real and what is simulated
 
 - **Real:** terrain, slope and images (NASA MRO HiRISE via USGS), the Curiosity stops and their photos, the walking-energy formula, all the route and safety maths.
-- **Estimates, marked:** ground type on Gale (from image brightness and roughness until the classifier lands), rock layer on Gale (until shadow-based rock detection lands), helicopter flights per sol, the energy budget size.
+- **Estimates, marked:** ground type on Gale (from image brightness and roughness until the classifier lands), rock layer on Gale (until shadow-based rock detection lands), the energy budget size, and the walking-energy factors above.
 - **Simulated:** the helicopter flights, the astronaut (a phone stands in for the suit display).

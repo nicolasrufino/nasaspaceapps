@@ -25,14 +25,10 @@
       .warn { color: #ff8a6a; }
       .warn:empty { display: none; }
       #map { cursor: crosshair; }
-      #fleet { width: 3.5em; font: inherit; }
-      #fleetTable, #whyTable { border-collapse: collapse; width: 100%; }
+      #whyTable { border-collapse: collapse; width: 100%; }
       #whyTable th, #whyTable td { text-align: left; padding: 1px 6px 1px 0; font-weight: normal; }
       #whyTable th { color: #f3e6d8; }
       #whyNotes { margin: 4px 0; padding-left: 1.1em; }
-      #fleetTable caption { text-align: left; }
-      #fleetTable th, #fleetTable td { text-align: left; padding: 1px 6px 1px 0; font-weight: normal; }
-      #fleetTable th { color: #f3e6d8; }
       #detail p { margin: 4px 0; }
       #detail figure { margin: 6px 0 0; }
       #detail img { width: 100%; border-radius: 4px; }
@@ -76,10 +72,7 @@
           <h2>Scout</h2>
           <div class="row">
             <button id="scout">Fly the route</button>
-            <button id="survey">Survey the whole area</button>
           </div>
-          <label class="src">Helicopters <input id="fleet" type="number" min="1" max="6" value="3" aria-label="Number of helicopters"> (NASA SkyFall: three)</label>
-          <table id="fleetTable" class="src"></table>
           <p id="scoutStatus" class="src" aria-live="polite"></p>
         </div>
         <div id="detail" aria-live="polite"></div>

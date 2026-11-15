@@ -2,8 +2,7 @@ import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { parseLayer } from './world.js'
-import { FLIGHT_M } from './scout.js'
-import { surveyPlan, scanSegment, bestAreas } from './survey.js'
+import { bestAreas } from './best-areas.js'
 
 function load(name) {
   const dir = new URL(`../../data/worlds/${name}/`, import.meta.url)
@@ -17,25 +16,6 @@ for (const name of ['synthetic', 'gale']) {
   const world = load(name)
   const { meta, layers } = world
   const n = meta.width * meta.height
-
-  test(`${name}: flying the whole survey maps every cell, each flight within the limit`, () => {
-    const plan = surveyPlan(meta, layers.cost_to_go)
-    const scanned = new Uint8Array(n)
-    for (const f of plan.flights) {
-      assert.ok(f.metres <= FLIGHT_M)
-      scanSegment(meta, scanned, f.waypoints[0], f.waypoints[1])
-    }
-    assert.equal(scanned.reduce((a, v) => a + v, 0), n)
-  })
-
-  test(`${name}: reachable ground is surveyed first; more helicopters, fewer sols`, () => {
-    const one = surveyPlan(meta, layers.cost_to_go, { helicopters: 1 })
-    const three = surveyPlan(meta, layers.cost_to_go, { helicopters: 3 })
-    const firstFar = one.flights.findIndex((f) => !f.reachable)
-    assert.ok(firstFar > 0 && one.flights.slice(firstFar).every((f) => !f.reachable))
-    assert.ok(three.solsReachable < three.sols && three.sols < one.sols)
-    assert.equal(three.sols, Math.ceil(one.flights.length / 3))
-  })
 
   test(`${name}: best areas are zero where the round trip doesn't fit or rocks were seen`, () => {
     const scanned = new Uint8Array(n).fill(1)
