@@ -80,6 +80,11 @@ const CSS = `
 #helmet .beacon i{width:16px;height:16px;transform:rotate(45deg);border:2px solid currentColor;background:#0008}
 #helmet .beacon.off i{background:currentColor}
 #helmet .beacon.home{color:#fff}#helmet .beacon.next{color:#ffd23f}
+#helmet .go{position:absolute;transform:translate(-50%,-50%);width:64px;height:64px;border-radius:50%;border:2px solid #fff;background:#ffffff38;
+  color:#fff;font-size:30px;line-height:1;pointer-events:auto;cursor:pointer;display:grid;place-items:center;box-shadow:0 2px 12px #0008;
+  -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+#helmet .go:hover{background:#ffffff66}#helmet .go:active{transform:translate(-50%,-50%) scale(.92)}
+#helmet .go[hidden]{display:none}
 #helmet .mini{position:absolute;right:max(12px,env(safe-area-inset-right));bottom:calc(max(14px,env(safe-area-inset-bottom)) + 62px);
   width:min(30vmin,170px);aspect-ratio:1;border-radius:50%;border:1px solid #5fe6ff66;background:#0a141cb3;overflow:hidden}
 #helmet .mini canvas{width:100%;height:100%}
@@ -107,6 +112,7 @@ export function initHud() {
   <div class="kv"><span>HOME BY ROUTE</span><span id="hudHomeEta"></span></div>
   <div class="kv"><span>ELAPSED</span><span id="hudTime"></span></div></div>
 <div class="beacon home" id="hudBHome"><i></i><span></span></div><div class="beacon next" id="hudBNext"><i></i><span></span></div>
+<button class="go" id="hudGo" type="button" aria-label="Walk on along the route" hidden>&#x2303;</button>
 <div class="mini" aria-hidden="true"><canvas width="340" height="340"></canvas></div>
 <div class="alert" id="hudAlert" role="alert" hidden></div>`
   document.head.append(style)
@@ -184,6 +190,9 @@ export function initHud() {
     ctx.fillRect(w / 2 - 2, 36, 4, 40) // lubber line: where you are looking
   }
 
+  let onGo = null
+  q('hudGo').onclick = () => onGo?.()
+
   return {
     el,
     show(on) { el.hidden = !on },
@@ -218,6 +227,14 @@ export function initHud() {
       nb.hidden = !showNext
       if (showNext) beacon(nb, s.project(s.next.cell[0] * s.cs, s.next.cell[1] * s.cs), `${Math.round(s.next.metres)} m`)
       mini(s)
+      // Street-view step: an arrow on the ground two cells ahead, kept in the lower middle of the view.
+      const g = q('hudGo'), [gx, gy, gb] = s.project(s.ahead[0] * s.cs, s.ahead[1] * s.cs)
+      onGo = s.go
+      g.hidden = !(s.eye && s.canGo)
+      if (!g.hidden) {
+        g.style.left = `${gb ? innerWidth / 2 : Math.max(innerWidth * 0.25, Math.min(innerWidth * 0.75, gx))}px`
+        g.style.top = `${gb ? innerHeight * 0.72 : Math.max(innerHeight * 0.55, Math.min(innerHeight * 0.78, gy))}px`
+      }
       const t = Math.round(s.t)
       q('hudTime').textContent = `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`
       q('hudAlert').hidden = !a
