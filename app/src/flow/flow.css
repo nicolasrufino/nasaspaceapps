@@ -1,59 +1,75 @@
-/* The guided mission (docs/UX-PLAN.md). Matches the landing page: Michroma for names and big numbers, Rethink Sans for
-   the rest; paper #f3f2ef on ink #191919. One meaning per accent: cyan scout, amber stops, red hazards, white route. */
-@font-face { font-family: "Michroma"; src: url("./michroma.ttf") format("truetype"); font-display: swap; }
+/* The guided mission, version 2 (docs/UX-PLAN.md section 0): the map is the page, one left rail, fixed homes.
+   Rethink Sans only (the landing page's text font). Panels are solid: no outline, no transparency.
+   One meaning per accent: cyan scout, amber stops, red hazards, white route. */
 @font-face { font-family: "Rethink Sans"; src: url("../../mission-vesta/assets/rethink-sans.woff2") format("woff2"); font-weight: 400 800; font-display: swap; }
-body.flow { --paper: #f3f2ef; --ink: #191919; --rule: #ceccc755; --scout: #35e0ff; --stop: #ffd23f; --hazard: #ff5a3d; --mute: #c6c3c1;
+body.flow { --paper: #f3f2ef; --ink: #191919; --panel: #1d1c1b; --panel2: #2a2927; --scout: #35e0ff; --stop: #ffd23f; --hazard: #ff5a3d; --mute: #a9a6a2;
   font-family: "Rethink Sans", system-ui, sans-serif; }
-/* The map screen's own chrome is hidden; flow draws its own. */
 body.flow #hud, body.flow #legend, body.flow #minimap, body.flow #viewBtn, body.flow #visionBar, body.flow #visionNote, body.flow #furniture { display: none !important; }
 #flow { position: fixed; inset: 0; z-index: 7; pointer-events: none; color: var(--paper); display: grid;
-  grid-template: "top top top" auto "left center right" 1fr "bl bottom br" auto / minmax(0, 300px) 1fr minmax(0, 300px);
-  gap: 12px; padding: max(12px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(14px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left)); }
-#flow > * { pointer-events: none; min-width: 0; min-height: 0; }
-#flow .f-card, #flow button, #flow .f-map, #flow [data-hit] { pointer-events: auto; }
-#f-top { grid-area: top; display: flex; justify-content: center; }
-#f-left { grid-area: left; display: flex; flex-direction: column; gap: 10px; align-self: start; }
-#f-right { grid-area: right; display: flex; flex-direction: column; gap: 10px; align-self: start; }
-#f-center { grid-area: center; display: grid; place-items: center; }
-#f-bl { grid-area: bl; display: flex; gap: 8px; align-items: end; }
-#f-bottom { grid-area: bottom; display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: end; }
-#f-br { grid-area: br; display: flex; justify-content: end; align-items: end; }
-.f-steps { display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: #191919b8; backdrop-filter: blur(10px); border: 1px solid var(--rule); }
-.f-steps span { font: 400 10px/1 "Michroma", system-ui, sans-serif; letter-spacing: .08em; text-transform: uppercase; padding: 9px 14px; border-radius: 999px; color: var(--mute); white-space: nowrap; }
-.f-steps span[aria-current=step] { background: var(--paper); color: var(--ink); }
-.f-steps span.done { color: var(--paper); }
-.f-card { background: #191919c7; backdrop-filter: blur(12px); border: 1px solid var(--rule); border-radius: 14px; padding: 14px 16px; }
-.f-card h3 { margin: 0 0 10px; font: 400 10px/1.2 "Michroma", system-ui, sans-serif; letter-spacing: .1em; text-transform: uppercase; color: var(--mute); }
-.f-card p { margin: 6px 0 0; font-size: 13px; line-height: 1.4; color: var(--mute); }
-.f-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(70px, 1fr)); gap: 12px; }
-.f-stat b { display: block; font: 400 20px/1.1 "Michroma", system-ui, sans-serif; color: var(--paper); }
-.f-stat span { display: block; margin-top: 4px; font-size: 11px; color: var(--mute); }
+  grid-template: "top top" 48px "rail main" minmax(0, 1fr) / 360px minmax(0, 1fr); font-size: 14px; line-height: 1.4; }
+#flow > * { pointer-events: auto; min-width: 0; min-height: 0; }
+/* Top bar: home link left, the four stages centred. */
+#f-top { grid-area: top; background: var(--panel); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 16px; }
+#f-top a { color: var(--mute); text-decoration: none; font-weight: 600; justify-self: start; } #f-top a:hover { color: var(--paper); }
+.f-steps { display: flex; gap: 4px; }
+.f-steps button { all: unset; font-weight: 600; font-size: 13px; padding: 6px 12px; border-radius: 999px; color: var(--mute); white-space: nowrap; }
+.f-steps button[aria-current=step] { background: var(--paper); color: var(--ink); }
+.f-steps button.open { color: var(--paper); cursor: pointer; } .f-steps button.open:hover { background: var(--panel2); }
+/* The rail: body on top, the primary action pinned at the bottom. */
+#f-rail { grid-area: rail; background: var(--panel); display: flex; flex-direction: column; }
+#f-body { flex: 1; min-height: 0; overflow: auto; padding: 18px 20px; display: flex; flex-direction: column; gap: 18px; }
+#f-foot { padding: 14px 20px 20px; display: flex; flex-direction: column; gap: 8px; }
+#f-foot:empty { display: none; }
+.f-back { all: unset; cursor: pointer; color: var(--mute); font-weight: 600; font-size: 13px; align-self: flex-start; } .f-back:hover { color: var(--paper); }
+.f-sec h3 { margin: 0 0 8px; font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--mute); }
+.f-sec h2 { margin: 0 0 8px; font-size: 22px; line-height: 1.2; font-weight: 700; text-transform: none; letter-spacing: 0; color: var(--paper); }
+.f-sec p { margin: 0 0 8px; color: var(--paper); } .f-sec p.dim, .f-small { color: var(--mute); font-size: 12px; }
+.f-list { display: flex; flex-direction: column; }
+.f-item { display: flex; gap: 10px; align-items: center; padding: 9px 0; border-top: 1px solid var(--panel2); min-height: 26px; }
+.f-item .n { flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--stop); color: var(--ink); font-weight: 700; font-size: 12px; display: grid; place-items: center; }
+.f-item .t { flex: 1; min-width: 0; } .f-item .t small { display: block; color: var(--mute); font-size: 12px; }
+.f-item .x { all: unset; cursor: pointer; color: var(--mute); font-size: 18px; padding: 0 6px; } .f-item .x:hover { color: var(--paper); }
+.f-item.hot { background: var(--panel2); }
+.f-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(72px, 1fr)); gap: 12px; }
+.f-stat b { display: block; font-size: 24px; line-height: 1.1; font-weight: 700; font-variant-numeric: tabular-nums; }
+.f-stat span { display: block; margin-top: 3px; font-size: 12px; color: var(--mute); }
 .f-stat.scout b { color: var(--scout); } .f-stat.hazard b { color: var(--hazard); } .f-stat.stop b { color: var(--stop); }
-.f-bar { height: 4px; border-radius: 2px; background: #ffffff26; overflow: hidden; margin: 8px 0 6px; }
+.f-bar { height: 4px; border-radius: 2px; background: var(--panel2); overflow: hidden; margin: 8px 0 6px; }
 .f-bar i { display: block; height: 100%; width: 0; background: var(--scout); transition: width .2s linear; }
-#flow button { font: 600 14px "Rethink Sans", system-ui, sans-serif; min-height: 44px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--rule);
-  background: #191919c7; color: var(--paper); backdrop-filter: blur(10px); cursor: pointer; }
-#flow button:hover { background: #2a2a2ad9; }
-#flow button.primary { background: var(--paper); color: var(--ink); border-color: var(--paper); font: 400 12px "Michroma", system-ui, sans-serif; letter-spacing: .08em; text-transform: uppercase; padding: 0 26px; min-height: 50px; }
-#flow button.primary:hover { background: #fff; }
-#flow button[aria-pressed=true] { background: var(--paper); color: var(--ink); }
-#flow button:disabled { opacity: .45; cursor: default; }
-.f-seg { display: flex; gap: 6px; } .f-seg button { flex: 1; padding: 0 10px; }
-.f-row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
-.f-event { max-width: min(480px, 80vw); padding: 10px 16px; border-radius: 12px; background: #191919d9; border: 1px solid var(--rule); border-left: 3px solid var(--scout); font-size: 14px; line-height: 1.35;
+#flow button.f-btn { font: 600 14px "Rethink Sans", system-ui, sans-serif; min-height: 44px; padding: 0 16px; border-radius: 10px; border: 0; background: var(--panel2); color: var(--paper); cursor: pointer; }
+#flow button.f-btn:hover { background: #383634; }
+#flow button.f-btn.primary { background: var(--paper); color: var(--ink); min-height: 50px; font-size: 15px; font-weight: 700; }
+#flow button.f-btn.primary:hover { background: #fff; }
+#flow button.f-btn[aria-pressed=true] { background: var(--paper); color: var(--ink); }
+#flow button.f-btn:disabled { opacity: .4; cursor: default; }
+.f-seg { display: flex; gap: 6px; } .f-seg button { flex: 1; }
+.f-row { display: flex; gap: 8px; } .f-row > * { flex: 1; }
+/* A model-card line: one model, its score, its limit. */
+.f-model { background: var(--panel2); border-radius: 10px; padding: 10px 12px; font-size: 12px; color: var(--mute); }
+.f-model b { color: var(--paper); font-weight: 700; }
+/* The main area: the 2D map fills it in console stages; in scene stages it is clear and the 3D view shows through. */
+#f-main { grid-area: main; position: relative; overflow: hidden; background: #120e0c; }
+#f-main.scene { background: none; pointer-events: none; }
+#f-main > .f-ov { position: absolute; z-index: 2; pointer-events: none; display: flex; gap: 8px; }
+#f-main > .f-ov > * { pointer-events: auto; }
+#f-strip { right: 16px; top: 16px; } #f-br { right: 16px; bottom: 16px; align-items: flex-end; } #f-bl { left: 16px; bottom: 16px; align-items: flex-end; }
+#f-bottom { left: 16px; right: 16px; bottom: 16px; flex-direction: column; align-items: center; }
+.f-chip { background: var(--panel); border-radius: 10px; padding: 10px 14px; font-size: 13px; }
+.f-chip .f-stats { gap: 18px; grid-template-columns: repeat(3, auto); } .f-chip .f-stat b { font-size: 20px; }
+.f-event { max-width: min(520px, 90%); padding: 10px 16px; border-radius: 10px; background: var(--panel); border-left: 3px solid var(--scout); font-size: 14px;
   opacity: 0; transform: translateY(6px); transition: opacity .35s, transform .35s; }
 .f-event.on { opacity: 1; transform: none; } .f-event.hazard { border-left-color: var(--hazard); }
-.f-small { font-size: 11px; color: var(--mute); }
-/* The 2D orbit map: a picture with an SVG drawn over it. Sizes: .big in the centre, .mini in the corner. */
-.f-map { position: relative; aspect-ratio: 1; border-radius: 14px; overflow: hidden; border: 1px solid var(--rule); background: #2a1d16; }
-.f-map.big { width: min(62vh, 100%, 640px); } .f-map.mini { width: min(26vh, 220px); }
+/* The 2D orbit map. .fill covers the main area; .mini is a small square for a corner. */
+.f-map { position: relative; overflow: hidden; background: #2a1d16; }
+.f-map.fill { position: absolute; inset: 0; } .f-map.mini { width: min(30vh, 240px); aspect-ratio: 1; border-radius: 10px; }
 .f-map canvas, .f-map svg { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: block; max-width: none; }
-.f-map .cap { position: absolute; left: 10px; top: 8px; font: 400 9px "Michroma", system-ui, sans-serif; letter-spacing: .1em; text-transform: uppercase; color: var(--paper); text-shadow: 0 1px 3px #000; }
-.f-map .cap2 { position: absolute; left: 10px; bottom: 8px; right: 10px; font-size: 10px; color: var(--paper); text-shadow: 0 1px 3px #000; }
+.f-map .cap { position: absolute; left: 16px; top: 14px; font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--paper); text-shadow: 0 1px 3px #000; }
+.f-map .cap2 { position: absolute; left: 16px; bottom: 12px; font-size: 11px; color: var(--paper); text-shadow: 0 1px 3px #000; max-width: 60%; }
+.f-map.mini .cap { left: 8px; top: 6px; font-size: 10px; } .f-map.mini .cap2 { display: none; }
 @media (max-width: 760px) {
-  #flow { grid-template: "top" auto "center" 1fr "left" auto "right" auto "corners" auto "bottom" auto / 1fr; gap: 8px; }
-  #f-bl, #f-br { grid-area: corners; } #f-br { justify-content: end; } #f-bl { justify-content: start; }
-  .f-steps span { padding: 8px 9px; font-size: 8px; } .f-steps span:not([aria-current=step]) i { display: none; }
-  .f-map.big { width: min(100%, 46vh); } .f-map.mini { width: 110px; }
-  .f-card { padding: 10px 12px; } .f-stat b { font-size: 16px; }
+  #flow { grid-template: "top" 44px "main" minmax(0, 1fr) "rail" auto / 1fr; }
+  #f-top { grid-template-columns: auto 1fr; gap: 10px; padding: 0 10px; } #f-top a span { display: none; }
+  .f-steps { justify-self: end; } .f-steps button { padding: 5px 8px; font-size: 12px; } .f-steps button:not([aria-current=step]) i { display: none; }
+  #f-rail { max-height: 52vh; } #f-body { padding: 12px 14px; gap: 12px; } #f-foot { padding: 10px 14px 14px; }
+  .f-sec h2 { font-size: 18px; } .f-map.mini { width: 104px; } #f-strip { right: 8px; top: 8px; } .f-chip .f-stat b { font-size: 16px; }
 }

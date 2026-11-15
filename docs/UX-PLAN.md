@@ -3,7 +3,7 @@
 Proposed 2026-11-15, 8:30 AM. Submission closes 1:30 PM. Status: **accepted by Nicolas 15 Nov; being built in `app/src/flow/`.** Vision lives at `/scout/?vision` for now (not `/vision/`).
 Source: Nicolas's direction of 15 Nov. Site in both products: the Gale crater slice (2 × 2 km of lower Mount Sharp), the one the app already uses.
 
-## 0. Version 2 (Nicolas's review of the first build, 15 Nov, about 9 AM): proposed, not built
+## 0. Version 2 (Nicolas's review of the first build, 15 Nov, about 9 AM): built in `app/src/flow/`
 
 This section replaces §2 and §4 below where they differ.
 

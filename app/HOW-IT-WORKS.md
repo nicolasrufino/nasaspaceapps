@@ -206,9 +206,12 @@ The **View** button switches between Map, Follow (camera 14 m behind the astrona
 
 ## 13b. The guided mission (Vesta Scout) and the helicopter battery
 
-Vesta Scout runs in four stages (`app/src/flow/`, plan in `docs/UX-PLAN.md`): **Plan** at the habitat on a 2D orbit map, **Read the orbit map**, **Scout** behind the helicopter, **Choose the walk**. The map screen with every layer is Vesta Vision (`/scout/?vision`).
+Vesta Scout runs in four stages (`app/src/flow/`, plan in `docs/UX-PLAN.md` §0): **Choose stops** on the 2D orbit map (it starts empty; at least 3), **How the route is found** (five steps the user moves through), **Scout** behind the helicopter, **Choose the walk**. The crew is inside the habitat, so only the flight and the walk preview show the 3D scene. The map screen with every layer is Vesta Vision (`/scout/?vision`).
 
 - **Route priority.** *Easiest* is the planner's least-energy route. *Shortest* keeps the same stops in the same order and joins them by least distance; its energy is then measured with the same walking model. While the scout flies it re-plans by least energy, whichever was chosen.
+- **The straight line** (stage 2, step 1): straight segments base → stops → base in the planned order; the metres of it on cells steeper than `max_slope_deg` (20°) are counted and drawn red.
+- **Detections** (stage 3): newly seen rock cells are grouped into one find until 40 m of flight pass without any; a find's area is cells × 64 m². "On the route" means one of its cells is on the route as planned at that moment. Ground scanned = newly seen cells × 64 m².
+- **Model lines** (`app/src/flow/models.js`): the rock-chance model (AUC 0.73 on a development check, not calibrated), the reviewed rock detections (23 of 25 proposals confirmed, no hit rate claimed), and the ground classifier (93% on 159 held-out Curiosity patches, 48% on 197 Perseverance patches), each copied from its export.
 - **Unseen ground** (stage 2): the length of the route whose cells no helicopter has looked at, summed step by step.
 - **Hidden-rock estimate** (stage 2): the belief map of §12, shown relative to its highest value near the route. Experimental, not calibrated.
 - **Helicopter battery** (stage 3, `app/src/flow/heli-energy.js`), an **estimate**: Ingenuity's flight power, about 350 W (JPL Ingenuity landing press kit), and its battery, 38.8 Wh when new at 0 °C (NASA/JPL battery slide deck, six Sony VTC4 cells), on SkyFall's flight profile of 1 km in 2.5 minutes (`docs/OPERATIONS.md`).

@@ -1,181 +1,275 @@
-// Stage 2, Read the orbit map (docs/UX-PLAN.md): about 9 s, automatic, skippable. The system shows its own reasoning
-// one line at a time, each tied to something drawn on the 2D map (NASA MRO HiRISE picture): the planned route, the
-// experimental chance of rocks too small for orbit to see, the route ground no helicopter has seen, the first flight.
-// Every number is read from `app` when the step runs.
+// Stage 2, How the route is found (docs/UX-PLAN.md section 0): a five-step explainer on the user's own stops.
+// The user moves with Next and Back; nothing advances by itself. Each step changes one thing on the 2D map
+// (NASA MRO HiRISE picture; slope from the HiRISE stereo terrain) and says at most two sentences in the rail.
+// show(step) clears this stage's layers and redraws the whole picture for that step, animating only the newest
+// layer, so Back restores the previous picture exactly. Every number is read from `app` when the stage opens.
+import { MODELS } from './models.js'
+
 const SVG = 'http://www.w3.org/2000/svg'
-const STEP_MS = 2100 // one line of reasoning
 const NEAR = 12 // cells either side of the route that get the hidden-rock estimate
+const RED = '#ff5a3d', AMBER = '#ffaa28', CYAN = '#35e0ff', GREEN = '#46aa5a'
+const AMBER_RGB = [255, 170, 40]
+const LAYERS = ['fa-straight', 'fa-band', 'fa-centre', 'fa-route'] // map.line layers owned by this stage
 const CSS = `
-@keyframes fa-pulse { 0%, 100% { opacity: 1 } 50% { opacity: .2 } }
-.fa-unseen { animation: fa-pulse 1s ease-in-out infinite; }
-.fa-line { max-width: min(560px, 92vw); text-align: center; font-size: clamp(16px, 2.3vw, 21px); line-height: 1.3; font-weight: 600;
-  color: var(--paper); background: #191919c7; backdrop-filter: blur(10px); border: 1px solid var(--rule); border-radius: 14px; padding: 12px 20px; box-sizing: border-box; opacity: 0; transform: translateY(6px); transition: opacity .3s, transform .3s; }
-.fa-line.on { opacity: 1; transform: none; }
-.fa-sub { min-height: 1.3em; text-align: center; text-shadow: 0 1px 4px #000; }
-.fa-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; font-size: 14px; color: var(--mute); }
-.fa-list li { display: flex; gap: 10px; align-items: center; transition: color .3s; }
-.fa-list li::before { content: ""; flex: none; width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid var(--mute); box-sizing: border-box; transition: background .3s, border-color .3s; }
-.fa-list li.now { color: var(--paper); } .fa-list li.now::before { border-color: var(--scout); }
-.fa-list li.done { color: var(--paper); } .fa-list li.done::before { background: var(--scout); border-color: var(--scout); }
-@media (prefers-reduced-motion: reduce) { .fa-unseen { animation: none; } }
+.fa-wrap { display: flex; flex-direction: column; gap: 14px; }
+.fa-count { font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--mute); }
+.fa-prog { display: flex; gap: 4px; margin-top: 8px; }
+.fa-prog button { all: unset; flex: 1; height: 6px; padding: 8px 0; background: var(--panel2); background-clip: content-box; border-radius: 3px; cursor: pointer; }
+.fa-prog button.done { background-color: var(--mute); } .fa-prog button.now { background-color: var(--paper); }
+.fa-prog button:focus-visible { outline: 2px solid var(--scout); outline-offset: -4px; }
+.fa-text p { font-size: 15px; line-height: 1.45; }
+.fa-fade { transition: opacity .5s; }
+@keyframes fa-pulse { 0%, 100% { opacity: 1 } 50% { opacity: .15 } }
+.fa-pulse { animation: fa-pulse 1.1s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .fa-pulse { animation: none; } }
 `
-const metresText = (m) => `${Math.round(m)} m`
-const flightText = (m) => (m >= 1000 ? `${+(m / 1000).toFixed(1)} km` : `${Math.round(m)} m`)
+const span = (color, text) => `<span style="color:${color};font-weight:700">${text}</span>`
+const metres = (m) => `${Math.round(m)} m`
+const km = (m) => (m >= 1000 ? `${+(m / 1000).toFixed(1)} km` : `${Math.round(m)} m`)
 
 export default {
   enter(ui, app) {
-    app.camera('habitat')
     const { map } = ui
     const { W, H, cs } = app
     if (!document.getElementById('fa-style')) document.head.append(Object.assign(document.createElement('style'), { id: 'fa-style', textContent: CSS }))
+    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches
 
-    // Read the plan once: this stage only watches, nothing can change the route while it runs.
+    // ---- Read the plan once: nothing in this stage changes the route. ----
     const route = app.route()
     const cells = route.cells ?? []
-    const routeM = cells.length > 1 ? app.describe(cells).metres : 0
-    const stopCount = route.stops?.length ?? 0
-    // Route ground never seen up close: steps of the route that end on a cell no helicopter has looked at.
-    const runs = [] // contiguous stretches of unseen route cells, for drawing
-    let unseenM = 0, run = null
-    cells.forEach(([x, y], n) => {
-      if (app.scanned[y * W + x]) { run = null; return }
-      if (n > 0) unseenM += Math.hypot(x - cells[n - 1][0], y - cells[n - 1][1]) * cs
-      if (!run) runs.push((run = []))
-      run.push([x, y])
-    })
+    const base = app.meta.base_cell
+    const all = app.stops()
+    const ordered = (route.stops ?? []).map((id) => all.find((s) => s.id === id)).filter(Boolean)
+    const others = all.filter((s) => s.included && !ordered.includes(s)) // included but not on the route (dropped)
+    const limit = app.maxSlopeDeg
+    const slope = app.world.layers.slope
+    const stepM = (a, b) => Math.hypot(b[0] - a[0], b[1] - a[1]) * cs
+
+    // Step 1: straight lines base -> stops in route order -> base, and the steps of it that end on too-steep ground.
+    const corners = [base, ...ordered.map((s) => s.cell), base]
+    const straight = []
+    for (let k = 1; k < corners.length; k++) { const leg = app.line(corners[k - 1], corners[k]); straight.push(...(k > 1 ? leg.slice(1) : leg)) }
+    // Contiguous stretches of path cells that pass `bad`, each starting with the cell stepped from; and their length.
+    function stretches(path, bad) {
+      const runs = []
+      let m = 0, run = null
+      for (let n = 1; n < path.length; n++) {
+        const [x, y] = path[n]
+        if (bad(y * W + x)) { m += stepM(path[n - 1], path[n]); if (!run) runs.push((run = [path[n - 1]])); run.push(path[n]) } else run = null
+      }
+      return { runs, m }
+    }
+    const steep = stretches(straight, (i) => slope[i] > limit)
+    // Step 4: route ground no helicopter has looked at.
+    const unseen = stretches(cells, (i) => !app.scanned[i])
+    // Step 3: the numbers, from the planner.
+    const d = cells.length > 1 ? app.describe(cells) : { metres: 0, energy_j: 0, minutes: 0 }
+    const numbers = [['metres', `${Math.round(d.metres)}`], ['kJ', ui.kj(route.energy_j ?? d.energy_j)], ['minutes', `${Math.round(route.minutes ?? d.minutes)}`]]
     const left = app.scout.left()
 
-    // Layout
-    map.size('big')
-    map.clear()
-    map.fit([...cells, app.meta.base_cell], 18)
-    const k = map.scale
-    map.caption('Reading the orbit map', 'NASA MRO HiRISE')
-    ui.center.append(map.el)
-
-    const steps = ui.card('What the system is checking')
-    const list = ui.h('ul', 'fa-list')
-    const items = ['Route', 'Hidden-rock estimate', 'Unseen ground', 'Flight plan'].map((t) => { const li = ui.h('li'); li.textContent = t; list.append(li); return li })
-    const small = ui.h('p', 'f-small')
-    small.textContent = 'Planning with unknown blockages: the Canadian Traveller Problem.'
-    small.style.marginTop = '12px'
-    steps.append(list, small)
-    ui.left.append(steps)
-
-    const numbers = ui.card('From the planner')
-    const stats = ui.stats([['route metres', '–'], ['metres not seen up close', '–', 'hazard'], [left === 1 ? 'flight available' : 'flights available', '–', 'scout']])
-    numbers.append(stats.el)
-    ui.right.append(numbers)
-
-    const line = ui.h('div', 'fa-line'), sub = ui.h('div', 'f-small fa-sub')
-    line.setAttribute('aria-live', 'polite')
-    const launch = ui.button('Launch', () => go(), true)
-    launch.style.visibility = 'hidden'
-    ui.bottom.append(line, sub, launch)
-    ui.bl.append(ui.button('Skip', () => go()))
-
-    // Everything that could fire later is tracked here so cleanup can stop it.
-    let dead = false, raf = 0
-    const timers = new Set()
-    const after = (ms, fn) => { const t = setTimeout(() => { timers.delete(t); if (!dead) fn() }, ms); timers.add(t) }
-    const go = () => { if (!dead) ui.go('scout') }
-    const extra = document.createElementNS(SVG, 'g') // our own drawing (the pulsing unseen stretches), removed on cleanup
-
-    function say(n, text, subText = '') {
-      items.forEach((li, j) => { li.className = j < n ? 'done' : j === n ? 'now' : '' })
-      line.classList.remove('on')
-      after(140, () => { line.textContent = text; sub.textContent = subText; line.classList.add('on') })
+    // Worked out the first time they are needed (they cost a pass over the map).
+    let hazard = null, belief = null, flight
+    const getHazard = () => (hazard ??= app.hazardColors())
+    function getBelief() { // { near: 1 within NEAR cells of the route, b: chance per cell, max: strongest chance near the route }
+      if (belief) return belief
+      const near = new Uint8Array(W * H), b = app.belief()
+      for (const [x, y] of cells) for (let yy = Math.max(0, y - NEAR); yy <= Math.min(H - 1, y + NEAR); yy++) for (let xx = Math.max(0, x - NEAR); xx <= Math.min(W - 1, x + NEAR); xx++) near[yy * W + xx] = 1
+      let max = 0
+      for (let i = 0; i < W * H; i++) if (near[i] && b[i] > max) max = b[i]
+      return (belief = { near, b, max })
     }
-    function drawStops() {
-      map.dots('stops', [
-        { cell: app.meta.base_cell, label: 'H', color: '#fff', r: 6 * k },
-        ...app.stops().filter((s) => s.included && !s.dropped).map((s) => ({ cell: s.cell, r: 4 * k })),
-      ])
+    function getFlight() { // the first flight the scout would fly, or null
+      if (flight === undefined) { try { flight = app.scout.preview() ?? null } catch { flight = null } }
+      return flight?.waypoints?.length > 1 ? flight : null
     }
 
-    const run4 = [
-      // 1. The planned route draws itself.
-      () => {
-        map.line('route', cells, { color: '#fff', width: 2.2 * k })
-        map.drawOn('route', STEP_MS - 500)
-        drawStops()
-        stats.set(0, Math.round(routeM))
-        say(0, cells.length > 1 ? `Planned route: ${metresText(routeM)} through ${stopCount} ${stopCount === 1 ? 'stop' : 'stops'}.` : 'No route planned yet.')
-      },
-      // 2. Chance of a hidden rock, around the route only. Amber, stronger where the chance is higher.
-      () => {
-        say(1, 'Orbit sees rocks down to about 1.5 m. Smaller ones are a guess.', 'Amber: experimental estimate of hidden rocks, not calibrated.')
-        let belief = null
-        try { belief = app.belief() } catch { belief = null }
-        if (!belief) return
-        const near = new Uint8Array(W * H)
-        for (const [cx, cy] of cells) {
-          for (let y = Math.max(0, cy - NEAR); y <= Math.min(H - 1, cy + NEAR); y++) {
-            for (let x = Math.max(0, cx - NEAR); x <= Math.min(W - 1, cx + NEAR); x++) if ((x - cx) ** 2 + (y - cy) ** 2 <= NEAR * NEAR) near[y * W + x] = 1
-          }
-        }
-        let top = 0
-        for (let i = 0; i < W * H; i++) if (near[i] && belief[i] > top) top = belief[i]
-        if (!(top > 0)) return
-        // Alpha is relative to the highest chance near the route, so the layer shows where the guess is stronger, not how strong.
-        const t0 = performance.now(), FADE = 900
-        let last = -1
-        const frame = (now) => {
-          if (dead) return
-          const f = Math.min(1, (now - t0) / FADE), q = Math.ceil(f * 6) // six repaints are enough for a fade
-          if (q !== last) {
-            last = q
-            const a = (q / 6) * 190
-            map.paint((i) => (near[i] && belief[i] > 0 ? [255, 176, 32, Math.round(a * Math.min(1, belief[i] / top))] : null))
-          }
-          if (f < 1) raf = requestAnimationFrame(frame)
-        }
-        raf = requestAnimationFrame(frame)
-      },
-      // 3. Route ground no helicopter has seen: pulses red.
-      () => {
-        stats.set(1, Math.round(unseenM))
-        if (!runs.length) return say(2, 'All of this route has been seen up close.')
-        const d = runs.map((r) => (r.length === 1 ? [r[0], r[0]] : r).map(([x, y], n) => `${n ? 'L' : 'M'}${x + 0.5} ${y + 0.5}`).join('')).join('')
-        const path = document.createElementNS(SVG, 'path')
-        for (const [a, v] of Object.entries({ d, fill: 'none', stroke: '#ff5a3d', 'stroke-width': 4.2 * k, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', class: 'fa-unseen' })) path.setAttribute(a, v)
-        extra.append(path)
-        map.svg.append(extra)
-        drawStops() // keep the stops above the pulse
-        say(2, `${metresText(unseenM)} of this route has never been seen up close.`, `Measured along the route in ${cs} m cells.`)
-      },
-      // 4. The first flight the scout would fly, as wide as what it sees.
-      () => {
-        stats.set(2, left)
-        let first = null
-        try { first = app.scout.preview() } catch { first = null }
-        if (first?.waypoints?.length > 1) {
-          map.line('corridor', first.waypoints, { color: '#35e0ff', width: (2 * app.scout.swathM) / cs, opacity: 0.28 })
-          map.line('flight', first.waypoints, { color: '#35e0ff', width: 1.2 * k })
-          map.drawOn('corridor', 1100); map.drawOn('flight', 1100)
-          drawStops()
-        }
-        const each = flightText(app.scout.flightM)
-        const text = left <= 0 ? 'No flights left. The walk uses what has been seen so far.'
-          : `${left === 1 ? `One flight of ${each}.` : `Up to ${left} flights of ${each} each.`} The scout re-plans after every landing.`
-        say(3, text, first?.waypoints?.length > 1 ? `Cyan: the first flight, ${metresText(first.metres)}, drawn as wide as the ${2 * app.scout.swathM} m it sees.` : '')
-      },
-      // Done: tick the last step, offer Launch, and go on by itself.
-      () => {
-        items.forEach((li) => { li.className = 'done' })
-        launch.style.visibility = ''
-        after(STEP_MS, go)
-      },
+    // ---- The steps: title (six words at most), two sentences, what Next is called. ----
+    const STEPS = [
+      { title: 'The straight line', next: 'from picture to terrain',
+        text: () => [`The simplest plan joins the stops with straight lines. ${steep.m > 0
+          ? `Here ${span(RED, metres(steep.m))} of it crosses ground ${span(RED, `steeper than ${limit}°`)}, the suit’s limit.`
+          : `Here it happens to stay walkable, but it ignores how much energy each step costs.`}`] },
+      { title: 'From a picture to terrain', next: 'the best route',
+        text: () => ['Orbit also gives height (HiRISE stereo). Height gives slope, and slope and ground type give the energy of every step.'],
+        small: () => `${span(GREEN, 'Walkable')} · ${span(AMBER, 'near the limit')} · ${span(RED, 'too steep')}` },
+      { title: 'The best route orbit can give', next: 'what orbit cannot see',
+        text: () => [`${app.objective() === 'shortest' ? `The shortest ${span('#fff', 'route')} through your stops that stays walkable.` : `The least-energy ${span('#fff', 'route')} bends around steep ground and sand.`} As far as orbit can tell.`] },
+      { title: 'What orbit cannot see', next: 'where to send the helicopter',
+        text: () => [`Orbit sees rocks down to about 1.5 m. ${span('#fff', metres(unseen.m))} of this route has never been seen up close.`],
+        small: () => `${span(AMBER, 'Amber')}: where smaller rocks are more likely to hide. An experimental estimate.`,
+        models: [MODELS.rockChance, MODELS.rockReview] },
+      { title: 'Where to send the helicopter',
+        text: () => [getFlight()
+          ? `Up to ${left} ${left === 1 ? 'flight' : 'flights'} of ${km(app.scout.flightM)}, each seeing a ${span(CYAN, `${Math.round(2 * app.scout.swathM)} m strip`)}. After each landing the route is planned again with what was found.`
+          : `No flight is planned from here: ${left <= 0 ? 'the helicopter has no flights left' : 'there is no unseen route ground in reach'}. The route stands as orbit gave it.`],
+        small: () => 'Planning with unknown blockages is known as the Canadian Traveller Problem.' },
     ]
-    run4.forEach((fn, n) => after(n === 0 ? 60 : n * STEP_MS, fn))
+
+    // ---- Rail and foot: built once, filled by show(). ----
+    const wrap = ui.h('div', 'fa-wrap')
+    const head = ui.h('div'), count = ui.h('div', 'fa-count'), prog = ui.h('div', 'fa-prog')
+    const segs = STEPS.map((s, k) => { const b = ui.h('button'); b.type = 'button'; b.title = s.title; b.setAttribute('aria-label', `Step ${k + 1}: ${s.title}`); b.onclick = () => show(k); prog.append(b); return b })
+    head.append(count, prog)
+    const body = ui.h('div', 'fa-wrap')
+    wrap.append(head, body)
+    ui.body.append(wrap)
+
+    const note = ui.h('div', 'f-small'), row = ui.h('div', 'f-row')
+    const backBtn = ui.button('Back', () => show(step - 1))
+    const nextBtn = ui.button('', () => (step === STEPS.length - 1 ? ui.go('scout') : show(step + 1)), true)
+    backBtn.style.flex = '0 0 84px'
+    row.append(backBtn, nextBtn)
+    ui.foot.append(note, row)
+
+    const chip = ui.chip()
+    chip.append(ui.stats(numbers.map(([label, value]) => [label, value])).el)
+
+    // ---- Map drawing owned by this stage: two SVG paths (several stretches each) beside the map's named layers. ----
+    const path = (color) => { const p = document.createElementNS(SVG, 'path'); for (const [k, v] of Object.entries({ fill: 'none', stroke: color, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' })) p.setAttribute(k, v); return p }
+    const dOf = (runs) => runs.map((r) => `M${r.map(([x, y]) => `${x + 0.5},${y + 0.5}`).join('L')}`).join('')
+    const steepEl = path(RED), unseenEl = path('#fff')
+    steepEl.setAttribute('d', dOf(steep.runs)); unseenEl.setAttribute('d', dOf(unseen.runs))
+
+    // ---- Timers: every one is tracked, and dies with the stage or with the next show(). ----
+    let alive = true, step = 0, gen = 0
+    const timers = new Set()
+    const later = (fn, ms) => { const g = gen, t = setTimeout(() => { timers.delete(t); if (alive && g === gen) fn() }, ms); timers.add(t) }
+    const stopTimers = () => { for (const t of timers) clearTimeout(t); timers.clear() }
+
+    // Paint: one colour per cell. px is reused (map.paint copies it).
+    const px = [0, 0, 0, 0]
+    function paintSlope(alpha) {
+      if (alpha <= 0) return map.paint(() => null)
+      const c = getHazard()
+      px[3] = alpha
+      map.paint((i) => { px[0] = c[i * 3]; px[1] = c[i * 3 + 1]; px[2] = c[i * 3 + 2]; return px })
+    }
+    function paintBelief(strength) { // amber near the route, alpha relative to the strongest chance near the route
+      const { near, b, max } = getBelief()
+      if (!(max > 0) || strength <= 0) return map.paint(() => null)
+      px[0] = AMBER_RGB[0]; px[1] = AMBER_RGB[1]; px[2] = AMBER_RGB[2]
+      map.paint((i) => { if (!near[i]) return null; const a = (b[i] / max) * 230 * strength; if (a < 6) return null; px[3] = a; return px })
+    }
+    // Repaint `fn(value)` from one value to another in six steps over about 0.7 s, then hold.
+    function fade(fn, from, to) {
+      if (calm) return fn(to)
+      fn(from)
+      for (let n = 1; n <= 6; n++) later(() => fn(from + ((to - from) * n) / 6), n * 115)
+    }
+    // Show an element of ours at an opacity, fading in when it is the newest thing.
+    function reveal(el, opacity, animate, delay = 0) {
+      el.classList.remove('fa-fade')
+      el.style.opacity = animate ? 0 : opacity
+      map.svg.append(el)
+      if (!animate) return
+      el.getBoundingClientRect()
+      later(() => { el.classList.add('fa-fade'); el.style.opacity = opacity }, delay)
+    }
+
+    function pins() {
+      const k = map.scale
+      map.dots('stops', [
+        ...others.map((s) => ({ id: s.id, cell: s.cell, label: '', color: '#ffd23f', r: 1.3 * k, faded: true })),
+        ...ordered.map((s, n) => ({ id: s.id, cell: s.cell, label: n + 1, color: '#ffd23f', r: 1.7 * k })),
+        { id: 'base', cell: base, label: 'H', color: '#fff', r: 1.7 * k },
+      ])
+      map.raise('stops')
+    }
+
+    // The whole picture for step s. `animate` only moves the layer that step s adds.
+    function show(s, animate = true) {
+      if (!alive) return
+      s = Math.max(0, Math.min(STEPS.length - 1, s))
+      const fresh = animate && !calm
+      gen++
+      stopTimers()
+      step = s
+      const k = map.scale, thin = 0.45 * k
+      for (const name of LAYERS) map.clear(name)
+      steepEl.remove(); unseenEl.remove()
+      unseenEl.classList.remove('fa-pulse')
+
+      // 1. The straight line (white), then its too-steep parts (red). Faint from step 2, 25% from step 3.
+      const sOp = s === 0 ? 1 : s === 1 ? 0.55 : 0.25
+      map.line('fa-straight', straight, { color: '#fff', width: thin, opacity: sOp, dash: s === 0 ? '' : `${1.2 * k} ${1.2 * k}` })
+      steepEl.setAttribute('stroke-width', thin * 1.9)
+      if (s === 0 && fresh) { map.drawOn('fa-straight', 700); reveal(steepEl, 1, true, 750) } else reveal(steepEl, sOp, false)
+
+      // 2. Slope colours over the picture; dimmed from step 3; replaced by the hidden-rock estimate from step 4.
+      if (s === 0) paintSlope(0)
+      else if (s === 1) fresh ? fade(paintSlope, 0, 150) : paintSlope(150)
+      else if (s === 2) fresh ? fade(paintSlope, 150, 70) : paintSlope(70)
+      else if (s === 3) fresh ? fade(paintBelief, 0, 1) : paintBelief(1)
+      else paintBelief(0.55)
+
+      // 5. The first flight: a translucent band as wide as the camera sees, with a thin centre line. Under the route.
+      const f = s === 4 ? getFlight() : null
+      if (f) {
+        map.line('fa-band', f.waypoints, { color: CYAN, width: (2 * app.scout.swathM) / cs, opacity: 0.3 })
+        map.line('fa-centre', f.waypoints, { color: CYAN, width: thin * 0.8 })
+        if (fresh) { map.drawOn('fa-band', 1100); map.drawOn('fa-centre', 1100) }
+      }
+
+      // 3. The planned route (white). In step 4 it goes faint so the unseen stretches can pulse over it.
+      if (s >= 2) {
+        map.line('fa-route', cells, { color: '#fff', width: 0.6 * k, opacity: s === 3 ? 0.3 : 1 })
+        if (s === 2 && fresh) map.drawOn('fa-route', 1200)
+      }
+      // 4. Route ground never seen up close: pulses.
+      if (s === 3) { unseenEl.setAttribute('stroke-width', 0.6 * k); unseenEl.style.opacity = ''; unseenEl.classList.add('fa-pulse'); map.svg.append(unseenEl) }
+
+      // Order, bottom to top: straight, steep, band, centre, route, unseen, pins.
+      map.raise('fa-band'); map.raise('fa-centre'); map.raise('fa-route')
+      if (unseenEl.isConnected) map.svg.append(unseenEl)
+      pins()
+
+      // The numbers exist from step 3 on.
+      if (s >= 2) { if (!chip.isConnected) ui.strip.append(chip) } else chip.remove()
+
+      // Rail.
+      const st = STEPS[s]
+      count.textContent = `${s + 1} of ${STEPS.length}`
+      segs.forEach((b, n) => { b.className = n === s ? 'now' : n < s ? 'done' : ''; n === s ? b.setAttribute('aria-current', 'step') : b.removeAttribute('aria-current') })
+      const sec = ui.section(st.title, true)
+      sec.classList.add('fa-text')
+      for (const t of st.text()) sec.append(ui.h('p', '', t))
+      if (st.small) sec.append(ui.h('p', 'dim', st.small()))
+      body.replaceChildren(sec, ...(st.models ?? []).map((m) => ui.model(m)))
+
+      // Foot: Back and the primary button, always in the same place.
+      const last = s === STEPS.length - 1
+      backBtn.disabled = s === 0
+      nextBtn.textContent = last ? 'Send the scout' : `Next: ${st.next}`
+      nextBtn.disabled = last && left <= 0
+      note.textContent = last && left <= 0 ? 'No flights left.' : ''
+      note.hidden = !note.textContent
+    }
+
+    // Arrow keys step too (never past the last step: sending the scout takes the button).
+    const onKey = (e) => {
+      if (e.altKey || e.ctrlKey || e.metaKey || /^(INPUT|TEXTAREA|SELECT)$/.test(e.target?.tagName ?? '')) return
+      if (e.key === 'ArrowRight' && step < STEPS.length - 1) show(step + 1)
+      else if (e.key === 'ArrowLeft' && step > 0) show(step - 1)
+    }
+    addEventListener('keydown', onKey)
+    // Sizes follow map.scale, which changes when the map's box does: redraw the same step, without animation.
+    let resizeT = 0
+    const onResize = () => { clearTimeout(resizeT); resizeT = setTimeout(() => show(step, false), 150) }
+    addEventListener('resize', onResize)
+
+    map.caption('How the route is found', 'NASA MRO HiRISE colour and stereo terrain · USGS MSL Gale mosaic')
+    map.fit([base, ...all.filter((s) => s.included).map((s) => s.cell), ...cells], 16)
+    show(0)
 
     return () => {
-      dead = true
-      for (const t of timers) clearTimeout(t)
-      timers.clear()
-      cancelAnimationFrame(raf)
-      extra.remove()
-      map.clear()
+      alive = false
+      gen++
+      stopTimers()
+      clearTimeout(resizeT)
+      removeEventListener('keydown', onKey)
+      removeEventListener('resize', onResize)
+      steepEl.remove(); unseenEl.remove()
+      chip.remove()
     }
   },
 }
