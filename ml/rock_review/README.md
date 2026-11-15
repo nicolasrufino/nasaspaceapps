@@ -12,6 +12,12 @@ The fixed shadow-pair baseline has now been measured on that real site:
 within 2 m; uncertain points are excluded. These are correspondence counts,
 not detector accuracy. See `final_site_baseline_metrics.json` and `FINAL_SITE.md`.
 
+**Next detector experiment:** [ROSCO.md](ROSCO.md) documents the official NASA/JPL
+native detector on a single HiRISE acquisition covering this site, with verified
+observation-level solar geometry. The development run produces 25 candidates;
+Jules reviewed six: five accepted and one uncertain. It does not replace the world hazards
+or transfer the existing visual labels to a different image.
+
 This handoff makes the same starter review available to Jules, Luca and Nicolas. **Jules has visually accepted all 50 numbered circles in the first delivered image as corresponding to rocks.** Their positions lie on a real 256 × 256 m Gale crop. The proposals use bright-object morphology; this is **preparation for R1**, not the completed shadow-based detector, a trained model, a final hazard map or a measured accuracy result. Issue #31 remains open.
 
 ## Start here
