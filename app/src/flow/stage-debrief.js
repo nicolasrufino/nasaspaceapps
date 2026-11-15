@@ -27,6 +27,17 @@ const CSS = `
   .d-strip .lab { flex-wrap: wrap; gap: 2px 8px; white-space: normal; }
   .d-strip .lab b { order: 3; flex-basis: 100%; }
 }
+.d-win { display: grid; grid-template-columns: 1.25fr 1fr; gap: 10px; margin: 4px 0 4px; }
+.d-win > div { background: var(--panel2); border-radius: 10px; padding: 10px 12px; }
+.d-win small { display: block; color: var(--mute); font-size: 12px; }
+.d-win b { display: block; font-size: 26px; line-height: 1.2; color: var(--paper); }
+.d-win .good b { color: var(--scout); } .d-win .price b { font-size: 20px; }
+.d-why { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.d-why li { position: relative; padding-left: 14px; font-size: 13px; line-height: 1.45; color: var(--paper); }
+.d-why li::before { content: ''; position: absolute; left: 0; top: .55em; width: 6px; height: 6px; border-radius: 50%; background: var(--scout); }
+.d-why.cost li { color: var(--mute); } .d-why.cost li::before { background: var(--mute); }
+.d-bar { position: relative; height: 10px; border-radius: 5px; background: var(--panel2); overflow: hidden; margin: 6px 0 4px; }
+.d-bar i { position: absolute; top: 0; bottom: 0; }
 `
 
 export default {
@@ -92,6 +103,45 @@ export default {
       return sec
     }
 
+    // The scout found rock on the orbit route: lead with what it bought (rock cells avoided), then what it cost.
+    // Every number is read from the two routes at run time; nothing about the cost of meeting the rocks on foot is claimed.
+    function compareWin(route, before, d, crossedOld, crossedNew) {
+      const od = app.describe(before.cells)
+      const extraJ = route.energy_j - before.energy_j, extraM = Math.round(d.metres - od.metres)
+      const pct = Math.round((route.energy_j / app.usableJ) * 100), spare = ui.kj(app.usableJ - route.energy_j)
+      const sign = (n) => (n >= 0 ? `+${n}` : `${n}`)
+      const cells = (n) => `${n} rock ${n === 1 ? 'cell' : 'cells'}`
+
+      const head = ui.section(crossedNew === 0 ? 'The scout cleared your path' : 'The scout made your path safer', true)
+      head.append(p(`Same stops. The route planned from orbit walked into ${cells(crossedOld)} that orbit can't see. The scouted route goes around them.`, 'dim'))
+      const win = ui.h('div', 'd-win', `<div class="good"><small>Rock cells on your path</small><b>${crossedOld} → ${crossedNew}</b></div>
+        <div class="price"><small>The price</small><b>${sign(Math.round(extraJ / 1000))} kJ</b><small>${sign(+((extraJ / before.energy_j) * 100).toFixed(1))}% energy · ${sign(extraM)} m</small></div>`)
+      head.append(win)
+
+      const why = ui.section("Why it's better")
+      why.append(ui.h('ul', 'd-why', `<li>No surprises on foot. Orbit misses rocks under about 1 m; the helicopter found these before anyone left.</li>
+        <li>Decided in the habitat, not mid-walk. Without the scout the crew meets these rocks on the walk and chooses on the spot, with Earth up to 22 minutes away.</li>
+        <li>The way home is worked out for the route you actually walk, so the walk-back ring can be trusted.</li>`))
+
+      const costSec = ui.section('Why it costs a little more')
+      costSec.append(ui.h('ul', 'd-why cost', `<li>It walks around the rocks instead of over them: ${extraM >= 0 ? `${extraM} m longer` : `${-extraM} m shorter`}. You still have ${spare} kJ to spare before the reserve.</li>`))
+      const orbitW = Math.min(100, (before.energy_j / app.usableJ) * 100), allW = Math.min(100, (route.energy_j / app.usableJ) * 100)
+      costSec.append(p(`Walking energy · ${ui.kj(route.energy_j)} of ${ui.kj(app.usableJ)} kJ (${pct}%)`, 'dim'),
+        ui.h('div', 'd-bar', `<i style="left:0;width:${Math.min(orbitW, allW)}%;background:var(--mute)"></i><i style="left:${Math.min(orbitW, allW)}%;width:${Math.abs(allW - orbitW)}%;background:var(--scout)"></i>`),
+        p(`Grey: the route from orbit (${ui.kj(before.energy_j)} kJ) · light: the scout's detour · the reserve is kept apart`, 'dim'))
+
+      const blocks = [routeBlock('new', 'With the scout', [['metres', Math.round(d.metres)], ['kJ', ui.kj(route.energy_j)], ['rock cells crossed', crossedNew, crossedNew > 0 ? 'hazard' : undefined]]),
+        routeBlock('old', 'Without the scout', [['metres', Math.round(od.metres)], ['kJ', ui.kj(before.energy_j)], ['rock cells crossed', crossedOld, 'hazard']])]
+      const both = ui.details('Compare the two routes', ...blocks)
+
+      const options = ui.details('More actions & model details', visionBtn)
+      if (app.scout.left() > 0) options.querySelector('.f-details-body').append(againBtn)
+      options.querySelector('.f-details-body').append(ui.model(MODELS.groundClassifier))
+      setBody(head, why, costSec, both, options)
+      previewBtn.disabled = route.cells.length < 2
+      ui.foot.replaceChildren(previewBtn, stopsBtn)
+    }
+
     function compare() {
       mode = 'compare'
       const route = app.route(), before = app.scout.before(), d = app.describe(route.cells)
@@ -108,6 +158,7 @@ export default {
         : crossedOld > 0 ? 'A clearer way home'
         : 'Your route, checked'
       const head = ui.section(headline, true)
+      if (before && crossedOld > 0) return compareWin(route, before, d, crossedOld, crossedNew)
       if (!before) head.append(p('No scouting yet: this is the route as seen from orbit.', 'dim'))
       else if (crossedOld > 0) head.append(p(`The route planned from orbit crossed ${crossedOld} rock ${crossedOld === 1 ? 'cell' : 'cells'} the scout found.`, 'dim'))
       else head.append(p('The scout found no rock on the route planned from orbit.', 'dim'))

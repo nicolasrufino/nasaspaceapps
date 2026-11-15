@@ -97,6 +97,10 @@
         button { min-height: 44px; }
       }
     </style>
+    <!-- The guided mission mounts only after the world loads (initFlow at the end of src/main.js); until then the
+         Vision panels would show for a moment. Same test as main.js's flowMode. -->
+    <script>if (!/[?&](vision|world|flags)(=|&|$)/.test(location.search)) document.documentElement.classList.add('flow-boot')</script>
+    <style>html.flow-boot body:not(.flow) > * { visibility: hidden; }</style>
   </head>
   <body>
     <canvas id="scene"></canvas>
