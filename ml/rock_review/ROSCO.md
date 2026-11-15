@@ -5,6 +5,11 @@ R3 or replace the DTM roughness layer. The new source is a single acquisition,
 so its illumination can be identified. G01–G50 and the original northern crop
 remain unchanged; their visual labels are not transferred to this new image.
 
+**Placement update:** [REGISTRATION.md](REGISTRATION.md) measures and corrects
+the source-to-mosaic offset. The world coordinates/cells in the native run and
+frozen review proposal below are historical nominal values, not aligned cells.
+Use `registered_candidates.json` for corrected candidate placement and flags.
+
 ## Source and geometry
 
 NASA/JPL-Caltech/University of Arizona
@@ -109,9 +114,9 @@ runs. A native rerun of `confidence-only` reproduced the same 25 candidates.
 
 ## Remaining gate
 
-The six-proposal review is complete with one uncertain judgment. Verify
-inter-image registration before comparing different acquisitions, and assess
-false detections and missed rocks in separate
+The six-proposal review is complete with one uncertain judgment. Image-relative
+registration is now measured separately in [REGISTRATION.md](REGISTRATION.md).
+Assess false detections and missed rocks in separate
 areas before selecting a density threshold. Until then R1/R3 remains open;
 this experiment does not unlock R5 proof claims or a scientific rock-hazard
 replacement. There is no new app flag, contract change or deployed web behavior.
