@@ -190,6 +190,18 @@ The default view shows **real HiRISE colour imagery** on the terrain (NASA Mars 
 
 Around what you look at and around the astronaut (within about 330 m), the app swaps in **1 m terrain** (USGS MSL Gale merged HiRISE DEM) with the **25 cm HiRISE image** on it, in 256 m tiles: at most 9 at once on a large screen, 4 on a phone. Everywhere else stays at 8 m. The route line follows the 1 m surface where it is loaded. HiRISE resolves features of about 3–4 m and up; rocks under about 1 m are not in this data. Like the picture, the detail is for looking only: routes and energy still use the 8 m grid and the walk-scale crossings.
 
+### True scale (ticket F5)
+
+Heights are drawn 1:1, with no exaggeration: the slice really climbs about 526 m. The astronaut is 1.8 m tall, the helicopter has a 1.2 m rotor (Ingenuity's) and flies 10 m up, and the habitat is about 9 m across with a 2 m hatch. Because real-size things vanish from far away, each also has a small round icon that keeps its size on screen. The scale bar (bottom left) is computed from the camera distance, and the arrow points north.
+
+### What has been explored (the discover look, ticket A3)
+
+Ground nobody has checked up close is drawn **muted**: the same HiRISE picture, mostly grey and a little darker. It turns to full colour where a helicopter has flown (a 15 m swath), within 60 m of the habitat, and within 24 m of where the astronaut has walked. A bright ring on the ground marks the helicopter's scan as it passes. The flight is simulated; the terrain and the picture it "reveals" are the real NASA data, standing in for the helicopter's own sharper images.
+
+### Vesta Vision v0 (ticket A4)
+
+The **View** button switches between Map, Follow (camera 14 m behind the astronaut) and Eye level (1.7 m, drag to look around). The Vision views hide the panels: there is no HUD. A dusty haze fades distant ground. Up close the ground looks soft, because HiRISE resolves features of about 3 m and up.
+
 ## 14. What is real and what is simulated
 
 - **Real:** terrain, slope and images (NASA MRO HiRISE via USGS), the Curiosity stops and their photos, the walking-energy formula, all the route and safety maths.

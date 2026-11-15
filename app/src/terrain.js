@@ -8,10 +8,21 @@ const SIZE = 2048
 
 // The material: imagery times the vertex colour (ring dimming, found rocks) in the Imagery view; in any other view
 // the layer colour is laid over the image's brightness, so the ground detail still shows through.
-export function terrainMaterial() {
+// Shared by the 8 m mesh and the detail tiles (ticket A3, the discover look): ground the helicopter has not flown is
+// drawn muted (mostly grey, a little darker); flown ground is full colour. The tint texture's alpha is 1 where flown.
+// A bright ring on the ground marks the helicopter's scan as it passes. Needs: vec2 xz (app metres), vec2 tintUv.
+export const REVEAL_GLSL = `
+  float rev = max(texture2D(uTint, tintUv).a, 1.0 - uMuted);
+  float grey = dot(diffuseColor.rgb, vec3(0.299, 0.587, 0.114));
+  diffuseColor.rgb = mix(mix(vec3(grey), diffuseColor.rgb, 0.4) * 0.82, diffuseColor.rgb, rev);
+  float sweep = smoothstep(3.0, 0.0, abs(distance(xz, uHeli.xy) - uHeli.z)) * step(0.01, uHeli.z);
+  diffuseColor.rgb += vec3(0.15, 0.85, 1.0) * sweep * 0.9;`
+export const REVEAL_UNIFORMS = 'uniform sampler2D uTint;\nuniform float uMuted;\nuniform vec3 uHeli;\nuniform vec2 uCells;'
+
+export function terrainMaterial(shared = {}) {
   // uHoles: rectangles [x0, z0, x1, z1] where a 1 m detail tile is drawn instead (tiles.js); this mesh is cut away there.
   const uniforms = { uOverlay: { value: 1 }, uHasMap: { value: 0 },
-    uHoles: { value: Array.from({ length: 9 }, () => new THREE.Vector4()) }, uHoleCount: { value: 0 } }
+    uHoles: { value: Array.from({ length: 9 }, () => new THREE.Vector4()) }, uHoleCount: { value: 0 }, ...shared }
   const mat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 1 })
   mat.onBeforeCompile = (shader) => {
     Object.assign(shader.uniforms, uniforms)
@@ -19,7 +30,7 @@ export function terrainMaterial() {
       .replace('#include <common>', '#include <common>\nvarying vec2 vXZ;')
       .replace('#include <begin_vertex>', '#include <begin_vertex>\nvXZ = position.xz;')
     shader.fragmentShader = shader.fragmentShader
-      .replace('#include <common>', '#include <common>\nuniform float uOverlay;\nuniform float uHasMap;\nuniform vec4 uHoles[9];\nuniform int uHoleCount;\nvarying vec2 vXZ;')
+      .replace('#include <common>', `#include <common>\nuniform float uOverlay;\nuniform float uHasMap;\nuniform vec4 uHoles[9];\nuniform int uHoleCount;\nvarying vec2 vXZ;\n${REVEAL_UNIFORMS}`)
       .replace('#include <clipping_planes_fragment>', `#include <clipping_planes_fragment>
         for (int i = 0; i < 9; i++) {
           if (i >= uHoleCount) break;
@@ -29,7 +40,8 @@ export function terrainMaterial() {
         vec3 vc = pow(vColor.rgb, vec3(2.2)); // layer colours are sRGB bytes
         float lum = dot(diffuseColor.rgb, vec3(0.299, 0.587, 0.114));
         vec3 over = vc * mix(1.0, 0.35 + 2.2 * lum, uHasMap);
-        diffuseColor.rgb = mix(diffuseColor.rgb * vc, over, uOverlay);`)
+        diffuseColor.rgb = mix(diffuseColor.rgb * vc, over, uOverlay);
+        vec2 xz = vXZ; vec2 tintUv = (vXZ / uCells.x + 0.5) / uCells.y;${REVEAL_GLSL}`)
   }
   mat.userData.uniforms = uniforms
   return mat
