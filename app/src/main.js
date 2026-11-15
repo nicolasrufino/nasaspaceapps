@@ -231,6 +231,30 @@ function tickView(dt) {
 }
 setView('map')
 
+// Opening (ticket A5): start high above the whole slice, as the orbiter sees it, then ease down to the habitat.
+// Any tap, scroll or key skips it; off for reduced motion and for automated tests (their clicks must not race it).
+const INTRO_HOLD_S = 1.2, INTRO_FLY_S = 4
+let intro = null
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !navigator.webdriver) {
+  const mid = new THREE.Vector3((W * cs) / 2, home.y, (H * cs) / 2)
+  const label = document.createElement('div')
+  label.textContent = 'Gale crater, lower Mount Sharp · NASA MRO HiRISE'
+  label.style.cssText = 'position:fixed;left:50%;bottom:22%;transform:translateX(-50%);z-index:6;font:600 15px system-ui,sans-serif;color:#fff;text-shadow:0 1px 4px #000;pointer-events:none;transition:opacity .8s;text-align:center'
+  document.body.append(label)
+  intro = { t: 0, label, to: camera.position.clone(), targetTo: controls.target.clone(), from: new THREE.Vector3(mid.x, home.y + span * 1.15, mid.z + span * 0.25), targetFrom: mid }
+  camera.position.copy(intro.from)
+  controls.target.copy(mid)
+  for (const e of ['pointerdown', 'wheel', 'keydown']) addEventListener(e, () => { if (intro) tickIntro(Infinity) }, { once: true, capture: true }) // land at once, before the tap does anything else
+}
+function tickIntro(dt) {
+  intro.t += dt
+  const k = THREE.MathUtils.smootherstep((intro.t - INTRO_HOLD_S) / INTRO_FLY_S, 0, 1)
+  camera.position.lerpVectors(intro.from, intro.to, k)
+  controls.target.lerpVectors(intro.targetFrom, intro.targetTo, k)
+  if (k > 0.5) intro.label.style.opacity = 0
+  if (k === 1) { const { label } = intro; setTimeout(() => label.remove(), 900); intro = null }
+}
+
 let lastFrame = performance.now()
 let lastTiles = 0
 renderer.setAnimationLoop((now) => {
@@ -243,6 +267,7 @@ renderer.setAnimationLoop((now) => {
   if (walkerGoal.distanceToSquared(walker.position) > 0.01) walker.rotation.y = Math.atan2(-(walkerGoal.x - walker.position.x), -(walkerGoal.z - walker.position.z))
   walkerIcon.position.set(walker.position.x, walker.position.y + 3, walker.position.z)
   baseMarker.position.set(habitat.position.x, habitat.position.y + 12, habitat.position.z)
+  if (intro) tickIntro(dt)
   tickView(dt)
   furniture.update(camera, controls, innerHeight)
   if (tiles && now - lastTiles > 500) {
