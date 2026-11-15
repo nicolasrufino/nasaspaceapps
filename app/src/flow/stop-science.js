@@ -177,6 +177,7 @@ export function createStopScience(ui, app, data) {
     sec.classList.add('ss-log')
     const dose = +log.reduce((a, e) => a + e.dose_ugy, 0).toFixed(2)
     sec.append(ui.stats([['stops worked', log.filter((e) => e.tasks_done.length).length], ['samples carried', samples, 'stop'], ['µGy at the stops', dose]]).el)
+    sec.append(txt('p', `This walk: ${log.reduce((n, e) => n + e.tasks_done.length, 0)} tasks completed.`))
     const list = ui.h('div', 'f-list')
     for (const e of log) {
       const stop = app.stops().find((s) => s.id === e.target_id), c = recOf(e.target_id)?.chem
@@ -188,9 +189,10 @@ export function createStopScience(ui, app, data) {
     for (const g of goalChecks(log)) goals.append(ui.item({ title: `${g.answered ? '✓ Answered' : '○ Still open'}: ${g.title}`, sub: g.how }))
     sec.append(list, txt('p', 'Dose at the stops: RAD mean × sky view at each stop (an estimate) × minutes there.', 'dim'))
     const y = yieldData
-    // S6's walking dose is for its planned five-stop route; show it only when this walk is that route.
-    if (y?.dose?.walk_dose_ugy != null && y.walk?.stop_ids?.join() === app.route().stops.join()) sec.append(txt('p', `Walking dose ${y.dose.walk_dose_ugy} µGy (${y.dose.walk_hours} h at ${y.dose.mean_dose_rate_ugy_per_h} µGy/h, an estimate): ${+(dose + y.dose.walk_dose_ugy).toFixed(2)} µGy for the whole walk.`))
-    if (y?.walk && y?.stay) sec.append(txt('p', `One walk: ${y.walk.stops} stops, ${y.walk.measurements_per_walk} measurements. A ${y.stay.stay_sols}-sol stay: at most ${y.stay.walks_max} walks, ${y.stay.stops_max} stops, ${y.stay.measurements_max} measurements (our arithmetic, ${y.stay.sols_per_walk} sols per walk).`, 'dim'))
+    // S6 describes a fixed reference route. Even identical stops can produce a different path;
+    // never add its walking dose to this walk's stop dose or present its capacity as tasks done.
+    if (y?.walk && y?.stay) sec.append(txt('p', `Reference scenario: ${y.walk.stops} stops × ${y.walk.visit_tasks_per_stop} tasks = ${y.walk.measurements_per_walk} tasks per walk, with all tasks completed. A ${y.stay.stay_sols}-sol stay: at most ${y.stay.walks_max} walks, ${y.stay.stops_max} stops, ${y.stay.measurements_max} tasks (our arithmetic, ${y.stay.sols_per_walk} sols per walk). These are planning assumptions, not the result of this walk.`, 'dim'))
+    if (y?.dose?.walk_dose_ugy != null && y.walk?.route_m != null) sec.append(txt('p', `Reference route (${y.walk.route_m} m): walking dose ${y.dose.walk_dose_ugy} µGy (${y.dose.walk_hours} h at ${y.dose.mean_dose_rate_ugy_per_h} µGy/h, an estimate). Walking only; stops excluded. This is not the dose of your chosen route.`, 'dim'))
     el.replaceChildren(sec, goals, ...[...el.children].filter((c) => c.classList.contains('ss-card')))
   }
 

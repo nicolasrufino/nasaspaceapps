@@ -41,7 +41,11 @@ export default {
     ui.foot.append(hint, go)
 
     let hot = null
-    function draw() {
+    function hover(id, v) {
+      hot = v ? id : null
+      drawPins() // Keep the hovered row mounted so its click/remove handler can run.
+    }
+    function drawPins() {
       const stops = app.stops(), on = stops.filter((s) => s.included), off = stops.filter((s) => !s.included && !s.custom)
       const k = map.scale
       map.dots('stops', [
@@ -49,10 +53,14 @@ export default {
         ...off.map((s) => ({ id: s.id, cell: s.cell, label: '+', color: '#f3f2ef', r: (s.id === hot ? 1.9 : 1.4) * k, faded: s.id !== hot })),
         ...on.map((s, n) => ({ id: s.id, cell: s.cell, label: n + 1, color: '#ffd23f', r: (s.id === hot ? 2.1 : 1.7) * k })),
       ], (id) => { if (id !== 'base') app.toggleStop(id) })
+    }
+    function draw() {
+      const stops = app.stops(), on = stops.filter((s) => s.included), off = stops.filter((s) => !s.included && !s.custom)
+      drawPins()
       mine.querySelector('h3').textContent = on.length >= MIN_STOPS ? `Your stops · ${on.length}` : `Your stops · ${on.length} of ${MIN_STOPS} needed`
-      mineList.replaceChildren(...on.map((s, n) => ui.item({ n: n + 1, title: s.name, sub: s.custom ? (picks.find((p) => `${p.cell}` === `${s.cell}`)?.why ?? 'Picked on the map') : s.goal ?? '', onRemove: () => app.removeStop(s.id), onHover: (v) => { hot = v ? s.id : null; draw() } })))
+      mineList.replaceChildren(...on.map((s, n) => ui.item({ n: n + 1, title: s.name, sub: s.custom ? (picks.find((p) => `${p.cell}` === `${s.cell}`)?.why ?? 'Picked on the map') : s.goal ?? '', onRemove: () => app.removeStop(s.id), onHover: (v) => hover(s.id, v) })))
       if (!on.length) mineList.append(Object.assign(ui.h('p', 'dim'), { textContent: 'None yet.' }))
-      sugList.replaceChildren(...off.map((s) => ui.item({ title: s.name, sub: goal && stopCheck(s.id) ? `Check: ${stopCheck(s.id)}. ${s.why ?? ''}` : s.why ?? '', onClick: () => app.toggleStop(s.id), onHover: (v) => { hot = v ? s.id : null; draw() } })))
+      sugList.replaceChildren(...off.map((s) => ui.item({ title: s.name, sub: goal && stopCheck(s.id) ? `Check: ${stopCheck(s.id)}. ${s.why ?? ''}` : s.why ?? '', onClick: () => app.toggleStop(s.id), onHover: (v) => hover(s.id, v) })))
       sug.hidden = !off.length
       const o = app.objective()
       btn.easiest.setAttribute('aria-pressed', o === 'easiest'); btn.shortest.setAttribute('aria-pressed', o === 'shortest')
