@@ -97,10 +97,13 @@ export async function loadImagery(meta, renderer, onUpdate) {
   })
   const done = () => { texture.needsUpdate = true; onUpdate?.(canvas) }
 
-  if (meta.detail_tiles.overview) {
-    image(meta.detail_tiles.overview).then((im) => { ctx.drawImage(im, 0, 0, SIZE, SIZE); done() }).catch(() => {})
+  // One overview image (ticket F3) instead of 64 tiles: world.json may name it; otherwise it sits beside tiles.json.
+  const overview = await image(meta.detail_tiles.overview ?? url.slice(0, url.lastIndexOf('/') + 1) + 'overview.jpg').catch(() => null)
+  if (overview) {
+    ctx.drawImage(overview, 0, 0, SIZE, SIZE)
+    setTimeout(done) // after the caller has the texture
     return { texture, canvas }
-  }
+  } // no overview hosted: stitch the tiles
   const manifest = await fetch(url).then((r) => r.json())
   const root = url.slice(0, url.lastIndexOf('/') + 1)
   const n = manifest.tiles, px = SIZE / n
@@ -119,7 +122,7 @@ export async function loadImagery(meta, renderer, onUpdate) {
       } catch { /* a missing tile keeps the base colour */ }
     }
   }
-  Promise.all(Array.from({ length: 6 }, worker)) // ponytail: 64 tile downloads until the single overview image exists (F3)
+  Promise.all(Array.from({ length: 6 }, worker)) // only when no overview image is hosted
   return { texture, canvas }
 }
 

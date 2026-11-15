@@ -202,6 +202,8 @@ Ground nobody has checked up close is drawn **muted**: the same HiRISE picture, 
 
 The **View** button switches between Map, Follow (camera 14 m behind the astronaut) and Eye level (1.7 m, drag to look around). The Vision views hide the panels: there is no HUD. A dusty haze fades distant ground. Up close the ground looks soft, because HiRISE resolves features of about 3 m and up.
 
+**Loading and opening.** The whole-slice picture is one image (`overview.jpg`, 2048 px, 1 m per pixel, stitched from the same HiRISE tiles and hosted beside them); if it is missing the app stitches the 64 tiles itself. The page opens about 2.4 km above the middle of the slice, holds for 1.2 s, then eases down to the habitat over 4 s. Any tap, scroll or key skips it; it is off when the device asks for reduced motion.
+
 ## 14. What is real and what is simulated
 
 - **Real:** terrain, slope and images (NASA MRO HiRISE via USGS), the Curiosity stops and their photos, the walking-energy formula, all the route and safety maths.
