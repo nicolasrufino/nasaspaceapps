@@ -1,6 +1,7 @@
 // Stage 1, Choose stops: inside the habitat, at the console. The orbit picture is all the crew has. It starts empty:
 // tap the map or pick a suggested stop; three or more, then "Plan the route". Nothing is worked out yet, so no
 // route line and no numbers are shown here (docs/UX-PLAN.md section 0).
+import { scienceGoalOn, goalCard, stopCheck, loadCandidates } from './goal.js'
 const MIN_STOPS = 3
 
 export default {
@@ -9,8 +10,9 @@ export default {
     map.caption('What we know from orbit', 'NASA MRO HiRISE colour · USGS MSL Gale mosaic · tap to add a stop')
     map.fit()
 
+    const goal = scienceGoalOn()
     const intro = ui.section('Where do you want to go?', true)
-    intro.append(Object.assign(ui.h('p', 'dim'), { textContent: 'You are in the habitat. Pick the places worth the walk: tap the map, or take the science team’s suggestions.' }))
+    intro.append(Object.assign(ui.h('p', 'dim'), { textContent: `You are in the habitat. Pick the places worth the walk: tap the map, or take ${goal ? 'Curiosity’s stops' : 'the science team’s suggestions'}.` }))
     const how = ui.section('How to walk it')
     const seg = ui.h('div', 'f-seg')
     const btn = { easiest: ui.button('Easiest', () => app.setObjective('easiest')), shortest: ui.button('Shortest', () => app.setObjective('shortest')) }
@@ -20,9 +22,19 @@ export default {
     how.append(seg, note)
     const mine = ui.section(''), mineList = ui.h('div', 'f-list')
     mine.append(ui.h('h3'), mineList)
-    const sug = ui.section('Suggested by the science team'), sugList = ui.h('div', 'f-list')
+    const sug = ui.section(goal ? 'Curiosity’s five stops' : 'Suggested by the science team'), sugList = ui.h('div', 'f-list')
     sug.append(sugList)
-    ui.body.append(intro, how, mine, sug)
+    ui.body.append(...(goal ? [goalCard(ui)] : []), intro, how, mine, sug)
+    // Sites the map suggests: only when S5's candidates.json is there; nothing shows otherwise.
+    let picks = [], live = true
+    if (goal) loadCandidates().then((c) => {
+      if (!live || !c.length) return
+      picks = c
+      const sec = ui.section('Sites the map suggests'), note = Object.assign(ui.h('p', 'dim'), { textContent: 'Ranked from the 1 m HiRISE terrain where ridges and hollows are both common. A guide; the crew decides.' })
+      sec.append(note, ui.button(`Add ${c.length} sites`, () => { const have = new Set(app.stops().filter((s) => s.included).map((s) => `${s.cell}`)); for (const p of c) if (!have.has(`${p.cell}`)) app.addStop(p.cell) }))
+      sug.after(sec)
+      draw()
+    })
 
     const go = ui.button('Plan the route', () => ui.go('analyse'), true)
     const hint = ui.h('div', 'f-small')
@@ -38,9 +50,9 @@ export default {
         ...on.map((s, n) => ({ id: s.id, cell: s.cell, label: n + 1, color: '#ffd23f', r: (s.id === hot ? 2.1 : 1.7) * k })),
       ], (id) => { if (id !== 'base') app.toggleStop(id) })
       mine.querySelector('h3').textContent = on.length >= MIN_STOPS ? `Your stops · ${on.length}` : `Your stops · ${on.length} of ${MIN_STOPS} needed`
-      mineList.replaceChildren(...on.map((s, n) => ui.item({ n: n + 1, title: s.name, sub: s.custom ? 'Picked on the map' : s.goal ?? '', onRemove: () => app.removeStop(s.id), onHover: (v) => { hot = v ? s.id : null; draw() } })))
+      mineList.replaceChildren(...on.map((s, n) => ui.item({ n: n + 1, title: s.name, sub: s.custom ? (picks.find((p) => `${p.cell}` === `${s.cell}`)?.why ?? 'Picked on the map') : s.goal ?? '', onRemove: () => app.removeStop(s.id), onHover: (v) => { hot = v ? s.id : null; draw() } })))
       if (!on.length) mineList.append(Object.assign(ui.h('p', 'dim'), { textContent: 'None yet.' }))
-      sugList.replaceChildren(...off.map((s) => ui.item({ title: s.name, sub: s.why ?? '', onClick: () => app.toggleStop(s.id), onHover: (v) => { hot = v ? s.id : null; draw() } })))
+      sugList.replaceChildren(...off.map((s) => ui.item({ title: s.name, sub: goal && stopCheck(s.id) ? `Check: ${stopCheck(s.id)}. ${s.why ?? ''}` : s.why ?? '', onClick: () => app.toggleStop(s.id), onHover: (v) => { hot = v ? s.id : null; draw() } })))
       sug.hidden = !off.length
       const o = app.objective()
       btn.easiest.setAttribute('aria-pressed', o === 'easiest'); btn.shortest.setAttribute('aria-pressed', o === 'shortest')
@@ -51,6 +63,6 @@ export default {
     map.onTap((cell) => app.addStop(cell))
     const off = app.on('plan', draw)
     draw()
-    return off
+    return () => { live = false; off() }
   },
 }
