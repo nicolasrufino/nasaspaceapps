@@ -142,7 +142,7 @@ The app keeps height as a knob either way, so nothing waits on this.
 
 ## 7. Flight budget: the evidence first
 
-**Status: open. Nicolas asked for every number with its source before deciding.** Updated 2026-11-15 with NASA's SkyFall mission package ([SkyFall Mission Information Package, NASA, Sept 2026](https://science.nasa.gov/wp-content/uploads/2026/09/skyfall-mission-information-package-final.pdf)), which **does** publish SkyFall's flight cadence. Earlier docs said it did not. Second correction: an earlier version said flights were "capped at about 10 Wh / 90 s". That came from a secondary source and is **wrong**. NASA says the cap was motor temperature, at 130–170 s (below).
+**Status: accepted by Nicolas, 2026-11-15, after testing: 3 flights per walk, 1 km each. Test and arithmetic in `docs/OPERATIONS.md`.** Updated 2026-11-15 with NASA's SkyFall mission package ([SkyFall Mission Information Package, NASA, Sept 2026](https://science.nasa.gov/wp-content/uploads/2026/09/skyfall-mission-information-package-final.pdf)), which **does** publish SkyFall's flight cadence. Earlier docs said it did not. Second correction: an earlier version said flights were "capped at about 10 Wh / 90 s". That came from a secondary source and is **wrong**. NASA says the cap was motor temperature, at 130–170 s (below).
 
 | Question | What is known | Source | Confidence |
 |---|---|---|---|
@@ -168,7 +168,7 @@ The app keeps height as a knob either way, so nothing waits on this.
 
 ## 8. A scouting sol and a walk sol, hour by hour
 
-**Status: proposed timeline for Nicolas to confirm.** Times are **Mars local solar time at Gale**, in AM/PM. A Mars hour is 1 h 1.6 min of Earth time; a sol is 24 h 40 min. NASA plans crews on a 24 h 40 min "workday" ([NASA HEOMD-415](https://ntrs.nasa.gov/api/citations/20220000589/downloads/MarsSAC21SurfaceOps_2022-Jan_Version%201%20FINAL_update.pdf) §4.1).
+**Status: accepted by Nicolas, 2026-11-15; the full version lives in `docs/OPERATIONS.md`.** Times are **Mars local solar time at Gale**, in AM/PM. A Mars hour is 1 h 1.6 min of Earth time; a sol is 24 h 40 min. NASA plans crews on a 24 h 40 min "workday" ([NASA HEOMD-415](https://ntrs.nasa.gov/api/citations/20220000589/downloads/MarsSAC21SurfaceOps_2022-Jan_Version%201%20FINAL_update.pdf) §4.1).
 
 **Sun at Gale (4.8° S), computed from the latitude and the Sun's seasonal swing (±25°):**
 - **Sunrise:** 5:51–6:09 AM. **Sunset:** 5:51–6:09 PM.
@@ -231,7 +231,7 @@ The app keeps height as a knob either way, so nothing waits on this.
 
 ## 10. What the helicopter senses besides pictures
 
-**Status: open. Research for Nicolas.**
+**Status: accepted by Nicolas, 2026-11-15. How it looks in 3D: `docs/SCOUT-3D.md`.**
 
 **What our app does today (checked in the code):** the simulated flight only reveals the hidden rock layer (`rocks_fine`) inside a 15 m swath (`app/src/scout.js`, `reveal()` in `app/src/main.js`). Radiation (`dose_rate`), chemistry (ChemCam/APXS points), hydrogen (DAN) and minerals (CRISM) come from orbit and from Curiosity, **not** from the helicopter.
 
