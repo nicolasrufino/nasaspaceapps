@@ -30,7 +30,8 @@ from rasterio.warp import transform as warp_xy
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import itertools
 
-from make_world import KNOBS, build, path_home, write
+import terrain_1m
+from make_world import CLASSES, KNOBS, build, path_home, write
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 RAW = os.path.join(HERE, '..', 'raw', 'gale')
@@ -140,13 +141,24 @@ def main():
     rocks = ((steep1 > 0.04) & (s8 < 15) & (cls != 4)).astype('u1')
     by, bx = np.ogrid[:n, :n]
     rocks[(bx - base[0]) ** 2 + (by - base[1]) ** 2 <= 9] = 0
+    # keep positives already in the world (e.g. human-reviewed rocks from ml/rock_review, R3): add, never remove
+    rocks_src = None
+    old = os.path.join(a.out, 'rocks_fine.u8')
+    if os.path.exists(old) and os.path.getsize(old) == n * n:
+        rocks |= np.fromfile(old, 'u1').reshape(n, n)
+        with open(os.path.join(a.out, 'world.json')) as f:
+            rocks_src = json.load(f).get('sources', {}).get('rocks_fine')
+
+    # --- walk-scale crossings and terrain views from the 1 m terrain (terrain_1m.py) ---
+    views = terrain_1m.compute(h1, n, k1, KNOBS['max_slope_deg'], base)
+    P = array.array('B', views['passable'].ravel().tolist())
 
     hmin = float(h8.min())
     H = (h8 - hmin).astype('f4').ravel().tolist()
     C = array.array('B', cls.ravel().tolist())
     R = array.array('B', rocks.ravel().tolist())
     budget0 = 1.0e6
-    h, slope, cls_a, cost_per_m, ctg = build(n, cell, base, budget0, h=H, cls=C)
+    h, slope, cls_a, cost_per_m, ctg = build(n, cell, base, budget0, h=H, cls=C, passable=P)
 
     # --- targets at Curiosity's logged positions, nudged to the nearest cell with a way home ---
     ctg_np = np.array(ctg).reshape(n, n)
@@ -172,8 +184,8 @@ def main():
     cells, energy, legs = [base], 0.0, [t['cell'] for t in order] + [base]
     prev = base
     for goal in legs:
-        ctg_goal = build(n, cell, goal, budget0, h=H, cls=C)[-1]
-        leg = path_home(ctg_goal, n, prev)
+        ctg_goal = build(n, cell, goal, budget0, h=H, cls=C, passable=P)[-1]
+        leg = path_home(ctg_goal, n, prev, passable=P)
         energy += ctg_goal[prev[1] * n + prev[0]]
         cells += leg[1:]
         prev = goal
@@ -218,13 +230,21 @@ def main():
             'height': {'mission': 'MRO', 'instrument': 'HiRISE stereo (USGS MSL Gale merged DEM 1 m)', 'date': date},
             'slope': {'mission': 'MRO', 'instrument': 'HiRISE stereo (from the 8 m height)', 'date': date},
             'terrain_class': 'Estimate: HiRISE albedo + DTM roughness, until terrain_cls.onnx and THEMIS',
-            'cost_to_go': 'Pandolf walking model on the HiRISE terrain (make_world.py)',
-            'rocks_fine': 'Estimate: rough at 1 m (HiRISE DTM) but gentle at 8 m; shadow rock detection to follow (#31)',
+            'rocks_fine': rocks_src or 'Estimate: rough at 1 m (HiRISE DTM) but gentle at 8 m; shadow rock detection to follow (#31)',
+            'cost_to_go': 'Pandolf walking model (gravity factor and sand from #83) over walk-scale crossings (passable.u8)',
             'optical': {'mission': 'MRO', 'instrument': 'HiRISE colour (USGS MSL Gale LRGB 25 cm)', 'date': date},
             'targets': {'mission': 'MSL Curiosity', 'instrument': 'rover positions (MMGIS waypoints)', 'date': '2025'},
         },
     }
-    site = {'meta': site_meta, 'targets': targets, 'stops': stops, 'route': route, 'rocks': R}
+    site_meta['knobs'] = {**KNOBS, 'eta': [CLASSES[c][1] for c in range(5)], **terrain_1m.KNOBS}
+    ext = {'u1': ('.u8', 'B'), 'f4': ('.f32', 'f')}
+    extra = []
+    for name, arr in views.items():
+        suffix, code = ext[arr.dtype.str[1:]]
+        extra.append((name + suffix, arr.ravel().tolist(), code))
+        site_meta['sources'][name] = terrain_1m.SOURCES[name]
+    site = {'meta': site_meta, 'targets': targets, 'stops': stops, 'route': route, 'rocks': R, 'passable': P,
+            'extra_files': extra}
     write(a.out, n, cell, base, budget, h, slope, cls_a, cost_per_m, ctg, site=site)
     Image.fromarray((np.clip((albedo - lo) / (hi - lo), 0, 1) * 255).astype('u1')).save(os.path.join(a.out, 'optical.png'))
     wj = os.path.join(a.out, 'world.json')
@@ -233,6 +253,10 @@ def main():
     m['name'] = 'gale'
     m['files']['optical'] = 'optical.png'
     m['layers'].insert(0, 'optical')
+    for name, arr in views.items():
+        m['files'][name] = name + ext[arr.dtype.str[1:]][0]
+        if name in terrain_1m.VIEWS and name not in m['layers']:
+            m['layers'].append(name)
     with open(wj, 'w') as f:
         json.dump(m, f, indent=2)
 

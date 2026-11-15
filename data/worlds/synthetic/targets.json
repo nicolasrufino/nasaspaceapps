@@ -4,7 +4,7 @@
   "name": "Target 1 (synthetic)",
   "cell": [
    74,
-   72
+   63
   ],
   "goal": "demo",
   "why": "Synthetic placeholder until the real site exists",
@@ -14,8 +14,8 @@
   "id": "T2",
   "name": "Target 2 (synthetic)",
   "cell": [
-   89,
-   108
+   32,
+   127
   ],
   "goal": "demo",
   "why": "Synthetic placeholder until the real site exists",
@@ -25,8 +25,8 @@
   "id": "T3",
   "name": "Target 3 (synthetic)",
   "cell": [
-   110,
-   11
+   109,
+   35
   ],
   "goal": "demo",
   "why": "Synthetic placeholder until the real site exists",
