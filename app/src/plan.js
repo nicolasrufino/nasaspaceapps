@@ -13,6 +13,11 @@ export const energyCost = (meta, layers, i, j) => stepCostIdx(meta, layers.heigh
 export const distanceCost = (meta, layers, i, j) =>
   meta.cell_size_m * Math.hypot((i % meta.width) - (j % meta.width), Math.floor(i / meta.width) - Math.floor(j / meta.width))
 
+// Can you step from cell i to its neighbour k (index into NB)? With passable.u8 (walk-scale crossings checked on
+// the 1 m terrain, contract §1) the crossing decides; without it, the old rule: the next cell's 8 m slope.
+export const canStep = (meta, layers, i, k, j) =>
+  layers.passable ? ((layers.passable[i] >> k) & 1) === 1 : layers.slope[j] <= meta.knobs.max_slope_deg
+
 // Cost (J by default) to walk from `from` to every cell, and the previous cell on that cheapest path (Dijkstra).
 export function costFrom({ meta, layers }, from, blocked, cost = energyCost) {
   const { width: W, height: H } = meta
@@ -26,11 +31,12 @@ export function costFrom({ meta, layers }, from, blocked, cost = energyCost) {
     const [d, i] = heap.pop()
     if (d > dist[i]) continue
     const x = i % W, y = (i - x) / W
-    for (const [dx, dy] of NB) {
+    for (let k = 0; k < 8; k++) {
+      const [dx, dy] = NB[k]
       const nx = x + dx, ny = y + dy
       if (nx < 0 || ny < 0 || nx >= W || ny >= H) continue
       const j = ny * W + nx
-      if (layers.slope[j] > meta.knobs.max_slope_deg || blocked?.[j]) continue
+      if (!canStep(meta, layers, i, k, j) || blocked?.[j]) continue
       const nd = d + cost(meta, layers, i, j)
       if (nd < dist[j]) {
         dist[j] = nd

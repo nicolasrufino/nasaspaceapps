@@ -9,7 +9,7 @@ the next one takes off; the first takes off at base.
 
 Only what orbit can see is used to choose cells (height, slope, terrain_class, optical.png), never rocks_fine:
 the plan must not peek at what the drone is meant to discover.
-  Anomalies: walkable slopes close to the 25 deg limit, and cells where brightness and terrain class disagree
+  Anomalies: walkable slopes within 5 deg of the slope limit (knobs.max_slope_deg, 20 deg), and cells where brightness and terrain class disagree
              (bright "sand", dark "bedrock"). Thermal (THEMIS) and mineral (CRISM) disagreements join when those
              layers exist.
   Least sure: texture the 8 m cell can't resolve (local spread of brightness and slope).

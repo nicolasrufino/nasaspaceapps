@@ -27,7 +27,7 @@
     "r3_candidates.json": "024e23b6a777acde3d0b01ae98ef11ffcc1a828e7e40f291fcee3a71d69286a3",
     "r3_decisions.json": "4cccd2d670e8755ba7fa2d80e242f79d15698421d4252b5ebd3468167507086b",
     "r3_alignment.json": "9950cd04bfb1ca8f2189dbdcd58657d8a87646b5cc7c33a3a53fdeae6e623c51",
-    "r3_world_reference.json": "e7dc500816aa4a294268370195eb5e44178ae761759696fc18ddddc318b34c9c",
+    "r3_world_reference.json": "644d623d0d4261ad4967d78360106bc0bbbeb9bc66fcfccfe7b4835fd84624bb",
     "registration_metrics.json": "3325264b48d86e186af4279833e02c75f5300dc9fc398115b03d99dffbd6fc97",
     "registered_candidates.json": "5458984f184d49ce4289259cb99d0468d82971f5afd0aaee00e753849ac8f5b1",
     "single_observation_source.json": "ff6f0f4c1c26580044b61f78b1d1ed288294039f59a5f664c5e5a89d236538e2"
@@ -1210,7 +1210,8 @@
     }
   ],
   "positive_cells": 180,
-  "existing_dtm_cells": 963,
+  "existing_dtm_cells": 1143,
+  "existing_layer_scope": "Input hazard cells retained; may already include reviewed positives from an earlier R3 export",
   "reviewed_point_density": {
     "cell_area_m2": 64.0,
     "meaning": "Counts of accepted native detections before clearance padding; incomplete sampling, not total rock abundance",
@@ -1393,7 +1394,7 @@
       }
     ]
   },
-  "added_cells": 180,
+  "added_cells": 0,
   "combined_cells": 1143,
   "files": {
     "rocks_verified.u8": {
@@ -1414,8 +1415,8 @@
     "The earlier G mosaic labels and northern starter labels are preserved, not transferred across images."
   ],
   "staged_world": {
-    "cost_to_go_scouted_sha256": "f6102d3031738882b7d84ef398dd80693f4291a018f2ac1cd47b589b2cbd7052",
-    "world_semantic_sha256": "c6f91a13cf1b698c862392c5f2a3fd784c2cea2ea1a6c077a7b0ae5ed75d2109",
+    "cost_to_go_scouted_sha256": "815dab956b7faa9eff8d2eff442f32f814dc7bc3d6ab9d30479019bdb9bb7df7",
+    "world_semantic_sha256": "6a69f2b7c758d2289f115dc2f72ffd98c99595bb03ed3ac4321c99648de38a3d",
     "changed_files": [
       "rocks_fine.u8",
       "cost_to_go_scouted.f32",
