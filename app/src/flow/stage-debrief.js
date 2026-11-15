@@ -239,6 +239,7 @@ export default {
       // The walk pauses itself at a stop; carry on, since this preview plays by itself.
       if (want && !done && !spent && !app.walk.playing()) app.walk.play()
       if (done || spent) want = false
+      if (done) sci?.finish()
       if (map.scale !== lastScale) live.redraw() // the mini map's box changed size
       if (cells[k]) { map.dots('walker', [{ cell: cells[k], color: CYAN, ring: WHITE, r: 1.3 * live.k() }]); map.raise('walker') }
       const f = prof.cum[k] / prof.total
