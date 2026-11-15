@@ -165,7 +165,23 @@ segmentation, height measurement or georeferencing here; the current map and rou
 
 Code and verification: `app/src/terrain-*.js`, `app/e2e/terrain.spec.js`, `app/README.md`.
 
-## 12. What is real and what is simulated
+## 12. Chance of hidden rocks (the belief map, flag `belief`)
+
+The first step of the scouting algorithm (`docs/SCOUT-ALGORITHM.md` §2A): before any flight, every cell gets a **chance that it hides rocks** that block a suited walker. Where the helicopter has flown, the chance becomes 0 (clear) or 1 (rocks found).
+
+```
+chance = 1 / (1 + e^(−z))
+z = bias + w1 × (slope ÷ slope limit, standardised) + w2 × (8 m relief, standardised)
+```
+
+- **8 m relief** is how much the heights vary in the 3 × 3 cells around a cell (HiRISE terrain).
+- **The weights are fitted by a script, not chosen** (`app/scripts/belief-fit.mjs`). The script fits on the west half of the map and scores on the east half and on Jules's 22 human-reviewed rocks, the only labels not made from orbit data. Numbers: `app/scripts/belief-fit.json`.
+- **Scores today:** AUC 0.687 against the rock layer, **0.729 against the real reviewed rocks** (0.5 = guessing, 1 = perfect). Average predicted chance 2.2% against a real rate of 1.8%, so the chances are about the right size.
+- **Why only two layers:** the 1 m layers (`fine_steep`, `dropoff`, Luca's `unsure`) come from the same 1 m terrain the rock estimate was built from. They predict the estimate well (unsure alone: 0.757) but **not** the real rocks (0.441, worse than guessing). Adding them gives 0.248 on real rocks. They would only echo the estimate.
+- **It updates itself:** when Jules's whole-slice ROSCO export replaces `rocks_fine`, run `node app/scripts/belief-fit.mjs` again. The weights and scores change; the app code doesn't.
+- **On the map:** grey means unlikely; red means a 10% chance or more (found rocks are full red). Labelled "Estimate".
+
+## 13. What is real and what is simulated
 
 - **Real:** terrain, slope and images (NASA MRO HiRISE via USGS), the Curiosity stops and their photos, the walking-energy formula, all the route and safety maths.
 - **Estimates, marked:** ground type on Gale (from image brightness and roughness until the classifier lands), rock layer on Gale (until shadow-based rock detection lands), the energy budget size, and the walking-energy factors above.

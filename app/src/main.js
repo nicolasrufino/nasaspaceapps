@@ -6,6 +6,7 @@ import { startWalk, stepTo, ringMask, ringLimit, appState, oxygenL } from './wal
 import { planTour, MAX_STOPS } from './plan.js'
 import { routeFlights, scanAt, pointAlong } from './scout.js'
 import { bestAreas } from './best-areas.js'
+import { beliefMap } from './belief.js'
 import { stretches, describe, lowestMargin, shortestAlternative } from './why.js'
 import { initStops } from './stops.js'
 import { initSteps } from './steps.js'
@@ -123,16 +124,20 @@ const shownLayers = meta.layers.filter((n) => layers[n] && n !== 'rocks_fine' &&
 let layerName = 'terrain_class'
 let layerColors = layerRGB(layerName, layers[layerName])
 // Colours for a layer; "best areas" is computed from what is known now (best-areas.js), not read from a file.
-const colorsFor = (name) => layerRGB(name, name === 'best_areas' ? bestAreas(world, ctg, scanned, blocked) : layers[name])
+const colorsFor = (name) => layerRGB(name, name === 'best_areas' ? bestAreas(world, ctg, scanned, blocked)
+  : name === 'belief' ? beliefMap(world, scanned, blocked) : layers[name])
 function refreshLayer() {
-  if (layerName === 'best_areas') layerColors = colorsFor(layerName)
+  if (layerName === 'best_areas' || layerName === 'belief') layerColors = colorsFor(layerName)
 }
 $('sources').textContent = meta.sources?.all ?? '' // applies to every layer without its own source
 const BEST = 'best_areas'
+const BELIEF = flags.has('belief') ? ['belief'] : [] // chance of hidden rocks (belief map v1, flag belief)
 const layerSource = (name) => name === BEST
   ? 'Computed: round trip from base fits the usable energy, slope within the limit, no rocks seen; unscouted ground counts half'
-  : sourceLabel(meta, name)
-$('layers').append(...[...shownLayers, BEST].map((name) => {
+  : name === 'belief'
+    ? 'Predicted chance of hidden rocks from 8 m slope and relief (HiRISE terrain); scouted cells show what was found. Estimate'
+    : sourceLabel(meta, name)
+$('layers').append(...[...shownLayers, BEST, ...BELIEF].map((name) => {
   const label = document.createElement('label')
   label.innerHTML = `<input type="radio" name="layer"><span><b></b><small></small></span>`
   label.querySelector('input').checked = name === layerName
