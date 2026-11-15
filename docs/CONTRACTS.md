@@ -24,8 +24,11 @@ A world is a folder in `data/worlds/<name>/`, produced by `data/pipeline/make_wo
 | `targets.json` | JSON list | Science targets: `{"id", "name", "cell": [x, y], "goal", "why", "sources": [...]}`. |
 | `stops.json` | JSON list | Rover photos for stops: `{"target_id" or "cell", "image_url", "caption", "credit", "sol"}` (Curiosity Mastcam/Navcam raw images). |
 | `route.json` | JSON | The planned route: `{"cells": [[x, y], ...], "stops": ["target id", ...], "energy_j", "minutes", "dose_ugy"}`, computed by the pipeline. |
+| `chem_points.json` | JSON list | Chemistry along Curiosity's path, as points (not a full map): `{"id", "instrument": "ChemCam" or "APXS", "target", "sol", "cell": [x, y], "oxides_wt_pct": {...}, "source"}`. *Optional.* |
+| `neutron_points.json` | JSON list | DAN passive neutrons per sol, as points: `{"sol", "cell", "hours", "thermal_cps", "epithermal_cps", "thermal_epithermal_ratio", "source"}`. Higher ratio suggests more hydrogen (relative). *Optional.* |
+| `weather.json` | JSON | Curiosity REMS daily weather: `{"source", "sols": [{"sol", "earth_date", "ls", "min_temp_c", "max_temp_c", "pressure_pa", "ground_min_c", "ground_max_c", "opacity", "uv"}]}`. *Optional.* |
 
-Optional layers may be missing in a world; the app hides that layer's toggle. `world.json` lists which layers exist under `"layers"` and each layer's mission, instrument and date under `"sources"`.
+Optional layers may be missing in a world; the app hides that layer's toggle. `world.json` lists which layers exist under `"layers"` and each layer's mission, instrument and date under `"sources"`. Real sites may add `"data_types"`: which layer or file carries each of NASA's eight data types (optical, topographic, thermal, spectral, radiation, atmospheric, chemical, geophysical).
 
 **The way home is always known:** from any cell, step to the neighbour with the lowest `cost_to_go` until you reach base. No search is needed on the phone.
 
