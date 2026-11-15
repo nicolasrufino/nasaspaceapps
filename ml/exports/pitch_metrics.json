@@ -48,7 +48,7 @@
   },
   "source_hash_convention": "SHA256: raw binary; canonical sorted-key JSON; LF-normalized JS/MJS source",
   "source_sha256": {
-    "data/worlds/gale/world.json": "7d7154a9a51ed3552e255c526ffcb80203f0e9dc3ed5280ef9dbf60c40c11d1f",
+    "data/worlds/gale/world.json": "845fc7a74feb60f5b51e351ae2910304003d82585192bd7eb3fe4c71659915e3",
     "data/worlds/gale/targets.json": "1cde48014c29506e973b22e9bcc567d214e53a44ca57167f0ec6623cf50ba523",
     "data/worlds/gale/scout_plan.json": "b80131041e214bcb6b2cdc51ca107b3f022922b77a367bdb682f30605716eab7",
     "data/worlds/gale/height.f32": "975c3b0dfd31d40ee876a960462d83a5d135b835e5c074f5a7146d141979f9e4",
