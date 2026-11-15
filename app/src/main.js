@@ -20,6 +20,7 @@ import { initTerrainClassifier } from './terrain-classifier.js'
 import { explainFlight, flightText } from './scout-why.js'
 import { initFlow } from './flow/flow.js'
 import { initHud, nextStop, bearingDeg } from './hud.js'
+import { initEyeWalk, ribbon } from './eye-walk.js'
 
 const $ = (id) => document.getElementById(id)
 const params = new URLSearchParams(location.search)
@@ -149,6 +150,14 @@ function drawRouteLine() {
   })
   routeLine.geometry.dispose()
   routeLine.geometry = new THREE.BufferGeometry().setFromPoints(pts)
+  if (eyeWalk) { // the red guide line (#208): a 0.5 m ribbon 0.2 m above the ground, along the same path
+    const { pos, idx } = ribbon(pts.map((p) => [p.x, p.y - 0.8, p.z]), 0.5)
+    guide.geometry.dispose()
+    guide.geometry = new THREE.BufferGeometry()
+    guide.geometry.setAttribute('position', new THREE.BufferAttribute(pos, 3))
+    guide.geometry.setIndex(idx)
+    eyeWalk.restart()
+  }
 }
 
 const camera = new THREE.PerspectiveCamera(50, 1, 0.3, span * 10)
@@ -186,6 +195,13 @@ for (const [text, id] of [['Walk / pause', 'play'], ['Step', 'step'], ['Back to 
 }
 document.body.append(viewBtn, visionNote, visionBar)
 // Helmet HUD (issue #41, flag hud or ?hud; off by default): drawn over the Follow and Eye views. hud.js only draws.
+// Eye-level walk (#208, flag eye_walk; on in ?vision): WASD over the terrain, a red guide line, the next stop named.
+const eyeWalk = flags.has('eye_walk') || (params.has('vision') && !params.has('flags'))
+  ? initEyeWalk({ speed: meta.knobs?.speed_mps ?? 1, max: [(W - 1) * cs, (H - 1) * cs] }) : null
+const guide = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({ color: 0xff2a2a, side: THREE.DoubleSide, fog: false }))
+guide.visible = false
+scene.add(guide)
+const eyeStops = () => route.stops.map((id) => allStops().find((s) => s.id === id)).map((s) => ({ id: s.id, name: s.name ?? s.id, x: s.cell[0] * cs, z: s.cell[1] * cs }))
 const hud = flags.has('hud') || params.has('hud') ? initHud() : null
 const lookDir = new THREE.Vector3()
 const hudState = () => {
@@ -205,7 +221,7 @@ function hudGo() {
   $('step').click()
   view.turnTo = heading()
 }
-addEventListener('keydown', (e) => { if (hud && view.mode === 'eye' && (e.key === 'ArrowUp' || e.key === 'w')) { e.preventDefault(); hudGo() } })
+addEventListener('keydown', (e) => { if (hud && !eyeWalk && view.mode === 'eye' && (e.key === 'ArrowUp' || e.key === 'w')) { e.preventDefault(); hudGo() } })
 const hudV = new THREE.Vector3()
 const hudProject = (x, z) => { // app metres -> screen pixels, and whether the point is behind the camera
   hudV.set(x, groundAt(x, z) + 2, z)
@@ -224,6 +240,10 @@ function setView(mode) {
   visionNote.hidden = visionBar.hidden = mode === 'map'
   revealShared.uContour.value = mode === 'map' && $('contours')?.checked ? 1 : 0 // contours only in the map view
   hud?.show(mode !== 'map')
+  guide.visible = !!eyeWalk && mode !== 'map'
+  routeLine.visible = !guide.visible // one line at a time: white on the map, red at eye level
+  eyeWalk?.show(mode === 'eye')
+  if (eyeWalk && mode === 'eye') { eyeWalk.place(walker.position.x, walker.position.z); visionNote.hidden = true }
   if (hud) visionNote.hidden = true // the HUD replaces the note
   document.querySelectorAll('.panel').forEach((el) => (el.style.display = mode === 'map' ? '' : 'none'))
   furniture.el.style.display = mode === 'map' ? 'flex' : 'none'
@@ -264,7 +284,10 @@ function tickView(dt) {
     camera.position.add(head.clone().sub(lastHead)) // ride along; the user's own orbiting is kept
     controls.target.copy(head)
   } else if (view.mode === 'eye') {
-    camera.position.copy(head)
+    if (eyeWalk) { // free walk: the keys move you, the camera stays 1.7 m above the ground under it
+      const [x, z] = eyeWalk.tick(dt, view.yaw, eyeStops())
+      camera.position.set(x, groundAt(x, z) + EYE_M, z)
+    } else camera.position.copy(head)
     if (view.turnTo != null) { // street-view step: ease round to face the way ahead (the short way)
       const d = Math.atan2(Math.sin(view.turnTo - view.yaw), Math.cos(view.turnTo - view.yaw))
       view.yaw += d * Math.min(1, dt * 4)
