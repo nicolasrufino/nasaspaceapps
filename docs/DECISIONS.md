@@ -6,6 +6,10 @@ One place for what the team decided, why, and what is still open. **Add a line h
 
 | Date | Decision | Why | Who | Where it lives |
 |---|---|---|---|---|
+| 2026-11-15 | **PR #94 approved by P2** (routes on crossings, gravity factor 0.68, sand 2.4×). Merge after Jules's R3 re-export, with the 20° rebuild in the same PR | Measured values; the old model under-counted energy by about 1.8× and let routes cross ledges. Tested on the branch: 31 app tests, build, Gale in the browser with no console errors | Nicolas | PR #94 review; `docs/DECISION-BRIEFS.md` §1 |
+| 2026-11-15 | **Energy budget from a real suit figure** (1,200 BTU/h, 8 h suit, 1.5 h reserve; ICES-2026-127), not sized to fit the tour | Sizing the budget to the tour was circular and hid that the walk got harder | Nicolas | PR #94; brief §2 |
+| 2026-11-15 | **Scouting mode first: reach the targets** (the specific stops chosen for this walk); network mode later | It is the demo, the building block of network mode, and measurable against "knowing everything" | Nicolas | Brief §3 |
+| 2026-11-15 | **"Blocked" follows NASA's suit data:** a rock taller than 0.3 m is an obstacle (smallest crew member's step, ICES-2025-294); a cell is blocked when obstacles leave gaps under 1.0 m (the hatch width NASA sizes for the largest crew member); otherwise rocks only add walking cost | Uses NASA's measured suit limits, the same 0.3 m Luca uses for ledges | Nicolas | Brief §5 |
 | 2026-11-14 | **Walking slope limit is 20°**, not 25° | Artemis xEVA suit specification (flagged by Luca in PR #94). On Gale: walls go from 15.5% to 24.2% of cells, cells reachable from base from 82.2% to 69.6%; the five-stop Curiosity tour is unchanged (334.7 kJ) because it already avoids steep ground (`app/scripts/slope-check.json`) | Nicolas, Luca | `max_slope_deg` in `world.json`. **Not applied yet:** world files must be rebuilt (pipeline, Luca/Galsan); the app follows the knob without a code change |
 | 2026-11-14 | **The visualizer is a guided tour** (11 steps, Next / Play), with free play folded underneath | The free-play version was hard to follow | Nicolas | [Scouting explainer](https://claude.ai/artifact/8FDY6zGHXoewAtzxYBCJKG); source `docs/scouting/explainer.html` |
 | 2026-11-14 | **Helicopters are based on SkyFall plus newer concepts**, recharged at the habitat | SkyFall (JPL, 3 helicopters, 2028) proves scouting is planned but publishes no range or recharge; Mars Science Helicopter, Ingenuity and Dragonfly fill the gaps. Habitat recharge is **our assumption**, said as such | Nicolas | `docs/SCOUT-ALGORITHM.md` §7 |
@@ -30,14 +34,10 @@ Recommendations with evidence and the holes checked: `docs/DECISION-BRIEFS.md` (
 
 | Question | Options | Needs | Blocks |
 |---|---|---|---|
-| **Approve PR #94** [1] (routes on crossings + measured energy: gravity 0.68, sand 2.4×; Gale tour 332 → 617 kJ) | Approve / change | Jules (P1) and Nicolas (P2); Jules must re-export R3 first | Honest energy numbers in the pitch |
 | **Rebuild world files at 20°** [1] | With #94 (one R3 re-export, recommended) or as its own PR | Luca or Galsan; Jules's R3 hashes change too | The 20° decision taking effect |
-| **Energy budget** [2] | Auto-sized to the tour (today) / from a real suit figure (1,200 BTU/h, 8 h, 1.5 h reserve; in #94, recommended) | Team, raised by Luca in #94 | Honest ring and pitch numbers |
-| **Which scouting mode first** [3] | Reach the targets (fits the demo) / build a network (long-term story) | Nicolas | Build step 7, the demo script |
-| **How high the helicopter flies** [4] | About 2 m (rover-like view, but rotor dust and 0.3 m ridge clearance) / about 10 m with the camera 45° below the horizon (recommended) | Nicolas | Helicopter-view model, flight planner |
+| **How high the helicopter flies** [4] | Low (about 2–4 m, matches the rover images the model learns from; dusty) / about 10 m (safe; needs the model adapted to the air view). Deciding test: run the rover-trained model on labelled Ingenuity images | Nicolas | Helicopter-view model, flight planner |
 | **Labels for sensing** | Start with the reviewed ROSCO rocks / also project Curiosity's labelled images onto Gale cells | Jules, Nicolas | Belief-map training |
-| **What "blocked" means for a suited walker** [5] | Rock height threshold; Luca uses NASA's 0.3 m step limit for ledges | Team | Belief map, rock-size law cut-off |
-| **Stop rule: what a flight is worth** [6] | How many kJ of walking a flight must save (1.0 kJ in the toy) | Nicolas | Value-of-information planner |
+| **Stop rule: when to stop flying** [6] | Keep flying while a flight could still make the walk safer, reach more science, or make it easier; stop when none would change the plan, or at the budget | Nicolas | Value-of-information planner |
 | **Flight budget per campaign** [7] | A number of flights / a number of sols; flights per helicopter per sol | Team | Flight planner |
 | **Walking window before sunset** [8] | How long before sunset a walk must end | Team | Sun model, plan mode |
 | **Demo look** [9] | 3D view starts coarse and fills in where flown | Nicolas | Re-plan loop screen |
