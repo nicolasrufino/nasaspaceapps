@@ -19,6 +19,7 @@ import { initSteps } from './steps.js'
 import { initTerrainClassifier } from './terrain-classifier.js'
 import { explainFlight, flightText } from './scout-why.js'
 import { initFlow } from './flow/flow.js'
+import { initHud, nextStop, bearingDeg } from './hud.js'
 
 const $ = (id) => document.getElementById(id)
 const params = new URLSearchParams(location.search)
@@ -179,6 +180,17 @@ for (const [text, id] of [['Walk / pause', 'play'], ['Step', 'step'], ['Back to 
   visionBar.append(b)
 }
 document.body.append(viewBtn, visionNote, visionBar)
+// Helmet HUD (issue #41, flag hud or ?hud; off by default): drawn over the Follow and Eye views. hud.js only draws.
+const hud = flags.has('hud') || params.has('hud') ? initHud() : null
+const lookDir = new THREE.Vector3()
+const hudState = () => {
+  camera.getWorldDirection(lookDir)
+  const s = window.appState, usable = meta.energy_budget_j - s.reserve_j
+  return { heading: bearingDeg(lookDir.x, lookDir.z), pos: [walker.position.x, walker.position.z], cs,
+    next: nextStop(route, k, allStops(), cs), home: [meta.base_cell[0] * cs, meta.base_cell[1] * cs],
+    marginJ: ringLimit(meta, walk) - s.cost_to_go_j, usableJ: usable, energyJ: walk.energy_left_j, budgetJ: meta.energy_budget_j,
+    o2L: oxygenL(meta, walk.energy_left_j), t: walk.t }
+}
 const heading = () => { // where the astronaut is going: along the route from where they stand
   const from = route?.cells[k + 1] ? walk.cell : route?.cells[k - 1]
   const next = route?.cells[k + 1] ?? walk.cell
@@ -188,6 +200,8 @@ function setView(mode) {
   view.mode = mode
   viewBtn.textContent = { map: 'View: Map', follow: 'View: Follow', eye: 'View: Eye level' }[mode]
   visionNote.hidden = visionBar.hidden = mode === 'map'
+  hud?.show(mode !== 'map')
+  if (hud) visionNote.hidden = true // the HUD replaces the note
   document.querySelectorAll('.panel').forEach((el) => (el.style.display = mode === 'map' ? '' : 'none'))
   furniture.el.style.display = mode === 'map' ? 'flex' : 'none'
   controls.enabled = mode !== 'eye'
@@ -290,6 +304,7 @@ renderer.setAnimationLoop((now) => {
   baseMarker.position.set(habitat.position.x, habitat.position.y + 12, habitat.position.z)
   if (intro) tickIntro(dt)
   tickView(dt)
+  hud?.tick(hudState)
   furniture.update(camera, controls, innerHeight)
   if (tiles && now - lastTiles > 500) {
     lastTiles = now
