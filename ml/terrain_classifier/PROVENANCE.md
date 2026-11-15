@@ -14,6 +14,11 @@ scenario; defer CAPCOM/Foundry (R7). Do not train on Perseverance in this follow
 - The v2 experiment changes the classifier head only. Its recorded promotion
   gates fail, so v1 remains the published model. The old 159-patch test is now a
   regression set; a separate 302-patch expert test provides additional evidence.
+- The [v3 follow-up](EXPANDED.md) continues training on 4,609 Curiosity ground
+  crops, including 155 big-rock crops, and fine-tunes feature blocks 9–12.
+  It improves the historical expert scores and big-rock challenge recall but
+  regresses on a new general crowd-label test. Its promotion gates also fail;
+  the v3 candidate is experimental and the published v1 still uses 1,136 crops.
 - No Ingenuity photographs were used to train or evaluate these classifiers.
   The historical Perseverance result is a transfer test, not training data.
 
