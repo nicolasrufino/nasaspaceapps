@@ -68,6 +68,7 @@ One place for what the team decided, why, and what is still open. **Add a line h
 | 2026-11-14 | **Every formula gets a plain-language note** in `app/HOW-IT-WORKS.md` | It feeds the project page | Nicolas | `app/HOW-IT-WORKS.md` |
 | 2026-11-14 | **Phone testing at the end** of the build | Desktop browser tests are enough to merge for now | Nicolas | AGENTS.md rule 13 |
 | 2026-11-14 | **Test, then merge as you go** into `dev`; `main` only by release PR | Ship faster | Nicolas, Luca | AGENTS.md rules 13–14 |
+| 2026-11-15 | **Home page shows Scout and Vision with real app captures**: a before/after toggle for Scout, a layer toggle for Vision, method on demand. The rejected `?layout=demo` console layout is removed | Judges see what each tool does without opening it; pictures and numbers come from one recorded run, none invented | Nicolas | `app/design-review/DIRECTION.md`, `app/scripts/capture-home.mjs` |
 
 ## Open: still to decide
 

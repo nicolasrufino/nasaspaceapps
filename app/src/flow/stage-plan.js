@@ -7,7 +7,7 @@ const MIN_STOPS = 3
 export default {
   enter(ui, app) {
     const { map } = ui
-    map.caption('What we know from orbit', 'NASA MRO HiRISE colour · USGS MSL Gale mosaic · tap to add a stop')
+    map.caption('What we know from orbit', 'NASA MRO HiRISE imagery · USGS MSL Gale mosaic · tap to add a stop')
     map.fit()
 
     const goal = scienceGoalOn()

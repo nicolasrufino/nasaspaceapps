@@ -26,6 +26,8 @@ body.flow #hud, body.flow #legend, body.flow #minimap, body.flow #viewBtn, body.
 .f-sec p { margin: 0 0 8px; color: var(--paper); } .f-sec p.dim, .f-small { color: var(--mute); font-size: 12px; }
 .f-list { display: flex; flex-direction: column; }
 .f-item { display: flex; gap: 10px; align-items: center; padding: 9px 0; border-top: 1px solid var(--panel2); min-height: 26px; }
+button.f-item { width: 100%; min-height: 44px; padding: 9px 0; border-radius: 0; background: none; color: inherit; text-align: left; cursor: pointer; }
+button.f-item:focus-visible { outline: 2px solid var(--scout); outline-offset: -2px; }
 .f-item .n { flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--stop); color: var(--ink); font-weight: 700; font-size: 12px; display: grid; place-items: center; }
 .f-item .t { flex: 1; min-width: 0; } .f-item .t small { display: block; color: var(--mute); font-size: 12px; }
 .f-item .x { all: unset; cursor: pointer; color: var(--mute); font-size: 18px; padding: 0 6px; } .f-item .x:hover { color: var(--paper); }

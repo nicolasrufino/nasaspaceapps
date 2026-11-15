@@ -100,7 +100,10 @@ export default {
       map.clear('walker')
       drawMap(false)
 
-      const head = ui.section(before && crossedOld > 0 ? 'The scout changed the route' : 'The route was already clear', true)
+      const headline = !before ? 'Route from orbit'
+        : crossedOld > 0 ? 'The scout changed the route'
+        : 'No detected rocks on the original route'
+      const head = ui.section(headline, true)
       if (!before) head.append(p('No scouting yet: this is the route as seen from orbit.', 'dim'))
       else if (crossedOld > 0) head.append(p(`The route planned from orbit crossed ${crossedOld} rock ${crossedOld === 1 ? 'cell' : 'cells'} the scout found.`, 'dim'))
       else head.append(p('The scout found no rock on the route planned from orbit.', 'dim'))
@@ -117,7 +120,7 @@ export default {
       const extra = before ? Math.round((route.energy_j - before.energy_j) / 1000) : 0
       const cost = extra > 0 ? `costs ${extra} kJ more` : extra < 0 ? `costs ${-extra} kJ less` : 'costs the same energy'
       const sum = ui.section('')
-      sum.append(p(before ? `The safe route ${cost} and uses ${pct}% of the walking budget.` : `The route uses ${pct}% of the walking budget.`))
+      sum.append(p(before ? `The scouted route ${cost} and uses ${pct}% of the walking budget.` : `The route uses ${pct}% of the walking budget.`))
 
       const ml = ui.section('At each stop')
       ml.append(ui.model(MODELS.groundClassifier))
