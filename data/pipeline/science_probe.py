@@ -7,7 +7,7 @@ Reads the Gale world files and prints / writes three checks:
 3. whether our ChemCam/APXS points repeat the published chemistry trend
    (boxwork: more Si, less Mg and S than the sulfate unit; Siebach et al., GSA 2025).
 
-Sources: MRO HiRISE 1 m terrain (landform layer), MSL ChemCam, APXS and DAN points.
+Sources: MRO HiRISE 1 m terrain (landform layer), MSL ChemCam and APXS points.
 Run: python data/pipeline/science_probe.py  ->  ml/exports/science_probe.json
 """
 
@@ -50,14 +50,15 @@ def main():
     }
 
     cells = {}
-    neutron = json.loads((WORLD / "neutron_points.json").read_text())
-    for p in neutron:
+    # Rover positions come from the chemistry points: they match the stops' cells exactly.
+    # neutron_points.json is about 200 m off on the same sols, so it is not used for positions.
+    chem = json.loads((WORLD / "chem_points.json").read_text())
+    for p in chem:
         cells.setdefault(tuple(p["cell"]), []).append(p["sol"])
     a = np.array([score[y, x] for (x, y), s in cells.items() if all(inside(v) for v in s)])
     b = np.array([score[y, x] for (x, y), s in cells.items() if not any(inside(v) for v in s)])
     auc = float(np.mean((a[:, None] > b[None, :]) + 0.5 * (a[:, None] == b[None, :])))
 
-    chem = json.loads((WORLD / "chem_points.json").read_text())
     oxides = {}
     for ox in ("SiO2", "MgO", "SO3", "Al2O3"):
         vals = [(c["oxides_wt_pct"][ox], inside(c["sol"])) for c in chem if ox in c["oxides_wt_pct"]]

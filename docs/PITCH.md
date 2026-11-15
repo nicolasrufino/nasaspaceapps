@@ -46,6 +46,8 @@ Speaker detail: flights are **1,000 m + 1,000 m + 215.4 m**, or **2.22 km** of s
 
 | Question | Answer supported by this build |
 |---|---|
+| What would the helicopter carry? | NASA's SkyFall payload: two colour cameras, two near-infrared cameras, ground-penetrating radar, air-temperature sensors, a dosimeter and navigation cameras ([NASA, Sept 2026](https://science.nasa.gov/wp-content/uploads/2026/09/skyfall-mission-information-package-final.pdf)). Six of the challenge's eight data kinds fly. Contact chemistry does not, so the crew measures it at the stop. In our build the sensors are not simulated. |
+| How do you choose science targets? | The goal is the boxwork. A ridge-and-hollow score from the 1 m terrain separates rover positions inside the boxwork from those outside at 0.851 on 90 cells (`ml/exports/science_probe.json`). It is a guide on a small test; the crew decides. |
 | Are the flights real? | No. A three-flight corridor simulation reveals a pre-existing hazard layer. Each flight is capped at 1 km. Aircraft transit, recharge, daylight and energy remain unmodelled. |
 | Does zero hazards mean safe? | Zero crossings of the stored grid hazard layer on this route. Unmapped hazards, perception mistakes and energy-model error can remain. |
 | Where did the hazard layer come from? | Fine-terrain rules plus registered, reviewed ROSCO rock proposals. Proposal acceptance is not detector precision or recall. The measured route benefit here comes from terrain-derived hazards. |
