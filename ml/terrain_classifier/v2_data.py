@@ -52,6 +52,17 @@ def split(infos, reused_stems):
     return images, labels, sorted(test_blocks), test, reused + new
 
 
+def drop_mismatched(destination, records):
+    """AI4Mars has M2020 frames whose label mask differs in size from the image; never resize, drop them."""
+    from PIL import Image
+    kept, dropped = [], []
+    for r in records:
+        image = Image.open(Path(destination) / r["image"]["local_path"]).size
+        label = Image.open(Path(destination) / r["label"]["local_path"]).size
+        (kept if image == label else dropped).append(r)
+    return kept, [r["image"]["archive_path"] for r in dropped]
+
+
 def main(subset, destination, extras):
     subset, destination = Path(subset), Path(destination)
     destination.mkdir(parents=True, exist_ok=True)
@@ -90,8 +101,10 @@ def main(subset, destination, extras):
             records.append(record)
             if (n + 1) % 20 == 0:
                 print(part, n + 1, "/", len(stems), flush=True)
+    records, mismatched = drop_mismatched(destination, records)
     manifest = {"record": RECORD, "archive": ARCHIVE, "protocol": P.ID, "block_sols": P.BLOCK_SOLS,
-                "test_blocks": test_blocks, "counts": {"test": len(test), "train": len(train)}, "records": records}
+                "test_blocks": test_blocks, "counts": {p: sum(r["split"] == p for r in records) for p in ("test", "train")},
+                "dropped_size_mismatch": mismatched, "records": records}
     (destination / "manifest.json").write_text(json.dumps(manifest, indent=1) + "\n", encoding="utf-8", newline="\n")
     print("saved", manifest["counts"], "test blocks", test_blocks, flush=True)
 
