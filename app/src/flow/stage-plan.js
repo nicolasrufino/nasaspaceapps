@@ -1,67 +1,61 @@
-// Stage 1: select stops on the NASA HiRISE map or with explicit add/remove buttons.
-// Selection, route preferences and calculations still belong to the existing app bridge.
-import { scienceGoalOn, goalCard, stopCheck, loadCandidates, goalsOn, goalsSection } from './goal.js'
-import { findButton } from './find.js'
+// Stage 1: pick a science goal, and its stops are added at once; tap the map to add or remove more.
+// One list (the stops you have), one way to add (goal or map), one way to remove (×). The science behind each goal
+// lives on the docs page, not here (DECISIONS 2026-11-15). Selection and planning belong to the app bridge.
+import { loadCandidates } from './goal.js'
 const MIN_STOPS = 3
+let chosen = null // the goal picked, kept when the user comes back to this stage
 
 export default {
   enter(ui, app) {
     const { map } = ui
-    map.caption('Choose your stops', 'NASA MRO HiRISE · USGS Gale mosaic · tap the map to add a stop')
+    map.caption('Mount Sharp from orbit', 'NASA MRO HiRISE · USGS Gale mosaic')
     map.fit([app.meta.base_cell, ...app.stops().map((s) => s.cell)], 20)
 
-    const goal = scienceGoalOn()
-    const intro = ui.section('Choose your stops', true)
-    intro.append(Object.assign(ui.h('p', 'dim'), { textContent: 'Pick at least 3. Use + below or tap the map.' }))
-    const sug = ui.section(goal ? 'Curiosity stops' : 'Suggested stops'), sugList = ui.h('div', 'f-list f-stop-list')
-    const addAll = ui.button('+ Add all', () => {
-      for (const s of app.stops()) if (!s.custom && !s.included) app.toggleStop(s.id)
-    })
-    addAll.classList.add('f-compact')
-    addAll.setAttribute('aria-label', 'Add all suggested stops')
-    const sugHead = ui.h('div', 'f-section-head')
-    sugHead.append(sug.querySelector('h3'), addAll)
-    sug.append(sugHead, sugList)
+    const curio = () => app.stops().filter((s) => !s.custom)
+    let picks = [] // candidates.json: the boxwork sites the map ranks
+    const fromMap = (s) => picks.find((p) => `${p.cell}` === `${s.cell}`)
 
-    const mine = ui.section('Added on the map'), mineList = ui.h('div', 'f-list')
-    mine.append(mineList)
-
-    const how = ui.section('Route preference'), seg = ui.h('div', 'f-seg')
-    const btn = { easiest: ui.button('Least energy', () => app.setObjective('easiest')), shortest: ui.button('Shortest', () => app.setObjective('shortest')) }
-    btn.easiest.title = 'Spend less walking energy; avoid sand and steep ground.'
-    btn.shortest.title = 'Minimise distance on walkable ground.'
-    seg.append(btn.easiest, btn.shortest)
-    how.append(seg)
-
-    const reasons = ui.h('div', 'f-list')
-    for (const s of app.stops().filter((s) => !s.custom)) reasons.append(ui.item({ title: s.name, sub: s.why ?? s.goal ?? '' }))
-    const more = ui.details('More options & stop details', reasons)
-    const goals = goal && goalsOn()
-    const addCurio = () => { for (const s of app.stops()) if (!s.custom && !s.included) app.toggleStop(s.id) }
-    const gc = goals ? goalsSection(ui, (id, note) => {
-      if (id === 'boxwork') return picks.length ? addCands() : (note.textContent = 'Boxwork sites are still loading.')
-      // ponytail: groundwater adds Curiosity's 5 stops: neutron_points.json has a DAN reading on each stop's sol (stops.json). Orbit-ranked cells are the upgrade.
-      addCurio(); note.textContent = 'Added Curiosity’s stops: DAN measured hydrogen on each stop’s sol. A guide; the crew decides.'
-    }) : goal ? goalCard(ui) : null
-    if (goals) sug.querySelector('h3').textContent = 'Or pick Curiosity’s stops'
-    ui.body.append(intro, ...(gc ? [gc] : []), sug, mine, how, more)
-    let addCands = () => {}
-
-    // Optional candidate sites keep their existing evidence and action, under More options.
-    let picks = [], live = true, closeFind = null
-    if (goal) loadCandidates().then((c) => {
-      if (!live || !c.length) return
-      picks = c
-      const sec = ui.section('Sites the map suggests')
-      sec.append(Object.assign(ui.h('p', 'dim'), { textContent: 'Ranked from ridges and hollows in the 1 m HiRISE terrain. A guide; the crew decides.' }),
-        ui.button(`+ Add ${c.length} candidate sites`, () => addCands()))
-      more.querySelector('.f-details-body').prepend(sec)
-      addCands = () => {
-        const have = new Set(app.stops().filter((s) => s.included).map((s) => `${s.cell}`))
-        for (const p of c) if (!have.has(`${p.cell}`)) { app.addStop(p.cell); have.add(`${p.cell}`) }
+    // Choosing a goal swaps in its stops; stops the user tapped on the map stay.
+    function choose(id) {
+      chosen = id
+      for (const s of app.stops()) {
+        if (!s.included) continue
+        if (!s.custom && id !== 'water') app.toggleStop(s.id)
+        if (s.custom && fromMap(s) && id !== 'boxwork') app.removeStop(s.id)
       }
-      // "How the map finds boxwork" (find.js), right after the science goal; hidden by ?off=find or a missing file.
-      findButton(ui, app, c, () => addCands()).then((f) => { if (live && f) { gc.after(f.el); closeFind = f.close } })
+      if (id === 'water') for (const s of curio()) { if (!s.included) app.toggleStop(s.id) }
+      else {
+        const have = new Set(app.stops().filter((s) => s.included).map((s) => `${s.cell}`))
+        for (const p of picks) if (!have.has(`${p.cell}`)) app.addStop(p.cell)
+      }
+      draw()
+    }
+
+    const intro = ui.section('Pick a science goal', true)
+    const cards = ui.h('div', 'f-goal-cards')
+    const card = (id, name) => {
+      const b = ui.h('button', 'f-goal-card', '<b></b><small></small>')
+      b.type = 'button'; b.firstChild.textContent = name; b.onclick = () => choose(id)
+      cards.append(b)
+      return b
+    }
+    const water = card('water', 'Groundwater'), box = card('boxwork', 'Boxwork')
+    water.lastChild.textContent = `Visit Curiosity’s ${curio().length} stops`
+    box.lastChild.textContent = 'Loading sites…'; box.disabled = true
+    intro.append(cards)
+
+    const mine = ui.section(''), head = ui.h('div', 'f-section-head'), list = ui.h('div', 'f-list f-stops')
+    head.innerHTML = '<h3></h3><span class="f-small">or tap the map</span>'
+    mine.append(head, list)
+    ui.body.append(intro, mine)
+
+    let live = true
+    loadCandidates().then((c) => {
+      if (!live) return
+      picks = c
+      box.disabled = !c.length
+      box.lastChild.textContent = c.length ? `Visit ${c.length} sites ranked from orbit` : 'No sites found'
+      draw()
     })
 
     const go = ui.button('Plan the route', () => ui.go('analyse'), true)
@@ -70,10 +64,7 @@ export default {
     ui.foot.append(hint, go)
 
     let hot = null
-    function hover(id, v) {
-      hot = v ? id : null
-      drawPins() // Hover never replaces the button under the pointer.
-    }
+    const hover = (id, v) => { hot = v ? id : null; drawPins() }
     function drawPins() {
       const stops = app.stops(), on = stops.filter((s) => s.included), off = stops.filter((s) => !s.included && !s.custom)
       const k = map.scale
@@ -81,43 +72,23 @@ export default {
         { id: 'base', cell: app.meta.base_cell, label: 'H', color: '#fff', r: 1.7 * k },
         ...off.map((s) => ({ id: s.id, cell: s.cell, label: '+', color: '#f3f2ef', r: (s.id === hot ? 1.9 : 1.6) * k, faded: s.id !== hot })),
         ...on.map((s, n) => ({ id: s.id, cell: s.cell, label: n + 1, color: '#ffd23f', r: (s.id === hot ? 2.1 : 1.7) * k })),
-      ], (id) => { if (id !== 'base') app.toggleStop(id) })
+      ], (id) => { if (id === 'base') return; const s = stops.find((x) => x.id === id); s?.custom ? app.removeStop(id) : app.toggleStop(id) })
     }
     function draw() {
-      const stops = app.stops(), on = stops.filter((s) => s.included), suggestions = stops.filter((s) => !s.custom)
+      const on = app.stops().filter((s) => s.included)
       drawPins()
-      const focused = sugList.contains(document.activeElement) ? document.activeElement.dataset.stopId : null
-      sugList.replaceChildren(...suggestions.map((s) => {
-        const row = ui.item({ n: s.included ? on.indexOf(s) + 1 : '+', title: s.name,
-          sub: goal ? stopCheck(s.id) : '', onClick: () => app.toggleStop(s.id), onHover: (v) => hover(s.id, v) })
-        row.dataset.stopId = s.id
-        row.classList.toggle('selected', s.included)
-        row.setAttribute('aria-pressed', s.included)
-        row.setAttribute('aria-label', `${s.included ? 'Remove' : 'Add'} ${s.name}`)
-        row.title = s.why ?? s.name
-        const action = ui.h('span', 'f-stop-action')
-        action.textContent = s.included ? '✓' : 'Add'
-        action.setAttribute('aria-hidden', 'true')
-        row.append(action)
-        return row
-      }))
-      if (focused) [...sugList.children].find((row) => row.dataset.stopId === focused)?.focus({ preventScroll: true })
-      const custom = on.filter((s) => s.custom)
-      mine.hidden = !custom.length
-      mineList.replaceChildren(...custom.map((s) => ui.item({ n: on.indexOf(s) + 1, title: s.name,
-        sub: picks.some((p) => `${p.cell}` === `${s.cell}`) ? 'Map candidate' : 'Picked on the map',
-        onRemove: () => app.removeStop(s.id), onHover: (v) => hover(s.id, v) })))
-      addAll.disabled = suggestions.every((s) => s.included)
-      addAll.textContent = addAll.disabled ? 'All added ✓' : '+ Add all'
-      const o = app.objective()
-      btn.easiest.setAttribute('aria-pressed', o === 'easiest'); btn.shortest.setAttribute('aria-pressed', o === 'shortest')
+      water.setAttribute('aria-pressed', chosen === 'water'); box.setAttribute('aria-pressed', chosen === 'boxwork')
+      head.firstChild.textContent = on.length ? `Your stops · ${on.length}` : 'Your stops'
+      list.replaceChildren(...on.map((s, n) => ui.item({ n: n + 1, title: fromMap(s)?.name ?? s.name,
+        onRemove: () => (s.custom ? app.removeStop(s.id) : app.toggleStop(s.id)), onHover: (v) => hover(s.id, v) })))
       go.disabled = on.length < MIN_STOPS
-      hint.textContent = on.length < MIN_STOPS ? `${on.length} selected · add ${MIN_STOPS - on.length} more` : `${on.length} stops selected · ready to plan`
-      hint.classList.toggle('ready', !go.disabled)
+      const more = MIN_STOPS - on.length
+      hint.textContent = on.length ? `Add ${more} more stop${more === 1 ? '' : 's'}` : `Pick a goal, or tap ${MIN_STOPS} spots on the map`
+      hint.hidden = !go.disabled
     }
     map.onTap((cell) => app.addStop(cell))
     const off = app.on('plan', draw)
     draw()
-    return () => { live = false; off(); closeFind?.() }
+    return () => { live = false; off() }
   },
 }
