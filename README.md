@@ -10,7 +10,7 @@ NASA Space Apps Challenge 2026 · Chicago · Challenge: *Interplanetary Survival
 |---|---|
 | ![The planned walk on the orbit map, before scouting](app/mission-vesta/assets/scout-before.jpg) | ![The same walk after scouting, re-planned around what the flights found](app/mission-vesta/assets/scout-after.jpg) |
 
-Runs in a phone or laptop browser. Nothing to install.
+Runs in a desktop browser in landscape (horizontal) view. Nothing to install. Desktop is the standard; a phone may not give the best experience, because the app needs a horizontal view.
 
 ## The problem
 
@@ -91,7 +91,7 @@ Working on the code: `AGENTS.md` has the team rules, and each folder has its own
 
 - The helicopter flights, the astronaut and the stop photos are simulated.
 - The classifier and the hidden-rock map are experiments, off by default.
-- Not yet tested on a real phone over HTTPS.
+- Built for desktop (landscape). Phones may not give the best experience, because the app needs a horizontal view.
 
 What is still missing is listed in [docs/DECISIONS.md](docs/DECISIONS.md).
 

@@ -29,7 +29,7 @@ What it is, concretely: **one app, three views of the same map.**
 - **The tablet the crew carries** (during the walk): a minimap like in a video game: where you are, where to go, the path, and the layers that matter (ground, minerals, chemistry, radiation). A science checklist at each stop.
 - **The helmet HUD** (during the walk): only what matters right now: how far you can still go and get home, heading, the next stop, alerts.
 
-In the demo a phone plays the tablet and switches to the HUD view.
+In the demo a desktop browser in landscape (horizontal) view plays the tablet and switches to the HUD view. Desktop is the standard; a phone may not give the best experience, because the app needs a horizontal view.
 
 Who uses it: a two-person crew on Mars, before, during and after a walk. Where we build it: one 2 km × 2 km slice of lower Mount Sharp in Gale crater (see `docs/DATA.md`).
 
@@ -111,8 +111,8 @@ The short version: **every tool that exists today does one stage. Martian Map co
 ## 7. What is real and what is simulated
 
 - **Real:** every data layer (NASA orbiters and Curiosity), the full-detail view the helicopter reveals, the walking-energy model, the route and safety maths, the classifier's training labels.
-- **Simulated:** the helicopter's flight, the astronaut (a judge walking with a phone), and the delay to mission control.
-- **Not claimed:** that a phone is the suit display (it stands in for one), or numbers we haven't measured. Every number in the pitch comes from our code.
+- **Simulated:** the helicopter's flight, the astronaut (played in a desktop browser), and the delay to mission control.
+- **Not claimed:** that the app is the suit display (it stands in for one), or numbers we haven't measured. Every number in the pitch comes from our code.
 
 ## Sources
 
