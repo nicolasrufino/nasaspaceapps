@@ -1,0 +1,50 @@
+{
+  "before": {
+    "url": "http://127.0.0.1:4179/scout/",
+    "runs": 3,
+    "viewport": "1280x800",
+    "renderer": "headless Chromium, SwiftShader",
+    "median_ms": {
+      "groundwater": 763,
+      "boxwork": 1279,
+      "groundwater_again": 1293,
+      "boxwork_again": 1271,
+      "plan_route": 70,
+      "route_step_1": 67,
+      "route_step_2": 71,
+      "route_step_3": 74,
+      "route_step_4": 188,
+      "scout_start": 266,
+      "longest_task": 1209,
+      "errors": 0
+    },
+    "routes": {
+      "groundwater": "5 stops, 133 cells, 621396.2 J",
+      "boxwork": "5 stops, 212 cells, 1072577.8 J"
+    }
+  },
+  "after": {
+    "url": "http://127.0.0.1:4178/scout/",
+    "runs": 3,
+    "viewport": "1280x800",
+    "renderer": "headless Chromium, SwiftShader",
+    "median_ms": {
+      "groundwater": 12,
+      "boxwork": 15,
+      "groundwater_again": 15,
+      "boxwork_again": 16,
+      "plan_route": 16,
+      "route_step_1": 16,
+      "route_step_2": 16,
+      "route_step_3": 16,
+      "route_step_4": 16,
+      "scout_start": 346,
+      "longest_task": 331,
+      "errors": 0
+    },
+    "routes": {
+      "groundwater": "5 stops, 133 cells, 621396.2 J",
+      "boxwork": "5 stops, 212 cells, 1072577.8 J"
+    }
+  }
+}

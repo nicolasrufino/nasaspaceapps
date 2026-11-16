@@ -34,7 +34,7 @@ export function initFlow(app) {
     // In a scene the 3D picture is shifted so its centre sits in the area the rail leaves free.
     // console (false, default): the 2D map fills the main area, no 3D. scene (true): the main area is clear and the 3D view shows.
     // full (scene only): hide the rail too; the stage draws its own panels over the 3D view (a control centre).
-    scene(on, full = false) { main.classList.toggle('scene', on); root.classList.toggle('full', on && full); on && !full ? (innerWidth > 760 ? app.viewShift(q('rail').offsetWidth / 2) : app.viewShift(0, innerHeight * 0.22)) : app.viewShift(0); if (on) map.el.remove(); else { map.size('fill'); main.prepend(map.el) } },
+    scene(on, full = false) { main.classList.toggle('scene', on); app.show3D(on); root.classList.toggle('full', on && full); on && !full ? (innerWidth > 760 ? app.viewShift(q('rail').offsetWidth / 2) : app.viewShift(0, innerHeight * 0.22)) : app.viewShift(0); if (on) map.el.remove(); else { map.size('fill'); main.prepend(map.el) } },
     // A titled block in the rail. big = a heading instead of a small label. Returns the element; append to it.
     section(title, big = false) { return h('div', 'f-sec', title ? `<${big ? 'h2' : 'h3'}>${title}</${big ? 'h2' : 'h3'}>` : '') },
     // Secondary explanations stay available without competing with the stage's next action.
