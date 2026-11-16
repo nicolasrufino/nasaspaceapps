@@ -1,0 +1,375 @@
+{
+ "protocol": "VESTA-terrain-v2",
+ "gates": {
+  "fresh_perseverance_gain": true,
+  "fresh_perseverance_balanced": true,
+  "curiosity_expert_v1_drop": true,
+  "curiosity_expert_v2_drop": true
+ },
+ "promote": true,
+ "evaluations": {
+  "curiosity_expert_v1": {
+   "v1": {
+    "metrics": {
+     "accuracy": 0.9308176100628931,
+     "balanced_accuracy_supported_classes": 0.9265873015873015,
+     "samples": 159
+    },
+    "correct": 148,
+    "confusion_matrix": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      79,
+      4,
+      0,
+      1
+     ],
+     [
+      0,
+      3,
+      37,
+      0,
+      0
+     ],
+     [
+      0,
+      0,
+      3,
+      32,
+      0
+     ],
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ]
+    ],
+    "recall": {
+     "soil": 0.9404761904761905,
+     "bedrock": 0.925,
+     "sand": 0.9142857142857143,
+     "big_rock": null
+    }
+   },
+   "v2": {
+    "metrics": {
+     "accuracy": 0.9182389937106918,
+     "balanced_accuracy_supported_classes": 0.901984126984127,
+     "samples": 159
+    },
+    "correct": 146,
+    "confusion_matrix": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      80,
+      3,
+      1,
+      0
+     ],
+     [
+      0,
+      3,
+      37,
+      0,
+      0
+     ],
+     [
+      0,
+      0,
+      6,
+      29,
+      0
+     ],
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ]
+    ],
+    "recall": {
+     "soil": 0.9523809523809523,
+     "bedrock": 0.925,
+     "sand": 0.8285714285714286,
+     "big_rock": null
+    }
+   },
+   "paired_bootstrap_v2_minus_v1": {
+    "gain_points": -1.257861635220126,
+    "ci95_points": [
+     -5.755741560597675,
+     2.9416115558649514
+    ],
+    "groups": 28
+   }
+  },
+  "perseverance_fresh": {
+   "v1": {
+    "metrics": {
+     "accuracy": 0.410958904109589,
+     "balanced_accuracy_supported_classes": 0.5624338624338624,
+     "samples": 219
+    },
+    "correct": 90,
+    "confusion_matrix": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      69,
+      3,
+      68,
+      0
+     ],
+     [
+      0,
+      27,
+      14,
+      31,
+      0
+     ],
+     [
+      0,
+      0,
+      0,
+      7,
+      0
+     ],
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ]
+    ],
+    "recall": {
+     "soil": 0.4928571428571429,
+     "bedrock": 0.19444444444444445,
+     "sand": 1.0,
+     "big_rock": null
+    }
+   },
+   "v2": {
+    "metrics": {
+     "accuracy": 0.730593607305936,
+     "balanced_accuracy_supported_classes": 0.6043650793650793,
+     "samples": 219
+    },
+    "correct": 160,
+    "confusion_matrix": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      118,
+      15,
+      7,
+      0
+     ],
+     [
+      0,
+      26,
+      39,
+      7,
+      0
+     ],
+     [
+      0,
+      2,
+      2,
+      3,
+      0
+     ],
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ]
+    ],
+    "recall": {
+     "soil": 0.8428571428571429,
+     "bedrock": 0.5416666666666666,
+     "sand": 0.42857142857142855,
+     "big_rock": null
+    }
+   },
+   "paired_bootstrap_v2_minus_v1": {
+    "gain_points": 31.963470319634702,
+    "ci95_points": [
+     19.44411532385466,
+     43.689429720983114
+    ],
+    "groups": 30
+   }
+  },
+  "curiosity_expert_v2": {
+   "v1": {
+    "metrics": {
+     "accuracy": 0.9105960264900662,
+     "balanced_accuracy_supported_classes": 0.886045293021986,
+     "samples": 302
+    },
+    "correct": 275,
+    "confusion_matrix": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      180,
+      1,
+      10,
+      0
+     ],
+     [
+      0,
+      3,
+      25,
+      0,
+      1
+     ],
+     [
+      0,
+      4,
+      6,
+      70,
+      2
+     ],
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ]
+    ],
+    "recall": {
+     "soil": 0.9424083769633508,
+     "bedrock": 0.8620689655172413,
+     "sand": 0.8536585365853658,
+     "big_rock": null
+    }
+   },
+   "v2": {
+    "metrics": {
+     "accuracy": 0.9403973509933775,
+     "balanced_accuracy_supported_classes": 0.9207805112894963,
+     "samples": 302
+    },
+    "correct": 284,
+    "confusion_matrix": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      184,
+      2,
+      5,
+      0
+     ],
+     [
+      0,
+      2,
+      26,
+      1,
+      0
+     ],
+     [
+      0,
+      3,
+      4,
+      74,
+      1
+     ],
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ]
+    ],
+    "recall": {
+     "soil": 0.9633507853403142,
+     "bedrock": 0.896551724137931,
+     "sand": 0.9024390243902439,
+     "big_rock": null
+    }
+   },
+   "paired_bootstrap_v2_minus_v1": {
+    "gain_points": 2.980132450331126,
+    "ci95_points": [
+     -0.29327669484215974,
+     6.354828203875591
+    ],
+    "groups": 51
+   }
+  }
+ },
+ "train_patches": {
+  "curiosity": 1136,
+  "perseverance": 901
+ },
+ "class_counts": [
+  1165,
+  669,
+  186,
+  17
+ ],
+ "final_train_loss": 0.10079625993967056,
+ "perseverance_test_blocks": [
+  0,
+  3,
+  6,
+  7,
+  9,
+  19,
+  27
+ ],
+ "block_sols": 10,
+ "manifest_sha256": "009309e5a1d7012267c57b22148536cfe65988e148cd745014691ddcac6e583e",
+ "onnx_sha256": "111008e1baf3e63d3b6f750ea9f2eea9405ecfda8658c9f62d2bc9d47eaa01b7",
+ "runtime": {
+  "torch": "2.15.0",
+  "onnxruntime": "1.32.0"
+ }
+}

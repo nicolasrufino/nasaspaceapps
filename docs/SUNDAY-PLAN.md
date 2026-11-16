@@ -36,7 +36,7 @@ The page never mentions helicopters. Tie the scout to its wording about robots t
 
 - **No sensor is simulated.** A flight uncovers `rocks_fine.u8` in a 30 m strip and switches those cells to `cost_to_go_scouted` (`app/src/scout.js`, `main.js` `reveal`). The 10 m height only places the 3D model.
 - **Rocks:** a rule on the 1 m terrain (`data/pipeline/make_gale.py`) plus 23 human-accepted ROSCO detections. Not a model we trained.
-- **ML:** one trained model, `terrain_cls.onnx` (AI4Mars Curiosity ground photos): 93.1% on 159 Curiosity patches, 48.2% on 197 Perseverance patches. Off in the demo; it changes nothing on the map. `buddy_policy` is a placeholder. The belief model (0.729, development check) is off.
+- **ML:** one trained model, `terrain_cls.onnx` v2 (AI4Mars Curiosity and Perseverance ground photos, grey input): 91.8% / 94.0% on 159 / 302 Curiosity patches, 73.1% on 219 fresh Perseverance patches (v1: 93.1% on 159 Curiosity, 48.2% on 197 Perseverance; 41.1% on the fresh set). Off in the demo; it changes nothing on the map. `buddy_policy` is a placeholder. The belief model (0.729, development check) is off.
 - **No check exists for science targets**, because the app never chooses any.
 - **Not from our site:** the classifier's photos (all of Curiosity's path), Perseverance and Ingenuity sets (Jezero), an earlier rock patch about 5 km north.
 
@@ -44,8 +44,8 @@ The page never mentions helicopters. Tie the scout to its wording about robots t
 
 Our map is one 2 × 2 km box. Some of our evidence was made somewhere else, so it cannot prove anything about that box:
 
-- **The ground-photo classifier** learned from photos taken along Curiosity's whole route, not in our box. Its 93% means "it names ground types in Curiosity photos", not "it is right about our map".
-- **The Perseverance and Ingenuity pictures** are from Jezero, another crater about 3,700 km away (our arithmetic from the two sites' coordinates). The 48% there shows the classifier does not carry over to a new place.
+- **The ground-photo classifier** learned from photos taken along Curiosity's whole route, not in our box. Its 92–94% means "it names ground types in Curiosity photos", not "it is right about our map".
+- **The Perseverance and Ingenuity pictures** are from Jezero, another crater about 3,700 km away (our arithmetic from the two sites' coordinates). v1's 48% there showed the classifier did not carry over to a new place; v2 trains on some Perseverance photos and scores 73% on fresh ones, which says nothing about Gale or a helicopter.
 - **An early rock check** used an image patch about 5 km north of our box. Those rocks are not in our map. The 23 reviewed rocks now in the map are inside it.
 
 **Effect on us:** nothing breaks in the demo, because none of these drive the route. It only limits what we may say: never quote them as proof about our site.
@@ -83,7 +83,7 @@ NASA has published what a small Mars helicopter will carry ([SkyFall Mission Inf
 | Flight choice | rule: next unseen stretch | which strip is revealed | value-of-information version failed its test and stays off |
 | Boxwork finder | rule on ridge/hollow shares | candidate sites (S5) | 0.851 on 90 rover cells; untested away from the rover's path |
 | Rock-chance model | logistic regression, off | nothing yet | 0.729 on a development check, not independent |
-| Ground-photo classifier | trained model, off | nothing yet | 93.1% Curiosity, 48.2% Perseverance |
+| Ground-photo classifier | trained model, off | nothing yet | v2: 91.8% / 94.0% Curiosity, 73.1% fresh Perseverance |
 
 No probability shown in the app is calibrated. Say "score", not "chance".
 

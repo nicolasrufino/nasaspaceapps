@@ -8,7 +8,7 @@ export const MODELS = {
   rockReview: { name: 'Rock detections from orbit images', score: '23 of 25 detector proposals confirmed by a person',
     limit: 'Coverage is not complete, so no hit rate is claimed.', what: 'ROSCO detector on a HiRISE image, each proposal checked by a person.' },
   // ml/exports/terrain_cls.json (held_out, perseverance_transfer)
-  groundClassifier: { name: 'Ground classifier', score: '93% on 159 held-out Curiosity patches',
-    limit: '48% on 197 Perseverance patches: it does not transfer to a new rover yet.', what: 'MobileNetV3-small features with a trained linear head, on NASA/JPL AI4Mars labels; runs in the browser.' },
+  groundClassifier: { name: 'Ground classifier', score: '92% and 94% on two held-out Curiosity tests; 73% on fresh Perseverance photos',
+    limit: 'Not tested on helicopter or phone photos; big rocks are too rare in the tests to score.', what: 'Grey input, MobileNetV3-small features and a trained linear head, on NASA/JPL AI4Mars Curiosity and Perseverance labels; runs in the browser.' },
   scan: { name: 'Scan', score: 'Simulated', limit: 'Rocks come from the stored rock layer (terrain roughness estimate plus the 23 reviewed rocks), not from a live classifier.', what: '' },
 }

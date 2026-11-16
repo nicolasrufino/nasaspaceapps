@@ -5,7 +5,7 @@ export function initTerrainClassifier(panel) {
   box.id = 'terrainClassifier'
   box.innerHTML = `
     <summary>Classify a ground photo</summary>
-    <p class="src">MobileNet v1 · trained on NASA/JPL AI4Mars Curiosity ground photos.
+    <p class="src">MobileNet v2 · trained on NASA/JPL AI4Mars Curiosity and Perseverance ground photos.
       Choose a ground photo with one main surface. Analysis stays on your device.</p>
     <label>Ground photo <input id="terrainPhoto" type="file" accept="image/jpeg,image/png,image/webp"></label>
     <p class="src">Tap the photo or use the arrow keys to move the square. Only that 256 × 256 pixel area is analyzed.</p>

@@ -1,13 +1,14 @@
 {
   "placeholder": false,
+  "version": "v2",
   "data_source": [
-    "NASA/JPL AI4Mars merged 0.6 NAV labels",
+    "NASA/JPL AI4Mars merged 0.6 NAV labels (Curiosity and Perseverance)",
     "https://zenodo.org/api/records/15995036",
     "torchvision MobileNet_V3_Small_Weights.IMAGENET1K_V1"
   ],
   "held_out": {
-    "accuracy": 0.9308176100628931,
-    "balanced_accuracy_supported_classes": 0.9265873015873015,
+    "accuracy": 0.9182389937106918,
+    "balanced_accuracy_supported_classes": 0.901984126984127,
     "samples": 159
   },
   "confusion_matrix": [
@@ -20,10 +21,10 @@
     ],
     [
       0,
-      79,
-      4,
-      0,
-      1
+      80,
+      3,
+      1,
+      0
     ],
     [
       0,
@@ -35,8 +36,8 @@
     [
       0,
       0,
-      3,
-      32,
+      6,
+      29,
       0
     ],
     [
@@ -47,11 +48,11 @@
       0
     ]
   ],
-  "perseverance_transfer": {
+  "perseverance_fresh_test": {
     "metrics": {
-      "accuracy": 0.48223350253807107,
-      "balanced_accuracy_supported_classes": 0.41283691777804477,
-      "samples": 197
+      "accuracy": 0.730593607305936,
+      "balanced_accuracy_supported_classes": 0.6043650793650793,
+      "samples": 219
     },
     "confusion_matrix": [
       [
@@ -63,35 +64,103 @@
       ],
       [
         0,
-        58,
-        1,
-        64,
+        118,
+        15,
+        7,
         0
       ],
       [
         0,
-        15,
-        9,
-        15,
-        3
-      ],
-      [
-        0,
-        1,
-        0,
-        28,
+        26,
+        39,
+        7,
         0
       ],
       [
         0,
-        0,
-        1,
         2,
+        2,
+        3,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
         0
       ]
-    ]
+    ],
+    "frames": 30,
+    "sol_blocks": [
+      0,
+      3,
+      6,
+      7,
+      9,
+      19,
+      27
+    ],
+    "v1_on_same_patches": {
+      "accuracy": 0.410958904109589,
+      "balanced_accuracy_supported_classes": 0.5624338624338624,
+      "samples": 219
+    },
+    "paired_bootstrap_v2_minus_v1": {
+      "gain_points": 31.963470319634702,
+      "ci95_points": [
+        19.44411532385466,
+        43.689429720983114
+      ],
+      "groups": 30
+    }
   },
-  "architecture": "Frozen ImageNet MobileNetV3-small features + trained 576x4 linear head; fixed unknown logit -100",
+  "perseverance_transfer": {
+    "metrics": {
+      "accuracy": 0.730593607305936,
+      "balanced_accuracy_supported_classes": 0.6043650793650793,
+      "samples": 219
+    },
+    "confusion_matrix": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        118,
+        15,
+        7,
+        0
+      ],
+      [
+        0,
+        26,
+        39,
+        7,
+        0
+      ],
+      [
+        0,
+        2,
+        2,
+        3,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "note": "v2: fresh sol-blocked Perseverance test (see perseverance_fresh_test); the v1 197-patch zero-shot set is retired"
+  },
+  "architecture": "ITU-R 601 grey conversion in graph, frozen ImageNet MobileNetV3-small features, trained 576x4 linear head; fixed unknown logit -100",
   "training": {
     "seed": 2026,
     "epochs": 200,
@@ -99,16 +168,20 @@
     "lr": 0.01,
     "weight_decay": 0.001,
     "class_weighting": "inverse training frequency",
-    "train_patches": 1136,
+    "train_patches": 2037,
+    "train_patches_by_rover": {
+      "curiosity": 1136,
+      "perseverance": 901
+    },
     "class_counts": [
-      508,
-      514,
-      105,
-      9
+      1165,
+      669,
+      186,
+      17
     ],
-    "final_train_loss": 0.04475237429141998
+    "final_train_loss": 0.10079625993967056
   },
-  "preprocessing": "Nonoverlapping 256x256 source crops, >=70% valid NAV labels, >=80% dominant class among valid pixels; bilinear RGB resize to128; input0..1; ImageNet normalization inside graph",
+  "preprocessing": "Nonoverlapping 256x256 source crops, >=70% valid NAV labels, >=80% dominant class among valid pixels; bilinear RGB resize to 128; input 0..1; grey conversion and ImageNet normalization inside graph",
   "class_mapping": {
     "0": "unknown (not learned)",
     "1": "soil",
@@ -116,18 +189,31 @@
     "3": "sand",
     "4": "big rock"
   },
-  "split": "Official MSL expert min3 test; all expert acquisition clock bins excluded from training; M2020 NAV transfer only",
-  "manifest_sha256": "e0ef1652cf4e130b333a2828866c6f8524b521f6aad1e76115682b6a8c1c1a5f",
-  "onnx_sha256": "6ca2d33f28420c661ef4bf689005ff68027708dfcc445a4f82198729ee8d97d3",
+  "split": "Curiosity: official MSL expert min3 test, expert clock bins excluded from training. Perseverance: 10-sol blocks; 7 blocks held out as a fresh test, chosen by hash before download (v2_protocol.py)",
+  "manifest_sha256": "009309e5a1d7012267c57b22148536cfe65988e148cd745014691ddcac6e583e",
+  "onnx_sha256": "111008e1baf3e63d3b6f750ea9f2eea9405ecfda8658c9f62d2bc9d47eaa01b7",
   "runtime": {
-    "torch": "2.15.0+cpu",
+    "torch": "2.15.0",
     "onnxruntime": "1.32.0"
   },
+  "report": "ml/terrain_classifier/v2_report.json",
   "limitations": [
-    "Small deterministic subset, patch-level majority labels; not segmentation or a rock detector.",
-    "Nearby patches within a frame are correlated; acquisition bins reduce but cannot eliminate terrain correlation.",
-    "Unknown is not trained; unlabeled pixels are excluded, not converted into negative examples.",
-    "Perseverance NAV labels are transfer evaluation, not expert gold labels.",
-    "No calibrated confidence, safe-navigation claim or phone performance measurement."
-  ]
+    "Patch-level majority labels; not segmentation or a rock detector.",
+    "Perseverance labels are crowd NAV labels; neighbouring sol blocks are nearby places, so some location correlation remains.",
+    "Big-rock support is tiny in every test; no big-rock accuracy is claimed.",
+    "Unknown is not trained. Softmax scores are not calibrated probabilities, especially outside Curiosity.",
+    "Not validated on helicopter, orbital or phone photos."
+  ],
+  "curiosity_expert_v2": {
+    "metrics": {
+      "accuracy": 0.9403973509933775,
+      "balanced_accuracy_supported_classes": 0.9207805112894963,
+      "samples": 302
+    },
+    "v1_on_same_patches": {
+      "accuracy": 0.9105960264900662,
+      "balanced_accuracy_supported_classes": 0.886045293021986,
+      "samples": 302
+    }
+  }
 }

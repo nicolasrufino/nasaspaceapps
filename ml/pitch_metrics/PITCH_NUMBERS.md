@@ -45,7 +45,7 @@ The browser and replay scan every 2 m plus both endpoints, regardless of animati
 
 These are simulated flights on NASA-derived terrain. Repositioning from the habitat, flight energy, recharge and daylight operations are not modelled. Zero stored hazard cells is not proof of a hazard-free Mars surface. Cells are not individual rocks; the route's 0 reviewed-rock-clearance cells are reported separately from DTM estimates.
 
-R3: 23 human-accepted ROSCO proposals, 2 uncertain and excluded; no detector precision/recall claim. The rover-photo classifier did not produce this route's terrain: Curiosity 148/159; Perseverance transfer 95/197, with no big-rock support in the Curiosity test. Buddy remains an untrained placeholder and is cut from the submission.
+R3: 23 human-accepted ROSCO proposals, 2 uncertain and excluded; no detector precision/recall claim. The rover-photo classifier did not produce this route's terrain: Curiosity 146/159; Perseverance fresh test 160/219, with no big-rock support in the Curiosity test. Buddy remains an untrained placeholder and is cut from the submission.
 
 ## Suggested proof line
 
