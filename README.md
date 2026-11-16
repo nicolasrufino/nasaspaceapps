@@ -41,7 +41,7 @@ The same slice in 3D at true scale: HiRISE imagery on the real relief, five view
 
 - **Terrain accuracy:** our 1 m terrain matches Curiosity's elevations at 148 drive waypoints to 0.12 m RMSE (`data/worlds/gale/validation.json`, made by `data/pipeline/check_accuracy.py`).
 - **Scouting on Gale:** three flights take the stored hazard cells on the five-stop route from 6 to 0, for 1.46% more walking energy (621.4 → 630.5 kJ). This is a simulation, and the file says so ([ml/pitch_metrics/PITCH_NUMBERS.md](ml/pitch_metrics/PITCH_NUMBERS.md), `ml/exports/pitch_metrics.json`).
-- **Ground-photo classifier** (experiment, off in the demo): 93.1% accuracy on 159 Curiosity patches and 48.2% on 197 Perseverance patches (`ml/exports/terrain_cls.json`). The drop on Perseverance is why it stays off.
+- **Ground-photo classifier v2** (experiment, off in the demo): 91.8% on 159 and 94.0% on 302 held-out Curiosity patches, and 73.1% on 219 fresh Perseverance patches from sols it never trained on (v1 scored 41.1% on those same patches) (`ml/exports/terrain_cls.json`, `ml/terrain_classifier/V2.md`). Not tested on helicopter or phone photos, so it stays off.
 - **Real vs simulated:** terrain, slope, imagery, Curiosity's stops and the energy formula are real. The helicopter flights, the astronaut and the stop photos are simulated. Full list: [How it works §14](app/HOW-IT-WORKS.md).
 
 ## NASA data

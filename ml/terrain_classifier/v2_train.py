@@ -118,6 +118,7 @@ def run(subset, perseverance, fresh, baseline, destination):
         "curiosity_expert_v2_drop": (drop(evaluations["curiosity_expert_v2"]) <= P.GATES["curiosity_expert_v2_drop_points_max"]
                                      if "curiosity_expert_v2" in evaluations else None),
     }
+    gates = {k: None if v is None else bool(v) for k, v in gates.items()}  # numpy bools are not `True`
     promote = all(v is True for v in gates.values())
     report = {"protocol": P.ID, "gates": gates, "promote": promote, "evaluations": evaluations,
               "train_patches": {"curiosity": len(curiosity["train"]), "perseverance": len(mars2020["train"])},
@@ -139,6 +140,10 @@ def run(subset, perseverance, fresh, baseline, destination):
                                     "frames": len({r[2] for r in mars2020["test"]}), "sol_blocks": m2020_manifest["test_blocks"],
                                     "v1_on_same_patches": pf["v1"]["metrics"],
                                     "paired_bootstrap_v2_minus_v1": pf["paired_bootstrap_v2_minus_v1"]},
+        # Kept for existing readers (ml/pitch_metrics/run.mjs). Since v2 trains on Perseverance, this is
+        # now the fresh sol-blocked Perseverance test, not a zero-shot transfer test.
+        "perseverance_transfer": {"metrics": pf["v2"]["metrics"], "confusion_matrix": pf["v2"]["confusion_matrix"],
+                                  "note": "v2: fresh sol-blocked Perseverance test (see perseverance_fresh_test); the v1 197-patch zero-shot set is retired"},
         "architecture": "ITU-R 601 grey conversion in graph, frozen ImageNet MobileNetV3-small features, trained 576x4 linear head; fixed unknown logit -100",
         "training": {"seed": P.SEED, "epochs": 200, "optimizer": "Adam", "lr": 0.01, "weight_decay": 0.001,
                      "class_weighting": "inverse training frequency", "train_patches": int(len(y)),

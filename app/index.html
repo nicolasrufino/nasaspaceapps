@@ -202,8 +202,8 @@
             <dd>USGS’s 1 m Gale terrain model from HiRISE stereo, averaged to 8 m cells for planning. Slope and steps come
               from it.</dd>
             <dt>Ground at each stop</dt>
-            <dd>A ground classifier (MobileNetV3-small, trained on NASA/JPL AI4Mars labels) runs in the browser. 93% on 159
-              held-out Curiosity patches, but 48% on 197 Perseverance patches: it does not transfer to a new rover yet.</dd>
+            <dd>A ground classifier (MobileNetV3-small, trained on NASA/JPL AI4Mars labels) runs in the browser. 92–94% on
+              held-out Curiosity patches and 73% on fresh Perseverance patches (the first version scored 41% there).</dd>
             <dt>Energy home</dt>
             <dd>Dijkstra’s shortest path, run once from the habitat over the Pandolf step cost. Red cells have no way back.</dd>
           </dl>
@@ -270,13 +270,15 @@
       <div class="cards">
         <div>
           <h3>Ground classifier</h3>
-          <p><b>Data:</b> NASA/JPL AI4Mars, Curiosity navigation-camera images labelled by people. 1,136 training
-            patches of 256 × 256 pixels in four classes: soil, bedrock, sand, big rock.</p>
-          <p><b>Model:</b> MobileNetV3-small image features (pretrained, frozen) and a small linear layer we trained:
-            200 epochs, Adam. It runs in the browser.</p>
-          <p><b>Result:</b> 93% on 159 held-out Curiosity patches, but 48% on 197 Perseverance patches.</p>
-          <p class="gives"><b>For the astronaut:</b> names the ground at a stop from a photo. It does not steer the route,
-            because it does not yet work on a new rover’s camera.</p>
+          <p><b>Data:</b> NASA/JPL AI4Mars, Curiosity and Perseverance navigation-camera images labelled by people.
+            2,037 training patches of 256 × 256 pixels (1,136 Curiosity, 901 Perseverance) in four classes: soil, bedrock,
+            sand, big rock.</p>
+          <p><b>Model:</b> the photo turned grey (Curiosity's camera is greyscale), MobileNetV3-small image features
+            (pretrained, frozen) and a small linear layer we trained: 200 epochs, Adam. It runs in the browser.</p>
+          <p><b>Result:</b> 92% and 94% on two held-out Curiosity tests (159 and 302 patches); 73% on 219 Perseverance
+            patches from sols it never saw, where the first version scored 41%.</p>
+          <p class="gives"><b>For the astronaut:</b> names the ground at a stop from a photo. It does not steer the route:
+            it is not yet tested on helicopter or phone photos.</p>
         </div>
         <div>
           <h3>Rocks from orbit images</h3>
