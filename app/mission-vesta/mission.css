@@ -31,23 +31,25 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 /* ---- Views: the hero by default; a #link shows its view instead (and #scout or #vision shows Method). ---- */
 .page { display: none; padding: clamp(2rem, 6vw, 5rem) var(--gutter) clamp(3rem, 7vw, 6rem); scroll-margin-top: var(--bar); }
 .page:target, .page:has(:target) { display: block; }
-main:has(.page:target, .page :target) .hero { display: none; }
+main:has(.page:target, .page :target) :is(.hero, .begin) { display: none; }
+.begin { padding: clamp(2.5rem, 6vw, 5rem) var(--gutter) clamp(3rem, 7vw, 6rem); scroll-margin-top: var(--bar); }
 
 /* ---- Top bar: on every view, so the sections are always one tap away. ---- */
 .bar {
   position: sticky;
   top: 0;
   z-index: 2;
-  display: flex;
+  /* Wordmark on the left, the three sections centred on the page. */
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: clamp(1.25rem, 3vw, 2.5rem);
   height: var(--bar);
   padding: 0 var(--gutter);
   background: var(--night);
 }
 .bar a { display: inline-flex; align-items: center; min-height: 44px; color: var(--muted); font-weight: 500; text-decoration: none; }
 .bar a:hover { color: var(--white); }
-.bar .brand { color: var(--white); letter-spacing: .14em; text-transform: uppercase; font-size: .875rem; }
+.bar .brand { justify-self: start; color: var(--white); letter-spacing: .14em; text-transform: uppercase; font-size: .875rem; }
 .bar nav { display: flex; gap: clamp(1.25rem, 3vw, 2rem); }
 /* The section you are in stays lit and underlined (not colour alone). */
 body:has(#about:target) .bar a[href="#about"],
@@ -135,7 +137,7 @@ body:has(#docs:target) .bar a[href="#docs"] { color: var(--white); text-decorati
 .mars:focus-within { filter: drop-shadow(0 -2px 0 var(--white)); }
 
 /* ---- Shared view type ---- */
-.page h2 {
+:is(.page, .begin) h2 {
   max-width: 24ch;
   margin-top: .75rem;
   font-size: clamp(1.9rem, 4.2vw, 3.5rem);
@@ -194,6 +196,19 @@ body:has(#docs:target) .bar a[href="#docs"] { color: var(--white); text-decorati
 .cols li + li { margin-top: .6rem; }
 .cols b { color: var(--white); font-weight: 500; }
 .cols a { color: var(--white); text-underline-offset: .2em; }
+/* Docs: the steps in order, each with what it gives the astronaut; then the models, then the sources. */
+.how { margin-top: clamp(2rem, 4vw, 3rem); padding: 0; list-style: none; counter-reset: how; max-width: 52rem; }
+.how li { counter-increment: how; position: relative; padding: 1.25rem 0 1.25rem 3rem; border-top: 1px solid var(--rule-dark); }
+.how li::before { content: counter(how); position: absolute; left: 0; top: 1.2rem; width: 2rem; height: 2rem; border-radius: 50%;
+  display: grid; place-items: center; background: var(--white); color: var(--ink); font-weight: 500; }
+.how h3, .cards h3 { font-size: 1.25rem; font-weight: 500; }
+.how p, .cards p { margin-top: .5rem; color: var(--muted); max-width: 44rem; }
+.how b, .cards b { color: var(--white); font-weight: 500; }
+.gives { padding-left: .75rem; border-left: 2px solid var(--white); }
+.page h2.next { margin-top: clamp(3rem, 6vw, 5rem); font-size: clamp(1.6rem, 3vw, 2.5rem); }
+.cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1rem, 2.5vw, 2rem); margin-top: 1.5rem; }
+.cards > div { padding: 1.25rem; border: 1px solid var(--rule-dark); border-radius: 12px; }
+.page code { font-size: .875em; color: var(--white); }
 .credit { margin-top: clamp(2.5rem, 5vw, 4rem); color: var(--dim); font-size: .8125rem; }
 
 /* ---- Method: the process, then Scout and Vision, each a large real view with its toggle and method ---- */
@@ -264,7 +279,7 @@ body:has(#docs:target) .bar a[href="#docs"] { color: var(--white); text-decorati
 .method dd { margin: .2rem 0 0; }
 
 @media (max-width: 900px) {
-  .choices, .cols { grid-template-columns: 1fr; }
+  .choices, .cols, .cards { grid-template-columns: 1fr; }
   .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
@@ -272,6 +287,7 @@ body:has(#docs:target) .bar a[href="#docs"] { color: var(--white); text-decorati
 @media (max-width: 680px) {
   :root { --gutter: 1rem; }
   .bar .brand { font-size: .75rem; letter-spacing: .1em; }
+  .bar .brand span { display: none; } /* "Vesta" alone, so the centred sections never touch it */
   .hero { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); align-items: start; padding-top: 1.5rem; }
   .welcome h1 { font-size: clamp(2.75rem, 15vw, 4.5rem); }
   .welcome p { max-width: 18rem; }
@@ -287,10 +303,6 @@ body:has(#docs:target) .bar a[href="#docs"] { color: var(--white); text-decorati
   .view img { aspect-ratio: 4 / 3; }
 }
 
-/* The narrowest phones: the three sections keep the bar; the wordmark goes (the title is right below it). */
-@media (max-width: 360px) {
-  .bar .brand { display: none; }
-}
 
 @media (prefers-reduced-motion: no-preference) {
   html { scroll-behavior: smooth; }

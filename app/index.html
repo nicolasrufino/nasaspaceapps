@@ -11,11 +11,11 @@
   <script>if (/[?&](world|flags)=/.test(location.search)) location.replace('/scout/' + location.search)</script>
 </head>
 <body>
-  <!-- One page, several views. The home view is the hero and its call to action; About, Method, Docs and the two
-       tools are views the nav (or the button) opens with a #link. CSS :target shows one view at a time, so there is
-       no router, the back button works and every view has its own link. -->
+  <!-- One page. Home is the hero and, right below it, the two tools ("Begin the mission" scrolls down to them).
+       About, Method and Docs are views the nav opens with a #link: CSS :target shows one at a time in place of home,
+       so there is no router, the back button works and every view has its own link. -->
   <header class="bar">
-    <a class="brand" href="./">Mission: Vesta</a>
+    <a class="brand" href="./"><span>Mission:&nbsp;</span>Vesta</a>
     <nav aria-label="Sections">
       <a href="#about">About</a>
       <a href="#method">Method</a>
@@ -42,7 +42,7 @@
       </div>
     </section>
 
-    <section class="page" id="begin" aria-labelledby="begin-title">
+    <section class="begin" id="begin" aria-labelledby="begin-title">
       <h2 id="begin-title">Begin the mission</h2>
       <p class="lead">Two tools, one map of Mars. Start with the guided mission.</p>
       <div class="choices">
@@ -213,7 +213,91 @@
 
     <section class="page" id="docs" aria-labelledby="docs-title">
       <p class="eyebrow">Docs</p>
-      <h2 id="docs-title">Data, sources and links.</h2>
+      <h2 id="docs-title">How it works, step by step.</h2>
+      <p class="intro">No background needed. Each step says what we do, how, and what it gives the astronaut. Every number
+        comes from the code or a file in our repository; estimates are marked.</p>
+
+      <!-- Numbers: app/HOW-IT-WORKS.md (sections 1 to 7), ml/exports/terrain_cls.json, ml/exports/rocks.json,
+           app/scripts/belief-fit.json, app/scripts/VOI_RESULTS.md. Change them there first. -->
+      <ol class="how">
+        <li>
+          <h3>From NASA data to a map</h3>
+          <p>We take NASA’s MRO HiRISE images (25 cm per pixel) and the USGS 1 m terrain model made from HiRISE stereo
+            of lower Mount Sharp, Gale crater. We cut a 2 × 2 km slice into 8 m squares, 256 × 256 of them. Each square
+            knows its height, its slope and its ground type.</p>
+          <p class="gives"><b>For the astronaut:</b> one map of the site where every square has a known slope and cost.</p>
+        </li>
+        <li>
+          <h3>What a suit can cross</h3>
+          <p>Slopes over 20° (NASA xEVA testing) and steps over 0.3 m (NASA study ICES-2025-294) are walls. Rocks count
+            as walls once someone has seen them.</p>
+          <p class="gives"><b>For the astronaut:</b> the route never asks them to climb what a suit can’t.</p>
+        </li>
+        <li>
+          <h3>The route</h3>
+          <p>Each step costs energy from the Pandolf walking equation, scaled to Mars gravity (0.68, an estimate) and
+            harder on sand. Dijkstra’s algorithm finds the cheapest path between every pair of stops, then the app tries
+            every order of the stops (Held-Karp) and keeps the one that fits the energy left after the reserve:
+            1,266 kJ usable, with 60% of the suit budget kept back.</p>
+          <p class="gives"><b>For the astronaut:</b> the least tiring route to as many stops as the suit allows.</p>
+        </li>
+        <li>
+          <h3>The scout, and the Canadian Traveller Problem</h3>
+          <p>Planning a walk when some squares may hide rocks orbit can’t see is a known problem in computer science: the
+            <b>Canadian Traveller Problem</b> (CTP) with remote sensing. The map is known, some links may be blocked,
+            and you can pay to look before you travel. Our way to look is a helicopter. It flies the planned route
+            first (up to 1,000 m a flight, seeing 15 m on each side), every rock it finds becomes a wall, and the route
+            is planned again after each landing. The flights are simulated; the rocks they reveal are the stored rock
+            layer.</p>
+          <p>We also built a value-of-information planner that picks where to fly by the walking cost it expects to
+            save over 12 sampled versions of the site (flag <code>voi</code>, off). On Gale it chose no flight and left
+            6 rock cells on the route, where flying the route left 0, so it is not the default.</p>
+          <p class="gives"><b>For the astronaut:</b> on Gale the route from orbit crosses 6 rock cells; after scouting it
+            crosses none, for 621.4 → 629.7 kJ. The detour is decided in the habitat, not mid-walk.</p>
+        </li>
+        <li>
+          <h3>The way home from everywhere</h3>
+          <p>Before the walk, Dijkstra’s algorithm runs once from the habitat and gives every square the least energy
+            needed to walk home: the <b>cost-to-go</b> map. On the walk the phone does no route search; it looks the
+            number up. The walk-back ring is every square where cost to go is at most the energy left minus the
+            reserve. Oxygen left is energy left ÷ 20.1 kJ per litre.</p>
+          <p class="gives"><b>For the astronaut:</b> at every step they see how far they can still go and get home with
+            the reserve untouched, and the phone buzzes at the point of no return.</p>
+        </li>
+      </ol>
+
+      <h2 class="next">How the models were trained.</h2>
+      <div class="cards">
+        <div>
+          <h3>Ground classifier</h3>
+          <p><b>Data:</b> NASA/JPL AI4Mars, Curiosity navigation-camera images labelled by people. 1,136 training
+            patches of 256 × 256 pixels in four classes: soil, bedrock, sand, big rock.</p>
+          <p><b>Model:</b> MobileNetV3-small image features (pretrained, frozen) and a small linear layer we trained:
+            200 epochs, Adam. It runs in the browser.</p>
+          <p><b>Result:</b> 93% on 159 held-out Curiosity patches, but 48% on 197 Perseverance patches.</p>
+          <p class="gives"><b>For the astronaut:</b> names the ground at a stop from a photo. It does not steer the route,
+            because it does not yet work on a new rover’s camera.</p>
+        </div>
+        <div>
+          <h3>Rocks from orbit images</h3>
+          <p><b>Data:</b> one HiRISE image of the site.</p>
+          <p><b>Model:</b> NASA/JPL’s ROSCO rock detector proposed rocks; a person checked each one.</p>
+          <p><b>Result:</b> 23 of 25 proposals confirmed. Coverage is not complete, so we claim no hit rate.</p>
+          <p class="gives"><b>For the astronaut:</b> real rocks in the layer the scout reveals.</p>
+        </div>
+        <div>
+          <h3>Chance of hidden rocks</h3>
+          <p><b>Data:</b> our stored rock layer (a terrain roughness estimate plus the reviewed rocks), west half for
+            fitting.</p>
+          <p><b>Model:</b> logistic regression on two orbit features: slope and 8 m relief.</p>
+          <p><b>Result:</b> AUC 0.73 on a development check. Not calibrated: only 3 of 22 reviewed rock cells could be
+            tested.</p>
+          <p class="gives"><b>For the astronaut:</b> an experimental hint of where to look first (flag
+            <code>belief</code>, off).</p>
+        </div>
+      </div>
+
+      <h2 class="next">Sources and links.</h2>
       <div class="cols">
         <div>
           <h3>NASA data on the map</h3>

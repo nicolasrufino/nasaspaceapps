@@ -123,7 +123,9 @@ const renderer = new THREE.WebGLRenderer({ canvas: $('scene'), antialias: true }
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
 const scene = new THREE.Scene()
 scene.background = new THREE.Color(0xc9a27e) // dusty Mars sky
-const richSky = flags.has('sky') || params.has('sky') || params.has('vision') || demoMode // on in Vesta Vision and the Demo. flag sky: dust band, Sun with its bluish glow, matching haze
+// Dusk is the default look in Vision and Scout (2026-11-15). ?flags= (every feature off) or ?off=dusk returns the day look.
+const duskDefault = flags.has('dusk') || params.has('dusk') || (!params.has('flags') && !(params.get('off') ?? '').split(',').includes('dusk'))
+const richSky = flags.has('sky') || params.has('sky') || params.has('vision') || demoMode || duskDefault // on in Vision, the Demo and wherever dusk is on (its sunset lives in this sky). flag sky: dust band, Sun with its bluish glow, matching haze
 if (!richSky) scene.add(makeSky())
 scene.add(terrain)
 const hemi = new THREE.HemisphereLight(0xffe8d0, 0x402015, 1.2)
@@ -133,7 +135,7 @@ sun.position.set(-1, 0.6, -0.4) // low sun so slopes read
 const sky = richSky ? makeRichSky(sun.position) : null // the Sun in the sky is where the light comes from
 if (sky) scene.add(sky)
 scene.add(sun, sun.target)
-// Dusk (flag dusk or ?dusk, off; a Dusk button in Vision's top bar compares): the Sun 8° above the west-north-west
+// Dusk (on by default, see duskDefault; a Dusk button in Vision's top bar compares): the Sun 8° above the west-north-west
 // horizon, warm light, a dim cool sky light, long cast shadows round the camera's focus, the sky at a Mars sunset
 // (figures.js) and ACES tone mapping. A look for the 3D views, not a lighting model; the colours are estimates.
 const DAY_SUN = new THREE.Vector3(-1, 0.6, -0.4).normalize(), DUSK_SUN = new THREE.Vector3(-1, 0.15, -0.3).normalize()
@@ -268,7 +270,7 @@ function visionTop() {
     b.dataset.view = mode
     top.querySelector('nav').append(b)
   }
-  if (flags.has('dusk') || !params.has('flags')) { // the toggle; flag dusk (or ?dusk) starts with it on
+  if (flags.has('dusk') || !params.has('flags')) { // the toggle; dusk starts on unless ?flags= or ?off=dusk
     const b = Object.assign(document.createElement('button'), { type: 'button', id: 'duskBtn', className: 'open', textContent: 'Dusk', onclick: () => setDusk(!dusk) })
     b.setAttribute('aria-pressed', 'false')
     top.querySelector('nav').append(b)
@@ -406,7 +408,7 @@ function tickView(dt) {
   lastHead.copy(head)
 }
 setView('map')
-if (flags.has('dusk') || params.has('dusk')) setDusk(true)
+if (duskDefault) setDusk(true)
 
 // Opening (ticket A5): start high above the whole slice, as the orbiter sees it, then ease down to the habitat.
 // Any tap, scroll or key skips it; off for reduced motion and for automated tests (their clicks must not race it).
