@@ -3,7 +3,7 @@
 // route planned from orbit emphasised (before) and the scouted route emphasised (after), same framing.
 // Vision: the same 3D view in three layers. Pictures: NASA MRO HiRISE (USGS MSL Gale mosaic and terrain model).
 // Run with the dev server on port 5173 (the tile host only allows that origin): node scripts/capture-home.mjs
-// Writes mission-vesta/assets/{scout-before,scout-after,vision-*}.jpg and captures.json; then shrink the Vision
+// Writes mission-vesta/assets/{scout-before,scout-after,vision-*}.jpg (vision-eye: eye level with the guide line) and captures.json; then shrink the Vision
 // pictures: for f in mission-vesta/assets/vision-*.jpg; do sips --resampleWidth 1600 "$f"; done
 import { chromium } from '@playwright/test'
 import { writeFileSync } from 'node:fs'
@@ -74,6 +74,18 @@ for (const title of ['Imagery', 'Hazards', 'Energy home']) {
   await shot(page.locator('#scene'), `vision-${title.split(' ')[0].toLowerCase()}`, 0.78)
   await page.addStyleTag({ content: 'body > *:not(#scene) { visibility: visible !important }' })
 }
+
+// Eye level: View cycles Map → Follow → Eye level; walk on (Shift+W) so the red guide line leads to the first stop.
+await page.goto(`${BASE}/scout/?vision`)
+await page.waitForFunction(() => window.vesta?.app.imagery(), null, { timeout: 60000 })
+await page.waitForTimeout(6000)
+for (let k = 0; k < 2; k++) { await page.locator('#viewBtn').click(); await page.waitForTimeout(500) }
+await page.waitForTimeout(8000)
+await page.keyboard.down('Shift'); await page.keyboard.down('w'); await page.waitForTimeout(6000)
+await page.keyboard.up('w'); await page.keyboard.up('Shift'); await page.waitForTimeout(6000)
+await page.addStyleTag({ content: '#eyePad, #viewBtn, #visionBar { visibility: hidden !important }' })
+vision.eye_label = await page.locator('#eyeLabel').textContent()
+await shot(page.locator('#scene'), 'vision-eye', 1)
 
 writeFileSync(new URL('captures.json', OUT), JSON.stringify({ captured: new Date().toISOString().slice(0, 10), scout: run, vision_sources: vision }, null, 2) + '\n')
 console.log(JSON.stringify(run, null, 2))
