@@ -88,17 +88,22 @@ const CSS = `
 #helmet .mini{position:absolute;right:max(12px,env(safe-area-inset-right));bottom:calc(max(14px,env(safe-area-inset-bottom)) + 62px);
   width:min(30vmin,170px);aspect-ratio:1;border-radius:50%;border:1px solid #5fe6ff66;background:#0a141cb3;overflow:hidden}
 #helmet .mini canvas{width:100%;height:100%}
+#helmet.lite .tape,#helmet.lite .right,#helmet.lite .mini,#helmet.lite .beacon,#helmet.lite .go,#helmet.lite .cross{display:none}
+#helmet.lite .box{top:calc(max(10px,env(safe-area-inset-top)) + 64px)}
+@media (max-width:600px){#helmet.lite .box{top:calc(max(10px,env(safe-area-inset-top)) + 132px)}} /* below the next-stop label */
 @keyframes hudblink{50%{opacity:.55}}
 @media (prefers-reduced-motion:reduce){#helmet .alert.danger{animation:none}}
 @media (max-width:480px){#helmet .big{font-size:21px}#helmet .arc{width:96px;height:54px}}`
 
 // accent: the colour of the gauges and marks (the demo passes the Scout paper colour).
-export function initHud({ accent = '#5fe6ff' } = {}) {
+// lite: only the margin home, oxygen, energy and the alert line (Vision's default); no compass, minimap or beacons.
+export function initHud({ accent = '#5fe6ff', lite = false } = {}) {
   const style = document.createElement('style')
   style.textContent = CSS.replaceAll('#5fe6ff', accent)
   const el = document.createElement('div')
   el.id = 'helmet'
   el.hidden = true
+  el.classList.toggle('lite', lite)
   el.innerHTML = `<div class="visor"></div><div class="cross"></div>
 <div class="tape"><canvas width="1120" height="108" aria-hidden="true"></canvas></div>
 <div class="box left" role="status"><small>MARGIN HOME</small>

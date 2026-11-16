@@ -2,7 +2,7 @@ import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { parseLayer } from './world.js'
-import { stepCost, startWalk, stepTo, ringMask, ringLimit } from './walk.js'
+import { stepCost, startWalk, stepTo, freeStep, ringMask, ringLimit, oxygenL } from './walk.js'
 
 const dir = new URL('../../data/worlds/synthetic/', import.meta.url)
 const meta = JSON.parse(readFileSync(new URL('world.json', dir)))
@@ -47,4 +47,22 @@ test('point of no return fires once, when the current cell leaves the ring', () 
 test('ring mask', () => {
   assert.deepEqual([...ringMask(new Float32Array([0, 5, 3e38]), 5)], [1, 1, 0])
   assert.equal(ringLimit(meta, startWalk(meta)), meta.energy_budget_j * (1 - meta.reserve_fraction))
+})
+
+test('free walk: energy drains once per new cell, the same as the route walk, and oxygen follows it', () => {
+  const cs = meta.cell_size_m, free = startWalk(meta), route = startWalk(meta)
+  const [bx, by] = meta.base_cell
+  for (let i = 1; i <= 5; i++) {
+    for (let f = 0; f < 4; f++) freeStep(world, free, (bx + i - 1 + f / 4 + 0.3) * cs, by * cs) // several frames inside one cell
+    stepTo(world, route, [bx + i, by])
+  }
+  assert.deepEqual(free.cell, [bx + 5, by])
+  assert.equal(free.energy_left_j, route.energy_left_j)
+  assert.equal(free.t, route.t)
+  assert.ok(free.energy_left_j < meta.energy_budget_j)
+  assert.ok(oxygenL(meta, free.energy_left_j) < oxygenL(meta, meta.energy_budget_j))
+  assert.equal(freeStep(world, free, (bx + 5) * cs, by * cs), false) // standing still costs nothing
+  const before = free.energy_left_j
+  freeStep(world, free, -50, -50) // walking off the map clamps to the edge cell
+  assert.ok(free.cell[0] >= 0 && free.cell[1] >= 0 && free.energy_left_j < before)
 })
