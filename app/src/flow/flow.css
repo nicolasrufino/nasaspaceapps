@@ -8,6 +8,7 @@ body.flow #hud, body.flow #legend, body.flow #minimap, body.flow #viewBtn, body.
 #flow { position: fixed; inset: 0; z-index: 7; pointer-events: none; color: var(--paper); display: grid;
   grid-template: "top top" 56px "rail main" minmax(0, 1fr) / 400px minmax(0, 1fr); font-size: 14px; line-height: 1.4; }
 #flow > * { pointer-events: auto; min-width: 0; min-height: 0; }
+#flow.full { grid-template: "top" 56px "main" minmax(0, 1fr) / 1fr; } #flow.full #f-rail { display: none; }
 #flow h2, #flow h3, #flow button { font-family: inherit; }
 #flow :is(button, a, summary, [tabindex]):focus-visible { outline: 2px solid var(--scout); outline-offset: 3px; }
 /* Top bar: home link left, the four stages centred. */
@@ -97,7 +98,7 @@ button.f-item { font: inherit; }
 .f-map .cap2 { position: absolute; left: 16px; bottom: 12px; font-size: 11px; color: var(--paper); text-shadow: 0 1px 3px #000; max-width: 60%; }
 .f-map.mini .cap { left: 8px; top: 6px; font-size: 10px; } .f-map.mini .cap2 { display: none; }
 @media (max-width: 760px) {
-  #flow { grid-template: "top" 52px "main" minmax(0, 1fr) "rail" auto / 1fr; }
+  #flow { grid-template: "top" 52px "main" minmax(0, 1fr) "rail" auto / 1fr; } #flow.full { grid-template: "top" 52px "main" minmax(0, 1fr) / 1fr; }
   #f-top { grid-template-columns: 32px 1fr; gap: 4px; padding: 0 8px; } #f-top a span, .f-context { display: none; }
   #f-top a { display: grid; place-items: center; min-height: 44px; }
   .f-steps { justify-self: stretch; justify-content: space-between; gap: 2px; } .f-steps button { padding: 5px 7px; font-size: 12px; gap: 4px; }

@@ -1,40 +1,55 @@
 // Stage 3, Scout: third person behind the helicopter while it flies its corridors (docs/UX-PLAN.md section 0).
-// The rail says what is happening: this flight, the helicopter's battery (an estimate, see heli-energy.js), a list
-// of detections (what was found, where, and what it means for the route) and the scan totals. The mini map,
-// bottom right, fills in and carries the same numbers as the list.
+// A control centre over the 3D view, no rail: top left the flight (progress, speed, totals), bottom left the findings
+// as cards (what was found, and what it means for the route), bottom right the mini map with the same numbers.
+// Instruments, limits and sources live on the docs page (DECISIONS 2026-11-15), not here.
 // The scan is simulated: rocks come from the stored rock layer (the terrain roughness estimate plus the reviewed
 // NASA MRO HiRISE detections, see models.js), not from a live classifier.
-import { flightSeconds, batteryLeft, FLIGHT_POWER_W, BATTERY_WH } from './heli-energy.js'
-import { MODELS } from './models.js'
-import { scoutPayloadEnabled, summarizePayloadFlight, latestWeather, SKYFALL_SOURCE, CAMERA_FOOTPRINT_M } from './scout-payload.js'
 
 const SCOUT = '#e3dfd3', HAZARD = '#c5a065'
-const NORMAL_S = 40, FAST_S = 20, SKIP_S = 1.5 // screen seconds per flight
+const NORMAL_S = 40, SKIP_S = 0.4 // screen seconds per flight at 1×, and when finishing
+const SPEEDS = [1, 2, 4, 8]
 const FIND_GAP_M = 40 // rocks after this much flight without any start a new find
-const MAX_ROWS = 5
+const MAX_CARDS = 4
 
 const CSS = `
-.sc-find .n { background: var(--hazard); }
-.sc-find.on-route .t small { color: var(--hazard); }
-.sc-find { padding: 6px 0; }
-.sc-legend { display: grid; gap: 4px; margin: 10px 0; font-size: 12px; color: var(--mute); }
-.sc-legend span { display: flex; gap: 8px; align-items: center; }
-.sc-legend i { flex: none; width: 14px; height: 8px; border-radius: 2px; }
-.sc-payload summary, .sc-record summary { cursor: pointer; font-weight: 600; }
-.sc-payload a { color: var(--scout); }
-.sc-payload ul { padding-left: 18px; margin: 10px 0; }
-.sc-payload li { margin: 8px 0; font-size: 12px; }
-.sc-payload li small { display: block; color: var(--mute); }
-.sc-record { padding: 8px 0; border-top: 1px solid var(--panel2); }
-.sc-record .f-stats { margin: 10px 0; }
+.sc-panel { background: var(--panel); border-radius: 14px; padding: 14px 16px; width: 340px; box-sizing: border-box; display: flex; flex-direction: column; gap: 10px; }
+.sc-panel h2 { margin: 0; font-size: 20px; line-height: 1.2; text-transform: none; letter-spacing: 0; color: var(--paper); }
+.sc-panel .f-flight-progress { margin: 0; }
+.sc-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 13px; color: var(--mute); }
+.sc-row b { color: var(--paper); font-variant-numeric: tabular-nums; }
+.sc-speed { display: flex; gap: 4px; }
+#flow .sc-speed button.f-btn { min-width: 44px; padding: 0 10px; }
+#flow .sc-panel button.f-btn:not(.primary) { font-size: 13px; }
+.sc-panel .f-stats { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.sc-panel .f-stat b { font-size: 20px; } .sc-panel .f-stat span { font-size: 11px; }
+.sc-news { margin: 0; font-size: 13px; padding-left: 10px; border-left: 3px solid var(--scout); } .sc-news.moved { border-left-color: var(--hazard); }
+.sc-legend { display: flex; gap: 14px; font-size: 11px; color: var(--mute); }
+.sc-legend span { display: flex; gap: 6px; align-items: center; } .sc-legend i { width: 12px; height: 8px; border-radius: 2px; }
+#f-strip.sc-tl { left: 16px; right: auto; }
+#f-bl.sc-finds { flex-direction: column; align-items: stretch; width: 340px; gap: 6px; }
+.sc-finds h3 { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--paper); text-shadow: 0 1px 3px #000; }
+.sc-card { display: flex; gap: 10px; align-items: center; background: var(--panel); border-radius: 12px; padding: 10px 12px; border-left: 4px solid #57534e; }
+.sc-card.on { border-left-color: var(--hazard); }
+.sc-card .n { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 12px; background: #44413c; color: var(--paper); }
+.sc-card.on .n { background: var(--hazard); color: var(--ink); }
+.sc-card .t { flex: 1; min-width: 0; font-weight: 600; font-size: 14px; }
+.sc-card .t small { display: block; font-weight: 400; font-size: 12px; color: var(--mute); }
+.sc-card .tag { flex: none; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: #44413c; color: var(--mute); }
+.sc-card.on .tag { background: var(--hazard); color: var(--ink); }
+@media (max-width: 760px) {
+  #f-strip.sc-tl { left: 8px; right: 8px; } .sc-panel { width: 100%; padding: 10px 12px; gap: 8px; } .sc-panel h2 { font-size: 16px; }
+  .sc-legend { display: none; }
+  #f-bl.sc-finds { left: 8px; bottom: 8px; width: calc(100% - 128px); }
+  .sc-finds .sc-card:nth-of-type(n+2), .sc-finds h3 { display: none; }
+  .sc-card { padding: 8px 10px; } .sc-card .tag { display: none; }
+}
 `
 
 export default {
   enter(ui, app) {
-    ui.scene(true)
+    ui.scene(true, true)
     const { map } = ui
     const { cs, W } = app
-    const payloadOn = scoutPayloadEnabled(location.search)
     const offs = [], timers = new Set()
     const later = (fn, ms) => { const t = setTimeout(() => { timers.delete(t); fn() }, ms); timers.add(t) }
     const style = ui.h('style', '', CSS)
@@ -42,131 +57,56 @@ export default {
     const num = (v) => Math.round(v).toLocaleString('en-US')
     const signedKj = (j) => { const v = Math.round(j / 1000); return `${v > 0 ? '+' : v < 0 ? '−' : ''}${Math.abs(v)} kJ` }
 
-    // 1. This flight.
-    const flightSec = ui.section(`Flight 1 of ${app.MAX_FLIGHTS ?? 3}`, true)
-    const flightTitle = flightSec.querySelector('h2')
-    const dist = ui.bar(), distText = ui.h('p', '', 'Taking off')
+    // ---- The control centre, top left. ----
+    const panel = ui.h('div', 'sc-panel')
+    const title = ui.h('h2', '', `Flight 1 of ${app.MAX_FLIGHTS ?? 3}`)
+    const dist = ui.bar()
     dist.el.classList.add('f-flight-progress')
     dist.el.setAttribute('role', 'progressbar')
     dist.el.setAttribute('aria-label', 'Flight progress')
     dist.el.setAttribute('aria-valuemin', '0')
     dist.el.setAttribute('aria-valuemax', '100')
     dist.el.setAttribute('aria-valuenow', '0')
-    flightSec.append(ui.h('p', 'dim', 'Simulated scan · stored HiRISE data'), dist.el, distText)
-
-    // 2. The helicopter (estimates from heli-energy.js).
-    const heliSec = ui.section('Helicopter')
-    const heli = ui.stats([['% battery, estimate', '100', 'scout'], ['seconds in the air, estimate', '0']])
-    const batt = ui.bar()
-    batt.set(1)
-    heliSec.append(heli.el, batt.el, ui.h('div', 'f-small', `Estimate: Ingenuity's ${FLIGHT_POWER_W} W and ${BATTERY_WH} Wh battery (NASA/JPL) on SkyFall's 1 km in 2.5 min.`))
-
-    // 3. Detections: one row per find, newest on top.
-    const detSec = ui.section('Detections · 0')
-    const detTitle = detSec.querySelector('h3'), detList = ui.h('div', 'f-list')
-    detSec.append(detList)
-
-    // 4. Scan totals, legend, model card.
-    const scanSec = ui.section('Scan')
-    const totals = ui.stats([['m² of ground scanned', '0', 'scout'], ['rock cells found', '0', 'hazard'], ['on the route', '0', 'hazard']])
+    const status = ui.h('div', 'sc-row', '<span>Simulated scan · stored HiRISE data</span><b>Taking off</b>')
+    const distText = status.lastChild
+    const totals = ui.stats([['m² scanned', '0', 'scout'], ['rock cells found', '0', 'hazard'], ['on your route', '0', 'hazard']])
     const stripM = Math.round(2 * (app.scout.swathM ?? 15))
-    const stripLabel = payloadOn ? `about ${stripM} m, our estimate` : `the ${stripM} m strip the camera sees`
-    const legend = ui.h('div', 'sc-legend', `<span><i style="background:${SCOUT}"></i>${stripLabel}</span><span><i style="background:${HAZARD}"></i>rock field: blocks over 0.3 m, walk around</span>`)
-    // Why a walker avoids rock fields: NASA ICES-2025-294 step limit; NASA JETT3 2022 (NTRS 20230010686), docs/RESEARCH.md.
-    const why = ui.details('Why avoid rock fields?', ...[
-      `A rock cell is one ${cs} m square of ground packed with rocks, not one rock. A suited astronaut can’t step over anything higher than 0.3 m (NASA ICES-2025-294), so the walk goes around the whole field.`,
-      'Found on foot, a field means an unplanned detour paid from the energy needed to get home. Found from the air, the route goes around it before anyone leaves.',
-      'In NASA’s 2022 JETT3 field test, walks ended short on ground the maps missed.',
-    ].map((t) => ui.h('p', 'dim', t)))
-    scanSec.append(totals.el, legend, why)
-    const technical = ui.details('Battery estimate & data sources', heliSec, ui.model(MODELS.scan))
-    ui.body.append(flightSec, scanSec, detSec, technical)
+    const legend = ui.h('div', 'sc-legend', `<span><i style="background:${SCOUT}"></i>seen (${stripM} m strip)</span><span><i style="background:${HAZARD}"></i>rock field: walk around</span>`)
 
-    // Payload and landing reports are opt-in. The engine and its event contract
-    // stay unchanged; all measurements below read the existing world layers.
-    let recordedSec = null, records = null, activeFlight = null
-    const weatherAbort = new AbortController()
-    if (payloadOn) {
-      const payload = ui.section('')
-      payload.classList.add('sc-payload')
-      const details = ui.h('details', 'f-details', '<summary>SkyFall instruments & limits</summary>')
-      details.append(ui.h('p', 'dim', 'Simulated observations from stored data. No live sensor is modelled.'))
-      const list = ui.h('ul')
-      const instruments = [
-        ['Two 13 MP colour cameras', 'Optical + topographic · Simulated: NASA HiRISE / USGS imagery (25 cm) and terrain (1 m) stand in for airborne mapping.'],
-        ['Two near-infrared cameras', 'Spectral · Simulated: CRISM orbit data (about 18 m), not helicopter mineral measurements.'],
-        ['Ground-penetrating radar', 'Geophysical · Not simulated. NASA expects roughly 3–5 m penetration in low-loss ground.'],
-        ['Air temperature + wind from flight', 'Atmospheric · Simulated temperature context: loading Curiosity REMS ground weather. Wind is not simulated.'],
-        ['Dosimeter', 'Radiation · Simulated: mean stored RAD-based dose rate in the strip; not a measured 3D radiation map.'],
-        ['Two navigation cameras', 'Hazards · Simulated: stored terrain-rule and reviewed HiRISE rock cells; not live camera detection.'],
-      ]
-      let weatherText
-      for (const [name, description] of instruments) {
-        const item = ui.h('li'), title = ui.h('b'), descriptionEl = ui.h('small')
-        title.textContent = name; descriptionEl.textContent = description
-        item.append(title, descriptionEl); list.append(item)
-        if (name.startsWith('Air temperature')) weatherText = descriptionEl
-      }
-      details.append(list,
-        ui.h('p', 'dim', 'Contact chemistry and ground thermal imaging are not carried. The crew adds contact measurements at the stop.'),
-        ui.h('p', 'dim', `Strip: about ${stripM} m, our estimate. At our assumed 10 m height, NASA’s 106° camera field of view gives about ${CAMERA_FOOTPRINT_M.toFixed(1)} m on flat ground. NASA specifies no flight height here.`),
-        ui.h('a', '', 'NASA SkyFall mission package · sections II and IV'))
-      const source = details.querySelector('a')
-      source.href = SKYFALL_SOURCE; source.target = '_blank'; source.rel = 'noopener noreferrer'
-      payload.append(details)
-      ui.body.append(payload)
-      recordedSec = ui.details('Flight recordings')
-      recordedSec.hidden = true
-      records = ui.h('div', 'sc-records')
-      recordedSec.querySelector('.f-details-body').append(ui.h('p', 'dim', 'Simulated · stored layers over each flight’s full strip. Overlap counts once per flight; these are not newly discovered cells.'), records)
-      payload.after(recordedSec)
-      const weatherFile = app.meta.files?.weather
-      const noWeather = () => { weatherText.textContent = 'Atmospheric · Not simulated: REMS temperature context unavailable. Wind is not simulated.' }
-      if (weatherFile) {
-        fetch(`${import.meta.env.BASE_URL}${encodeURIComponent(app.meta.name)}/${weatherFile}`, { signal: weatherAbort.signal })
-          .then((r) => r.ok ? r.json() : null).then((data) => {
-            if (weatherAbort.signal.aborted) return
-            const sol = latestWeather(data)
-            if (!sol) { noWeather(); return }
-            weatherText.textContent = `Atmospheric · Simulated context: Curiosity REMS sol ${sol.sol}, ${sol.min_temp_c} to ${sol.max_temp_c} °C (latest stored daily air range). Historical ground data, not this flight’s weather. Wind is not simulated.`
-          }).catch(() => { if (!weatherAbort.signal.aborted) noWeather() })
-      } else noWeather()
-    }
-
-    function recordFlight(n) {
-      if (!payloadOn || !activeFlight || activeFlight.n !== n) return
-      const s = summarizePayloadFlight(app.world, activeFlight)
-      const percent = (v) => v == null ? 'Unavailable' : `${(100 * v).toFixed(1)}%`
-      const report = ui.h('details', 'sc-record')
-      report.append(ui.h('summary', '', `Flight ${n} · ${num(s.metres)} m`), ui.stats([
-        ['m strip length', num(s.metres)], ['m² grid footprint', num(s.area_m2)],
-        ['ridge cells', percent(s.ridge_share)], ['hollow cells', percent(s.hollow_share)],
-        ['µGy/h mean dose rate', s.mean_dose_rate_ugy_h == null ? 'Unavailable' : s.mean_dose_rate_ugy_h.toFixed(2)],
-        ['rock cells in strip', s.rock_cells == null ? 'Unavailable' : num(s.rock_cells)],
-      ]).el, ui.h('p', 'dim', `${num(s.cells)} unique ${cs} m grid cells. Landform: ${num(s.landform_samples)} valid cells; dose rate: ${num(s.dose_samples)}; hazards: ${num(s.rock_samples)}. Landforms come from USGS/HiRISE terrain; radiation from the Curiosity RAD-based layer. Dose rate is not accumulated flight dose.`))
-      for (const previous of records.children) previous.open = false
-      records.prepend(report)
-      recordedSec.hidden = false
-      activeFlight = null
-    }
-
-    // Foot: speed.
-    let speed = NORMAL_S, skipped = false
-    const fast = ui.button('2× speed', () => {
-      if (skipped) return
-      speed = speed === NORMAL_S ? FAST_S : NORMAL_S
-      app.scout.seconds(speed)
-      fast.setAttribute('aria-pressed', speed === FAST_S)
+    // Speed: pick one; Finish flies the rest at once.
+    let skipped = false
+    const speedRow = ui.h('div', 'sc-row'), seg = ui.h('div', 'sc-speed')
+    const speedBtns = SPEEDS.map((x) => {
+      const b = ui.button(`${x}×`, () => setSpeed(x))
+      b.setAttribute('aria-label', `Fly at ${x}× speed`)
+      seg.append(b)
+      return b
     })
-    fast.setAttribute('aria-pressed', false)
-    fast.setAttribute('aria-label', 'Fly at double speed')
-    const skip = ui.button('Finish flights', () => { skipped = true; app.scout.seconds(SKIP_S); fast.disabled = skip.disabled = true })
+    function setSpeed(x) {
+      if (skipped) return
+      app.scout.seconds(NORMAL_S / x)
+      speedBtns.forEach((b, k) => b.setAttribute('aria-pressed', SPEEDS[k] === x))
+    }
+    const skip = ui.button('Finish flights', () => {
+      skipped = true
+      app.camera('map') // stand back: a chase camera at this speed whips across the ground
+      app.scout.seconds(SKIP_S)
+      for (const b of [...speedBtns, skip]) b.disabled = true
+    })
     skip.setAttribute('aria-label', 'Skip to the end of the flights')
-    const row = ui.h('div', 'f-row')
-    row.append(fast, skip)
-    ui.foot.append(row)
+    speedRow.append(seg, skip)
+    const next = ui.button('See the path we made', () => ui.go('debrief'), true)
+    next.hidden = true
+    const news = ui.h('p', 'sc-news'); news.hidden = true
+    panel.append(title, dist.el, status, speedRow, totals.el, news, legend, next)
+    ui.strip.classList.add('sc-tl')
+    ui.strip.append(panel)
 
-    // Main area: the mini map, bottom right.
+    // ---- Findings, bottom left: newest on top. ----
+    ui.bl.classList.add('sc-finds')
+    const findsHead = ui.h('h3', '', 'Findings · 0')
+
+    // ---- Mini map, bottom right. ----
     map.size('mini')
     map.caption('Seen so far')
     map.clear()
@@ -184,7 +124,7 @@ export default {
     map.paintScouted()
 
     // Live state: written by the events, drawn by the two timers below (never on every frame).
-    let tick = null, flying = false, started = false, dirty = false, mapDirty = false, findsDirty = true, campaignLanded = false
+    let tick = null, flying = false, started = false, dirty = false, mapDirty = false, findsDirty = true, landed = false
     let seenCells = 0, rockCells = 0, onRouteCells = 0, hot = null
     const finds = [] // { n, flight, along, cells, onRoute, cell, result }
     let cur = null, lastRockAlong = -Infinity, lastRockFlight = 0
@@ -192,8 +132,7 @@ export default {
     offs.push(app.on('flight:start', (e) => {
       started = flying = true
       tick = { ...e, along: 0 }
-      if (payloadOn) activeFlight = e
-      flightTitle.textContent = `Flight ${e.n} of ${e.of}`
+      title.textContent = `Flight ${e.n} of ${e.of}`
       cur = null
       dirty = true
     }))
@@ -215,51 +154,48 @@ export default {
       findsDirty = mapDirty = true
     }))
     offs.push(app.on('flight:end', ({ n, summary }) => {
-      recordFlight(n)
       const s = summary ?? {}
       flying = false
       cur = null
       const kj = Math.round((s.energy_delta_j ?? 0) / 1000) ? `, ${signedKj(s.energy_delta_j)}` : ''
-      const moved = s.avoided_cells ? 'route moved' : 'route unchanged'
       const hits = finds.filter((f) => f.flight === n && f.onRoute)
-      for (const f of hits) f.result = s.avoided_cells ? `route moved${kj}${kj && hits.length > 1 ? ' with the others in this flight' : ''}` : 'route unchanged'
+      for (const f of hits) f.result = s.avoided_cells ? `route moved${kj}` : 'route unchanged'
       const rocks = s.found_cells ? `${s.found_cells} rock cells found` : 'no rocks found'
-      ui.event(`Flight ${n} landed. ${rocks}, ${moved}${kj}.`, { hazard: !!s.avoided_cells, ms: 4000 })
+      news.textContent = `Flight ${n} landed: ${rocks}, ${s.avoided_cells ? 'route moved' : 'route unchanged'}${kj}.` // in the panel, not a toast over the findings
+      news.classList.toggle('moved', !!s.avoided_cells)
+      news.hidden = false
       if (tick) tick = { ...tick, along: tick.metres }
       dirty = mapDirty = findsDirty = true
     }))
     offs.push(app.on('plan', () => { drawRoute(); map.raise('finds'); map.raise('heli'); mapDirty = true }))
     offs.push(app.on('landed', () => {
       flying = false
+      landed = true
+      speedRow.hidden = true
+      next.hidden = false
       dirty = mapDirty = true
-      if (payloadOn) {
-        campaignLanded = true
-        ui.foot.replaceChildren(ui.button('Review the walk', () => ui.go('debrief'), true))
-      } else later(() => ui.go('debrief'), 1500)
     }))
 
     function drawFindDots() {
       const k = map.scale
       map.dots('finds', finds.map((f) => ({ cell: f.cell, label: f.n, color: HAZARD, ring: f.n === hot ? '#fff' : '#191919', r: (f.n === hot ? 4.2 : 3.2) * k })))
     }
+    function card(f) {
+      const e = ui.h('div', `sc-card ${f.onRoute ? 'on' : ''}`, '<span class="n"></span><span class="t"></span><span class="tag"></span>')
+      e.children[0].textContent = f.n
+      e.children[1].textContent = `Rock field · about ${num(f.cells * cs * cs)} m²`
+      const s = ui.h('small')
+      s.textContent = f.onRoute ? (f.result ? `On your route: ${f.result}` : 'On your route') : `Flight ${f.flight} · off your route`
+      e.children[1].append(s)
+      e.children[2].textContent = f.onRoute ? 'On route' : 'Off route'
+      e.onmouseenter = () => { hot = f.n; drawFindDots() }
+      e.onmouseleave = () => { hot = null; drawFindDots() }
+      return e
+    }
     function drawFinds() {
-      detTitle.textContent = `Detections · ${finds.length}`
-      if (!finds.length) {
-        detList.replaceChildren(Object.assign(ui.h('p', 'dim'), { textContent: 'Scanning for rocks…' }))
-        return
-      }
-      const rows = finds.slice(-MAX_ROWS).reverse().map((f) => {
-        const where = `${Math.round(f.along)} m into flight ${f.flight}`
-        const means = f.onRoute ? `on the route${f.result ? `: ${f.result}` : ''}` : 'off the route'
-        const e = ui.item({ n: f.n, title: `Rock field · ${f.cells} ${f.cells === 1 ? 'cell' : 'cells'}, about ${num(f.cells * cs * cs)} m²`, sub: `${where} · ${means}`,
-          onHover: (v) => { hot = v ? f.n : null; drawFindDots() } })
-        e.classList.add('sc-find')
-        if (f.onRoute) e.classList.add('on-route')
-        return e
-      })
-      const earlier = finds.length - rows.length
-      if (earlier > 0) rows.push(Object.assign(ui.h('p', 'dim'), { textContent: `and ${earlier} earlier` }))
-      detList.replaceChildren(...rows)
+      findsHead.textContent = `Findings · ${finds.length}`
+      if (!finds.length) return ui.bl.replaceChildren()
+      ui.bl.replaceChildren(findsHead, ...finds.slice(-MAX_CARDS).reverse().map(card))
     }
     drawFinds()
 
@@ -269,16 +205,14 @@ export default {
       if (!dirty) return
       dirty = false
       totals.set(0, num(seenCells * cs * cs)); totals.set(1, num(rockCells)); totals.set(2, num(onRouteCells))
+      if (landed) { title.textContent = 'Flights complete: your route is ready'; distText.textContent = '' }
       if (!tick) return
       const along = Math.min(tick.along, tick.metres)
-      const progress = tick.metres ? Math.max(0, Math.min(1, along / tick.metres)) : 0
+      const progress = landed ? 1 : tick.metres ? Math.max(0, Math.min(1, along / tick.metres)) : 0
       dist.set(progress)
       dist.el.setAttribute('aria-valuenow', Math.round(progress * 100))
       dist.el.classList.toggle('is-active', flying)
-      distText.textContent = campaignLanded ? 'Flights complete. Your route is ready.' : `${Math.round(along)} / ${Math.round(tick.metres)} m`
-      const left = batteryLeft(along)
-      heli.set(0, Math.round(left * 100)); heli.set(1, Math.round(flightSeconds(along)))
-      batt.set(left)
+      if (!landed) distText.textContent = `${Math.round(along)} / ${Math.round(tick.metres)} m`
     }, 100)
     // The map: four times a second.
     const paint = setInterval(() => {
@@ -289,22 +223,22 @@ export default {
       map.dots('heli', flying && tick?.x != null ? [{ cell: [tick.x / cs, tick.z / cs], color: SCOUT, ring: '#fff', r: 3.2 * map.scale }] : [])
     }, 250)
 
-    app.scout.seconds(NORMAL_S)
+    setSpeed(1)
     app.scout.start()
     // If no flight begins (none left, or nothing to scout), do not leave the crew stuck here.
     later(() => {
       if (started) return
-      fast.disabled = skip.disabled = true
-      distText.textContent = 'No flight to fly.'
-      ui.foot.append(ui.button('Continue', () => ui.go('debrief'), true))
+      speedRow.hidden = true
+      title.textContent = 'No flight to fly'
+      next.hidden = false
     }, 5000)
 
     return () => {
-      weatherAbort.abort()
       for (const off of offs) off()
       for (const t of timers) clearTimeout(t)
       clearInterval(text); clearInterval(paint)
       style.remove()
+      ui.strip.classList.remove('sc-tl'); ui.bl.classList.remove('sc-finds')
       map.clear('heli'); map.clear('finds')
       app.scout.seconds(null)
     }
