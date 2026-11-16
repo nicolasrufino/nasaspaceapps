@@ -4,7 +4,7 @@
 
 // Terrain factors and the gravity factor come from world.json knobs (make_world.py writes them: knobs.eta,
 // knobs.gravity_energy_factor). These fallbacks are the old values, for worlds built before those knobs existed.
-const ETA = [1.2, 1.1, 1.0, 2.1, 1.5] // unknown, soil, bedrock, sand, big rock
+export const ETA = [1.2, 1.1, 1.0, 2.1, 1.5] // unknown, soil, bedrock, sand, big rock
 
 const idx = (meta, [x, y]) => y * meta.width + x
 

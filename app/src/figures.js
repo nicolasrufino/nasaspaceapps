@@ -2,6 +2,7 @@
 // Simple built-in shapes until the glTF models of ticket A1 replace them. Sizes: astronaut 1.8 m; helicopter with a
 // 1.2 m rotor (Ingenuity's rotor span; NASA/JPL); habitat about 9 m across (our design, not a NASA vehicle).
 import * as THREE from 'three'
+import { fetchBuffer } from './world.js'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import ingenuityUrl from './models/ingenuity.glb?url'
 import suitUrl from './models/z2-spacesuit.glb?url'
@@ -12,7 +13,7 @@ import habitatUrl from './models/habitat-demonstration-unit.glb?url'
 const loader = new GLTFLoader()
 function useModel(g, url, { size, axis = 'y', turn = 0 }, then) {
   const old = [...g.children]
-  loader.loadAsync(url).then(({ scene: m }) => {
+  fetchBuffer(url).then((buf) => loader.parseAsync(buf, '')).then(({ scene: m }) => {
     m.traverse((o) => { if (o.material) Object.assign(o.material, { transmission: 0, transparent: false, metalness: Math.min(o.material.metalness, 0.2), side: THREE.DoubleSide }) }) // some NASA exports mark everything as glass; metal is black without an environment map
     m.rotation.y = turn
     const box = new THREE.Box3().setFromObject(m)
