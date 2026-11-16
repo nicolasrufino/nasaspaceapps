@@ -38,6 +38,15 @@ export function stepTo({ meta, layers }, walk, next) {
   return was && !walk.inside_ring
 }
 
+// Free walk (Vision's eye level and Follow): walk to app metres (x, z). When that lands in a new 8 m cell, pay the
+// step's energy and time exactly as the route walk does. Returns true when this step crossed the point of no return.
+export function freeStep(world, walk, x, z) {
+  const { meta } = world, cs = meta.cell_size_m
+  const cell = [Math.max(0, Math.min(meta.width - 1, Math.round(x / cs))), Math.max(0, Math.min(meta.height - 1, Math.round(z / cs)))]
+  if (cell[0] === walk.cell[0] && cell[1] === walk.cell[1]) return false
+  return stepTo(world, walk, cell)
+}
+
 // The walk-back ring: every cell with cost_to_go <= energy_left - reserve (contract §1).
 export const reserveJ = (meta) => meta.reserve_fraction * meta.energy_budget_j
 export const ringLimit = (meta, walk) => walk.energy_left_j - reserveJ(meta)

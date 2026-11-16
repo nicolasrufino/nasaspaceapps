@@ -2,7 +2,7 @@ import { parseWalkNotes, showWalkNotes } from './walk-notes.js'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { loadWorld, layerRGB, sourceLabel } from './world.js'
-import { startWalk, stepTo, ringMask, ringLimit, appState, oxygenL } from './walk.js'
+import { startWalk, stepTo, freeStep, ringMask, ringLimit, appState, oxygenL } from './walk.js'
 import { createPlaybackClock } from './playback.js'
 import { planTour, MAX_STOPS, costFrom, distanceCost } from './plan.js'
 import { mountFlightLog } from './scout-why.js'
@@ -285,15 +285,23 @@ const guide = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMate
 guide.visible = false
 scene.add(guide)
 const eyeStops = () => route.stops.map((id) => allStops().find((s) => s.id === id)).map((s) => ({ id: s.id, name: s.name ?? s.id, x: s.cell[0] * cs, z: s.cell[1] * cs }))
-const hud = flags.has('hud') || params.has('hud') || demoMode ? initHud(demoMode ? { accent: '#f3f2ef' } : undefined) : null
+// Vision's helmet read-outs (2026-11-16): on with the free walk, off with ?off=hud. Lite: margin home, oxygen, energy,
+// alert. The suit is its own walk: every 8 m cell you walk into at eye level or in Follow costs Pandolf energy (walk.js),
+// and the margin home is energy left minus the reserve minus cost_to_go where you stand (a lookup, no pathfinding).
+const helmet = !!eyeWalk && vision && !(params.get('off') ?? '').split(',').includes('hud')
+const fullHud = flags.has('hud') || params.has('hud') || demoMode
+const hud = fullHud || helmet ? initHud({ ...(demoMode ? { accent: '#f3f2ef' } : {}), lite: !fullHud }) : null
+const suit = helmet ? startWalk(meta) : null
+const suitAt = (x, z) => { if (suit) suit.cell = [Math.round(x / cs), Math.round(z / cs)] } // a jump, not a walk: no energy
 const lookDir = new THREE.Vector3()
 const hudState = () => {
   camera.getWorldDirection(lookDir)
   const s = window.appState, usable = meta.energy_budget_j - s.reserve_j
+  const w = suit ?? walk, ctgHere = suit ? layers.cost_to_go[suit.cell[1] * W + suit.cell[0]] : s.cost_to_go_j
   return { heading: bearingDeg(lookDir.x, lookDir.z), pos: [walker.position.x, walker.position.z], cs,
     next: nextStop(route, k, allStops(), cs), home: [meta.base_cell[0] * cs, meta.base_cell[1] * cs],
-    marginJ: ringLimit(meta, walk) - s.cost_to_go_j, usableJ: usable, energyJ: walk.energy_left_j, budgetJ: meta.energy_budget_j,
-    o2L: oxygenL(meta, walk.energy_left_j), t: walk.t, k, route: route.cells, speed: meta.knobs?.speed_mps ?? 1,
+    marginJ: ringLimit(meta, w) - ctgHere, usableJ: usable, energyJ: w.energy_left_j, budgetJ: meta.energy_budget_j,
+    o2L: oxygenL(meta, w.energy_left_j), t: w.t, k, route: route.cells, speed: meta.knobs?.speed_mps ?? 1,
     stops: allStops().filter((t) => route.stops.includes(t.id)).map((t) => t.cell), project: hudProject,
     eye: view.mode === 'eye', ahead: route.cells[Math.min(k + 2, route.cells.length - 1)], canGo: k < route.cells.length - 1, go: hudGo }
 }
@@ -331,7 +339,7 @@ function setView(mode) {
   guide.visible = !!eyeWalk && mode !== 'map'
   routeLine.visible = !guide.visible // one line at a time: white on the map, red at eye level
   eyeWalk?.show(mode !== 'map') // the keys walk you at eye level, and walk the astronaut in Follow
-  if (eyeWalk && mode !== 'map') { eyeWalk.place(walker.position.x, walker.position.z); visionNote.hidden = true }
+  if (eyeWalk && mode !== 'map') { eyeWalk.place(walker.position.x, walker.position.z); suitAt(walker.position.x, walker.position.z); visionNote.hidden = true }
   if (hud) visionNote.hidden = true // the HUD replaces the note
   document.querySelectorAll('.panel').forEach((el) => (el.style.display = mode === 'map' ? '' : 'none'))
   furniture.el.style.display = mode === 'map' ? 'flex' : 'none'
@@ -382,6 +390,7 @@ function tickView(dt) {
     if (eyeWalk) { // WASD or the arrows walk the astronaut, forward away from the camera; the figure strides after
       const [x, z] = eyeWalk.tick(dt, Math.atan2(camera.position.x - head.x, camera.position.z - head.z), eyeStops())
       walkerGoal.set(x, groundAt(x, z), z)
+      if (suit) freeStep(world, suit, x, z)
     }
     camera.position.add(head.clone().sub(lastHead)) // ride along; the user's own orbiting is kept
     controls.target.copy(head)
@@ -389,6 +398,7 @@ function tickView(dt) {
     if (eyeWalk) { // free walk: the keys move you, the camera stays 1.7 m above the ground under it
       const [x, z] = eyeWalk.tick(dt, view.yaw, eyeStops())
       camera.position.set(x, groundAt(x, z) + EYE_M, z)
+      if (suit) freeStep(world, suit, x, z)
     } else camera.position.copy(head)
     if (view.turnTo != null) { // street-view step: ease round to face the way ahead (the short way)
       const d = Math.atan2(Math.sin(view.turnTo - view.yaw), Math.cos(view.turnTo - view.yaw))
@@ -970,6 +980,7 @@ function reset() {
   walkClock.reset()
   pause()
   walk = startWalk(meta)
+  if (suit) Object.assign(suit, startWalk(meta)) // Back to start: a fresh suit at the habitat
   k = 0
   field?.reset(route, allStops())
   document.body.classList.remove('danger')
