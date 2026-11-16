@@ -111,7 +111,7 @@
           <li><b>Plan the route.</b> The app finds the path that costs the least energy. Slopes over 20° are walls.</li>
           <li><b>Scout.</b> A simulated helicopter flies the route first and finds rocks orbit can’t see. The route is
             planned again around them.</li>
-          <li><b>Walk.</b> A ring shows how far you can go and still get home with the reserve untouched. The phone warns
+          <li><b>Walk.</b> A ring shows how far you can go and still get home with the reserve untouched. The app warns
             at the point of no return.</li>
         </ol>
         <p class="intro"><b>Vesta Scout</b> runs these four steps as a guided mission. <b>Vesta Vision</b> is the map
@@ -155,7 +155,7 @@
               terrain, plus rocks the ROSCO detector proposed on a HiRISE image and a person confirmed (23 of 25). Coverage
               is not complete, so we claim no hit rate.</dd>
             <dt>Walking back</dt>
-            <dd>Before the walk, the energy to get home is worked out for every cell. On the walk the phone only looks it up,
+            <dd>Before the walk, the energy to get home is worked out for every cell. On the walk the app only looks it up,
               and warns at the point of no return.</dd>
           </dl>
         </details>
@@ -258,11 +258,11 @@
         <li>
           <h3>The way home from everywhere</h3>
           <p>Before the walk, Dijkstra’s algorithm runs once from the habitat and gives every square the least energy
-            needed to walk home: the <b>cost-to-go</b> map. On the walk the phone does no route search; it looks the
+            needed to walk home: the <b>cost-to-go</b> map. On the walk the app does no route search; it looks the
             number up. The walk-back ring is every square where cost to go is at most the energy left minus the
             reserve. Oxygen left is energy left ÷ 20.1 kJ per litre.</p>
           <p class="gives"><b>For the astronaut:</b> at every step they see how far they can still go and get home with
-            the reserve untouched, and the phone buzzes at the point of no return.</p>
+            the reserve untouched, and the app warns at the point of no return.</p>
         </li>
       </ol>
 
@@ -330,7 +330,7 @@
             <li><b>Real:</b> terrain, slope and images, the Curiosity stops, the walking-energy formula, all the route and
               safety maths.</li>
             <li><b>Estimates, marked:</b> ground type, the rock layer, the energy budget and the walking-energy factors.</li>
-            <li><b>Simulated:</b> the helicopter flights and the astronaut (a phone stands in for the suit display).</li>
+            <li><b>Simulated:</b> the helicopter flights and the astronaut (the app in a desktop browser stands in for the suit display; it is built for a landscape view, so a phone may not give the best experience).</li>
           </ul>
           <h3>Go deeper</h3>
           <ul>
