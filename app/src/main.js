@@ -32,6 +32,8 @@ const worldName = params.get('world') ?? 'gale'
 // Vesta Scout is the guided mission (flow/); ?vision (and the test world) keeps the map screen, which is Vesta Vision.
 const demoMode = params.has('demo') // the Demo tab (demo.js): the map screen with Plan, Walk and Demo, the helmet read-outs and the walking motion
 const flowMode = !demoMode && !params.has('vision') && !params.has('world') && !params.has('flags')
+const vision = !flowMode && !demoMode // Vesta Vision: Scout's look and shell (CSS on body.vision in scout/index.html)
+const scoutLook = flowMode || vision // ivory for the astronaut and the scan, as in Scout; the Demo keeps cyan
 const listeners = {}
 const emit = (evt, data) => (listeners[evt] ?? []).forEach((fn) => fn(data))
 let objective = 'easiest' // or 'shortest' (flow stage 1)
@@ -72,7 +74,7 @@ const rockSeen = (i) => scanned[i] && layers.rocks_fine?.[i]
 const cellPos = ([x, y], lift = 0) => new THREE.Vector3(x * cs, layers.height[y * W + x] + lift, y * cs)
 document.title = flowMode ? 'Vesta Scout' : 'Vesta Vision'
 if (demoMode) document.body.classList.add('demo') // the Scout look for every card (CSS in scout/index.html)
-if (!flowMode && !demoMode) document.body.classList.add('vision') // Vision: no Walk tab, no walk bar, no why-this-route (CSS in scout/index.html)
+if (vision) document.body.classList.add('vision') // Vision: no Walk tab, no walk bar, no why-this-route (CSS in scout/index.html)
 // Title in four levels (styled in scout/index.html): product, site, the energy scenario, then the grid's size.
 const el = (tag, cls, text) => Object.assign(document.createElement(tag), { className: cls, textContent: text })
 $('title').replaceChildren(el('span', 't-brand', flowMode ? 'Vesta Scout' : 'Vesta Vision'), el('span', 't-site', meta.site?.name ?? meta.name),
@@ -96,7 +98,7 @@ tint.magFilter = THREE.LinearFilter
 const mutedLook = flags.has('drone_scout') && !!layers.rocks_fine && !!meta.detail_tiles?.url // unflown ground is muted
 const revealShared = { uTint: { value: tint }, uCells: { value: new THREE.Vector2(cs, W) }, uMuted: { value: mutedLook ? 1 : 0 },
   uHeli: { value: new THREE.Vector3(0, 0, 0) }, // uHeli: x, z of the helicopter and the scan ring's radius (0 = off)
-  uScanColor: { value: flowMode ? new THREE.Color('#e3dfd3') : new THREE.Vector3(0.15, 0.85, 1.0) },
+  uScanColor: { value: scoutLook ? new THREE.Color('#e3dfd3') : new THREE.Vector3(0.15, 0.85, 1.0) },
   uContour: { value: 0 }, uContourBase: { value: meta.height_offset_m ?? 0 } } // contour lines (ticket A7, flag contours)
 const terrainMat = terrainMaterial(revealShared)
 const terrain = new THREE.Mesh(geo, terrainMat)
@@ -126,7 +128,7 @@ const pins = new THREE.Group() // science stops, rebuilt when the plan changes
 scene.add(pins)
 const walker = makeAstronaut({ stride: flags.has('stride') || params.has('stride') || demoMode }) // flag stride: legs and arms swing as it walks
 scene.add(walker)
-const walkerIcon = icon(flowMode ? '#e3dfd3' : '#35e0ff')
+const walkerIcon = icon(scoutLook ? '#e3dfd3' : '#35e0ff')
 scene.add(walkerIcon)
 const walkerGoal = cellPos(meta.base_cell) // where the walk logic says the astronaut is; the figure glides there
 const altLine = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineDashedMaterial({ color: 0xd0d0d0, dashSize: span / 120, gapSize: span / 120 }))
@@ -187,9 +189,9 @@ resize()
 const EYE_M = 1.7
 const view = { mode: 'map', yaw: 0, pitch: -0.05, drag: null }
 const viewBtn = Object.assign(document.createElement('button'), { id: 'viewBtn', type: 'button' })
-viewBtn.style.cssText = 'position:fixed;right:max(12px,env(safe-area-inset-right));bottom:calc(min(38vmin, 260px) + 96px);z-index:6;min-height:44px;padding:0 14px;border-radius:10px;border:1px solid #fff5;background:#141a22e6;color:#fff;font:600 14px system-ui,sans-serif'
+if (!vision) viewBtn.style.cssText = 'position:fixed;right:max(12px,env(safe-area-inset-right));bottom:calc(min(38vmin, 260px) + 96px);z-index:6;min-height:44px;padding:0 14px;border-radius:10px;border:1px solid #fff5;background:#141a22e6;color:#fff;font:600 14px system-ui,sans-serif'
 const visionNote = Object.assign(document.createElement('div'), { hidden: true, id: 'visionNote', textContent: 'Vesta Vision · real NASA HiRISE terrain and imagery (features of about 3 m and up) · drag to look' })
-visionNote.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:max(70px,calc(env(safe-area-inset-bottom) + 70px));z-index:5;max-width:min(92vw,520px);padding:6px 10px;border-radius:8px;background:#141a22cc;color:#fff;font:500 12px system-ui,sans-serif;text-align:center;pointer-events:none'
+if (!vision) visionNote.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:max(70px,calc(env(safe-area-inset-bottom) + 70px));z-index:5;max-width:min(92vw,520px);padding:6px 10px;border-radius:8px;background:#141a22cc;color:#fff;font:500 12px system-ui,sans-serif;text-align:center;pointer-events:none'
 // In the Vision views the big panel is hidden (no HUD); a small bar keeps the walk controls.
 const visionBar = Object.assign(document.createElement('div'), { hidden: true, id: 'visionBar' })
 visionBar.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:max(14px,env(safe-area-inset-bottom));z-index:6;display:flex;gap:8px'
@@ -198,7 +200,18 @@ for (const [text, id] of [['Walk / pause', 'play'], ['Step', 'step'], ['Back to 
   b.style.cssText = 'min-height:44px;padding:0 14px;border-radius:10px;border:1px solid #fff5;background:#141a22e6;color:#fff;font:600 14px system-ui,sans-serif'
   visionBar.append(b)
 }
-document.body.append(viewBtn, visionNote, visionBar)
+document.body.append(vision ? visionTop() : viewBtn, visionNote, visionBar)
+// Vision's top bar is Scout's (flow.css #f-top): home link, the three views where Scout has its stages.
+function visionTop() {
+  const top = Object.assign(document.createElement('header'), { id: 'f-top' })
+  top.innerHTML = '<a href="../" aria-label="Back to Mission VESTA">← <span>Vesta <b>Vision</b></span></a><nav class="f-steps" aria-label="View"></nav><span class="f-context">3D map</span>'
+  for (const [mode, text] of [['map', 'Map'], ['follow', 'Follow'], ['eye', 'Eye level']]) {
+    const b = Object.assign(document.createElement('button'), { type: 'button', className: 'open', textContent: text, onclick: () => setView(mode) })
+    b.dataset.view = mode
+    top.querySelector('nav').append(b)
+  }
+  return top
+}
 // Helmet HUD (issue #41, flag hud or ?hud; off by default): drawn over the Follow and Eye views. hud.js only draws.
 // Eye-level walk (#208, flag eye_walk; on in ?vision): WASD over the terrain, a red guide line, the next stop named.
 const eyeWalk = flags.has('eye_walk') || (params.has('vision') && !params.has('flags'))
@@ -242,6 +255,7 @@ const heading = () => { // where the astronaut is going: along the route from wh
 function setView(mode) {
   view.mode = mode
   viewBtn.textContent = { map: 'View: Map', follow: 'View: Follow', eye: 'View: Eye level' }[mode]
+  document.querySelectorAll('#f-top [data-view]').forEach((b) => b.setAttribute('aria-current', b.dataset.view === mode))
   visionNote.hidden = visionBar.hidden = mode === 'map'
   revealShared.uContour.value = mode === 'map' && $('contours')?.checked ? 1 : 0 // contours only in the map view
   hud?.show(mode !== 'map')
@@ -253,6 +267,7 @@ function setView(mode) {
   document.querySelectorAll('.panel').forEach((el) => (el.style.display = mode === 'map' ? '' : 'none'))
   furniture.el.style.display = mode === 'map' ? 'flex' : 'none'
   controls.enabled = mode !== 'eye'
+  shiftView()
   walker.visible = mode !== 'eye'
   walkerIcon.visible = mode === 'map'
   scene.fog = mode === 'map' ? null : richSky ? new THREE.Fog(RICH_HAZE, 60, 1900) : new THREE.Fog(0xd6b48e, 120, 2600) // dusty haze with distance
@@ -272,6 +287,14 @@ function setView(mode) {
     controls.target.copy(walker.position)
   }
 }
+// Vision's map view: the picture's centre sits in the area the rail leaves free, the same shift as Scout's scene stages.
+function shiftView() {
+  if (!vision) return
+  if (view.mode !== 'map') return camera.clearViewOffset()
+  const [px, py] = innerWidth > 760 ? [$('hud').offsetWidth / 2, 0] : [0, innerHeight * 0.22]
+  camera.setViewOffset(innerWidth, innerHeight, -px, py, innerWidth, innerHeight)
+}
+addEventListener('resize', shiftView)
 viewBtn.onclick = () => setView({ map: 'follow', follow: 'eye', eye: 'map' }[view.mode])
 const canvasEl = $('scene')
 canvasEl.addEventListener('pointerdown', (e) => { if (view.mode === 'eye') { view.drag = [e.clientX, e.clientY]; view.turnTo = null } })
@@ -679,7 +702,7 @@ function paintMinimap(inside) {
   for (const { cell: [x, y] } of walkNotes) ctx.fillRect(x - 1, y - 1, 3, 3)
   ctx.fillStyle = '#fff'
   ctx.fillRect(meta.base_cell[0] - 1, meta.base_cell[1] - 1, 3, 3)
-  ctx.fillStyle = '#35e0ff'
+  ctx.fillStyle = scoutLook ? '#e3dfd3' : '#35e0ff'
   ctx.fillRect(walk.cell[0] - 1, walk.cell[1] - 1, 3, 3)
   field?.paint(ctx)
 }
@@ -689,7 +712,7 @@ const ALT = 10 // flying height above the ground, metres (knob; docs/DECISION-BR
 function makeHeli() {
   const g = makeHelicopter()
   const beam = new THREE.Mesh(new THREE.ConeGeometry(15, ALT, 24, 1, true), // 15 m = SWATH_M
-    new THREE.MeshBasicMaterial({ color: flowMode ? 0xe3dfd3 : 0x35e0ff, transparent: true, opacity: 0.14, side: THREE.DoubleSide, depthWrite: false }))
+    new THREE.MeshBasicMaterial({ color: scoutLook ? 0xe3dfd3 : 0x35e0ff, transparent: true, opacity: 0.14, side: THREE.DoubleSide, depthWrite: false }))
   beam.position.y = -ALT / 2
   g.add(beam)
   g.userData.beam = beam
@@ -711,7 +734,7 @@ parkHeli()
 setInterval(() => { // keep the parked ones on the ground as the 1 m tiles load under them
   for (const h of flight ? parked : [heli, ...parked]) h.position.y = groundAt(h.position.x, h.position.z)
 }, 500)
-const heliIcon = icon('#ffffff', { ring: flowMode ? '#e3dfd3' : '#35e0ff', label: '✈' })
+const heliIcon = icon('#ffffff', { ring: scoutLook ? '#e3dfd3' : '#35e0ff', label: '✈' })
 heliIcon.visible = false
 scene.add(heliIcon)
 function placeHeli(h, [x, y], alt = ALT) {
