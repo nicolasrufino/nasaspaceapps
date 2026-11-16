@@ -31,3 +31,25 @@ test('source label: per-layer object or string', () => {
   assert.equal(sourceLabel(meta, 'slope'), 'from height')
   assert.equal(sourceLabel(meta, 'terrain_class'), '')
 })
+
+test('fetchBuffer: one download whether the host sends the .gz unzipped, as gzip bytes, or not at all', async () => {
+  const { gzipSync } = await import('node:zlib')
+  const { fetchBuffer } = await import('./world.js')
+  const data = new Uint8Array([1, 2, 3, 4, 250])
+  const reply = (body, type, enc) => new Response(body, { headers: { 'content-type': type, ...(enc && { 'content-encoding': enc }) } })
+  const hosts = {
+    azure: (u) => reply(data, 'application/octet-stream', 'gzip'), // Content-Encoding: gzip, already unzipped by the browser
+    azure_magic: (u) => reply(new Uint8Array([0x1f, 0x8b, 3]), 'application/octet-stream', 'gzip'), // unzipped data that starts like gzip
+    raw: (u) => reply(gzipSync(data), 'application/octet-stream'),
+    dev: (u) => (u.endsWith('.gz') ? reply('<!doctype html>', 'text/html') : reply(data, 'application/octet-stream')),
+  }
+  const real = globalThis.fetch
+  try {
+    for (const [name, host] of Object.entries(hosts)) {
+      const urls = []
+      globalThis.fetch = async (u) => (urls.push(u), host(u))
+      assert.deepEqual(new Uint8Array(await fetchBuffer('/gale/x.f32')), name === 'azure_magic' ? new Uint8Array([0x1f, 0x8b, 3]) : data, name)
+      assert.equal(urls.filter((u) => !u.endsWith('.gz')).length, name === 'dev' ? 1 : 0, `${name}: ${urls}`)
+    }
+  } finally { globalThis.fetch = real }
+})
