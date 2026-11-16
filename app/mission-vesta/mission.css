@@ -7,20 +7,19 @@
 }
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
   --night: #000;
   --paper: #f3f2ef;
   --ink: #191919;
-  --body: #484644;
   --white: #f4f3f0;
   --muted: #c6c3c1;
   --dim: #8f8b88;
-  --rule: #ceccc7;
   --rule-dark: #3a3836;
-  --gutter: clamp(1rem, 7.8vw, 7rem);
+  --gutter: clamp(1rem, 6vw, 6rem);
+  --bar: 3.75rem;
   font: 400 1rem/1.4 "Rethink Sans", system-ui, sans-serif;
-  color: var(--ink);
-  background: var(--paper);
+  color: var(--white);
+  background: var(--night);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -29,11 +28,37 @@ img { max-width: 100%; }
 button { font: inherit; }
 a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
 
+/* ---- Views: the hero by default; a #link shows its view instead (and #scout or #vision shows Method). ---- */
+.page { display: none; padding: clamp(2rem, 6vw, 5rem) var(--gutter) clamp(3rem, 7vw, 6rem); scroll-margin-top: var(--bar); }
+.page:target, .page:has(:target) { display: block; }
+main:has(.page:target, .page :target) .hero { display: none; }
+
+/* ---- Top bar: on every view, so the sections are always one tap away. ---- */
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  height: var(--bar);
+  padding: 0 var(--gutter);
+  background: var(--night);
+}
+.bar a { display: inline-flex; align-items: center; min-height: 44px; color: var(--muted); font-weight: 500; text-decoration: none; }
+.bar a:hover { color: var(--white); }
+.bar .brand { color: var(--white); letter-spacing: .14em; text-transform: uppercase; font-size: .875rem; }
+.bar nav { display: flex; gap: clamp(1.25rem, 3vw, 2rem); }
+/* The section you are in stays lit and underlined (not colour alone). */
+body:has(#about:target) .bar a[href="#about"],
+body:has(#method:target, #method :target) .bar a[href="#method"],
+body:has(#docs:target) .bar a[href="#docs"] { color: var(--white); text-decoration: underline; text-underline-offset: .5em; }
+
 .eyebrow {
   display: flex;
   align-items: center;
   gap: .75rem;
-  color: var(--body);
+  color: var(--muted);
   font-size: .875rem;
   font-weight: 500;
   letter-spacing: .18em;
@@ -48,36 +73,22 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
   letter-spacing: .08em;
 }
 
-/* ---- Hero: exactly one screen. Rows: nav, title, globe in what is left. ---- */
+/* ---- Hero: the rest of the screen. Text on the left, the globe on the right; stacked on a phone. ---- */
 .hero {
-  height: 100svh;
-  min-height: 30rem;
+  height: calc(100svh - var(--bar));
+  min-height: 28rem;
   display: grid;
-  grid-template-rows: auto auto minmax(0, 1fr);
-  padding: 0 var(--gutter);
-  background: var(--night);
-  color: var(--white);
-  text-align: center;
-}
-
-.top { display: flex; gap: 1.5rem; padding-top: .5rem; }
-.top a {
-  display: inline-flex;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
   align-items: center;
-  min-height: 44px;
-  color: var(--muted);
-  font-weight: 500;
-  text-decoration: none;
+  gap: clamp(1.5rem, 4vw, 4rem);
+  padding: 0 var(--gutter) clamp(1rem, 3vw, 2.5rem);
 }
-.top a:hover { color: var(--white); }
 
-.welcome { padding-top: clamp(1.5rem, 7svh, 4.5rem); }
 .welcome h1 {
-  font-size: clamp(2.75rem, 9vw, 7.5rem);
+  font-size: clamp(3rem, 8vw, 8rem);
   font-weight: 500;
   line-height: 1;
   letter-spacing: .06em;
-  text-indent: .06em;
 }
 /* "MISSION:" about a third of VESTA's size, above it. */
 .welcome h1 span {
@@ -85,16 +96,15 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
   margin-bottom: .5em;
   font-size: .3em;
   letter-spacing: .32em;
-  text-indent: .32em;
   color: var(--muted);
 }
-.welcome p { margin: 1rem auto 0; max-width: 30rem; font-size: 1.125rem; color: var(--muted); }
+.welcome p { margin-top: 1.25rem; max-width: 24rem; font-size: clamp(1.0625rem, 1.5vw, 1.375rem); color: var(--muted); }
 
 .cta {
   display: inline-flex;
   align-items: center;
-  min-height: 48px;
-  margin-top: 1.5rem;
+  min-height: 52px;
+  margin-top: 2rem;
   padding: 0 1.75rem;
   border-radius: 999px;
   background: var(--white);
@@ -107,9 +117,9 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .cta:hover { background: #fff; }
 .cta:focus-visible { outline-color: var(--white); outline-offset: 4px; }
 
-/* The globe takes the largest square that fits the space left. */
-.mars-box { container-type: size; margin: 1.5rem 0 1rem; }
-.mars { position: relative; width: min(100cqw, 100cqh); aspect-ratio: 1; margin-inline: auto; }
+/* The globe takes the largest square that fits its cell. */
+.mars-box { align-self: stretch; container-type: size; }
+.mars { position: relative; top: 50%; translate: 0 -50%; width: min(100cqw, 100cqh); aspect-ratio: 1; margin-inline: auto; }
 .mars img, .mars-control, .mars canvas { display: block; width: 100%; height: 100%; }
 .mars-control {
   position: absolute;
@@ -124,16 +134,20 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .mars-control:active { cursor: grabbing; }
 .mars:focus-within { filter: drop-shadow(0 -2px 0 var(--white)); }
 
-/* ---- Begin: the two tools. Scout is the big one; stacked on a phone. ---- */
-.begin, .dark { background: var(--night); color: var(--white); padding: clamp(3rem, 7vw, 6rem) var(--gutter); }
-.begin h2, .light h2, .dark h2 {
+/* ---- Shared view type ---- */
+.page h2 {
+  max-width: 24ch;
+  margin-top: .75rem;
   font-size: clamp(1.9rem, 4.2vw, 3.5rem);
   font-weight: 500;
   line-height: 1.1;
   letter-spacing: -.02em;
 }
-.begin .lead { margin-top: .75rem; color: var(--muted); font-size: 1.125rem; }
+#begin h2 { margin-top: 0; }
+.lead, .intro { max-width: 40rem; margin-top: 1rem; color: var(--muted); font-size: 1.125rem; }
+.intro b { font-weight: 500; color: var(--white); }
 
+/* ---- Begin: the two tools. Scout is the big one; stacked under 900 px. ---- */
 .choices {
   display: grid;
   grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
@@ -143,7 +157,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .choice { display: flex; flex-direction: column; border: 1px solid var(--rule-dark); border-radius: 12px; overflow: hidden; }
 .choice img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 11; object-fit: cover; }
 .choice .body { display: flex; flex-direction: column; flex: 1; padding: 1.25rem; }
-.choice .eyebrow { color: var(--muted); font-size: .8125rem; }
+.choice .eyebrow { font-size: .8125rem; }
 .choice h3 { margin-top: .5rem; font-size: clamp(1.5rem, 2.4vw, 2.25rem); font-weight: 500; line-height: 1.1; }
 .choice.big h3 { font-size: clamp(1.75rem, 3vw, 2.75rem); }
 .choice .body > p:not(.eyebrow) { margin-top: .5rem; color: var(--muted); }
@@ -163,33 +177,26 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .go.primary:hover { background: #fff; }
 .go span { margin-left: .3em; }
 
-/* ---- Light sections: About and Docs ---- */
-.light { padding: clamp(3rem, 7vw, 6rem) var(--gutter); }
-.light h2 { max-width: 24ch; margin-top: .75rem; }
-.intro { max-width: 40rem; margin-top: 1.25rem; font-size: 1.125rem; }
-.light .intro { color: var(--body); }
-.dark .intro { color: var(--muted); }
-.intro b { font-weight: 500; color: var(--white); }
-
+/* ---- About ---- */
 .sub { margin-top: clamp(2.5rem, 5vw, 4rem); font-size: 1.25rem; font-weight: 500; }
 .reasons { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.25rem, 3vw, 2.75rem); margin-top: 1.5rem; }
-.reasons div { border-top: 1px solid var(--rule); padding-top: 1rem; }
-.reasons p { color: var(--body); font-size: 1.0625rem; }
-.reasons .stat { color: var(--ink); font-size: clamp(1.6rem, 2.6vw, 2.25rem); font-weight: 500; margin-bottom: .35rem; }
+.reasons div { border-top: 1px solid var(--rule-dark); padding-top: 1rem; }
+.reasons p { color: var(--muted); font-size: 1.0625rem; }
+.reasons .stat { color: var(--white); font-size: clamp(1.6rem, 2.6vw, 2.25rem); font-weight: 500; margin-bottom: .35rem; }
 .answer { max-width: 40rem; margin-top: clamp(2rem, 4vw, 3rem); font-size: 1.25rem; }
 
+/* ---- Docs ---- */
 .cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.5rem, 3vw, 3rem); margin-top: clamp(2rem, 4vw, 3rem); }
-.cols h3 { padding-top: 1rem; border-top: 1px solid var(--rule); font-size: 1.0625rem; font-weight: 500; }
+.cols h3 { padding-top: 1rem; border-top: 1px solid var(--rule-dark); font-size: 1.0625rem; font-weight: 500; }
 .cols h3 + ul { margin-top: .75rem; }
 .cols ul + h3 { margin-top: 2rem; }
-.cols ul { padding: 0; list-style: none; color: var(--body); }
+.cols ul { padding: 0; list-style: none; color: var(--muted); }
 .cols li + li { margin-top: .6rem; }
-.cols b { color: var(--ink); font-weight: 500; }
-.cols a { color: var(--ink); text-underline-offset: .2em; }
+.cols b { color: var(--white); font-weight: 500; }
+.cols a { color: var(--white); text-underline-offset: .2em; }
+.credit { margin-top: clamp(2.5rem, 5vw, 4rem); color: var(--dim); font-size: .8125rem; }
 
 /* ---- Method: the process, then Scout and Vision, each a large real view with its toggle and method ---- */
-.dark .eyebrow { color: var(--muted); }
-.dark h2 { margin-top: .75rem; }
 .steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(1rem, 2.5vw, 2rem); margin-top: 2rem; padding: 0; list-style: none; counter-reset: step; }
 .steps li { counter-increment: step; border-top: 1px solid var(--rule-dark); padding-top: 1rem; color: var(--muted); }
 .steps li::before { content: counter(step); display: block; margin-bottom: .5rem; color: var(--dim); font-size: .875rem; font-weight: 500; }
@@ -203,7 +210,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
   column-gap: clamp(2rem, 4vw, 4.5rem);
   row-gap: 1.5rem;
   margin-top: clamp(4rem, 8vw, 7rem);
-  scroll-margin-top: 1.5rem;
+  scroll-margin-top: calc(var(--bar) + 1.5rem);
 }
 .product.flip { grid-template-columns: minmax(0, 2.4fr) minmax(17rem, 1fr); grid-template-areas: "view copy" "view method"; }
 
@@ -227,7 +234,6 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
   padding: 0;
   background: none;
   color: var(--muted);
-  font: inherit;
   font-weight: 500;
   cursor: pointer;
 }
@@ -257,17 +263,19 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .method dt { margin-top: .9rem; color: var(--white); font-weight: 500; }
 .method dd { margin: .2rem 0 0; }
 
-footer { padding: 2rem var(--gutter) 3rem; background: var(--night); color: var(--dim); font-size: .8125rem; }
-
 @media (max-width: 900px) {
   .choices, .cols { grid-template-columns: 1fr; }
   .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
+/* Phone: text on top, the globe in the space below. */
 @media (max-width: 680px) {
   :root { --gutter: 1rem; }
-  .welcome h1 { font-size: clamp(2.5rem, 14vw, 4.5rem); }
-  .welcome p { max-width: 17rem; font-size: 1rem; }
+  .bar .brand { font-size: .75rem; letter-spacing: .1em; }
+  .hero { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); align-items: start; padding-top: 1.5rem; }
+  .welcome h1 { font-size: clamp(2.75rem, 15vw, 4.5rem); }
+  .welcome p { max-width: 18rem; }
+  .cta { margin-top: 1.5rem; }
   .reasons, .steps { grid-template-columns: 1fr; }
   /* One column: intro, toggle right above the picture so a tap shows its change, then the numbers. */
   .product, .product.flip { display: flex; flex-direction: column; gap: 0; margin-top: 3.5rem; }
@@ -277,6 +285,11 @@ footer { padding: 2rem var(--gutter) 3rem; background: var(--night); color: var(
   .captions, .copy .go { order: 3; }
   .method { order: 4; margin-top: 1rem; }
   .view img { aspect-ratio: 4 / 3; }
+}
+
+/* The narrowest phones: the three sections keep the bar; the wordmark goes (the title is right below it). */
+@media (max-width: 360px) {
+  .bar .brand { display: none; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
