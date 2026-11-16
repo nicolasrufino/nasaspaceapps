@@ -13,12 +13,12 @@ Read `docs/PRODUCT.md` (what we build), `docs/BUILD.md` (who builds what, and wh
 4. **Small, working commits.** Each commit leaves the project runnable. Say which milestone (M0–M3) and which flag a PR touches.
 5. **No invented numbers.** Accuracy, energy and validation numbers come from code in this repo, written to a file. Mark anything else as an estimate.
 6. **No secrets in the repo.** Keys go in environment variables or `.env` (ignored by git).
-7. **Phone first.** Build for a phone and check it on one over HTTPS when you can (not a merge gate, see rule 13). No pathfinding on the phone; the walk-back ring is a lookup in `cost_to_go`.
+7. **Desktop first.** Mission VESTA is built for a desktop browser in landscape (horizontal) view; it may not work as well on a phone, which is fine. No pathfinding in the browser during the walk; the walk-back ring is a lookup in `cost_to_go`.
 8. **Cite NASA data by name** in code comments and in the project page (Mars Trek, USGS Gale terrain and images, HiRISE, THEMIS, CRISM, Curiosity RAD, REMS, ChemCam, APXS, DAN, Perseverance raw images, AI4Mars). See `docs/DATA.md`.
 9. **Do not read data files.** Binary world layers (`*.f32`, `*.u8`), datasets, model weights and logs waste tokens. Use `world.json` and the scripts' printed summaries.
 10. **Model and effort per job:** see `docs/CODEX.md` §6.
 11. **Grade new ideas first.** Before building a feature that is not in `docs/PLAN.md`, add it to `docs/CRITIQUE.md` and score it. 8 or less: do not build it.
 12. **Respect the build order.** Don't start a block until the blocks under its **Needs** are done, except by building against the synthetic world. When you finish a block, say in the PR which blocks it unlocks.
 13. **Test, then merge as you go.** Once CI is green and you have tested the change yourself (unit tests, build, run it in a browser, the feature works, no console errors), squash-merge your own PR without waiting for a human. Rebase any PR stacked on it onto `dev` and keep going. Say in the PR what you tested and that a real-phone check is still to do. Contract changes (rule 2) still need every owner's approval.
-14. **`dev` to test, `main` to submit.** Open every PR into `dev`: it gets a preview URL, and once merged it shows on the team's dev test URL. `main` is the official build we submit; it moves only by a release PR from `dev` at a milestone, after the dev URL works on a phone.
+14. **`dev` to test, `main` to submit.** Open every PR into `dev`: it gets a preview URL, and once merged it shows on the team's dev test URL. `main` is the official build we submit; it moves only by a release PR from `dev` at a milestone, after the dev URL works in a desktop browser.
 15. **Write decisions down.** Any PR that settles a choice (a number, a direction, a removal) adds a dated row to `docs/DECISIONS.md` and updates its Open and Missing lists.

@@ -292,7 +292,7 @@ td.area { font: 12px var(--mono); color: var(--muted); white-space: nowrap }
   <div class="numbers">
     <div class="num"><span class="big">0.60</span><span>AUC: coarse orbit features (8 m slope, 8 m relief, THEMIS) predicting the old rock layer. 0.5 is guessing. Flying the riskiest 20% would catch 35% of the rocks.</span><span class="src">app/scripts/sensing-check.json</span></div>
     <div class="num"><span class="big">0.83</span><span>AUC: 8 m slope alone on Jules's 22 human-reviewed rock cells. Real rocks sit on steep ground. The old rule assumed gentle ground and scores 0.52 on them.</span><span class="src">same file · only 22 rocks, one image: a lead</span></div>
-    <div class="num"><span class="big">93% → 48%</span><span>Ground-photo classifier: accuracy on Curiosity's test images, then on Perseverance's. Same height, different rover: the model does not carry over.</span><span class="src">ml/terrain_classifier/README.md</span></div>
+    <div class="num"><span class="big">92–94% → 73%</span><span>Ground-photo classifier v2: accuracy on Curiosity's held-out images, then on fresh Perseverance images (v1 fell to 41% there). Same height, different rover: accuracy drops.</span><span class="src">ml/terrain_classifier/V2.md</span></div>
     <div class="num"><span class="big">21 legs</span><span>Scouting only along the planned Gale route took 3 rounds, 21 flight legs and 14.05 km to reach zero hazard crossings. Walking energy rose from 329.6 to 334.7 kJ.</span><span class="src">ml/pitch_metrics (PR #92)</span></div>
     <div class="num"><span class="big">35%</span><span>Share of cells that look walkable at 8 m but hide a stretch steeper than 25° at 2 m scale. 82% of crossings between cells are passable.</span><span class="src">Luca, PR #93 (in review)</span></div>
     <div class="num"><span class="big">332 → 617 kJ</span><span>Gale five-stop tour once walking energy uses measured Mars gravity (about 0.68 of Earth) and measured sand (2.4×).</span><span class="src">Luca, PR #94 (in review)</span></div>
@@ -324,7 +324,7 @@ td.area { font: 12px var(--mono); color: var(--muted); white-space: nowrap }
       <div><b>Why we propose above about 6 m, camera tilted</b>
         <ul><li>Ingenuity's rotor lifted dust below 3 m on take-off, from 2.3–3.6 m on landing, and at times at 5.1–5.7 m in flight (Lemmon et al., 2022).</li>
         <li>Gale's boxwork ridges reach 1.7 m inside a cell (90th percentile), leaving about 0.3 m at 2 m.</li>
-        <li>Same height did not help rover-to-rover (93% → 48%). Match the slant, not the height, and test on Ingenuity's public colour images first.</li></ul></div>
+        <li>Same height did not help rover-to-rover (v2: 92–94% → 73%; v1 fell to 41%). Match the slant, not the height, and test on Ingenuity's public colour images first.</li></ul></div>
     </div>
   </div>
 </section>
@@ -390,7 +390,7 @@ const STAGES = [
     built: [['built', 'Reveal and re-plan after a flight (drone_scout flag)'], ['proposed', '"Why this flight" with its value in kJ']] },
 ];
 const MODELS = [
-  { name: 'Ground-photo classifier', status: 'built', label: 'Trained', learns: 'Sand, soil, bedrock or big rock from a ground-level photo', input: 'Rover Navcam image patches (AI4Mars)', labels: 'AI4Mars labels on Curiosity images; only 9 big-rock patches in training', nums: '93.1% on Curiosity test (159 patches); 48.2% on Perseverance (197)', role: 'Starting point for the helicopter-view model' },
+  { name: 'Ground-photo classifier', status: 'built', label: 'Trained', learns: 'Sand, soil, bedrock or big rock from a ground-level photo', input: 'Rover Navcam image patches (AI4Mars)', labels: 'AI4Mars labels on Curiosity images; only 9 big-rock patches in training', nums: '91.8% and 94.0% on held-out Curiosity (159 and 302 patches); 73.1% on 219 fresh Perseverance patches (v1: 41.1%)', role: 'Starting point for the helicopter-view model' },
   { name: 'Belief map', status: 'proposed', label: 'Planned · first', learns: 'Chance a cell is blocked, from orbit', input: 'HiRISE 25 cm patches, 1 m and 8 m terrain, THEMIS, ROSCO counts', labels: 'Reviewed ROSCO rocks, Curiosity\'s drive, every helicopter flight. Not the old rule layer.', nums: 'Starts as rules plus the rock-size law, calibrated so "10%" means 10%', role: 'Step 1 of the loop: the only input the decision needs' },
   { name: 'Ground type from orbit', status: 'proposed', label: 'Planned', learns: 'Sand, soil or bedrock from the orbit image', input: 'HiRISE 25 cm patches', labels: 'AI4Mars labels placed on the map at Curiosity\'s logged positions in our slice', nums: 'NASA\'s SPOC does this at more than 90%, but is not released', role: 'Sand costs 2.1–2.7× to walk: a cost, not a wall' },
   { name: 'Helicopter-view classifier', status: 'proposed', label: 'Planned', learns: 'Ground type from the helicopter\'s slanted camera', input: 'Helicopter colour images', labels: 'A few hundred labelled patches from Ingenuity\'s public colour images', nums: 'Must beat the rover model on held-out helicopter images', role: 'Turns a flight into confirmed cells' },
@@ -403,7 +403,7 @@ const LIMITS = [
   ['Data', 'Rocks under about 1.5 m are invisible from orbit, and those are what trip a walker.', 'Predict them from big-rock counts with the rock-size law used for landing sites.', 'proposed'],
   ['Data', '8 m cells average away ledges and short steep steps.', 'Passability per crossing from the 1 m DTM, with NASA\'s 0.3 m suited step limit.', 'review'],
   ['Data', 'Only 23 reviewed rocks, from one image, picked from a detector\'s proposals.', 'Treat the 0.83 result as a lead; widen with wall-to-wall detection.', 'known'],
-  ['Models', 'The ground-photo model drops from 93% to 48% on another rover.', 'Fine-tune on helicopter images; test on Ingenuity\'s images before building on it.', 'proposed'],
+  ['Models', 'The ground-photo model drops from 92–94% to 73% on another rover (v1: 41%).', 'Fine-tune on helicopter images; test on Ingenuity\'s images before building on it.', 'proposed'],
   ['Models', 'Few big-rock labels (9 in training).', 'Rocks come from ROSCO and the rock-size law; Moon pre-training as an option.', 'proposed'],
   ['Models', 'Moon data has no sand, no dust, and only big boulders.', 'Use it for pre-training the rock part only; always test on Mars.', 'decided'],
   ['Helicopter', 'SkyFall gives 1–2 km per flight and a recharge sol between flights, but no battery capacity.', 'Plan on 3 flights per walk as published; 6 only with habitat charging, labelled as our assumption.', 'proposed'],
