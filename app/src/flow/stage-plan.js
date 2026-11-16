@@ -18,17 +18,18 @@ export default {
     // Choosing a goal swaps in its stops; stops the user tapped on the map stay.
     function choose(id) {
       chosen = id
-      for (const s of app.stops()) {
-        if (!s.included) continue
-        if (!s.custom && id !== 'water') app.toggleStop(s.id)
-        if (s.custom && fromMap(s) && id !== 'boxwork') app.removeStop(s.id)
-      }
-      if (id === 'water') for (const s of curio()) { if (!s.included) app.toggleStop(s.id) }
-      else {
-        const have = new Set(app.stops().filter((s) => s.included).map((s) => `${s.cell}`))
-        for (const p of picks) if (!have.has(`${p.cell}`)) app.addStop(p.cell)
-      }
-      draw()
+      app.batch(() => { // one re-plan for the whole swap, not one per stop
+        for (const s of app.stops()) {
+          if (!s.included) continue
+          if (!s.custom && id !== 'water') app.toggleStop(s.id)
+          if (s.custom && fromMap(s) && id !== 'boxwork') app.removeStop(s.id)
+        }
+        if (id === 'water') for (const s of curio()) { if (!s.included) app.toggleStop(s.id) }
+        else {
+          const have = new Set(app.stops().filter((s) => s.included).map((s) => `${s.cell}`))
+          for (const p of picks) if (!have.has(`${p.cell}`)) app.addStop(p.cell)
+        }
+      })
     }
 
     const intro = ui.section('Pick a science goal', true)
@@ -53,6 +54,7 @@ export default {
     loadCandidates().then((c) => {
       if (!live) return
       picks = c
+      app.warm([app.meta.base_cell, ...curio().map((s) => s.cell), ...c.map((s) => s.cell)])
       box.disabled = !c.length
       box.lastChild.textContent = c.length ? `Visit ${c.length} sites ranked from orbit` : 'No sites found'
       draw()

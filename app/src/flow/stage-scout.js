@@ -4,8 +4,15 @@
 // Instruments, limits and sources live on the docs page (DECISIONS 2026-11-15), not here.
 // The scan is simulated: rocks come from the stored rock layer (the terrain roughness estimate plus the reviewed
 // NASA MRO HiRISE detections, see models.js), not from a live classifier.
+// Colour means what a find asks of the walk (DECISIONS 2026-11-15), always with a word and a glyph beside it:
+// red, on your route: walk around it; green, the re-plan moved the route off it; grey, off the route: recorded, no action.
 
-const SCOUT = '#e3dfd3', HAZARD = '#c5a065'
+const SCOUT = '#e3dfd3'
+export const KIND = { // in list order; rgb paints the rock cells on the 3D ground and the 2D map
+  on: { color: '#ff2d2d', rgb: [255, 45, 45], glyph: '▲', tag: 'On route', head: 'On your route' },
+  clear: { color: '#46aa5a', rgb: [70, 170, 90], glyph: '✓', tag: 'Avoided', head: 'Re-planned around' },
+  off: { color: '#a9a6a2', rgb: [169, 166, 162], glyph: '○', tag: 'Off route', head: 'Off your route' },
+}
 const NORMAL_S = 40, SKIP_S = 0.4 // screen seconds per flight at 1×, and when finishing
 const SPEEDS = [1, 2, 4, 8]
 const FIND_GAP_M = 40 // rocks after this much flight without any start a new find
@@ -24,26 +31,29 @@ const CSS = `
 #flow .sc-panel button.f-btn:not(.primary) { font-size: 13px; }
 .sc-panel .f-stats { grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .sc-panel .f-stat b { font-size: 20px; } .sc-panel .f-stat span { font-size: 11px; }
-.sc-news { margin: 0; font-size: 13px; padding-left: 10px; border-left: 3px solid var(--scout); } .sc-news.moved { border-left-color: var(--hazard); }
-.sc-legend { display: flex; gap: 14px; font-size: 11px; color: var(--mute); }
+.sc-news { margin: 0; font-size: 13px; padding-left: 10px; border-left: 3px solid var(--scout); } .sc-news.moved { border-left-color: var(--clear); } .sc-news.on { border-left-color: var(--avoid); }
+.sc-legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 11px; color: var(--mute); }
 .sc-legend span { display: flex; gap: 6px; align-items: center; } .sc-legend i { width: 12px; height: 8px; border-radius: 2px; }
+.sc-legend b { font-size: 10px; line-height: 1; }
 #f-strip.sc-tl { left: 16px; right: auto; }
 #f-bl.sc-finds { flex-direction: column; align-items: stretch; width: 340px; gap: 6px; }
 .sc-finds h3 { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--paper); text-shadow: 0 1px 3px #000; }
+.sc-finds h4 { margin: 4px 0 0; font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--paper); text-shadow: 0 1px 3px #000; }
 .sc-card { display: flex; gap: 10px; align-items: center; background: var(--panel); border-radius: 12px; padding: 10px 12px; border-left: 4px solid #57534e; }
-.sc-card.on { border-left-color: var(--hazard); }
+.sc-card.on { border-left-color: var(--avoid); } .sc-card.clear { border-left-color: var(--clear); }
 .sc-card .n { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 12px; background: #44413c; color: var(--paper); }
-.sc-card.on .n { background: var(--hazard); color: var(--ink); }
+.sc-card.on .n { background: var(--avoid); color: var(--ink); } .sc-card.clear .n { background: var(--clear); color: var(--ink); }
 .sc-card .t { flex: 1; min-width: 0; font-weight: 600; font-size: 14px; }
 .sc-card .t small { display: block; font-weight: 400; font-size: 12px; color: var(--mute); }
-.sc-card .tag { flex: none; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: #44413c; color: var(--mute); }
-.sc-card.on .tag { background: var(--hazard); color: var(--ink); }
+.sc-card.on .t small { color: var(--paper); }
+.sc-card .tag { flex: none; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: #44413c; color: var(--paper); white-space: nowrap; }
+.sc-card.on .tag { background: var(--avoid); color: var(--ink); } .sc-card.clear .tag { background: var(--clear); color: var(--ink); }
 @media (max-width: 760px) {
   #f-strip.sc-tl { left: 8px; right: 8px; } .sc-panel { width: 100%; padding: 10px 12px; gap: 8px; } .sc-panel h2 { font-size: 16px; }
   .sc-legend { display: none; }
   #f-bl.sc-finds { left: 8px; bottom: 8px; width: calc(100% - 128px); }
-  .sc-finds .sc-card:nth-of-type(n+2), .sc-finds h3 { display: none; }
-  .sc-card { padding: 8px 10px; } .sc-card .tag { display: none; }
+  .sc-finds .sc-card:nth-of-type(n+2), .sc-finds h3, .sc-finds h4 { display: none; }
+  .sc-card { padding: 8px 10px; } .sc-card .tag { padding: 3px 6px; } .sc-card .tag span { display: none; } /* the glyph stays; the words are in the card */
 }
 `
 
@@ -71,9 +81,11 @@ export default {
     dist.el.setAttribute('aria-valuenow', '0')
     const status = ui.h('div', 'sc-row', '<span>Simulated scan · stored HiRISE data</span><b>Taking off</b>')
     const distText = status.lastChild
-    const totals = ui.stats([['m² scanned', '0', 'scout'], ['rock cells found', '0', 'hazard'], ['on your route', '0', 'hazard']])
+    const totals = ui.stats([['m² scanned', '0', 'scout'], ['rock cells found', '0'], ['▲ on your route', '0', 'avoid']])
     const stripM = Math.round(2 * (app.scout.swathM ?? 15))
-    const legend = ui.h('div', 'sc-legend', `<span><i style="background:${SCOUT}"></i>seen (${stripM} m strip)</span><span><i style="background:${HAZARD}"></i>rock field: walk around</span>`)
+    const key = (k, text) => `<span><i style="background:${KIND[k].color}"></i><b aria-hidden="true">${KIND[k].glyph}</b>${text}</span>`
+    const legend = ui.h('div', 'sc-legend', `<span><i style="background:${SCOUT}"></i>seen (${stripM} m strip)</span>` +
+      key('on', 'rock on your route: walk around') + key('clear', 'route moved off it') + key('off', 'rock off route'))
 
     // Speed: pick one; Finish flies the rest at once.
     let skipped = false
@@ -115,6 +127,13 @@ export default {
     ui.br.append(map.el)
     const stopCells = () => app.stops().filter((s) => s.included && !s.dropped).map((s) => s.cell)
     let routeSet = new Set()
+    const findOf = new Map() // rock cell -> its find
+    // A find is 'on' while one of its cells is on the route, 'clear' once a re-plan moved the route off all of them.
+    const classify = (f) => { f.kind = f.idx.some((i) => routeSet.has(i)) ? 'on' : f.onRoute ? 'clear' : 'off' }
+    // Every seen rock: its find's colour; a rock not yet grouped (the scan dot drawn before the 'scan' event) by the route.
+    // Left set when the stage closes, so the hub's maps keep the same colours. ponytail: no reset, the next scouting replaces it.
+    const rockRGB = (i) => KIND[findOf.get(i)?.kind ?? (routeSet.has(i) ? 'on' : 'off')].rgb
+    app.setRockColor(rockRGB)
     function drawRoute() {
       const k = map.scale, cells = app.route().cells
       routeSet = new Set(cells.map(([x, y]) => y * W + x))
@@ -148,12 +167,14 @@ export default {
       if (!rocks.length) return
       if (!cur || lastRockFlight !== e.n || e.along - lastRockAlong >= FIND_GAP_M) {
         const i = rocks[0]
-        cur = { n: finds.length + 1, flight: e.n, along: e.along, cells: 0, onRoute: 0, cell: [i % W, Math.floor(i / W)], result: '' }
+        cur = { n: finds.length + 1, flight: e.n, along: e.along, cells: 0, onRoute: 0, cell: [i % W, Math.floor(i / W)], result: '', kj: '', idx: [], kind: 'off' }
         finds.push(cur)
       }
       lastRockAlong = e.along; lastRockFlight = e.n
       const hit = rocks.filter((i) => routeSet.has(i)).length // the route as it is now, before any re-plan
       cur.cells += rocks.length; cur.onRoute += hit
+      for (const i of rocks) { cur.idx.push(i); findOf.set(i, cur) }
+      classify(cur)
       rockCells += rocks.length; onRouteCells += hit
       findsDirty = mapDirty = true
     }))
@@ -163,15 +184,22 @@ export default {
       cur = null
       const kj = Math.round((s.energy_delta_j ?? 0) / 1000) ? `, ${signedKj(s.energy_delta_j)}` : ''
       const hits = finds.filter((f) => f.flight === n && f.onRoute)
-      for (const f of hits) f.result = s.avoided_cells ? `route moved${kj}` : 'route unchanged'
+      for (const f of hits) { f.result = s.avoided_cells ? `route moved${kj}` : 'route unchanged'; f.kj = s.avoided_cells ? kj : '' }
       const rocks = s.found_cells ? `${s.found_cells} rock cells found` : 'no rocks found'
       news.textContent = `Flight ${n} landed: ${rocks}, ${s.avoided_cells ? 'route moved' : 'route unchanged'}${kj}.` // in the panel, not a toast over the findings
       news.classList.toggle('moved', !!s.avoided_cells)
+      news.classList.toggle('on', !s.avoided_cells && hits.length > 0)
       news.hidden = false
       if (tick) tick = { ...tick, along: tick.metres }
       dirty = mapDirty = findsDirty = true
     }))
-    offs.push(app.on('plan', () => { drawRoute(); map.raise('finds'); map.raise('heli'); mapDirty = true }))
+    offs.push(app.on('plan', () => {
+      drawRoute(); map.raise('finds'); map.raise('heli')
+      finds.forEach(classify)
+      onRouteCells = finds.reduce((n, f) => n + f.idx.filter((i) => routeSet.has(i)).length, 0) // on the route as it is now
+      app.setRockColor(rockRGB) // repaint the 3D ground with the new kinds
+      dirty = mapDirty = findsDirty = true
+    }))
     offs.push(app.on('landed', () => {
       flying = false
       landed = true
@@ -182,24 +210,39 @@ export default {
 
     function drawFindDots() {
       const k = map.scale
-      map.dots('finds', finds.map((f) => ({ cell: f.cell, label: f.n, color: HAZARD, ring: f.n === hot ? '#fff' : '#191919', r: (f.n === hot ? 4.2 : 3.2) * k })))
+      map.dots('finds', finds.map((f) => ({ cell: f.cell, label: f.n, color: KIND[f.kind].color, ring: f.n === hot ? '#fff' : '#191919', r: (f.n === hot ? 4.2 : 3.2) * k })))
+    }
+    const say = {
+      on: (f) => f.result === 'route unchanged' ? 'Route unchanged: walk around it' : 'Walk around it: the route will be re-planned',
+      clear: (f) => `Route re-planned around it${f.kj}`,
+      off: (f) => `Flight ${f.flight} · recorded, no action needed`,
     }
     function card(f) {
-      const e = ui.h('div', `sc-card ${f.onRoute ? 'on' : ''}`, '<span class="n"></span><span class="t"></span><span class="tag"></span>')
+      const e = ui.h('div', `sc-card ${f.kind}`, '<span class="n"></span><span class="t"></span><span class="tag"><b aria-hidden="true"></b> <span></span></span>')
       e.children[0].textContent = f.n
       e.children[1].textContent = `Rock field · about ${num(f.cells * cs * cs)} m²`
       const s = ui.h('small')
-      s.textContent = f.onRoute ? (f.result ? `On your route: ${f.result}` : 'On your route') : `Flight ${f.flight} · off your route`
+      s.textContent = say[f.kind](f)
       e.children[1].append(s)
-      e.children[2].textContent = f.onRoute ? 'On route' : 'Off route'
+      e.children[2].firstChild.textContent = KIND[f.kind].glyph
+      e.children[2].lastChild.textContent = KIND[f.kind].tag
       e.onmouseenter = () => { hot = f.n; drawFindDots() }
       e.onmouseleave = () => { hot = null; drawFindDots() }
       return e
     }
+    // Grouped by what each find asks of the walk, most urgent first, newest first in a group; at most MAX_CARDS cards.
     function drawFinds() {
       findsHead.textContent = `Findings · ${finds.length}`
       if (!finds.length) return ui.bl.replaceChildren()
-      ui.bl.replaceChildren(findsHead, ...finds.slice(-MAX_CARDS).reverse().map(card))
+      const out = [findsHead]
+      let room = MAX_CARDS
+      for (const k of Object.keys(KIND)) {
+        const group = finds.filter((f) => f.kind === k).reverse()
+        if (!group.length) continue
+        out.push(ui.h('h4', '', `${KIND[k].glyph} ${KIND[k].head} · ${group.length}`), ...group.slice(0, room).map(card))
+        room = Math.max(0, room - group.length)
+      }
+      ui.bl.replaceChildren(...out)
     }
     drawFinds()
 
@@ -209,6 +252,7 @@ export default {
       if (!dirty) return
       dirty = false
       totals.set(0, num(seenCells * cs * cs)); totals.set(1, num(rockCells)); totals.set(2, num(onRouteCells))
+      totals.el.children[2].classList.toggle('avoid', onRouteCells > 0) // red only while the walk still has rocks to walk around
       if (landed) { title.textContent = 'Flights complete: your route is ready'; distText.textContent = '' }
       if (!tick) return
       const along = Math.min(tick.along, tick.metres)
