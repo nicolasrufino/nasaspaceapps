@@ -12,7 +12,7 @@ import { hazardRGB, blockedSegments, reviewedMask, legendHTML, COLORS as HAZARD 
 import { beliefMap } from './belief.js'
 import { terrainMaterial, setImageryUVs, loadImagery, imageryCells } from './terrain.js'
 import { detailTiles } from './tiles.js'
-import { makeAstronaut, makeHabitat, makeHelicopter, icon, makeSky, makeRichSky, RICH_HAZE, mapFurniture, STRIDE_M } from './figures.js'
+import { makeAstronaut, makeHabitat, makeHelicopter, icon, makeSky, makeRichSky, RICH_HAZE, DUSK_HAZE, mapFurniture, STRIDE_M } from './figures.js'
 import { stretches, describe, lowestMargin, shortestAlternative } from './why.js'
 import { initStops } from './stops.js'
 import { initSteps } from './steps.js'
@@ -22,6 +22,7 @@ import { initFlow } from './flow/flow.js'
 import { initHud, nextStop, bearingDeg } from './hud.js'
 import { initEyeWalk, ribbon } from './eye-walk.js'
 import { initDemo } from './demo.js'
+import { initVisionRail } from './vision-rail.js'
 
 const $ = (id) => document.getElementById(id)
 const params = new URLSearchParams(location.search)
@@ -81,6 +82,7 @@ if (vision) document.body.classList.add('vision') // Vision: no Walk tab, no wal
 const el = (tag, cls, text) => Object.assign(document.createElement(tag), { className: cls, textContent: text })
 $('title').replaceChildren(el('span', 't-brand', flowMode ? 'Vesta Scout' : 'Vesta Vision'), el('span', 't-site', meta.site?.name ?? meta.name),
   ...(scenario ? [el('span', 't-chip', scenario.name)] : []), el('span', 't-tech', `${W}×${H} cells · ${cs} m`))
+if (vision) initVisionRail($) // one short card: the route on one line, the stops as one list, layers in a popover
 
 // --- 3D view: visual only, no route maths here (docs/CRITIQUE.md). ---
 // One vertex per cell; cell (x, y) sits at (x*cs, height, y*cs), so +z is south and north is -z.
@@ -112,11 +114,52 @@ scene.background = new THREE.Color(0xc9a27e) // dusty Mars sky
 const richSky = flags.has('sky') || params.has('sky') || params.has('vision') || demoMode // on in Vesta Vision and the Demo. flag sky: dust band, Sun with its bluish glow, matching haze
 if (!richSky) scene.add(makeSky())
 scene.add(terrain)
-scene.add(new THREE.HemisphereLight(0xffe8d0, 0x402015, 1.2))
+const hemi = new THREE.HemisphereLight(0xffe8d0, 0x402015, 1.2)
+scene.add(hemi)
 const sun = new THREE.DirectionalLight(0xffffff, 2)
 sun.position.set(-1, 0.6, -0.4) // low sun so slopes read
-if (richSky) scene.add(makeRichSky(sun.position)) // the Sun in the sky is where the light comes from
-scene.add(sun)
+const sky = richSky ? makeRichSky(sun.position) : null // the Sun in the sky is where the light comes from
+if (sky) scene.add(sky)
+scene.add(sun, sun.target)
+// Dusk (flag dusk or ?dusk, off; a Dusk button in Vision's top bar compares): the Sun 8° above the west-north-west
+// horizon, warm light, a dim cool sky light, long cast shadows round the camera's focus, the sky at a Mars sunset
+// (figures.js) and ACES tone mapping. A look for the 3D views, not a lighting model; the colours are estimates.
+const DAY_SUN = new THREE.Vector3(-1, 0.6, -0.4).normalize(), DUSK_SUN = new THREE.Vector3(-1, 0.15, -0.3).normalize()
+const sunDir = DAY_SUN.clone()
+let dusk = false
+renderer.shadowMap.type = THREE.PCFSoftShadowMap
+sun.shadow.mapSize.set(2048, 2048)
+Object.assign(sun.shadow, { bias: -0.0004, normalBias: 0.6 })
+renderer.toneMappingExposure = 1.4
+function setDusk(on) {
+  dusk = on
+  sunDir.copy(on ? DUSK_SUN : DAY_SUN)
+  sun.position.copy(sunDir) // the shadow sweep in the frame loop re-centres it on the focus
+  sun.target.position.set(0, 0, 0)
+  sun.color.set(on ? 0xffc29a : 0xffffff)
+  sun.intensity = on ? 2.6 : 2
+  hemi.color.set(on ? 0x9098b0 : 0xffe8d0)
+  hemi.groundColor.set(on ? 0x2a1810 : 0x402015)
+  hemi.intensity = on ? 1.1 : 1.2
+  sun.castShadow = renderer.shadowMap.enabled = on // only while dusk is on (left on, it darkened a strip of the frame in SwiftShader)
+  renderer.toneMapping = on ? THREE.ACESFilmicToneMapping : THREE.NoToneMapping
+  if (sky) { sky.material.uniforms.uSun.value.copy(sunDir); sky.material.uniforms.uDusk.value = on ? 1 : 0 }
+  if (scene.fog && richSky) scene.fog.color.set(on ? DUSK_HAZE : RICH_HAZE)
+  document.getElementById('duskBtn')?.setAttribute('aria-pressed', on)
+}
+let shadowSweep = 0
+function tickDusk(now) { // keep the shadow box on what the camera looks at, and new tiles and models in it
+  if (!dusk) return
+  const focus = view.mode === 'map' ? controls.target : walker.position
+  const r = view.mode === 'map' ? THREE.MathUtils.clamp(camera.position.distanceTo(controls.target), 150, 1200) : 150
+  const sc = sun.shadow.camera
+  if (Math.abs(sc.right - r) > r * 0.1) { Object.assign(sc, { left: -r, right: r, top: r, bottom: -r, near: 1, far: 4000 }); sc.updateProjectionMatrix() }
+  sun.target.position.copy(focus)
+  sun.position.copy(focus).addScaledVector(sunDir, 1500)
+  if (now - shadowSweep < 1000) return
+  shadowSweep = now // ponytail: a sweep each second catches tiles and models that load later; a hook in tiles.js if it ever shows in profiles
+  scene.traverse((o) => { if (o.isMesh && o.material?.isMeshStandardMaterial) o.castShadow = o.receiveShadow = true })
+}
 
 const span = Math.max(W, H) * cs
 const pin = () => icon('#ff3bd4', { size: 0.022 }) // the astronaut's "Mark here" marks (stops.js): fixed-size dots, like every other marker
@@ -128,7 +171,7 @@ const baseMarker = icon('#ffffff', { ring: '#111111', label: 'H' })
 scene.add(baseMarker)
 const pins = new THREE.Group() // science stops, rebuilt when the plan changes
 scene.add(pins)
-const walker = makeAstronaut({ stride: flags.has('stride') || params.has('stride') || demoMode }) // flag stride: legs and arms swing as it walks
+const walker = makeAstronaut({ stride: flags.has('stride') || params.has('stride') || params.has('vision') || demoMode }) // flag stride (on in Vision and the Demo): legs and arms swing as it walks
 scene.add(walker)
 const walkerIcon = icon(scoutLook ? '#e3dfd3' : '#35e0ff')
 scene.add(walkerIcon)
@@ -145,6 +188,7 @@ scene.add(routeLine)
 // 1 m detail tiles (ticket F7, flag detail).
 const tileShared = { ...revealShared, uOverlay: terrainMat.userData.uniforms.uOverlay }
 let tiles = null
+let goalCell = null // the walk cell walkerGoal was last set from
 // Ground height at app (x, z): the 1 m surface where a tile is loaded, else the 8 m cell.
 const groundAt = (x, z) => tiles?.heightAt(x, z) ?? layers.height[Math.round(z / cs) * W + Math.round(x / cs)]
 function drawRouteLine() {
@@ -212,6 +256,11 @@ function visionTop() {
     b.dataset.view = mode
     top.querySelector('nav').append(b)
   }
+  if (flags.has('dusk') || !params.has('flags')) { // the toggle; flag dusk (or ?dusk) starts with it on
+    const b = Object.assign(document.createElement('button'), { type: 'button', id: 'duskBtn', className: 'open', textContent: 'Dusk', onclick: () => setDusk(!dusk) })
+    b.setAttribute('aria-pressed', 'false')
+    top.querySelector('nav').append(b)
+  }
   return top
 }
 // Helmet HUD (issue #41, flag hud or ?hud; off by default): drawn over the Follow and Eye views. hud.js only draws.
@@ -255,6 +304,10 @@ const heading = () => { // where the astronaut is going: along the route from wh
   return from && next ? Math.atan2(-(next[0] - from[0]), -(next[1] - from[1])) : 0
 }
 function setView(mode) {
+  if (eyeWalk && view.mode === 'eye' && mode !== 'eye') { // the astronaut stands where you walked to at eye level
+    walkerGoal.set(camera.position.x, groundAt(camera.position.x, camera.position.z), camera.position.z)
+    walker.position.copy(walkerGoal)
+  }
   view.mode = mode
   viewBtn.textContent = { map: 'View: Map', follow: 'View: Follow', eye: 'View: Eye level' }[mode]
   document.querySelectorAll('#f-top [data-view]').forEach((b) => b.setAttribute('aria-current', b.dataset.view === mode))
@@ -263,8 +316,8 @@ function setView(mode) {
   hud?.show(mode !== 'map')
   guide.visible = !!eyeWalk && mode !== 'map'
   routeLine.visible = !guide.visible // one line at a time: white on the map, red at eye level
-  eyeWalk?.show(mode === 'eye')
-  if (eyeWalk && mode === 'eye') { eyeWalk.place(walker.position.x, walker.position.z); visionNote.hidden = true }
+  eyeWalk?.show(mode !== 'map') // the keys walk you at eye level, and walk the astronaut in Follow
+  if (eyeWalk && mode !== 'map') { eyeWalk.place(walker.position.x, walker.position.z); visionNote.hidden = true }
   if (hud) visionNote.hidden = true // the HUD replaces the note
   document.querySelectorAll('.panel').forEach((el) => (el.style.display = mode === 'map' ? '' : 'none'))
   furniture.el.style.display = mode === 'map' ? 'flex' : 'none'
@@ -272,7 +325,7 @@ function setView(mode) {
   shiftView()
   walker.visible = mode !== 'eye'
   walkerIcon.visible = mode === 'map'
-  scene.fog = mode === 'map' ? null : richSky ? new THREE.Fog(RICH_HAZE, 60, 1900) : new THREE.Fog(0xd6b48e, 120, 2600) // dusty haze with distance
+  scene.fog = mode === 'map' ? null : richSky ? new THREE.Fog(dusk ? DUSK_HAZE : RICH_HAZE, 60, 1900) : new THREE.Fog(0xd6b48e, 120, 2600) // dusty haze with distance
   camera.near = mode === 'eye' ? 0.1 : 0.3
   camera.fov = mode === 'eye' ? 70 : 50
   camera.updateProjectionMatrix()
@@ -281,6 +334,7 @@ function setView(mode) {
     const h = heading()
     controls.target.copy(head)
     camera.position.set(head.x + Math.sin(h) * 14, head.y + 6, head.z + Math.cos(h) * 14) // 14 m behind, 6 m up
+    lastHead.copy(head)
   } else if (mode === 'eye') {
     view.yaw = heading()
     view.pitch = -0.05
@@ -311,6 +365,10 @@ const lastHead = new THREE.Vector3()
 function tickView(dt) {
   const head = walker.position.clone().setY(walker.position.y + EYE_M)
   if (view.mode === 'follow') {
+    if (eyeWalk) { // WASD or the arrows walk the astronaut, forward away from the camera; the figure strides after
+      const [x, z] = eyeWalk.tick(dt, Math.atan2(camera.position.x - head.x, camera.position.z - head.z), eyeStops())
+      walkerGoal.set(x, groundAt(x, z), z)
+    }
     camera.position.add(head.clone().sub(lastHead)) // ride along; the user's own orbiting is kept
     controls.target.copy(head)
   } else if (view.mode === 'eye') {
@@ -336,6 +394,7 @@ function tickView(dt) {
   lastHead.copy(head)
 }
 setView('map')
+if (flags.has('dusk') || params.has('dusk')) setDusk(true)
 
 // Opening (ticket A5): start high above the whole slice, as the orbiter sees it, then ease down to the habitat.
 // Any tap, scroll or key skips it; off for reduced motion and for automated tests (their clicks must not race it).
@@ -393,6 +452,7 @@ renderer.setAnimationLoop((now) => {
   baseMarker.position.set(habitat.position.x, habitat.position.y + 12, habitat.position.z)
   if (intro) tickIntro(dt)
   tickView(dt)
+  tickDusk(now)
   hud?.tick(hudState)
   furniture.update(camera, controls, innerHeight)
   if (tiles && now - lastTiles > 500) {
@@ -599,9 +659,12 @@ function drawStops() {
 }
 
 function listStops() {
-  $('targets').replaceChildren(...allStops().map((s) => {
+  // Vision: one list in walk order, Base at both ends, then the stops not in this walk (the timeline is hidden there).
+  const order = (s) => (route.stops.includes(s.id) ? route.stops.indexOf(s.id) : Infinity)
+  const base = () => el('div', 'stop base', 'Base')
+  const rows = (vision ? [...allStops()].sort((a, b) => order(a) - order(b)) : allStops()).map((s) => {
     const row = document.createElement('div')
-    row.className = 'stop'
+    row.className = `stop${route.stops.includes(s.id) ? ' on' : ''}${route.dropped.includes(s.id) ? ' dropped' : ''}`
     row.innerHTML = '<input type="checkbox"><button class="name"></button>'
     const box = row.querySelector('input')
     box.checked = included.has(s.id)
@@ -618,7 +681,9 @@ function listStops() {
       row.append(x)
     }
     return row
-  }))
+  })
+  const n = route.stops.length
+  $('targets').replaceChildren(...(vision && n ? [base(), ...rows.slice(0, n), base(), ...rows.slice(n)] : rows))
 }
 
 function removeCustom(id) {
@@ -962,7 +1027,7 @@ function render() {
     tint.image.data.set([colors.array[i * 3], colors.array[i * 3 + 1], colors.array[i * 3 + 2], scanned[i] || nearHome[i] ? 255 : 0], i * 4)
   }
   colors.needsUpdate = tint.needsUpdate = true
-  walkerGoal.copy(cellPos(walk.cell))
+  if (walk.cell !== goalCell) walkerGoal.copy(cellPos(goalCell = walk.cell)) // only when the walk moved: a free walk in Follow stays put
   if (!flowMode) paintMinimap(inside) // the guided mission draws its own map; this canvas is hidden
 
   const s = appState(world, walk)

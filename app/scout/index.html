@@ -188,11 +188,29 @@
       body.vision .f-steps button[aria-current=true] { background: var(--paper); color: var(--ink); }
       body.vision :is(button, a, summary, label):focus-visible, body.vision label:has(:focus-visible) { outline: 2px solid var(--scout); outline-offset: 3px; }
       body.vision .panel { background: var(--panel); color: var(--paper); border-radius: 10px; padding: 10px 14px; }
-      body.vision #hud { left: 0; top: 56px; bottom: 0; width: 360px; max-height: none; box-sizing: border-box; border-radius: 0; padding: 18px 20px;
-        gap: 14px; align-content: start; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #57534e var(--panel); }
+      /* The rail is one short floating card, as in Google Maps (src/vision-rail.js): it grows only as tall as it needs, and
+         scrolls inside itself only when a stop's detail or the flight log is open. */
+      body.vision #hud { left: 16px; top: 72px; bottom: auto; width: 360px; max-height: calc(100vh - 88px); max-height: calc(100dvh - 88px); box-sizing: border-box;
+        border-radius: 14px; padding: 14px 16px; gap: 12px; align-content: start; overscroll-behavior: contain; box-shadow: 0 10px 30px #0008;
+        scrollbar-width: thin; scrollbar-color: #57534e var(--panel); }
+      body.vision #railHead { display: flex; gap: 10px; align-items: start; }
+      body.vision #railHead #title { flex: 1; min-width: 0; }
+      body.vision #hud #layerBtn { flex: none; min-height: 36px; padding: 0 12px 0 10px; font-size: 13px; display: flex; gap: 7px; align-items: center; }
+      body.vision #layerBtn::before { content: ""; width: 12px; height: 12px; border: 2px solid currentColor; border-radius: 3px; transform: rotate(45deg) scale(.8);
+        box-shadow: 3px 3px 0 -1px var(--panel2), 4px 4px 0 0 currentColor; margin: 0 4px 4px 0; } /* two stacked sheets, Maps' layers mark */
+      body.vision #title .t-tech, body.vision #scoutBox > h2, body.vision #route .r-path { display: none; }
+      body.vision #layerPop { position: fixed; inset: 72px auto auto 392px; margin: 0; width: 300px; max-height: calc(100dvh - 96px); overflow: auto; box-sizing: border-box;
+        padding: 14px; border: 0; border-radius: 14px; background: var(--panel); color: var(--paper); box-shadow: 0 10px 30px #0008; display: none; gap: 10px; }
+      body.vision #layerPop:popover-open { display: grid; }
+      body.vision #layerPop h2 { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .04em; color: var(--mute); }
+      body.vision #layerPop .src { color: var(--mute); font-size: 12px; }
+      body.vision #duskBtn { margin-left: 8px; box-shadow: inset 1px 0 #57534e; border-radius: 0 8px 8px 0; }
+      body.vision #duskBtn::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: linear-gradient(#8fb3e6, #e8a06a); }
+      body.vision #duskBtn[aria-pressed=true] { background: var(--panel2); color: var(--paper); box-shadow: none; border-radius: 8px; }
+      body.vision #duskBtn[aria-pressed=true]::before { box-shadow: 0 0 0 2px var(--stop); }
       body.vision #title { display: grid; gap: 4px; font-weight: 400; }
       body.vision #title .t-brand { display: none; } /* the top bar names the product */
-      body.vision #title .t-site { font-size: 22px; line-height: 1.2; font-weight: 700; }
+      body.vision #title .t-site { font-size: 18px; line-height: 1.2; font-weight: 700; }
       body.vision #title :is(.t-chip, .t-tech), body.vision #hud :is(.src, small), body.vision #legend small { color: var(--mute); font-size: 12px; }
       body.vision #hud h2 { margin: 6px 0 0; font-size: 12px; font-weight: 700; letter-spacing: .04em; color: var(--mute); }
       body.vision #plan { gap: 10px; }
@@ -216,22 +234,34 @@
       body.vision #layers details[open] { display: flex; flex-direction: column; gap: 4px; }
       body.vision #layers details label { color: var(--paper); }
       /* Route numbers: Scout's .f-stats; the walk's order with amber stop dots. */
-      body.vision #route { display: grid; gap: 10px; }
-      body.vision #route .r-stats { display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 18px; font-size: 12px; color: var(--mute); }
-      body.vision #route .r-stat b { display: block; margin-bottom: 3px; font-size: 24px; line-height: 1.1; font-weight: 700; color: var(--paper); font-variant-numeric: tabular-nums; }
-      body.vision #route .r-path { list-style: none; margin: 0; padding: 0; display: grid; }
-      body.vision #route .r-path li { position: relative; padding: 4px 0 4px 22px; font-size: 13px; }
-      body.vision #route .r-path li::before { content: ""; position: absolute; left: 3px; top: 50%; width: 10px; height: 10px; margin-top: -5px; border-radius: 50%; background: var(--stop); }
-      body.vision #route .r-path li::after { content: ""; position: absolute; left: 7.5px; top: 50%; bottom: -50%; width: 1px; background: #57534e; }
-      body.vision #route .r-path li:last-child::after { display: none; }
-      body.vision #route .r-path li:is(:first-child, :last-child) { color: var(--mute); font-size: 12px; }
-      body.vision #route .r-path li:is(:first-child, :last-child)::before { background: var(--paper); }
+      body.vision #stopsBox { display: grid; gap: 8px; }
+      body.vision #stopsBox summary { list-style: none; cursor: pointer; display: grid; gap: 4px; position: relative; padding-right: 20px; }
+      body.vision #stopsBox summary::-webkit-details-marker { display: none; }
+      body.vision #stopsBox summary::after { content: ""; position: absolute; right: 4px; top: 4px; width: 7px; height: 7px; border-right: 2px solid var(--mute);
+        border-bottom: 2px solid var(--mute); transform: rotate(45deg); transition: transform .15s; }
+      body.vision #stopsBox[open] summary::after { transform: translateY(4px) rotate(-135deg); }
+      body.vision #stopsBox[open] > :not(summary) { margin-top: 0; }
+      body.vision #stopsBox h2 { margin: 0; }
+      body.vision #route { display: block; font-size: 12px; color: var(--mute); white-space: nowrap; }
+      body.vision #route .r-stats { display: flex; gap: 0 5px; }
+      body.vision #route .r-stat + .r-stat::before { content: "·"; margin-right: 5px; }
+      body.vision #route .r-stat b { font-size: 14px; font-weight: 700; color: var(--paper); font-variant-numeric: tabular-nums; }
       body.vision #dropped { color: var(--hazard); font-size: 12px; }
       /* Stops: Scout's stop rows; ticked stops get the amber box, the one open in the detail is amber. */
-      body.vision #targets { gap: 4px; }
-      body.vision #targets .stop { gap: 9px; padding: 0 0 0 10px; border-radius: 10px; background: var(--panel2); }
-      body.vision #targets .stop input { accent-color: var(--stop); width: 16px; height: 16px; margin: 0; flex: none; }
-      body.vision #hud #targets .stop button { background: none; padding: 0 10px 0 0; font-size: 13px; }
+      /* Stops: one list in walk order with a thread through it (Base, the stops, Base, then the stops left out); the box is the toggle. */
+      body.vision #targets { gap: 0; }
+      body.vision #targets .stop { position: relative; gap: 10px; padding: 0 0 0 4px; border-radius: 8px; min-height: 36px; }
+      body.vision #targets .stop:hover { background: var(--panel2); }
+      body.vision #targets .stop:is(.on, .base)::before { content: ""; position: absolute; left: 11.5px; top: 0; bottom: 0; width: 1px; background: #57534e; }
+      body.vision #targets .stop.base:first-child::before { top: 50%; }
+      body.vision #targets .stop.base:not(:first-child)::before { bottom: 50%; }
+      body.vision #targets .stop.base { padding-left: 28px; font-size: 12px; color: var(--mute); min-height: 26px; }
+      body.vision #targets .stop.base::after { content: ""; position: absolute; left: 7px; top: 50%; width: 10px; height: 10px; margin-top: -5px; border-radius: 50%; background: var(--paper); }
+      body.vision #targets .stop.base:not(:first-child) + .stop { margin-top: 8px; }
+      body.vision #targets .stop input { position: relative; accent-color: var(--stop); width: 16px; height: 16px; margin: 0; flex: none; }
+      body.vision #hud #targets .stop button { background: none; padding: 0 10px 0 0; font-size: 13px; min-height: 36px; }
+      body.vision #hud #targets .stop:not(.on, .base) button.name { color: var(--mute); }
+      body.vision #hud #targets .stop.dropped button.name { color: var(--hazard); }
       body.vision #hud #targets .stop button.name[aria-pressed=true] { color: var(--stop); }
       body.vision #hud #targets .stop button:not(.name) { color: var(--mute); font-size: 22px; font-weight: 400; min-width: 44px; padding: 0; }
       body.vision #detail { display: grid; gap: 6px; }
@@ -240,7 +270,7 @@
       /* Corners of the map: Scout's mini map and chips. */
       body.vision #minimap { right: 16px; bottom: 16px; padding: 0; background: none; }
       body.vision #minimap canvas { width: 240px; border: 0; border-radius: 10px; }
-      body.vision #legend { left: 376px; bottom: 16px; width: 300px; max-height: 40vh; font-size: 12px; }
+      body.vision #legend { left: 392px; bottom: 16px; width: 300px; max-height: 40vh; font-size: 12px; }
       body.vision #legend b:first-child { font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--mute); }
       body.vision #legend i { border: 0; }
       body.vision #furniture { right: 16px !important; bottom: 272px !important; font-family: inherit !important; }
@@ -252,7 +282,13 @@
       /* Phone: Scout's layout. Top bar 52 px, the rail a bottom sheet, the mini map at the top right, views as chips. */
       @media (max-width: 760px) {
         body.vision #f-top { height: 52px; }
-        body.vision #hud { top: auto; width: 100%; max-height: 44vh; max-height: 44dvh; border-radius: 16px 16px 0 0; padding: 12px 14px max(12px, env(safe-area-inset-bottom)); gap: 12px; }
+        body.vision #hud { left: 0; top: auto; bottom: 0; width: 100%; max-height: 68vh; max-height: 68dvh; border-radius: 16px 16px 0 0; padding: 12px 14px max(12px, env(safe-area-inset-bottom)); gap: 10px; }
+        body.vision #hud #scout { min-height: 44px; }
+        body.vision #hud #targets .stop button { min-height: 44px; }
+        body.vision #layerPop { inset: auto 8px max(8px, env(safe-area-inset-bottom)) 8px; width: auto; max-height: 70dvh; }
+        body.vision #duskBtn { margin-left: 2px; padding: 6px 8px; }
+        body.vision .f-steps { gap: 2px; }
+        body.vision .f-steps button { padding: 6px 9px; }
         body.vision #title .t-site { font-size: 18px; }
         body.vision #layers { flex-direction: row; flex-wrap: wrap; gap: 6px; }
         body.vision #layers > label { min-height: 28px; }
