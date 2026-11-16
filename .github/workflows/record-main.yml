@@ -1,0 +1,32 @@
+# After a squash release lands on main, record main in dev (merge -s ours, no file changes),
+# so the next release PR dev -> main doesn't conflict. scripts/release.sh does the same if this didn't run.
+# Pushes with GITHUB_TOKEN don't trigger other workflows; that's fine, dev's files don't change.
+name: Record main in dev
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+concurrency:
+  group: record-main
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: dev
+          fetch-depth: 0
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for try in 1 2 3; do
+            git fetch -q origin main dev
+            git checkout -q --detach origin/dev
+            if git merge-base --is-ancestor origin/main HEAD; then echo "dev already records main"; exit 0; fi
+            git merge -q -s ours origin/main -m "Record main in dev (merge -s ours, no file changes)"
+            git push -q origin HEAD:dev && exit 0
+            sleep $((try * 5))
+          done
+          exit 1

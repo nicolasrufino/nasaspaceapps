@@ -2,12 +2,14 @@
    IBM Plex Sans, self-hosted under the SIL Open Font License. Panels are solid.
    One meaning per accent: ivory scout, amber stops, ochre detections, white route. */
 @font-face { font-family: "IBM Plex Sans"; src: url("./assets/ibm-plex-sans-latin.woff2") format("woff2"); font-style: normal; font-weight: 400 700; font-display: swap; }
-body.flow { --paper: #f3f2ef; --ink: #191919; --panel: #1d1c1b; --panel2: #2a2927; --scout: #e3dfd3; --stop: #ffd23f; --hazard: #c5a065; --mute: #a9a6a2;
+/* body.vision: Vesta Vision shares these tokens and the font (its layout is in scout/index.html). */
+body.flow, body.vision { --paper: #f3f2ef; --ink: #191919; --panel: #1d1c1b; --panel2: #2a2927; --scout: #e3dfd3; --stop: #ffd23f; --hazard: #c5a065; --mute: #a9a6a2;
   font-family: "IBM Plex Sans", system-ui, sans-serif; }
 body.flow #hud, body.flow #legend, body.flow #minimap, body.flow #viewBtn, body.flow #visionBar, body.flow #visionNote, body.flow #furniture { display: none !important; }
 #flow { position: fixed; inset: 0; z-index: 7; pointer-events: none; color: var(--paper); display: grid;
-  grid-template: "top top" 56px "rail main" minmax(0, 1fr) / 360px minmax(0, 1fr); font-size: 14px; line-height: 1.4; }
+  grid-template: "top top" 56px "rail main" minmax(0, 1fr) / 400px minmax(0, 1fr); font-size: 14px; line-height: 1.4; }
 #flow > * { pointer-events: auto; min-width: 0; min-height: 0; }
+#flow.full { grid-template: "top" 56px "main" minmax(0, 1fr) / 1fr; } #flow.full #f-rail { display: none; }
 #flow h2, #flow h3, #flow button { font-family: inherit; }
 #flow :is(button, a, summary, [tabindex]):focus-visible { outline: 2px solid var(--scout); outline-offset: 3px; }
 /* Top bar: home link left, the four stages centred. */
@@ -40,21 +42,9 @@ button.f-item:focus-visible { outline: 2px solid var(--scout); outline-offset: -
 .f-item.hot { background: var(--panel2); }
 .f-section-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
 .f-section-head h3 { margin: 0; }
-#flow button.f-compact { font-size: 12px; padding: 0 12px; }
-.f-stop-list { gap: 4px; }
 button.f-item { font: inherit; }
-.f-stop-list button.f-item { padding: 8px 10px; border: 0; border-radius: 10px; background: var(--panel2); gap: 9px; }
-.f-stop-list button.f-item:hover { background: #383634; }
-.f-stop-list .n { background: #44413c; color: var(--paper); width: 24px; height: 24px; font-size: 16px; }
-.f-stop-list .selected .n { background: var(--stop); color: var(--ink); font-size: 12px; }
-.f-stop-list .t { font-size: 13px; font-weight: 600; }
-.f-stop-list .t small { font-size: 11px; font-weight: 400; }
-.f-stop-action { flex: none; color: var(--mute); font-size: 12px; }
-.selected .f-stop-action { color: var(--stop); }
 .f-selection-count { color: var(--mute); font-size: 12px; }
 .f-selection-count.ready { color: var(--stop); }
-.f-goal { padding: 10px 12px; border-radius: 10px; background: var(--panel2); }
-.f-goal h3 { font-size: 10px; margin-bottom: 4px; }
 .f-details { font-size: 13px; }
 .f-details > summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; cursor: pointer; list-style: none; color: var(--mute); font-weight: 600; }
 .f-details > summary::-webkit-details-marker { display: none; }
@@ -62,7 +52,6 @@ button.f-item { font: inherit; }
 .f-details[open] > summary::after { content: '−'; }
 .f-details > summary:hover { color: var(--paper); }
 .f-details-body { display: flex; flex-direction: column; gap: 12px; padding: 8px 0; }
-.f-goal .f-details > summary { min-height: 34px; font-size: 12px; }
 .f-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(72px, 1fr)); gap: 12px; }
 .f-stat b { display: block; font-size: 24px; line-height: 1.1; font-weight: 700; font-variant-numeric: tabular-nums; }
 .f-stat span { display: block; margin-top: 3px; font-size: 12px; color: var(--mute); }
@@ -86,7 +75,6 @@ button.f-item { font: inherit; }
 #flow button.f-btn.primary::after { content: ''; flex: none; width: 7px; height: 7px; border-top: 2px solid currentColor; border-right: 2px solid currentColor; transform: rotate(45deg); margin-right: 3px; }
 #flow button.f-btn[aria-pressed=true] { background: var(--paper); color: var(--ink); }
 #flow button.f-btn:disabled { opacity: .4; cursor: default; }
-.f-seg { display: flex; gap: 6px; } .f-seg button { flex: 1; }
 .f-row { display: flex; gap: 8px; } .f-row > * { flex: 1; }
 /* A model-card line: one model, its score, its limit. */
 .f-model { background: var(--panel2); border-radius: 10px; padding: 10px 12px; font-size: 12px; color: var(--mute); }
@@ -111,22 +99,20 @@ button.f-item { font: inherit; }
 .f-map .cap2 { position: absolute; left: 16px; bottom: 12px; font-size: 11px; color: var(--paper); text-shadow: 0 1px 3px #000; max-width: 60%; }
 .f-map.mini .cap { left: 8px; top: 6px; font-size: 10px; } .f-map.mini .cap2 { display: none; }
 @media (max-width: 760px) {
-  #flow { grid-template: "top" 52px "main" minmax(0, 1fr) "rail" auto / 1fr; }
+  #flow { grid-template: "top" 52px "main" minmax(0, 1fr) "rail" auto / 1fr; } #flow.full { grid-template: "top" 52px "main" minmax(0, 1fr) / 1fr; }
   #f-top { grid-template-columns: 32px 1fr; gap: 4px; padding: 0 8px; } #f-top a span, .f-context { display: none; }
   #f-top a { display: grid; place-items: center; min-height: 44px; }
   .f-steps { justify-self: stretch; justify-content: space-between; gap: 2px; } .f-steps button { padding: 5px 7px; font-size: 12px; gap: 4px; }
   #f-rail { max-height: 56vh; max-height: 56dvh; border-radius: 16px 16px 0 0; } #f-body { padding: 12px 14px; gap: 12px; } #f-foot { padding: 10px 14px max(12px, env(safe-area-inset-bottom)); }
-  .f-sec h2 { font-size: 18px; } .f-map.mini { width: 104px; } #f-strip { right: 8px; top: 8px; } .f-chip .f-stat b { font-size: 16px; }
-  .f-goal { padding: 8px 12px; }
-  .f-goal .f-details > summary { min-height: 44px; }
+  .f-sec h2 { font-size: 18px; } #flow button.f-goal-card { padding: 7px 12px; } .f-section-head { margin-bottom: 0; } .f-map.mini { width: 104px; } #f-strip { right: 8px; top: 8px; } .f-chip .f-stat b { font-size: 16px; }
   .f-map .cap { left: 12px; top: 12px; font-size: 10px; }
   .f-map .cap2 { max-width: 90%; font-size: 10px; }
 }
-/* Science goals (goal.js goalsSection, ?off=goals) */
-.f-goals h3 { font-size: 16px; margin-bottom: 6px; }
-.f-goal-card { padding: 10px 12px; border-radius: 10px; background: var(--panel2); margin-bottom: 8px; }
-.f-goal-card label { display: grid; grid-template-columns: auto 1fr; gap: 2px 8px; align-items: center; cursor: pointer; }
-.f-goal-card b { font-size: 15px; }
-.f-goal-card small { grid-column: 2; font-size: 13px; }
-.f-goal-card summary { cursor: pointer; font-size: 16px; width: max-content; padding: 0 6px; }
-.f-goal-card a { color: inherit; }
+/* Stage 1: two goal cards side by side, then the stops you have (stage-plan.js). */
+.f-goal-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+#flow button.f-goal-card { all: unset; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; gap: 2px; min-height: 44px; padding: 10px 12px; border-radius: 10px; background: var(--panel2); box-shadow: inset 0 0 0 2px transparent; }
+#flow button.f-goal-card:hover { background: #383634; }
+#flow button.f-goal-card[aria-pressed=true] { box-shadow: inset 0 0 0 2px var(--stop); }
+#flow button.f-goal-card:disabled { opacity: .5; cursor: default; }
+.f-goal-card b { font-size: 15px; } .f-goal-card small { color: var(--mute); font-size: 12px; }
+.f-stops .f-item { padding: 0; }

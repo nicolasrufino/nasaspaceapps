@@ -6,11 +6,13 @@
 // heights: the USGS MSL Gale terrain model in world.layers.height.
 import { MODELS } from './models.js'
 import * as stopScience from './stop-science.js'
+import { log } from './stage-scout.js'
 
 const OCHRE = '#c5a065', WHITE = '#fff', AMBER = '#ffd23f', SCOUT = '#e3dfd3'
 const SPEEDS = [[120, '1×'], [60, '2×'], [30, '4×']] // milliseconds per 8 m step
 const STRIP_H = 110
 const NS = 'http://www.w3.org/2000/svg'
+const km = (m) => (m >= 1000 ? `${+(m / 1000).toFixed(1)} km` : `${Math.round(m)} m`)
 const svgEl = (tag, attrs = {}) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); return e }
 
 const CSS = `
@@ -38,6 +40,12 @@ const CSS = `
 .d-why.cost li { color: var(--mute); } .d-why.cost li::before { background: var(--mute); }
 .d-bar { position: relative; height: 10px; border-radius: 5px; background: var(--panel2); overflow: hidden; margin: 6px 0 4px; }
 .d-bar i { position: absolute; top: 0; bottom: 0; }
+.d-hub { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+#flow .d-hub button { all: unset; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; gap: 2px; min-height: 76px; padding: 10px 12px; border-radius: 12px; background: var(--panel2); }
+#flow .d-hub button:hover { background: #383634; } #flow .d-hub button:disabled { opacity: .45; cursor: default; }
+#flow .d-hub button:focus-visible { outline: 2px solid var(--scout); outline-offset: 2px; }
+.d-hub small { font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--mute); }
+.d-hub b { font-size: 16px; line-height: 1.25; } .d-hub span { font-size: 12px; color: var(--mute); }
 `
 
 export default {
@@ -46,7 +54,8 @@ export default {
     const W = app.W
     if (!document.getElementById('d-style')) document.head.append(Object.assign(document.createElement('style'), { id: 'd-style', textContent: CSS }))
 
-    let mode = 'compare' // or 'preview'
+    let mode = 'compare' // or 'hub', 'replay', 'preview'
+    let replayTimer = null
     let timer = null, mine = [], hot = null, pin = null, speedK = 0, want = false, lastScale = 0, prof = null, live = null
     let sci = null // the Visit step (stop-science.js); null when off or its data did not load: the preview plays as before
     const sciData = stopScience.enabled() ? stopScience.load() : Promise.resolve(null)
@@ -80,8 +89,7 @@ export default {
 
     // ---------- Comparison ----------
     const againBtn = ui.button('Scout again', () => ui.go('plan'))
-    const stopsBtn = ui.button('Change the stops', () => ui.go('plan'))
-    const previewBtn = ui.button('Preview the walk', startPreview, true)
+    const previewBtn = ui.button('Start the walk simulator', startPreview, true)
     const visionBtn = ui.button('Explore in Vesta Vision', () => { location.href = './?vision' })
 
     function routeBlock(key, title, numbers) {
@@ -137,12 +145,114 @@ export default {
       const options = ui.details('More actions & model details', visionBtn)
       if (app.scout.left() > 0) options.querySelector('.f-details-body').append(againBtn)
       options.querySelector('.f-details-body').append(ui.model(MODELS.groundClassifier))
-      setBody(head, why, costSec, both, options)
+      setBody(toHub(), head, why, costSec, both, options)
       previewBtn.disabled = route.cells.length < 2
-      ui.foot.replaceChildren(previewBtn, stopsBtn)
+      ui.foot.replaceChildren(previewBtn)
+    }
+
+    // ---------- The mission: every step of this mission, to open again ----------
+    function toHub() {
+      const b = ui.h('button', 'f-back', '← Mission')
+      b.type = 'button'; b.setAttribute('aria-label', 'Back to the mission'); b.onclick = () => { stopPreview(); leaveViews(); hub() }
+      return b
+    }
+    function hub() {
+      mode = 'hub'
+      const route = app.route(), before = app.scout.before(), d = app.describe(route.cells)
+      const stops = app.stops().filter((s) => s.included)
+      map.caption('Your mission', 'NASA MRO HiRISE')
+      drawMap(false)
+      const head = ui.section('Your mission', true)
+      head.append(p('Open any step again.', 'dim'))
+      const grid = ui.h('div', 'd-hub')
+      const tile = (label, value, sub, onClick) => {
+        const b = ui.h('button', '', '<small></small><b></b><span></span>')
+        b.type = 'button'; b.children[0].textContent = label; b.children[1].textContent = value; b.children[2].textContent = sub
+        b.onclick = onClick; b.disabled = !onClick
+        grid.append(b)
+        return b
+      }
+      const crossedOld = before?.crossed ?? 0, crossedNew = rocksOn(route.cells).length
+      tile('1 · Stops', `${stops.length} stops`, 'Change them', () => ui.go('plan'))
+      tile('2 · Route from orbit', `${ui.kj(before?.energy_j ?? route.energy_j)} kJ`, 'How it was found', () => ui.go('analyse'))
+      tile('3 · Flight replay', `${log.flights.length} ${log.flights.length === 1 ? 'flight' : 'flights'}`, `${log.finds.length} findings`, log.flights.length ? replay : null)
+      tile('4 · The path we made', before ? `${crossedOld} → ${crossedNew} rock cells` : `${ui.kj(route.energy_j)} kJ`, 'Compare the routes', compare)
+      setBody(head, grid)
+      previewBtn.disabled = route.cells.length < 2
+      const walk = p(`Walk simulator: ${km(d.metres)} · ${ui.kj(route.energy_j)} kJ`, 'f-small')
+      ui.foot.replaceChildren(walk, previewBtn)
+    }
+
+    // ---------- Flight replay: the recorded flights redrawn on the 2D map ----------
+    function replay() {
+      mode = 'replay'
+      const k = map.scale, band = (2 * (app.scout.swathM ?? 15)) / app.cs
+      const flights = log.flights.map((f) => { // cumulative length of each path, in cells
+        const cum = [0]
+        for (let i = 1; i < f.waypoints.length; i++) cum.push(cum[i - 1] + Math.hypot(f.waypoints[i][0] - f.waypoints[i - 1][0], f.waypoints[i][1] - f.waypoints[i - 1][1]))
+        return { ...f, cum, len: cum.at(-1) || 1 }
+      })
+      map.caption('Flight replay', 'Recorded from your scouting · NASA MRO HiRISE')
+      map.fit([app.meta.base_cell, ...flights.flatMap((f) => f.waypoints)], 16)
+      map.paint(() => null)
+      for (const name of ['before', 'crossed']) map.clear(name)
+      map.line('route', app.route().cells, { color: WHITE, width: 0.35 * k, opacity: 0.35 })
+
+      const head = ui.section('Flight replay', true), status = p('', 'dim'), bar = ui.bar(), list = ui.h('div', 'f-list')
+      head.append(status, bar.el)
+      setBody(toHub(), head, list)
+      const again = ui.button('Replay again', run)
+      ui.foot.replaceChildren(again)
+
+      const SPAN_MS = 5000 // screen time per flight
+      function pathTo(f, t) { // the waypoints flown by fraction t, ending at the exact point
+        const at = t * f.len, pts = [f.waypoints[0]]
+        for (let i = 1; i < f.waypoints.length; i++) {
+          if (f.cum[i] <= at) { pts.push(f.waypoints[i]); continue }
+          const a = f.waypoints[i - 1], b = f.waypoints[i], u = (at - f.cum[i - 1]) / (f.cum[i] - f.cum[i - 1] || 1)
+          pts.push([a[0] + (b[0] - a[0]) * u, a[1] + (b[1] - a[1]) * u])
+          break
+        }
+        return pts
+      }
+      function frame(ms) {
+        const n = Math.min(flights.length - 1, Math.floor(ms / SPAN_MS)), t = ms >= flights.length * SPAN_MS ? 1 : (ms % SPAN_MS) / SPAN_MS
+        const shown = []
+        flights.forEach((f, j) => {
+          const pts = j < n ? f.waypoints : j === n ? pathTo(f, t) : []
+          map.line(`rp-band-${j}`, pts, { color: SCOUT, width: band, opacity: 0.28 })
+          map.line(`rp-line-${j}`, pts, { color: SCOUT, width: 0.35 * k })
+          if (j === n && pts.length) map.dots('rp-heli', t < 1 ? [{ cell: pts.at(-1), color: SCOUT, ring: WHITE, r: 1.4 * k }] : [])
+          for (const fd of log.finds) if (fd.flight === f.n && (j < n || (j === n && fd.along <= t * f.metres))) shown.push(fd)
+        })
+        map.dots('rp-finds', shown.map((fd) => ({ cell: fd.cell, label: fd.n, color: OCHRE, ring: '#191919', r: 1.8 * k })))
+        map.raise('stops')
+        const f = flights[n]
+        status.textContent = t >= 1 && n === flights.length - 1 ? `${flights.length} ${flights.length === 1 ? 'flight' : 'flights'} · ${log.finds.length} findings`
+          : `Flight ${f.n} of ${flights.length} · ${Math.round(t * f.metres)} / ${Math.round(f.metres)} m`
+        bar.set((n + t) / flights.length)
+        if (list.childElementCount !== shown.length) list.replaceChildren(...shown.slice().reverse().map((fd) => ui.item({ n: fd.n,
+          title: `Rock field · about ${Math.round(fd.cells * app.cs * app.cs).toLocaleString('en-US')} m²`, sub: fd.onRoute ? `On your route${fd.result ? `: ${fd.result}` : ''}` : `Flight ${fd.flight} · off your route` })))
+      }
+      function run() {
+        clearInterval(replayTimer)
+        const t0 = performance.now(), end = flights.length * SPAN_MS
+        replayTimer = setInterval(() => {
+          const ms = performance.now() - t0
+          frame(Math.min(ms, end))
+          if (ms >= end) { clearInterval(replayTimer); replayTimer = null; map.clear('rp-heli'); map.paintScouted(); map.raise('rp-finds'); map.raise('stops') }
+        }, 50)
+      }
+      run()
+    }
+    function leaveViews() { // what replay drew
+      clearInterval(replayTimer); replayTimer = null
+      log.flights.forEach((_, j) => { map.clear(`rp-band-${j}`); map.clear(`rp-line-${j}`) })
+      for (const name of ['rp-heli', 'rp-finds']) map.clear(name)
     }
 
     function compare() {
+      leaveViews()
       mode = 'compare'
       const route = app.route(), before = app.scout.before(), d = app.describe(route.cells)
       const crossedOld = before?.crossed ?? 0, crossedNew = rocksOn(route.cells).length
@@ -184,9 +294,9 @@ export default {
       const options = ui.details('More actions & model details', visionBtn)
       if (app.scout.left() > 0) options.querySelector('.f-details-body').append(againBtn)
       options.querySelector('.f-details-body').append(ui.model(MODELS.groundClassifier))
-      setBody(head, ...blocks, sum, options)
+      setBody(toHub(), head, ...blocks, sum, options)
       previewBtn.disabled = route.cells.length < 2
-      ui.foot.replaceChildren(previewBtn, stopsBtn)
+      ui.foot.replaceChildren(previewBtn)
     }
 
     // ---------- Preview ----------
@@ -209,6 +319,7 @@ export default {
     function startPreview() {
       const route = app.route()
       if (mode === 'preview' || route.cells.length < 2) return
+      leaveViews()
       mode = 'preview'
       const d = app.describe(route.cells), totalM = Math.round(d.metres)
       prof = profile(route.cells)
@@ -221,14 +332,14 @@ export default {
       want = true
 
       // Rail
-      const head = ui.section('Walk preview', true)
+      const head = ui.section('Walk simulator', true)
       const note = p('Plays automatically. Drag the height strip to jump.', 'dim')
       head.append(note)
       const nums = ui.section('')
       const stats = ui.stats([[`metres of ${totalM}`, '0'], ['kJ left', '0', 'scout'], ['% of the way', '0']])
       const bar = ui.bar()
       nums.append(stats.el, bar.el)
-      setBody(head, nums)
+      setBody(toHub(), head, nums)
 
       // Controls
       const playBtn = ui.button('Pause', () => {
@@ -243,11 +354,10 @@ export default {
       const speedBtn = ui.button(SPEEDS[0][1], () => { speedK = (speedK + 1) % SPEEDS.length; app.walk.speed(SPEEDS[speedK][0]); speedBtn.textContent = SPEEDS[speedK][1] })
       speedBtn.setAttribute('aria-label', 'Walking speed')
       const restartBtn = ui.button('Restart', () => { app.walk.reset(); app.walk.play(); want = true; tick() })
-      const backBtn = ui.button('Back to the comparison', stopPreview)
       const r1 = ui.h('div', 'f-row'), r2 = ui.h('div', 'f-row')
       r1.append(playBtn)
       r2.append(stepBtn, speedBtn, restartBtn)
-      ui.foot.replaceChildren(r1, r2, backBtn)
+      ui.foot.replaceChildren(r1, r2)
 
       // Bottom strip: the height profile, which is also the scrubber.
       const strip = ui.h('div', 'd-strip', '<div class="lab"><span>Height along the route</span><b></b><span></span></div>')
@@ -336,7 +446,6 @@ export default {
       if (mode !== 'preview') return
       leavePreview()
       ui.scene(false)
-      compare()
     }
 
     // ---------- Go ----------
@@ -351,6 +460,7 @@ export default {
       off()
       offWalk()
       leavePreview()
+      leaveViews()
       mode = 'compare'
       for (const n of mine) n.remove()
       mine = []

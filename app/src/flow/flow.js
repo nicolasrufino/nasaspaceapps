@@ -11,7 +11,7 @@ import scout from './stage-scout.js'
 import debrief from './stage-debrief.js'
 
 const STAGES = [['plan', 'Stops', plan], ['analyse', 'Route', analyse], ['scout', 'Scout', scout], ['debrief', 'Walk', debrief]]
-const BACK = { analyse: 'plan', debrief: 'analyse' } // where Back goes; none while the scout flies
+const BACK = { analyse: 'plan' } // where Back goes; none while the scout flies, and stage 4 has its own (the mission)
 const h = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e }
 
 export function initFlow(app) {
@@ -33,7 +33,8 @@ export function initFlow(app) {
     h,
     // In a scene the 3D picture is shifted so its centre sits in the area the rail leaves free.
     // console (false, default): the 2D map fills the main area, no 3D. scene (true): the main area is clear and the 3D view shows.
-    scene(on) { main.classList.toggle('scene', on); on ? (innerWidth > 760 ? app.viewShift(q('rail').offsetWidth / 2) : app.viewShift(0, innerHeight * 0.22)) : app.viewShift(0); if (on) map.el.remove(); else { map.size('fill'); main.prepend(map.el) } },
+    // full (scene only): hide the rail too; the stage draws its own panels over the 3D view (a control centre).
+    scene(on, full = false) { main.classList.toggle('scene', on); root.classList.toggle('full', on && full); on && !full ? (innerWidth > 760 ? app.viewShift(q('rail').offsetWidth / 2) : app.viewShift(0, innerHeight * 0.22)) : app.viewShift(0); if (on) map.el.remove(); else { map.size('fill'); main.prepend(map.el) } },
     // A titled block in the rail. big = a heading instead of a small label. Returns the element; append to it.
     section(title, big = false) { return h('div', 'f-sec', title ? `<${big ? 'h2' : 'h3'}>${title}</${big ? 'h2' : 'h3'}>` : '') },
     // Secondary explanations stay available without competing with the stage's next action.
