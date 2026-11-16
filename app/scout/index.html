@@ -178,6 +178,31 @@
          Vision panels would show for a moment. Same test as main.js's flowMode. -->
     <script>if (!/[?&](vision|world|flags|demo)(=|&|$)/.test(location.search)) document.documentElement.classList.add('flow-boot')</script>
     <style>html.flow-boot body:not(.flow) > * { visibility: hidden; }</style>
+    <!-- Vesta Vision's loading screen: same test as main.js's vision. Hides the page until the HiRISE imagery is on the
+         terrain (main.js visionReady), so nothing flashes; 8 s at most. Colours are flow.css's tokens, written out
+         because body.vision is not set yet. -->
+    <script>if (/[?&](vision|world|flags)(=|&|$)/.test(location.search) && !/[?&]demo(=|&|$)/.test(location.search)) document.documentElement.classList.add('vision-boot')</script>
+    <style>
+      html.vision-boot body > :not(#visionLoader) { visibility: hidden; }
+      #visionLoader { display: none; }
+      html.vision-boot #visionLoader, #visionLoader.out { position: fixed; inset: 0; z-index: 20; display: grid; place-content: center; justify-items: center; gap: 14px;
+        background: radial-gradient(ellipse at 50% 40%, #2a1d16, #120e0c 70%); color: #f3f2ef; font: 14px "IBM Plex Sans", system-ui, sans-serif; text-align: center; }
+      #visionLoader.out { opacity: 0; transition: opacity .5s; pointer-events: none; }
+      #visionLoader .vl-planet { position: relative; width: 96px; height: 96px; margin-bottom: 10px; }
+      #visionLoader .vl-planet::before { content: ""; position: absolute; inset: 14px; border-radius: 50%;
+        background: radial-gradient(circle at 35% 35%, #d9915a, #9a4f2a 55%, #3a1c10 100%); box-shadow: 0 0 40px #c66a3a40; } /* Mars */
+      #visionLoader .vl-planet::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 1px solid #e3dfd333;
+        border-top-color: transparent; animation: vl-orbit 2.4s linear infinite; }
+      #visionLoader .vl-dot { position: absolute; inset: 0; animation: vl-orbit 2.4s linear infinite; }
+      #visionLoader .vl-dot::before { content: ""; position: absolute; left: 50%; top: -3px; width: 7px; height: 7px; margin-left: -3.5px; border-radius: 50%;
+        background: #e3dfd3; box-shadow: 0 0 10px #e3dfd3; } /* the orbiter that took the pictures */
+      #visionLoader b { font-size: 20px; font-weight: 700; letter-spacing: -.01em; }
+      #visionLoader b span { font-weight: 400; }
+      #visionLoader p { margin: 0; color: #a9a6a2; min-height: 1.4em; }
+      #visionLoader small { color: #a9a6a2; font-size: 12px; opacity: .8; }
+      @keyframes vl-orbit { to { transform: rotate(360deg); } }
+      @media (prefers-reduced-motion: reduce) { #visionLoader .vl-dot, #visionLoader .vl-planet::after { animation: none; } }
+    </style>
     <style>
       /* Vesta Vision (body.vision): Scout's look and shell, from app/src/flow/flow.css (tokens, #f-top, type scale). A top bar
          with the three views where Scout has its stages, a 360 px rail on the left (a bottom sheet on a phone), solid panels,
@@ -328,6 +353,8 @@
     </style>
   </head>
   <body>
+    <div id="visionLoader" role="status" aria-live="polite"><div class="vl-planet"><div class="vl-dot"></div></div>
+      <b>Vesta <span>Vision</span></b><p id="visionLoaderText">Loading Gale crater…</p><small>Real NASA HiRISE terrain and imagery · lower Mount Sharp</small></div>
     <canvas id="scene"></canvas>
     <div id="alarm"></div>
     <div id="hud" class="panel">

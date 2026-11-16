@@ -49,8 +49,20 @@ try {
   world = await loadWorld(base)
 } catch (e) {
   $('title').textContent = `Could not load world "${worldName}": ${e.message}`
+  visionReady()
   throw e
 }
+// Vision's loading screen (scout/index.html #visionLoader): it lifts once the imagery is draped, or after 8 s at most.
+// Automated tests (navigator.webdriver) get the page as soon as the plan is drawn, so their clicks don't wait.
+function visionReady() {
+  const el = $('visionLoader'), root = document.documentElement
+  if (!root.classList.contains('vision-boot')) return
+  root.classList.remove('vision-boot')
+  el.classList.add('out')
+  setTimeout(() => el.remove(), 600)
+}
+setTimeout(visionReady, 8000)
+if ($('visionLoaderText')) $('visionLoaderText').textContent = 'Building the 3D terrain…'
 const targets = await optionalJSON('targets.json', [])
 const photos = await optionalJSON('stops.json', []) // rover photos per stop (contract: stops.json)
 let flight = null // current scouting campaign; re-plan and select again after each landing
@@ -404,7 +416,7 @@ if (!flowMode && !matchMedia('(prefers-reduced-motion: reduce)').matches && !nav
   const mid = new THREE.Vector3((W * cs) / 2, home.y, (H * cs) / 2)
   const label = document.createElement('div')
   label.textContent = 'Gale crater, lower Mount Sharp · NASA MRO HiRISE'
-  label.style.cssText = 'position:fixed;left:50%;bottom:22%;transform:translateX(-50%);z-index:6;font:600 15px system-ui,sans-serif;color:#fff;text-shadow:0 1px 4px #000;pointer-events:none;transition:opacity .8s;text-align:center'
+  label.style.cssText = 'position:fixed;left:50%;bottom:40%;transform:translateX(-50%);z-index:6;font:600 15px system-ui,sans-serif;color:#fff;text-shadow:0 1px 4px #000;pointer-events:none;transition:opacity .8s;text-align:center'
   document.body.append(label)
   intro = { t: 0, label, to: camera.position.clone(), targetTo: controls.target.clone(), from: new THREE.Vector3(mid.x, home.y + span * 1.15, mid.z + span * 0.25), targetFrom: mid }
   camera.position.copy(intro.from)
@@ -450,7 +462,7 @@ renderer.setAnimationLoop((now) => {
   if (walkerGoal.distanceToSquared(walker.position) > 0.01) walker.rotation.y = Math.atan2(-(walkerGoal.x - walker.position.x), -(walkerGoal.z - walker.position.z))
   walkerIcon.position.set(walker.position.x, walker.position.y + 3, walker.position.z)
   baseMarker.position.set(habitat.position.x, habitat.position.y + 12, habitat.position.z)
-  if (intro) tickIntro(dt)
+  if (intro && !document.documentElement.classList.contains('vision-boot')) tickIntro(dt) // the opening waits for the loading screen
   tickView(dt)
   tickDusk(now)
   hud?.tick(hudState)
@@ -1065,6 +1077,8 @@ $('play').onclick = () => (walkClock.playing ? pause() : play())
 $('step').onclick = () => (unlockAudio(), step())
 $('reset').onclick = reset
 replan()
+if (navigator.webdriver) visionReady()
+else if ($('visionLoaderText')) $('visionLoaderText').textContent = 'Draping the HiRISE imagery…'
 
 // Real imagery (ticket F2): drape HiRISE on the terrain and make it the default view; it sharpens as tiles arrive.
 loadImagery(meta, renderer, (canvas) => {
@@ -1079,7 +1093,7 @@ loadImagery(meta, renderer, (canvas) => {
   terrainMat.needsUpdate = true
   setLayer(IMAGERY)
   render()
-}).catch(() => {}) // no network or no tiles: the class colours stay
+}).catch(() => {}).finally(visionReady) // no network or no tiles: the class colours stay
 
 // 1 m detail near what you look at and near the astronaut (ticket F7); fewer tiles on small screens to save memory.
 if (flags.has('detail')) {
