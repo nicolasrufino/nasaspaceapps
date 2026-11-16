@@ -78,8 +78,8 @@ export function createMap2D(app) {
       for (let i = 0; i < W * H; i++) { const v = fn(i); if (v) img.data.set(v, i * 4) }
       c.putImageData(img, 0, 0)
     },
-    // The standard picture of scouting: unseen ground dimmed, found rocks ochre.
-    paintScouted(dim = 110) { api.paint((i) => (app.rockSeen(i) ? [197, 160, 101, 255] : app.scanned[i] ? null : [20, 16, 14, dim])) },
+    // The standard picture of scouting: unseen ground dimmed, found rocks in the colour the Scout stage gave them.
+    paintScouted(dim = 110) { api.paint((i) => (app.rockSeen(i) ? [...app.rockColor(i), 255] : app.scanned[i] ? null : [20, 16, 14, dim])) },
     // Zoom to the rectangle (same shape as the map's box on screen) that holds these cells plus `pad` cells around;
     // fit() with no cells shows as much of the slice as fits. Re-applied when the box changes size.
     fit(cells, pad = 14) {

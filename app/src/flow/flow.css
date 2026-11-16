@@ -1,9 +1,11 @@
 /* The guided mission, version 2 (docs/UX-PLAN.md section 0): the map is the page, one left rail, fixed homes.
    IBM Plex Sans, self-hosted under the SIL Open Font License. Panels are solid.
-   One meaning per accent: ivory scout, amber stops, ochre detections, white route. */
+   One meaning per accent: ivory scout, amber stops, ochre detections, white route; in the Scout stage a rock on your route
+   is red (walk around it), one the re-plan avoided is green, one off the route is grey (DECISIONS 2026-11-15). */
 @font-face { font-family: "IBM Plex Sans"; src: url("./assets/ibm-plex-sans-latin.woff2") format("woff2"); font-style: normal; font-weight: 400 700; font-display: swap; }
 /* body.vision: Vesta Vision shares these tokens and the font (its layout is in scout/index.html). */
 body.flow, body.vision { --paper: #f3f2ef; --ink: #191919; --panel: #1d1c1b; --panel2: #2a2927; --scout: #e3dfd3; --stop: #ffd23f; --hazard: #c5a065; --mute: #a9a6a2;
+  --avoid: #ff2d2d; --clear: #46aa5a; /* the red and green of hazards.js (blocked steps, walkable ground) */
   font-family: "IBM Plex Sans", system-ui, sans-serif; }
 body.flow #hud, body.flow #legend, body.flow #minimap, body.flow #viewBtn, body.flow #visionBar, body.flow #visionNote, body.flow #furniture { display: none !important; }
 #flow { position: fixed; inset: 0; z-index: 7; pointer-events: none; color: var(--paper); display: grid;
@@ -55,7 +57,7 @@ button.f-item { font: inherit; }
 .f-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(72px, 1fr)); gap: 12px; }
 .f-stat b { display: block; font-size: 24px; line-height: 1.1; font-weight: 700; font-variant-numeric: tabular-nums; }
 .f-stat span { display: block; margin-top: 3px; font-size: 12px; color: var(--mute); }
-.f-stat.scout b { color: var(--scout); } .f-stat.hazard b { color: var(--hazard); } .f-stat.stop b { color: var(--stop); }
+.f-stat.scout b { color: var(--scout); } .f-stat.hazard b { color: var(--hazard); } .f-stat.avoid b { color: var(--avoid); } .f-stat.stop b { color: var(--stop); }
 .f-bar { height: 4px; border-radius: 2px; background: var(--panel2); overflow: hidden; margin: 8px 0 6px; }
 .f-bar i { display: block; height: 100%; width: 0; background: var(--scout); transition: width .2s linear; }
 .f-flight-progress { height: 8px; border-radius: 999px; background: #383530; margin: 14px 0 8px; }

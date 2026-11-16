@@ -71,6 +71,8 @@ showWalkNotes($('layers'), walkNotes, walkNotesUrl)
 const ctg = layers.cost_to_go
 const scanned = new Uint8Array(W * H) // cells the helicopter has seen
 const rockSeen = (i) => scanned[i] && layers.rocks_fine?.[i]
+let rockRGB = null // set by the guided mission's Scout stage: each seen rock coloured by what it means for the route
+const rockColor = (i) => rockRGB?.(i) ?? (flowMode ? [197, 160, 101] : [200, 35, 35])
 const cellPos = ([x, y], lift = 0) => new THREE.Vector3(x * cs, layers.height[y * W + x] + lift, y * cs)
 document.title = flowMode ? 'Vesta Scout' : 'Vesta Vision'
 if (demoMode) document.body.classList.add('demo') // the Scout look for every card (CSS in scout/index.html)
@@ -766,7 +768,7 @@ function reveal(fresh) {
     if (layers.cost_to_go_scouted) ctg[i] = layers.cost_to_go_scouted[i]
     if (!rock) continue // clear ground shows by turning to full colour (the discover look); only rocks get a dot
     dotPos.set([(i % W) * cs, layers.height[i] + 0.5, Math.floor(i / W) * cs], dots * 3)
-    dotCol.set(scanDotColor, dots * 3)
+    dotCol.set(rockRGB ? rockColor(i).map((v) => v / 255) : scanDotColor, dots * 3)
     dots++
   }
   if (fresh.length) {
@@ -950,7 +952,7 @@ function render() {
   const vertexBase = layerName === IMAGERY ? WHITE : layerColors // the image itself carries the colour in the Imagery view
   for (let i = 0; i < W * H; i++) {
     const f = inside[i] ? 1 : 0.45
-    if (rockSeen(i)) colors.array.set(flowMode ? [197, 160, 101] : [200, 35, 35], i * 3)
+    if (rockSeen(i)) colors.array.set(rockColor(i), i * 3)
     else for (let c = 0; c < 3; c++) colors.array[i * 3 + c] = vertexBase[i * 3 + c] * f
     tint.image.data.set([colors.array[i * 3], colors.array[i * 3 + 1], colors.array[i * 3 + 2], scanned[i] || nearHome[i] ? 255 : 0], i * 4)
   }
@@ -1039,6 +1041,8 @@ const app = {
   setObjective(o) { if (flight) return; objective = o; replan() },
   scanned, // Uint8Array(W*H): 1 where a helicopter has looked
   rockSeen: (i) => !!rockSeen(i),
+  rockColor, // [r, g, b] 0-255 of a seen rock cell
+  setRockColor(fn) { rockRGB = fn; render() }, // fn(i) -> [r, g, b] or null for the default; repaints the 3D ground
   blocked: () => blocked,
   belief: () => beliefMap(world, scanned, blocked), // Float32Array(W*H) chance of a hidden rock; experimental
   imagery: () => imageryCanvas, // 2048 px canvas of the slice, north up, or null until loaded ('imagery' event)
