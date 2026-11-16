@@ -7,8 +7,8 @@ The build graph for four people. Each block is one thing someone builds. **Needs
 | Lane | Who | GitHub | Role brief |
 |---|---|---|---|
 | P1 | **Jules** | `julesrumeautennis-cmd` | `docs/roles/person-1-ml.md` |
-| P2 | **Nicolas** | `nicolasrufino` | `docs/roles/person-2-engine.md` |
-| P3 | **Galsan** (lead) | `Galsan2005` | `docs/roles/person-3-data-systems.md` |
+| P2 | **Nicolas** (lead) | `nicolasrufino` | `docs/roles/person-2-engine.md` |
+| P3 | **Galsan** | `Galsan2005` | `docs/roles/person-3-data-systems.md` |
 | PX | Open: joins later, or the fallbacks below | — | `docs/roles/person-x.md` |
 
 Every block's GitHub issue is assigned to its lane's owner and repeats what it needs, what it unlocks and when it is due.

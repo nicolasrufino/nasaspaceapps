@@ -1,4 +1,4 @@
-# How Martian Map works
+# How Mission VESTA works
 
 Plain-language notes on every rule and formula the app uses, for the project page and the pitch. Every number here comes from the code in this repo (`app/src/`, `data/pipeline/make_world.py`) or from a test or run on our worlds. **Estimates are marked as estimates.** Update this file whenever a rule changes.
 
