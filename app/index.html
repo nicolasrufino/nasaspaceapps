@@ -12,27 +12,73 @@
 </head>
 <body>
   <main>
+    <!-- One screen: nav, title, the one call to action, and the globe in whatever height is left. -->
     <section class="hero" aria-labelledby="mission-title">
-      <!-- Viking Orbiter Mars globe mosaic, NASA/JPL-Caltech.
-           https://science.nasa.gov/resource/mars-planet-globe/ -->
-      <div class="mars">
-        <img src="./mission-vesta/assets/mars-globe.jpg" alt="" width="2048" height="2048" fetchpriority="high">
-        <button type="button" class="mars-control" aria-label="Automatic Mars rotation" aria-pressed="false"
-          title="Drag or use the arrow keys to turn Mars. Click to pause or play." hidden>
-          <canvas aria-hidden="true"></canvas>
-        </button>
-      </div>
+      <nav class="top" aria-label="Sections">
+        <a href="#about">About</a>
+        <a href="#method">Method</a>
+        <a href="#docs">Docs</a>
+      </nav>
       <div class="welcome">
         <h1 id="mission-title"><span>MISSION:</span> VESTA</h1>
         <p>We’re building tools to plan science walks on Mars.</p>
-        <a href="#why">Explore the mission <span aria-hidden="true">↓</span></a>
-        <a class="demo-cta" href="./scout/?demo">Watch the mission demo <span aria-hidden="true">→</span></a>
+        <a class="cta" href="#begin">Begin the mission</a>
+      </div>
+      <!-- Viking Orbiter Mars globe mosaic, NASA/JPL-Caltech.
+           https://science.nasa.gov/resource/mars-planet-globe/ -->
+      <div class="mars-box">
+        <div class="mars">
+          <img src="./mission-vesta/assets/mars-globe.jpg" alt="" width="2048" height="2048" fetchpriority="high">
+          <button type="button" class="mars-control" aria-label="Automatic Mars rotation" aria-pressed="false"
+            title="Drag or use the arrow keys to turn Mars. Click to pause or play." hidden>
+            <canvas aria-hidden="true"></canvas>
+          </button>
+        </div>
       </div>
     </section>
 
-    <section class="why" id="why" aria-labelledby="why-title">
-      <p class="eyebrow">Why</p>
-      <h2 id="why-title">There is no map of Mars detailed enough for a single walk.</h2>
+    <!-- The two ways in. Pictures: one real run of the app, captured by scripts/capture-home.mjs (assets/captures.json).
+         NASA MRO HiRISE colour (USGS MSL Gale LRGB 25 cm mosaic) on the USGS MSL Gale DEM from HiRISE stereo. -->
+    <section class="begin" id="begin" aria-labelledby="begin-title">
+      <h2 id="begin-title">Begin the mission</h2>
+      <p class="lead">Two tools, one map of Mars. Start with the guided mission.</p>
+      <div class="choices">
+        <article class="choice big">
+          <img src="./mission-vesta/assets/scout-before.jpg" width="1770" height="1216" loading="lazy"
+            alt="HiRISE map of lower Mount Sharp: habitat H, stops 1 to 3, the route from orbit in red dashes through rocks the scout found, the scouted route in white.">
+          <div class="body">
+            <p class="eyebrow">Vesta Scout · the guided mission</p>
+            <h3>Look before you walk.</h3>
+            <p>Pick science stops, plan the route, send a scout helicopter to find the rocks orbit can’t see, then walk.</p>
+            <div class="actions">
+              <a class="go primary" href="./scout/">Start Vesta Scout <span aria-hidden="true">→</span></a>
+              <a class="go" href="#scout">Details</a>
+            </div>
+          </div>
+        </article>
+        <article class="choice">
+          <img src="./mission-vesta/assets/vision-eye.jpg" width="1600" height="1100" loading="lazy"
+            alt="Eye level on lower Mount Sharp: a red guide line runs over the ground to stop 1, labelled Next: Altadena drill site, 345 m.">
+          <div class="body">
+            <p class="eyebrow">Vesta Vision <span class="tag">Early version</span></p>
+            <h3>Read the ground.</h3>
+            <p>The site in 3D, down to eye level: follow the red line to the next stop.</p>
+            <div class="actions">
+              <a class="go primary" href="./scout/?vision">Open Vesta Vision <span aria-hidden="true">→</span></a>
+              <a class="go" href="#vision">Details</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="light" id="about" aria-labelledby="about-title">
+      <p class="eyebrow">About</p>
+      <h2 id="about-title">Astronauts on Mars will walk out to study rocks, and must always be able to walk back.</h2>
+      <p class="intro">Mission: Vesta is a set of tools to plan those walks with NASA’s own Mars data. We built it for
+        NASA Space Apps 2026, on a 2 × 2 km slice of lower Mount Sharp in Gale crater, where the Curiosity rover drilled.</p>
+
+      <h3 class="sub">Why: there is no map of Mars detailed enough for a single walk.</h3>
       <div class="reasons">
         <div>
           <p class="stat">~1.5 m</p>
@@ -51,99 +97,165 @@
         then walk with the way home always in view.</p>
     </section>
 
-    <!-- Pictures and numbers: one real run of the app, captured by scripts/capture-home.mjs (see assets/captures.json).
-         Map imagery: NASA MRO HiRISE colour, USGS MSL Gale LRGB 25 cm mosaic (NASA/JPL-Caltech/University of Arizona).
-         Terrain: USGS MSL Gale DEM from MRO HiRISE stereo. -->
-    <section class="product" id="scout" aria-labelledby="scout-title">
-      <div class="copy">
-        <p class="eyebrow">Vesta Scout</p>
-        <h2 id="scout-title">Look before you walk.</h2>
-        <p>Pick science stops from the habitat. A simulated scout helicopter, like NASA’s Ingenuity, flies the route
-          first and finds the rocks orbit can’t see. Then the walk is planned around them.</p>
-        <div class="toggle" role="group" aria-label="Show the route">
-          <button type="button" aria-pressed="true" data-show="before">From orbit</button>
-          <button type="button" aria-pressed="false" data-show="after">After scouting</button>
-        </div>
-        <div class="captions" aria-live="polite">
-          <p class="caption" data-for="before">Planned from orbit: <b>908 m</b>, <b>435 kJ</b>.
-          It crosses <b>2 rock cells</b> the scout later found.</p>
-        <p class="caption" data-for="after" hidden>Planned after scouting: <b>931 m</b>,
-          <b>442 kJ</b>, no rock crossed. 23 m and 7 kJ more, 35% of the walking budget.</p>
-        </div>
-        <a class="go" href="./scout/">Open Vesta Scout <span aria-hidden="true">→</span></a>
+    <section class="dark" id="method" aria-labelledby="method-title">
+      <div class="head">
+        <p class="eyebrow">Method · our process</p>
+        <h2 id="method-title">Look first, then walk.</h2>
+        <p class="intro">Orbit sees the whole site, but not the small rocks. A scout helicopter sees them, but only along
+          its path. So each step tells the next one where to look.</p>
+        <ol class="steps">
+          <li><b>Choose stops.</b> Pick at least three science stops on the orbit map, such as Curiosity’s drill sites.</li>
+          <li><b>Plan the route.</b> The app finds the path that costs the least energy. Slopes over 20° are walls.</li>
+          <li><b>Scout.</b> A simulated helicopter flies the route first and finds rocks orbit can’t see. The route is
+            planned again around them.</li>
+          <li><b>Walk.</b> A ring shows how far you can go and still get home with the reserve untouched. The phone warns
+            at the point of no return.</li>
+        </ol>
+        <p class="intro"><b>Vesta Scout</b> runs these four steps as a guided mission. <b>Vesta Vision</b> is the map
+          underneath: every layer, in 3D, down to eye level.</p>
       </div>
-      <figure class="view">
-        <img src="./mission-vesta/assets/scout-before.jpg" class="on" data-for="before" width="1770" height="1216" loading="lazy"
-          alt="HiRISE map of lower Mount Sharp: the route planned from orbit, dashed red, runs through two rocks the scout found.">
-        <img src="./mission-vesta/assets/scout-after.jpg" data-for="after" width="1770" height="1216" loading="lazy"
-          alt="The same map: the scouted route, white, bends around those rocks.">
-        <figcaption>Habitat (H) and three stops, lower Mount Sharp, Gale crater. Red dashes: the route from orbit.
-          White: after scouting. Red squares: rocks the scout found. NASA MRO HiRISE.</figcaption>
-      </figure>
-      <details class="method">
-        <summary>Read the method</summary>
-        <dl>
-          <dt>Route</dt>
-          <dd>Least-energy path over 8 m cells of the HiRISE terrain. Each step costs energy from the Pandolf walking
-            equation, scaled to Mars gravity (0.68, an estimate). Slopes over 20° are walls.</dd>
-          <dt>Scout</dt>
-          <dd>The flight is simulated. The rocks it “finds” come from the stored rock layer: a roughness estimate from the
-            terrain, plus rocks the ROSCO detector proposed on a HiRISE image and a person confirmed (23 of 25). Coverage
-            is not complete, so we claim no hit rate.</dd>
-          <dt>Walking back</dt>
-          <dd>Before the walk, the energy to get home is worked out for every cell. On the walk the phone only looks it up,
-            and warns at the point of no return.</dd>
-        </dl>
-      </details>
+
+      <div class="product" id="scout" aria-labelledby="scout-title">
+        <div class="copy">
+          <p class="eyebrow">Vesta Scout</p>
+          <h3 id="scout-title">Look before you walk.</h3>
+          <p>Pick science stops from the habitat. A simulated scout helicopter, like NASA’s Ingenuity, flies the route
+            first and finds the rocks orbit can’t see. Then the walk is planned around them.</p>
+          <div class="toggle" role="group" aria-label="Show the route">
+            <button type="button" aria-pressed="true" data-show="before">From orbit</button>
+            <button type="button" aria-pressed="false" data-show="after">After scouting</button>
+          </div>
+          <div class="captions" aria-live="polite">
+            <p class="caption" data-for="before">Planned from orbit: <b>908 m</b>, <b>435 kJ</b>.
+              It crosses <b>2 rock cells</b> the scout later found.</p>
+            <p class="caption" data-for="after" hidden>Planned after scouting: <b>931 m</b>,
+              <b>442 kJ</b>, no rock crossed. 23 m and 7 kJ more, 35% of the walking budget.</p>
+          </div>
+          <a class="go" href="./scout/">Open Vesta Scout <span aria-hidden="true">→</span></a>
+        </div>
+        <figure class="view">
+          <img src="./mission-vesta/assets/scout-before.jpg" class="on" data-for="before" width="1770" height="1216" loading="lazy"
+            alt="HiRISE map of lower Mount Sharp: the route planned from orbit, dashed red, runs through two rocks the scout found.">
+          <img src="./mission-vesta/assets/scout-after.jpg" data-for="after" width="1770" height="1216" loading="lazy"
+            alt="The same map: the scouted route, white, bends around those rocks.">
+          <figcaption>Habitat (H) and three stops, lower Mount Sharp, Gale crater. Red dashes: the route from orbit.
+            White: after scouting. Red squares: rocks the scout found. NASA MRO HiRISE.</figcaption>
+        </figure>
+        <details class="method">
+          <summary>Read the method</summary>
+          <dl>
+            <dt>Route</dt>
+            <dd>Least-energy path over 8 m cells of the HiRISE terrain. Each step costs energy from the Pandolf walking
+              equation, scaled to Mars gravity (0.68, an estimate). Slopes over 20° are walls.</dd>
+            <dt>Scout</dt>
+            <dd>The flight is simulated. The rocks it “finds” come from the stored rock layer: a roughness estimate from the
+              terrain, plus rocks the ROSCO detector proposed on a HiRISE image and a person confirmed (23 of 25). Coverage
+              is not complete, so we claim no hit rate.</dd>
+            <dt>Walking back</dt>
+            <dd>Before the walk, the energy to get home is worked out for every cell. On the walk the phone only looks it up,
+              and warns at the point of no return.</dd>
+          </dl>
+        </details>
+      </div>
+
+      <div class="product flip" id="vision" aria-labelledby="vision-title">
+        <div class="copy">
+          <p class="eyebrow">Vesta Vision <span class="tag">Early version</span></p>
+          <h3 id="vision-title">Read the ground.</h3>
+          <p>The site as a 3D map: NASA’s 1 m terrain with HiRISE colour, and the layers behind every route.</p>
+          <div class="toggle" role="group" aria-label="Map layer">
+            <button type="button" aria-pressed="true" data-show="eye">Eye level</button>
+            <button type="button" aria-pressed="false" data-show="imagery">Imagery</button>
+            <button type="button" aria-pressed="false" data-show="hazards">Hazards</button>
+            <button type="button" aria-pressed="false" data-show="energy">Energy home</button>
+          </div>
+          <div class="captions" aria-live="polite">
+            <p class="caption" data-for="eye">Stand 1.7 m above the ground and walk. A red guide line follows the
+              planned route, and the label names the next stop and how far it is.</p>
+            <p class="caption" data-for="imagery" hidden>What orbit sees: HiRISE colour at 25 cm, draped on the
+              HiRISE stereo terrain.</p>
+            <p class="caption" data-for="hazards" hidden>Green is walkable, amber is near the 20° limit,
+              red is too steep. Red lines: steps too high to climb in the 1 m terrain. White pins: rocks a person confirmed.</p>
+            <p class="caption" data-for="energy" hidden>The energy it takes to walk back to the habitat
+              from every cell. Dark is cheap, pale costs more.</p>
+          </div>
+          <a class="go" href="./scout/?vision">Open Vesta Vision <span aria-hidden="true">→</span></a>
+        </div>
+        <figure class="view">
+          <img src="./mission-vesta/assets/vision-eye.jpg" class="on" data-for="eye" width="1600" height="1100" loading="lazy"
+            alt="Eye level on lower Mount Sharp: a red guide line runs to stop 1, labelled Next: Altadena drill site, 345 m.">
+          <img src="./mission-vesta/assets/vision-imagery.jpg" data-for="imagery" width="1600" height="1100" loading="lazy"
+            alt="3D view of lower Mount Sharp in HiRISE colour, with the habitat, five stops and a route.">
+          <img src="./mission-vesta/assets/vision-hazards.jpg" data-for="hazards" width="1600" height="1100" loading="lazy"
+            alt="The same view coloured by slope: green flats, dark steep ridges, red ticks on high steps.">
+          <img src="./mission-vesta/assets/vision-energy.jpg" data-for="energy" width="1600" height="1100" loading="lazy"
+            alt="The same view coloured by energy to walk home: dark near the habitat, paler further away.">
+          <figcaption>Lower Mount Sharp, 2 × 2 km. NASA MRO HiRISE colour and stereo terrain (USGS MSL Gale mosaic and DEM).</figcaption>
+        </figure>
+        <details class="method">
+          <summary>Read the method</summary>
+          <dl>
+            <dt>Terrain</dt>
+            <dd>USGS’s 1 m Gale terrain model from HiRISE stereo, averaged to 8 m cells for planning. Slope and steps come
+              from it.</dd>
+            <dt>Ground at each stop</dt>
+            <dd>A ground classifier (MobileNetV3-small, trained on NASA/JPL AI4Mars labels) runs in the browser. 93% on 159
+              held-out Curiosity patches, but 48% on 197 Perseverance patches: it does not transfer to a new rover yet.</dd>
+            <dt>Energy home</dt>
+            <dd>Dijkstra’s shortest path, run once from the habitat over the Pandolf step cost. Red cells have no way back.</dd>
+          </dl>
+        </details>
+      </div>
     </section>
 
-    <section class="product" id="vision" aria-labelledby="vision-title">
-      <div class="copy">
-        <p class="eyebrow">Vesta Vision <span class="tag">Early version</span></p>
-        <h2 id="vision-title">Read the ground.</h2>
-        <p>The site as a 3D map: NASA’s 1 m terrain with HiRISE colour, and the layers behind every route.</p>
-        <div class="toggle" role="group" aria-label="Map layer">
-          <button type="button" aria-pressed="true" data-show="imagery">Imagery</button>
-          <button type="button" aria-pressed="false" data-show="hazards">Hazards</button>
-          <button type="button" aria-pressed="false" data-show="energy">Energy home</button>
+    <section class="light" id="docs" aria-labelledby="docs-title">
+      <p class="eyebrow">Docs</p>
+      <h2 id="docs-title">Data, sources and links.</h2>
+      <div class="cols">
+        <div>
+          <h3>NASA data on the map</h3>
+          <ul>
+            <li><a href="https://astrogeology.usgs.gov/search/map/mars_msl_gale_merged_dem_1m">MRO HiRISE</a>: 25 cm colour
+              images (USGS MSL Gale mosaic) and the 1 m terrain model from HiRISE stereo (USGS MSL Gale DEM).</li>
+            <li>NASA/JPL ROSCO: rocks proposed on a HiRISE image, checked by a person.</li>
+            <li><a href="https://ntrs.nasa.gov/citations/20220008371">NASA AI4Mars</a>: labelled rover images that train
+              the ground classifier.</li>
+            <li>Curiosity: its drill sites as stops, and ChemCam, DAN, REMS and RAD readings near each one.</li>
+            <li>Viking Orbiter Mars globe (NASA/JPL-Caltech), at the top of this page.</li>
+          </ul>
         </div>
-        <div class="captions" aria-live="polite">
-          <p class="caption" data-for="imagery">What orbit sees: HiRISE colour at 25 cm, draped on the
-          HiRISE stereo terrain.</p>
-        <p class="caption" data-for="hazards" hidden>Green is walkable, amber is near the 20° limit,
-          red is too steep. Red lines: steps too high to climb in the 1 m terrain. White pins: rocks a person confirmed.</p>
-        <p class="caption" data-for="energy" hidden>The energy it takes to walk back to the habitat
-          from every cell. Dark is cheap, pale costs more.</p>
+        <div>
+          <h3>Where the rules come from</h3>
+          <ul>
+            <li><a href="https://ntrs.nasa.gov/api/citations/20210000827/downloads/Exporation%20EVA%20Testing%20and%20Analogs%2020210000827.pdf">NASA xEVA testing</a>: slopes up to 20°.</li>
+            <li><a href="https://ntrs.nasa.gov/api/citations/20250004496/downloads/ICES2025-294-stepheight-final.pdf">NASA step-height study, ICES-2025-294</a>: steps up to 0.3 m.</li>
+            <li><a href="https://ntrs.nasa.gov/api/citations/20260003024/downloads/Final_ICES2026_Mars_PLSS_Plan.pdf">NASA Mars suit life-support plan, ICES 2026</a>: the energy budget.</li>
+            <li><a href="https://en.wikipedia.org/wiki/Pandolf_equation">Pandolf walking-energy equation</a> and
+              <a href="https://pubmed.ncbi.nlm.nih.gov/9622579/">Lejeune et al. 1998, walking on sand</a>.</li>
+            <li><a href="https://science.nasa.gov/wp-content/uploads/2026/09/skyfall-mission-information-package-final.pdf">NASA SkyFall mission information package</a>: scout flights.</li>
+          </ul>
         </div>
-        <a class="go" href="./scout/?vision">Open Vesta Vision <span aria-hidden="true">→</span></a>
+        <div>
+          <h3>Real or simulated</h3>
+          <ul>
+            <li><b>Real:</b> terrain, slope and images, the Curiosity stops, the walking-energy formula, all the route and
+              safety maths.</li>
+            <li><b>Estimates, marked:</b> ground type, the rock layer, the energy budget and the walking-energy factors.</li>
+            <li><b>Simulated:</b> the helicopter flights and the astronaut (a phone stands in for the suit display).</li>
+          </ul>
+          <h3>Go deeper</h3>
+          <ul>
+            <li><a href="https://github.com/nicolasrufino/nasaspaceapps/blob/main/app/HOW-IT-WORKS.md">How every rule works</a>, in plain words.</li>
+            <li><a href="./scout/?demo">Watch a guided run of the app</a>, start to finish.</li>
+            <li><a href="https://github.com/nicolasrufino/nasaspaceapps">Source code on GitHub</a>.</li>
+          </ul>
+        </div>
       </div>
-      <figure class="view">
-        <img src="./mission-vesta/assets/vision-imagery.jpg" class="on" data-for="imagery" width="1600" height="1100" loading="lazy"
-          alt="3D view of lower Mount Sharp in HiRISE colour, with the habitat, five stops and a route.">
-        <img src="./mission-vesta/assets/vision-hazards.jpg" data-for="hazards" width="1600" height="1100" loading="lazy"
-          alt="The same view coloured by slope: green flats, dark steep ridges, red ticks on high steps.">
-        <img src="./mission-vesta/assets/vision-energy.jpg" data-for="energy" width="1600" height="1100" loading="lazy"
-          alt="The same view coloured by energy to walk home: dark near the habitat, paler further away.">
-        <figcaption>Lower Mount Sharp, 2 × 2 km. NASA MRO HiRISE colour and stereo terrain (USGS MSL Gale mosaic and DEM).</figcaption>
-      </figure>
-      <details class="method">
-        <summary>Read the method</summary>
-        <dl>
-          <dt>Terrain</dt>
-          <dd>USGS’s 1 m Gale terrain model from HiRISE stereo, averaged to 8 m cells for planning. Slope and steps come
-            from it.</dd>
-          <dt>Ground at each stop</dt>
-          <dd>A ground classifier (MobileNetV3-small, trained on NASA/JPL AI4Mars labels) runs in the browser. 93% on 159
-            held-out Curiosity patches, but 48% on 197 Perseverance patches: it does not transfer to a new rover yet.</dd>
-          <dt>Energy home</dt>
-          <dd>Dijkstra’s shortest path, run once from the habitat over the Pandolf step cost. Red cells have no way back.</dd>
-        </dl>
-      </details>
     </section>
 
     <footer>
       <p>NASA Space Apps 2026. Data: NASA MRO HiRISE (NASA/JPL-Caltech/University of Arizona), USGS MSL Gale mosaic and
-        terrain model, NASA/JPL ROSCO and AI4Mars, Viking Orbiter Mars globe (NASA/JPL-Caltech).</p>
+        terrain model, NASA/JPL ROSCO and AI4Mars, NASA Curiosity, Viking Orbiter Mars globe (NASA/JPL-Caltech).</p>
     </footer>
   </main>
   <script type="module" src="./mission-vesta/mars.js"></script>

@@ -1,3 +1,4 @@
+/* One font for the whole site: Rethink Sans (SIL Open Font License), title included. */
 @font-face {
   font-family: "Rethink Sans";
   src: url("./assets/rethink-sans.woff2") format("woff2");
@@ -5,51 +6,111 @@
   font-display: swap;
 }
 
-/* Title font: Michroma (SIL Open Font License, Google Fonts), subset to the title's letters. */
-@font-face { font-family: "Michroma"; src: url("./assets/michroma.woff2") format("woff2"); font-display: swap; }
-
 :root {
   color-scheme: light;
+  --night: #000;
   --paper: #f3f2ef;
   --ink: #191919;
   --body: #484644;
   --white: #f4f3f0;
   --muted: #c6c3c1;
+  --dim: #8f8b88;
   --rule: #ceccc7;
-  --gutter: clamp(1.625rem, 7.8vw, 7rem);
+  --rule-dark: #3a3836;
+  --gutter: clamp(1rem, 7.8vw, 7rem);
   font: 400 1rem/1.4 "Rethink Sans", system-ui, sans-serif;
   color: var(--ink);
   background: var(--paper);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-body, h1, h2, p { margin: 0; }
+body, h1, h2, h3, p, ul, ol, figure { margin: 0; }
+img { max-width: 100%; }
+button { font: inherit; }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
 
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  color: var(--body);
+  font-size: .875rem;
+  font-weight: 500;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+.tag {
+  border: 1px solid var(--rule-dark);
+  border-radius: 999px;
+  padding: .15em .7em;
+  font-size: .75rem;
+  letter-spacing: .08em;
+}
+
+/* ---- Hero: exactly one screen. Rows: nav, title, globe in what is left. ---- */
 .hero {
-  position: relative;
-  isolation: isolate;
-  min-height: clamp(39rem, 58vw, 47rem);
-  overflow: hidden;
-  padding: 5.1875rem 1rem 4rem;
-  background: #000;
+  height: 100svh;
+  min-height: 30rem;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  padding: 0 var(--gutter);
+  background: var(--night);
   color: var(--white);
   text-align: center;
 }
 
-.mars {
-  position: absolute;
-  z-index: -1;
-  inset: clamp(21.5625rem, 28.5vw, 24.4375rem) auto auto 50%;
-  width: clamp(35rem, 75.7vw, 68.125rem);
-  aspect-ratio: 1;
-  transform: translateX(-50%);
+.top { display: flex; gap: 1.5rem; padding-top: .5rem; }
+.top a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--muted);
+  font-weight: 500;
+  text-decoration: none;
 }
+.top a:hover { color: var(--white); }
 
-.mars img, .mars-control, .mars canvas {
-  width: 100%;
-  height: 100%;
+.welcome { padding-top: clamp(1.5rem, 7svh, 4.5rem); }
+.welcome h1 {
+  font-size: clamp(2.75rem, 9vw, 7.5rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: .06em;
+  text-indent: .06em;
 }
+/* "MISSION:" about a third of VESTA's size, above it. */
+.welcome h1 span {
+  display: block;
+  margin-bottom: .5em;
+  font-size: .3em;
+  letter-spacing: .32em;
+  text-indent: .32em;
+  color: var(--muted);
+}
+.welcome p { margin: 1rem auto 0; max-width: 30rem; font-size: 1.125rem; color: var(--muted); }
 
+.cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  margin-top: 1.5rem;
+  padding: 0 1.75rem;
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--ink);
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.cta:hover { background: #fff; }
+.cta:focus-visible { outline-color: var(--white); outline-offset: 4px; }
+
+/* The globe takes the largest square that fits the space left. */
+.mars-box { container-type: size; margin: 1.5rem 0 1rem; }
+.mars { position: relative; width: min(100cqw, 100cqh); aspect-ratio: 1; margin-inline: auto; }
+.mars img, .mars-control, .mars canvas { display: block; width: 100%; height: 100%; }
 .mars-control {
   position: absolute;
   inset: 0;
@@ -60,93 +121,80 @@ body, h1, h2, p { margin: 0; }
   cursor: grab;
   touch-action: pan-y;
 }
-
 .mars-control:active { cursor: grabbing; }
-.mars canvas { display: block; }
 .mars:focus-within { filter: drop-shadow(0 -2px 0 var(--white)); }
 
-.welcome h1 {
-  font: 400 1em "Michroma", system-ui, sans-serif;
-  font-size: clamp(2.75rem, 8.6vw, 7.75rem);
-  line-height: 1;
-  letter-spacing: .06em;
-  text-indent: .06em;
-}
-
-/* "MISSION:" in the title font, about a third of VESTA's size. */
-.welcome h1 span {
-  display: block;
-  margin-bottom: .55em;
-  font-size: .32em;
-  letter-spacing: .32em;
-  text-indent: .32em;
-  color: var(--muted);
-}
-
-.welcome p {
-  margin: 1.125rem auto 0;
-  max-width: 30rem;
-  font-size: 1.125rem;
-  color: var(--muted);
-}
-
-.welcome a {
-  display: inline-block;
-  min-height: 44px;
-  margin-top: .625rem;
-  padding-block: .6875rem;
-  color: inherit;
-  font-weight: 500;
-  text-underline-offset: .65em;
-  text-decoration-color: var(--muted);
-}
-
-.welcome a span { margin-left: .3em; }
-.welcome a:hover { text-decoration-thickness: 2px; }
-.welcome a:focus-visible { outline: 2px solid var(--white); outline-offset: 4px; }
-
-/* ---- Why ---- */
-.why {
-  max-width: 100rem;
-  margin-inline: auto;
-  padding: clamp(3rem, 7vw, 5.5rem) var(--gutter) 1rem;
-}
-
-.eyebrow {
-  color: var(--body);
-  font-size: .875rem;
-  font-weight: 500;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-}
-
-.why h2 {
-  max-width: 22ch;
-  margin-top: .75rem;
+/* ---- Begin: the two tools. Scout is the big one; stacked on a phone. ---- */
+.begin, .dark { background: var(--night); color: var(--white); padding: clamp(3rem, 7vw, 6rem) var(--gutter); }
+.begin h2, .light h2, .dark h2 {
   font-size: clamp(1.9rem, 4.2vw, 3.5rem);
   font-weight: 500;
   line-height: 1.1;
   letter-spacing: -.02em;
 }
+.begin .lead { margin-top: .75rem; color: var(--muted); font-size: 1.125rem; }
 
-.reasons {
+.choices {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(1.25rem, 3vw, 2.75rem);
-  margin-top: clamp(2rem, 4vw, 3rem);
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: clamp(1rem, 2.5vw, 2rem);
+  margin-top: clamp(1.75rem, 4vw, 3rem);
 }
+.choice { display: flex; flex-direction: column; border: 1px solid var(--rule-dark); border-radius: 12px; overflow: hidden; }
+.choice img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 11; object-fit: cover; }
+.choice .body { display: flex; flex-direction: column; flex: 1; padding: 1.25rem; }
+.choice .eyebrow { color: var(--muted); font-size: .8125rem; }
+.choice h3 { margin-top: .5rem; font-size: clamp(1.5rem, 2.4vw, 2.25rem); font-weight: 500; line-height: 1.1; }
+.choice.big h3 { font-size: clamp(1.75rem, 3vw, 2.75rem); }
+.choice .body > p:not(.eyebrow) { margin-top: .5rem; color: var(--muted); }
+.actions { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; align-items: center; margin-top: auto; padding-top: 1rem; }
 
+.go {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--white);
+  font-weight: 500;
+  text-underline-offset: .4em;
+  text-decoration-color: var(--muted);
+}
+.go:hover { text-decoration-thickness: 2px; }
+.go.primary { padding: 0 1.25rem; border-radius: 999px; background: var(--white); color: var(--ink); text-decoration: none; }
+.go.primary:hover { background: #fff; }
+.go span { margin-left: .3em; }
+
+/* ---- Light sections: About and Docs ---- */
+.light { padding: clamp(3rem, 7vw, 6rem) var(--gutter); }
+.light h2 { max-width: 24ch; margin-top: .75rem; }
+.intro { max-width: 40rem; margin-top: 1.25rem; font-size: 1.125rem; }
+.light .intro { color: var(--body); }
+.dark .intro { color: var(--muted); }
+.intro b { font-weight: 500; color: var(--white); }
+
+.sub { margin-top: clamp(2.5rem, 5vw, 4rem); font-size: 1.25rem; font-weight: 500; }
+.reasons { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.25rem, 3vw, 2.75rem); margin-top: 1.5rem; }
 .reasons div { border-top: 1px solid var(--rule); padding-top: 1rem; }
 .reasons p { color: var(--body); font-size: 1.0625rem; }
 .reasons .stat { color: var(--ink); font-size: clamp(1.6rem, 2.6vw, 2.25rem); font-weight: 500; margin-bottom: .35rem; }
+.answer { max-width: 40rem; margin-top: clamp(2rem, 4vw, 3rem); font-size: 1.25rem; }
 
-.answer {
-  max-width: 40rem;
-  margin-top: clamp(2rem, 4vw, 3rem);
-  font-size: 1.25rem;
-}
+.cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.5rem, 3vw, 3rem); margin-top: clamp(2rem, 4vw, 3rem); }
+.cols h3 { padding-top: 1rem; border-top: 1px solid var(--rule); font-size: 1.0625rem; font-weight: 500; }
+.cols h3 + ul { margin-top: .75rem; }
+.cols ul + h3 { margin-top: 2rem; }
+.cols ul { padding: 0; list-style: none; color: var(--body); }
+.cols li + li { margin-top: .6rem; }
+.cols b { color: var(--ink); font-weight: 500; }
+.cols a { color: var(--ink); text-underline-offset: .2em; }
 
-/* ---- Products: Scout and Vision, each a large real view of the app with its toggle and method ---- */
+/* ---- Method: the process, then Scout and Vision, each a large real view with its toggle and method ---- */
+.dark .eyebrow { color: var(--muted); }
+.dark h2 { margin-top: .75rem; }
+.steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(1rem, 2.5vw, 2rem); margin-top: 2rem; padding: 0; list-style: none; counter-reset: step; }
+.steps li { counter-increment: step; border-top: 1px solid var(--rule-dark); padding-top: 1rem; color: var(--muted); }
+.steps li::before { content: counter(step); display: block; margin-bottom: .5rem; color: var(--dim); font-size: .875rem; font-weight: 500; }
+.steps b { display: block; color: var(--white); font-weight: 500; font-size: 1.125rem; margin-bottom: .25rem; }
+
 .product {
   display: grid;
   grid-template-columns: minmax(17rem, 1fr) minmax(0, 2.4fr);
@@ -154,16 +202,13 @@ body, h1, h2, p { margin: 0; }
   grid-template-rows: auto 1fr;
   column-gap: clamp(2rem, 4vw, 4.5rem);
   row-gap: 1.5rem;
-  padding: clamp(4rem, 8vw, 7rem) var(--gutter);
-  background: #000;
-  color: var(--white);
+  margin-top: clamp(4rem, 8vw, 7rem);
+  scroll-margin-top: 1.5rem;
 }
-.product + .product { padding-top: 0; }
-#vision { grid-template-columns: minmax(0, 2.4fr) minmax(17rem, 1fr); grid-template-areas: "view copy" "view method"; }
+.product.flip { grid-template-columns: minmax(0, 2.4fr) minmax(17rem, 1fr); grid-template-areas: "view copy" "view method"; }
 
 .copy { grid-area: copy; align-self: end; }
-.product .eyebrow { color: var(--muted); display: flex; align-items: center; gap: .75rem; }
-.product h2 {
+.product h3 {
   margin-top: .75rem;
   font-size: clamp(2rem, 3.6vw, 3.25rem);
   font-weight: 500;
@@ -171,8 +216,9 @@ body, h1, h2, p { margin: 0; }
   letter-spacing: -.02em;
 }
 .copy > p { margin-top: 1rem; color: var(--muted); font-size: 1.0625rem; max-width: 30rem; }
+.copy .go { margin-top: 1.25rem; }
 
-.toggle { display: flex; flex-wrap: wrap; gap: 0 1.5rem; margin-top: 1.75rem; border-bottom: 1px solid #3a3836; }
+.toggle { display: flex; flex-wrap: wrap; gap: 0 1.5rem; margin-top: 1.75rem; border-bottom: 1px solid var(--rule-dark); }
 .toggle button {
   min-height: 44px;
   margin-bottom: -1px;
@@ -187,24 +233,11 @@ body, h1, h2, p { margin: 0; }
 }
 .toggle button:hover { color: var(--white); }
 .toggle button[aria-pressed="true"] { color: var(--white); border-bottom-color: var(--white); }
-.toggle button:focus-visible, .go:focus-visible, .method summary:focus-visible { outline: 2px solid var(--white); outline-offset: 3px; }
 
 .captions { min-height: 4.5em; margin-top: 1rem; color: var(--muted); }
 .captions b { color: var(--white); font-weight: 500; }
 
-.go {
-  display: inline-block;
-  min-height: 44px;
-  margin-top: 1.25rem;
-  padding-block: .6875rem;
-  color: var(--white);
-  font-weight: 500;
-  text-underline-offset: .5em;
-  text-decoration-color: var(--muted);
-}
-.go:hover { text-decoration-thickness: 2px; }
-
-.view { grid-area: view; margin: 0; display: grid; }
+.view { grid-area: view; display: grid; }
 .view img {
   grid-area: 1 / 1;
   width: 100%;
@@ -216,39 +249,33 @@ body, h1, h2, p { margin: 0; }
   transition: opacity .18s ease;
 }
 .view img.on { opacity: 1; }
-.view figcaption { grid-area: 2 / 1; margin-top: .75rem; color: #8f8b88; font-size: .8125rem; }
+.view figcaption { grid-area: 2 / 1; margin-top: .75rem; color: var(--dim); font-size: .8125rem; }
 
-.method { grid-area: method; align-self: start; border-top: 1px solid #3a3836; }
+.method { grid-area: method; align-self: start; border-top: 1px solid var(--rule-dark); }
 .method summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; color: var(--white); font-weight: 500; }
 .method dl { margin: .25rem 0 0; color: var(--muted); font-size: .9375rem; }
 .method dt { margin-top: .9rem; color: var(--white); font-weight: 500; }
 .method dd { margin: .2rem 0 0; }
 
-.tag {
-  border: 1px solid #3a3836;
-  border-radius: 999px;
-  padding: .15em .7em;
-  font-size: .75rem;
-  letter-spacing: .08em;
+footer { padding: 2rem var(--gutter) 3rem; background: var(--night); color: var(--dim); font-size: .8125rem; }
+
+@media (max-width: 900px) {
+  .choices, .cols { grid-template-columns: 1fr; }
+  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
-footer { padding: 2rem var(--gutter) 3rem; background: #000; color: #8f8b88; font-size: .8125rem; border-top: 1px solid #1f1d1c; }
-
 @media (max-width: 680px) {
-  .hero { min-height: 39.0625rem; padding-top: 5.125rem; }
-  .mars { top: 21.5625rem; }
-  .welcome h1 { font-size: clamp(2.5rem, 13vw, 4.5rem); }
+  :root { --gutter: 1rem; }
+  .welcome h1 { font-size: clamp(2.5rem, 14vw, 4.5rem); }
   .welcome p { max-width: 17rem; font-size: 1rem; }
-  .welcome a { font-size: .9375rem; }
-  .reasons { grid-template-columns: 1fr; }
+  .reasons, .steps { grid-template-columns: 1fr; }
   /* One column: intro, toggle right above the picture so a tap shows its change, then the numbers. */
-  .product, #vision { display: flex; flex-direction: column; gap: 0; }
+  .product, .product.flip { display: flex; flex-direction: column; gap: 0; margin-top: 3.5rem; }
   .copy { display: contents; }
   .toggle { order: 1; margin-top: 1.5rem; }
   .view { order: 2; margin-top: .75rem; }
-  .captions, .go { order: 3; }
+  .captions, .copy .go { order: 3; }
   .method { order: 4; margin-top: 1rem; }
-  .product + .product { padding-top: 2rem; }
   .view img { aspect-ratio: 4 / 3; }
 }
 
@@ -259,8 +286,3 @@ footer { padding: 2rem var(--gutter) 3rem; background: #000; color: #8f8b88; fon
 @media (prefers-reduced-motion: reduce) {
   .view img { transition: none; }
 }
-
-/* Demo call to action in the hero: opens the map screen on its Demo tab (a guided run: data, rules, plan, scout, walk, home). */
-.welcome a.demo-cta { display: inline-block; margin-top: 14px; padding: 10px 18px; border-radius: 999px; background: #f4f1ea; color: #111;
-  font-weight: 600; text-decoration: none; border: 0; }
-.welcome a.demo-cta:hover { background: #fff; }
