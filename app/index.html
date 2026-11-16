@@ -11,14 +11,19 @@
   <script>if (/[?&](world|flags)=/.test(location.search)) location.replace('/scout/' + location.search)</script>
 </head>
 <body>
+  <!-- One page, several views. The home view is the hero and its call to action; About, Method, Docs and the two
+       tools are views the nav (or the button) opens with a #link. CSS :target shows one view at a time, so there is
+       no router, the back button works and every view has its own link. -->
+  <header class="bar">
+    <a class="brand" href="./">Mission: Vesta</a>
+    <nav aria-label="Sections">
+      <a href="#about">About</a>
+      <a href="#method">Method</a>
+      <a href="#docs">Docs</a>
+    </nav>
+  </header>
   <main>
-    <!-- One screen: nav, title, the one call to action, and the globe in whatever height is left. -->
     <section class="hero" aria-labelledby="mission-title">
-      <nav class="top" aria-label="Sections">
-        <a href="#about">About</a>
-        <a href="#method">Method</a>
-        <a href="#docs">Docs</a>
-      </nav>
       <div class="welcome">
         <h1 id="mission-title"><span>MISSION:</span> VESTA</h1>
         <p>We’re building tools to plan science walks on Mars.</p>
@@ -37,9 +42,7 @@
       </div>
     </section>
 
-    <!-- The two ways in. Pictures: one real run of the app, captured by scripts/capture-home.mjs (assets/captures.json).
-         NASA MRO HiRISE colour (USGS MSL Gale LRGB 25 cm mosaic) on the USGS MSL Gale DEM from HiRISE stereo. -->
-    <section class="begin" id="begin" aria-labelledby="begin-title">
+    <section class="page" id="begin" aria-labelledby="begin-title">
       <h2 id="begin-title">Begin the mission</h2>
       <p class="lead">Two tools, one map of Mars. Start with the guided mission.</p>
       <div class="choices">
@@ -72,7 +75,7 @@
       </div>
     </section>
 
-    <section class="light" id="about" aria-labelledby="about-title">
+    <section class="page" id="about" aria-labelledby="about-title">
       <p class="eyebrow">About</p>
       <h2 id="about-title">Astronauts on Mars will walk out to study rocks, and must always be able to walk back.</h2>
       <p class="intro">Mission: Vesta is a set of tools to plan those walks with NASA’s own Mars data. We built it for
@@ -97,7 +100,7 @@
         then walk with the way home always in view.</p>
     </section>
 
-    <section class="dark" id="method" aria-labelledby="method-title">
+    <section class="page" id="method" aria-labelledby="method-title">
       <div class="head">
         <p class="eyebrow">Method · our process</p>
         <h2 id="method-title">Look first, then walk.</h2>
@@ -208,7 +211,7 @@
       </div>
     </section>
 
-    <section class="light" id="docs" aria-labelledby="docs-title">
+    <section class="page" id="docs" aria-labelledby="docs-title">
       <p class="eyebrow">Docs</p>
       <h2 id="docs-title">Data, sources and links.</h2>
       <div class="cols">
@@ -251,12 +254,9 @@
           </ul>
         </div>
       </div>
-    </section>
-
-    <footer>
-      <p>NASA Space Apps 2026. Data: NASA MRO HiRISE (NASA/JPL-Caltech/University of Arizona), USGS MSL Gale mosaic and
+      <p class="credit">NASA Space Apps 2026. Data: NASA MRO HiRISE (NASA/JPL-Caltech/University of Arizona), USGS MSL Gale mosaic and
         terrain model, NASA/JPL ROSCO and AI4Mars, NASA Curiosity, Viking Orbiter Mars globe (NASA/JPL-Caltech).</p>
-    </footer>
+    </section>
   </main>
   <script type="module" src="./mission-vesta/mars.js"></script>
   <script type="module">
