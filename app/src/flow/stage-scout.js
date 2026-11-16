@@ -10,6 +10,8 @@ const NORMAL_S = 40, SKIP_S = 0.4 // screen seconds per flight at 1×, and when 
 const SPEEDS = [1, 2, 4, 8]
 const FIND_GAP_M = 40 // rocks after this much flight without any start a new find
 const MAX_CARDS = 4
+// The last scouting, for the mission hub's flight replay (stage-debrief.js): each flight's path, and the findings.
+export const log = { flights: [], finds: [] }
 
 const CSS = `
 .sc-panel { background: var(--panel); border-radius: 14px; padding: 14px 16px; width: 340px; box-sizing: border-box; display: flex; flex-direction: column; gap: 10px; }
@@ -127,11 +129,13 @@ export default {
     let tick = null, flying = false, started = false, dirty = false, mapDirty = false, findsDirty = true, landed = false
     let seenCells = 0, rockCells = 0, onRouteCells = 0, hot = null
     const finds = [] // { n, flight, along, cells, onRoute, cell, result }
+    log.flights = []; log.finds = finds
     let cur = null, lastRockAlong = -Infinity, lastRockFlight = 0
 
     offs.push(app.on('flight:start', (e) => {
       started = flying = true
       tick = { ...e, along: 0 }
+      log.flights.push({ n: e.n, waypoints: e.waypoints, metres: e.metres })
       title.textContent = `Flight ${e.n} of ${e.of}`
       cur = null
       dirty = true
