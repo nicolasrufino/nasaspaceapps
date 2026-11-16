@@ -57,6 +57,8 @@
       body.danger #hud { background: #8a0d0dd9; }
       /* Vesta Vision menu: the Mission VESTA look (Rethink Sans, solid dark panels, one accent). Styling only. */
       @font-face { font-family: "Rethink Sans"; src: url("../mission-vesta/assets/rethink-sans.woff2") format("woff2"); font-weight: 400 800; font-display: swap; }
+      /* The three passes below are the Demo's and the test pages' look; Vesta Vision uses Scout's (body.vision, further down). */
+      body:not(.vision) {
       .panel { background: #141a22f2; border-radius: 14px; padding: 12px; box-shadow: 0 8px 28px #0007; font-family: "Rethink Sans", system-ui, sans-serif; }
       #hud { gap: 12px; width: min(336px, calc(100vw - 24px)); scrollbar-width: thin; scrollbar-color: #fff3 transparent; }
       #title { font-size: 13px; font-weight: 600; line-height: 1.35; color: #c9d3de; }
@@ -170,20 +172,98 @@
         #layers details { flex-basis: 100%; }
         button { min-height: 44px; }
       }
+      } /* end of body:not(.vision) */
     </style>
     <!-- The guided mission mounts only after the world loads (initFlow at the end of src/main.js); until then the
          Vision panels would show for a moment. Same test as main.js's flowMode. -->
     <script>if (!/[?&](vision|world|flags|demo)(=|&|$)/.test(location.search)) document.documentElement.classList.add('flow-boot')</script>
     <style>html.flow-boot body:not(.flow) > * { visibility: hidden; }</style>
     <style>
-      /* Vesta Vision (body.vision): no Walk, no route explanation, Scout look (app/src/flow/flow.css colours and type). */
+      /* Vesta Vision (body.vision): Scout's look and shell, from app/src/flow/flow.css (tokens, #f-top, type scale). A top bar
+         with the three views where Scout has its stages, a 360 px rail on the left (a bottom sheet on a phone), solid panels,
+         one meaning per accent: ivory scout, amber stops. No Walk tab, no walk bar, no why-this-route. */
       body.vision #hud [data-tab=walk], body.vision #walk, body.vision #visionBar, body.vision #whyBox, body.vision #hud [role=tablist] { display: none !important; }
-      body.vision { font-family: "IBM Plex Sans", "Rethink Sans", system-ui, sans-serif; }
-      body.vision .panel, body.vision #viewBtn, body.vision #visionNote { background: #1d1c1b !important; color: #f3f2ef !important; border: 0 !important; border-radius: 8px !important; box-shadow: none !important; font-family: inherit !important; }
-      body.vision #hud h2 { font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: #a9a6a2; }
-      body.vision #hud button, body.vision #viewBtn { background: #2a2927 !important; color: #f3f2ef !important; border: 0 !important; border-radius: 8px !important; font-weight: 600 !important; }
-      body.vision #hud button:hover, body.vision #viewBtn:hover { background: #f3f2ef !important; color: #191919 !important; }
-      body.vision #hud .src, body.vision #hud small { color: #a9a6a2; }
+      body.vision { background: #120e0c; color: var(--paper); font-size: 14px; line-height: 1.4; }
+      body.vision #f-top { position: fixed; top: 0; left: 0; right: 0; height: 56px; z-index: 7; box-sizing: border-box; }
+      body.vision .f-steps button[aria-current=true] { background: var(--paper); color: var(--ink); }
+      body.vision :is(button, a, summary, label):focus-visible, body.vision label:has(:focus-visible) { outline: 2px solid var(--scout); outline-offset: 3px; }
+      body.vision .panel { background: var(--panel); color: var(--paper); border-radius: 10px; padding: 10px 14px; }
+      body.vision #hud { left: 0; top: 56px; bottom: 0; width: 360px; max-height: none; box-sizing: border-box; border-radius: 0; padding: 18px 20px;
+        gap: 14px; align-content: start; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #57534e var(--panel); }
+      body.vision #title { display: grid; gap: 4px; font-weight: 400; }
+      body.vision #title .t-brand { display: none; } /* the top bar names the product */
+      body.vision #title .t-site { font-size: 22px; line-height: 1.2; font-weight: 700; }
+      body.vision #title :is(.t-chip, .t-tech), body.vision #hud :is(.src, small), body.vision #legend small { color: var(--mute); font-size: 12px; }
+      body.vision #hud h2 { margin: 6px 0 0; font-size: 12px; font-weight: 700; letter-spacing: .04em; color: var(--mute); }
+      body.vision #plan { gap: 10px; }
+      body.vision #hud button { font-weight: 600; min-height: 44px; padding: 0 16px; border-radius: 10px; background: var(--panel2); color: var(--paper); cursor: pointer; }
+      body.vision #hud button:hover { background: #383634; }
+      body.vision #hud button:disabled { opacity: .4; cursor: default; }
+      body.vision #hud #scout { flex: 1; display: flex; justify-content: space-between; align-items: center; min-height: 50px; font-size: 15px; font-weight: 700; background: var(--paper); color: var(--ink); text-align: left; }
+      body.vision #hud #scout::after { content: ""; width: 7px; height: 7px; border-top: 2px solid currentColor; border-right: 2px solid currentColor; transform: rotate(45deg); margin-right: 3px; }
+      /* Views: Scout's list rows (.f-stop-list); the one in use is ivory, like Scout's pressed buttons. */
+      body.vision #layers { display: flex; flex-direction: column; gap: 4px; }
+      body.vision #layers label { gap: 10px; align-items: center; padding: 8px 10px; min-height: 28px; border-radius: 10px; background: var(--panel2); cursor: pointer; font-size: 13px; font-weight: 600; }
+      body.vision #layers label:hover { background: #383634; }
+      body.vision #layers label:has(input[type=radio]:checked) { background: var(--paper); color: var(--ink); }
+      body.vision #layers input[type=radio] { position: absolute; opacity: 0; pointer-events: none; }
+      body.vision #layers input[type=checkbox] { accent-color: var(--paper); width: 16px; height: 16px; margin: 0; flex: none; }
+      body.vision #layers label small { display: none; margin-top: 2px; font-weight: 400; }
+      body.vision #layers label:has(input[type=radio]:checked) small { display: block; color: #484644; }
+      body.vision #layers b { font-weight: 600; }
+      body.vision #layers details summary, body.vision #layers > details { color: var(--mute); font-size: 13px; font-weight: 600; }
+      body.vision #layers details summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; }
+      body.vision #layers details[open] { display: flex; flex-direction: column; gap: 4px; }
+      body.vision #layers details label { color: var(--paper); }
+      /* Route numbers: Scout's .f-stats; the walk's order with amber stop dots. */
+      body.vision #route { display: grid; gap: 10px; }
+      body.vision #route .r-stats { display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 18px; font-size: 12px; color: var(--mute); }
+      body.vision #route .r-stat b { display: block; margin-bottom: 3px; font-size: 24px; line-height: 1.1; font-weight: 700; color: var(--paper); font-variant-numeric: tabular-nums; }
+      body.vision #route .r-path { list-style: none; margin: 0; padding: 0; display: grid; }
+      body.vision #route .r-path li { position: relative; padding: 4px 0 4px 22px; font-size: 13px; }
+      body.vision #route .r-path li::before { content: ""; position: absolute; left: 3px; top: 50%; width: 10px; height: 10px; margin-top: -5px; border-radius: 50%; background: var(--stop); }
+      body.vision #route .r-path li::after { content: ""; position: absolute; left: 7.5px; top: 50%; bottom: -50%; width: 1px; background: #57534e; }
+      body.vision #route .r-path li:last-child::after { display: none; }
+      body.vision #route .r-path li:is(:first-child, :last-child) { color: var(--mute); font-size: 12px; }
+      body.vision #route .r-path li:is(:first-child, :last-child)::before { background: var(--paper); }
+      body.vision #dropped { color: var(--hazard); font-size: 12px; }
+      /* Stops: Scout's stop rows; ticked stops get the amber box, the one open in the detail is amber. */
+      body.vision #targets { gap: 4px; }
+      body.vision #targets .stop { gap: 9px; padding: 0 0 0 10px; border-radius: 10px; background: var(--panel2); }
+      body.vision #targets .stop input { accent-color: var(--stop); width: 16px; height: 16px; margin: 0; flex: none; }
+      body.vision #hud #targets .stop button { background: none; padding: 0 10px 0 0; font-size: 13px; }
+      body.vision #hud #targets .stop button.name[aria-pressed=true] { color: var(--stop); }
+      body.vision #hud #targets .stop button:not(.name) { color: var(--mute); font-size: 22px; font-weight: 400; min-width: 44px; padding: 0; }
+      body.vision #detail { display: grid; gap: 6px; }
+      body.vision #detail strong { font-size: 16px; }
+      body.vision #detail img { border-radius: 10px; }
+      /* Corners of the map: Scout's mini map and chips. */
+      body.vision #minimap { right: 16px; bottom: 16px; padding: 0; background: none; }
+      body.vision #minimap canvas { width: 240px; border: 0; border-radius: 10px; }
+      body.vision #legend { left: 376px; bottom: 16px; width: 300px; max-height: 40vh; font-size: 12px; }
+      body.vision #legend b:first-child { font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--mute); }
+      body.vision #legend i { border: 0; }
+      body.vision #furniture { right: 16px !important; bottom: 272px !important; font-family: inherit !important; }
+      body.vision #visionNote { position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 5; width: fit-content; max-width: 520px; margin: 0 auto; box-sizing: border-box;
+        padding: 10px 16px; border-radius: 10px; background: var(--panel); border-left: 3px solid var(--scout); font-size: 14px; pointer-events: none; }
+      body.vision #eyeLabel { top: 68px !important; font-family: inherit !important; }
+      body.vision #eyePad button { font-family: inherit !important; }
+      body.vision #eyePad button:active { background: var(--paper) !important; color: var(--ink) !important; }
+      /* Phone: Scout's layout. Top bar 52 px, the rail a bottom sheet, the mini map at the top right, views as chips. */
+      @media (max-width: 760px) {
+        body.vision #f-top { height: 52px; }
+        body.vision #hud { top: auto; width: 100%; max-height: 44vh; max-height: 44dvh; border-radius: 16px 16px 0 0; padding: 12px 14px max(12px, env(safe-area-inset-bottom)); gap: 12px; }
+        body.vision #title .t-site { font-size: 18px; }
+        body.vision #layers { flex-direction: row; flex-wrap: wrap; gap: 6px; }
+        body.vision #layers > label { min-height: 28px; }
+        body.vision #layers label small { display: none !important; }
+        body.vision #layers details { flex-basis: 100%; }
+        body.vision #minimap { top: 60px; right: 8px; bottom: auto; }
+        body.vision #minimap canvas { width: 104px; }
+        body.vision #furniture { top: 172px !important; right: 8px !important; bottom: auto !important; }
+        body.vision #legend { box-sizing: border-box; left: 8px; top: 60px; bottom: auto; width: calc(100vw - 136px); max-height: 24vh; }
+        body.vision #eyeLabel { top: 62px !important; }
+      }
       /* Demo (body.demo, /scout/?demo): every card in the Scout look of the live site (flow.css palette and type), with a soft
          lift off the terrain and one order of reading on each card: small grey label, then the value or title, then detail. */
       body.demo { font-family: "IBM Plex Sans", "Rethink Sans", system-ui, sans-serif; }
