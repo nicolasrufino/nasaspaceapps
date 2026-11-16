@@ -11,7 +11,7 @@ export async function loadWorld(base) {
   const n = meta.width * meta.height
   const grids = Object.entries(meta.files).filter(([, f]) => /\.(f32|u8)$/.test(f)) // optical.png etc. load elsewhere
   const layers = Object.fromEntries(await Promise.all(grids.map(async ([name, file]) =>
-    [name, parseLayer(file, await fetchOk(`${base}/${file}`).then((r) => r.arrayBuffer()), n)])))
+    [name, parseLayer(file, await fetchBuffer(`${base}/${file}`), n)])))
   return { meta, layers } // keys in world.json order
 }
 
@@ -19,6 +19,17 @@ async function fetchOk(url) {
   const r = await fetch(url)
   if (!r.ok) throw new Error(`${url}: HTTP ${r.status}`)
   return r
+}
+
+// Binary files ship beside a gzipped copy (vite.config.js); the host does not compress octet-stream, the browser
+// unzips it natively. No copy (dev server) or no DecompressionStream: the plain file.
+export async function fetchBuffer(url) {
+  const gz = typeof DecompressionStream === 'function' && await fetch(`${url}.gz`).catch(() => null)
+  if (gz?.ok) {
+    const buf = await gz.arrayBuffer(), b = new Uint8Array(buf, 0, Math.min(2, buf.byteLength))
+    if (b[0] === 0x1f && b[1] === 0x8b) return new Response(new Blob([buf]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer()
+  } // not gzip (the dev server answers a missing file with index.html): the plain file
+  return fetchOk(url).then((r) => r.arrayBuffer())
 }
 
 // ponytail: typed arrays use the device's byte order; every phone and PC is little-endian like the files.

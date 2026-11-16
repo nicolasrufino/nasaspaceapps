@@ -4,7 +4,8 @@
     ".u8": "application/octet-stream",
     ".onnx": "application/octet-stream",
     ".wasm": "application/wasm",
-    ".mjs": "text/javascript"
+    ".mjs": "text/javascript",
+    ".gz": "application/octet-stream"
   },
   "globalHeaders": {
     "Cache-Control": "no-cache"
