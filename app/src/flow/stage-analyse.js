@@ -19,6 +19,10 @@ const CSS = `
 .fa-prog button:focus-visible { outline: 2px solid var(--scout); outline-offset: -4px; }
 .fa-text p { font-size: 15px; line-height: 1.45; }
 .fa-fade { transition: opacity .5s; }
+.fa-route { margin-top: 8px; padding-top: 14px; border-top: 1px solid var(--panel2); }
+.fa-route .f-item { padding: 5px 0; border: 0; min-height: 0; }
+.fa-route .f-item .n.h { background: #fff; }
+@media (max-width: 760px) { .fa-route { display: none; } }
 @keyframes fa-pulse { 0%, 100% { opacity: 1 } 50% { opacity: .15 } }
 .fa-pulse { animation: fa-pulse 1.1s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .fa-pulse { animation: none; } }
@@ -111,7 +115,19 @@ export default {
     const segs = STEPS.map((s, k) => { const b = ui.h('button'); b.type = 'button'; b.textContent = k + 1; b.title = s.title; b.setAttribute('aria-label', `Step ${k + 1}: ${s.title}`); b.onclick = () => show(k); prog.append(b); return b })
     head.append(count, prog)
     const body = ui.h('div', 'fa-wrap')
-    wrap.append(head, body)
+    // Your route, under every step (desktop only; the pins carry the numbers on a phone): the stops in walking
+    // order, and from step 3 the route's energy against what may be spent walking (budget minus reserve).
+    const card = ui.section('Your route'), legs = ui.h('div', 'f-list'), energy = ui.h('div'), bar = ui.bar(), eText = ui.h('p', 'dim')
+    card.classList.add('fa-route')
+    const home = () => { const r = ui.item({ n: 'H', title: 'Habitat' }); r.firstChild.classList.add('h'); return r }
+    legs.append(home(), ...ordered.map((s, n) => ui.item({ n: n + 1, title: s.name })), home())
+    if (others.length) legs.append(ui.h('p', 'dim', `Not on the route: ${others.map((s) => s.name).join(', ')}`))
+    const routeJ = route.energy_j ?? d.energy_j
+    bar.set(routeJ / app.usableJ)
+    eText.textContent = `${ui.kj(routeJ)} of the ${ui.kj(app.usableJ)} kJ you can spend walking. The reserve is kept apart.`
+    energy.append(bar.el, eText)
+    card.append(legs, energy)
+    wrap.append(head, body, card)
     ui.body.append(wrap)
 
     const note = ui.h('div', 'f-small'), row = ui.h('div', 'f-row')
@@ -225,6 +241,7 @@ export default {
 
       // The numbers exist from step 3 on.
       if (s >= 2) { if (!chip.isConnected) ui.strip.append(chip) } else chip.remove()
+      energy.hidden = s < 2
 
       // Rail.
       const st = STEPS[s]

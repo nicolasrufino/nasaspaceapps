@@ -81,7 +81,7 @@ export default {
     // ---------- Comparison ----------
     const againBtn = ui.button('Scout again', () => ui.go('plan'))
     const stopsBtn = ui.button('Change the stops', () => ui.go('plan'))
-    const previewBtn = ui.button('Preview the walk', startPreview, true)
+    const previewBtn = ui.button('Start the walk simulator', startPreview, true)
     const visionBtn = ui.button('Explore in Vesta Vision', () => { location.href = './?vision' })
 
     function routeBlock(key, title, numbers) {
@@ -221,7 +221,7 @@ export default {
       want = true
 
       // Rail
-      const head = ui.section('Walk preview', true)
+      const head = ui.section('Walk simulator', true)
       const note = p('Plays automatically. Drag the height strip to jump.', 'dim')
       head.append(note)
       const nums = ui.section('')

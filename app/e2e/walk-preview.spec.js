@@ -11,8 +11,8 @@ async function preview(page, query = '') {
   for (let i = 0; i < 4; i++) await page.getByRole('button', { name: /^Next:/ }).click()
   await page.getByRole('button', { name: 'Send the scout', exact: true }).click()
   await page.getByRole('button', { name: 'Skip to the end of the flights', exact: true }).click()
-  await page.getByRole('button', { name: 'Review the walk', exact: true }).click({ timeout: 30000 })
-  await page.getByRole('button', { name: 'Preview the walk', exact: true }).click({ timeout: 30000 })
+  await page.getByRole('button', { name: 'See the path we made', exact: true }).click({ timeout: 30000 })
+  await page.getByRole('button', { name: 'Start the walk simulator', exact: true }).click({ timeout: 30000 })
 }
 
 test('guided preview visits every stop with a visible way to continue and returns to the habitat', async ({ page }, testInfo) => {
@@ -88,7 +88,7 @@ test('automatic preview passes 3%, pauses, seeks without camera drift, restarts,
   await expect(page.locator('.d-strip')).toContainText('Arrived back at the habitat.', { timeout: 15000 })
   expect(await page.evaluate(() => window.vesta.app.walk.playing())).toBe(false)
   await foot.getByRole('button', { name: 'Back to the comparison', exact: true }).click()
-  await page.getByRole('button', { name: 'Preview the walk', exact: true }).click()
+  await page.getByRole('button', { name: 'Start the walk simulator', exact: true }).click()
   await expect.poll(() => page.evaluate(() => window.vesta.app.walk.state().k)).toBeGreaterThan(4)
   expect(errors).toEqual([])
 })

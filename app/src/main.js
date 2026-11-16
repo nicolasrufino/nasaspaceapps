@@ -788,7 +788,7 @@ async function startNextFlight() {
   if (next) {
     flight.along = 0
     emit('flight:start', { n: flightsUsed + 1, of: MAX_FLIGHTS, metres: next.metres, waypoints: next.waypoints, kind: next.kind })
-    flight.zoom = 3 // seconds of easing the camera in
+    flight.zoom = (flightSeconds ?? FLIGHT_ANIMATION_S) < 3 ? 0 : 3 // seconds of easing the camera in; none when the flights are being finished at once
     flight.camOff ??= camera.position.clone().sub(controls.target) // put back after the last landing
     heli.userData.beam.visible = heli.visible = heliIcon.visible = scanDots.visible = true
   }
