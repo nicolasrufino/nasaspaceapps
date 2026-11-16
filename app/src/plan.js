@@ -19,7 +19,31 @@ export const canStep = (meta, layers, i, k, j) =>
   layers.passable ? ((layers.passable[i] >> k) & 1) === 1 : layers.slope[j] <= meta.knobs.max_slope_deg
 
 // Cost (J by default) to walk from `from` to every cell, and the previous cell on that cheapest path (Dijkstra).
-export function costFrom({ meta, layers }, from, blocked, cost = energyCost) {
+// Runs with the two built-in costs are kept and reused while the world and the found rocks stay the same: picking a
+// goal or adding a stop re-plans, and each stop's run is the same as last time. Callers must not change the arrays.
+// ponytail: up to MEMO_RUNS kept (12 bytes a cell each, 0.8 MB on Gale's 256², 32 MB at most): both goals' stops, each
+// with the energy and the distance run, plus base. Past that the memo starts over.
+const MEMO_RUNS = 40
+let memo = { world: null, blocked: null, runs: new Map() }
+const sameRocks = (a, b) => { // null means no rocks found
+  if (a === b) return true
+  const n = a?.length ?? b.length
+  for (let i = 0; i < n; i++) if ((a?.[i] ? 1 : 0) !== (b?.[i] ? 1 : 0)) return false
+  return true
+}
+export function costFrom(world, from, blocked, cost = energyCost) {
+  if (cost !== energyCost && cost !== distanceCost) return dijkstra(world, from, blocked, cost)
+  if (memo.world !== world || !sameRocks(memo.blocked, blocked)) memo = { world, blocked: blocked && Uint8Array.from(blocked), runs: new Map() }
+  const key = `${cost === energyCost ? 'e' : 'd'}${from}`
+  let run = memo.runs.get(key)
+  if (!run) {
+    if (memo.runs.size >= MEMO_RUNS) memo.runs.clear()
+    memo.runs.set(key, (run = dijkstra(world, from, blocked, cost)))
+  }
+  return run
+}
+
+function dijkstra({ meta, layers }, from, blocked, cost) {
   const { width: W, height: H } = meta
   const dist = new Float64Array(W * H).fill(Infinity)
   const prev = new Int32Array(W * H).fill(-1)

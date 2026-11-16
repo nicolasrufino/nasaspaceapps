@@ -4,7 +4,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { loadWorld, layerRGB, sourceLabel } from './world.js'
 import { startWalk, stepTo, ringMask, ringLimit, appState, oxygenL } from './walk.js'
 import { createPlaybackClock } from './playback.js'
-import { planTour, MAX_STOPS } from './plan.js'
+import { planTour, MAX_STOPS, costFrom, distanceCost } from './plan.js'
 import { mountFlightLog } from './scout-why.js'
 import { createVoiSelector } from './scout-voi-client.js'
 import { createScout, launchScoutFlight, completeScoutFlight, scanFlight, pointAlong, MAX_FLIGHTS, FLIGHT_ANIMATION_S, SWATH_M, FLIGHT_M } from './scout.js'
@@ -368,7 +368,11 @@ const walkClock = createPlaybackClock()
 let lastWalkFrame = lastFrame
 // Background tabs suspend rendering: resuming must not spend the whole hidden interval walking.
 document.addEventListener('visibilitychange', () => { lastWalkFrame = performance.now() })
+// The guided mission shows 3D only in its scene stages. Under its 2D map, one frame a second instead of sixty: enough
+// to keep shaders compiled, textures uploaded and detail tiles loading, so the scout starts at once. The walk never runs there.
+let draw3D = !flowMode
 renderer.setAnimationLoop((now) => {
+  if (!draw3D) { lastWalkFrame = now; if (now - lastFrame < 1000) return }
   const elapsed = Math.max(0, (now - lastFrame) / 1000)
   const dt = Math.min(elapsed, 0.1) // smooth camera/character motion, not the flight clock
   frameElapsed = Math.min(elapsed, 1)
@@ -626,6 +630,7 @@ function removeCustom(id) {
 }
 
 let customCount = 0
+let batching = false // inside app.batch: stop changes wait for one re-plan
 // Tap the minimap (plan tab): on your own stop removes it, on a target toggles it, elsewhere adds a stop.
 $('map').addEventListener('click', (e) => {
   if ($('plan').hidden || flight) return
@@ -1026,9 +1031,18 @@ const app = {
   usableJ: meta.energy_budget_j * (1 - meta.reserve_fraction),
   on(evt, fn) { (listeners[evt] ??= []).push(fn); return () => listeners[evt].splice(listeners[evt].indexOf(fn), 1) },
   stops: () => allStops().map((s) => ({ ...s, included: included.has(s.id), dropped: route.dropped.includes(s.id), photo: photos.find((p) => p.target_id === s.id) })),
-  toggleStop(id) { if (flight) return; included.has(id) ? included.delete(id) : included.add(id); replan() },
-  addStop(cell) { if (flight) return; const id = `C${++customCount}`; custom.push({ id, name: `Your stop ${customCount}`, cell, custom: true, why: 'Picked on the map.' }); included.add(id); replan() },
-  removeStop(id) { if (flight) return; const c = custom.findIndex((s) => s.id === id); if (c >= 0) custom.splice(c, 1); included.delete(id); replan() },
+  toggleStop(id) { if (flight) return; included.has(id) ? included.delete(id) : included.add(id); batching || replan() },
+  addStop(cell) { if (flight) return; const id = `C${++customCount}`; custom.push({ id, name: `Your stop ${customCount}`, cell, custom: true, why: 'Picked on the map.' }); included.add(id); batching || replan() },
+  removeStop(id) { if (flight) return; const c = custom.findIndex((s) => s.id === id); if (c >= 0) custom.splice(c, 1); included.delete(id); batching || replan() },
+  show3D(on) { draw3D = on }, // flow.js: true in the scene stages (flight, walk preview), false under the 2D map
+  // Work out the paths from these cells while the page is idle, so choosing them later re-plans at once (results unchanged).
+  warm(cells) {
+    const idle = (fn) => (window.requestIdleCallback ? requestIdleCallback(fn, { timeout: 500 }) : setTimeout(fn, 50))
+    const next = () => { const c = cells.shift(); if (!c || flight) return; costFrom(world, c, blocked); costFrom(world, c, blocked, distanceCost); idle(next) }
+    idle(next)
+  },
+  // Several stop changes, one re-plan at the end (a science goal swaps all its stops at once).
+  batch(fn) { batching = true; try { fn() } finally { batching = false }; replan() },
   route: () => route, // { cells, stops, dropped, energy_j, minutes }
   maxSlopeDeg: meta.knobs.max_slope_deg,
   hazardColors: () => hazardRGB(world, scanned, reviewed), // Uint8Array(W*H*3): green walkable, amber near the limit, red too steep or rock

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { parseLayer } from './world.js'
 import { startWalk, stepTo } from './walk.js'
-import { costFrom, planTour } from './plan.js'
+import { costFrom, planTour, energyCost } from './plan.js'
 
 const dir = new URL('../../data/worlds/synthetic/', import.meta.url)
 const read = (f) => readFileSync(new URL(f, dir))
@@ -52,4 +52,16 @@ test('blocked cells are avoided', () => {
   const again = planTour({ meta: { ...meta, energy_budget_j: 1e9 }, layers }, targets, blocked)
   assert.ok(!again.cells.some((c) => blocked[at(c)]))
   assert.ok(again.energy_j >= plan.energy_j)
+})
+
+test('kept Dijkstra runs never go stale: rocks found in place after a plan change the next plan', () => {
+  const fresh = (b) => costFrom(world, meta.base_cell, b, (m, l, i, j) => energyCost(m, l, i, j)) // a custom cost skips the memo
+  const blocked = new Uint8Array(meta.width * meta.height)
+  assert.equal(costFrom(world, meta.base_cell, blocked), costFrom(world, meta.base_cell, null)) // no rocks = no blocked layer: reused
+  const plan = planTour(world, targets, blocked)
+  const mid = plan.cells[Math.floor(plan.cells.length / 4)]
+  blocked[at(mid)] = 1 // the scout marks a rock in the same array
+  assert.deepEqual(costFrom(world, meta.base_cell, blocked).dist, fresh(blocked).dist)
+  assert.deepEqual(planTour(world, targets, blocked), planTour(world, targets, Uint8Array.from(blocked)))
+  assert.ok(!planTour(world, targets, blocked).cells.some((c) => at(c) === at(mid)))
 })
