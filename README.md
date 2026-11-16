@@ -1,143 +1,109 @@
-# Martian Map
+# Mission VESTA
 
-**Martian Map turns NASA's Mars data into a science walk you can plan, preview and come home from, and makes the map better with every walk.**
+**Plan a safe science walk on Mars from NASA data: scout it with a helicopter first, then walk it and come home.**
 
-NASA Space Apps 2026 (Chicago), challenge *Interplanetary Survival Guide: Martian Map*.
+NASA Space Apps Challenge 2026 · Chicago · Challenge: *Interplanetary Survival Guide: Martian Map*
 
-## What it is, in one minute
+**[▶ Open the live site](https://nasa.nicolasrufino.com)** · [Vesta Scout](https://nasa.nicolasrufino.com/scout/) · [Vesta Vision](https://nasa.nicolasrufino.com/scout/?vision) · [How it works](app/HOW-IT-WORKS.md) · [NASA data](docs/DATA.md) · [Pitch](docs/PITCH.md)
 
-There is no map of Mars detailed enough for one walk, and Earth is 4 to 22 minutes away. So we build the map in five stages, coarse to fine, each telling the next where to look:
+| Before scouting | After three helicopter flights |
+|---|---|
+| ![The planned walk on the orbit map, before scouting](app/mission-vesta/assets/scout-before.jpg) | ![The same walk after scouting, re-planned around what the flights found](app/mission-vesta/assets/scout-after.jpg) |
 
-1. **Orbit:** NASA's layers for one 2 × 2 km slice of Mount Sharp, Gale crater.
-2. **Scout:** a NASA JPL-style helicopter (Ingenuity, SkyFall) flies the route strip, then anomalies, then uncertain spots, and reveals the rocks and sand orbit can't see.
-3. **Plan and pack:** the safe, efficient route to the science stops, the margin home and the packing list.
-4. **Walk and add:** a tablet minimap and a helmet HUD keep the way home known; every step adds to the map.
-5. **Next walk:** starts from a better map.
+Runs in a phone or laptop browser. Nothing to install.
 
-One three.js web app shows it three ways: the habitat display, the tablet the crew carries, and the helmet HUD. Full story: `docs/PRODUCT.md`.
+## The problem
 
-## The team
+There is no map of Mars detailed enough to plan one walk. Orbit shows the region but misses the rock field, the soft sand and the short steep step that decide whether a suited astronaut gets through. Earth is 4 to 22 minutes away by radio, so the crew has to know the way home before they leave. Full reasoning: [docs/PRODUCT.md](docs/PRODUCT.md).
 
-| Lane | Who | Focus | Brief |
+## Two products on one map
+
+Both use the same real 2 × 2 km slice of lower Mount Sharp, Gale crater, where Curiosity studied the boxwork ridges in 2025.
+
+### Vesta Scout: the guided mission (`/scout/`)
+
+Four steps, from the habitat console:
+
+1. **Stops.** Pick a science goal (*Groundwater* or *Investigate boxwork*) and the stops to visit on the orbit map.
+2. **Route.** The planner finds the cheapest safe route: walking energy per step, walls where the ground is too steep, and the energy needed to get home from every point.
+3. **Scout.** Up to three helicopter flights, at most 1 km each, scan the stretches the route depends on. After each landing, the route is planned again around what the flight found.
+4. **Walk.** Preview the walk on the scouted map and review it at the end.
+
+### Vesta Vision: the map (`/scout/?vision`)
+
+The same slice in 3D at true scale: HiRISE imagery on the real relief, five views (Imagery, Hazards, Energy home, Science, Radiation), a fly-through of the route, and an eye-level walk with NASA's Z-2 suit model for scale.
+
+| Imagery | Hazards | Energy home | Eye level |
 |---|---|---|---|
-| Person 1 | **Jules** | Machine learning: rock detection, ground classifier, CAPCOM agent on Azure | `docs/roles/person-1-ml.md` |
-| Person 2 | **Nicolas** | App and 3D: views, walk, helicopter scout, stops | `docs/roles/person-2-engine.md` |
-| Person 3 | **Galsan** (lead) | Data, systems and integration: real Gale slice, all data layers, Azure deploy, merges | `docs/roles/person-3-data-systems.md` |
-| Person X | Open | Story, HUD design, pitch, project page | `docs/roles/person-x.md` |
+| ![](app/mission-vesta/assets/vision-imagery.jpg) | ![](app/mission-vesta/assets/vision-hazards.jpg) | ![](app/mission-vesta/assets/vision-energy.jpg) | ![](app/mission-vesta/assets/vision-eye.jpg) |
 
-Who leans where, and how each person uses AI: `docs/roles/README.md`.
+## Results, each with the file it comes from
 
-## Links
+- **Terrain accuracy:** our 1 m terrain matches Curiosity's elevations at 148 drive waypoints to 0.12 m RMSE (`data/worlds/gale/validation.json`, made by `data/pipeline/check_accuracy.py`).
+- **Scouting on Gale:** three flights take the stored hazard cells on the five-stop route from 6 to 0, for 1.46% more walking energy (621.4 → 630.5 kJ). This is a simulation, and the file says so ([ml/pitch_metrics/PITCH_NUMBERS.md](ml/pitch_metrics/PITCH_NUMBERS.md), `ml/exports/pitch_metrics.json`).
+- **Ground-photo classifier** (experiment, off in the demo): 93.1% accuracy on 159 Curiosity patches and 48.2% on 197 Perseverance patches (`ml/exports/terrain_cls.json`). The drop on Perseverance is why it stays off.
+- **Real vs simulated:** terrain, slope, imagery, Curiosity's stops and the energy formula are real. The helicopter flights, the astronaut and the stop photos are simulated. Full list: [How it works §14](app/HOW-IT-WORKS.md).
 
-- **Team page** (the whole plan, the build graph, roles, research): https://claude.ai/artifact/FxZ2AS4JSxE6d1RMbfXq6N. Built from this repo's docs: `docs/team-page/`.
-- **Pitch deck:** https://claude.ai/artifact/XiHnUGPaJkCCpBeHoWck41. Source: `docs/deck/`; script: `docs/PITCH.md`.
+## NASA data
 
-## Start here (people and agents)
+Every source, what it is and how we use it, with links: [docs/DATA.md](docs/DATA.md).
 
-1. `docs/PRODUCT.md`: what we build and why each stage exists.
-2. `docs/BUILD.md`: **who builds what, in what order.** Every block has an owner, its prerequisites and a GitHub issue.
-3. `docs/CONTRACTS.md`: the file and model formats everyone shares. This is how nobody waits on anybody.
-4. Your role brief in `docs/roles/`.
-5. `AGENTS.md`: rules for coding agents (each folder has its own too). Codex setup: `docs/CODEX.md`.
-
-Background: `docs/PLAN.md` (the whole plan), `docs/DATA.md` (each NASA resource and our slice), `docs/CRITIQUE.md` (every idea graded), `docs/PITCH.md` (the pitch and the local awards), `docs/RESEARCH.md` (the evidence).
-
-## Local awards we aim for
-
-1. **Best Use of Science** (main target): eight types of NASA data, every claim tested.
-2. **Best Use of Technology** (requires Microsoft Azure): hosted on Azure Static Web Apps. The CAPCOM agent runs offline for now; connecting it to Microsoft Foundry is next.
-3. **Art & Technology**: 3D terrain, the helicopter's scan sweep, the helmet HUD.
-
-## Quick start
-
-```bash
-python3 data/pipeline/make_world.py   # builds data/worlds/synthetic/ (standard library only)
-```
-
-Everyone builds against `data/worlds/synthetic/` from the first minute; the real Gale slice drops in later through the same files.
-
-## Layout
-
-| Folder | Owner | What lives there |
+| Data | Mission or source | Used for |
 |---|---|---|
-| `data/` | Galsan | Pipeline and world files |
-| `ml/` | Jules | Rock detection, ground classifier, buddy rover; ONNX exports |
-| `agent/` | Jules | CAPCOM agent (offline service; Microsoft Foundry next) |
-| `app/` | Nicolas | The three.js web app |
-| `docs/` | Everyone (Galsan merges) | Product, build plan, contracts, role briefs, pitch |
+| Gale merged terrain model (1 m) and image mosaic (25 cm) | MRO HiRISE, via USGS Astrogeology | Terrain, slope, walls, imagery, rocks |
+| Mars Trek | NASA JPL | Choosing the slice |
+| THEMIS thermal inertia | Mars Odyssey (NASA PDS) | Sand and dust |
+| CRISM | Mars Reconnaissance Orbiter (NASA PDS) | Water-related minerals for science targets |
+| Curiosity RAD and REMS | Mars Science Laboratory (NASA PDS) | Radiation dose rate and weather |
+| Curiosity ChemCam, APXS and DAN | Mars Science Laboratory (NASA PDS) | Chemistry and hydrogen at the stops |
+| Curiosity raw images and traverse | NASA JPL | Stop photos; terrain validation |
+| Perseverance raw images | Mars 2020 | Classifier test set |
+| AI4Mars | NASA JPL | Classifier training labels |
+| SkyFall Mission Information Package | NASA | Helicopter flight profile |
+| Z-2 suit, Ingenuity and habitat 3D models | NASA 3D Resources, NASA/JPL-Caltech | The astronaut, helicopter and habitat ([credits](app/src/models/README.md)) |
 
-## How we work
+NASA Worldview, also on the challenge's resource list, has no Mars data, so we don't use it.
 
-- **One block, one issue, one branch, one PR.** Take the next block in your lane whose prerequisites are done (`docs/BUILD.md`), branch `yourname/what-it-does`, open a PR that names the block, the milestone and the flag.
-- **`main` always runs.** CI must be green; every feature sits behind a flag and ships switched off if it is late.
-- **Contracts change only with every owner's approval.**
-- **New idea? Grade it first** in `docs/CRITIQUE.md`. 8 or less: don't build it.
-- **Numbers only from code.** No invented metric reaches the pitch.
-
----
-
-# How we ship
-
-
-`main` is protected: **nothing lands without a PR and green CI.** No direct pushes, not even admins.
+## Run it locally
 
 ```bash
-git switch main && git pull
-git switch -c nico/map-layer          # name/what-it-does
-# ...code, commit...
-git push -u origin HEAD
-gh pr create --fill
-gh pr merge --auto --squash           # merges itself the moment CI goes green
+cd app && npm install
+npm run dev          # http://localhost:5173 is the home page; /scout/ is the app
+npm test             # unit tests
+npm run build        # production build in app/dist/
 ```
 
-Then go back to `main`, pull, and start the next thing. Don't babysit PRs.
+Browser tests: `npx playwright install chromium && npm run test:browser`. To rebuild the Gale world from the USGS files, see "Rebuild" in [docs/DATA.md](docs/DATA.md). To build the synthetic test world (standard library only): `python3 data/pipeline/make_world.py`.
 
-### Rules that keep the team fast
+## What's in the repo
 
-- **Small PRs, merged within ~1 hour.** Long branches = merge conflicts at 3am.
-- **Pull `main` often** (`git pull --rebase origin main` on your branch).
-- **CI red? Fix it before anything else.** If `main` breaks, whoever's PR broke it fixes or reverts (`gh pr revert <n>` / revert button).
-- **Squash merge only**, so the PR title becomes the commit. Make the title readable.
-- Branches are auto-deleted after merge.
+| Folder | What lives there |
+|---|---|
+| `app/` | The web app (three.js + Vite): home page, Vesta Scout, Vesta Vision |
+| `data/` | The NASA data pipeline and the world files the app loads |
+| `ml/` | Rock detection review, ground-photo classifier, measured pitch numbers |
+| `agent/` | CAPCOM assistant: offline experiment, not in the demo |
+| `docs/` | Product, data, research, decisions and pitch. Start at [docs/README.md](docs/README.md) |
 
-### Stacking PRs (only when you need to)
+Working on the code: `AGENTS.md` has the team rules, and each folder has its own `AGENTS.md`.
 
-Use when B depends on A and A isn't merged yet. Keep stacks to 2, 3 max.
+## Limits
 
-```bash
-git switch -c nico/api-client         # A, based on main
-gh pr create --fill
-git switch -c nico/api-ui             # B, based on A
-gh pr create --fill --base nico/api-client
-```
+- The helicopter flights, the astronaut and the stop photos are simulated.
+- The classifier and the hidden-rock map are experiments, off by default.
+- Not yet tested on a real phone over HTTPS.
 
-When A squash-merges, GitHub retargets B to `main` automatically. Drop A's old commits from B:
+What is still missing is listed in [docs/DECISIONS.md](docs/DECISIONS.md).
 
-```bash
-git fetch origin
-git switch nico/api-ui
-git rebase --onto origin/main nico/api-client
-git push --force-with-lease
-```
+## Team
 
-### CI
+| Who | Role |
+|---|---|
+| **Nicolas** (lead) | App and 3D: Vesta Scout, Vesta Vision, the home page |
+| **Jules** | Machine learning: rock detection, ground classifier |
+| **Luca** | Data: the Gale slice, its terrain layers and crossings, the eight NASA data types |
+| **Galsan** | Systems and integration |
 
-[`.github/workflows/ci.yml`](.github/workflows/ci.yml) auto-detects the stack:
+## Credits and license
 
-- `package-lock.json` at root → `npm ci`, then `lint`, `typecheck`, `test`, `build` (whichever scripts exist)
-- `requirements.txt` at root → `ruff check` + `pytest`
-
-Add a script to `package.json` and CI runs it, no workflow edits needed.
-
-### CD
-
-The app deploys to **Azure Static Web Apps** (block D5, issue #14): `main` deploys the public link, and each PR can get a preview URL. Azure is also what makes us eligible for the Best Use of Technology award.
-
-## One-time setup (repo owner)
-
-```bash
-gh repo create <name> --public --source . --push
-./scripts/protect-main.sh
-```
-
-Then add teammates: Settings → Collaborators (Write access).
+Code: [MIT](LICENSE). NASA imagery, data and 3D models belong to their sources and are credited where they are used; see [docs/DATA.md](docs/DATA.md) and [app/src/models/README.md](app/src/models/README.md). Fonts: Rethink Sans and IBM Plex Sans, under the SIL Open Font License. This project uses NASA data and models; it is not endorsed by NASA.

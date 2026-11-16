@@ -1,4 +1,4 @@
-# What Martian Map is, and why it works
+# What Mission VESTA is, and why it works
 
 Read this first. It explains the product in order: the challenge, our answer, each stage and why it exists, and why our answer beats the alternatives on every objective NASA set.
 

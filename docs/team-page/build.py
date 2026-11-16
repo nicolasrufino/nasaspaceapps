@@ -69,7 +69,7 @@ import json
 build = md(f'{R}/docs/BUILD.md', shift=1)
 build = re.sub(r'<h2[^>]*>Who builds what, and in what order</h2>', '', build)
 rows = re.findall(r'^\| ([A-Z]\d) \| (.*?) \| (P1|P2|P3|PX) \| (.*?) \| (.*?) \| (.*?) \| (.*?) \|$', Path(f'{R}/docs/BUILD.md').read_text(encoding='utf-8'), re.MULTILINE)
-lanes = [('P1', 'Jules · P1 · ML', 'p1'), ('P2', 'Nicolas · P2 · App', 'p2'), ('P3', 'Galsan · P3 · Data (lead)', 'p3'), ('PX', 'Person X · Story (open)', 'px')]
+lanes = [('P1', 'Jules · P1 · ML', 'p1'), ('P2', 'Nicolas · P2 · App (lead)', 'p2'), ('P3', 'Galsan · P3 · Data', 'p3'), ('PX', 'Person X · Story (open)', 'px')]
 phases = [('M0', 'M0 · Sat 9:00–12:30'), ('M1', 'M1 · 12:30–16:00'), ('M2', 'M2 · 16:00–21:00'), ('Overnight', 'Overnight · to Sun 7:00'), ('Freeze', 'Freeze · Sun 8:00 → submit')]
 link = lambda t: re.sub(r'#(\d+)', r'<a href="https://github.com/nicolasrufino/nasaspaceapps/issues/\1" target="_blank" rel="noopener">#\1</a>', t)
 B = {i: {'title': t, 'who': {l[0]: l[1] for l in lanes}[w], 'when': dict(phases)[wh], 'what': html.escape(what), 'needs': [n.strip() for n in nd.split(',') if n.strip() not in ('—', '')], 'issue': link(iss) if iss != '—' else ''} for i, t, w, wh, what, nd, iss in rows}
