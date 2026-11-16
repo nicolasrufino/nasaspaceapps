@@ -8,7 +8,9 @@ import { MODELS } from './models.js'
 import * as stopScience from './stop-science.js'
 import { log, KIND } from './stage-scout.js'
 
-const OCHRE = '#c5a065', WHITE = '#fff', AMBER = '#ffd23f', SCOUT = '#e3dfd3'
+// Colours as in stage 3 (KIND): red = rock on the route (here: the rocks the orbit route would have crossed),
+// grey = the route from orbit and rocks off the route, white = the scouted route, green = rocks the route now goes around.
+const OLD = KIND.off.color, WHITE = '#fff', AMBER = '#ffd23f', SCOUT = '#e3dfd3'
 const SPEEDS = [[120, '1×'], [60, '2×'], [30, '4×']] // milliseconds per 8 m step
 const STRIP_H = 110
 const NS = 'http://www.w3.org/2000/svg'
@@ -20,7 +22,7 @@ const CSS = `
 .d-route.hot { background: var(--panel2); }
 .d-route.pin { border-color: var(--mute); }
 .d-route h3 i { display: inline-block; width: 18px; height: 0; margin-right: 8px; vertical-align: middle; border-top: 3px solid #fff; }
-.d-route.old h3 i { border-top: 3px dashed ${OCHRE}; }
+.d-route.old h3 i { border-top: 3px dashed ${OLD}; }
 .d-strip { align-self: stretch; height: ${STRIP_H}px; box-sizing: border-box; background: var(--panel); border-radius: 10px; padding: 8px 12px 10px; display: flex; flex-direction: column; gap: 4px; }
 .d-strip .lab { display: flex; justify-content: space-between; gap: 12px; font-size: 11px; color: var(--mute); white-space: nowrap; }
 .d-strip .lab b { color: var(--paper); font-weight: 600; overflow: hidden; text-overflow: ellipsis; }
@@ -29,15 +31,19 @@ const CSS = `
   .d-strip .lab { flex-wrap: wrap; gap: 2px 8px; white-space: normal; }
   .d-strip .lab b { order: 3; flex-basis: 100%; }
 }
-.d-win { display: grid; grid-template-columns: 1.25fr 1fr; gap: 10px; margin: 4px 0 4px; }
-.d-win > div { background: var(--panel2); border-radius: 10px; padding: 10px 12px; }
-.d-win small { display: block; color: var(--mute); font-size: 12px; }
-.d-win b { display: block; font-size: 26px; line-height: 1.2; color: var(--paper); }
-.d-win .good b { color: var(--scout); } .d-win .price b { font-size: 20px; }
-.d-why { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-.d-why li { position: relative; padding-left: 14px; font-size: 13px; line-height: 1.45; color: var(--paper); }
-.d-why li::before { content: ''; position: absolute; left: 0; top: .55em; width: 6px; height: 6px; border-radius: 50%; background: var(--scout); }
-.d-why.cost li { color: var(--mute); } .d-why.cost li::before { background: var(--mute); }
+.d-result { display: flex; align-items: center; gap: 14px; background: var(--panel2); border-radius: 12px; padding: 12px 14px; }
+.d-result > div { display: flex; flex-direction: column; }
+.d-result b { font-size: 36px; line-height: 1; font-weight: 700; font-variant-numeric: tabular-nums; }
+.d-result b i { font-style: normal; font-size: 18px; margin-right: 6px; vertical-align: 6px; }
+.d-result small { margin-top: 4px; font-size: 12px; color: var(--mute); }
+.d-result .old b { color: var(--avoid); } .d-result .new b { color: var(--clear); } .d-result .new.on b { color: var(--avoid); }
+.d-result .arrow { color: var(--mute); font-size: 22px; }
+.d-result .what { flex: 1; text-align: right; font-size: 13px; color: var(--paper); }
+.f-sec .d-cost { margin: 10px 0 0; font-size: 15px; } .d-cost b { font-variant-numeric: tabular-nums; } .d-cost span { color: var(--mute); }
+.d-why { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.d-why li { display: flex; gap: 10px; font-size: 14px; line-height: 1.35; color: var(--paper); }
+.d-why li::before { content: '✓'; flex: none; width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 700; background: var(--clear); color: var(--ink); }
+.d-why li small { display: block; color: var(--mute); font-size: 12px; }
 .d-bar { position: relative; height: 10px; border-radius: 5px; background: var(--panel2); overflow: hidden; margin: 6px 0 4px; }
 .d-bar i { position: absolute; top: 0; bottom: 0; }
 .d-hub { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -73,7 +79,7 @@ export default {
       const k = map.scale * (mini ? 2 : 1)
       const em = mini ? null : pin ?? hot // the emphasised route, if any
       const lw = 0.45 * k
-      map.line('before', oldCells, { color: OCHRE, width: lw, dash: `${lw * 2.2} ${lw * 2.4}`, opacity: em === 'new' ? 0.3 : 1 })
+      map.line('before', oldCells, { color: OLD, width: lw, dash: `${lw * 2.2} ${lw * 2.4}`, opacity: em === 'new' ? 0.3 : 1 })
       map.dots('crossed', rocksOn(oldCells).map((cell) => ({ cell, color: KIND.on.color, ring: WHITE, r: 0.7 * k, faded: em === 'new' })))
       map.line('route', route.cells, { color: WHITE, width: lw * (em === 'new' ? 1.5 : 1), opacity: em === 'old' ? 0.3 : 1 })
       map.dots('stops', [
@@ -118,34 +124,34 @@ export default {
       const extraJ = route.energy_j - before.energy_j, extraM = Math.round(d.metres - od.metres)
       const pct = Math.round((route.energy_j / app.usableJ) * 100), spare = ui.kj(app.usableJ - route.energy_j)
       const sign = (n) => (n >= 0 ? `+${n}` : `${n}`)
-      const cells = (n) => `${n} rock ${n === 1 ? 'cell' : 'cells'}`
 
+      // One result, one cost line, three reasons; the energy bar and the two routes are folded into Details.
       const head = ui.section(crossedNew === 0 ? 'The scout cleared your path' : 'The scout made your path safer', true)
-      head.append(p(`Same stops. The route planned from orbit walked into ${cells(crossedOld)} that orbit can't see. The scouted route goes around them.`, 'dim'))
-      const win = ui.h('div', 'd-win', `<div class="good"><small>Rock cells on your path</small><b>${crossedOld} → ${crossedNew}</b></div>
-        <div class="price"><small>The price</small><b>${sign(Math.round(extraJ / 1000))} kJ</b><small>${sign(+((extraJ / before.energy_j) * 100).toFixed(1))}% energy · ${sign(extraM)} m</small></div>`)
-      head.append(win)
+      const res = ui.h('div', 'd-result', `<div class="old"><b><i aria-hidden="true">▲</i>${crossedOld}</b><small>from orbit</small></div>
+        <span class="arrow" aria-hidden="true">→</span>
+        <div class="new ${crossedNew ? 'on' : ''}"><b><i aria-hidden="true">${crossedNew ? '▲' : '✓'}</i>${crossedNew}</b><small>scouted</small></div>
+        <span class="what">rock cells on your path</span>`)
+      const costLine = ui.h('p', 'd-cost', `<b>${sign(extraM)} m · ${sign(Math.round(extraJ / 1000))} kJ</b> <span>to walk around them ·</span> <b>${spare} kJ</b> <span>still spare before the reserve</span>`)
+      head.append(res, costLine)
 
-      const why = ui.section("Why it's better")
-      why.append(ui.h('ul', 'd-why', `<li>No surprises on foot. Orbit misses rocks under about 1 m; the helicopter found these before anyone left.</li>
-        <li>Decided in the habitat, not mid-walk. Without the scout the crew meets these rocks on the walk and chooses on the spot, with Earth up to 22 minutes away.</li>
-        <li>The way home is worked out for the route you actually walk, so the walk-back ring can be trusted.</li>`))
+      const why = ui.section("Why it's worth it")
+      why.append(ui.h('ul', 'd-why', `<li><span>Found before anyone left<small>Orbit misses rocks under about 1 m.</small></span></li>
+        <li><span>Decided in the habitat, not mid-walk<small>On the walk, Earth is up to 22 minutes away.</small></span></li>
+        <li><span>The walk-back ring fits this route<small>The way home is worked out for the route you actually walk.</small></span></li>`))
 
-      const costSec = ui.section('Why it costs a little more')
-      costSec.append(ui.h('ul', 'd-why cost', `<li>It walks around the rocks instead of over them: ${extraM >= 0 ? `${extraM} m longer` : `${-extraM} m shorter`}. You still have ${spare} kJ to spare before the reserve.</li>`))
       const orbitW = Math.min(100, (before.energy_j / app.usableJ) * 100), allW = Math.min(100, (route.energy_j / app.usableJ) * 100)
-      costSec.append(p(`Walking energy · ${ui.kj(route.energy_j)} of ${ui.kj(app.usableJ)} kJ (${pct}%)`, 'dim'),
-        ui.h('div', 'd-bar', `<i style="left:0;width:${Math.min(orbitW, allW)}%;background:var(--mute)"></i><i style="left:${Math.min(orbitW, allW)}%;width:${Math.abs(allW - orbitW)}%;background:var(--scout)"></i>`),
-        p(`Grey: the route from orbit (${ui.kj(before.energy_j)} kJ) · light: the scout's detour · the reserve is kept apart`, 'dim'))
+      const energy = [p(`Walking energy · ${ui.kj(route.energy_j)} of ${ui.kj(app.usableJ)} kJ (${pct}%) · ${sign(+((extraJ / before.energy_j) * 100).toFixed(1))}% for the detour`, 'dim'),
+        ui.h('div', 'd-bar', `<i style="left:0;width:${Math.min(orbitW, allW)}%;background:var(--mute)"></i><i style="left:${Math.min(orbitW, allW)}%;width:${Math.abs(allW - orbitW)}%;background:var(--paper)"></i>`),
+        p(`Grey: the route from orbit (${ui.kj(before.energy_j)} kJ) · white: the scout's detour · the reserve is kept apart`, 'dim')]
 
-      const blocks = [routeBlock('new', 'With the scout', [['metres', Math.round(d.metres)], ['kJ', ui.kj(route.energy_j)], ['rock cells crossed', crossedNew, crossedNew > 0 ? 'hazard' : undefined]]),
-        routeBlock('old', 'Without the scout', [['metres', Math.round(od.metres)], ['kJ', ui.kj(before.energy_j)], ['rock cells crossed', crossedOld, 'hazard']])]
-      const both = ui.details('Compare the two routes', ...blocks)
+      const blocks = [routeBlock('new', 'With the scout', [['metres', Math.round(d.metres)], ['kJ', ui.kj(route.energy_j)], ['rock cells crossed', crossedNew, crossedNew > 0 ? 'avoid' : undefined]]),
+        routeBlock('old', 'Without the scout', [['metres', Math.round(od.metres)], ['kJ', ui.kj(before.energy_j)], ['rock cells crossed', crossedOld, 'avoid']])]
+      const both = ui.details('Energy and the two routes', ...energy, ...blocks)
 
       const options = ui.details('More actions & model details', visionBtn)
       if (app.scout.left() > 0) options.querySelector('.f-details-body').append(againBtn)
       options.querySelector('.f-details-body').append(ui.model(MODELS.groundClassifier))
-      setBody(toHub(), head, why, costSec, both, options)
+      setBody(toHub(), head, why, both, options)
       previewBtn.disabled = route.cells.length < 2
       ui.foot.replaceChildren(previewBtn)
     }
@@ -259,7 +265,7 @@ export default {
       if (!before) pin = hot = null
 
       map.caption('After scouting', before
-        ? 'White: the scouted route · ochre dashes: without the scout · red dots: rock it would have crossed · rocks: green the route moved off, grey off the route · NASA MRO HiRISE'
+        ? 'White: scouted route · grey dashes: from orbit · red: rocks it would have crossed · green: avoided · grey: off route · NASA MRO HiRISE'
         : 'White: the route · NASA MRO HiRISE')
       map.clear('walker')
       drawMap(false)
@@ -274,11 +280,11 @@ export default {
       else head.append(p('The scout found no rock on the route planned from orbit.', 'dim'))
 
       const blocks = [routeBlock('new', before ? 'With the scout' : 'The route',
-        [['metres', Math.round(d.metres)], ['kJ', ui.kj(route.energy_j)], ['rock cells crossed', crossedNew, crossedNew > 0 ? 'hazard' : undefined]])]
+        [['metres', Math.round(d.metres)], ['kJ', ui.kj(route.energy_j)], ['rock cells crossed', crossedNew, crossedNew > 0 ? 'avoid' : undefined]])]
       if (before) {
         const od = app.describe(before.cells)
         blocks.push(routeBlock('old', 'Without the scout',
-          [['metres', Math.round(od.metres)], ['kJ', ui.kj(before.energy_j)], ['rock cells crossed', crossedOld, 'hazard']]))
+          [['metres', Math.round(od.metres)], ['kJ', ui.kj(before.energy_j)], ['rock cells crossed', crossedOld, crossedOld > 0 ? 'avoid' : undefined]]))
       }
 
       const pct = Math.round((route.energy_j / app.usableJ) * 100)
