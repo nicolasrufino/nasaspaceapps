@@ -214,7 +214,7 @@ Switching views or "Back to start" moves you without walking, so it costs nothin
 
 **Loading and opening.** Until the HiRISE picture is on the terrain, a loading screen covers the page (Mars with an orbiter going round it, and what is loading: the world, the 3D terrain, the imagery), so the half-built page never flashes. It lifts when the imagery is draped or fails, and after 8 s at most; the opening flight starts only after it lifts. The whole-slice picture is one image (`overview.jpg`, 2048 px, 1 m per pixel, stitched from the same HiRISE tiles and hosted beside them); if it is missing the app stitches the 64 tiles itself. The page opens about 2.4 km above the middle of the slice, holds for 1.2 s, then eases down to the habitat over 4 s. Any tap, scroll or key skips it; it is off when the device asks for reduced motion.
 
-## 13b. The guided mission (Vesta Scout) and the helicopter battery
+## 13b. The guided mission (Vesta Scout)
 
 Vesta Scout runs in four stages (`app/src/flow/`, plan in `docs/UX-PLAN.md` §0): **Choose stops** on the 2D orbit map (it starts empty; pick a science goal to add its stops, or tap the map; at least 3), **How the route is found** (five steps the user moves through), **Scout** behind the helicopter (a control centre over the 3D view), **Walk**: the path we made, then a mission hub to reopen any step (stops, route, a 2D flight replay, the comparison) and the walk simulator. The crew is inside the habitat, so only the flight and the walk preview show the 3D scene. The map screen with every layer is Vesta Vision (`/scout/?vision`).
 
@@ -226,15 +226,6 @@ The walk preview uses foreground elapsed time (120 ms per grid step at 1×). Slo
 - **Model lines** (`app/src/flow/models.js`): the rock-chance model (AUC 0.73 on a development check, not calibrated), the reviewed rock detections (23 of 25 proposals confirmed, no hit rate claimed), and the ground classifier v2 (92% and 94% on two held-out Curiosity tests of 159 and 302 patches, 73% on 219 fresh Perseverance patches), each copied from its export.
 - **Unseen ground** (stage 2): the length of the route whose cells no helicopter has looked at, summed step by step.
 - **Hidden-rock estimate** (stage 2): the belief map of §12, shown relative to its highest value near the route. Experimental, not calibrated.
-- **Helicopter battery** (stage 3, `app/src/flow/heli-energy.js`), an **estimate**: Ingenuity's flight power, about 350 W (JPL Ingenuity landing press kit), and its battery, 38.8 Wh when new at 0 °C (NASA/JPL battery slide deck, six Sony VTC4 cells), on SkyFall's flight profile of 1 km in 2.5 minutes (`docs/OPERATIONS.md`).
-
-```
-flight seconds = metres / (1000 m / 150 s)
-energy used    = 350 W x flight seconds          (14.6 Wh for 1 km)
-battery left   = 1 - energy used / 38.8 Wh       (about 62% after 1 km)
-```
-
-  38.8 Wh is the whole battery, not the usable part (NASA gives no usable share), so the percentage is optimistic. Each flight starts full: three helicopters, one flight each.
 - **The scan on screen is simulated**: found rocks come from the hidden-rock layer (`rocks_fine`), not from a live classifier.
 
 ## 13c. The Visit step: what the crew measures at a stop (flag `stop_science`, off with `?off=stop_science`)
