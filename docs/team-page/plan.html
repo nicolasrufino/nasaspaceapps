@@ -2711,7 +2711,7 @@ flowchart LR
 <tr>
 <td>D2 Real world files</td>
 <td>M1</td>
-<td><code>data/pipeline/load_dtm.py</code> feeds the slice into <code>build()</code> and <code>write()</code> in <code>make_world.py</code>: slope, walking cost, cost home from every square; add sand (THEMIS) and science (CRISM, Fraeman et al. local map). Tell Nicolas the folder name</td>
+<td><code>data/pipeline/cut_slice.py</code> cuts the slice and <code>make_gale.py</code> builds the world from it: slope, walking cost, cost home from every square; add sand (THEMIS) and science (CRISM, Fraeman et al. local map). Tell Nicolas the folder name</td>
 <td>D1</td>
 <td>#13</td>
 </tr>
@@ -2774,7 +2774,7 @@ flowchart LR
 <li>Run the orchestrator's "status" about once an hour (<code>docs/CODEX.md</code> §3).</li>
 </ul>
 <h3 id="agent-brief-paste-into-your-coding-agent">Agent brief (paste into your coding agent)</h3>
-<div class="brief"><button type="button" class="copy">Copy agent brief</button><div class="brief-text"><p>You are helping Galsan (Person 3, data, systems and integration) on Martian Map, a NASA Space Apps project. Read <code>AGENTS.md</code>, <code>docs/PRODUCT.md</code>, <code>docs/BUILD.md</code> (lane P3), <code>docs/DATA.md</code> and <code>docs/CONTRACTS.md</code> first. Work in <code>data/</code> and <code>docs/</code>. First: <code>data/pipeline/load_dtm.py</code> that reads the USGS Gale 1 m terrain model for our 2 × 2 km box, makes the 8 m orbit view, and passes it through <code>build()</code> and <code>write()</code> in <code>make_world.py</code> so the output matches CONTRACTS §1 exactly; keep <code>make_world.py</code>'s tests passing. Then targets, stops and route; then <code>scout_plan.json</code> (route strip, then anomalies, then least-certain cells). Never change a contract without updating CONTRACTS.md in the same PR. Never read binary data files; use <code>world.json</code> and printed summaries. One issue per session; small, working commits.</p></div></div>
+<div class="brief"><button type="button" class="copy">Copy agent brief</button><div class="brief-text"><p>You are helping Galsan (Person 3, data, systems and integration) on Martian Map, a NASA Space Apps project. Read <code>AGENTS.md</code>, <code>docs/PRODUCT.md</code>, <code>docs/BUILD.md</code> (lane P3), <code>docs/DATA.md</code> and <code>docs/CONTRACTS.md</code> first. Work in <code>data/</code> and <code>docs/</code>. First: <code>data/pipeline/cut_slice.py</code> that reads the USGS Gale 1 m terrain model for our 2 × 2 km box, makes the 8 m orbit view, and passes it through <code>build()</code> and <code>write()</code> in <code>make_world.py</code> so the output matches CONTRACTS §1 exactly; keep <code>make_world.py</code>'s tests passing. Then targets, stops and route; then <code>scout_plan.json</code> (route strip, then anomalies, then least-certain cells). Never change a contract without updating CONTRACTS.md in the same PR. Never read binary data files; use <code>world.json</code> and printed summaries. One issue per session; small, working commits.</p></div></div>
 </article>
 <article class="role px" id="px"><h2 id="person-x-story-design-and-pitch-joins-later">Person X: Story, design and pitch (joins later)</h2>
 <p><strong>Status:</strong> not here yet. Nothing on the critical path waits for Person X. Until they arrive, Galsan keeps pitch notes in <code>docs/pitch-notes.md</code>. If nobody joins by M2 (Sat 21:00), the fallbacks in <code>docs/BUILD.md</code> give these blocks to Nicolas and Galsan.</p>
@@ -3174,7 +3174,6 @@ ml/__init__.py
 ml/buddy_rover/.gitkeep
 ml/check_exports.py
 ml/export_placeholders.py
-ml/exports/.gitkeep
 ml/exports/buddy_policy.json
 ml/exports/buddy_policy.onnx
 ml/exports/pitch_metrics.json
@@ -3260,7 +3259,6 @@ ml/rock_review/test_review.py
 ml/rock_review/test_rosco.py
 ml/rock_review/test_shadow_baseline.py
 ml/terrain_classifier/.gitattributes
-ml/terrain_classifier/.gitkeep
 ml/terrain_classifier/EXPANDED.md
 ml/terrain_classifier/PROVENANCE.md
 ml/terrain_classifier/README.md
