@@ -146,7 +146,7 @@ def run(subset, perseverance, fresh, baseline, destination):
                                   "note": "v2: fresh sol-blocked Perseverance test (see perseverance_fresh_test); the v1 197-patch zero-shot set is retired"},
         "architecture": "ITU-R 601 grey conversion in graph, frozen ImageNet MobileNetV3-small features, trained 576x4 linear head; fixed unknown logit -100",
         "training": {"seed": P.SEED, "epochs": 200, "optimizer": "Adam", "lr": 0.01, "weight_decay": 0.001,
-                     "class_weighting": "inverse training frequency", "train_patches": int(len(y)),
+                     "class_weighting": "inverse training frequency", "train_patches": len(y),
                      "train_patches_by_rover": report["train_patches"], "class_counts": counts.tolist(),
                      "final_train_loss": float(loss.detach())},
         "preprocessing": "Nonoverlapping 256x256 source crops, >=70% valid NAV labels, >=80% dominant class among valid pixels; bilinear RGB resize to 128; input 0..1; grey conversion and ImageNet normalization inside graph",
@@ -166,7 +166,7 @@ def run(subset, perseverance, fresh, baseline, destination):
         metadata["curiosity_expert_v2"] = {"metrics": evaluations["curiosity_expert_v2"]["v2"]["metrics"],
                                            "v1_on_same_patches": evaluations["curiosity_expert_v2"]["v1"]["metrics"]}
     path.with_suffix(".json").write_text(json.dumps(metadata, indent=2, default=float) + "\n", encoding="utf-8", newline="\n")
-    names, errors = check(destination)
+    _names, errors = check(destination)
     if errors:
         raise RuntimeError("; ".join(errors))
     print(json.dumps({"gates": gates, "promote": promote, **{k: {m: v[m]["metrics"] for m in ("v1", "v2")} for k, v in evaluations.items()}},

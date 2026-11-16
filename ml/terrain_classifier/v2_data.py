@@ -15,8 +15,8 @@ import zipfile
 import zlib
 from pathlib import Path
 
-from ml.terrain_classifier.dataset import ARCHIVE, RECORD, member_bytes
 from ml.terrain_classifier import v2_protocol as P
+from ml.terrain_classifier.dataset import ARCHIVE, RECORD, member_bytes
 
 
 def sol(name):
