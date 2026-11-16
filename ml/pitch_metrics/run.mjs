@@ -94,7 +94,7 @@ export function buildReport(root = ROOT) {
         curiosity: checkedAccuracy(terrain.held_out, terrain.confusion_matrix),
         perseverance: checkedAccuracy(terrain.perseverance_transfer.metrics, terrain.perseverance_transfer.confusion_matrix),
         used_for_this_route: false,
-        limitation: 'Rover-photo classifier; not applied to orbital terrain. Curiosity test has zero big-rock examples. Perseverance transfer is poor.' },
+        limitation: 'Rover-photo classifier; not applied to orbital terrain. Curiosity test has zero big-rock examples. v2 trains on some Perseverance photos; its Perseverance number is a fresh sol-blocked test.' },
       buddy: { placeholder: buddy.placeholder, accuracy: null, limitation: buddy.limitations } },
     limitations: [
       'Simulated walk and scout on real NASA-derived terrain, not an astronaut or drone field trial.',
@@ -150,7 +150,7 @@ ${r.sampling_sensitivity.map((v) => `| ${v.mode} | ${v.discovered_hazard_cells} 
 
 These are simulated flights on NASA-derived terrain. Repositioning from the habitat, flight energy, recharge and daylight operations are not modelled. Zero stored hazard cells is not proof of a hazard-free Mars surface. Cells are not individual rocks; the route's ${r.orbit_only.reviewed_rock_clearance.unique_cells} reviewed-rock-clearance cells are reported separately from DTM estimates.
 
-R3: ${report.vision_evidence.rocks.accepted_points} human-accepted ROSCO proposals, ${report.vision_evidence.rocks.review_counts.uncertain} uncertain and excluded; no detector precision/recall claim. The rover-photo classifier did not produce this route's terrain: Curiosity ${report.vision_evidence.terrain.curiosity.correct}/${report.vision_evidence.terrain.curiosity.samples}; Perseverance transfer ${report.vision_evidence.terrain.perseverance.correct}/${report.vision_evidence.terrain.perseverance.samples}, with no big-rock support in the Curiosity test. Buddy remains an untrained placeholder and is cut from the submission.
+R3: ${report.vision_evidence.rocks.accepted_points} human-accepted ROSCO proposals, ${report.vision_evidence.rocks.review_counts.uncertain} uncertain and excluded; no detector precision/recall claim. The rover-photo classifier did not produce this route's terrain: Curiosity ${report.vision_evidence.terrain.curiosity.correct}/${report.vision_evidence.terrain.curiosity.samples}; Perseverance fresh test ${report.vision_evidence.terrain.perseverance.correct}/${report.vision_evidence.terrain.perseverance.samples}, with no big-rock support in the Curiosity test. Buddy remains an untrained placeholder and is cut from the submission.
 
 ## Suggested proof line
 

@@ -7,10 +7,11 @@ Terrain classifier (`terrain_classifier/`) and buddy rover (`buddy_rover/`). Exp
 `exports/buddy_policy.onnx` is an **untrained placeholder**, marked in the
 ONNX metadata and adjacent JSON. It returns constant logits favouring stay;
 this is a wiring fixture, not a validated navigation policy.
-`exports/terrain_cls.onnx` is now the measured R4 baseline described in
+`exports/terrain_cls.onnx` is v2 ([terrain_classifier/V2.md](terrain_classifier/V2.md)): grey input
+plus Perseverance training data, 73.1% on a fresh Perseverance test where v1 scored 41.1%, and
+91.8% / 94.0% on the two Curiosity expert tests. v1 is described in
 [terrain_classifier/README.md](terrain_classifier/README.md). It classifies rover
-ground photos, not orbital pixels, and transfers poorly to Perseverance in the
-initial evaluation. Keep classifier/RL app features off pending integration QA.
+ground photos, not orbital pixels. Keep classifier/RL app features off pending integration QA.
 Both use the existing contract names, float32 types and shapes.
 
 Install `ml/requirements-ci.txt`, then run `python ml/check_exports.py` for real

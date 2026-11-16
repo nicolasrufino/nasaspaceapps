@@ -11,7 +11,7 @@ export async function loadWorld(base) {
   const n = meta.width * meta.height
   const grids = Object.entries(meta.files).filter(([, f]) => /\.(f32|u8)$/.test(f)) // optical.png etc. load elsewhere
   const layers = Object.fromEntries(await Promise.all(grids.map(async ([name, file]) =>
-    [name, parseLayer(file, await fetchOk(`${base}/${file}`).then((r) => r.arrayBuffer()), n)])))
+    [name, parseLayer(file, await fetchBuffer(`${base}/${file}`), n)])))
   return { meta, layers } // keys in world.json order
 }
 
@@ -19,6 +19,19 @@ async function fetchOk(url) {
   const r = await fetch(url)
   if (!r.ok) throw new Error(`${url}: HTTP ${r.status}`)
   return r
+}
+
+// Binary files ship beside a gzipped copy (vite.config.js); Azure does not compress octet-stream itself. Azure sends the
+// .gz with Content-Encoding: gzip, so the browser unzips it on the way in; a host that sends the raw gzip bytes gets
+// unzipped here with DecompressionStream. The dev server answers a missing .gz with index.html: then the plain file.
+export async function fetchBuffer(url) {
+  const gz = await fetch(`${url}.gz`).catch(() => null)
+  if (gz?.ok && !(gz.headers.get('content-type') ?? '').startsWith('text/html')) {
+    const buf = await gz.arrayBuffer(), b = new Uint8Array(buf, 0, Math.min(2, buf.byteLength))
+    if (gz.headers.get('content-encoding') || b[0] !== 0x1f || b[1] !== 0x8b) return buf // already unzipped by the browser
+    if (typeof DecompressionStream === 'function') return new Response(new Blob([buf]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer()
+  }
+  return fetchOk(url).then((r) => r.arrayBuffer())
 }
 
 // ponytail: typed arrays use the device's byte order; every phone and PC is little-endian like the files.

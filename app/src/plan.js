@@ -3,9 +3,9 @@
 // Cost = energy (Pandolf at Mars gravity, same as the pipeline), so "best" means least effort, not
 // shortest: uphill and sand cost more. Cells steeper than knobs.max_slope_deg, or blocked (rocks the
 // scout found), cannot be entered, same rule as data/pipeline/make_world.py.
-import { stepCostIdx } from './walk.js'
+import { stepCostIdx, ETA } from './walk.js'
 
-const NB = [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]]
+const NBX = [-1, 0, 1, -1, 1, -1, 0, 1], NBY = [-1, -1, -1, 0, 0, 1, 1, 1] // neighbour k; bit k of passable.u8
 export const MAX_STOPS = 12 // ponytail: exact order search is 2^k·k²; past ~12 stops switch to a greedy order
 
 // Step costs the search can minimise: walking energy (the default), or plain distance (E5's alternative).
@@ -44,7 +44,13 @@ export function costFrom(world, from, blocked, cost = energyCost) {
 }
 
 function dijkstra({ meta, layers }, from, blocked, cost) {
-  const { width: W, height: H } = meta
+  const { width: W, height: H } = meta, cs = meta.cell_size_m
+  const energy = cost === energyCost, plain = cost === distanceCost
+  // Energy terms hoisted out of the loop: the same formula as walk.js stepCostIdx (Pandolf), bit for bit.
+  const { body_kg: BW, load_kg: L, speed_mps: V } = meta.knobs
+  const etas = meta.knobs.eta ?? ETA, g = meta.knobs.gravity_energy_factor ?? meta.gravity_mps2 / 9.81
+  const base = 1.5 * BW + 2 * (BW + L) * (L / BW) ** 2, h = layers.height, cls = layers.terrain_class
+  const pass = layers.passable, slope = layers.slope, maxSlope = meta.knobs.max_slope_deg
   const dist = new Float64Array(W * H).fill(Infinity)
   const prev = new Int32Array(W * H).fill(-1)
   const s = from[1] * W + from[0]
@@ -52,16 +58,20 @@ function dijkstra({ meta, layers }, from, blocked, cost) {
   const heap = new Heap()
   heap.push(0, s)
   while (heap.size) {
-    const [d, i] = heap.pop()
+    const d = heap.topKey, i = heap.pop()
     if (d > dist[i]) continue
     const x = i % W, y = (i - x) / W
     for (let k = 0; k < 8; k++) {
-      const [dx, dy] = NB[k]
-      const nx = x + dx, ny = y + dy
+      const nx = x + NBX[k], ny = y + NBY[k]
       if (nx < 0 || ny < 0 || nx >= W || ny >= H) continue
       const j = ny * W + nx
-      if (!canStep(meta, layers, i, k, j) || blocked?.[j]) continue
-      const nd = d + cost(meta, layers, i, j)
+      if ((pass ? ((pass[i] >> k) & 1) !== 1 : slope[j] > maxSlope) || blocked?.[j]) continue
+      let c
+      if (energy) {
+        const step = cs * Math.hypot(nx - x, ny - y), grade = (100 * (h[j] - h[i])) / step
+        c = ((base + (etas[cls[j]] ?? etas[0]) * (BW + L) * (1.5 * V * V + 0.35 * V * Math.max(grade, 0))) * g * step) / V
+      } else c = plain ? cs * Math.hypot(nx - x, ny - y) : cost(meta, layers, i, j)
+      const nd = d + c
       if (nd < dist[j]) {
         dist[j] = nd
         prev[j] = i
@@ -144,17 +154,20 @@ function popcount(m) {
   return c
 }
 
-// ponytail: minimal binary min-heap; JS has no priority queue.
+// ponytail: minimal binary min-heap on typed arrays (no allocation per pop); JS has no priority queue.
 class Heap {
-  k = []
-  v = []
-  get size() {
-    return this.k.length
+  k = new Float64Array(1 << 12)
+  v = new Int32Array(1 << 12)
+  size = 0
+  get topKey() {
+    return this.k[0]
   }
   push(key, val) {
-    let i = this.k.length
-    this.k.push(key)
-    this.v.push(val)
+    if (this.size === this.k.length) {
+      const k = new Float64Array(this.size * 2), v = new Int32Array(this.size * 2)
+      k.set(this.k); v.set(this.v); this.k = k; this.v = v
+    }
+    let i = this.size++
     while (i > 0) {
       const p = (i - 1) >> 1
       if (this.k[p] <= key) break
@@ -165,11 +178,9 @@ class Heap {
     this.k[i] = key
     this.v[i] = val
   }
-  pop() {
-    const top = [this.k[0], this.v[0]]
-    const key = this.k.pop()
-    const val = this.v.pop()
-    const n = this.k.length
+  pop() { // returns the value with the smallest key (read topKey first)
+    const top = this.v[0], n = --this.size
+    const key = this.k[n], val = this.v[n]
     if (n) {
       let i = 0
       for (;;) {

@@ -1,0 +1,3818 @@
+{
+ "record": "https://zenodo.org/api/records/15995036",
+ "archive": "ai4mars-dataset-merged-0.6.zip",
+ "protocol": "VESTA-terrain-v2",
+ "block_sols": 10,
+ "test_blocks": [
+  0,
+  3,
+  6,
+  7,
+  9,
+  19,
+  27
+ ],
+ "counts": {
+  "test": 53,
+  "train": 197
+ },
+ "records": [
+  {
+   "split": "test",
+   "sol": 98,
+   "block": 9,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0098_0675653785_800ECM_N0040136NCAM00500_01_295J.jpeg",
+    "local_path": "test/image/NLF_0098_0675653785_800ECM_N0040136NCAM00500_01_295J.jpeg",
+    "sha256": "32a1ee8f9ac16042b6daeceddabaf8e897762914f53e7e81d142eb6765530173"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0098_0675653785_800ECM_N0040136NCAM00500_01_295J_merged5.png",
+    "local_path": "test/label/NLF_0098_0675653785_800ECM_N0040136NCAM00500_01_295J_merged5.png",
+    "sha256": "04c93fd6cb9de6ecfdb5ead2f5d1bb4823c72d5277b60fcd6b758cee487b29e5"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 69,
+   "block": 6,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0069_0673076015_730ECM_N0032208NCAM00500_01_295J.jpeg",
+    "local_path": "test/image/NLF_0069_0673076015_730ECM_N0032208NCAM00500_01_295J.jpeg",
+    "sha256": "39e77e72d426ee4fcb7e86eb01cbeab65f8f72053e102936962af6db7ef2e403"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0069_0673076015_730ECM_N0032208NCAM00500_01_295J_merged8.png",
+    "local_path": "test/label/NLF_0069_0673076015_730ECM_N0032208NCAM00500_01_295J_merged8.png",
+    "sha256": "3f5978cd59d8ebad41d3baf0d3cb7c21ba7a7a05e55032c590453c2e455d4bee"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 35,
+   "block": 3,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0035_0670050463_352ECM_N0031392NCAM00500_01_295J.jpeg",
+    "local_path": "test/image/NLF_0035_0670050463_352ECM_N0031392NCAM00500_01_295J.jpeg",
+    "sha256": "fb086d824e2e473a6271b7143bcd0d073a66caa1807738eaa13cf7dff9fcf6ae"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0035_0670050463_352ECM_N0031392NCAM00500_01_295J_merged12.png",
+    "local_path": "test/label/NLF_0035_0670050463_352ECM_N0031392NCAM00500_01_295J_merged12.png",
+    "sha256": "6d1eb043047c8e8ddadf4734e61c75cf0b0fc78344faf61a91bcb0cc6f57a0f4"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 72,
+   "block": 7,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0072_0673332461_895ECM_N0032208NCAM00503_01_295J.jpeg",
+    "local_path": "test/image/NLF_0072_0673332461_895ECM_N0032208NCAM00503_01_295J.jpeg",
+    "sha256": "65c89ae1f6f8118adb0f6abe9622754717de1e5a35ae9c35dd81d81cac3debcd"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0072_0673332461_895ECM_N0032208NCAM00503_01_295J_merged10.png",
+    "local_path": "test/label/NLF_0072_0673332461_895ECM_N0032208NCAM00503_01_295J_merged10.png",
+    "sha256": "46337dfaeebffc07edfd5baf951826a25851841d3f6aed08206d0aaad28346c4"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 91,
+   "block": 9,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0091_0675031663_102ECM_N0040136NCAM03091_01_295J.jpeg",
+    "local_path": "test/image/NLF_0091_0675031663_102ECM_N0040136NCAM03091_01_295J.jpeg",
+    "sha256": "a5d6784cf82d22d25df253901f28349fc24b09434ef320d76089d3a953e1ca5c"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0091_0675031663_102ECM_N0040136NCAM03091_01_295J_merged13.png",
+    "local_path": "test/label/NLF_0091_0675031663_102ECM_N0040136NCAM03091_01_295J_merged13.png",
+    "sha256": "6cbd8d63ddbcf3e8d28c22bc455a1a0a14adb27e92bf4a402dde7381da14654d"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 34,
+   "block": 3,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0034_0669963189_929ECM_N0031392NCAM00303_04_195J.jpeg",
+    "local_path": "test/image/NLF_0034_0669963189_929ECM_N0031392NCAM00303_04_195J.jpeg",
+    "sha256": "7c62cd22ee5bfcfcd26fdbaefe1a5a0a63fe4f3dfa342bffe66a77cff2626081"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0034_0669963189_929ECM_N0031392NCAM00303_04_195J_merged9.png",
+    "local_path": "test/label/NLF_0034_0669963189_929ECM_N0031392NCAM00303_04_195J_merged9.png",
+    "sha256": "4e725de63a989e10e33857d026ca3ed82f373359438ac0fc1f893591082f992e"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 33,
+   "block": 3,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0033_0669876929_412ECM_N0031374NCAM03033_13_195J.jpeg",
+    "local_path": "test/image/NLF_0033_0669876929_412ECM_N0031374NCAM03033_13_195J.jpeg",
+    "sha256": "3c27fd04f5e4cecdd12ec632f74d004626a5ca70ddf3c176db0f81ef86c26755"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0033_0669876929_412ECM_N0031374NCAM03033_13_195J_merged10.png",
+    "local_path": "test/label/NLF_0033_0669876929_412ECM_N0031374NCAM03033_13_195J_merged10.png",
+    "sha256": "25fc2ecd06a0d7923b75a7aae44db5b46b42011f9d015305f757dfdaedd314e7"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 91,
+   "block": 9,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0091_0675031663_102ECM_N0040136NCAM03091_04_195J.jpeg",
+    "local_path": "test/image/NLF_0091_0675031663_102ECM_N0040136NCAM03091_04_195J.jpeg",
+    "sha256": "c8fd08667e936c9b2fb2b3d54a1f7958d1e367005db2b3cc5519204e64e76e04"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0091_0675031663_102ECM_N0040136NCAM03091_04_195J_merged12.png",
+    "local_path": "test/label/NLF_0091_0675031663_102ECM_N0040136NCAM03091_04_195J_merged12.png",
+    "sha256": "30e63b28ea381d1043243960f79a722ee3345508e58260da0006be5a72726ce4"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 199,
+   "block": 19,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0199_0684620602_614ECM_N0070346NCAM02199_07_195J.jpeg",
+    "local_path": "test/image/NLF_0199_0684620602_614ECM_N0070346NCAM02199_07_195J.jpeg",
+    "sha256": "a568d3db90642360ca95d56731517e250f7c50a3b61276d307483a3c8953890d"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0199_0684620602_614ECM_N0070346NCAM02199_07_195J_merged11.png",
+    "local_path": "test/label/NLF_0199_0684620602_614ECM_N0070346NCAM02199_07_195J_merged11.png",
+    "sha256": "a347c88bbf965fca6a3b1105b4ce66b194717ecceffc67cf041c566a89083996"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 31,
+   "block": 3,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0031_0669701133_039ECM_N0031044NCAM00303_10_195J.jpeg",
+    "local_path": "test/image/NLF_0031_0669701133_039ECM_N0031044NCAM00303_10_195J.jpeg",
+    "sha256": "0065f014920bddadeeefe7ccdbb27819de42da6246387dedf5f3d4df1c29368b"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0031_0669701133_039ECM_N0031044NCAM00303_10_195J_merged14.png",
+    "local_path": "test/label/NLF_0031_0669701133_039ECM_N0031044NCAM00303_10_195J_merged14.png",
+    "sha256": "fcd3ca5f28ed5ab9a465ce67ba44791e7dcd562d4d63a85f319e98ee8d570fb2"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 34,
+   "block": 3,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0034_0669963703_818ECM_N0031392NCAM02034_01_295J.jpeg",
+    "local_path": "test/image/NLF_0034_0669963703_818ECM_N0031392NCAM02034_01_295J.jpeg",
+    "sha256": "3b6d55c9a5c138c0c306af03939c0925f16b1575d79726219ee469815b8d3185"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0034_0669963703_818ECM_N0031392NCAM02034_01_295J_merged12.png",
+    "local_path": "test/label/NLF_0034_0669963703_818ECM_N0031392NCAM02034_01_295J_merged12.png",
+    "sha256": "70812545340740a9de7b65c51d84e34c70f6618fb8c4b9d4403b210282bac487"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 99,
+   "block": 9,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0099_0675737936_010ECM_N0040218NCAM03099_01_295J.jpeg",
+    "local_path": "test/image/NLF_0099_0675737936_010ECM_N0040218NCAM03099_01_295J.jpeg",
+    "sha256": "cfd5321224d854ab25d917d89a9a717d69876ffddb8eb65c50419e3df8651074"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0099_0675737936_010ECM_N0040218NCAM03099_01_295J_merged13.png",
+    "local_path": "test/label/NLF_0099_0675737936_010ECM_N0040218NCAM03099_01_295J_merged13.png",
+    "sha256": "953d8272d08f0460d74feda2a2af3f5a4060254c89632c6b6dea2fce499d7693"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 199,
+   "block": 19,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0199_0684617879_242ECM_N0070346NCAM03199_10_195J.jpeg",
+    "local_path": "test/image/NLF_0199_0684617879_242ECM_N0070346NCAM03199_10_195J.jpeg",
+    "sha256": "e51ca9d2c2ecaa9852bffa9fab1777037a0bd187ebd06bcb6480e51bb814b69c"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0199_0684617879_242ECM_N0070346NCAM03199_10_195J_merged12.png",
+    "local_path": "test/label/NLF_0199_0684617879_242ECM_N0070346NCAM03199_10_195J_merged12.png",
+    "sha256": "812f58a4ee31456ac11b7269e5feba58ac0897748a219a9d96cca323dcdb442a"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 199,
+   "block": 19,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0199_0684617562_366ECM_N0070346NCAM03199_07_195J.jpeg",
+    "local_path": "test/image/NLF_0199_0684617562_366ECM_N0070346NCAM03199_07_195J.jpeg",
+    "sha256": "1cd5ced0afce41ab89c3bb600af51ab294c70b563ed70c23e670e41267abd8e9"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0199_0684617562_366ECM_N0070346NCAM03199_07_195J_merged10.png",
+    "local_path": "test/label/NLF_0199_0684617562_366ECM_N0070346NCAM03199_07_195J_merged10.png",
+    "sha256": "8857d6f6ad31f2faa9a0950b38e462c01448a28f33db7b370c542086e5f336aa"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 31,
+   "block": 3,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0031_0669701133_039ECM_N0031044NCAM00303_07_195J.jpeg",
+    "local_path": "test/image/NLF_0031_0669701133_039ECM_N0031044NCAM00303_07_195J.jpeg",
+    "sha256": "920a03b8e7534931d393de1b9e67cb3dd8a6fb5c982a7974a444c4f2326bb75f"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0031_0669701133_039ECM_N0031044NCAM00303_07_195J_merged10.png",
+    "local_path": "test/label/NLF_0031_0669701133_039ECM_N0031044NCAM00303_07_195J_merged10.png",
+    "sha256": "bb1b291a93a524918930910335b770d96eed13b8b428d53cf05f37cf05ccc699"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 65,
+   "block": 6,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0065_0672707897_425ECM_N0032046NCAM00202_07_195J.jpeg",
+    "local_path": "test/image/NLF_0065_0672707897_425ECM_N0032046NCAM00202_07_195J.jpeg",
+    "sha256": "1a43142ecef43aced1acca160b525a3c2cf042503b0e8ed8fca64377b33e7720"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0065_0672707897_425ECM_N0032046NCAM00202_07_195J_merged6.png",
+    "local_path": "test/label/NLF_0065_0672707897_425ECM_N0032046NCAM00202_07_195J_merged6.png",
+    "sha256": "3ae88fe1ac872a99e8fd9c778e0d0042ca35cc4104e7e0483684a3f088999621"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 61,
+   "block": 6,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0061_0672359729_760ECM_N0032046NCAM00500_01_295J.jpeg",
+    "local_path": "test/image/NLF_0061_0672359729_760ECM_N0032046NCAM00500_01_295J.jpeg",
+    "sha256": "d734e6c703e95e0957cb118a20fe289dfb2b5f5cdb50394f621a164e946980f2"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0061_0672359729_760ECM_N0032046NCAM00500_01_295J_merged10.png",
+    "local_path": "test/label/NLF_0061_0672359729_760ECM_N0032046NCAM00500_01_295J_merged10.png",
+    "sha256": "0636f16fbb92a38d5b350fff1c83275a923860a2d3a8a92a21d9a30c3759af38"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 99,
+   "block": 9,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0099_0675729702_727ECM_N0040136NCAM00500_01_295J.jpeg",
+    "local_path": "test/image/NLF_0099_0675729702_727ECM_N0040136NCAM00500_01_295J.jpeg",
+    "sha256": "30fa670de38e25227842530578c7dd9e9ef0fcc858e24d18de7e7b0b2b049c38"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0099_0675729702_727ECM_N0040136NCAM00500_01_295J_merged9.png",
+    "local_path": "test/label/NLF_0099_0675729702_727ECM_N0040136NCAM00500_01_295J_merged9.png",
+    "sha256": "10bfa92a5b7201fe23f08ac0c518c56388736cd9a169f2ec58f079f8a433a718"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 66,
+   "block": 6,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0066_0672794979_727ECM_N0032180NCAM00301_01_295J.jpeg",
+    "local_path": "test/image/NLF_0066_0672794979_727ECM_N0032180NCAM00301_01_295J.jpeg",
+    "sha256": "bfc8b4475bf347e68051e4c49419713ea6f39a81db7c03ecfe307adfd302336e"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0066_0672794979_727ECM_N0032180NCAM00301_01_295J_merged14.png",
+    "local_path": "test/label/NLF_0066_0672794979_727ECM_N0032180NCAM00301_01_295J_merged14.png",
+    "sha256": "cce5867a3d3ea0a27b436dad0432364feb29d51728cd943de844ba315bdfab4f"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 35,
+   "block": 3,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0035_0670050322_283ECM_N0031392NCAM00500_01_295J.jpeg",
+    "local_path": "test/image/NLF_0035_0670050322_283ECM_N0031392NCAM00500_01_295J.jpeg",
+    "sha256": "77c54321aab318d789b8ed3cbc72605e4bbb6af25a65dee06f10cfe7479b8246"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0035_0670050322_283ECM_N0031392NCAM00500_01_295J_merged12.png",
+    "local_path": "test/label/NLF_0035_0670050322_283ECM_N0031392NCAM00500_01_295J_merged12.png",
+    "sha256": "5cd74e8f4f07933418f72ac291caed23fcd4a8c708ec9508c811916f4d0f5eb3"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 66,
+   "block": 6,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0066_0672809359_976ECM_N0032208NCAM00303_07_195J.jpeg",
+    "local_path": "test/image/NLF_0066_0672809359_976ECM_N0032208NCAM00303_07_195J.jpeg",
+    "sha256": "bd0fee408fb720923aa68e9d4af5fd6c4dd613b38e093dffc6fa2746fbf80ecf"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0066_0672809359_976ECM_N0032208NCAM00303_07_195J_merged11.png",
+    "local_path": "test/label/NLF_0066_0672809359_976ECM_N0032208NCAM00303_07_195J_merged11.png",
+    "sha256": "b0bf1f00450686b936f2376e5fabe6be3c2ba73c4eee7f63f2efe55c62400239"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 32,
+   "block": 3,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0032_0669789110_255ECM_N0031266NCAM03032_13_195J.jpeg",
+    "local_path": "test/image/NLF_0032_0669789110_255ECM_N0031266NCAM03032_13_195J.jpeg",
+    "sha256": "ebb77d1d0c357730d3793840835a683948619d47bedb60017f54e350a178674b"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0032_0669789110_255ECM_N0031266NCAM03032_13_195J_merged14.png",
+    "local_path": "test/label/NLF_0032_0669789110_255ECM_N0031266NCAM03032_13_195J_merged14.png",
+    "sha256": "5d66f509771bb56d46a75147e7da3a32d91d75d429ba0af2b6484e184e2f5927"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 99,
+   "block": 9,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0099_0675729821_758ECM_N0040136NCAM00500_01_295J.jpeg",
+    "local_path": "test/image/NLF_0099_0675729821_758ECM_N0040136NCAM00500_01_295J.jpeg",
+    "sha256": "c3425585f7cf925981cae0dadf57113aabc855160ac3ef349b5a5db80d2fef33"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0099_0675729821_758ECM_N0040136NCAM00500_01_295J_merged11.png",
+    "local_path": "test/label/NLF_0099_0675729821_758ECM_N0040136NCAM00500_01_295J_merged11.png",
+    "sha256": "a81b5c5edcdd47b67688720aaef4523fe51c9884f3fcd39bee0cdf0fb9b05e1a"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 31,
+   "block": 3,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0031_0669701133_039ECM_N0031044NCAM00303_04_195J.jpeg",
+    "local_path": "test/image/NLF_0031_0669701133_039ECM_N0031044NCAM00303_04_195J.jpeg",
+    "sha256": "173e85565268d46372afab7f0c2c5a746d32ff1037cdbc2b63e1a5644d9a0922"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0031_0669701133_039ECM_N0031044NCAM00303_04_195J_merged12.png",
+    "local_path": "test/label/NLF_0031_0669701133_039ECM_N0031044NCAM00303_04_195J_merged12.png",
+    "sha256": "84a722c2ddfb6ded41254e4de533ea7a896566bfe993404e56a9fd9b4ba07091"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 75,
+   "block": 7,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0075_0673599332_943ECM_N0032430NCAM00500_01_295J.jpeg",
+    "local_path": "test/image/NLF_0075_0673599332_943ECM_N0032430NCAM00500_01_295J.jpeg",
+    "sha256": "51fb7e4c4bbbdd04f8e89ab9e16a48b9a4593d951d345473c1e95f4bb2d9d746"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0075_0673599332_943ECM_N0032430NCAM00500_01_295J_merged9.png",
+    "local_path": "test/label/NLF_0075_0673599332_943ECM_N0032430NCAM00500_01_295J_merged9.png",
+    "sha256": "ca604de933c34eb2f13292921ce2ae978cd1c25c8d5936bf8d90050d818ae26e"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 33,
+   "block": 3,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0033_0669876929_412ECM_N0031374NCAM03033_04_195J.jpeg",
+    "local_path": "test/image/NLF_0033_0669876929_412ECM_N0031374NCAM03033_04_195J.jpeg",
+    "sha256": "da58d7c355155f679c1466895c7b2949e9db7043c7810987829c8b9b5aa299db"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0033_0669876929_412ECM_N0031374NCAM03033_04_195J_merged14.png",
+    "local_path": "test/label/NLF_0033_0669876929_412ECM_N0031374NCAM03033_04_195J_merged14.png",
+    "sha256": "9f0b163bf99f2ee080ceb61c5f21c57ce0c631f8c5105cb2830e0a337385d0e0"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 61,
+   "block": 6,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0061_0672359676_638ECM_N0032046NCAM00500_01_295J.jpeg",
+    "local_path": "test/image/NLF_0061_0672359676_638ECM_N0032046NCAM00500_01_295J.jpeg",
+    "sha256": "d2e8aec98690e4d88082b42fed2241a9395373d14b5201d34bfabf3d00513f38"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0061_0672359676_638ECM_N0032046NCAM00500_01_295J_merged13.png",
+    "local_path": "test/label/NLF_0061_0672359676_638ECM_N0032046NCAM00500_01_295J_merged13.png",
+    "sha256": "274cd791a556e54b760e06892e09c75b3568ef5ad6749493f0c3e779d9530ee5"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 32,
+   "block": 3,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0032_0669789815_184ECM_N0031266NCAM00307_01_195J.jpeg",
+    "local_path": "test/image/NLF_0032_0669789815_184ECM_N0031266NCAM00307_01_195J.jpeg",
+    "sha256": "a7ea9dbbd9348551c20fca475ad80a66f1584e4723c769225bb009f5c3e8a92e"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0032_0669789815_184ECM_N0031266NCAM00307_01_195J_merged14.png",
+    "local_path": "test/label/NLF_0032_0669789815_184ECM_N0031266NCAM00307_01_195J_merged14.png",
+    "sha256": "bfe65ce2528fbf34f775b267fe2dc977bb8d52c9ff74157155da53d26cf2d740"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 61,
+   "block": 6,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0061_0672359845_272ECM_N0032046NCAM00500_01_295J.jpeg",
+    "local_path": "test/image/NLF_0061_0672359845_272ECM_N0032046NCAM00500_01_295J.jpeg",
+    "sha256": "f9e3bf297f5c1560aa98ecb3707614aa4238f3aa3b28dfdfe87dd8bd9fed16ae"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0061_0672359845_272ECM_N0032046NCAM00500_01_295J_merged9.png",
+    "local_path": "test/label/NLF_0061_0672359845_272ECM_N0032046NCAM00500_01_295J_merged9.png",
+    "sha256": "7af4733bd001ee83923130af7f7032b287cd5de7eb0606a9521c2c0695621f88"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 65,
+   "block": 6,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0065_0672721820_149ECM_N0032150NCAM03065_01_295J.jpeg",
+    "local_path": "test/image/NLF_0065_0672721820_149ECM_N0032150NCAM03065_01_295J.jpeg",
+    "sha256": "79a09f70dd0d3929416b434508f2ee78b9e9316cbbd14a7825c7d9975bbeb39a"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0065_0672721820_149ECM_N0032150NCAM03065_01_295J_merged14.png",
+    "local_path": "test/label/NLF_0065_0672721820_149ECM_N0032150NCAM03065_01_295J_merged14.png",
+    "sha256": "d969d45c3d6a095792e30799b6d30c04b2a6377dbff653e1ce86ccf64dc97234"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 69,
+   "block": 6,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0069_0673075941_989ECM_N0032208NCAM00500_01_295J.jpeg",
+    "local_path": "test/image/NLF_0069_0673075941_989ECM_N0032208NCAM00500_01_295J.jpeg",
+    "sha256": "d2604b798dda6fd844ce95c670ddda56a685fb18e832b1dd77fcdfd53f2676fe"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0069_0673075941_989ECM_N0032208NCAM00500_01_295J_merged8.png",
+    "local_path": "test/label/NLF_0069_0673075941_989ECM_N0032208NCAM00500_01_295J_merged8.png",
+    "sha256": "8df8358e1a22b13da9c0c4e8fd121a9f36c3538292bd2a4fe40f049919146b80"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 31,
+   "block": 3,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0031_0669701362_769ECM_N0031044NCAM03031_01_295J.jpeg",
+    "local_path": "test/image/NLF_0031_0669701362_769ECM_N0031044NCAM03031_01_295J.jpeg",
+    "sha256": "038f90138145ebb5ae0a6a52e58242391109aa7ffb3d005a4e5735b9f65bc26b"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0031_0669701362_769ECM_N0031044NCAM03031_01_295J_merged9.png",
+    "local_path": "test/label/NLF_0031_0669701362_769ECM_N0031044NCAM03031_01_295J_merged9.png",
+    "sha256": "4badec9cfdb6043919cfa833dbc1156032a3aa58ff3fcb571a11bb92eb35f38b"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 33,
+   "block": 3,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0033_0669876929_412ECM_N0031374NCAM03033_01_295J.jpeg",
+    "local_path": "test/image/NLF_0033_0669876929_412ECM_N0031374NCAM03033_01_295J.jpeg",
+    "sha256": "321a8b075f4f4812b8f74a6c5d4c7eb30c4bfc333e55f6ded5a2ba060ec4286f"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0033_0669876929_412ECM_N0031374NCAM03033_01_295J_merged12.png",
+    "local_path": "test/label/NLF_0033_0669876929_412ECM_N0031374NCAM03033_01_295J_merged12.png",
+    "sha256": "aaed9def1320170669d191d8dc6a099e66100bda6062ffa8c2e4dd7ff79d9a33"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 72,
+   "block": 7,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0072_0673332248_675ECM_N0032208NCAM00503_01_295J.jpeg",
+    "local_path": "test/image/NLF_0072_0673332248_675ECM_N0032208NCAM00503_01_295J.jpeg",
+    "sha256": "3d7b374367a0e656271cfe0f2b85cc81d0a1f6473621d615816dcefdfaa07ee2"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0072_0673332248_675ECM_N0032208NCAM00503_01_295J_merged10.png",
+    "local_path": "test/label/NLF_0072_0673332248_675ECM_N0032208NCAM00503_01_295J_merged10.png",
+    "sha256": "5d9b992fb7d457c4d110267fbf80056538d84c32948d71f362b0e0b94b063b60"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 99,
+   "block": 9,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0099_0675733205_786ECM_N0040182NCAM00301_01_295J.jpeg",
+    "local_path": "test/image/NLF_0099_0675733205_786ECM_N0040182NCAM00301_01_295J.jpeg",
+    "sha256": "54451770828d6f98f3fbbc448d0c74f0cb0e1acd84822e4f31b98b98a48aa71a"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0099_0675733205_786ECM_N0040182NCAM00301_01_295J_merged17.png",
+    "local_path": "test/label/NLF_0099_0675733205_786ECM_N0040182NCAM00301_01_295J_merged17.png",
+    "sha256": "88c1ec3aa08384c0ab3f3e008b337c773c287ac724e3f5b96322f86cfab65333"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 99,
+   "block": 9,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0099_0675737735_005ECM_N0040218NCAM03099_01_295J.jpeg",
+    "local_path": "test/image/NLF_0099_0675737735_005ECM_N0040218NCAM03099_01_295J.jpeg",
+    "sha256": "a3923630f5185ded9482678c669ff3f5336af95c8d1f33b4e08b61b0e3001421"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0099_0675737735_005ECM_N0040218NCAM03099_01_295J_merged13.png",
+    "local_path": "test/label/NLF_0099_0675737735_005ECM_N0040218NCAM03099_01_295J_merged13.png",
+    "sha256": "bd63de0519c99497f6b4f2cf3efff08f7fbe80e7d47d91bbadb81789c9a62469"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 70,
+   "block": 7,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0070_0673173555_770ECM_N0032208NCAM00189_01_290J.jpeg",
+    "local_path": "test/image/NLF_0070_0673173555_770ECM_N0032208NCAM00189_01_290J.jpeg",
+    "sha256": "2608f649c3da5a806abb536aa1fc087e75558c696ab2ffecb522cbbf221a6225"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0070_0673173555_770ECM_N0032208NCAM00189_01_290J_merged11.png",
+    "local_path": "test/label/NLF_0070_0673173555_770ECM_N0032208NCAM00189_01_290J_merged11.png",
+    "sha256": "b445b6a0bbf875f1a24a6473d8640da0f3b54be56b9593bec89e9c9fb83cf95b"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 99,
+   "block": 9,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0099_0675737782_019ECM_N0040218NCAM03099_04_195J.jpeg",
+    "local_path": "test/image/NLF_0099_0675737782_019ECM_N0040218NCAM03099_04_195J.jpeg",
+    "sha256": "d6fbebb018297d120af6a656cdec854ee3692ede62b0f5f48576b032a378fae1"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0099_0675737782_019ECM_N0040218NCAM03099_04_195J_merged12.png",
+    "local_path": "test/label/NLF_0099_0675737782_019ECM_N0040218NCAM03099_04_195J_merged12.png",
+    "sha256": "b794008856d28ac9e5187b0d6dd9f3feaf728b576178945463be2ce4f5dd61cf"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 73,
+   "block": 7,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0073_0673429137_932ECM_N0032430NCAM00303_07_195J.jpeg",
+    "local_path": "test/image/NLF_0073_0673429137_932ECM_N0032430NCAM00303_07_195J.jpeg",
+    "sha256": "0b9d7638daa326713e56740aa0180e5820cc27a27ad4a733ab39156553319352"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0073_0673429137_932ECM_N0032430NCAM00303_07_195J_merged5.png",
+    "local_path": "test/label/NLF_0073_0673429137_932ECM_N0032430NCAM00303_07_195J_merged5.png",
+    "sha256": "46df6818dc7af73f08e948e0978c27e79ada16044ab6449f9ca30676f1cb067d"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 32,
+   "block": 3,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0032_0669789369_152ECM_N0031266NCAM02032_01_295J.jpeg",
+    "local_path": "test/image/NLF_0032_0669789369_152ECM_N0031266NCAM02032_01_295J.jpeg",
+    "sha256": "ee2db768792f7d55aad748f2322abd26ffb226b36faf4bbef0b2fa871700116a"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0032_0669789369_152ECM_N0031266NCAM02032_01_295J_merged9.png",
+    "local_path": "test/label/NLF_0032_0669789369_152ECM_N0031266NCAM02032_01_295J_merged9.png",
+    "sha256": "467a608bc88e8e8fe72f7eb50d4fc90892c962aa0babf828d411d8c819b2ed66"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 99,
+   "block": 9,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0099_0675729717_726ECM_N0040136NCAM00500_01_295J.jpeg",
+    "local_path": "test/image/NLF_0099_0675729717_726ECM_N0040136NCAM00500_01_295J.jpeg",
+    "sha256": "7990dabcabd86c8d3cb5a21f811dd48a65da97eb0242362f57b30f3aa13f8bc5"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0099_0675729717_726ECM_N0040136NCAM00500_01_295J_merged9.png",
+    "local_path": "test/label/NLF_0099_0675729717_726ECM_N0040136NCAM00500_01_295J_merged9.png",
+    "sha256": "9571624cdb10150950369d6020ae50dbb25883c06025b8ff325ca377a8f72574"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 31,
+   "block": 3,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0031_0669701514_908ECM_N0031044NCAM03031_01_295J.jpeg",
+    "local_path": "test/image/NLF_0031_0669701514_908ECM_N0031044NCAM03031_01_295J.jpeg",
+    "sha256": "3c15cd9334e4ad21b8f9adb3df25f4f3de31fad5f8c5002ec3f68db9c71b4b8b"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0031_0669701514_908ECM_N0031044NCAM03031_01_295J_merged13.png",
+    "local_path": "test/label/NLF_0031_0669701514_908ECM_N0031044NCAM03031_01_295J_merged13.png",
+    "sha256": "72240289ce60b657bf19ee08dc30e4aa535daa15ed6ecf96ec651343e6128dfb"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 32,
+   "block": 3,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0032_0669789740_722ECM_N0031266NCAM00307_04_195J.jpeg",
+    "local_path": "test/image/NLF_0032_0669789740_722ECM_N0031266NCAM00307_04_195J.jpeg",
+    "sha256": "fdd694ee7945c8dbb8cfa288f57952be25a229466bce32d9a6fbd3e0e0bd1cf3"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0032_0669789740_722ECM_N0031266NCAM00307_04_195J_merged12.png",
+    "local_path": "test/label/NLF_0032_0669789740_722ECM_N0031266NCAM00307_04_195J_merged12.png",
+    "sha256": "84348674d458d3cbfb9565a5a148f333c57ddb158aa602927547a4ff732c04df"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 78,
+   "block": 7,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0078_0673867474_739ECM_N0032430NCAM00500_01_295J.jpeg",
+    "local_path": "test/image/NLF_0078_0673867474_739ECM_N0032430NCAM00500_01_295J.jpeg",
+    "sha256": "c4463ce0c78357446e17331f611c66d0dff0f8dea6cc2d7660c93bcf6f1cb35e"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0078_0673867474_739ECM_N0032430NCAM00500_01_295J_merged9.png",
+    "local_path": "test/label/NLF_0078_0673867474_739ECM_N0032430NCAM00500_01_295J_merged9.png",
+    "sha256": "2c587e5c1f0a394ab914eb343f2217d4c7237a450b60b044941776b550c2df20"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 66,
+   "block": 6,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0066_0672809359_976ECM_N0032208NCAM00303_10_195J.jpeg",
+    "local_path": "test/image/NLF_0066_0672809359_976ECM_N0032208NCAM00303_10_195J.jpeg",
+    "sha256": "1e3fcd2f97a4c157b82836b46ffd788339ec57dcd0dfe8647d9d84076cb5fc73"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0066_0672809359_976ECM_N0032208NCAM00303_10_195J_merged14.png",
+    "local_path": "test/label/NLF_0066_0672809359_976ECM_N0032208NCAM00303_10_195J_merged14.png",
+    "sha256": "cf7683be39a73cf0b905980b7598c7e4057e21c55b0d019b26f0093aa7f93d4f"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 72,
+   "block": 7,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0072_0673332205_487ECM_N0032208NCAM00503_01_295J.jpeg",
+    "local_path": "test/image/NLF_0072_0673332205_487ECM_N0032208NCAM00503_01_295J.jpeg",
+    "sha256": "bad1aca4cf00fc1821e8d473ecce7feb47030538d96e2474dff1880eb5300de0"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0072_0673332205_487ECM_N0032208NCAM00503_01_295J_merged9.png",
+    "local_path": "test/label/NLF_0072_0673332205_487ECM_N0032208NCAM00503_01_295J_merged9.png",
+    "sha256": "40206fcf0b7be05429913a8897a1aea4f644085a117832d8b799d64d3f8a0f18"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 69,
+   "block": 6,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0069_0673076118_145ECM_N0032208NCAM00500_01_295J.jpeg",
+    "local_path": "test/image/NLF_0069_0673076118_145ECM_N0032208NCAM00500_01_295J.jpeg",
+    "sha256": "ee612f15ea37b92035cac07efdb843f0e9d2a47e8af3b3be3cd9fb753991b7ba"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0069_0673076118_145ECM_N0032208NCAM00500_01_295J_merged8.png",
+    "local_path": "test/label/NLF_0069_0673076118_145ECM_N0032208NCAM00500_01_295J_merged8.png",
+    "sha256": "9fc9d547168f6c909b6aa8a7bf3bb6f35e8e0714053974fbf7bd8f25ed8e02c2"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 35,
+   "block": 3,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0035_0670050407_675ECM_N0031392NCAM00500_01_295J.jpeg",
+    "local_path": "test/image/NLF_0035_0670050407_675ECM_N0031392NCAM00500_01_295J.jpeg",
+    "sha256": "9ccf7ed2df4ed9ba3a4aa80cbcd0693dd96465c32d7e849f4077ce72d39a758b"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0035_0670050407_675ECM_N0031392NCAM00500_01_295J_merged10.png",
+    "local_path": "test/label/NLF_0035_0670050407_675ECM_N0031392NCAM00500_01_295J_merged10.png",
+    "sha256": "6922c976a87befbefae4845e6a8a45d36787d7a876f66208fb9711632289e765"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 91,
+   "block": 9,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0091_0675031444_789ECM_N0040136NCAM00303_01_195J.jpeg",
+    "local_path": "test/image/NLF_0091_0675031444_789ECM_N0040136NCAM00303_01_195J.jpeg",
+    "sha256": "26d078742d244666f17888b5c9525a82a944550258d8422020692eed237b1b5b"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0091_0675031444_789ECM_N0040136NCAM00303_01_195J_merged12.png",
+    "local_path": "test/label/NLF_0091_0675031444_789ECM_N0040136NCAM00303_01_195J_merged12.png",
+    "sha256": "d087827852780e96b9502feae6c5c9edd460d39a160c29552d8f7a6a7dafd074"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 98,
+   "block": 9,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0098_0675653450_800ECM_N0040136NCAM00500_01_295J.jpeg",
+    "local_path": "test/image/NLF_0098_0675653450_800ECM_N0040136NCAM00500_01_295J.jpeg",
+    "sha256": "01b5d6a3d922f92afb1a8ec0bc2e197f563cb31d97c88c09594631c5cc081f9f"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0098_0675653450_800ECM_N0040136NCAM00500_01_295J_merged11.png",
+    "local_path": "test/label/NLF_0098_0675653450_800ECM_N0040136NCAM00500_01_295J_merged11.png",
+    "sha256": "7677d03876aa2788400e2f2e229bf4139b77c100960775d01d5fc128908b72df"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 72,
+   "block": 7,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0072_0673345418_523ECM_N0032346NCAM03072_04_195J.jpeg",
+    "local_path": "test/image/NLF_0072_0673345418_523ECM_N0032346NCAM03072_04_195J.jpeg",
+    "sha256": "62ffb169bfa1b5a0c4a09bbf00e78c31edcb5b8845996711d4652d87280f3f46"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0072_0673345418_523ECM_N0032346NCAM03072_04_195J_merged10.png",
+    "local_path": "test/label/NLF_0072_0673345418_523ECM_N0032346NCAM03072_04_195J_merged10.png",
+    "sha256": "f4f13e11ec61b8648f0b5280717208ec8099e9403212bddf9c91dccbf6b58b48"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 35,
+   "block": 3,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0035_0670050336_675ECM_N0031392NCAM00500_01_295J.jpeg",
+    "local_path": "test/image/NLF_0035_0670050336_675ECM_N0031392NCAM00500_01_295J.jpeg",
+    "sha256": "0da5e22c0913bdc8d839477162de9682ea9c451a4e0d34e161320278e41877c6"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0035_0670050336_675ECM_N0031392NCAM00500_01_295J_merged11.png",
+    "local_path": "test/label/NLF_0035_0670050336_675ECM_N0031392NCAM00500_01_295J_merged11.png",
+    "sha256": "6d2da43769556f0bafc13592e231597f892681fb4297ece3f7062285760f2b34"
+   }
+  },
+  {
+   "split": "test",
+   "sol": 69,
+   "block": 6,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0069_0673075817_284ECM_N0032208NCAM00500_01_295J.jpeg",
+    "local_path": "test/image/NLF_0069_0673075817_284ECM_N0032208NCAM00500_01_295J.jpeg",
+    "sha256": "80f19b1be8b40bb1a2c33e0216d3741b4b70ddd7aed8e2d832d3a4906ec608e7"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0069_0673075817_284ECM_N0032208NCAM00500_01_295J_merged11.png",
+    "local_path": "test/label/NLF_0069_0673075817_284ECM_N0032208NCAM00500_01_295J_merged11.png",
+    "sha256": "eea625c53b607301b35555f5aec913c31bc9273bab0c417195c314aa061c801d"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 12,
+   "block": 1,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0012_0668009211_487ECM_N0030000NCAM00182_01_290J.jpeg",
+    "local_path": "train/image/NLF_0012_0668009211_487ECM_N0030000NCAM00182_01_290J.jpeg",
+    "sha256": "89c9a164dfa665266785ca98d19d2874ce54a576c05d305b5b6b43fe9c94057c"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0012_0668009211_487ECM_N0030000NCAM00182_01_290J_merged11.png",
+    "local_path": "train/label/NLF_0012_0668009211_487ECM_N0030000NCAM00182_01_290J_merged11.png",
+    "sha256": "900d8cfc76e177969f8e64be84daf8957603c9f764d18cbad77ed2e0033f3da9"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 12,
+   "block": 1,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0012_0668009680_786ECM_N0030000NCAM00180_01_290J.jpeg",
+    "local_path": "train/image/NLF_0012_0668009680_786ECM_N0030000NCAM00180_01_290J.jpeg",
+    "sha256": "e3303151a76560149840340ead129427525a239a25b2da1668cb6f322bf4d61f"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0012_0668009680_786ECM_N0030000NCAM00180_01_290J_merged53.png",
+    "local_path": "train/label/NLF_0012_0668009680_786ECM_N0030000NCAM00180_01_290J_merged53.png",
+    "sha256": "4b76ca095e7efb4740ae0d9fab6b792481f5e4bbfc3f4702b8d2addd652c810a"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 15,
+   "block": 1,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0015_0668287342_929ECM_N0030386NCAM03001_07_195J.jpeg",
+    "local_path": "train/image/NLF_0015_0668287342_929ECM_N0030386NCAM03001_07_195J.jpeg",
+    "sha256": "bb991c15ff0d2faa81416618e26da0b05e74b5236a84cb2f9fc1d02ef4bfcbcb"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0015_0668287342_929ECM_N0030386NCAM03001_07_195J_merged12.png",
+    "local_path": "train/label/NLF_0015_0668287342_929ECM_N0030386NCAM03001_07_195J_merged12.png",
+    "sha256": "d020f89fd568c546280d1dd7c63d68d8df1a60634f0746297cbdc9d93f73fce0"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 16,
+   "block": 1,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0016_0668373957_362ECM_N0030578NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0016_0668373957_362ECM_N0030578NCAM00500_01_295J.jpeg",
+    "sha256": "7ea43587bcaf27da36d0a98f1d0a8377d329b182a66bc9443093daa57c071e5d"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0016_0668373957_362ECM_N0030578NCAM00500_01_295J_merged11.png",
+    "local_path": "train/label/NLF_0016_0668373957_362ECM_N0030578NCAM00500_01_295J_merged11.png",
+    "sha256": "7ba089b2c8b9955a3e035dc184fb2bf8d1a2f5732aea425d5311da30a6b9c806"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 17,
+   "block": 1,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0017_0668452002_600ECM_N0030578NCAM00183_01_290J.jpeg",
+    "local_path": "train/image/NLF_0017_0668452002_600ECM_N0030578NCAM00183_01_290J.jpeg",
+    "sha256": "155c2fabcdd4dd5fd55d61fa22f3bf8e650d371b317ed29a19680825b392b332"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0017_0668452002_600ECM_N0030578NCAM00183_01_290J_merged10.png",
+    "local_path": "train/label/NLF_0017_0668452002_600ECM_N0030578NCAM00183_01_290J_merged10.png",
+    "sha256": "8e2c544384a5a60662efd625ae4897d7b044c87fc18f24d485a10281d791ca76"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 18,
+   "block": 1,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0018_0668545153_612ECM_N0030578NCAM00190_01_290J.jpeg",
+    "local_path": "train/image/NLF_0018_0668545153_612ECM_N0030578NCAM00190_01_290J.jpeg",
+    "sha256": "1992495ae8645b718891eb14785fa888a3ab858299a5edbc785b812219ecccf0"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0018_0668545153_612ECM_N0030578NCAM00190_01_290J_merged13.png",
+    "local_path": "train/label/NLF_0018_0668545153_612ECM_N0030578NCAM00190_01_290J_merged13.png",
+    "sha256": "314a31621e86e3a1225ba8d46681d5fcd957023de4ba918f4696b1740ad70fbe"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 20,
+   "block": 2,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0020_0668728815_613ECM_N0030770NCAM00305_04_195J.jpeg",
+    "local_path": "train/image/NLF_0020_0668728815_613ECM_N0030770NCAM00305_04_195J.jpeg",
+    "sha256": "1038d0ae6735a77538ba53a595c4d40bf40f80085801083234b2064ac838fbe3"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0020_0668728815_613ECM_N0030770NCAM00305_04_195J_merged15.png",
+    "local_path": "train/label/NLF_0020_0668728815_613ECM_N0030770NCAM00305_04_195J_merged15.png",
+    "sha256": "369a5f517d3dc9daf80c7f000f2b499f99dc92f03f20a19660ad9f2758ba47cf"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 23,
+   "block": 2,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0023_0668989457_042ECM_N0030792NCAM03023_04_195J.jpeg",
+    "local_path": "train/image/NLF_0023_0668989457_042ECM_N0030792NCAM03023_04_195J.jpeg",
+    "sha256": "6e3864159696259abe94db82273a96bfcce9b8e698ceec298a294605fa17265e"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0023_0668989457_042ECM_N0030792NCAM03023_04_195J_merged14.png",
+    "local_path": "train/label/NLF_0023_0668989457_042ECM_N0030792NCAM03023_04_195J_merged14.png",
+    "sha256": "babab716e7e203c1f747e7f653a371d55ae347ee8eb2386023a99cf29dafc127"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 23,
+   "block": 2,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0023_0668989457_042ECM_N0030792NCAM03023_10_195J.jpeg",
+    "local_path": "train/image/NLF_0023_0668989457_042ECM_N0030792NCAM03023_10_195J.jpeg",
+    "sha256": "4acf36786a166344e9481adb3a7b8ba86901932bcf78b5619bc833a9900c81c2"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0023_0668989457_042ECM_N0030792NCAM03023_10_195J_merged2.png",
+    "local_path": "train/label/NLF_0023_0668989457_042ECM_N0030792NCAM03023_10_195J_merged2.png",
+    "sha256": "2d93bf14c21da3aa164006a797883ad530b2c82919b6e1eb240043f9798f2f85"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 23,
+   "block": 2,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0023_0668989922_022ECM_N0030792NCAM00305_04_195J.jpeg",
+    "local_path": "train/image/NLF_0023_0668989922_022ECM_N0030792NCAM00305_04_195J.jpeg",
+    "sha256": "e4aafbc6278cded597c9ef109234b4fcc1304ef7188a2f31042942b1c3dbb935"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0023_0668989922_022ECM_N0030792NCAM00305_04_195J_merged14.png",
+    "local_path": "train/label/NLF_0023_0668989922_022ECM_N0030792NCAM00305_04_195J_merged14.png",
+    "sha256": "2f2072b8ddf38c5d83cd8da93945312be03bc4ed8fa710a57672192470bd8bc3"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 29,
+   "block": 2,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0029_0669530458_163ECM_N0030828NCAM03029_01_295J.jpeg",
+    "local_path": "train/image/NLF_0029_0669530458_163ECM_N0030828NCAM03029_01_295J.jpeg",
+    "sha256": "54450605cbe4582dc8b9f5787757f6e5370490a75b10df1abf692aafce022e0e"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0029_0669530458_163ECM_N0030828NCAM03029_01_295J_merged14.png",
+    "local_path": "train/label/NLF_0029_0669530458_163ECM_N0030828NCAM03029_01_295J_merged14.png",
+    "sha256": "1c3a0fa7d70963123e22e2699167af03e0273844cefd90f4843a27545cfccfbd"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 44,
+   "block": 4,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0044_0670852318_575ECM_N0031416NCAM03044_01_295J.jpeg",
+    "local_path": "train/image/NLF_0044_0670852318_575ECM_N0031416NCAM03044_01_295J.jpeg",
+    "sha256": "5bd70e9b325afafcae46728bb497c6ae7e7bf13c3e8d59406510634dd0e28a01"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0044_0670852318_575ECM_N0031416NCAM03044_01_295J_merged15.png",
+    "local_path": "train/label/NLF_0044_0670852318_575ECM_N0031416NCAM03044_01_295J_merged15.png",
+    "sha256": "7454d640750425a9b50d3c7015f456fadff3096bddfc63a20b0582278fca3a9c"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 45,
+   "block": 4,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0045_0670932345_352ECM_N0031416NCAM00298_01_295J.jpeg",
+    "local_path": "train/image/NLF_0045_0670932345_352ECM_N0031416NCAM00298_01_295J.jpeg",
+    "sha256": "3627b5a73cf6b4330e85939a7ef040c63613c0fe0f56785ce822dbe6b5390f69"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0045_0670932345_352ECM_N0031416NCAM00298_01_295J_merged36.png",
+    "local_path": "train/label/NLF_0045_0670932345_352ECM_N0031416NCAM00298_01_295J_merged36.png",
+    "sha256": "47effde2830d85d6fc41c2010e272a7ff6bc372caa6f696092aa363f6555e658"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 45,
+   "block": 4,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0045_0670932547_694ECM_N0031416NCAM00298_01_295J.jpeg",
+    "local_path": "train/image/NLF_0045_0670932547_694ECM_N0031416NCAM00298_01_295J.jpeg",
+    "sha256": "77e95b182b2d5dbb76f9f785351b305a280f1dfac44562e32c82506bc5110bc9"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0045_0670932547_694ECM_N0031416NCAM00298_01_295J_merged41.png",
+    "local_path": "train/label/NLF_0045_0670932547_694ECM_N0031416NCAM00298_01_295J_merged41.png",
+    "sha256": "e83824fe94c47817cd1246333b5a06811511a746ed57f6d2d5660bc4c4410cd1"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 46,
+   "block": 4,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0046_0671022573_020ECM_N0031416NCAM00298_01_295J.jpeg",
+    "local_path": "train/image/NLF_0046_0671022573_020ECM_N0031416NCAM00298_01_295J.jpeg",
+    "sha256": "0bc2499b5570c90103bf0f6dfd3d542f2bbc0b36b4e314b30c53bc6c987be1d3"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0046_0671022573_020ECM_N0031416NCAM00298_01_295J_merged12.png",
+    "local_path": "train/label/NLF_0046_0671022573_020ECM_N0031416NCAM00298_01_295J_merged12.png",
+    "sha256": "55a51ae6d1c9160bc939830b74a46faedb54e7179178920e246010c1c118f398"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 46,
+   "block": 4,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0046_0671023180_981ECM_N0031416NCAM00298_01_295J.jpeg",
+    "local_path": "train/image/NLF_0046_0671023180_981ECM_N0031416NCAM00298_01_295J.jpeg",
+    "sha256": "134259a2c748ce545393efef13188eae15783113386ca6f4ef4373cc367c2ca6"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0046_0671023180_981ECM_N0031416NCAM00298_01_295J_merged12.png",
+    "local_path": "train/label/NLF_0046_0671023180_981ECM_N0031416NCAM00298_01_295J_merged12.png",
+    "sha256": "d748cf04f641509056b99183b1660c1592d3796b184933e54f49090246804b5d"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 46,
+   "block": 4,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0046_0671023405_773ECM_N0031416NCAM00298_01_295J.jpeg",
+    "local_path": "train/image/NLF_0046_0671023405_773ECM_N0031416NCAM00298_01_295J.jpeg",
+    "sha256": "8dd324276a85ce59654455682361a981154446254fb71df3af6b2d60a6307c21"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0046_0671023405_773ECM_N0031416NCAM00298_01_295J_merged11.png",
+    "local_path": "train/label/NLF_0046_0671023405_773ECM_N0031416NCAM00298_01_295J_merged11.png",
+    "sha256": "2d60b6159c01061f60f81f1d9afe45afcf4a330b9a6ef9349bc89692eeaa67aa"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 46,
+   "block": 4,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0046_0671024114_025ECM_N0031416NCAM00298_01_295J.jpeg",
+    "local_path": "train/image/NLF_0046_0671024114_025ECM_N0031416NCAM00298_01_295J.jpeg",
+    "sha256": "fa490c6175f403f43940b250573bde31341ced5091b61bd1e53ea52f40324d05"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0046_0671024114_025ECM_N0031416NCAM00298_01_295J_merged11.png",
+    "local_path": "train/label/NLF_0046_0671024114_025ECM_N0031416NCAM00298_01_295J_merged11.png",
+    "sha256": "d1f214bf50414cc2af928c75860f70bee2a0f15b4a4cba9d26176e5a2c47b110"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 47,
+   "block": 4,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0047_0671121153_414ECM_N0031708NCAM00405_01_295J.jpeg",
+    "local_path": "train/image/NLF_0047_0671121153_414ECM_N0031708NCAM00405_01_295J.jpeg",
+    "sha256": "a133cbdd619319a0a77da384a5f8949b62e19b5515ce690e7a94c640c765e4c6"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0047_0671121153_414ECM_N0031708NCAM00405_01_295J_merged12.png",
+    "local_path": "train/label/NLF_0047_0671121153_414ECM_N0031708NCAM00405_01_295J_merged12.png",
+    "sha256": "fe418d2f7082867d5dc88c067b11fb1f748261df2292a55db1ee7676c241fb65"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 48,
+   "block": 4,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0048_0671211779_549ECM_N0031850NCAM03048_01_295J.jpeg",
+    "local_path": "train/image/NLF_0048_0671211779_549ECM_N0031850NCAM03048_01_295J.jpeg",
+    "sha256": "6b3e3cbfdb9a49d34becf96be4b16d5889a4fcb60f20e94168beef3f33c427e5"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0048_0671211779_549ECM_N0031850NCAM03048_01_295J_merged11.png",
+    "local_path": "train/label/NLF_0048_0671211779_549ECM_N0031850NCAM03048_01_295J_merged11.png",
+    "sha256": "7bd1967b909dcddfe924117db3f061e8de1b8e85b9e04990899b9ad64949c924"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 49,
+   "block": 4,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0049_0671302533_854ECM_N0031950NCAM03049_01_295J.jpeg",
+    "local_path": "train/image/NLF_0049_0671302533_854ECM_N0031950NCAM03049_01_295J.jpeg",
+    "sha256": "efb0711d1557b7697ae42e252d5bd42907c851dd2e53437ac8f0bbd8b52ba1eb"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0049_0671302533_854ECM_N0031950NCAM03049_01_295J_merged9.png",
+    "local_path": "train/label/NLF_0049_0671302533_854ECM_N0031950NCAM03049_01_295J_merged9.png",
+    "sha256": "1aaf7cf60e337cd99bd2d2ea4fee59bddf038b936249e3242f9e27b2765e94bb"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 50,
+   "block": 5,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0050_0671382174_448ECM_N0031950NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0050_0671382174_448ECM_N0031950NCAM00500_01_295J.jpeg",
+    "sha256": "fdfaf325228b60ffeecb3fb5e598dcbef90d1032be9eaebc4bc9c89e750674f1"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0050_0671382174_448ECM_N0031950NCAM00500_01_295J_merged9.png",
+    "local_path": "train/label/NLF_0050_0671382174_448ECM_N0031950NCAM00500_01_295J_merged9.png",
+    "sha256": "b1c733e429f164297e898fa6b3652c448ff5c56c5ce4ead26a57180efca1c0cf"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 50,
+   "block": 5,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0050_0671382343_450ECM_N0031950NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0050_0671382343_450ECM_N0031950NCAM00500_01_295J.jpeg",
+    "sha256": "9dc959d14d72622fad98da5f07b5fcd7fa9c5eca1fc4266f2f1d106198a5f428"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0050_0671382343_450ECM_N0031950NCAM00500_01_295J_merged10.png",
+    "local_path": "train/label/NLF_0050_0671382343_450ECM_N0031950NCAM00500_01_295J_merged10.png",
+    "sha256": "1cff7168d7d99caded05cc30b760c21c4cf471c3c7c2034d270525795467db63"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 52,
+   "block": 5,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0052_0671564415_007ECM_N0032046NCAM03052_10_195J.jpeg",
+    "local_path": "train/image/NLF_0052_0671564415_007ECM_N0032046NCAM03052_10_195J.jpeg",
+    "sha256": "cd5e7e8d406183c44f6e1624f8a468fa536aadebd738521001b7cb3a9313d18b"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0052_0671564415_007ECM_N0032046NCAM03052_10_195J_merged14.png",
+    "local_path": "train/label/NLF_0052_0671564415_007ECM_N0032046NCAM03052_10_195J_merged14.png",
+    "sha256": "db43a5ef1fc9f94b102a146430a392501264eb5c0224528ca9771a4ac6cc26c7"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 56,
+   "block": 5,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0056_0671919492_534ECM_N0032046NCAM00503_01_295J.jpeg",
+    "local_path": "train/image/NLF_0056_0671919492_534ECM_N0032046NCAM00503_01_295J.jpeg",
+    "sha256": "8871e25edee12a6082aa0a7e8d486330ec4d5bd8084ce56034c42baae4732d91"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0056_0671919492_534ECM_N0032046NCAM00503_01_295J_merged11.png",
+    "local_path": "train/label/NLF_0056_0671919492_534ECM_N0032046NCAM00503_01_295J_merged11.png",
+    "sha256": "c99db3622bb750592db1785e57cb1a83522feae48de98f9eb1a57ee3134dacd8"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 56,
+   "block": 5,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0056_0671919661_534ECM_N0032046NCAM00503_01_295J.jpeg",
+    "local_path": "train/image/NLF_0056_0671919661_534ECM_N0032046NCAM00503_01_295J.jpeg",
+    "sha256": "e0c92dba8a14c7d84d28dce7dff8ea9cc5a12bca897b1eccca8d6ee6cb65fdd3"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0056_0671919661_534ECM_N0032046NCAM00503_01_295J_merged10.png",
+    "local_path": "train/label/NLF_0056_0671919661_534ECM_N0032046NCAM00503_01_295J_merged10.png",
+    "sha256": "5c83d552ee71874741524eac76f2da18b7591ac26ce37a39fb845df60448f751"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 57,
+   "block": 5,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0057_0672000569_757ECM_N0032046NCAM00504_01_295J.jpeg",
+    "local_path": "train/image/NLF_0057_0672000569_757ECM_N0032046NCAM00504_01_295J.jpeg",
+    "sha256": "392f6095495272a82536fa858c0782d1dd1b462ffc715fc5286763c38211945f"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0057_0672000569_757ECM_N0032046NCAM00504_01_295J_merged9.png",
+    "local_path": "train/label/NLF_0057_0672000569_757ECM_N0032046NCAM00504_01_295J_merged9.png",
+    "sha256": "b42136773f2d92d1383a541746519edf5c3715b7e8a2198efc8cab2ff8d5ec95"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 84,
+   "block": 8,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0084_0674398239_491ECM_N0032430NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0084_0674398239_491ECM_N0032430NCAM00500_01_295J.jpeg",
+    "sha256": "2ce71a12cf508e2eaf90613047b2d32c8efe7fe306128145ae9baa682c383090"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0084_0674398239_491ECM_N0032430NCAM00500_01_295J_merged10.png",
+    "local_path": "train/label/NLF_0084_0674398239_491ECM_N0032430NCAM00500_01_295J_merged10.png",
+    "sha256": "83151bfcc62fa210318aeafd47db5f6d2910a5da11dc813220ee7e6d68108527"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 84,
+   "block": 8,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0084_0674405048_866ECM_N0040000NCAM03084_01_295J.jpeg",
+    "local_path": "train/image/NLF_0084_0674405048_866ECM_N0040000NCAM03084_01_295J.jpeg",
+    "sha256": "5ba647c68b4028d5f974706511451995a5390e2b33ecfc393c0d2a88499aa97d"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0084_0674405048_866ECM_N0040000NCAM03084_01_295J_merged10.png",
+    "local_path": "train/label/NLF_0084_0674405048_866ECM_N0040000NCAM03084_01_295J_merged10.png",
+    "sha256": "e545c73962aab89d03532b8e33cad1ac4a170e2035b29b2bcfaae427bf9ee69e"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 84,
+   "block": 8,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0084_0674405298_366ECM_N0040000NCAM02084_01_295J.jpeg",
+    "local_path": "train/image/NLF_0084_0674405298_366ECM_N0040000NCAM02084_01_295J.jpeg",
+    "sha256": "e4f7a24b9690cad4fd257dfdb1d13b3d71ceff0aba155f8bcbeaa48bb6a8dacf"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0084_0674405298_366ECM_N0040000NCAM02084_01_295J_merged14.png",
+    "local_path": "train/label/NLF_0084_0674405298_366ECM_N0040000NCAM02084_01_295J_merged14.png",
+    "sha256": "d118d461e5be4bdf0687df2d1666782f486094a2eb145ac525c94614db11bf0a"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 86,
+   "block": 8,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0086_0674576434_755ECM_N0040000NCAM00503_01_295J.jpeg",
+    "local_path": "train/image/NLF_0086_0674576434_755ECM_N0040000NCAM00503_01_295J.jpeg",
+    "sha256": "a716ece287fcd1591ad35d86c8a64be3f3ae73281830de81e5eafd6ecaabd7fc"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0086_0674576434_755ECM_N0040000NCAM00503_01_295J_merged13.png",
+    "local_path": "train/label/NLF_0086_0674576434_755ECM_N0040000NCAM00503_01_295J_merged13.png",
+    "sha256": "7c9bf5d1dce222ae306a57a1372d34189d49b5acebb923dd9a6e6da5ca61d0a3"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 86,
+   "block": 8,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0086_0674586486_566ECM_N0040048NCAM00304_01_195J.jpeg",
+    "local_path": "train/image/NLF_0086_0674586486_566ECM_N0040048NCAM00304_01_195J.jpeg",
+    "sha256": "ce03e14407da0c0a056983bde034b9f25e52b0ffdbc2d42afec0719f435b203e"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0086_0674586486_566ECM_N0040048NCAM00304_01_195J_merged11.png",
+    "local_path": "train/label/NLF_0086_0674586486_566ECM_N0040048NCAM00304_01_195J_merged11.png",
+    "sha256": "475ba3bd20068057fb068d09a91490e5f289b6c6bc1df0d3f5e9d2374f334f77"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 86,
+   "block": 8,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0086_0674586714_928ECM_N0040048NCAM03086_13_195J.jpeg",
+    "local_path": "train/image/NLF_0086_0674586714_928ECM_N0040048NCAM03086_13_195J.jpeg",
+    "sha256": "196f8fa882fde63e5ad3dbe8cdf4b404e13535ac0e6bb41c361878bf307e0f33"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0086_0674586714_928ECM_N0040048NCAM03086_13_195J_merged13.png",
+    "local_path": "train/label/NLF_0086_0674586714_928ECM_N0040048NCAM03086_13_195J_merged13.png",
+    "sha256": "72b53fd005d36a4c4caafabe957421664082f8dc3e5a87c9654fbf9c371644ac"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 87,
+   "block": 8,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0087_0674665923_680ECM_N0040048NCAM00200_01_290J.jpeg",
+    "local_path": "train/image/NLF_0087_0674665923_680ECM_N0040048NCAM00200_01_290J.jpeg",
+    "sha256": "901a2fcf081dfdf988cab653a8ed834279d18feb971e77be17ee777945d4f3c1"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0087_0674665923_680ECM_N0040048NCAM00200_01_290J_merged6.png",
+    "local_path": "train/label/NLF_0087_0674665923_680ECM_N0040048NCAM00200_01_290J_merged6.png",
+    "sha256": "77c1326b23a96ab2923e32afdfc15b1c486f23360376115ea099b22b2b382326"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 87,
+   "block": 8,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0087_0674666215_193ECM_N0040048NCAM00176_01_290J.jpeg",
+    "local_path": "train/image/NLF_0087_0674666215_193ECM_N0040048NCAM00176_01_290J.jpeg",
+    "sha256": "858ea79e90db6eaa9fc561e50bd87fc0d4b4917c5f3173062f3154dcee871464"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0087_0674666215_193ECM_N0040048NCAM00176_01_290J_merged6.png",
+    "local_path": "train/label/NLF_0087_0674666215_193ECM_N0040048NCAM00176_01_290J_merged6.png",
+    "sha256": "83eb8b582062ca288ad0cd81c1d4f5758c46b0bb437a79589b08188ca6f42f81"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 87,
+   "block": 8,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0087_0674667043_784ECM_N0040048NCAM00176_01_290J.jpeg",
+    "local_path": "train/image/NLF_0087_0674667043_784ECM_N0040048NCAM00176_01_290J.jpeg",
+    "sha256": "3ddb7569959d0413f9f8d6211dbde2bbc2485472b2e79b9f6c36b344c1d53ff8"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0087_0674667043_784ECM_N0040048NCAM00176_01_290J_merged6.png",
+    "local_path": "train/label/NLF_0087_0674667043_784ECM_N0040048NCAM00176_01_290J_merged6.png",
+    "sha256": "c50d7fcdf9254264a7271a7ab6423bb1527201e59a24ccefca7b7d977156d25c"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 87,
+   "block": 8,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0087_0674672460_809ECM_N0040048NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0087_0674672460_809ECM_N0040048NCAM00500_01_295J.jpeg",
+    "sha256": "8b2b647f260b09b58a99d483a9b8fd4620ee609c98edd06ad0c560c5906674e6"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0087_0674672460_809ECM_N0040048NCAM00500_01_295J_merged9.png",
+    "local_path": "train/label/NLF_0087_0674672460_809ECM_N0040048NCAM00500_01_295J_merged9.png",
+    "sha256": "d2ac4dda1969d0dce3a509d81a1c6fdd5c0c63b1cf13bf54f5c13613da4a3397"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 88,
+   "block": 8,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0088_0674754169_784ECM_N0040048NCAM00503_01_295J.jpeg",
+    "local_path": "train/image/NLF_0088_0674754169_784ECM_N0040048NCAM00503_01_295J.jpeg",
+    "sha256": "74a56ad8d878642f1b88d8f041ee24449a8806bb35407e869f5459585eae1a8e"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0088_0674754169_784ECM_N0040048NCAM00503_01_295J_merged8.png",
+    "local_path": "train/label/NLF_0088_0674754169_784ECM_N0040048NCAM00503_01_295J_merged8.png",
+    "sha256": "aa9639ef3e24301a5ffac598db52a641dbb2559b6c60f3d3258e29c8585f63dc"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 88,
+   "block": 8,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0088_0674754255_786ECM_N0040048NCAM00503_01_295J.jpeg",
+    "local_path": "train/image/NLF_0088_0674754255_786ECM_N0040048NCAM00503_01_295J.jpeg",
+    "sha256": "930da406e1ec9f2fbaf686745810b897cb43db7e14a504a9796cea9b20c0e573"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0088_0674754255_786ECM_N0040048NCAM00503_01_295J_merged11.png",
+    "local_path": "train/label/NLF_0088_0674754255_786ECM_N0040048NCAM00503_01_295J_merged11.png",
+    "sha256": "c8113e5a5a16b1b929594edfe2311cbb85dcdbd7cc523c2296cef738ea6a3efd"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 103,
+   "block": 10,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0103_0676094496_120ECM_N0040430NCAM02103_01_295J.jpeg",
+    "local_path": "train/image/NLF_0103_0676094496_120ECM_N0040430NCAM02103_01_295J.jpeg",
+    "sha256": "8e960034bb005b112e37f1e965aeae79e12839a684118b0de765fbea4e1da7c8"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0103_0676094496_120ECM_N0040430NCAM02103_01_295J_merged10.png",
+    "local_path": "train/label/NLF_0103_0676094496_120ECM_N0040430NCAM02103_01_295J_merged10.png",
+    "sha256": "01dfd20d56d388f66cf4ad6146d447ada05cf18211b1af3b485cdeb25b46ee4b"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 104,
+   "block": 10,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0104_0676180886_678ECM_N0040510NCAM00303_07_195J.jpeg",
+    "local_path": "train/image/NLF_0104_0676180886_678ECM_N0040510NCAM00303_07_195J.jpeg",
+    "sha256": "1e280ebc5e19667a7b0d3a16e9261ff872efd6aec2247202aeecb5c118b94712"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0104_0676180886_678ECM_N0040510NCAM00303_07_195J_merged8.png",
+    "local_path": "train/label/NLF_0104_0676180886_678ECM_N0040510NCAM00303_07_195J_merged8.png",
+    "sha256": "d7a93fbddef03c777b502178f266b0f437ad75f41fc9020c674a355fe85c4d10"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 104,
+   "block": 10,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0104_0676181486_802ECM_N0040510NCAM02104_01_295J.jpeg",
+    "local_path": "train/image/NLF_0104_0676181486_802ECM_N0040510NCAM02104_01_295J.jpeg",
+    "sha256": "5ad706f6ec6f7b867eb878baede12e99b08efdee6f08a98fa7c15c563446cf7c"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0104_0676181486_802ECM_N0040510NCAM02104_01_295J_merged14.png",
+    "local_path": "train/label/NLF_0104_0676181486_802ECM_N0040510NCAM02104_01_295J_merged14.png",
+    "sha256": "4d283ba1a99a8ec3a9f016a4bea956b6bfb7c51e3e601131928438c248212e75"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 106,
+   "block": 10,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0106_0676349852_800ECM_N0040592NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0106_0676349852_800ECM_N0040592NCAM00500_01_295J.jpeg",
+    "sha256": "364afceb60a3b32b5b3f0b970aae818447c34dcb19d9348de99b342a713c4bab"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0106_0676349852_800ECM_N0040592NCAM00500_01_295J_merged12.png",
+    "local_path": "train/label/NLF_0106_0676349852_800ECM_N0040592NCAM00500_01_295J_merged12.png",
+    "sha256": "47cf1d472d51f027708ddbb944163213f20050c618876cbff7a22472008490e1"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 108,
+   "block": 10,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0108_0676532957_432ECM_N0040738NCAM02108_07_195J.jpeg",
+    "local_path": "train/image/NLF_0108_0676532957_432ECM_N0040738NCAM02108_07_195J.jpeg",
+    "sha256": "a6c30332217bf91965fb25a87d4c1669b76219e4fd514d619a9df297e7af4c62"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0108_0676532957_432ECM_N0040738NCAM02108_07_195J_merged12.png",
+    "local_path": "train/label/NLF_0108_0676532957_432ECM_N0040738NCAM02108_07_195J_merged12.png",
+    "sha256": "dafe17cfda0ccd9c70e091cfc1c796571c9be23bfda396b6f0903d44ff8fd193"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 110,
+   "block": 11,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0110_0676714473_121ECM_N0040922NCAM02110_07_195J.jpeg",
+    "local_path": "train/image/NLF_0110_0676714473_121ECM_N0040922NCAM02110_07_195J.jpeg",
+    "sha256": "9975907599ba388cfe8a01ad2067f0d406a6b145b1acebd289ee246f171b8f5a"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0110_0676714473_121ECM_N0040922NCAM02110_07_195J_merged14.png",
+    "local_path": "train/label/NLF_0110_0676714473_121ECM_N0040922NCAM02110_07_195J_merged14.png",
+    "sha256": "70d13ba285ccda2c14eb401c9755d56b4f58d1b495aeb7990077fdd221003db4"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 110,
+   "block": 11,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0110_0676714716_395ECM_N0040922NCAM02110_10_195J.jpeg",
+    "local_path": "train/image/NLF_0110_0676714716_395ECM_N0040922NCAM02110_10_195J.jpeg",
+    "sha256": "6c50b1ea96e0d6b90704ecb676a0de55e68dbac40fae325f04100420ff026af7"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0110_0676714716_395ECM_N0040922NCAM02110_10_195J_merged7.png",
+    "local_path": "train/label/NLF_0110_0676714716_395ECM_N0040922NCAM02110_10_195J_merged7.png",
+    "sha256": "d9bf63b105660d297984f08b0a69d33e5d9bebfa5e1b8100d5d724c1cb754deb"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 111,
+   "block": 11,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0111_0676789226_987ECM_N0040922NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0111_0676789226_987ECM_N0040922NCAM00500_01_295J.jpeg",
+    "sha256": "96e05a3e4a240de80cf755d0911eedd5c71dafd99fdfee928fd4d04764d6e828"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0111_0676789226_987ECM_N0040922NCAM00500_01_295J_merged12.png",
+    "local_path": "train/label/NLF_0111_0676789226_987ECM_N0040922NCAM00500_01_295J_merged12.png",
+    "sha256": "c809a45288c968ac25e572235c1540079b38b5db438288e3df56c8d56193000a"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 111,
+   "block": 11,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0111_0676789405_175ECM_N0040922NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0111_0676789405_175ECM_N0040922NCAM00500_01_295J.jpeg",
+    "sha256": "b12ced8952a6508017ea43c6c5184ec640b720c829f94c76d8c5429286af1378"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0111_0676789405_175ECM_N0040922NCAM00500_01_295J_merged13.png",
+    "local_path": "train/label/NLF_0111_0676789405_175ECM_N0040922NCAM00500_01_295J_merged13.png",
+    "sha256": "c8f38e6c254fa0dedcf9ceb426da710384781b756604f2ae811437d3db41cd81"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 111,
+   "block": 11,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0111_0676789527_987ECM_N0040922NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0111_0676789527_987ECM_N0040922NCAM00500_01_295J.jpeg",
+    "sha256": "91ea6e6f05ec6af672c049b3214be37f4de1a13671d6b13d1294ebe31112e4ed"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0111_0676789527_987ECM_N0040922NCAM00500_01_295J_merged11.png",
+    "local_path": "train/label/NLF_0111_0676789527_987ECM_N0040922NCAM00500_01_295J_merged11.png",
+    "sha256": "aa759b67435325d8940d15f5e90917f9b52de5badd5665fb000716883840d18a"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 113,
+   "block": 11,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0113_0676976848_167ECM_N0041034NCAM00310_01_195J.jpeg",
+    "local_path": "train/image/NLF_0113_0676976848_167ECM_N0041034NCAM00310_01_195J.jpeg",
+    "sha256": "668857a1fbe5f8e4f908308233f58972d088e9e0e442bb327a17ce9340077c7d"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0113_0676976848_167ECM_N0041034NCAM00310_01_195J_merged11.png",
+    "local_path": "train/label/NLF_0113_0676976848_167ECM_N0041034NCAM00310_01_195J_merged11.png",
+    "sha256": "91cc46e254195050a96df1347b5a8892a90cdd9c84dd4b77b3f22ae6013f4fdf"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 113,
+   "block": 11,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0113_0676982584_199ECM_N0041062NCAM03113_01_195J.jpeg",
+    "local_path": "train/image/NLF_0113_0676982584_199ECM_N0041062NCAM03113_01_195J.jpeg",
+    "sha256": "4a8ab06e0ddc8e6a273f443b32f024b046e7346ee5f64c0d8259e18c0723e020"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0113_0676982584_199ECM_N0041062NCAM03113_01_195J_merged13.png",
+    "local_path": "train/label/NLF_0113_0676982584_199ECM_N0041062NCAM03113_01_195J_merged13.png",
+    "sha256": "82de77911c76ed9832295c1736f49d886995cb66d5d68f51982a79b824faf125"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 113,
+   "block": 11,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0113_0676982738_928ECM_N0041062NCAM00303_07_195J.jpeg",
+    "local_path": "train/image/NLF_0113_0676982738_928ECM_N0041062NCAM00303_07_195J.jpeg",
+    "sha256": "1c8d0c8412dc32a77620b3ff779155f9e68b8b8bebce936af44105981a1d9168"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0113_0676982738_928ECM_N0041062NCAM00303_07_195J_merged12.png",
+    "local_path": "train/label/NLF_0113_0676982738_928ECM_N0041062NCAM00303_07_195J_merged12.png",
+    "sha256": "c7d942d7c747c164dfe24b5eecd4a9ba7b0ccf40b2f6ade834048b044824a8be"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 113,
+   "block": 11,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0113_0676982738_928ECM_N0041062NCAM00303_10_195J.jpeg",
+    "local_path": "train/image/NLF_0113_0676982738_928ECM_N0041062NCAM00303_10_195J.jpeg",
+    "sha256": "0bb0ed16ef30207544c808a7a7bb9412a817c9f40b2f623d79ccb454190e1e71"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0113_0676982738_928ECM_N0041062NCAM00303_10_195J_merged12.png",
+    "local_path": "train/label/NLF_0113_0676982738_928ECM_N0041062NCAM00303_10_195J_merged12.png",
+    "sha256": "ace35fa47ebdcc1811fda6faf27cf21ea33f12d899f47933a3e14753fb8ca065"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 114,
+   "block": 11,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0114_0677057728_818ECM_N0041062NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0114_0677057728_818ECM_N0041062NCAM00500_01_295J.jpeg",
+    "sha256": "e98461310feedf5d5184f5d2ea95af106010fc24c925877c393f81d62ba9675d"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0114_0677057728_818ECM_N0041062NCAM00500_01_295J_merged12.png",
+    "local_path": "train/label/NLF_0114_0677057728_818ECM_N0041062NCAM00500_01_295J_merged12.png",
+    "sha256": "647593630215e38a65b4f90ad4d1c164e52e590266232fe3e2fe8428e57500c4"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 116,
+   "block": 11,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0116_0677245697_652ECM_N0041250NCAM00303_04_195J.jpeg",
+    "local_path": "train/image/NLF_0116_0677245697_652ECM_N0041250NCAM00303_04_195J.jpeg",
+    "sha256": "f8f6f1372c0276edf1aef1ee2478d44c602a7c1268d219d70b9e683ad8382354"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0116_0677245697_652ECM_N0041250NCAM00303_04_195J_merged14.png",
+    "local_path": "train/label/NLF_0116_0677245697_652ECM_N0041250NCAM00303_04_195J_merged14.png",
+    "sha256": "0a1cec8eafa5c5c8bfd143298463db5c2c3da7b6a950cbc0c88d0f33c55b8ded"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 116,
+   "block": 11,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0116_0677246094_637ECM_N0041250NCAM02116_10_195J.jpeg",
+    "local_path": "train/image/NLF_0116_0677246094_637ECM_N0041250NCAM02116_10_195J.jpeg",
+    "sha256": "ddfc6a68255a0ca5f970dd8ec64d39fb91b575a37a33a15c5a8d60d5575426b5"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0116_0677246094_637ECM_N0041250NCAM02116_10_195J_merged8.png",
+    "local_path": "train/label/NLF_0116_0677246094_637ECM_N0041250NCAM02116_10_195J_merged8.png",
+    "sha256": "04d6c82863e39d4d0e7cb712a2d057c210e62f9ca2165db4758a7815e916263e"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 122,
+   "block": 12,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0122_0677784655_605ECM_N0041422NCAM00303_04_195J.jpeg",
+    "local_path": "train/image/NLF_0122_0677784655_605ECM_N0041422NCAM00303_04_195J.jpeg",
+    "sha256": "a48424e18bbb52a3997734adfdad29b569b50f89d00adc81a317f5effe61af5e"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0122_0677784655_605ECM_N0041422NCAM00303_04_195J_merged10.png",
+    "local_path": "train/label/NLF_0122_0677784655_605ECM_N0041422NCAM00303_04_195J_merged10.png",
+    "sha256": "ffaa47b157e26d287a4195afac74c2e69984a10fc03d3e2e008d214cd6f66c8a"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 126,
+   "block": 12,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0126_0678134428_975ECM_N0041776NCAM00303_01_195J.jpeg",
+    "local_path": "train/image/NLF_0126_0678134428_975ECM_N0041776NCAM00303_01_195J.jpeg",
+    "sha256": "bce8aa939f9a5b0968ded02ef210442023c5dba62d1eb98a77803854880d7a82"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0126_0678134428_975ECM_N0041776NCAM00303_01_195J_merged12.png",
+    "local_path": "train/label/NLF_0126_0678134428_975ECM_N0041776NCAM00303_01_195J_merged12.png",
+    "sha256": "a62b4ff346685945079f261d287094ebd82b251029c7da7981d97aa50fd7699e"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 127,
+   "block": 12,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0127_0678225314_979ECM_N0041860NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0127_0678225314_979ECM_N0041860NCAM00500_01_295J.jpeg",
+    "sha256": "4f7a0e474b6cbfa5a9ff8680a30d98dd4a366194c3ef801a67385f406f4f9884"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0127_0678225314_979ECM_N0041860NCAM00500_01_295J_merged13.png",
+    "local_path": "train/label/NLF_0127_0678225314_979ECM_N0041860NCAM00500_01_295J_merged13.png",
+    "sha256": "93077a656c51dd01e3a66898d3024ee3b38c35a40f2f8d0ea187505463773bc5"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 130,
+   "block": 13,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0130_0678490337_432ECM_N0050000NCAM03130_10_195J.jpeg",
+    "local_path": "train/image/NLF_0130_0678490337_432ECM_N0050000NCAM03130_10_195J.jpeg",
+    "sha256": "7aa1260f664268b874aa0f4ba5a96e7a431466caf4c05793cfcd1dba70b90f68"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0130_0678490337_432ECM_N0050000NCAM03130_10_195J_merged9.png",
+    "local_path": "train/label/NLF_0130_0678490337_432ECM_N0050000NCAM03130_10_195J_merged9.png",
+    "sha256": "90eb814d23a736850597400432a25e26dc5ad8d283589a387fb50b83e4f93850"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 134,
+   "block": 13,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0134_0678844258_552ECM_N0050894NCAM03133_01_195J.jpeg",
+    "local_path": "train/image/NLF_0134_0678844258_552ECM_N0050894NCAM03133_01_195J.jpeg",
+    "sha256": "2e49dc5a451bdaa87d5c9e605715d0122caccd4be3fd19d68574edb248960771"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0134_0678844258_552ECM_N0050894NCAM03133_01_195J_merged12.png",
+    "local_path": "train/label/NLF_0134_0678844258_552ECM_N0050894NCAM03133_01_195J_merged12.png",
+    "sha256": "b65e996c86e1c46e9f35345972c91e6ab6418fdd3be4eb6d5237dc09890eaacf"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 135,
+   "block": 13,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0135_0678934185_535ECM_N0051388NCAM02135_01_195J.jpeg",
+    "local_path": "train/image/NLF_0135_0678934185_535ECM_N0051388NCAM02135_01_195J.jpeg",
+    "sha256": "89b9f8d483763e159bd47e0f046786c8acbf640470b2858dbdcf917620ca89ea"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0135_0678934185_535ECM_N0051388NCAM02135_01_195J_merged13.png",
+    "local_path": "train/label/NLF_0135_0678934185_535ECM_N0051388NCAM02135_01_195J_merged13.png",
+    "sha256": "59f50134b9c53b45c8d0234d08ae4f4666714cfb1a1b970078b68e2e72ebf53b"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 136,
+   "block": 13,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0136_0679020243_537ECM_N0051572NCAM03136_07_195J.jpeg",
+    "local_path": "train/image/NLF_0136_0679020243_537ECM_N0051572NCAM03136_07_195J.jpeg",
+    "sha256": "ea8085854a17713c42349374246a5994d0935007e570e64b086e562d75bfa680"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0136_0679020243_537ECM_N0051572NCAM03136_07_195J_merged12.png",
+    "local_path": "train/label/NLF_0136_0679020243_537ECM_N0051572NCAM03136_07_195J_merged12.png",
+    "sha256": "fb13cebb1238f3af920f409a420165117616066279e71b681d882511b3dc75c2"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 137,
+   "block": 13,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0137_0679105744_052ECM_N0051812NCAM02137_01_195J.jpeg",
+    "local_path": "train/image/NLF_0137_0679105744_052ECM_N0051812NCAM02137_01_195J.jpeg",
+    "sha256": "e94024d99349d75c97de1c21953254cccfd1dc451fd6a3eceda7e169c44ff948"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0137_0679105744_052ECM_N0051812NCAM02137_01_195J_merged12.png",
+    "local_path": "train/label/NLF_0137_0679105744_052ECM_N0051812NCAM02137_01_195J_merged12.png",
+    "sha256": "168b4724ee256a827708b69e7587293f43161f2c9c113a15902704ef29dd35cf"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 142,
+   "block": 14,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0142_0679544984_506ECM_N0051812NCAM00208_01_295J.jpeg",
+    "local_path": "train/image/NLF_0142_0679544984_506ECM_N0051812NCAM00208_01_295J.jpeg",
+    "sha256": "59b33b19d885d632c9410d578e51e9abaa203d671f9f31ca452b45598d7023f4"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0142_0679544984_506ECM_N0051812NCAM00208_01_295J_merged12.png",
+    "local_path": "train/label/NLF_0142_0679544984_506ECM_N0051812NCAM00208_01_295J_merged12.png",
+    "sha256": "607c3df7477eacc62d76dda5b95489190799eb1eb5727df8034cf2e42f46c781"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 142,
+   "block": 14,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0142_0679545210_168ECM_N0051812NCAM00208_01_295J.jpeg",
+    "local_path": "train/image/NLF_0142_0679545210_168ECM_N0051812NCAM00208_01_295J.jpeg",
+    "sha256": "ad7385c80496eda46d2da004546fb70f786ba95576674925a9e1b219908a9c40"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0142_0679545210_168ECM_N0051812NCAM00208_01_295J_merged11.png",
+    "local_path": "train/label/NLF_0142_0679545210_168ECM_N0051812NCAM00208_01_295J_merged11.png",
+    "sha256": "6eb53d983313fa1816904dc23a1172d7aa9148164737f9f246d37d6dce7127cb"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 144,
+   "block": 14,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0144_0679691784_300ECM_N0051812NCAM00210_01_295J.jpeg",
+    "local_path": "train/image/NLF_0144_0679691784_300ECM_N0051812NCAM00210_01_295J.jpeg",
+    "sha256": "42a1bd7a3d8f504d0342b2e7ae1af5f887fb5841fa83a19b3f99a6fdcbaa9c10"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0144_0679691784_300ECM_N0051812NCAM00210_01_295J_merged2.png",
+    "local_path": "train/label/NLF_0144_0679691784_300ECM_N0051812NCAM00210_01_295J_merged2.png",
+    "sha256": "3dff8a4edb6fa6fe603e459ea2d086e0b2d79eba1f8dc0fba4ef4f5a3d2440cb"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 144,
+   "block": 14,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0144_0679716517_803ECM_N0051812NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0144_0679716517_803ECM_N0051812NCAM00500_01_295J.jpeg",
+    "sha256": "9cfdcae568363cbeb5376e535591b24687b10ee2efadb04ad5fdba8273ef4705"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0144_0679716517_803ECM_N0051812NCAM00500_01_295J_merged10.png",
+    "local_path": "train/label/NLF_0144_0679716517_803ECM_N0051812NCAM00500_01_295J_merged10.png",
+    "sha256": "e4017e058d365326c9c75e21ccbccffc89f1a7cebbe500323a92e4062fdf513f"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 145,
+   "block": 14,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0145_0679827253_987ECM_N0051812NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0145_0679827253_987ECM_N0051812NCAM00500_01_295J.jpeg",
+    "sha256": "e897425bf86c4cf4f3448732cde56a7b0c49c1114dd474f769f0b04a79cad8d9"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0145_0679827253_987ECM_N0051812NCAM00500_01_295J_merged11.png",
+    "local_path": "train/label/NLF_0145_0679827253_987ECM_N0051812NCAM00500_01_295J_merged11.png",
+    "sha256": "f594a29130712b27fe241799f177f7f45dd0417a6dd1b9aa620ab8656b8e4759"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 147,
+   "block": 14,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0147_0679995238_739ECM_N0051812NCAM00209_01_295J.jpeg",
+    "local_path": "train/image/NLF_0147_0679995238_739ECM_N0051812NCAM00209_01_295J.jpeg",
+    "sha256": "0f40a652ce80404ce72597f8705ef94a091780331033c35fafeeaaf6ad85fcd3"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0147_0679995238_739ECM_N0051812NCAM00209_01_295J_merged12.png",
+    "local_path": "train/label/NLF_0147_0679995238_739ECM_N0051812NCAM00209_01_295J_merged12.png",
+    "sha256": "b089da2ed5a06754b0f9e93fdc00ffb683dbfb2e3c228a9e6b7103065d8c64a7"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 147,
+   "block": 14,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0147_0680002337_972ECM_N0051812NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0147_0680002337_972ECM_N0051812NCAM00500_01_295J.jpeg",
+    "sha256": "cabbc62d597240e719fb2dd5e40962c5b5c8dcaa6ced9c2526b69d02892dbd02"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0147_0680002337_972ECM_N0051812NCAM00500_01_295J_merged10.png",
+    "local_path": "train/label/NLF_0147_0680002337_972ECM_N0051812NCAM00500_01_295J_merged10.png",
+    "sha256": "1fb86d7b9b8db41093d59855dd8e0a05d6cf921fb2e090e84fc48f3d9050e515"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 151,
+   "block": 15,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0151_0680350002_159ECM_N0051812NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0151_0680350002_159ECM_N0051812NCAM00500_01_295J.jpeg",
+    "sha256": "e6da4ddbe6fef613e6e4698babe95687f1515dbae36b94c4c167de34f7ca7096"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0151_0680350002_159ECM_N0051812NCAM00500_01_295J_merged11.png",
+    "local_path": "train/label/NLF_0151_0680350002_159ECM_N0051812NCAM00500_01_295J_merged11.png",
+    "sha256": "c6c424bee94d6a22743f6d27fd1368ee2f748dcbd9b3ebc10208762399727b7b"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 152,
+   "block": 15,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0152_0680446972_057ECM_N0051812NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0152_0680446972_057ECM_N0051812NCAM00500_01_295J.jpeg",
+    "sha256": "16d03a500b29413224ebdced5725a80673b0922aebfeab33f6d8a7f5a053b107"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0152_0680446972_057ECM_N0051812NCAM00500_01_295J_merged13.png",
+    "local_path": "train/label/NLF_0152_0680446972_057ECM_N0051812NCAM00500_01_295J_merged13.png",
+    "sha256": "b677755caae53a0e37e5b064c6a87145e313c85ce4e2e6adc57f99cf49f6b14d"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 153,
+   "block": 15,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0153_0680531437_851ECM_N0052296NCAM03153_10_195J.jpeg",
+    "local_path": "train/image/NLF_0153_0680531437_851ECM_N0052296NCAM03153_10_195J.jpeg",
+    "sha256": "2ff57d3c593ce1f19ee87c27698e62f3b3dabd25375fcf3e21cf83267fe03a55"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0153_0680531437_851ECM_N0052296NCAM03153_10_195J_merged14.png",
+    "local_path": "train/label/NLF_0153_0680531437_851ECM_N0052296NCAM03153_10_195J_merged14.png",
+    "sha256": "f614fa12f3b87c379c4ba75b99a67e67a26e1c71ebb841b4036fad1063913c7b"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 155,
+   "block": 15,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0155_0680708431_725ECM_N0052506NCAM00301_10_195J.jpeg",
+    "local_path": "train/image/NLF_0155_0680708431_725ECM_N0052506NCAM00301_10_195J.jpeg",
+    "sha256": "444fc53d74baa6598106bd90a1d66ad5f0d27e7baad56546150004dd3feb82cd"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0155_0680708431_725ECM_N0052506NCAM00301_10_195J_merged14.png",
+    "local_path": "train/label/NLF_0155_0680708431_725ECM_N0052506NCAM00301_10_195J_merged14.png",
+    "sha256": "4cf61fc0b9211e5505d1278e4c3c444195a2a2b129eceb81dfbc64a1d09829e8"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 155,
+   "block": 15,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0155_0680713400_159ECM_N0052512NCAM02155_01_195J.jpeg",
+    "local_path": "train/image/NLF_0155_0680713400_159ECM_N0052512NCAM02155_01_195J.jpeg",
+    "sha256": "0c85702862bedd0213d098fcf8dfa5ca06e941568c5973e5668239be0374c57a"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0155_0680713400_159ECM_N0052512NCAM02155_01_195J_merged15.png",
+    "local_path": "train/label/NLF_0155_0680713400_159ECM_N0052512NCAM02155_01_195J_merged15.png",
+    "sha256": "30821cd01d5221de3ed5d6158ca27e3a47db0fd1852bb1453b02fa5418d8d9c1"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 156,
+   "block": 15,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0156_0680788233_112ECM_N0052512NCAM00511_01_295J.jpeg",
+    "local_path": "train/image/NLF_0156_0680788233_112ECM_N0052512NCAM00511_01_295J.jpeg",
+    "sha256": "f521c105864c92decd4d8866fcc1d9cc64fee3396d1ab6eef26554e18e21d93b"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0156_0680788233_112ECM_N0052512NCAM00511_01_295J_merged14.png",
+    "local_path": "train/label/NLF_0156_0680788233_112ECM_N0052512NCAM00511_01_295J_merged14.png",
+    "sha256": "ccc21e1a5d1996d495aa392528760cfddb12e3bb38a905cd7aa791ff65cbddc1"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 156,
+   "block": 15,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0156_0680788319_096ECM_N0052512NCAM00511_01_295J.jpeg",
+    "local_path": "train/image/NLF_0156_0680788319_096ECM_N0052512NCAM00511_01_295J.jpeg",
+    "sha256": "d60631049141327df0c632fc9eb48145d6263ca19cd616bb07c20576a76f7861"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0156_0680788319_096ECM_N0052512NCAM00511_01_295J_merged12.png",
+    "local_path": "train/label/NLF_0156_0680788319_096ECM_N0052512NCAM00511_01_295J_merged12.png",
+    "sha256": "efe7aa5977bb46fc065a9c99e772aed731a8bcb392076809f4734a8df52d70d6"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 156,
+   "block": 15,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0156_0680788378_112ECM_N0052512NCAM00511_01_295J.jpeg",
+    "local_path": "train/image/NLF_0156_0680788378_112ECM_N0052512NCAM00511_01_295J.jpeg",
+    "sha256": "1fe3241692286c5efad345dd94d1fc6c163ea928c90288c0f4e05ee960aff836"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0156_0680788378_112ECM_N0052512NCAM00511_01_295J_merged9.png",
+    "local_path": "train/label/NLF_0156_0680788378_112ECM_N0052512NCAM00511_01_295J_merged9.png",
+    "sha256": "4c0fa1b977fac07ad94aaea0d9326048281b00e584e3790ec5db7a8e6a524ed9"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 168,
+   "block": 16,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0168_0681867691_559ECM_N0060170NCAM03168_04_195J.jpeg",
+    "local_path": "train/image/NLF_0168_0681867691_559ECM_N0060170NCAM03168_04_195J.jpeg",
+    "sha256": "da5b043583dfc44e1aa027723250729e0246ad243968dd3135eefef0be1fb8b0"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0168_0681867691_559ECM_N0060170NCAM03168_04_195J_merged11.png",
+    "local_path": "train/label/NLF_0168_0681867691_559ECM_N0060170NCAM03168_04_195J_merged11.png",
+    "sha256": "e4df7b4bea4c2017cd6719ba82802b592802bee7c8fb41d9847587c52ef02303"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 168,
+   "block": 16,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0168_0681867868_114ECM_N0060170NCAM02168_04_195J.jpeg",
+    "local_path": "train/image/NLF_0168_0681867868_114ECM_N0060170NCAM02168_04_195J.jpeg",
+    "sha256": "17298fa3c4337aa696894fe50dd01fc6ef8bbb60ea71b43df29f3fc09470e446"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0168_0681867868_114ECM_N0060170NCAM02168_04_195J_merged12.png",
+    "local_path": "train/label/NLF_0168_0681867868_114ECM_N0060170NCAM02168_04_195J_merged12.png",
+    "sha256": "1f01b85b26619b7039b9e7642059e36bffdeca1140f364e6694465dbf57d4330"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 170,
+   "block": 17,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0170_0682039366_558ECM_N0060892NCAM03170_10_195J.jpeg",
+    "local_path": "train/image/NLF_0170_0682039366_558ECM_N0060892NCAM03170_10_195J.jpeg",
+    "sha256": "2b7ad90ee3c36536d39f1769d68920a92ed713468786aa14181d5072779804b7"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0170_0682039366_558ECM_N0060892NCAM03170_10_195J_merged14.png",
+    "local_path": "train/label/NLF_0170_0682039366_558ECM_N0060892NCAM03170_10_195J_merged14.png",
+    "sha256": "101efc76d4489de9674e35977303a36889e93160baab5459d2546bc6c00e41fe"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 170,
+   "block": 17,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0170_0682043595_286ECM_N0060892NCAM02170_07_195J.jpeg",
+    "local_path": "train/image/NLF_0170_0682043595_286ECM_N0060892NCAM02170_07_195J.jpeg",
+    "sha256": "6c08cb3080240e3dfaa53b1ac2fac8aadb8458be72fab641e7de405bf6670ec3"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0170_0682043595_286ECM_N0060892NCAM02170_07_195J_merged12.png",
+    "local_path": "train/label/NLF_0170_0682043595_286ECM_N0060892NCAM02170_07_195J_merged12.png",
+    "sha256": "d6d06abe6f7c99319f3f940dff106a4c4715e34be43a7326908d4b5813753dac"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 170,
+   "block": 17,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0170_0682043795_606ECM_N0060892NCAM02170_10_195J.jpeg",
+    "local_path": "train/image/NLF_0170_0682043795_606ECM_N0060892NCAM02170_10_195J.jpeg",
+    "sha256": "5a9029f8fe6462fc440662d93e2717be06ea6530c867187fd05dd38458f1affc"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0170_0682043795_606ECM_N0060892NCAM02170_10_195J_merged1.png",
+    "local_path": "train/label/NLF_0170_0682043795_606ECM_N0060892NCAM02170_10_195J_merged1.png",
+    "sha256": "1b8e232d824c221b2412c4317ccc7963199eeb02dea6bdad4cd81f6cdbe97c55"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 171,
+   "block": 17,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0171_0682126430_182ECM_N0061450NCAM03171_04_195J.jpeg",
+    "local_path": "train/image/NLF_0171_0682126430_182ECM_N0061450NCAM03171_04_195J.jpeg",
+    "sha256": "85feb0dfa4260f2a13b3c036bd5e777403ed6689b707886cdb5328d3af93c3ba"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0171_0682126430_182ECM_N0061450NCAM03171_04_195J_merged13.png",
+    "local_path": "train/label/NLF_0171_0682126430_182ECM_N0061450NCAM03171_04_195J_merged13.png",
+    "sha256": "452d46f75727571f1a8e9906a0e830dc0276bd147f781a587515a1152d1d418a"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 171,
+   "block": 17,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0171_0682126597_854ECM_N0061450NCAM03171_01_195J.jpeg",
+    "local_path": "train/image/NLF_0171_0682126597_854ECM_N0061450NCAM03171_01_195J.jpeg",
+    "sha256": "0e73a1b111ce17e71c158da13a37f5c1009666f2620267b6fa9586823dc3626a"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0171_0682126597_854ECM_N0061450NCAM03171_01_195J_merged12.png",
+    "local_path": "train/label/NLF_0171_0682126597_854ECM_N0061450NCAM03171_01_195J_merged12.png",
+    "sha256": "aa285ce2b979d307a09af77a6ec884d386a1f0b0a05127358e7acd79dd95e201"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 171,
+   "block": 17,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0171_0682127134_070ECM_N0061450NCAM02171_10_195J.jpeg",
+    "local_path": "train/image/NLF_0171_0682127134_070ECM_N0061450NCAM02171_10_195J.jpeg",
+    "sha256": "7ddb4dcd758ac1791795a7afe5bc4147b07827094d7388cbeabd433c09252f22"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0171_0682127134_070ECM_N0061450NCAM02171_10_195J_merged7.png",
+    "local_path": "train/label/NLF_0171_0682127134_070ECM_N0061450NCAM02171_10_195J_merged7.png",
+    "sha256": "e8eb53c26434e175fa28077efe99b07180804594083516a8c82906ac8d87c61e"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 173,
+   "block": 17,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0173_0682308672_489ECM_N0061648NCAM03173_04_195J.jpeg",
+    "local_path": "train/image/NLF_0173_0682308672_489ECM_N0061648NCAM03173_04_195J.jpeg",
+    "sha256": "349f5ecdaf10112a7c66eceb52a857ba3effacb429c5570f855628ae980a0e24"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0173_0682308672_489ECM_N0061648NCAM03173_04_195J_merged15.png",
+    "local_path": "train/label/NLF_0173_0682308672_489ECM_N0061648NCAM03173_04_195J_merged15.png",
+    "sha256": "688ebe754ce9e5a1bc8770a8253af7b823ee883e7f976309097cb1f586482a41"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 175,
+   "block": 17,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0175_0682484237_056ECM_N0061752NCAM00419_01_195J.jpeg",
+    "local_path": "train/image/NLF_0175_0682484237_056ECM_N0061752NCAM00419_01_195J.jpeg",
+    "sha256": "7c95d128e4f6121acb78d1f17ac046108542ad900a9dcd9d333c1f6c02a5c380"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0175_0682484237_056ECM_N0061752NCAM00419_01_195J_merged11.png",
+    "local_path": "train/label/NLF_0175_0682484237_056ECM_N0061752NCAM00419_01_195J_merged11.png",
+    "sha256": "2c1a476c5c74fd75a69f70210abed9570865a893c26f9647b54fb8cc2afa02da"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 175,
+   "block": 17,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0175_0682484814_495ECM_N0061752NCAM03175_10_195J.jpeg",
+    "local_path": "train/image/NLF_0175_0682484814_495ECM_N0061752NCAM03175_10_195J.jpeg",
+    "sha256": "a006cf194b4c18ffea5f702fa31fded1ec3a718e59b373b759b71a645b5e63bf"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0175_0682484814_495ECM_N0061752NCAM03175_10_195J_merged8.png",
+    "local_path": "train/label/NLF_0175_0682484814_495ECM_N0061752NCAM03175_10_195J_merged8.png",
+    "sha256": "993469f5b93ef7eeab8dd6868c4f1c458e0156823006fa09fb2959ce3e48735c"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 178,
+   "block": 17,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0178_0682754989_758ECM_N0062666NCAM02178_01_195J.jpeg",
+    "local_path": "train/image/NLF_0178_0682754989_758ECM_N0062666NCAM02178_01_195J.jpeg",
+    "sha256": "e64be357bf3d35dfaeefe7482c08ac50c5337b5b1f527f9a43a58ee436ddfa6a"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0178_0682754989_758ECM_N0062666NCAM02178_01_195J_merged14.png",
+    "local_path": "train/label/NLF_0178_0682754989_758ECM_N0062666NCAM02178_01_195J_merged14.png",
+    "sha256": "9e4f25701bbddc1c8e6d5abffb5e7489ab0f70e7d665df4fbe63ccf2119e535e"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 180,
+   "block": 18,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0180_0682927121_995ECM_N0070000NCAM03180_01_195J.jpeg",
+    "local_path": "train/image/NLF_0180_0682927121_995ECM_N0070000NCAM03180_01_195J.jpeg",
+    "sha256": "c1bca84950f73f809b7e8a27f4ba366bf0c16a42461f5e5d51fd5c13a4796b29"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0180_0682927121_995ECM_N0070000NCAM03180_01_195J_merged11.png",
+    "local_path": "train/label/NLF_0180_0682927121_995ECM_N0070000NCAM03180_01_195J_merged11.png",
+    "sha256": "79b831e3d1074ebb16d6cc41989d6e3d9d38771ddfe8a9d6e44212b491331041"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 185,
+   "block": 18,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0185_0683366539_317ECM_N0070000NCAM00303_01_195J.jpeg",
+    "local_path": "train/image/NLF_0185_0683366539_317ECM_N0070000NCAM00303_01_195J.jpeg",
+    "sha256": "f33d4a95763689570c44fd84dddd28a672b4c233a96c8290d513a7d131abd716"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0185_0683366539_317ECM_N0070000NCAM00303_01_195J_merged14.png",
+    "local_path": "train/label/NLF_0185_0683366539_317ECM_N0070000NCAM00303_01_195J_merged14.png",
+    "sha256": "4b7d12f5750f8726510dd2c93b66565e8b0168b5d8eb6c399d6960b0995df66c"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 202,
+   "block": 20,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0202_0684880423_101ECM_N0071556NCAM02202_10_195J.jpeg",
+    "local_path": "train/image/NLF_0202_0684880423_101ECM_N0071556NCAM02202_10_195J.jpeg",
+    "sha256": "551c85b5b3e624fd1efe3e5cdbadce418554581d78d79b2de7070f23904ac597"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0202_0684880423_101ECM_N0071556NCAM02202_10_195J_merged6.png",
+    "local_path": "train/label/NLF_0202_0684880423_101ECM_N0071556NCAM02202_10_195J_merged6.png",
+    "sha256": "7c1721024fb05f07cf97a9df2d7ec8c2f16578c42d3d827de98731fbb16b1c76"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 283,
+   "block": 28,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0283_0692069740_057ECM_N0080458NCAM03282_10_195J.jpeg",
+    "local_path": "train/image/NLF_0283_0692069740_057ECM_N0080458NCAM03282_10_195J.jpeg",
+    "sha256": "94ad61f824dc5b8916d8d61abf8b33d6b8015091741590140bfb9f0f6baba044"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0283_0692069740_057ECM_N0080458NCAM03282_10_195J_merged8.png",
+    "local_path": "train/label/NLF_0283_0692069740_057ECM_N0080458NCAM03282_10_195J_merged8.png",
+    "sha256": "c8b72e58cc3d0b5d83627228ef13f87aee96b32341bf78a2d189c79317c2a69c"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 45,
+   "block": 4,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0045_0670932584_117ECM_N0031416NCAM00298_01_295J.jpeg",
+    "local_path": "train/image/NLF_0045_0670932584_117ECM_N0031416NCAM00298_01_295J.jpeg",
+    "sha256": "66c94f9dfb9fd8ded3378a4c3978783d25659f6ef68e2882edc330e4c86fe1e6"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0045_0670932584_117ECM_N0031416NCAM00298_01_295J_merged36.png",
+    "local_path": "train/label/NLF_0045_0670932584_117ECM_N0031416NCAM00298_01_295J_merged36.png",
+    "sha256": "88ac2b0505f796f22ac6718015f2345ab6783906196435f40db668fd2afba8f5"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 126,
+   "block": 12,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0126_0678130642_903ECM_N0041776NCAM03126_04_195J.jpeg",
+    "local_path": "train/image/NLF_0126_0678130642_903ECM_N0041776NCAM03126_04_195J.jpeg",
+    "sha256": "10eb2cf833ee30fa69a6eb116eb38c5e63fca5ffab9bc6c8d2ecd3bd94d14b31"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0126_0678130642_903ECM_N0041776NCAM03126_04_195J_merged11.png",
+    "local_path": "train/label/NLF_0126_0678130642_903ECM_N0041776NCAM03126_04_195J_merged11.png",
+    "sha256": "dc4d8d2cf365c42d48c96c9f1a7941177ef82009791152bf452149f5fb0e5ece"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 103,
+   "block": 10,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0103_0676093978_680ECM_N0040430NCAM00303_04_195J.jpeg",
+    "local_path": "train/image/NLF_0103_0676093978_680ECM_N0040430NCAM00303_04_195J.jpeg",
+    "sha256": "ccadbe6fe25a47dda587148518118ffbe8be20ce91acc21382424ec7e68ab97b"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0103_0676093978_680ECM_N0040430NCAM00303_04_195J_merged13.png",
+    "local_path": "train/label/NLF_0103_0676093978_680ECM_N0040430NCAM00303_04_195J_merged13.png",
+    "sha256": "b28bbe6385cd4dc8eac70e84ae3a5aeb676e96aacb502566d35c1aea5ec45dce"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 239,
+   "block": 23,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0239_0688165255_115ECM_N0072440NCAM03239_04_195J.jpeg",
+    "local_path": "train/image/NLF_0239_0688165255_115ECM_N0072440NCAM03239_04_195J.jpeg",
+    "sha256": "6b032945bc79c6c55f608d3dc3c3cbf0aa3c07ae9fa4c1b26e8e2c247f1c0f7a"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0239_0688165255_115ECM_N0072440NCAM03239_04_195J_merged9.png",
+    "local_path": "train/label/NLF_0239_0688165255_115ECM_N0072440NCAM03239_04_195J_merged9.png",
+    "sha256": "153451edd134834b2bbc477e77dfc77dbdf860ce08d039dedc25341741c9aacd"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 87,
+   "block": 8,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0087_0674672714_228ECM_N0040048NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0087_0674672714_228ECM_N0040048NCAM00500_01_295J.jpeg",
+    "sha256": "1385f8285454254d16de1a254f00754833dd515022e73b4f3c9b7b2a178d318b"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0087_0674672714_228ECM_N0040048NCAM00500_01_295J_merged9.png",
+    "local_path": "train/label/NLF_0087_0674672714_228ECM_N0040048NCAM00500_01_295J_merged9.png",
+    "sha256": "821f949bb50652f9269c8470b205e8be925293e898f3b2c9122f84ec744bb4c2"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 110,
+   "block": 11,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0110_0676714265_676ECM_N0040922NCAM03110_01_195J.jpeg",
+    "local_path": "train/image/NLF_0110_0676714265_676ECM_N0040922NCAM03110_01_195J.jpeg",
+    "sha256": "c89b76a5e82e7b0f74863f79e0a2cbc7f0e8985f453d359ff6e8fe99e22fffac"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0110_0676714265_676ECM_N0040922NCAM03110_01_195J_merged11.png",
+    "local_path": "train/label/NLF_0110_0676714265_676ECM_N0040922NCAM03110_01_195J_merged11.png",
+    "sha256": "b20c6a0b4544e30b96f98a37949bba8dce65bcbf5b62b0078768e73f5a3d8cf1"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 171,
+   "block": 17,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0171_0682126765_882ECM_N0061450NCAM03171_01_195J.jpeg",
+    "local_path": "train/image/NLF_0171_0682126765_882ECM_N0061450NCAM03171_01_195J.jpeg",
+    "sha256": "38ca0ce2bca8aabdf350fb98ca817fd1cc2a9313cee85583b7185570003ff6de"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0171_0682126765_882ECM_N0061450NCAM03171_01_195J_merged12.png",
+    "local_path": "train/label/NLF_0171_0682126765_882ECM_N0061450NCAM03171_01_195J_merged12.png",
+    "sha256": "4db55bba9f04cf56970a47ffb1b9dba89b5244638a584d5f2b9ee3092fdfe7c5"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 175,
+   "block": 17,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0175_0682484615_116ECM_N0061752NCAM03175_04_195J.jpeg",
+    "local_path": "train/image/NLF_0175_0682484615_116ECM_N0061752NCAM03175_04_195J.jpeg",
+    "sha256": "2c531e15a52e330f047ff068613718505bbaa359e77963ea20a30f6daed260a8"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0175_0682484615_116ECM_N0061752NCAM03175_04_195J_merged13.png",
+    "local_path": "train/label/NLF_0175_0682484615_116ECM_N0061752NCAM03175_04_195J_merged13.png",
+    "sha256": "ad7e8cb705ceecb0f7fd6647717757e401e91cabc889768824c9c5257d71819f"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 147,
+   "block": 14,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0147_0680002409_005ECM_N0051812NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0147_0680002409_005ECM_N0051812NCAM00500_01_295J.jpeg",
+    "sha256": "e1173e08d7721eae575b213f48a3db68e49eb2f578b9023ed39dc10bdb7a4074"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0147_0680002409_005ECM_N0051812NCAM00500_01_295J_merged14.png",
+    "local_path": "train/label/NLF_0147_0680002409_005ECM_N0051812NCAM00500_01_295J_merged14.png",
+    "sha256": "ed8c3948eafc29311f49e8351b3ebb0da8e54f136f0459ea4f6722c75e7f0767"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 122,
+   "block": 12,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0122_0677785003_055ECM_N0041422NCAM02122_10_195J.jpeg",
+    "local_path": "train/image/NLF_0122_0677785003_055ECM_N0041422NCAM02122_10_195J.jpeg",
+    "sha256": "2fa35140af852f00c30bf2883d6970a1c7a07061ae48ffae4876252bd58cd677"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0122_0677785003_055ECM_N0041422NCAM02122_10_195J_merged9.png",
+    "local_path": "train/label/NLF_0122_0677785003_055ECM_N0041422NCAM02122_10_195J_merged9.png",
+    "sha256": "c56793537b99e923d64eb46d4b68a4427c00d10143163d986570716e9929e025"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 127,
+   "block": 12,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0127_0678218487_243ECM_N0041860NCAM03127_07_195J.jpeg",
+    "local_path": "train/image/NLF_0127_0678218487_243ECM_N0041860NCAM03127_07_195J.jpeg",
+    "sha256": "9162e1f9512ed8cd05f98681c93e7bea3728ac3acafa235d43a7225f27a6f326"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0127_0678218487_243ECM_N0041860NCAM03127_07_195J_merged9.png",
+    "local_path": "train/label/NLF_0127_0678218487_243ECM_N0041860NCAM03127_07_195J_merged9.png",
+    "sha256": "1bb607121d19cf1a5fb3c49ab8af1bd4ced199ab45069562604b3d1eec662931"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 17,
+   "block": 1,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0017_0668452701_397ECM_N0030578NCAM00183_01_290J.jpeg",
+    "local_path": "train/image/NLF_0017_0668452701_397ECM_N0030578NCAM00183_01_290J.jpeg",
+    "sha256": "50ab9773eb6c7db8653fe89fae66d473396e5743ffa646e1b2d429ac13fe9c8d"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0017_0668452701_397ECM_N0030578NCAM00183_01_290J_merged12.png",
+    "local_path": "train/label/NLF_0017_0668452701_397ECM_N0030578NCAM00183_01_290J_merged12.png",
+    "sha256": "f533da090000ff23ecf13fc0cf865502d410ceaa9bdabdb81c38a62a717f031e"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 109,
+   "block": 10,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0109_0676625776_491ECM_N0040822NCAM02109_04_195J.jpeg",
+    "local_path": "train/image/NLF_0109_0676625776_491ECM_N0040822NCAM02109_04_195J.jpeg",
+    "sha256": "5d9024e4af76e07e230d60c9cc5497aced9420d37426c5e00e5d341a5c8e2449"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0109_0676625776_491ECM_N0040822NCAM02109_04_195J_merged12.png",
+    "local_path": "train/label/NLF_0109_0676625776_491ECM_N0040822NCAM02109_04_195J_merged12.png",
+    "sha256": "ed6e7e15838be484ed8ba1c0e959f3da2018d4e1f83931446c89eaad8b7bbc8b"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 155,
+   "block": 15,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0155_0680712745_054ECM_N0052512NCAM03155_01_195J.jpeg",
+    "local_path": "train/image/NLF_0155_0680712745_054ECM_N0052512NCAM03155_01_195J.jpeg",
+    "sha256": "dbc890421b44de9d0bed7c7a3c9281cf35d5fa821566c7ba1e14add01ee4ba42"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0155_0680712745_054ECM_N0052512NCAM03155_01_195J_merged15.png",
+    "local_path": "train/label/NLF_0155_0680712745_054ECM_N0052512NCAM03155_01_195J_merged15.png",
+    "sha256": "c57c3b04e22b8ad6d68db7dd495cad7c66ab1d1dcea6237056b7794c7ca4c4eb"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 129,
+   "block": 12,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0129_0678403356_559ECM_N0042222NCAM03129_01_195J.jpeg",
+    "local_path": "train/image/NLF_0129_0678403356_559ECM_N0042222NCAM03129_01_195J.jpeg",
+    "sha256": "6e6ee765bf25c532003a763420b4812c447bd332f952ec829d3ef865cc715143"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0129_0678403356_559ECM_N0042222NCAM03129_01_195J_merged13.png",
+    "local_path": "train/label/NLF_0129_0678403356_559ECM_N0042222NCAM03129_01_195J_merged13.png",
+    "sha256": "22d0d20acc6b6d9820e828b4feaa808981c3aff350c37d183c0700184720497f"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 149,
+   "block": 14,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0149_0680161517_050ECM_N0051812NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0149_0680161517_050ECM_N0051812NCAM00500_01_295J.jpeg",
+    "sha256": "e442ccfcdf3b62fd38f01e6b7dc76f97e8ff03ad83a302162ac435d27b2568c7"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0149_0680161517_050ECM_N0051812NCAM00500_01_295J_merged11.png",
+    "local_path": "train/label/NLF_0149_0680161517_050ECM_N0051812NCAM00500_01_295J_merged11.png",
+    "sha256": "18210efe5c94544badd632e160bc96b466bc72390430edd97f973653407c9dc2"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 80,
+   "block": 8,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0080_0674047950_137ECM_N0032430NCAM00192_01_295J.jpeg",
+    "local_path": "train/image/NLF_0080_0674047950_137ECM_N0032430NCAM00192_01_295J.jpeg",
+    "sha256": "53e3e8b43663c74c23d3fc46aa3dcb822f36b65e33785d5cd12c9002d1e8de79"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0080_0674047950_137ECM_N0032430NCAM00192_01_295J_merged12.png",
+    "local_path": "train/label/NLF_0080_0674047950_137ECM_N0032430NCAM00192_01_295J_merged12.png",
+    "sha256": "feda37ac324aa11b566907833b66d191c65937b3af419d36cfee6b75b51f94db"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 122,
+   "block": 12,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0122_0677785003_055ECM_N0041422NCAM02122_07_195J.jpeg",
+    "local_path": "train/image/NLF_0122_0677785003_055ECM_N0041422NCAM02122_07_195J.jpeg",
+    "sha256": "1e09ac7b9be4d7a15fb69a14b74ff57ac54aaf7f5cd179ac045e37734ac96e44"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0122_0677785003_055ECM_N0041422NCAM02122_07_195J_merged14.png",
+    "local_path": "train/label/NLF_0122_0677785003_055ECM_N0041422NCAM02122_07_195J_merged14.png",
+    "sha256": "e851c4b28ead578260c75ceeaa3e3b4d2f7fe379fcf6b02887666d42a6e24c25"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 52,
+   "block": 5,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0052_0671568531_150ECM_N0032046NCAM02052_01_295J.jpeg",
+    "local_path": "train/image/NLF_0052_0671568531_150ECM_N0032046NCAM02052_01_295J.jpeg",
+    "sha256": "340582030c608907ba1cefc5da31265dfe28518ec4afeeba795e7cfd79c32e1f"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0052_0671568531_150ECM_N0032046NCAM02052_01_295J_merged14.png",
+    "local_path": "train/label/NLF_0052_0671568531_150ECM_N0032046NCAM02052_01_295J_merged14.png",
+    "sha256": "2dd0c2ec55bdfff1e1e7f9ed6035be349b9229bcd6f6d48b5a8b66b16e5d4c4d"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 171,
+   "block": 17,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0171_0682127134_070ECM_N0061450NCAM02171_01_195J.jpeg",
+    "local_path": "train/image/NLF_0171_0682127134_070ECM_N0061450NCAM02171_01_195J.jpeg",
+    "sha256": "5a6226ff496141161ce33994b117f2362f48cfc89aa71b41fad58922eb1fbb0b"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0171_0682127134_070ECM_N0061450NCAM02171_01_195J_merged11.png",
+    "local_path": "train/label/NLF_0171_0682127134_070ECM_N0061450NCAM02171_01_195J_merged11.png",
+    "sha256": "2b96dea3a2ece5c2a3425ed1af500955c54aff8e32d32113f34474aacafc4341"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 105,
+   "block": 10,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0105_0676269377_099ECM_N0040592NCAM03105_10_195J.jpeg",
+    "local_path": "train/image/NLF_0105_0676269377_099ECM_N0040592NCAM03105_10_195J.jpeg",
+    "sha256": "93f70f36142d195eb4166942edecbfb0e0eaaa10f25cf0f216899887cefd0e00"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0105_0676269377_099ECM_N0040592NCAM03105_10_195J_merged13.png",
+    "local_path": "train/label/NLF_0105_0676269377_099ECM_N0040592NCAM03105_10_195J_merged13.png",
+    "sha256": "b1a1c767eacc19b51440b83b43bd837afe50020fd9d9f3c264aa675f72dfb78c"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 46,
+   "block": 4,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0046_0671022989_382ECM_N0031416NCAM00298_01_295J.jpeg",
+    "local_path": "train/image/NLF_0046_0671022989_382ECM_N0031416NCAM00298_01_295J.jpeg",
+    "sha256": "02a342f017e3396a99b43b6bf68fcf16ed3205e028bfbd3cd9fc3b1dbc9d435b"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0046_0671022989_382ECM_N0031416NCAM00298_01_295J_merged12.png",
+    "local_path": "train/label/NLF_0046_0671022989_382ECM_N0031416NCAM00298_01_295J_merged12.png",
+    "sha256": "82b33c50f886bdf08afcd86499f28e543048e3a791f782bc34eb5fddab14f59c"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 168,
+   "block": 16,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0168_0681867466_742ECM_N0060170NCAM03168_07_195J.jpeg",
+    "local_path": "train/image/NLF_0168_0681867466_742ECM_N0060170NCAM03168_07_195J.jpeg",
+    "sha256": "671da42e5f1462152745e7a2f4cdbde3f97a8cca246238797c640f25dc208ab1"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0168_0681867466_742ECM_N0060170NCAM03168_07_195J_merged11.png",
+    "local_path": "train/label/NLF_0168_0681867466_742ECM_N0060170NCAM03168_07_195J_merged11.png",
+    "sha256": "41a98f3a094d3247292ce62e0d0934d5d2d3317bf54a931ec80e7189c38b5d82"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 46,
+   "block": 4,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0046_0671021432_257ECM_N0031416NCAM00298_01_295J.jpeg",
+    "local_path": "train/image/NLF_0046_0671021432_257ECM_N0031416NCAM00298_01_295J.jpeg",
+    "sha256": "3817e64a44460beb7de8504e46ebb178fd4052867116145ba7ef657fa909ef38"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0046_0671021432_257ECM_N0031416NCAM00298_01_295J_merged14.png",
+    "local_path": "train/label/NLF_0046_0671021432_257ECM_N0031416NCAM00298_01_295J_merged14.png",
+    "sha256": "632fc34eaec67d598c0ef306467541dc8ee5bdb2dd605736c4e0b89577f80ddb"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 46,
+   "block": 4,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0046_0671024002_183ECM_N0031416NCAM00298_01_295J.jpeg",
+    "local_path": "train/image/NLF_0046_0671024002_183ECM_N0031416NCAM00298_01_295J.jpeg",
+    "sha256": "47421868a5bfce353cfef2114a651f98eb0508045bb9d1168426abfe16267d66"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0046_0671024002_183ECM_N0031416NCAM00298_01_295J_merged10.png",
+    "local_path": "train/label/NLF_0046_0671024002_183ECM_N0031416NCAM00298_01_295J_merged10.png",
+    "sha256": "7aa0c9dcedfa038f355614af12151198baa702982a86d366b5f1ba2ab4ad82d3"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 170,
+   "block": 17,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0170_0682039520_506ECM_N0060892NCAM03170_07_195J.jpeg",
+    "local_path": "train/image/NLF_0170_0682039520_506ECM_N0060892NCAM03170_07_195J.jpeg",
+    "sha256": "eddad556cb9e9cd42d954fb72479932f60d904c8dcfe7d8e7845b768962ca8a7"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0170_0682039520_506ECM_N0060892NCAM03170_07_195J_merged14.png",
+    "local_path": "train/label/NLF_0170_0682039520_506ECM_N0060892NCAM03170_07_195J_merged14.png",
+    "sha256": "111a297ac1e67628678e87a41f273955b35c8c3c8b4eed1939551ce00d1586bb"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 129,
+   "block": 12,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0129_0678403525_258ECM_N0042222NCAM00303_10_195J.jpeg",
+    "local_path": "train/image/NLF_0129_0678403525_258ECM_N0042222NCAM00303_10_195J.jpeg",
+    "sha256": "16aa0102c47db3652d1d4ef1259f857d4b9b64457123f5b86d211b2c9104de14"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0129_0678403525_258ECM_N0042222NCAM00303_10_195J_merged13.png",
+    "local_path": "train/label/NLF_0129_0678403525_258ECM_N0042222NCAM00303_10_195J_merged13.png",
+    "sha256": "74a9605a0a9a3b776e1d60d2e86b04100d213f4fabeb7c75ade2cdaf6d191abf"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 84,
+   "block": 8,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0084_0674398274_190ECM_N0032430NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0084_0674398274_190ECM_N0032430NCAM00500_01_295J.jpeg",
+    "sha256": "25d225f8781db074deaf93d1d44ca60f2b471a94cf93454328b971dcae7f0206"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0084_0674398274_190ECM_N0032430NCAM00500_01_295J_merged9.png",
+    "local_path": "train/label/NLF_0084_0674398274_190ECM_N0032430NCAM00500_01_295J_merged9.png",
+    "sha256": "e9c3107af6846826086e9538fd21de3a406e95bf7e00c3ef4012c775761a6e55"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 123,
+   "block": 12,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0123_0677875399_300ECM_N0041644NCAM03123_10_195J.jpeg",
+    "local_path": "train/image/NLF_0123_0677875399_300ECM_N0041644NCAM03123_10_195J.jpeg",
+    "sha256": "62ea202d50c2ab8f4706184371be5f45356c5eaf5bdfc7d530fd41420e29f147"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0123_0677875399_300ECM_N0041644NCAM03123_10_195J_merged13.png",
+    "local_path": "train/label/NLF_0123_0677875399_300ECM_N0041644NCAM03123_10_195J_merged13.png",
+    "sha256": "c2dc9bd92513ddf8ca4d6c71a83e648f127130e01044b9529c5ef8502c07a9b9"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 14,
+   "block": 1,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0014_0668191860_522ECM_N0030110NCAM00304_10_195J.jpeg",
+    "local_path": "train/image/NLF_0014_0668191860_522ECM_N0030110NCAM00304_10_195J.jpeg",
+    "sha256": "2f7dd90643df7df5ba79f702a0eb6312a7dd698d3e68ade10a62e4d529765876"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0014_0668191860_522ECM_N0030110NCAM00304_10_195J_merged11.png",
+    "local_path": "train/label/NLF_0014_0668191860_522ECM_N0030110NCAM00304_10_195J_merged11.png",
+    "sha256": "2c933c335d1264f4d8ef0c0b06fe15f4c8cf64a4080fd55b68fb9f3262f62536"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 18,
+   "block": 1,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0018_0668547162_020ECM_N0030578NCAM00189_01_290J.jpeg",
+    "local_path": "train/image/NLF_0018_0668547162_020ECM_N0030578NCAM00189_01_290J.jpeg",
+    "sha256": "323dc21347a1785311034a3efaf553a08b2154e113f1383643b5580408b18189"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0018_0668547162_020ECM_N0030578NCAM00189_01_290J_merged11.png",
+    "local_path": "train/label/NLF_0018_0668547162_020ECM_N0030578NCAM00189_01_290J_merged11.png",
+    "sha256": "6d301921dda0f6285bb0c31e79177ac2549b42b0e92808eac82758dd19bfdce8"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 171,
+   "block": 17,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0171_0682126597_854ECM_N0061450NCAM03171_04_195J.jpeg",
+    "local_path": "train/image/NLF_0171_0682126597_854ECM_N0061450NCAM03171_04_195J.jpeg",
+    "sha256": "4cad4f161924b32722428a77c169d329bba4fee904e6ea39f64e05740bd2228e"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0171_0682126597_854ECM_N0061450NCAM03171_04_195J_merged14.png",
+    "local_path": "train/label/NLF_0171_0682126597_854ECM_N0061450NCAM03171_04_195J_merged14.png",
+    "sha256": "fe6ac9d06bf8afa9a1c89842d2e3fd835d1fbf66fb30299e4c7761a14de919c1"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 180,
+   "block": 18,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0180_0682927552_550ECM_N0070000NCAM02180_04_195J.jpeg",
+    "local_path": "train/image/NLF_0180_0682927552_550ECM_N0070000NCAM02180_04_195J.jpeg",
+    "sha256": "22247d8ab4ccb35cf5af707c1909fafeb52a4062effffdbc54a1c0c7833ddc4f"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0180_0682927552_550ECM_N0070000NCAM02180_04_195J_merged12.png",
+    "local_path": "train/label/NLF_0180_0682927552_550ECM_N0070000NCAM02180_04_195J_merged12.png",
+    "sha256": "82585038c6d422466f77d92ecf06cdca1badbf93e062bbcbbaa3a72b6fbea072"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 123,
+   "block": 12,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0123_0677875559_495ECM_N0041644NCAM02123_04_195J.jpeg",
+    "local_path": "train/image/NLF_0123_0677875559_495ECM_N0041644NCAM02123_04_195J.jpeg",
+    "sha256": "b95b0497e2e9955f11359a351ac14087e6bb9a01022ecc69ad0433cb11412707"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0123_0677875559_495ECM_N0041644NCAM02123_04_195J_merged13.png",
+    "local_path": "train/label/NLF_0123_0677875559_495ECM_N0041644NCAM02123_04_195J_merged13.png",
+    "sha256": "d8b199bcf2971ad477c14f7bbf52d7179831d26dcee2e3f869e189014a7bee1a"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 142,
+   "block": 14,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0142_0679545152_382ECM_N0051812NCAM00208_01_295J.jpeg",
+    "local_path": "train/image/NLF_0142_0679545152_382ECM_N0051812NCAM00208_01_295J.jpeg",
+    "sha256": "8f97ca7ef9d46b194f78cedb2362596400e96e44c64d546c9bf5e39469256b75"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0142_0679545152_382ECM_N0051812NCAM00208_01_295J_merged11.png",
+    "local_path": "train/label/NLF_0142_0679545152_382ECM_N0051812NCAM00208_01_295J_merged11.png",
+    "sha256": "d1b8e9f59a1dd86fe52d68a6087b08ce89272e39cef21de1211a5a40fc26d784"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 153,
+   "block": 15,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0153_0680531625_806ECM_N0052296NCAM03153_01_195J.jpeg",
+    "local_path": "train/image/NLF_0153_0680531625_806ECM_N0052296NCAM03153_01_195J.jpeg",
+    "sha256": "e0ac777a673d5eb42dafd54e6946db30a084f7aacd22617c8e2952b1915fcb01"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0153_0680531625_806ECM_N0052296NCAM03153_01_195J_merged14.png",
+    "local_path": "train/label/NLF_0153_0680531625_806ECM_N0052296NCAM03153_01_195J_merged14.png",
+    "sha256": "fa7e16800ffda437e1d0f827a205c49082bbac5ffd5c5c77e071c45118c5fa5e"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 124,
+   "block": 12,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0124_0677955190_226ECM_N0041712NCAM03124_04_195J.jpeg",
+    "local_path": "train/image/NLF_0124_0677955190_226ECM_N0041712NCAM03124_04_195J.jpeg",
+    "sha256": "a66abe6ab73195f76bd528e34d3288e855a19150b32af75c7252fb55305d4253"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0124_0677955190_226ECM_N0041712NCAM03124_04_195J_merged13.png",
+    "local_path": "train/label/NLF_0124_0677955190_226ECM_N0041712NCAM03124_04_195J_merged13.png",
+    "sha256": "b2eb07c5b8ceb3f1e1a9098cb6309ee0ebbb4734de9deda7f77974dbb456b932"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 170,
+   "block": 17,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0170_0682039366_558ECM_N0060892NCAM03170_04_195J.jpeg",
+    "local_path": "train/image/NLF_0170_0682039366_558ECM_N0060892NCAM03170_04_195J.jpeg",
+    "sha256": "f2f60cf05e14523bf039113a0ec8a5ce2a2f9ed1d8b9e5691063c2557cbc6c3a"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0170_0682039366_558ECM_N0060892NCAM03170_04_195J_merged13.png",
+    "local_path": "train/label/NLF_0170_0682039366_558ECM_N0060892NCAM03170_04_195J_merged13.png",
+    "sha256": "57559a4a05183ed9c08dbc83cd7bac5e4d9f421dcf9496d92fa83d76cf2bb2aa"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 46,
+   "block": 4,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0046_0671023257_871ECM_N0031416NCAM00298_01_295J.jpeg",
+    "local_path": "train/image/NLF_0046_0671023257_871ECM_N0031416NCAM00298_01_295J.jpeg",
+    "sha256": "65e7cf930b8359de89da806b5012f695098f5f18faf5bc5965b5ec365e0152cc"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0046_0671023257_871ECM_N0031416NCAM00298_01_295J_merged10.png",
+    "local_path": "train/label/NLF_0046_0671023257_871ECM_N0031416NCAM00298_01_295J_merged10.png",
+    "sha256": "8e5d0b62f477621a3dafe0385a907f7b21307ec5249e53d58497c24b5e2aebff"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 105,
+   "block": 10,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0105_0676269573_543ECM_N0040592NCAM03105_07_195J.jpeg",
+    "local_path": "train/image/NLF_0105_0676269573_543ECM_N0040592NCAM03105_07_195J.jpeg",
+    "sha256": "4ecb841ac0cab9a4b0b80c367c6b62ee07f6e3b16ee17291d7c11d260b2723cd"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0105_0676269573_543ECM_N0040592NCAM03105_07_195J_merged15.png",
+    "local_path": "train/label/NLF_0105_0676269573_543ECM_N0040592NCAM03105_07_195J_merged15.png",
+    "sha256": "dad597097331580c3ed93baa182ff8279396a4333c33dd50d1a6ab9bb5ca6b5d"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 170,
+   "block": 17,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0170_0682039520_506ECM_N0060892NCAM03170_04_195J.jpeg",
+    "local_path": "train/image/NLF_0170_0682039520_506ECM_N0060892NCAM03170_04_195J.jpeg",
+    "sha256": "177d7e80189e484818072b0309e357f7ab8ce312f47a781ee764ea971a8f8032"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0170_0682039520_506ECM_N0060892NCAM03170_04_195J_merged14.png",
+    "local_path": "train/label/NLF_0170_0682039520_506ECM_N0060892NCAM03170_04_195J_merged14.png",
+    "sha256": "ca2b50483965b9c2ead94b914b0db528608e71d476b20df078473b1e65f089c5"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 10,
+   "block": 1,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0010_0667837566_897ECM_N0030000NCAM00131_01_295J.jpeg",
+    "local_path": "train/image/NLF_0010_0667837566_897ECM_N0030000NCAM00131_01_295J.jpeg",
+    "sha256": "7ff2d8edc16e9d824d809068b9c2b1bd8fb6e1511e55d6714a633b079b1fb4b2"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0010_0667837566_897ECM_N0030000NCAM00131_01_295J_merged46.png",
+    "local_path": "train/label/NLF_0010_0667837566_897ECM_N0030000NCAM00131_01_295J_merged46.png",
+    "sha256": "5b3736aca7871fff843e037003e46c44c9bc962884c67474d2c9057d2f3f599d"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 127,
+   "block": 12,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0127_0678225452_020ECM_N0041860NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0127_0678225452_020ECM_N0041860NCAM00500_01_295J.jpeg",
+    "sha256": "c656144b33d6af7c9f74d112321d0fbee428fe7ccbf4bb95dcf5b0d5f133dd58"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0127_0678225452_020ECM_N0041860NCAM00500_01_295J_merged11.png",
+    "local_path": "train/label/NLF_0127_0678225452_020ECM_N0041860NCAM00500_01_295J_merged11.png",
+    "sha256": "cd7635beb1e22aaab188207c878876542dea6ca4268e2634872258a3575aec95"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 108,
+   "block": 10,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0108_0676532592_679ECM_N0040738NCAM03108_13_195J.jpeg",
+    "local_path": "train/image/NLF_0108_0676532592_679ECM_N0040738NCAM03108_13_195J.jpeg",
+    "sha256": "f7573742350a4b965849becee5736d665f80a734c29bc1959d77e4bd7b56535d"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0108_0676532592_679ECM_N0040738NCAM03108_13_195J_merged11.png",
+    "local_path": "train/label/NLF_0108_0676532592_679ECM_N0040738NCAM03108_13_195J_merged11.png",
+    "sha256": "fa013a544ba8f906a3669c49a7dbefdab8f732b96fa085fcc56db08ea24c221b"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 15,
+   "block": 1,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0015_0668287188_861ECM_N0030386NCAM03001_01_195J.jpeg",
+    "local_path": "train/image/NLF_0015_0668287188_861ECM_N0030386NCAM03001_01_195J.jpeg",
+    "sha256": "5e8f8c5b3d697b6578ef544e5e8b218d6dfc415b6f03fc8af66e7c0454f9fc56"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0015_0668287188_861ECM_N0030386NCAM03001_01_195J_merged15.png",
+    "local_path": "train/label/NLF_0015_0668287188_861ECM_N0030386NCAM03001_01_195J_merged15.png",
+    "sha256": "8f1e298e526010f25e6acf3c476c7f0dce7f81f01fa3c81ee94f3850204fa7fd"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 52,
+   "block": 5,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0052_0671559435_675ECM_N0031950NCAM00502_01_295J.jpeg",
+    "local_path": "train/image/NLF_0052_0671559435_675ECM_N0031950NCAM00502_01_295J.jpeg",
+    "sha256": "8901c6ac48efd173f4904041100fd79a7b8a116b0e093e31a9823a7ab9f5a67d"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0052_0671559435_675ECM_N0031950NCAM00502_01_295J_merged8.png",
+    "local_path": "train/label/NLF_0052_0671559435_675ECM_N0031950NCAM00502_01_295J_merged8.png",
+    "sha256": "25a7e008d77b08d241341c2f9fb4672403c25a60041de9e35976748c4fd94bf6"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 171,
+   "block": 17,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0171_0682126430_182ECM_N0061450NCAM03171_10_195J.jpeg",
+    "local_path": "train/image/NLF_0171_0682126430_182ECM_N0061450NCAM03171_10_195J.jpeg",
+    "sha256": "afa6305a24b2977ed4df3e7572c818b153c598fdee328b808012f067071472c0"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0171_0682126430_182ECM_N0061450NCAM03171_10_195J_merged2.png",
+    "local_path": "train/label/NLF_0171_0682126430_182ECM_N0061450NCAM03171_10_195J_merged2.png",
+    "sha256": "70fe372243b4b34bed56ae8b9764c34c13ec528f464014ee5cc3164f9b871542"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 178,
+   "block": 17,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0178_0682754853_667ECM_N0062666NCAM02178_01_195J.jpeg",
+    "local_path": "train/image/NLF_0178_0682754853_667ECM_N0062666NCAM02178_01_195J.jpeg",
+    "sha256": "e87f96fde6e758ea7f98fecff7c434654895bb4920956437fcd3fb79205c1a82"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0178_0682754853_667ECM_N0062666NCAM02178_01_195J_merged12.png",
+    "local_path": "train/label/NLF_0178_0682754853_667ECM_N0062666NCAM02178_01_195J_merged12.png",
+    "sha256": "1fe6f50d07ded2ac98b10b09118449bfc4ce69b18d64fb8afdbdb89a23753981"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 154,
+   "block": 15,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0154_0680612230_020ECM_N0052296NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0154_0680612230_020ECM_N0052296NCAM00500_01_295J.jpeg",
+    "sha256": "910dafd7bbc59f562ff59df483c1e5fde603f76dcd8f4ad665b273c19f03e46c"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0154_0680612230_020ECM_N0052296NCAM00500_01_295J_merged10.png",
+    "local_path": "train/label/NLF_0154_0680612230_020ECM_N0052296NCAM00500_01_295J_merged10.png",
+    "sha256": "f0dd0d3347343508e8edd87389dec7fc69704e62a3580d6c8ea194edb4b0dc3f"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 173,
+   "block": 17,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0173_0682309459_910ECM_N0061648NCAM02173_07_195J.jpeg",
+    "local_path": "train/image/NLF_0173_0682309459_910ECM_N0061648NCAM02173_07_195J.jpeg",
+    "sha256": "a14bc146109700e1b673f0b3d02de3aa9a85c22356af10c1d0082c6a2f98ceaa"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0173_0682309459_910ECM_N0061648NCAM02173_07_195J_merged9.png",
+    "local_path": "train/label/NLF_0173_0682309459_910ECM_N0061648NCAM02173_07_195J_merged9.png",
+    "sha256": "6723e69a80b9571c0d760a5f486b34110d9d614810a8fde15497fec7e56533c5"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 132,
+   "block": 13,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0132_0678665664_020ECM_N0050500NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0132_0678665664_020ECM_N0050500NCAM00500_01_295J.jpeg",
+    "sha256": "edc001847f1693c9bcd919fd35a4cae8db39c1434815d26b95f983a779e67916"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0132_0678665664_020ECM_N0050500NCAM00500_01_295J_merged13.png",
+    "local_path": "train/label/NLF_0132_0678665664_020ECM_N0050500NCAM00500_01_295J_merged13.png",
+    "sha256": "903840315cd71b7d040583163cb0edf81cd5563261b9ed6dbca0adcca296104f"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 87,
+   "block": 8,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0087_0674672476_145ECM_N0040048NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0087_0674672476_145ECM_N0040048NCAM00500_01_295J.jpeg",
+    "sha256": "65af59d9347aa7b414ec24a51951555e776d33e3fd37d1210f6a0b644bdbda69"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0087_0674672476_145ECM_N0040048NCAM00500_01_295J_merged10.png",
+    "local_path": "train/label/NLF_0087_0674672476_145ECM_N0040048NCAM00500_01_295J_merged10.png",
+    "sha256": "fa94ac2588e0156f8442855bb83f33bfdc48df52af2259eff6d80fe34b6030e5"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 134,
+   "block": 13,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0134_0678844258_552ECM_N0050894NCAM03133_10_195J.jpeg",
+    "local_path": "train/image/NLF_0134_0678844258_552ECM_N0050894NCAM03133_10_195J.jpeg",
+    "sha256": "7d4c0edc7e1a46ab718d779478381422c8d33b0555264af26b1731e9bb173cd5"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0134_0678844258_552ECM_N0050894NCAM03133_10_195J_merged11.png",
+    "local_path": "train/label/NLF_0134_0678844258_552ECM_N0050894NCAM03133_10_195J_merged11.png",
+    "sha256": "18a7d9c6d01252d8960159cd948684a429dcaf15e075cac5dfec7164a5f568d0"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 117,
+   "block": 11,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0117_0677327922_100ECM_N0041250NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0117_0677327922_100ECM_N0041250NCAM00500_01_295J.jpeg",
+    "sha256": "7b44eea85a737d92cb5d3e63c75fad3033e547a46a5319d3d061dba24fad8e55"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0117_0677327922_100ECM_N0041250NCAM00500_01_295J_merged10.png",
+    "local_path": "train/label/NLF_0117_0677327922_100ECM_N0041250NCAM00500_01_295J_merged10.png",
+    "sha256": "cdf75f5f880443386bfec1aad8bf893386ea0eeca715ecb6792fbc614d035c8e"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 46,
+   "block": 4,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0046_0671023524_743ECM_N0031416NCAM00298_01_295J.jpeg",
+    "local_path": "train/image/NLF_0046_0671023524_743ECM_N0031416NCAM00298_01_295J.jpeg",
+    "sha256": "8ba1ac5d97b7192c956d843700687d88f920d047a210036e3670dc4260d1c3f9"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0046_0671023524_743ECM_N0031416NCAM00298_01_295J_merged10.png",
+    "local_path": "train/label/NLF_0046_0671023524_743ECM_N0031416NCAM00298_01_295J_merged10.png",
+    "sha256": "965ae099a5de6e2eeacf19c8d822fb8d2c898f42f00d1f9b832acfba2cc7d107"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 169,
+   "block": 16,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0169_0681951459_785ECM_N0060410NCAM03169_04_195J.jpeg",
+    "local_path": "train/image/NLF_0169_0681951459_785ECM_N0060410NCAM03169_04_195J.jpeg",
+    "sha256": "56ed99d5a0a5505633281a062ed1bb73c890661912d57365a43dfa8a88192d16"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0169_0681951459_785ECM_N0060410NCAM03169_04_195J_merged13.png",
+    "local_path": "train/label/NLF_0169_0681951459_785ECM_N0060410NCAM03169_04_195J_merged13.png",
+    "sha256": "d3dcf9dd148f330338cb81d16dacbd473e7fa752d64fca6076f1cf60473d8a49"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 130,
+   "block": 13,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0130_0678490500_195ECM_N0050000NCAM03130_10_195J.jpeg",
+    "local_path": "train/image/NLF_0130_0678490500_195ECM_N0050000NCAM03130_10_195J.jpeg",
+    "sha256": "26c82756c8b4707dc49c0aa8374ea151af88cb2c4bc75deb39b1339d47dca21c"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0130_0678490500_195ECM_N0050000NCAM03130_10_195J_merged12.png",
+    "local_path": "train/label/NLF_0130_0678490500_195ECM_N0050000NCAM03130_10_195J_merged12.png",
+    "sha256": "1ba4ed52ab0596a49597e78eaf2af644c0c978941e68c31030bbac5b3abf2ed7"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 110,
+   "block": 11,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0110_0676714473_121ECM_N0040922NCAM02110_10_195J.jpeg",
+    "local_path": "train/image/NLF_0110_0676714473_121ECM_N0040922NCAM02110_10_195J.jpeg",
+    "sha256": "0dfdf73489dc823a8a363988a086653da63633fc7ac046614342e746e1b0da86"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0110_0676714473_121ECM_N0040922NCAM02110_10_195J_merged13.png",
+    "local_path": "train/label/NLF_0110_0676714473_121ECM_N0040922NCAM02110_10_195J_merged13.png",
+    "sha256": "31c9eb8d4316cd0f9cc28c27b2ed04be29642b0fcadc97e1d19322315ceab05d"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 18,
+   "block": 1,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0018_0668545302_323ECM_N0030578NCAM00190_01_290J.jpeg",
+    "local_path": "train/image/NLF_0018_0668545302_323ECM_N0030578NCAM00190_01_290J.jpeg",
+    "sha256": "b413f576792f0a3006b76ae401b04fcc799695d29d47691689ce783d0e504db5"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0018_0668545302_323ECM_N0030578NCAM00190_01_290J_merged12.png",
+    "local_path": "train/label/NLF_0018_0668545302_323ECM_N0030578NCAM00190_01_290J_merged12.png",
+    "sha256": "a49e2509f0a4fd13aef71de867acd20f7a677811c62e8b1fd836c26d39c05b0c"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 20,
+   "block": 2,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0020_0668728153_417ECM_N0030770NCAM00304_01_195J.jpeg",
+    "local_path": "train/image/NLF_0020_0668728153_417ECM_N0030770NCAM00304_01_195J.jpeg",
+    "sha256": "1e6f200ad41e305632d2e66c447760229a3eded973056bbb8be3d59baa4c55c7"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0020_0668728153_417ECM_N0030770NCAM00304_01_195J_merged13.png",
+    "local_path": "train/label/NLF_0020_0668728153_417ECM_N0030770NCAM00304_01_195J_merged13.png",
+    "sha256": "82023beb32bfe43f0044f0a5f9279815ea973d258e7d928af4f94c5e5d289161"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 155,
+   "block": 15,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0155_0680713031_691ECM_N0052512NCAM03155_07_195J.jpeg",
+    "local_path": "train/image/NLF_0155_0680713031_691ECM_N0052512NCAM03155_07_195J.jpeg",
+    "sha256": "759a4bbd1be87804d6c12793372b7212452cf56ca05b24c6e12d983ad24e73b5"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0155_0680713031_691ECM_N0052512NCAM03155_07_195J_merged14.png",
+    "local_path": "train/label/NLF_0155_0680713031_691ECM_N0052512NCAM03155_07_195J_merged14.png",
+    "sha256": "05977caccb88b6c5b6069c1803c00b4f1514e6d5e302c972dae0e42bfd48e77f"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 178,
+   "block": 17,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0178_0682748480_929ECM_N0062648NCAM00301_01_295J.jpeg",
+    "local_path": "train/image/NLF_0178_0682748480_929ECM_N0062648NCAM00301_01_295J.jpeg",
+    "sha256": "e7ddfa710ffc00a329586755b7e9429e62f062caeddaf8f9bcfc769ecef4256e"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0178_0682748480_929ECM_N0062648NCAM00301_01_295J_merged15.png",
+    "local_path": "train/label/NLF_0178_0682748480_929ECM_N0062648NCAM00301_01_295J_merged15.png",
+    "sha256": "6c35003f8a93a8aeea1ba53d7d0654796e17b80e5b42ee8cc3ec7ef05a39e575"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 84,
+   "block": 8,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0084_0674398256_909ECM_N0032430NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0084_0674398256_909ECM_N0032430NCAM00500_01_295J.jpeg",
+    "sha256": "4080756fefa2e2dd7763d1130c22433d5ff106ea088f706726f71fe7bede9efd"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0084_0674398256_909ECM_N0032430NCAM00500_01_295J_merged13.png",
+    "local_path": "train/label/NLF_0084_0674398256_909ECM_N0032430NCAM00500_01_295J_merged13.png",
+    "sha256": "464184ba696e97e63d48d507fc5d5eadf4a62063893ab6979e6490f5a3f753e1"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 177,
+   "block": 17,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0177_0682666454_660ECM_N0062250NCAM02177_07_195J.jpeg",
+    "local_path": "train/image/NLF_0177_0682666454_660ECM_N0062250NCAM02177_07_195J.jpeg",
+    "sha256": "b4f6a877cb4ea122ccf349e171b2ea7ea1bf3a32012a04a1622678d0902010b4"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0177_0682666454_660ECM_N0062250NCAM02177_07_195J_merged14.png",
+    "local_path": "train/label/NLF_0177_0682666454_660ECM_N0062250NCAM02177_07_195J_merged14.png",
+    "sha256": "9d5cad9e79cc46adea261023b179cac03322221f806e351c7d4242d2908436b4"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 23,
+   "block": 2,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0023_0668989457_042ECM_N0030792NCAM03023_07_195J.jpeg",
+    "local_path": "train/image/NLF_0023_0668989457_042ECM_N0030792NCAM03023_07_195J.jpeg",
+    "sha256": "dd39ddd7c8a06ee6a661a628a18ef04bfcaed650739a1b046b08e51f063b90ec"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0023_0668989457_042ECM_N0030792NCAM03023_07_195J_merged5.png",
+    "local_path": "train/label/NLF_0023_0668989457_042ECM_N0030792NCAM03023_07_195J_merged5.png",
+    "sha256": "c5d754026597c043ba77fc9498747e6b33dadb2e8ce0a8dede59e9c41a9ec6c0"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 128,
+   "block": 12,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0128_0678313893_691ECM_N0041878NCAM03128_10_195J.jpeg",
+    "local_path": "train/image/NLF_0128_0678313893_691ECM_N0041878NCAM03128_10_195J.jpeg",
+    "sha256": "a067e8c1f4e043c8e7bbdf1845fc922acc77f2f8e9d0352d1dddede4eea95e2d"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0128_0678313893_691ECM_N0041878NCAM03128_10_195J_merged2.png",
+    "local_path": "train/label/NLF_0128_0678313893_691ECM_N0041878NCAM03128_10_195J_merged2.png",
+    "sha256": "27782fca24e5575d885cbdd0d00f11898423fca7c57972d6e82053c8ece4bcdd"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 122,
+   "block": 12,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0122_0677774349_058ECM_N0041376NCAM00301_01_295J.jpeg",
+    "local_path": "train/image/NLF_0122_0677774349_058ECM_N0041376NCAM00301_01_295J.jpeg",
+    "sha256": "60b072e622d08526ef8b88355551f87fa86686fd5c7e18474ff3d4a1ab80f6cd"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0122_0677774349_058ECM_N0041376NCAM00301_01_295J_merged14.png",
+    "local_path": "train/label/NLF_0122_0677774349_058ECM_N0041376NCAM00301_01_295J_merged14.png",
+    "sha256": "4e67a5d3dab24ef25abcf0c2c17b672f102ec2671bc071ff342e15cad820b05c"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 180,
+   "block": 18,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0180_0682926965_387ECM_N0070000NCAM03180_01_195J.jpeg",
+    "local_path": "train/image/NLF_0180_0682926965_387ECM_N0070000NCAM03180_01_195J.jpeg",
+    "sha256": "7a6946fd877a74f4371062d076a70b908d1d2f03acf26bdbadcc90192c3b5672"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0180_0682926965_387ECM_N0070000NCAM03180_01_195J_merged12.png",
+    "local_path": "train/label/NLF_0180_0682926965_387ECM_N0070000NCAM03180_01_195J_merged12.png",
+    "sha256": "5d6468913a02e033ee5b4e1c2a0f694568ec58d18787bb016cc22d1ad4bd3e2e"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 46,
+   "block": 4,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0046_0671021943_648ECM_N0031416NCAM00298_01_295J.jpeg",
+    "local_path": "train/image/NLF_0046_0671021943_648ECM_N0031416NCAM00298_01_295J.jpeg",
+    "sha256": "869941d79c606b50bcaea96fe1f153334cacee703c2d9037cfeb8cb8d301eaa6"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0046_0671021943_648ECM_N0031416NCAM00298_01_295J_merged40.png",
+    "local_path": "train/label/NLF_0046_0671021943_648ECM_N0031416NCAM00298_01_295J_merged40.png",
+    "sha256": "290a9a6b3b468bbaa50964edccbd568d8486d4fa42b109573994180ca2766117"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 116,
+   "block": 11,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0116_0677245340_743ECM_N0041250NCAM03116_07_195J.jpeg",
+    "local_path": "train/image/NLF_0116_0677245340_743ECM_N0041250NCAM03116_07_195J.jpeg",
+    "sha256": "abbd776c840d98acb9b04e7bbe1123ea0ce5008fdafa6c1f044f8e52cb06595d"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0116_0677245340_743ECM_N0041250NCAM03116_07_195J_merged14.png",
+    "local_path": "train/label/NLF_0116_0677245340_743ECM_N0041250NCAM03116_07_195J_merged14.png",
+    "sha256": "83608173b091e6e5693aa13efa51d860c3f319f07725d06ad2de7aa00f549f74"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 29,
+   "block": 2,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0029_0669530684_574ECM_N0030828NCAM03029_01_295J.jpeg",
+    "local_path": "train/image/NLF_0029_0669530684_574ECM_N0030828NCAM03029_01_295J.jpeg",
+    "sha256": "5a5970a87402c863496080fb6181b96950acfff4bf7de1bc3cf3f8a5fdaa60bb"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0029_0669530684_574ECM_N0030828NCAM03029_01_295J_merged10.png",
+    "local_path": "train/label/NLF_0029_0669530684_574ECM_N0030828NCAM03029_01_295J_merged10.png",
+    "sha256": "e093ec43aef3b1ee98444a7015cd20c01616002ab460a86d8bcbc2b5180b8d0e"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 130,
+   "block": 13,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0130_0678490337_432ECM_N0050000NCAM03130_04_195J.jpeg",
+    "local_path": "train/image/NLF_0130_0678490337_432ECM_N0050000NCAM03130_04_195J.jpeg",
+    "sha256": "b007f1b140d48fb484056807a8c5515352f57d42c149778a44427031e31edba9"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0130_0678490337_432ECM_N0050000NCAM03130_04_195J_merged13.png",
+    "local_path": "train/label/NLF_0130_0678490337_432ECM_N0050000NCAM03130_04_195J_merged13.png",
+    "sha256": "3470c012ca2f4342c60ed0e17ce3f02335263b6b205a7065be17ddb81af53936"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 23,
+   "block": 2,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0023_0668989581_615ECM_N0030792NCAM03023_10_195J.jpeg",
+    "local_path": "train/image/NLF_0023_0668989581_615ECM_N0030792NCAM03023_10_195J.jpeg",
+    "sha256": "3ddab5401fcd905d27f5bfcffc4a066897a678b1dbb67d55ad540d4721c58677"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0023_0668989581_615ECM_N0030792NCAM03023_10_195J_merged13.png",
+    "local_path": "train/label/NLF_0023_0668989581_615ECM_N0030792NCAM03023_10_195J_merged13.png",
+    "sha256": "bba132cb1ca99a0898e02c48e92aeadc90a3e4247d538709aab79dd5da3287d2"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 86,
+   "block": 8,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0086_0674576392_755ECM_N0040000NCAM00503_01_295J.jpeg",
+    "local_path": "train/image/NLF_0086_0674576392_755ECM_N0040000NCAM00503_01_295J.jpeg",
+    "sha256": "485bbf96c29d2c16961b87c84295ae175c781209db721b118be48e08b81b8eee"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0086_0674576392_755ECM_N0040000NCAM00503_01_295J_merged10.png",
+    "local_path": "train/label/NLF_0086_0674576392_755ECM_N0040000NCAM00503_01_295J_merged10.png",
+    "sha256": "d95add5b5e08b697a76fc8d09542ffaad07f5ebc25759269d2e67e767046845d"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 104,
+   "block": 10,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0104_0676180886_678ECM_N0040510NCAM00303_10_195J.jpeg",
+    "local_path": "train/image/NLF_0104_0676180886_678ECM_N0040510NCAM00303_10_195J.jpeg",
+    "sha256": "eeafef65666e4d19f4d0e5fc8516c5a2af2507dc7bbd71d4f1266384b9025a6f"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0104_0676180886_678ECM_N0040510NCAM00303_10_195J_merged11.png",
+    "local_path": "train/label/NLF_0104_0676180886_678ECM_N0040510NCAM00303_10_195J_merged11.png",
+    "sha256": "f1dcc0eb5c22ca13787473637a771aeb0e257ac497a9909f223e9756ab1af501"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 46,
+   "block": 4,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0046_0671021446_698ECM_N0031416NCAM00298_01_295J.jpeg",
+    "local_path": "train/image/NLF_0046_0671021446_698ECM_N0031416NCAM00298_01_295J.jpeg",
+    "sha256": "e36fb4b7051b72247338db1e3b02516bbcbafdd2372540116ccd90e19ab2b8a9"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0046_0671021446_698ECM_N0031416NCAM00298_01_295J_merged33.png",
+    "local_path": "train/label/NLF_0046_0671021446_698ECM_N0031416NCAM00298_01_295J_merged33.png",
+    "sha256": "402e731d31df06e7d167a0d7dc6bfb1f185eff517107c81a8bfef070d5d4eeb4"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 173,
+   "block": 17,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0173_0682309225_380ECM_N0061648NCAM02173_10_195J.jpeg",
+    "local_path": "train/image/NLF_0173_0682309225_380ECM_N0061648NCAM02173_10_195J.jpeg",
+    "sha256": "976df26d90b15c5b3249658c1cecbf65ddd4fba0725817b2acc8aee1b7c01aa0"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0173_0682309225_380ECM_N0061648NCAM02173_10_195J_merged13.png",
+    "local_path": "train/label/NLF_0173_0682309225_380ECM_N0061648NCAM02173_10_195J_merged13.png",
+    "sha256": "b324577d5ea3da9552925582eee03e228bcc1716d6aeb709911ecb0431170af6"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 102,
+   "block": 10,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0102_0675997770_933ECM_N0040350NCAM00301_01_295J.jpeg",
+    "local_path": "train/image/NLF_0102_0675997770_933ECM_N0040350NCAM00301_01_295J.jpeg",
+    "sha256": "326c5c2bc91b4a34ed2ff996cc3f57d2cb44f238c4b7a8395ee898669f5d0349"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0102_0675997770_933ECM_N0040350NCAM00301_01_295J_merged12.png",
+    "local_path": "train/label/NLF_0102_0675997770_933ECM_N0040350NCAM00301_01_295J_merged12.png",
+    "sha256": "26fb49f50024d3d3439163d9b941a757a7ddd4fb9866192b5d1019587559489e"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 48,
+   "block": 4,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0048_0671208984_158ECM_N0031850NCAM02048_01_295J.jpeg",
+    "local_path": "train/image/NLF_0048_0671208984_158ECM_N0031850NCAM02048_01_295J.jpeg",
+    "sha256": "0d13becce5b5ded00397525defbe1e70ec1c19043c8167bfec1e732600211130"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0048_0671208984_158ECM_N0031850NCAM02048_01_295J_merged12.png",
+    "local_path": "train/label/NLF_0048_0671208984_158ECM_N0031850NCAM02048_01_295J_merged12.png",
+    "sha256": "740460138d8bdd1270b236d0822995502487288c8724ebe2951d8c36511625f0"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 150,
+   "block": 15,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0150_0680264618_277ECM_N0051812NCAM00209_01_295J.jpeg",
+    "local_path": "train/image/NLF_0150_0680264618_277ECM_N0051812NCAM00209_01_295J.jpeg",
+    "sha256": "4fd189b2e39e5cac9bf66b7adc0bf745ed2ec52c3caa43aeacb797f8a5d06da5"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0150_0680264618_277ECM_N0051812NCAM00209_01_295J_merged14.png",
+    "local_path": "train/label/NLF_0150_0680264618_277ECM_N0051812NCAM00209_01_295J_merged14.png",
+    "sha256": "a32abcbd94cf1ade5a591dd21a158d1d3d1294cf505b93b39a313dd1eca653a4"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 46,
+   "block": 4,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0046_0671023946_302ECM_N0031416NCAM00298_01_295J.jpeg",
+    "local_path": "train/image/NLF_0046_0671023946_302ECM_N0031416NCAM00298_01_295J.jpeg",
+    "sha256": "119b1eda4e8a3ea25956343787c98b68a010e30bbf48c9f055f1b8edf441127a"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0046_0671023946_302ECM_N0031416NCAM00298_01_295J_merged12.png",
+    "local_path": "train/label/NLF_0046_0671023946_302ECM_N0031416NCAM00298_01_295J_merged12.png",
+    "sha256": "c9992eec5351c0fa34c37ac2440fe575c3e76bd87947fd4c3d13ba96b9369285"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 135,
+   "block": 13,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0135_0678933639_099ECM_N0051388NCAM03135_04_195J.jpeg",
+    "local_path": "train/image/NLF_0135_0678933639_099ECM_N0051388NCAM03135_04_195J.jpeg",
+    "sha256": "7fd53f25d6a795ee889deb3e83cc7623a4a10568ed397dc0a55756807a420803"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0135_0678933639_099ECM_N0051388NCAM03135_04_195J_merged11.png",
+    "local_path": "train/label/NLF_0135_0678933639_099ECM_N0051388NCAM03135_04_195J_merged11.png",
+    "sha256": "05680d7184fce68b71f0ae18948bfdf1e7300641ab4451a768e03177c9e56b51"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 177,
+   "block": 17,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0177_0682666090_177ECM_N0062250NCAM03177_07_195J.jpeg",
+    "local_path": "train/image/NLF_0177_0682666090_177ECM_N0062250NCAM03177_07_195J.jpeg",
+    "sha256": "03d5c54814c6c856c305e3491eff2cd9770942db310a6fdd9df02718fd3b181d"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0177_0682666090_177ECM_N0062250NCAM03177_07_195J_merged12.png",
+    "local_path": "train/label/NLF_0177_0682666090_177ECM_N0062250NCAM03177_07_195J_merged12.png",
+    "sha256": "c5f53d6030f9b8515339bf313e071f011fca32469433f3479d727d736840f5be"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 109,
+   "block": 10,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0109_0676626037_997ECM_N0040822NCAM02109_04_195J.jpeg",
+    "local_path": "train/image/NLF_0109_0676626037_997ECM_N0040822NCAM02109_04_195J.jpeg",
+    "sha256": "32cb2b613a4d842d7ea978f29e29c7773e1a4e8a851bb7adb39b65536f9f450b"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0109_0676626037_997ECM_N0040822NCAM02109_04_195J_merged10.png",
+    "local_path": "train/label/NLF_0109_0676626037_997ECM_N0040822NCAM02109_04_195J_merged10.png",
+    "sha256": "92f56b89a7a5a7e9ce5da75574732f365e8b55c1c5089a717ab7acc402c62b10"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 173,
+   "block": 17,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0173_0682308520_176ECM_N0061648NCAM03173_01_195J.jpeg",
+    "local_path": "train/image/NLF_0173_0682308520_176ECM_N0061648NCAM03173_01_195J.jpeg",
+    "sha256": "e042276d3661124f97e62298aa3e1d3f8a87fff3fb5f8126f2e759515bd3ff09"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0173_0682308520_176ECM_N0061648NCAM03173_01_195J_merged13.png",
+    "local_path": "train/label/NLF_0173_0682308520_176ECM_N0061648NCAM03173_01_195J_merged13.png",
+    "sha256": "5432828ad65eb0abdf765701cf9de764382a987e841923f511c81e77ac6574d5"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 108,
+   "block": 10,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0108_0676532592_679ECM_N0040738NCAM03108_01_295J.jpeg",
+    "local_path": "train/image/NLF_0108_0676532592_679ECM_N0040738NCAM03108_01_295J.jpeg",
+    "sha256": "197f52e01349f239dc0906669c3b17d4bdd3df2ce032e552f2c684796490b240"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0108_0676532592_679ECM_N0040738NCAM03108_01_295J_merged14.png",
+    "local_path": "train/label/NLF_0108_0676532592_679ECM_N0040738NCAM03108_01_295J_merged14.png",
+    "sha256": "979b9ebc01e07e7deaf6e53868cdd3ed431d78ae99ab19e664b31256d59b241a"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 131,
+   "block": 13,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0131_0678575451_757ECM_N0050500NCAM03131_04_195J.jpeg",
+    "local_path": "train/image/NLF_0131_0678575451_757ECM_N0050500NCAM03131_04_195J.jpeg",
+    "sha256": "0607d670f125e060751a038c3305f899f12417cab20a000f459949c2d4ceedc5"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0131_0678575451_757ECM_N0050500NCAM03131_04_195J_merged13.png",
+    "local_path": "train/label/NLF_0131_0678575451_757ECM_N0050500NCAM03131_04_195J_merged13.png",
+    "sha256": "339409ed3304c4156d18f87f21833514e3b5f6ee312575a85b28968e89a80bc5"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 116,
+   "block": 11,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0116_0677242158_987ECM_N0041206NCAM00310_01_195J.jpeg",
+    "local_path": "train/image/NLF_0116_0677242158_987ECM_N0041206NCAM00310_01_195J.jpeg",
+    "sha256": "943f9ae22027a2c2772943093d77078cedbfc5743e932e10898a9b92e0b8837a"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0116_0677242158_987ECM_N0041206NCAM00310_01_195J_merged10.png",
+    "local_path": "train/label/NLF_0116_0677242158_987ECM_N0041206NCAM00310_01_195J_merged10.png",
+    "sha256": "c0c689b0f990c4998b00351ddb174d83167a9947b37f7b6844b23282ee746ce4"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 130,
+   "block": 13,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0130_0678490867_039ECM_N0050000NCAM02130_04_195J.jpeg",
+    "local_path": "train/image/NLF_0130_0678490867_039ECM_N0050000NCAM02130_04_195J.jpeg",
+    "sha256": "dc40d4a9c911fdcec249c8956092a044de3e2fe4e88325eb2d56823e1d7f532b"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0130_0678490867_039ECM_N0050000NCAM02130_04_195J_merged14.png",
+    "local_path": "train/label/NLF_0130_0678490867_039ECM_N0050000NCAM02130_04_195J_merged14.png",
+    "sha256": "aaa028f6db5acc8750d030628f46e9e9177f67fbfe4c4b66028ba7d3bbd0ca87"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 175,
+   "block": 17,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0175_0682485183_115ECM_N0061752NCAM02175_10_195J.jpeg",
+    "local_path": "train/image/NLF_0175_0682485183_115ECM_N0061752NCAM02175_10_195J.jpeg",
+    "sha256": "1d5f71f9ebb48db2c6f0c4764ba65efcba8ce65d1af9c84fa5aff8368e548d9e"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0175_0682485183_115ECM_N0061752NCAM02175_10_195J_merged6.png",
+    "local_path": "train/label/NLF_0175_0682485183_115ECM_N0061752NCAM02175_10_195J_merged6.png",
+    "sha256": "87b8e4ca0970cb5aba3b0d0c2b3225e8fe249d0705d26f4d3508930e877d10c6"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 147,
+   "block": 14,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0147_0680002379_572ECM_N0051812NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0147_0680002379_572ECM_N0051812NCAM00500_01_295J.jpeg",
+    "sha256": "5dd8e9fae4fef47295faa9246a60b4c22c9f54565b5a666b6c1c66cbf7641a50"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0147_0680002379_572ECM_N0051812NCAM00500_01_295J_merged12.png",
+    "local_path": "train/label/NLF_0147_0680002379_572ECM_N0051812NCAM00500_01_295J_merged12.png",
+    "sha256": "534ebb95452be967589a2c3aa36b6784ef50f820e35ff9fcef43f464dbbf2e58"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 128,
+   "block": 12,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0128_0678313893_691ECM_N0041878NCAM03128_04_195J.jpeg",
+    "local_path": "train/image/NLF_0128_0678313893_691ECM_N0041878NCAM03128_04_195J.jpeg",
+    "sha256": "77beebdf0e0bec1bc1bdef2e5b940ed5d0bc98ebc00de37bead1bdcd7f1ddc33"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0128_0678313893_691ECM_N0041878NCAM03128_04_195J_merged11.png",
+    "local_path": "train/label/NLF_0128_0678313893_691ECM_N0041878NCAM03128_04_195J_merged11.png",
+    "sha256": "8ba7167b6c35b826a17d3b517709da643532e8ede9e1db84e974b6ebba99cf86"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 14,
+   "block": 1,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0014_0668187134_647ECM_N0030038NCAM00112_01_295J.jpeg",
+    "local_path": "train/image/NLF_0014_0668187134_647ECM_N0030038NCAM00112_01_295J.jpeg",
+    "sha256": "9ac95f621e34d6bf16f05ed7b963addbdfa71f17bdd373e38fde1389d0357fd2"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0014_0668187134_647ECM_N0030038NCAM00112_01_295J_merged11.png",
+    "local_path": "train/label/NLF_0014_0668187134_647ECM_N0030038NCAM00112_01_295J_merged11.png",
+    "sha256": "63ade11db985b0acd1df728be7d1c47b32f7ea6064bd47ee7daa5e83a24a94a1"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 88,
+   "block": 8,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0088_0674754183_784ECM_N0040048NCAM00503_01_295J.jpeg",
+    "local_path": "train/image/NLF_0088_0674754183_784ECM_N0040048NCAM00503_01_295J.jpeg",
+    "sha256": "6ba77476b2e89868b75beb52890102e948e53fee7ddd91ab5ec0682978073f75"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0088_0674754183_784ECM_N0040048NCAM00503_01_295J_merged12.png",
+    "local_path": "train/label/NLF_0088_0674754183_784ECM_N0040048NCAM00503_01_295J_merged12.png",
+    "sha256": "f3a71805b092060e4cae4642195a2264026307c3b8381e1a54275f42f8b31767"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 46,
+   "block": 4,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0046_0671021666_695ECM_N0031416NCAM00298_01_295J.jpeg",
+    "local_path": "train/image/NLF_0046_0671021666_695ECM_N0031416NCAM00298_01_295J.jpeg",
+    "sha256": "bfbb54760893d810b0b7bf2b98e77660002e37cdbf93135827a0c72570de91d6"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0046_0671021666_695ECM_N0031416NCAM00298_01_295J_merged41.png",
+    "local_path": "train/label/NLF_0046_0671021666_695ECM_N0031416NCAM00298_01_295J_merged41.png",
+    "sha256": "577206d1edea842f1eefd8bab0f2259cecafb75446d9b239fc8fcbeff28c8043"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 104,
+   "block": 10,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0104_0676185599_816ECM_N0040510NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0104_0676185599_816ECM_N0040510NCAM00500_01_295J.jpeg",
+    "sha256": "fd9c6559ad7a7082036b94c8e905120989a2b9aebfe435891165b6069a4e1b4e"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0104_0676185599_816ECM_N0040510NCAM00500_01_295J_merged12.png",
+    "local_path": "train/label/NLF_0104_0676185599_816ECM_N0040510NCAM00500_01_295J_merged12.png",
+    "sha256": "d9ab5674a78582a16a447ebd1c1d9de01c9ea9c8877ca95c750854d58066dc7c"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 20,
+   "block": 2,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0020_0668728366_634ECM_N0030770NCAM03020_01_295J.jpeg",
+    "local_path": "train/image/NLF_0020_0668728366_634ECM_N0030770NCAM03020_01_295J.jpeg",
+    "sha256": "e3b37cb538a524d6993fe118daca4e1d0bdc07ff05871cf87c5f1ff0db6c1292"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0020_0668728366_634ECM_N0030770NCAM03020_01_295J_merged12.png",
+    "local_path": "train/label/NLF_0020_0668728366_634ECM_N0030770NCAM03020_01_295J_merged12.png",
+    "sha256": "f13f1b2814b9e72166219d6d3ee733cb95f4e53768bb0df98a5a14573cda434d"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 46,
+   "block": 4,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0046_0671023427_167ECM_N0031416NCAM00298_01_295J.jpeg",
+    "local_path": "train/image/NLF_0046_0671023427_167ECM_N0031416NCAM00298_01_295J.jpeg",
+    "sha256": "54f39aa2c609547351317d986e736c707cbf4ada5443a01fcbc9598d827c2cd3"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0046_0671023427_167ECM_N0031416NCAM00298_01_295J_merged10.png",
+    "local_path": "train/label/NLF_0046_0671023427_167ECM_N0031416NCAM00298_01_295J_merged10.png",
+    "sha256": "3752ddfde6abc4971a409f8fcac5a323cb08e4979623b3f715d7c8771e642bcb"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 46,
+   "block": 4,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0046_0671022274_788ECM_N0031416NCAM00298_01_295J.jpeg",
+    "local_path": "train/image/NLF_0046_0671022274_788ECM_N0031416NCAM00298_01_295J.jpeg",
+    "sha256": "79fcc739d2f04253e4653881c4afa34b808d944993138ba5c85ab2ab50089fed"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0046_0671022274_788ECM_N0031416NCAM00298_01_295J_merged32.png",
+    "local_path": "train/label/NLF_0046_0671022274_788ECM_N0031416NCAM00298_01_295J_merged32.png",
+    "sha256": "c6ffdfa6bd81ea5cd10de813def34e04d704d899d2d19d61d4322c1c200c8288"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 171,
+   "block": 17,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0171_0682126917_160ECM_N0061450NCAM02171_01_195J.jpeg",
+    "local_path": "train/image/NLF_0171_0682126917_160ECM_N0061450NCAM02171_01_195J.jpeg",
+    "sha256": "c02a30d6941d266445c95d7e6532ce966940907500af0103efe55220dda1e2ac"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0171_0682126917_160ECM_N0061450NCAM02171_01_195J_merged14.png",
+    "local_path": "train/label/NLF_0171_0682126917_160ECM_N0061450NCAM02171_01_195J_merged14.png",
+    "sha256": "ca4f4d9d0d88ef6803d598aef42173f75f42f3870c5a6a5e34861886aa25aa27"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 145,
+   "block": 14,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0145_0679827573_987ECM_N0051812NCAM00500_01_295J.jpeg",
+    "local_path": "train/image/NLF_0145_0679827573_987ECM_N0051812NCAM00500_01_295J.jpeg",
+    "sha256": "88c7d9b3849c88a3f4eff42d17fd7ee16719cff5c26ecb8e7c6863c969bcc81a"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0145_0679827573_987ECM_N0051812NCAM00500_01_295J_merged7.png",
+    "local_path": "train/label/NLF_0145_0679827573_987ECM_N0051812NCAM00500_01_295J_merged7.png",
+    "sha256": "33d8ce6ceb43a995c7a844ce922a0f73792009916abfd8dbc465afd5041993ba"
+   }
+  },
+  {
+   "split": "train",
+   "sol": 15,
+   "block": 1,
+   "image": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0015_0668287065_553ECM_N0030386NCAM03001_01_195J.jpeg",
+    "local_path": "train/image/NLF_0015_0668287065_553ECM_N0030386NCAM03001_01_195J.jpeg",
+    "sha256": "917acbc2385e8f0d99531cc6ba19fa21de02224cb95dda27b608a5c609662131"
+   },
+   "label": {
+    "archive_path": "ai4mars-dataset-merged-0.6/m2020/labels/NAV/NLF_0015_0668287065_553ECM_N0030386NCAM03001_01_195J_merged13.png",
+    "local_path": "train/label/NLF_0015_0668287065_553ECM_N0030386NCAM03001_01_195J_merged13.png",
+    "sha256": "e108e29a3f1c23073d3fad9bf50e541fc310f756358293108348c43b79521462"
+   }
+  }
+ ],
+ "dropped_size_mismatch": [
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0278_0691619347_617ECM_N0080064NCAM03277_04_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0278_0691618925_440ECM_N0080064NCAM03277_10_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0278_0691619882_678ECM_N0080064NCAM02277_07_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0278_0691619347_617ECM_N0080064NCAM03277_01_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0278_0691618925_440ECM_N0080064NCAM03277_07_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0278_0691619518_569ECM_N0080064NCAM00303_10_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0278_0691616160_512ECM_N0080012NCAM00301_01_295J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0204_0685061112_659ECM_N0071836NCAM00718_01_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0206_0685224650_759ECM_N0071836NCAM00314_01_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0210_0685593603_793ECM_N0072050NCAM03210_01_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0238_0688077784_691ECM_N0072326NCAM03238_07_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0238_0688077953_481ECM_N0072326NCAM02238_07_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0239_0688168279_101EBY_N0072440NCAM00767_01_0LLJ.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0239_0688168279_101EBY_N0072440NCAM00767_11_0LLJ.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0248_0688960634_895ECM_N0080000NCAM03248_07_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0253_0689404650_862ECM_N0080000NCAM00314_01_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0280_0691798140_632ECM_N0080186NCAM00301_01_295J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0280_0691800905_682ECM_N0080256NCAM03280_04_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0280_0691801116_553ECM_N0080256NCAM03280_04_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0280_0691801294_901ECM_N0080256NCAM03280_10_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0280_0691804963_871ECM_N0080256NCAM02280_01_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0281_0691887244_413ECM_N0080410NCAM01001_04_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0281_0691891358_174ECM_N0080410NCAM03281_04_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0281_0691895166_940ECM_N0080410NCAM02281_07_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0285_0692248647_257ECM_N0080734NCAM03285_07_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0286_0692337081_871ECM_N0090000NCAM00303_01_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0286_0692337518_300ECM_N0090000NCAM03286_01_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0280_0691801294_901ECM_N0080256NCAM03280_04_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0239_0688168279_101EBY_N0072440NCAM00767_02_0LLJ.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0210_0685593754_289ECM_N0072050NCAM03210_10_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0210_0685593754_289ECM_N0072050NCAM03210_01_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0204_0685061807_286ECM_N0071836NCAM03204_10_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0201_0684789140_293ECM_N0071314NCAM00301_01_295J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0203_0684970679_051ECM_N0071716NCAM02203_01_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0204_0685061112_659ECM_N0071836NCAM00718_10_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0248_0688961003_575ECM_N0080000NCAM02248_04_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0239_0688165255_115ECM_N0072440NCAM03239_01_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0203_0684968306_745ECM_N0071716NCAM03203_01_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0238_0688077582_521ECM_N0072326NCAM03238_04_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0280_0691804963_871ECM_N0080256NCAM02280_07_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0286_0692338094_408ECM_N0090000NCAM02286_04_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0203_0684970826_145ECM_N0071716NCAM02203_10_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0280_0691804709_731ECM_N0080256NCAM02280_10_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0204_0685061642_065ECM_N0071836NCAM03204_01_195J.jpg",
+  "ai4mars-dataset-merged-0.6/m2020/images/ncam/NLF_0238_0688073371_182ECM_N0072280NCAM01238_10_195J.jpg"
+ ]
+}

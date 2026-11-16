@@ -153,15 +153,15 @@ Code: `app/src/stops.js`, `app/src/steps.js`, `app/src/log.js`.
 ## 11. Ground-photo classification (flag `classifier`, M2 R4 → E6)
 
 In Walk mode, choose a ground photo and select a square of 256 × 256 source pixels.
-The retained MobileNet v1 model predicts the dominant surface in that square: soil, bedrock,
-sand or big rock. Resizing and RGB conversion match the training input; the model does its own
-normalization. Computation runs on the device in a Web Worker, after downloading the model once
+The MobileNet v2 model predicts the dominant surface in that square: soil, bedrock,
+sand or big rock. Resizing and RGB conversion match the training input; the model turns the crop grey and does its
+own normalization (Curiosity's training photos are greyscale, so a colour photo is read the same way). Computation runs on the device in a Web Worker, after downloading the model once
 for that page session. The photo is not sent to a server.
 
 The displayed percentages are softmax scores: exponentiate each of the four learned logits,
 then divide by their sum. They express relative preference, not measured accuracy or safety.
 Unknown is a fixed logit and is not a learned rejection class. Training used NASA/JPL AI4Mars
-Curiosity ground photos, so helicopter and orbital use remain unvalidated. There is no per-pixel
+Curiosity and Perseverance ground photos, so helicopter and orbital use remain unvalidated. There is no per-pixel
 segmentation, height measurement or georeferencing here; the current map and route remain unchanged.
 
 Code and verification: `app/src/terrain-*.js`, `app/e2e/terrain.spec.js`, `app/README.md`.
@@ -214,7 +214,7 @@ Switching views or "Back to start" moves you without walking, so it costs nothin
 
 **Loading and opening.** Until the HiRISE picture is on the terrain, a loading screen covers the page (Mars with an orbiter going round it, and what is loading: the world, the 3D terrain, the imagery), so the half-built page never flashes. It lifts when the imagery is draped or fails, and after 8 s at most; the opening flight starts only after it lifts. The whole-slice picture is one image (`overview.jpg`, 2048 px, 1 m per pixel, stitched from the same HiRISE tiles and hosted beside them); if it is missing the app stitches the 64 tiles itself. The page opens about 2.4 km above the middle of the slice, holds for 1.2 s, then eases down to the habitat over 4 s. Any tap, scroll or key skips it; it is off when the device asks for reduced motion.
 
-## 13b. The guided mission (Vesta Scout) and the helicopter battery
+## 13b. The guided mission (Vesta Scout)
 
 Vesta Scout runs in four stages (`app/src/flow/`, plan in `docs/UX-PLAN.md` §0): **Choose stops** on the 2D orbit map (it starts empty; pick a science goal to add its stops, or tap the map; at least 3), **How the route is found** (five steps the user moves through), **Scout** behind the helicopter (a control centre over the 3D view), **Walk**: the path we made, then a mission hub to reopen any step (stops, route, a 2D flight replay, the comparison) and the walk simulator. The crew is inside the habitat, so only the flight and the walk preview show the 3D scene. The map screen with every layer is Vesta Vision (`/scout/?vision`).
 
@@ -223,18 +223,9 @@ The walk preview uses foreground elapsed time (120 ms per grid step at 1×). Slo
 - **Route priority.** Vesta Scout always plans the *Easiest* route: the planner's least-energy route (the Shortest choice left stage 1 on 2026-11-15; `app.setObjective('shortest')` still works). *Shortest* keeps the same stops in the same order and joins them by least distance; its energy is then measured with the same walking model. While the scout flies it re-plans by least energy, whichever was chosen.
 - **The straight line** (stage 2, step 1): straight segments base → stops → base in the planned order; the metres of it on cells steeper than `max_slope_deg` (20°) are counted and drawn red.
 - **Detections** (stage 3): newly seen rock cells are grouped into one find until 40 m of flight pass without any; a find's area is cells × 64 m². "On the route" means one of its cells is on the route as planned at that moment. Each find is then one of three kinds, shown in this order: **on your route** (one of its cells is on the current route; red), **re-planned around** (it was on the route when found, and after a re-plan none of its cells is; green), **off route** (never on the route; grey). The panel's "on your route" counts found rock cells on the current route, so it falls after a re-plan moves the route off them. Ground scanned = newly seen cells × 64 m².
-- **Model lines** (`app/src/flow/models.js`): the rock-chance model (AUC 0.73 on a development check, not calibrated), the reviewed rock detections (23 of 25 proposals confirmed, no hit rate claimed), and the ground classifier (93% on 159 held-out Curiosity patches, 48% on 197 Perseverance patches), each copied from its export.
+- **Model lines** (`app/src/flow/models.js`): the rock-chance model (AUC 0.73 on a development check, not calibrated), the reviewed rock detections (23 of 25 proposals confirmed, no hit rate claimed), and the ground classifier v2 (92% and 94% on two held-out Curiosity tests of 159 and 302 patches, 73% on 219 fresh Perseverance patches), each copied from its export.
 - **Unseen ground** (stage 2): the length of the route whose cells no helicopter has looked at, summed step by step.
 - **Hidden-rock estimate** (stage 2): the belief map of §12, shown relative to its highest value near the route. Experimental, not calibrated.
-- **Helicopter battery** (stage 3, `app/src/flow/heli-energy.js`), an **estimate**: Ingenuity's flight power, about 350 W (JPL Ingenuity landing press kit), and its battery, 38.8 Wh when new at 0 °C (NASA/JPL battery slide deck, six Sony VTC4 cells), on SkyFall's flight profile of 1 km in 2.5 minutes (`docs/OPERATIONS.md`).
-
-```
-flight seconds = metres / (1000 m / 150 s)
-energy used    = 350 W x flight seconds          (14.6 Wh for 1 km)
-battery left   = 1 - energy used / 38.8 Wh       (about 62% after 1 km)
-```
-
-  38.8 Wh is the whole battery, not the usable part (NASA gives no usable share), so the percentage is optimistic. Each flight starts full: three helicopters, one flight each.
 - **The scan on screen is simulated**: found rocks come from the hidden-rock layer (`rocks_fine`), not from a live classifier.
 
 ## 13c. The Visit step: what the crew measures at a stop (flag `stop_science`, off with `?off=stop_science`)

@@ -2,7 +2,7 @@ import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { parseLayer } from './world.js'
-import { startWalk, stepTo } from './walk.js'
+import { startWalk, stepTo, stepCostIdx } from './walk.js'
 import { costFrom, planTour, energyCost } from './plan.js'
 
 const dir = new URL('../../data/worlds/synthetic/', import.meta.url)
@@ -64,4 +64,18 @@ test('kept Dijkstra runs never go stale: rocks found in place after a plan chang
   assert.deepEqual(costFrom(world, meta.base_cell, blocked).dist, fresh(blocked).dist)
   assert.deepEqual(planTour(world, targets, blocked), planTour(world, targets, Uint8Array.from(blocked)))
   assert.ok(!planTour(world, targets, blocked).cells.some((c) => at(c) === at(mid)))
+})
+
+test('the search uses the walk\'s step energy exactly: every cell = its previous cell + stepCostIdx (bit for bit)', () => {
+  // plan.js inlines the Pandolf formula for speed; this keeps it identical to walk.js stepCostIdx.
+  for (const t of targets) {
+    const { dist, prev } = costFrom(world, t.cell)
+    let checked = 0
+    for (let j = 0; j < dist.length; j++) {
+      if (prev[j] < 0) continue
+      assert.equal(dist[j], dist[prev[j]] + stepCostIdx(meta, layers.height, layers.terrain_class, prev[j], j), `cell ${j}`)
+      checked++
+    }
+    assert.ok(checked > 0)
+  }
 })

@@ -1,5 +1,8 @@
 # R4: AI4Mars ground-photo classifier v1
 
+> **Superseded on 2026-11-15 by v2** ([V2.md](V2.md)): grey input + Perseverance training data,
+> 73.1% on a fresh Perseverance test (v1: 41.1% on the same patches). This page documents v1.
+
 `ml/exports/terrain_cls.onnx` now contains a trained linear head on frozen
 ImageNet MobileNetV3-small features. It accepts contract RGB float32
 `image [1,3,128,128]` in 0–1 and returns `logits [1,5]` in contract class order.

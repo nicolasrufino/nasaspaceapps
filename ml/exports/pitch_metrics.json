@@ -61,16 +61,16 @@
     "data/worlds/gale/cost_to_go.f32": "9c7a7afac2c657a8b3c45de6f2823c2b9a4b06875b0fe2e1a740d6fd1f0520cf",
     "data/worlds/gale/cost_to_go_scouted.f32": "815dab956b7faa9eff8d2eff442f32f814dc7bc3d6ab9d30479019bdb9bb7df7",
     "ml/exports/rocks.json": "7f955ad032ed21e1caf13a1cbba476c4e538e310a14d0578855047f2fae2f789",
-    "ml/exports/terrain_cls.json": "ebde871cf04878ab8d8bed3779712424ba7f7e0b5a1f935971abd46fd6e1f3d0",
+    "ml/exports/terrain_cls.json": "0f5c0d910dbb062215f4bf7a92c607de1dd6c1a489c8f86cd2e0a8c4e05742d8",
     "ml/exports/buddy_policy.json": "ddc2696b80bc3cc7a17ae980bdbcb452385c677dbf52eec71fe1be0a5b463dfa",
-    "app/src/plan.js": "ae0af1f298c1f9f53f915a90084db92bc4c1db9de86d6576102bac77121592bc",
-    "app/src/walk.js": "bafcf5d2635da7660321d0c09d3ccbb3dd073263d761bd2678c6caaa3bacc514",
+    "app/src/plan.js": "17d654446b70b66053a52a99075bbe05166100dc235eaa8bbf7e083b9650642a",
+    "app/src/walk.js": "6a57d15efae1941166a60a11ad9e1c8813074718c072d36e532b696cfa09f1a9",
     "app/src/scout.js": "fbedd59e8f83fe71ab33c9f8871a8a6e89a309c3185ad80b81019f82b7f2f309",
     "app/src/why.js": "ddfd6ff73ffe5898e3a81915ec15903712e6e7ddf453db7c092db8b2c7928f6c",
     "app/src/main.js": "df672171bd4c08edf1f8c786d47c94bbd03f90c4975c84667b881e3d6264d010",
-    "app/src/world.js": "614e878361ea5d4d2845041e3f7514f0690cb1738d4795465a957b565f064801",
+    "app/src/world.js": "92f6f7ab18575e654714403133a290d5b90165143ec5651ee8fef043f8039b4d",
     "ml/pitch_metrics/metrics.mjs": "e22ac2d1dd97639a8095182164c0bde199c772488b7467af04e5071326e942e7",
-    "ml/pitch_metrics/run.mjs": "089922e8637a0a55d564593c9460b097d158081af51f00f2e71b0244533d344c",
+    "ml/pitch_metrics/run.mjs": "13e5e48198017fef41d581a48eecb5fa9fa327d245ab4e34845f105dfef3e836",
     "data/worlds/gale/passable.u8": "aa094aa98b2251b249129ef3fc318abe4cf956cadad062b7495146dc283d1137"
   },
   "results": {
@@ -4718,13 +4718,13 @@
       "recall": null
     },
     "terrain": {
-      "architecture": "Frozen ImageNet MobileNetV3-small features + trained 576x4 linear head; fixed unknown logit -100",
-      "train_patches": 1136,
+      "architecture": "ITU-R 601 grey conversion in graph, frozen ImageNet MobileNetV3-small features, trained 576x4 linear head; fixed unknown logit -100",
+      "train_patches": 2037,
       "curiosity": {
-        "accuracy": 0.930818,
-        "balanced_accuracy_supported_classes": 0.926587,
+        "accuracy": 0.918239,
+        "balanced_accuracy_supported_classes": 0.901984,
         "samples": 159,
-        "correct": 148,
+        "correct": 146,
         "support_by_class": [
           0,
           84,
@@ -4734,20 +4734,20 @@
         ]
       },
       "perseverance": {
-        "accuracy": 0.482234,
-        "balanced_accuracy_supported_classes": 0.412837,
-        "samples": 197,
-        "correct": 95,
+        "accuracy": 0.730594,
+        "balanced_accuracy_supported_classes": 0.604365,
+        "samples": 219,
+        "correct": 160,
         "support_by_class": [
           0,
-          123,
-          42,
-          29,
-          3
+          140,
+          72,
+          7,
+          0
         ]
       },
       "used_for_this_route": false,
-      "limitation": "Rover-photo classifier; not applied to orbital terrain. Curiosity test has zero big-rock examples. Perseverance transfer is poor."
+      "limitation": "Rover-photo classifier; not applied to orbital terrain. Curiosity test has zero big-rock examples. v2 trains on some Perseverance photos; its Perseverance number is a fresh sol-blocked test."
     },
     "buddy": {
       "placeholder": true,

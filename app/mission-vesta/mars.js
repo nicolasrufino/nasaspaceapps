@@ -1,4 +1,4 @@
-import { marsTexture } from './assets/mars-texture.js'
+import marsTexture from './assets/mars-texture.webp?url' // a file, not base64 in the script: cached, parsed off the JS
 
 // Project the NASA Mars texture onto a lit sphere and turn it around its polar axis.
 function makeGlobe(canvas, image) {
