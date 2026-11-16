@@ -1,6 +1,6 @@
 # The four roles at a glance
 
-Everyone touches the core: the world files, the walk and the demo. But each person leans toward one area. Assigned: **Jules** is Person 1, **Nicolas** is Person 2, **Galsan** is Person 3 (lead). Person X is open. Each person's full brief is in `docs/roles/` (and below on the team page); the blocks are in `docs/BUILD.md`.
+Everyone touches the core: the world files, the walk and the demo. But each person leans toward one area. Assigned: **Jules** is Person 1, **Nicolas** is Person 2 (lead), **Galsan** is Person 3. Luca is Person X. Each person's full brief is in `docs/roles/` (and below on the team page); the blocks are in `docs/BUILD.md`.
 
 ## Who leans where
 
@@ -35,7 +35,7 @@ Everyone touches the core: the world files, the walk and the demo. But each pers
 - **Good fit if you:** have trained a model before, like measuring things, and are patient with data.
 - **Owns:** `ml/` and `agent/` (the CAPCOM agent on Azure, needed for Best Use of Technology). **First block:** R1, rock detector on one image tile. **Works most with:** Person 3 (images in, rocks out).
 
-## Person 2 · Nicolas · App and 3D
+## Person 2 · Nicolas · App and 3D (lead)
 
 - **Primary focus:** the thing people see and hold: the 3D view, minimap, plan mode, walk, helicopter scout and stops.
 - **Leans toward:** JavaScript, three.js, UI, phones and touch, fast iteration.
@@ -43,7 +43,7 @@ Everyone touches the core: the world files, the walk and the demo. But each pers
 - **Good fit if you:** are the strongest web or game developer, and like shipping something visible every hour.
 - **Owns:** `app/`. **First block:** E1, app with the 3D view and minimap. **Works most with:** Person 3 (files in) and Person X (HUD look).
 
-## Person 3 · Galsan · Data, systems and integration (lead)
+## Person 3 · Galsan · Data, systems and integration
 
 - **Primary focus:** the foundation everyone builds on: the real Gale slice, all eight data types, the cost and way-home maths, the helicopter's flight plan, deployment, and keeping the pieces fitting together.
 - **Leans toward:** system design, Python scripts, GIS data (elevation models, images, coordinates), reading NASA papers, Git discipline.
