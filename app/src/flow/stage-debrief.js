@@ -6,7 +6,7 @@
 // heights: the USGS MSL Gale terrain model in world.layers.height.
 import { MODELS } from './models.js'
 import * as stopScience from './stop-science.js'
-import { log } from './stage-scout.js'
+import { log, KIND } from './stage-scout.js'
 
 const OCHRE = '#c5a065', WHITE = '#fff', AMBER = '#ffd23f', SCOUT = '#e3dfd3'
 const SPEEDS = [[120, '1×'], [60, '2×'], [30, '4×']] // milliseconds per 8 m step
@@ -74,7 +74,7 @@ export default {
       const em = mini ? null : pin ?? hot // the emphasised route, if any
       const lw = 0.45 * k
       map.line('before', oldCells, { color: OCHRE, width: lw, dash: `${lw * 2.2} ${lw * 2.4}`, opacity: em === 'new' ? 0.3 : 1 })
-      map.dots('crossed', rocksOn(oldCells).map((cell) => ({ cell, color: OCHRE, ring: WHITE, r: 0.7 * k, faded: em === 'new' })))
+      map.dots('crossed', rocksOn(oldCells).map((cell) => ({ cell, color: KIND.on.color, ring: WHITE, r: 0.7 * k, faded: em === 'new' })))
       map.line('route', route.cells, { color: WHITE, width: lw * (em === 'new' ? 1.5 : 1), opacity: em === 'old' ? 0.3 : 1 })
       map.dots('stops', [
         { cell: app.meta.base_cell, label: 'H', color: WHITE, r: 1.6 * k },
@@ -225,7 +225,7 @@ export default {
           if (j === n && pts.length) map.dots('rp-heli', t < 1 ? [{ cell: pts.at(-1), color: SCOUT, ring: WHITE, r: 1.4 * k }] : [])
           for (const fd of log.finds) if (fd.flight === f.n && (j < n || (j === n && fd.along <= t * f.metres))) shown.push(fd)
         })
-        map.dots('rp-finds', shown.map((fd) => ({ cell: fd.cell, label: fd.n, color: OCHRE, ring: '#191919', r: 1.8 * k })))
+        map.dots('rp-finds', shown.map((fd) => ({ cell: fd.cell, label: fd.n, color: KIND[fd.kind ?? 'off'].color, ring: '#191919', r: 1.8 * k })))
         map.raise('stops')
         const f = flights[n]
         status.textContent = t >= 1 && n === flights.length - 1 ? `${flights.length} ${flights.length === 1 ? 'flight' : 'flights'} · ${log.finds.length} findings`
@@ -259,7 +259,7 @@ export default {
       if (!before) pin = hot = null
 
       map.caption('After scouting', before
-        ? 'White: the scouted route · ochre dashes: without the scout · ochre dots: rock it would have crossed · NASA MRO HiRISE'
+        ? 'White: the scouted route · ochre dashes: without the scout · red dots: rock it would have crossed · rocks: green the route moved off, grey off the route · NASA MRO HiRISE'
         : 'White: the route · NASA MRO HiRISE')
       map.clear('walker')
       drawMap(false)
