@@ -11,7 +11,7 @@ import scout from './stage-scout.js'
 import debrief from './stage-debrief.js'
 
 const STAGES = [['plan', 'Stops', plan], ['analyse', 'Route', analyse], ['scout', 'Scout', scout], ['debrief', 'Walk', debrief]]
-const BACK = { analyse: 'plan', debrief: 'analyse' } // where Back goes; none while the scout flies
+const BACK = { analyse: 'plan' } // where Back goes; none while the scout flies, and stage 4 has its own (the mission)
 const h = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e }
 
 export function initFlow(app) {
